@@ -1,0 +1,49 @@
+name: Build & Publish
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - name: Install dependencies
+      run: |
+        yarn install --frozen-lockfile;
+    - name: Test
+      run: |
+        yarn test;
+    - name: Build Plugin
+      run: |
+        yarn build;
+        echo $(date) > dist/LAST_UPDATED;
+    - name: Build Docs
+      run: |
+        yarn docs:build;
+        rm -rf docs/dist;
+    - name: Publish
+      run: |
+        git config --global user.email "actions@github.com";
+        git config --global user.name "Github Actions";
+        git add --force dist/
+        git add --force docs/
+        git commit -m "Build by Github Actions"
+        git push
+        git status   
+    - uses: actions/setup-go@master
+      with:
+        go-version: "1.13.3"
+    - name: Lint Plugin
+      run: |
+        git clone https://github.com/grafana/plugin-validator;
+        cd ./plugin-validator/cmd/plugincheck;
+        go install
+        cd ../../;
+        plugincheck -url https://github.com/yesoreyeram/grafana-scraping-datasource;

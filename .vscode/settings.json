@@ -1,0 +1,7 @@
+{
+    "deno.enable": false,
+    "cSpell.words": [
+        "plugincheck",
+        "vuepress"
+    ]
+}

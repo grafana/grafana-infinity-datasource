@@ -1,0 +1,37 @@
+{
+  "name": "Scraping",
+  "id": "yesoreyeram-scraping-datasource",
+  "type": "datasource",
+  "metrics": true,
+  "annotations": false,
+  "info": {
+    "version": "%VERSION%",
+    "updated": "%TODAY%",
+    "description": "Grafana Service Now Datasource",
+    "author": {
+      "name": "Sriramajeyam Sugumaran",
+      "url": "https://www.google.com/search?q=Sriramajeyam+Sugumaran"
+    },
+    "logos": {
+      "small": "img/yesoreyeram-grafana-scraping-datasource-logo.jpg",
+      "large": "img/yesoreyeram-grafana-scraping-datasource-logo.jpg"
+    },
+    "keywords": [
+      "grafana",
+      "scraping"
+    ],
+    "screenshots": [],
+    "links": [
+      {
+        "name": "Github",
+        "url": "https://github.com/yesoreyeram/grafana-scraping-datasource"
+      }
+    ]
+  },
+  "dependencies": {
+    "grafanaDependency": ">=7.0.0",
+    "plugins": []
+  },
+  "includes": [],
+  "routes": []
+}
