@@ -2,8 +2,9 @@ import { flatten, forEach, get } from "lodash";
 import { DataSourceApi } from '@grafana/data';
 import { getBackendSrv } from '@grafana/runtime';
 import { load } from 'cheerio';
+import { ScrapQuery } from "./types";
 
-export class Datasource extends DataSourceApi {
+export class Datasource extends DataSourceApi<ScrapQuery> {
     constructor(instanceSettings: any) {
         super(instanceSettings);
     }
@@ -16,68 +17,6 @@ export class Datasource extends DataSourceApi {
         const promises: any[] = [];
         options.targets.forEach((t: any) => {
             promises.push(new Promise((resolve, reject) => {
-                t = {
-                    type: "html",
-                    format: "table",
-                    url: "https://grafana.com/about/team/",
-                    root_selector: `body > div.main > div.page__content > div > div > div:nth-child(3) > div > div`,
-                    columns: [
-                        {
-                            selector: `h4`,
-                            text: `Member`,
-                            type: `string`
-                        },
-                        {
-                            selector: `.team__title`,
-                            text: `Title`,
-                            type: `string`
-                        }
-                    ]
-                };
-                t = {
-                    type: "json",
-                    url: "https://jsonplaceholder.typicode.com/users",
-                    root_selector: "",
-                    columns: [
-                        {
-                            selector: 'name',
-                            text: `Name`,
-                            type: `string`
-                        },
-                        {
-                            selector: 'email',
-                            text: `Email`,
-                            type: `string`
-                        },
-                        {
-                            selector: 'company.name',
-                            text: `Company Name`,
-                            type: `string`
-                        }
-                    ]
-                }
-                t = {
-                    type: "json",
-                    url: "https://localhost:3333/api/dashboards/uid/4pRYL2DMk",
-                    root_selector: "dashboard.panels",
-                    columns: [
-                        {
-                            selector: 'title',
-                            text: `Title`,
-                            type: `string`
-                        },
-                        {
-                            selector: 'type',
-                            text: `Type`,
-                            type: `string`
-                        },
-                        {
-                            selector: 'datasource',
-                            text: `Data Source`,
-                            type: `string`
-                        }
-                    ]
-                }
                 getBackendSrv().get(t.url)
                     .then(res => {
                         const rows: any[] = [];
@@ -96,18 +35,28 @@ export class Datasource extends DataSourceApi {
                             if (t.root_selector) {
                                 res = get(res, t.root_selector)
                             }
-                            forEach(res, r => {
+                            if (Array.isArray(res)) {
+                                forEach(res, r => {
+                                    const row: any[] = [];
+                                    t.columns.forEach((c: any) => {
+                                        row.push(get(r, c.selector, ""));
+                                    });
+                                    rows.push(row);
+                                })
+                            } else {
                                 const row: any[] = [];
                                 t.columns.forEach((c: any) => {
-                                    row.push(get(r, c.selector, ""));
+                                    row.push(get(res, c.selector, ""));
                                 });
                                 rows.push(row);
-                            })
+                            }
                         }
                         resolve({
                             rows,
                             columns: t.columns
                         });
+                    }).catch(ex => {
+                        reject("Failed to retrieve data")
                     });
             }));
         });
