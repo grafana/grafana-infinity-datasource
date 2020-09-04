@@ -1,4 +1,4 @@
-import { flatten, forEach } from "lodash";
+import { flatten, forEach, get } from "lodash";
 import { DataSourceApi } from '@grafana/data';
 import { getBackendSrv } from '@grafana/runtime';
 import { load } from 'cheerio';
@@ -34,19 +34,76 @@ export class Datasource extends DataSourceApi {
                         }
                     ]
                 };
+                t = {
+                    type: "json",
+                    url: "https://jsonplaceholder.typicode.com/users",
+                    root_selector: "",
+                    columns: [
+                        {
+                            selector: 'name',
+                            text: `Name`,
+                            type: `string`
+                        },
+                        {
+                            selector: 'email',
+                            text: `Email`,
+                            type: `string`
+                        },
+                        {
+                            selector: 'company.name',
+                            text: `Company Name`,
+                            type: `string`
+                        }
+                    ]
+                }
+                t = {
+                    type: "json",
+                    url: "https://localhost:3333/api/dashboards/uid/4pRYL2DMk",
+                    root_selector: "dashboard.panels",
+                    columns: [
+                        {
+                            selector: 'title',
+                            text: `Title`,
+                            type: `string`
+                        },
+                        {
+                            selector: 'type',
+                            text: `Type`,
+                            type: `string`
+                        },
+                        {
+                            selector: 'datasource',
+                            text: `Data Source`,
+                            type: `string`
+                        }
+                    ]
+                }
                 getBackendSrv().get(t.url)
                     .then(res => {
-                        const $ = load(res);
-                        const rootElements = $(t.root_selector);
                         const rows: any[] = [];
-                        forEach(rootElements, r => {
-                            const row: any[] = [];
-                            const $$ = load(r);
-                            t.columns.forEach((c: any) => {
-                                row.push($$(c.selector).text().trim());
+                        if (t.type === "html") {
+                            const $ = load(res);
+                            const rootElements = $(t.root_selector);
+                            forEach(rootElements, r => {
+                                const row: any[] = [];
+                                const $$ = load(r);
+                                t.columns.forEach((c: any) => {
+                                    row.push($$(c.selector).text().trim());
+                                });
+                                rows.push(row);
                             });
-                            rows.push(row);
-                        });
+                        } else if (t.type === "json") {
+                            if (t.root_selector) {
+                                res = get(res, t.root_selector)
+                            }
+                            forEach(res, r => {
+                                const row: any[] = [];
+                                t.columns.forEach((c: any) => {
+                                    row.push(get(r, c.selector, ""));
+                                });
+                                rows.push(row);
+                            })
+                        }
                         resolve({
                             rows,
                             columns: t.columns
