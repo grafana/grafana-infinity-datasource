@@ -8,4 +8,4 @@ __Note:__ This is a proof of concept / work in progress plugin. Not to be used a
 
 ## License
 
-Grafana scraping datasource is licensed under the [Apache 2.0 License](./LICENSE).
+Grafana scraping datasource is licensed under the [Apache 2.0 License](https://github.com/yesoreyeram/grafana-scraping-datasource/blob/master/LICENSE).
