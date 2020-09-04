@@ -149,7 +149,7 @@ export class ScrapingQueryEditor extends PureComponent<EditorProps> {
                                 </span>
                             </div>
                         </div>
-                    </div>)
+                    </div>);
                 })
                 }
             </div >
