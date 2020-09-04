@@ -5,12 +5,12 @@ import { load } from 'cheerio';
 
 export class Datasource extends DataSourceApi {
     constructor(instanceSettings: any) {
-        super(instanceSettings)
+        super(instanceSettings);
     }
     testDatasource() {
         return new Promise(async (resolve: any, reject: any) => {
             reject({ message: 'Not Implemented', status: 'error' });
-        })
+        });
     }
     query(options: any) {
         const promises: any[] = [];
@@ -33,27 +33,27 @@ export class Datasource extends DataSourceApi {
                             type: `string`
                         }
                     ]
-                }
+                };
                 getBackendSrv().get(t.url)
                     .then(res => {
                         const $ = load(res);
                         const rootElements = $(t.root_selector);
-                        let rows: any[] = [];
+                        const rows: any[] = [];
                         forEach(rootElements, r => {
-                            let row: any[] = [];
+                            const row: any[] = [];
                             const $$ = load(r);
                             t.columns.forEach((c: any) => {
-                                row.push($$(c.selector).text())
-                            })
+                                row.push($$(c.selector).text().trim());
+                            });
                             rows.push(row);
-                        })
+                        });
                         resolve({
                             rows,
                             columns: t.columns
                         });
                     });
-            }))
-        })
+            }));
+        });
         return Promise.all(promises).then(results => {
             return { data: flatten(results) };
         });
