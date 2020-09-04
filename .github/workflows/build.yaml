@@ -28,15 +28,12 @@ jobs:
       run: |
         yarn docs:build;
         rm -rf docs/dist;
-    - name: Publish
-      run: |
-        git config --global user.email "actions@github.com";
-        git config --global user.name "Github Actions";
-        git add --force dist/
-        git add --force docs/
-        git commit -m "Build by Github Actions"
-        git push
-        git status   
+    - name: Publish Updated Type Docs
+      uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: publish docs
+        push_options: --force
+        file_pattern: dist docs
     - uses: actions/setup-go@master
       with:
         go-version: "1.13.3"
