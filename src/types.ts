@@ -18,12 +18,12 @@ export const SCRAP_QUERY_TYPES = [{
 }, {
     label: 'HTML',
     value: 'html'
-}]
+}];
 export const SCRAP_QUERY_RESULT_FORMATS = [{
     label: 'Table',
     value: 'table'
-}]
+}];
 export const SCRAP_QUERY_RESULT_COLUMN_FORMATS = [{
     label: 'String',
     value: 'string'
-}]
+}];

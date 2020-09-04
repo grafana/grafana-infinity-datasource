@@ -33,7 +33,7 @@ export class Datasource extends DataSourceApi<ScrapQuery> {
                             });
                         } else if (t.type === "json") {
                             if (t.root_selector) {
-                                res = get(res, t.root_selector)
+                                res = get(res, t.root_selector);
                             }
                             if (Array.isArray(res)) {
                                 forEach(res, r => {
@@ -42,7 +42,7 @@ export class Datasource extends DataSourceApi<ScrapQuery> {
                                         row.push(get(r, c.selector, ""));
                                     });
                                     rows.push(row);
-                                })
+                                });
                             } else {
                                 const row: any[] = [];
                                 t.columns.forEach((c: any) => {
@@ -56,7 +56,7 @@ export class Datasource extends DataSourceApi<ScrapQuery> {
                             columns: t.columns
                         });
                     }).catch(ex => {
-                        reject("Failed to retrieve data")
+                        reject("Failed to retrieve data");
                     });
             }));
         });

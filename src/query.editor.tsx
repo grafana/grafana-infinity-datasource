@@ -9,17 +9,17 @@ type EditorProps = QueryEditorProps<Datasource, ScrapQuery>;
 export class ScrapingQueryEditor extends PureComponent<EditorProps> {
     onColumnAdd = () => {
         const { query, onChange } = this.props;
-        let columns = query.columns || [];
+        const columns = query.columns || [];
         columns.push({
             text: "",
             selector: "",
             type: "string"
-        })
+        });
         onChange({ ...query, columns });
     }
     onColumnRemove = (index: number) => {
         const { query, onChange } = this.props;
-        let columns = query.columns;
+        const columns = query.columns;
         columns.splice(index, 1);
         onChange({ ...query, columns });
     };
@@ -49,7 +49,9 @@ export class ScrapingQueryEditor extends PureComponent<EditorProps> {
                         <label className="gf-form-label query-keyword width-8">Type</label>
                         <Select
                             className="min-width-12 width-12"
-                            value={SCRAP_QUERY_TYPES.find((field: any) => field.value === this.props.query.type) || { value: 'json', label: 'JSON' }}
+                            value={
+                                SCRAP_QUERY_TYPES.find((field: any) => field.value === this.props.query.type)
+                                || { value: 'json', label: 'JSON' }}
                             options={SCRAP_QUERY_TYPES}
                             defaultValue={{ value: 'json', label: 'JSON' }}
                             onChange={e => this.onSelectChange(e, 'type', this.props)}
@@ -57,7 +59,10 @@ export class ScrapingQueryEditor extends PureComponent<EditorProps> {
                         <label className="gf-form-label query-keyword width-5">Format</label>
                         <Select
                             className="min-width-12 width-12"
-                            value={SCRAP_QUERY_RESULT_FORMATS.find((field: any) => field.value === this.props.query.format) || { value: 'table', label: 'Table' }}
+                            value={
+                                SCRAP_QUERY_RESULT_FORMATS.find((field: any) => field.value === this.props.query.format)
+                                || { value: 'table', label: 'Table' }
+                            }
                             options={SCRAP_QUERY_RESULT_FORMATS}
                             defaultValue={{ value: 'table', label: 'Table' }}
                             onChange={e => this.onSelectChange(e, 'format', this.props)}
@@ -129,22 +134,25 @@ export class ScrapingQueryEditor extends PureComponent<EditorProps> {
                                 ></input>
                                 <Select
                                     className="min-width-12 width-12"
-                                    value={SCRAP_QUERY_RESULT_COLUMN_FORMATS.find((field: any) => field.value === column.type) || { value: 'string', label: 'String' }}
+                                    value={
+                                        SCRAP_QUERY_RESULT_COLUMN_FORMATS.find((field: any) => field.value === column.type)
+                                        || { value: 'string', label: 'String' }}
                                     options={SCRAP_QUERY_RESULT_COLUMN_FORMATS}
                                     defaultValue={{ value: 'string', label: 'String' }}
                                     onChange={e => this.onSelectChange(e, `columns[${index}].type`, this.props)}
                                 ></Select>
-                                <span className="btn btn-success btn-small" style={{ margin: '5px' }} onClick={() => this.onColumnAdd()}>
+                                <span className="btn btn-success btn-small" style={{ margin: '5px' }} onClick={() => { this.onColumnAdd(); }}>
                                     +
                                 </span>
-                                <span className="btn btn-danger btn-small" style={{ margin: '5px' }} onClick={() => this.onColumnRemove(index)}>
+                                <span className="btn btn-danger btn-small" style={{ margin: '5px' }} onClick={() => { this.onColumnRemove(index); }}>
                                     x
                                 </span>
                             </div>
                         </div>
                     </div>)
-                })}
-            </div>
+                })
+                }
+            </div >
         );
     }
 }
