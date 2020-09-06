@@ -6,7 +6,7 @@
   "annotations": false,
   "info": {
     "version": "0.0.1",
-    "updated": "2020-09-04",
+    "updated": "2020-09-06",
     "description": "Grafana Service Now Datasource",
     "author": {
       "name": "Sriramajeyam Sugumaran",
