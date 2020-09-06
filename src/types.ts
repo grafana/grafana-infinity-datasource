@@ -18,6 +18,9 @@ export const SCRAP_QUERY_TYPES = [{
 }, {
     label: 'HTML',
     value: 'html'
+}, {
+    label: 'CSV',
+    value: 'csv'
 }];
 export const SCRAP_QUERY_RESULT_FORMATS = [{
     label: 'Table',

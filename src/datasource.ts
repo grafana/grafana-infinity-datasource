@@ -3,6 +3,7 @@ import { DataSourceApi } from '@grafana/data';
 import { getBackendSrv } from '@grafana/runtime';
 import { load } from 'cheerio';
 import { ScrapQuery } from "./types";
+import parse from "csv-parse/lib/sync";
 
 export class Datasource extends DataSourceApi<ScrapQuery> {
     constructor(instanceSettings: any) {
@@ -49,6 +50,21 @@ export class Datasource extends DataSourceApi<ScrapQuery> {
                                     row.push(get(res, c.selector, ""));
                                 });
                                 rows.push(row);
+                            }
+                        } else if (t.type === "csv") {
+                            const options = {
+                                columns: true,
+                                skip_empty_lines: true
+                            };
+                            const records = parse(res, options);
+                            if (Array.isArray(records)) {
+                                forEach(records, r => {
+                                    const row: any[] = [];
+                                    t.columns.forEach((c: any) => {
+                                        row.push(get(r, c.selector, ""));
+                                    });
+                                    rows.push(row);
+                                });
                             }
                         }
                         resolve({
