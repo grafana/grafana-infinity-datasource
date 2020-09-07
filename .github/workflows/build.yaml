@@ -43,4 +43,4 @@ jobs:
         cd ./plugin-validator/cmd/plugincheck;
         go install
         cd ../../;
-        plugincheck -url https://github.com/yesoreyeram/grafana-utils-datasource;
+        plugincheck -url https://github.com/yesoreyeram/grafana-infinity-datasource;

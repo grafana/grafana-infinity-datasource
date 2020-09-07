@@ -3,10 +3,10 @@ import React, { PureComponent, ChangeEvent } from 'react';
 import { Select } from "@grafana/ui";
 import { QueryEditorProps, SelectableValue } from '@grafana/data';
 import { Datasource } from "./datasource";
-import { UtilsQuery, ScrapColumn, SCRAP_QUERY_TYPES, SCRAP_QUERY_RESULT_FORMATS, SCRAP_QUERY_RESULT_COLUMN_FORMATS } from "./types";
+import { InfinityQuery, ScrapColumn, SCRAP_QUERY_TYPES, SCRAP_QUERY_RESULT_FORMATS, SCRAP_QUERY_RESULT_COLUMN_FORMATS } from "./types";
 
-type EditorProps = QueryEditorProps<Datasource, UtilsQuery>;
-export class UtilsQueryEditor extends PureComponent<EditorProps> {
+type EditorProps = QueryEditorProps<Datasource, InfinityQuery>;
+export class InfinityQueryEditor extends PureComponent<EditorProps> {
     onColumnAdd = () => {
         const { query, onChange } = this.props;
         const columns = query.columns || [];
@@ -83,7 +83,7 @@ export class UtilsQueryEditor extends PureComponent<EditorProps> {
                 </div>
                 <div className="gf-form-inline">
                     <div className="gf-form">
-                        <label className="gf-form-label query-keyword width-8">Root Selector</label>
+                        <label className="gf-form-label query-keyword width-8">Rows / Root</label>
                         <input
                             type="text"
                             className="gf-form-input min-width-30"

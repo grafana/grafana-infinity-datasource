@@ -2,10 +2,10 @@ import { flatten, forEach, get } from "lodash";
 import { DataSourceApi } from '@grafana/data';
 import { getBackendSrv } from '@grafana/runtime';
 import { load } from 'cheerio';
-import { UtilsQuery } from "./types";
+import { InfinityQuery } from "./types";
 import parse from "csv-parse/lib/sync";
 
-export class Datasource extends DataSourceApi<UtilsQuery> {
+export class Datasource extends DataSourceApi<InfinityQuery> {
     constructor(instanceSettings: any) {
         super(instanceSettings);
     }

@@ -1,7 +1,7 @@
 {
-  "name": "grafana-utils-datasource",
+  "name": "grafana-infinity-datasource",
   "version": "0.0.1",
-  "description": "Utils data source plugin for Grafana",
+  "description": "Infinity data source plugin for Grafana",
   "main": "dist/module.js",
   "scripts": {
     "build": "grafana-toolkit plugin:build",
@@ -13,19 +13,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yesoreyeram/grafana-utils-datasource.git"
+    "url": "git+https://github.com/yesoreyeram/grafana-infinity-datasource.git"
   },
   "keywords": [
     "grafana",
+    "grafana infinity",
     "grafana utils",
     "web scraping"
   ],
   "author": "Sriramajeyam Sugumaran",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/yesoreyeram/grafana-utils-datasource/issues"
+    "url": "https://github.com/yesoreyeram/grafana-infinity-datasource/issues"
   },
-  "homepage": "https://github.com/yesoreyeram/grafana-utils-datasource#readme",
+  "homepage": "https://github.com/yesoreyeram/grafana-infinity-datasource#readme",
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
     "csv-parse": "^4.12.0",

@@ -1,10 +1,10 @@
 import { DataSourcePlugin } from '@grafana/data';
 import { Datasource } from "./datasource";
-import { UtilsConfigEditor } from "./config.editor";
-import { UtilsQueryEditor } from "./query.editor";
-import { UtilsAnnotationCtrl } from "./annotations.editor";
+import { InfinityConfigEditor } from "./config.editor";
+import { InfinityQueryEditor } from "./query.editor";
+import { InfinityAnnotationCtrl } from "./annotations.editor";
 
 export const plugin = new DataSourcePlugin(Datasource)
-    .setConfigEditor(UtilsConfigEditor)
-    .setQueryEditor(UtilsQueryEditor)
-    .setAnnotationQueryCtrl(UtilsAnnotationCtrl);
+    .setConfigEditor(InfinityConfigEditor)
+    .setQueryEditor(InfinityQueryEditor)
+    .setAnnotationQueryCtrl(InfinityAnnotationCtrl);

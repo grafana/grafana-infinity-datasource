@@ -1,7 +1,7 @@
 module.exports = {
-    title: `Grafana Utils Datasource`,
-    description: `Grafana Utils Datasource plugin.`,
-    base: '/grafana-utils-datasource/',
+    title: `Grafana Infinity Datasource`,
+    description: `Grafana Infinity Datasource plugin.`,
+    base: '/grafana-infinity-datasource/',
     dest: 'docs',
     themeConfig: {
         displayAllHeaders: true,
@@ -12,11 +12,11 @@ module.exports = {
             },
             {
                 text: "Report Bug",
-                link: "https://github.com/yesoreyeram/grafana-utils-datasource/issues/new/choose"
+                link: "https://github.com/yesoreyeram/grafana-infinity-datasource/issues/new/choose"
             },
             {
                 text: "Github",
-                link: "https://github.com/yesoreyeram/grafana-utils-datasource"
+                link: "https://github.com/yesoreyeram/grafana-infinity-datasource"
             }
         ],
         sidebar: [

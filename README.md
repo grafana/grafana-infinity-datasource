@@ -1,9 +1,7 @@
-# grafana-utils-datasource
+# Grafana Infinity Data source
 
-Utils data source plugin for Grafana.
-
-__Note:__ This is a proof of concept / work in progress plugin. Not to be used anywhere.
+Infinity data source plugin for Grafana.
 
 ## License
 
-Grafana utils datasource is licensed under the [Apache 2.0 License](https://github.com/yesoreyeram/grafana-utils-datasource/blob/master/LICENSE).
+Grafana Infinity datasource is licensed under the [Apache 2.0 License](https://github.com/yesoreyeram/grafana-infinity-datasource/blob/master/LICENSE).
