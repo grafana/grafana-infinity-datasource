@@ -6,8 +6,8 @@
   "annotations": false,
   "info": {
     "version": "0.0.1",
-    "updated": "2020-09-06",
-    "description": "Grafana Service Now Datasource",
+    "updated": "2020-09-07",
+    "description": "Grafana Scraping Datasource",
     "author": {
       "name": "Sriramajeyam Sugumaran",
       "url": "https://www.google.com/search?q=Sriramajeyam+Sugumaran"

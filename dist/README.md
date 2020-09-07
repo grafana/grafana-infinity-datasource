@@ -1,11 +1,9 @@
-# grafana-scraping-datasource
+# grafana-utils-datasource
 
-Web scraping data source plugin for Grafana. 
-
-Idea is to get contents from html tables (or any relevant format) from any website, parse, convert into grafana data format and pass to grafana plugins for rendering.
+Utils data source plugin for Grafana.
 
 __Note:__ This is a proof of concept / work in progress plugin. Not to be used anywhere.
 
 ## License
 
-Grafana scraping datasource is licensed under the [Apache 2.0 License](https://github.com/yesoreyeram/grafana-scraping-datasource/blob/master/LICENSE).
+Grafana utils datasource is licensed under the [Apache 2.0 License](https://github.com/yesoreyeram/grafana-utils-datasource/blob/master/LICENSE).
