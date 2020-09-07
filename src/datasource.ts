@@ -2,10 +2,10 @@ import { flatten, forEach, get } from "lodash";
 import { DataSourceApi } from '@grafana/data';
 import { getBackendSrv } from '@grafana/runtime';
 import { load } from 'cheerio';
-import { ScrapQuery } from "./types";
+import { UtilsQuery } from "./types";
 import parse from "csv-parse/lib/sync";
 
-export class Datasource extends DataSourceApi<ScrapQuery> {
+export class Datasource extends DataSourceApi<UtilsQuery> {
     constructor(instanceSettings: any) {
         super(instanceSettings);
     }

@@ -1,7 +1,7 @@
 {
-  "name": "grafana-scraping-datasource",
+  "name": "grafana-utils-datasource",
   "version": "0.0.1",
-  "description": "Web scraping data source plugin for Grafana",
+  "description": "Utils data source plugin for Grafana",
   "main": "dist/module.js",
   "scripts": {
     "build": "grafana-toolkit plugin:build",
@@ -13,18 +13,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yesoreyeram/grafana-scraping-datasource.git"
+    "url": "git+https://github.com/yesoreyeram/grafana-utils-datasource.git"
   },
   "keywords": [
     "grafana",
+    "grafana utils",
     "web scraping"
   ],
   "author": "Sriramajeyam Sugumaran",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/yesoreyeram/grafana-scraping-datasource/issues"
+    "url": "https://github.com/yesoreyeram/grafana-utils-datasource/issues"
   },
-  "homepage": "https://github.com/yesoreyeram/grafana-scraping-datasource#readme",
+  "homepage": "https://github.com/yesoreyeram/grafana-utils-datasource#readme",
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
     "csv-parse": "^4.12.0",

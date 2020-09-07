@@ -5,7 +5,7 @@ export interface ScrapColumn {
     text: string;
     type: "string";
 }
-export interface ScrapQuery extends DataQuery {
+export interface UtilsQuery extends DataQuery {
     type: 'json' | 'html';
     format: 'table' | 'timeseries';
     url: string;

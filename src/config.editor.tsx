@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 import { DataSourcePluginOptionsEditorProps, DataSourceJsonData } from '@grafana/data';
 
-interface ScrapingDataSourceOptions extends DataSourceJsonData { }
-interface ConfigProps extends DataSourcePluginOptionsEditorProps<ScrapingDataSourceOptions> { }
-export class ScrappingConfigEditor extends PureComponent<ConfigProps> {
+interface UtilsDataSourceOptions extends DataSourceJsonData { }
+interface ConfigProps extends DataSourcePluginOptionsEditorProps<UtilsDataSourceOptions> { }
+export class UtilsConfigEditor extends PureComponent<ConfigProps> {
     render() {
-        return <div>Scraping Config Editor</div>;
+        return <div>Utils Config Editor</div>;
     }
 }

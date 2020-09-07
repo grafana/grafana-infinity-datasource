@@ -3,10 +3,10 @@ import React, { PureComponent, ChangeEvent } from 'react';
 import { Select } from "@grafana/ui";
 import { QueryEditorProps, SelectableValue } from '@grafana/data';
 import { Datasource } from "./datasource";
-import { ScrapQuery, ScrapColumn, SCRAP_QUERY_TYPES, SCRAP_QUERY_RESULT_FORMATS, SCRAP_QUERY_RESULT_COLUMN_FORMATS } from "./types";
+import { UtilsQuery, ScrapColumn, SCRAP_QUERY_TYPES, SCRAP_QUERY_RESULT_FORMATS, SCRAP_QUERY_RESULT_COLUMN_FORMATS } from "./types";
 
-type EditorProps = QueryEditorProps<Datasource, ScrapQuery>;
-export class ScrapingQueryEditor extends PureComponent<EditorProps> {
+type EditorProps = QueryEditorProps<Datasource, UtilsQuery>;
+export class UtilsQueryEditor extends PureComponent<EditorProps> {
     onColumnAdd = () => {
         const { query, onChange } = this.props;
         const columns = query.columns || [];

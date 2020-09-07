@@ -1,7 +1,7 @@
 module.exports = {
-    title: `Grafana Scraping Datasource`,
-    description: `Grafana Scraping Datasource plugin.`,
-    base: '/grafana-scraping-datasource/',
+    title: `Grafana Utils Datasource`,
+    description: `Grafana Utils Datasource plugin.`,
+    base: '/grafana-utils-datasource/',
     dest: 'docs',
     themeConfig: {
         displayAllHeaders: true,
@@ -12,11 +12,11 @@ module.exports = {
             },
             {
                 text: "Report Bug",
-                link: "https://github.com/yesoreyeram/grafana-scraping-datasource/issues/new/choose"
+                link: "https://github.com/yesoreyeram/grafana-utils-datasource/issues/new/choose"
             },
             {
                 text: "Github",
-                link: "https://github.com/yesoreyeram/grafana-scraping-datasource"
+                link: "https://github.com/yesoreyeram/grafana-utils-datasource"
             }
         ],
         sidebar: [
