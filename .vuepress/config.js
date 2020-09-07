@@ -17,10 +17,14 @@ module.exports = {
             {
                 text: "Github",
                 link: "https://github.com/yesoreyeram/grafana-infinity-datasource"
+            },
+            {
+                text: "Author",
+                link: "https://sriramajeyam.com"
             }
         ],
         sidebar: [
-            '/',
+            ['/', 'Infinity Datasource'],
             ['/CHANGELOG', 'Change Log']
         ]
     }
