@@ -3,7 +3,7 @@ import React, { PureComponent, ChangeEvent } from 'react';
 import { Select } from "@grafana/ui";
 import { QueryEditorProps, SelectableValue } from '@grafana/data';
 import { Datasource } from "./datasource";
-import { InfinityQuery, ScrapColumn, SCRAP_QUERY_TYPES, SCRAP_QUERY_RESULT_FORMATS, SCRAP_QUERY_RESULT_COLUMN_FORMATS } from "./types";
+import { InfinityQuery, ScrapColumn, SCRAP_QUERY_TYPES, SCRAP_QUERY_RESULT_FORMATS, SCRAP_QUERY_RESULT_COLUMN_FORMATS, SCRAP_QUERY_SOURCES } from "./types";
 
 type EditorProps = QueryEditorProps<Datasource, InfinityQuery>;
 export class InfinityQueryEditor extends PureComponent<EditorProps> {
@@ -37,6 +37,7 @@ export class InfinityQueryEditor extends PureComponent<EditorProps> {
     render() {
         defaultsDeep(this.props.query, {
             type: 'json',
+            source: 'url',
             format: 'table',
             url: '',
             root_selector: '',
@@ -56,6 +57,17 @@ export class InfinityQueryEditor extends PureComponent<EditorProps> {
                             defaultValue={{ value: 'json', label: 'JSON' }}
                             onChange={e => this.onSelectChange(e, 'type', this.props)}
                         ></Select>
+                        <label className="gf-form-label query-keyword width-5">Source</label>
+                        <Select
+                            className="min-width-12 width-12"
+                            value={
+                                SCRAP_QUERY_SOURCES.find((field: any) => field.value === this.props.query.source)
+                                || { value: 'url', label: 'URL' }
+                            }
+                            options={SCRAP_QUERY_SOURCES}
+                            defaultValue={{ value: 'url', label: 'URL' }}
+                            onChange={e => this.onSelectChange(e, 'source', this.props)}
+                        ></Select>
                         <label className="gf-form-label query-keyword width-5">Format</label>
                         <Select
                             className="min-width-12 width-12"
@@ -69,18 +81,33 @@ export class InfinityQueryEditor extends PureComponent<EditorProps> {
                         ></Select>
                     </div>
                 </div>
-                <div className="gf-form-inline">
-                    <div className="gf-form">
-                        <label className="gf-form-label query-keyword width-8">URL</label>
-                        <input
-                            type="text"
-                            className="gf-form-input min-width-30"
-                            value={this.props.query.url}
-                            placeholder="https://jsonplaceholder.typicode.com/todos"
-                            onChange={e => this.onInputTextChange(e, `url`, this.props)}
-                        ></input>
+                {this.props.query.source === 'url' ? (
+                    <div className="gf-form-inline">
+                        <div className="gf-form">
+                            <label className="gf-form-label query-keyword width-8">URL</label>
+                            <input
+                                type="text"
+                                className="gf-form-input min-width-30"
+                                value={this.props.query.url}
+                                placeholder="https://jsonplaceholder.typicode.com/todos"
+                                onChange={e => this.onInputTextChange(e, `url`, this.props)}
+                            ></input>
+                        </div>
                     </div>
-                </div>
+                ) : (
+                        <div className="gf-form-inline">
+                            <div className="gf-form">
+                                <label className="gf-form-label query-keyword width-8">Data</label>
+                                <textarea
+                                    rows={5}
+                                    className="gf-form-input min-width-30"
+                                    value={this.props.query.data}
+                                    placeholder=""
+                                    onChange={e => this.onInputTextChange(e, `data`, this.props)}
+                                ></textarea>
+                            </div>
+                        </div>
+                    )}
                 <div className="gf-form-inline">
                     <div className="gf-form">
                         <label className="gf-form-label query-keyword width-8">Rows / Root</label>
