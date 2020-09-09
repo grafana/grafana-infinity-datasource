@@ -4,7 +4,7 @@ import { DataSourcePluginOptionsEditorProps, DataSourceJsonData } from '@grafana
 interface InfinityDataSourceOptions extends DataSourceJsonData { }
 interface ConfigProps extends DataSourcePluginOptionsEditorProps<InfinityDataSourceOptions> { }
 export class InfinityConfigEditor extends PureComponent<ConfigProps> {
-	render() {
-		return <div>Infinity Config Editor</div>;
-	}
+    render() {
+        return <div>Infinity Config Editor</div>;
+    }
 }
