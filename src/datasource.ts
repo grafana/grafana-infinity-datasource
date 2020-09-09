@@ -1,7 +1,7 @@
-import { flatten } from "lodash";
+import { flatten } from 'lodash';
 import { DataSourceApi } from '@grafana/data';
 import { getBackendSrv } from '@grafana/runtime';
-import { InfinityQuery } from "./types";
+import { InfinityQuery } from './types';
 import { HTMLParser } from './app/HTMLParser';
 import { JSONParser } from './app/JSONParser';
 import { CSVParser } from './app/CSVParser';
