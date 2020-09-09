@@ -1,9 +1,10 @@
-import { flatten, forEach, get } from "lodash";
+import { flatten } from "lodash";
 import { DataSourceApi } from '@grafana/data';
 import { getBackendSrv } from '@grafana/runtime';
-import { load } from 'cheerio';
 import { InfinityQuery } from "./types";
-import parse from "csv-parse/lib/sync";
+import { HTMLParser } from './app/HTMLParser';
+import { JSONParser } from './app/JSONParser';
+import { CSVParser } from './app/CSVParser';
 
 export class Datasource extends DataSourceApi<InfinityQuery> {
     constructor(instanceSettings: any) {
@@ -20,57 +21,16 @@ export class Datasource extends DataSourceApi<InfinityQuery> {
             promises.push(new Promise((resolve, reject) => {
                 getBackendSrv().get(t.url)
                     .then(res => {
-                        const rows: any[] = [];
                         if (t.type === "html") {
-                            const $ = load(res);
-                            const rootElements = $(t.root_selector);
-                            forEach(rootElements, r => {
-                                const row: any[] = [];
-                                const $$ = load(r);
-                                t.columns.forEach((c: any) => {
-                                    row.push($$(c.selector).text().trim());
-                                });
-                                rows.push(row);
-                            });
+                            const htmlResults = new HTMLParser(res, t);
+                            resolve(htmlResults.toTable());
                         } else if (t.type === "json") {
-                            if (t.root_selector) {
-                                res = get(res, t.root_selector);
-                            }
-                            if (Array.isArray(res)) {
-                                forEach(res, r => {
-                                    const row: any[] = [];
-                                    t.columns.forEach((c: any) => {
-                                        row.push(get(r, c.selector, ""));
-                                    });
-                                    rows.push(row);
-                                });
-                            } else {
-                                const row: any[] = [];
-                                t.columns.forEach((c: any) => {
-                                    row.push(get(res, c.selector, ""));
-                                });
-                                rows.push(row);
-                            }
+                            const jsonResults = new JSONParser(res, t);
+                            resolve(jsonResults.toTable());
                         } else if (t.type === "csv") {
-                            const options = {
-                                columns: true,
-                                skip_empty_lines: true
-                            };
-                            const records = parse(res, options);
-                            if (Array.isArray(records)) {
-                                forEach(records, r => {
-                                    const row: any[] = [];
-                                    t.columns.forEach((c: any) => {
-                                        row.push(get(r, c.selector, ""));
-                                    });
-                                    rows.push(row);
-                                });
-                            }
+                            const csvResults = new CSVParser(res, t);
+                            resolve(csvResults.toTable());
                         }
-                        resolve({
-                            rows,
-                            columns: t.columns
-                        });
                     }).catch(ex => {
                         reject("Failed to retrieve data");
                     });

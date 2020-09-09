@@ -6,7 +6,7 @@ export interface ScrapColumn {
     type: "string";
 }
 export interface InfinityQuery extends DataQuery {
-    type: 'json' | 'html';
+    type: 'json' | 'html' | 'csv';
     format: 'table' | 'timeseries';
     url: string;
     root_selector: string;
