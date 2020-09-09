@@ -20,6 +20,7 @@
 ## Features
 
 * Turn any website into grafana datasource
+* Inline CSV / JSON support
 * JSON / CSV / HTML urls as a data source
     * Selecting attributes of HTML elements instead of text of the html element (Work in progress)
     * Filter the results (Work in progress). Example: Ignore-first-row, Ignore-nth-rows, Ignore-odd, Ignore-even etc.
@@ -28,7 +29,7 @@
 
 More screenshots on how to use this plugin is available [here](https://github.com/yesoreyeram/grafana-infinity-datasource/issues/1).
 
-## JSON URL as a datasource
+## JSON URL
 
 In the below example, we are going to convert the JSON URL `https://jsonplaceholder.typicode.com/todos` into a grafana datasource.
 
@@ -38,7 +39,23 @@ The URL returns an array of objects. Each item in the array goes as a table row.
 
 **Note:** As the URL returns an array of objects, root selector / row have to be blank. If the root of the document is an object and you want to select specific property of the object, you can specify the selector of the object as a root selector / row. Example given [here](https://github.com/yesoreyeram/grafana-infinity-datasource/issues/1#issue-694996991).
 
-## CSV URL as a datasource
+## JSON Inline
+
+Instead of specifying URL, you can hardcode JSON object. For example, you can specify the json as shown in the below example
+
+```
+[
+  { "country": "india", "population": 420 },
+  { "country": "india", "population": 440 },
+  { "country": "usa", "population": 200 },
+  { "country": "uk", "population": 150 },
+  { "country": "china", "population": 400 }
+]
+```
+
+You need to also specify the column names manually for display purposes. 
+
+## CSV URL
 
 In the below example, we are going to convert the CSV URL `https://gist.githubusercontent.com/yesoreyeram/64a46b02f0bf87cb527d6270dd84ea47/raw/32ae9b1a4a0183dceb3596226b818c8f428193af/sample-with-quotes.csv` into a grafana datasource.
 
@@ -46,7 +63,26 @@ In the below example, we are going to convert the CSV URL `https://gist.githubus
 
 This is same as your JSON configuration. Ignore the root / rows as each line of CSV will be your rows. Though your csv file have columns, specify them as columns manually. Columns will appear in the same order you specify.
 
-## HTML URL as a datasource
+## CSV Inline
+
+Instead of specifying URL, you can hardcode csv values. For example, you can specify the csv in the following format
+
+```
+country,population,capital
+india,200,mumbai
+india,100,chennai
+china,500,beijing
+usa,200,washinton
+canada,100,ottawa
+```
+
+CSV data should have columns as its first line and commma delimited. You need to also specify the column names manually for display purposes. 
+
+Below screenshot shows the example of csv inline datasource
+
+![image](https://user-images.githubusercontent.com/153843/92571108-9e0ff800-f27a-11ea-9fe9-9f9dcbd7125a.png)
+
+## HTML URL
 
 In the below example, we are going to convert the HTML URL `https://grafana.com/about/team/` into grafana datasource.
 
