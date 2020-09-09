@@ -25,25 +25,25 @@ export class CSVParser {
             NumbersColumns.forEach((metricColumn: ScrapColumn) => {
                 forEach(records, r => {
                     let seriesName = target.columns.filter(t => t.type === 'string').map(c => r[c.selector]).join(' ');
-                    if( NumbersColumns.length>1){
-                        seriesName += ` ${metricColumn.text}`
+                    if (NumbersColumns.length > 1) {
+                        seriesName += ` ${metricColumn.text}`;
                     }
                     const timestamp = endTime ? endTime.getTime() : new Date().getTime();
                     this.series.push({
                         target: seriesName,
                         datapoints: [[get(r, metricColumn.selector), timestamp]]
-                    })
-                })
-            })
+                    });
+                });
+            });
         }
     }
     toTable() {
         return {
             rows: this.rows.filter(row => row.length > 0),
             columns: this.target.columns
-        }
+        };
     }
     toTimeSeries() {
-        return this.series
+        return this.series;
     }
 }

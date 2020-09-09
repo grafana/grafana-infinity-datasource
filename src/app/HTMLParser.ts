@@ -24,25 +24,25 @@ export class HTMLParser {
                 const $$ = load(r);
                 let seriesName = target.columns.filter(t => t.type === 'string').map(c => $$(c.selector).text()).join(' ');
                 if (NumbersColumns.length > 1) {
-                    seriesName += ` ${metricColumn.text}`
+                    seriesName += ` ${metricColumn.text}`;
                 }
                 const timestamp = endTime ? endTime.getTime() : new Date().getTime();
                 if (seriesName) {
                     this.series.push({
                         target: seriesName,
                         datapoints: [[toNumber($$(metricColumn.selector).text().trim().replace(/\,/g, '')), timestamp]]
-                    })
+                    });
                 }
-            })
-        })
+            });
+        });
     }
     toTable() {
         return {
             rows: this.rows.filter(row => row.length > 0),
             columns: this.target.columns
-        }
+        };
     }
     toTimeSeries() {
-        return this.series
+        return this.series;
     }
 }
