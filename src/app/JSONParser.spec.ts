@@ -3,6 +3,8 @@ import { JSONParser } from './JSONParser';
 const JSONResults1 = new JSONParser({}, {
     refId: '',
     type: 'json',
+    source: 'inline',
+    data:'',
     format: 'table',
     url: '',
     root_selector: '',
@@ -27,6 +29,8 @@ const JSONResults2 = new JSONParser([
 ], {
     refId: '',
     type: 'json',
+    source: 'inline',
+    data:'',
     format: 'table',
     url: '',
     root_selector: '',
@@ -66,6 +70,8 @@ const JSONResults3 = new JSONParser({
 }, {
     refId: '',
     type: 'json',
+    source: 'inline',
+    data:'',
     format: 'table',
     url: '',
     root_selector: 'users',
