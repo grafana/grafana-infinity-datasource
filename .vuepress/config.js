@@ -38,6 +38,7 @@ module.exports = {
             ['/wiki/features', 'Guide'],
             ['/wiki/csv', 'CSV'],
             ['/wiki/json', 'JSON'],
+            ['/wiki/html', 'HTML'],
             ['/wiki/installation', 'Installation'],
             ['/CHANGELOG', 'Change Log']
         ]

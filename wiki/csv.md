@@ -59,7 +59,7 @@ Below screenshot shows the example of csv inline datasource
 
 ![image](https://user-images.githubusercontent.com/153843/92711942-e568b800-f350-11ea-8191-4e8f493f1ec1.png)
 
-### One string filed and one number field
+### One string field and one number field
 
 ![image](https://user-images.githubusercontent.com/153843/92711986-f3b6d400-f350-11ea-97f8-fae28f44e8ec.png)
 
