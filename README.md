@@ -1,10 +1,10 @@
 ---
 home: true
-heroImage: https://user-images.githubusercontent.com/153843/92716030-316a2b80-f356-11ea-956f-71683cea3e33.png
 heroText: Grafana Infinity Datasource
 tagline: Do infinite things with Grafana
 actionText: Get Started →
 actionLink: /wiki/
+heroImage: https://user-images.githubusercontent.com/153843/92716030-316a2b80-f356-11ea-956f-71683cea3e33.png
 features:
 - title: Inline Data Source
   details: Use the inline datasource for ad-hoc or for static data
@@ -24,11 +24,11 @@ footer: Apache 2.0 Licensed | Authored by Sriramajeyam Sugumaran
     <a href="https://github.com/yesoreyeram/grafana-infinity-datasource/blob/master/LICENSE" target="_blank"><img src="https://img.shields.io/github/license/yesoreyeram/grafana-infinity-datasource" alt="Grafana Infinity data source license" /></a>
     <a href="http://makeapullrequest.com"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs are welcome" /></a>
     <a href="https://GitHub.com/yesoreyeram/grafana-infinity-datasource/graphs/commit-activity"><img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" alt="Grafana Infinity datasource is maintained" /></a>
-    <a href="https://codeclimate.com/github/yesoreyeram/grafana-infinity-datasource/maintainability"><img src="https://api.codeclimate.com/v1/badges/fe316cba222e99e573dd/maintainability" /></a>
+    <a href="https://codeclimate.com/github/yesoreyeram/grafana-infinity-datasource/maintainability"><img src="https://api.codeclimate.com/v1/badges/7e2ae1bce7310890065c/maintainability" /></a>
 </p>
 
 <p align="center">
-    <a href="https://yesoreyeram.github.io/grafana-infinity-datasource/wiki/">
+    <a href="https://yesoreyeram.github.io/grafana-infinity-datasource">
         <button align="center" style="padding:10px 20px;margin:20px;">Plugin Guide</button>
     </a>
 </p>

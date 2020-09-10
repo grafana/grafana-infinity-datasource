@@ -1,7 +1,4 @@
-<p align="center">
-    <h1 align="center">Grafana Infinity Data source</h2>
-    <h5 align="center">Do infinite things with Grafana</h5>
-</p>
+# Infinity Datasource
 
 ## Features
 
@@ -9,7 +6,7 @@
 * Inline CSV / JSON support
 * JSON / CSV / HTML urls as a data source
 
-### Upcoming features
+### Road Map / Upcoming features
 
 * Selecting attributes of HTML elements instead of text of the html element
 * Filter the results. Example: Ignore-first-row, Ignore-nth-rows, Ignore-odd, Ignore-even etc.
@@ -95,39 +92,6 @@ Example :
 
 Some URLs you might not access directly due to CORS restriction set by the websites. At that time you may need to use proxy servers or hosted services as mentioned [here](https://stackoverflow.com/a/32167044/1576253). Example: Use **https://cors-anywhere.herokuapp.com/https://en.wikipedia.org/wiki/FIFA_World_Cup** to connect with wikipedia.
 
-## Installation
-
-There are multiple ways to install this plugin into your grafana instance
-
-### Download and extract zip file
-
-Download the zip file from [github](https://github.com/yesoreyeram/grafana-infinity-datasource/archive/master.zip) and extract into your grafana plugin folder. Then restart Grafana.
-
-### Using grafana-cli
-
-If you are using grafana-cli, execute the following command to install the plugin
-
-```
-grafana-cli --pluginUrl https://github.com/yesoreyeram/grafana-infinity-datasource/archive/master.zip plugins install yesoreyeram-infinity-datasource
-```
-
-### Using helm chart
-
-If you use helm chart to provision grafana, use the following config to install the plugin
-
-```
-plugins:
-  - https://github.com/yesoreyeram/grafana-infinity-datasource/archive/master.zip;yesoreyeram-infinity-datasource
-```
-
-## Configuration
-
-Once the plugin installed, you need to create an instance of the datasource. To create an instance follow the steps
-
-* Go to `http://localhost:3000/datasources` and select *Add data source*
-* Search for **Infinity** plugin
-* Give some name. Any name. Sure; Your kitten names are allowed.
-* Save (and test)
 
 ## License
 
