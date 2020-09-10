@@ -4,7 +4,7 @@ heroText: Grafana Infinity Datasource
 tagline: Do infinite things with Grafana
 actionText: Get Started →
 actionLink: /wiki/features
-heroImage: https://user-images.githubusercontent.com/153843/92716030-316a2b80-f356-11ea-956f-71683cea3e33.png
+heroImage: https://user-images.githubusercontent.com/153843/92741922-03491380-f377-11ea-9c31-9a744afd3388.png
 features:
 - title: Inline Data Source
   details: Use the inline datasource for ad-hoc queries and for static data analysis
