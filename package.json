@@ -1,6 +1,6 @@
 {
   "name": "grafana-infinity-datasource",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Infinity data source plugin for Grafana",
   "main": "dist/module.js",
   "scripts": {

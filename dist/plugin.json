@@ -5,7 +5,7 @@
   "metrics": true,
   "annotations": false,
   "info": {
-    "version": "0.0.1",
+    "version": "0.1.0",
     "updated": "2020-09-10",
     "description": "Grafana Infinity Datasource",
     "author": {
