@@ -1,4 +1,4 @@
-import { forEach, get } from 'lodash';
+import { forEach, get, toNumber } from 'lodash';
 import parse from "csv-parse/lib/sync";
 import { InfinityQuery, ScrapColumn } from "./../types";
 
@@ -31,7 +31,7 @@ export class CSVParser {
                     const timestamp = endTime ? endTime.getTime() : new Date().getTime();
                     this.series.push({
                         target: seriesName,
-                        datapoints: [[get(r, metricColumn.selector), timestamp]]
+                        datapoints: [[toNumber(get(r, metricColumn.selector)), timestamp]]
                     });
                 });
             });

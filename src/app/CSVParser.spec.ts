@@ -1,0 +1,61 @@
+import { CSVParser } from './CSVParser';
+
+const CSVResults1 = new CSVParser(``, {
+    refId: '',
+    type: 'json',
+    source: 'inline',
+    data: '',
+    format: 'table',
+    url: '',
+    root_selector: '',
+    columns: []
+})
+describe('CSVParser', () => {
+    it('Basic', () => {
+        expect(CSVResults1.toTable().rows.length).toBe(0)
+        expect(CSVResults1.toTable().columns.length).toBe(0)
+    })
+})
+const CSVResults2 = new CSVParser(`
+country,population
+india,10
+usa,7
+uk,k
+china,11
+`, {
+    refId: '',
+    type: 'json',
+    source: 'inline',
+    data: '',
+    format: 'table',
+    url: '',
+    root_selector: '',
+    columns: [
+        {
+            text: "Country",
+            type: "string",
+            selector: "country"
+        },
+        {
+            text: "Population",
+            type: "number",
+            selector: "population"
+        }
+    ]
+})
+describe('CSVParser', () => {
+    it('Basic', () => {
+        expect(CSVResults2.toTable().columns.length).toBe(2)
+        expect(CSVResults2.toTable().rows.length).toBe(4)
+        expect(CSVResults2.toTable().rows[1].length).toBe(2)
+        expect(CSVResults2.toTable().rows[1][0]).toBe('usa')
+        expect(CSVResults2.toTimeSeries().length).toBe(4)
+        expect(CSVResults2.toTimeSeries()[0].target).toBe('india')
+        expect(CSVResults2.toTimeSeries()[3].target).toBe('china')
+        expect(CSVResults2.toTimeSeries()[3].datapoints.length).toBe(1)
+        expect(CSVResults2.toTimeSeries()[3].datapoints[0].length).toBe(2)
+        expect(typeof CSVResults2.toTimeSeries()[3].datapoints[0][0]).toBe('number')
+        expect(typeof CSVResults2.toTimeSeries()[3].datapoints[0][1]).toBe('number')
+        expect(CSVResults2.toTimeSeries()[3].datapoints[0][0]).toBe(11)
+    })
+})
