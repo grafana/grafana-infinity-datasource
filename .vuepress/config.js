@@ -37,6 +37,7 @@ module.exports = {
         sidebar: [
             ['/wiki/features', 'Guide'],
             ['/wiki/csv', 'CSV'],
+            ['/wiki/json', 'JSON'],
             ['/wiki/installation', 'Installation'],
             ['/CHANGELOG', 'Change Log']
         ]

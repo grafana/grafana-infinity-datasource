@@ -3,13 +3,13 @@ home: true
 heroText: Grafana Infinity Datasource
 tagline: Do infinite things with Grafana
 actionText: Get Started →
-actionLink: /wiki/
+actionLink: /wiki/features
 heroImage: https://user-images.githubusercontent.com/153843/92716030-316a2b80-f356-11ea-956f-71683cea3e33.png
 features:
 - title: Inline Data Source
-  details: Use the inline datasource for ad-hoc or for static data
+  details: Use the inline datasource for ad-hoc queries and for static data analysis
 - title: Use URLs as datasource
-  details: Get the data from any url
+  details: Get the data from any public url
 - title: Support for multiple formats
   details: Support for CSV, JSON and HTML formats
 footer: Apache 2.0 Licensed | Authored by Sriramajeyam Sugumaran

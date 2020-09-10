@@ -13,63 +13,6 @@
 * Header-less CSV files support
 * Custom fields support. Example: Sum of two fields. Joining two fields etc.
 
-## JSON URL
-
-In the below example, we are going to convert the JSON URL `https://jsonplaceholder.typicode.com/todos` into a grafana datasource.
-
-![image](https://user-images.githubusercontent.com/153843/92381992-bf020d00-f103-11ea-936d-94f903faa5e6.png)
-
-The URL returns an array of objects. Each item in the array goes as a table row. Property of each object goes into column of the table. By default, the datasource will not consider any columns for display. You have to manually specify the column names and corresponding properties in the JSON object.
-
-**Note:** As the URL returns an array of objects, root selector / row have to be blank. If the root of the document is an object and you want to select specific property of the object, you can specify the selector of the object as a root selector / row. Example given [here](https://github.com/yesoreyeram/grafana-infinity-datasource/issues/1#issue-694996991).
-
-## JSON Inline
-
-Instead of specifying URL, you can hardcoded JSON object. For example, you can specify the json as shown in the below example
-
-```
-[
-  { "country": "india", "population": 420 },
-  { "country": "india", "population": 440 },
-  { "country": "usa", "population": 200 },
-  { "country": "uk", "population": 150 },
-  { "country": "china", "population": 400 }
-]
-```
-
-You need to also specify the column names manually for display purposes. 
-
-## CSV
-
-[wiki](https://yesoreyeram.github.io/grafana-infinity-datasource/wiki/csv.html) have more details on how to use CSV feature and latest guide.
-
-### CSV URL
-
-In the below example, we are going to convert the CSV URL `https://gist.githubusercontent.com/yesoreyeram/64a46b02f0bf87cb527d6270dd84ea47/raw/32ae9b1a4a0183dceb3596226b818c8f428193af/sample-with-quotes.csv` into a grafana datasource.
-
-![image](https://user-images.githubusercontent.com/153843/92382040-d8a35480-f103-11ea-8ff8-48c7ca211062.png)
-
-This is same as your JSON configuration. Ignore the root / rows as each line of CSV will be your rows. Though your csv file have columns, specify them as columns manually. Columns will appear in the same order you specify.
-
-### CSV Inline
-
-Instead of specifying URL, you can hardcoded csv values. For example, you can specify the csv in the following format
-
-```
-country,population,capital
-india,200,mumbai
-india,100,chennai
-china,500,beijing
-usa,200,washington
-canada,100,ottawa
-```
-
-CSV data should have columns as its first line and comma delimited. You need to also specify the column names manually for display purposes. 
-
-Below screenshot shows the example of csv inline datasource
-
-![image](https://user-images.githubusercontent.com/153843/92571108-9e0ff800-f27a-11ea-9fe9-9f9dcbd7125a.png)
-
 ## HTML URL
 
 In the below example, we are going to convert the HTML URL `https://grafana.com/about/team/` into grafana datasource.
