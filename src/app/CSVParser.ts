@@ -1,13 +1,11 @@
 import { forEach, get, toNumber } from 'lodash';
 import parse from "csv-parse/lib/sync";
-import { InfinityQuery, ScrapColumn } from "./../types";
+import { InfinityQuery, ScrapColumn, GrafanaTableRow } from "./../types";
+import { InfinityParser } from './InfinityParser';
 
-export class CSVParser {
-    private rows: any[];
-    private series: any[];
-    constructor(CSVResponse: string, private target: InfinityQuery, endTime?: Date) {
-        this.rows = [];
-        this.series = [];
+export class CSVParser extends InfinityParser {
+    constructor(CSVResponse: string, target: InfinityQuery, endTime?: Date) {
+        super(target);
         const options = {
             columns: true,
             skip_empty_lines: true
@@ -15,20 +13,27 @@ export class CSVParser {
         const records = parse(CSVResponse, options);
         if (Array.isArray(records)) {
             forEach(records, r => {
-                const row: any[] = [];
+                const row: GrafanaTableRow = [];
                 target.columns.forEach((c: ScrapColumn) => {
                     row.push(get(r, c.selector, ""));
                 });
                 this.rows.push(row);
             });
-            const NumbersColumns = target.columns.filter(t => t.type === 'number');
-            NumbersColumns.forEach((metricColumn: ScrapColumn) => {
+            this.NumbersColumns.forEach((metricColumn: ScrapColumn) => {
                 forEach(records, r => {
-                    let seriesName = target.columns.filter(t => t.type === 'string').map(c => r[c.selector]).join(' ');
-                    if (NumbersColumns.length > 1) {
+                    let seriesName = this.StringColumns.map(c => r[c.selector]).join(' ');
+                    if (this.NumbersColumns.length > 1) {
                         seriesName += ` ${metricColumn.text}`;
                     }
-                    const timestamp = endTime ? endTime.getTime() : new Date().getTime();
+                    if (this.NumbersColumns.length === 1 && seriesName === '') {
+                        seriesName = `${metricColumn.text}`;
+                    }
+                    seriesName = seriesName.trim();
+                    let timestamp = endTime ? endTime.getTime() : new Date().getTime();
+                    if (this.TimeColumns.length >= 1) {
+                        const FirstTimeColumn = this.TimeColumns[0];
+                        timestamp = new Date(get(r, FirstTimeColumn.selector)).getTime();
+                    }
                     this.series.push({
                         target: seriesName,
                         datapoints: [[toNumber(get(r, metricColumn.selector)), timestamp]]
@@ -36,14 +41,5 @@ export class CSVParser {
                 });
             });
         }
-    }
-    toTable() {
-        return {
-            rows: this.rows.filter(row => row.length > 0),
-            columns: this.target.columns
-        };
-    }
-    toTimeSeries() {
-        return this.series;
     }
 }

@@ -1,5 +1,21 @@
 import { DataQuery } from '@grafana/data';
 
+export type dataPoint = [number | null, number];
+export type timeSeriesResult = {
+    target: string;
+    datapoints: dataPoint[];
+};
+export type GrafanaTableColumn = {
+    text: string;
+    type: string;
+};
+export type GrafanaTableRow = (string | number | object)[];
+export type tableResult = {
+    columns: GrafanaTableColumn[];
+    rows: GrafanaTableRow;
+};
+export type queryResult = timeSeriesResult | tableResult;
+
 export interface ScrapColumn {
     selector: string;
     text: string;

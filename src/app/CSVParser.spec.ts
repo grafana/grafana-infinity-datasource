@@ -44,7 +44,7 @@ china,11
     ]
 })
 describe('CSVParser', () => {
-    it('Basic', () => {
+    it('With Columns', () => {
         expect(CSVResults2.toTable().columns.length).toBe(2)
         expect(CSVResults2.toTable().rows.length).toBe(4)
         expect(CSVResults2.toTable().rows[1].length).toBe(2)
@@ -57,5 +57,58 @@ describe('CSVParser', () => {
         expect(typeof CSVResults2.toTimeSeries()[3].datapoints[0][0]).toBe('number')
         expect(typeof CSVResults2.toTimeSeries()[3].datapoints[0][1]).toBe('number')
         expect(CSVResults2.toTimeSeries()[3].datapoints[0][0]).toBe(11)
+    })
+})
+const CSVResults3 = new CSVParser(`
+year,country,population
+1990,india,10
+1990,usa,7
+1990,uk,5
+1990,china,11
+1990,india,11
+1990,usa,8
+1990,uk,5
+1990,china,12
+`, {
+    refId: '',
+    type: 'json',
+    source: 'inline',
+    data: '',
+    format: 'table',
+    url: '',
+    root_selector: '',
+    columns: [
+        {
+            text: "Year",
+            type: "timestamp",
+            selector: "year"
+        },
+        {
+            text: "Country",
+            type: "string",
+            selector: "country"
+        },
+        {
+            text: "Population",
+            type: "number",
+            selector: "population"
+        }
+    ]
+})
+describe('CSVParser', () => {
+    it('With Timestamp YYYY And Aggregation', () => {
+        expect(CSVResults3.toTable().columns.length).toBe(3)
+        expect(CSVResults3.toTable().rows.length).toBe(8)
+        expect(CSVResults3.toTable().rows[1].length).toBe(3)
+        expect(CSVResults3.toTable().rows[1][1]).toBe('usa')
+        expect(CSVResults3.toTimeSeries().length).toBe(4)
+        expect(CSVResults3.toTimeSeries()[0].target).toBe('india')
+        expect(CSVResults3.toTimeSeries()[3].target).toBe('china')
+        expect(CSVResults3.toTimeSeries()[3].datapoints.length).toBe(2)
+        expect(CSVResults3.toTimeSeries()[3].datapoints[0].length).toBe(2)
+        expect(typeof CSVResults3.toTimeSeries()[3].datapoints[0][0]).toBe('number')
+        expect(typeof CSVResults3.toTimeSeries()[3].datapoints[0][1]).toBe('number')
+        expect(CSVResults3.toTimeSeries()[3].datapoints[0][1]).toBe(631152000000)
+        expect(CSVResults3.toTimeSeries()[3].datapoints[0][0]).toBe(11)
     })
 })
