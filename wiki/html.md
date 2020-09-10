@@ -12,6 +12,8 @@ Then you can select, individual properties of the row as columns of the table as
 
 ![image](https://user-images.githubusercontent.com/153843/92382094-f4a6f600-f103-11ea-8035-e1bbd9157629.png)
 
+![image](https://user-images.githubusercontent.com/153843/92747321-fbd83900-f37b-11ea-8be9-9366386dc6e2.png)
+
 Example :
 
 - `h4` --> h4 element will be selected
