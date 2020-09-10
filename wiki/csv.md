@@ -69,9 +69,9 @@ Below screenshot shows the example of csv inline datasource
 
 ## Time formats
 
-Rows for the timestamp fields should be one of the standard javascript date format as specified [here](https://www.w3schools.com/js/js_date_formats.asp).
+Rows for the timestamp fields should be one of the standard javascript date format as specified [here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/Date).
 
-![image](https://user-images.githubusercontent.com/153843/92719281-d38c1280-f35a-11ea-97cd-498e008f12f1.png)
+![image](https://user-images.githubusercontent.com/153843/92720934-3d0d2080-f35d-11ea-93e3-c1ff46d4ea59.png)
 
 For example, below is the valid csv with valid timestamps
 
@@ -83,4 +83,10 @@ year,population
 2017/04,9.4
 2017/05/23,9.4
 2017-06-25T12:10:00Z,10.1
+"July 12, 2017 03:24:00",12
+2017/08/23 10:30,9.4
+2017/09/23 10:30:20,9.4
+2017-10-23 10:30:20,9.4
+Thu Nov 23 2017 10:30:20 GMT+0000 (Greenwich Mean Time),10.1
+"Sat, 23 Dec 2017 10:30:20 GMT",12
 ```
