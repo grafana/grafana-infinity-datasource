@@ -13,7 +13,7 @@
     <a href="https://codeclimate.com/github/yesoreyeram/grafana-infinity-datasource/maintainability"><img src="https://api.codeclimate.com/v1/badges/fe316cba222e99e573dd/maintainability" /></a>
 </p>
 <p align="center">
-    <img src="https://user-images.githubusercontent.com/153843/92399290-faabcf80-f121-11ea-9261-b06c708e81c0.png" width="500" height="200"></img><br/>
+    <img src="https://user-images.githubusercontent.com/153843/92399290-faabcf80-f121-11ea-9261-b06c708e81c0.png" width="700" height="300"></img><br/>
     <img src="https://user-images.githubusercontent.com/153843/92382187-1a33ff80-f104-11ea-92ec-e5c4fa83fd3f.png" width="500" height="200"></img>
 </p>
 
@@ -41,7 +41,7 @@ The URL returns an array of objects. Each item in the array goes as a table row.
 
 ## JSON Inline
 
-Instead of specifying URL, you can hardcode JSON object. For example, you can specify the json as shown in the below example
+Instead of specifying URL, you can hardcoded JSON object. For example, you can specify the json as shown in the below example
 
 ```
 [
@@ -55,7 +55,11 @@ Instead of specifying URL, you can hardcode JSON object. For example, you can sp
 
 You need to also specify the column names manually for display purposes. 
 
-## CSV URL
+## CSV
+
+[wiki](https://yesoreyeram.github.io/grafana-infinity-datasource/wiki/csv.html) have more details on how to use CSV feature and latest guide.
+
+### CSV URL
 
 In the below example, we are going to convert the CSV URL `https://gist.githubusercontent.com/yesoreyeram/64a46b02f0bf87cb527d6270dd84ea47/raw/32ae9b1a4a0183dceb3596226b818c8f428193af/sample-with-quotes.csv` into a grafana datasource.
 
@@ -63,20 +67,20 @@ In the below example, we are going to convert the CSV URL `https://gist.githubus
 
 This is same as your JSON configuration. Ignore the root / rows as each line of CSV will be your rows. Though your csv file have columns, specify them as columns manually. Columns will appear in the same order you specify.
 
-## CSV Inline
+### CSV Inline
 
-Instead of specifying URL, you can hardcode csv values. For example, you can specify the csv in the following format
+Instead of specifying URL, you can hardcoded csv values. For example, you can specify the csv in the following format
 
 ```
 country,population,capital
 india,200,mumbai
 india,100,chennai
 china,500,beijing
-usa,200,washinton
+usa,200,washington
 canada,100,ottawa
 ```
 
-CSV data should have columns as its first line and commma delimited. You need to also specify the column names manually for display purposes. 
+CSV data should have columns as its first line and comma delimited. You need to also specify the column names manually for display purposes. 
 
 Below screenshot shows the example of csv inline datasource
 

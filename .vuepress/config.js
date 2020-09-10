@@ -36,6 +36,7 @@ module.exports = {
         ],
         sidebar: [
             ['/', 'Infinity Datasource'],
+            ['/wiki/csv', 'CSV'],
             ['/CHANGELOG', 'Change Log']
         ]
     }
