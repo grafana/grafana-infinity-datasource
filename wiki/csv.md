@@ -66,3 +66,21 @@ Below screenshot shows the example of csv inline datasource
 ### One time field, multiple string and number fields
 
 ![image](https://user-images.githubusercontent.com/153843/92713171-8dcb4c00-f352-11ea-9050-6757fbbe3158.png)
+
+## Time formats
+
+Rows for the timestamp fields should be one of the standard javascript date format as specified [here](https://www.w3schools.com/js/js_date_formats.asp).
+
+![image](https://user-images.githubusercontent.com/153843/92719281-d38c1280-f35a-11ea-97cd-498e008f12f1.png)
+
+For example, below is the valid csv with valid timestamps
+
+```
+year,population
+2017,8
+2017-02,9
+2017-03,9.3
+2017/04,9.4
+2017/05/23,9.4
+2017-06-25T12:10:00Z,10.1
+```
