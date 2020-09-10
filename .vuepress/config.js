@@ -19,7 +19,7 @@ module.exports = {
         nav: [
             {
                 text: "Install",
-                link: "/wiki/install"
+                link: "/wiki/installation"
             },
             {
                 text: "Report Bug",
@@ -37,7 +37,7 @@ module.exports = {
         sidebar: [
             ['/wiki/features', 'Guide'],
             ['/wiki/csv', 'CSV'],
-            ['/wiki/install', 'Installation'],
+            ['/wiki/installation', 'Installation'],
             ['/CHANGELOG', 'Change Log']
         ]
     }
