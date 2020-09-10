@@ -35,10 +35,10 @@ module.exports = {
             }
         ],
         sidebar: [
-            ['/wiki', 'Guide'],
+            ['/wiki/features', 'Guide'],
             ['/wiki/csv', 'CSV'],
             ['/wiki/install', 'Installation'],
-            ['/changelog', 'Change Log']
+            ['/CHANGELOG', 'Change Log']
         ]
     }
 }
