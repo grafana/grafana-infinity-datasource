@@ -89,4 +89,5 @@ year,population
 2017-10-23 10:30:20,9.4
 Thu Nov 23 2017 10:30:20 GMT+0000 (Greenwich Mean Time),10.1
 "Sat, 23 Dec 2017 10:30:20 GMT",12
+01/29/2018,12.4
 ```
