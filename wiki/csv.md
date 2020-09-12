@@ -67,6 +67,10 @@ Below screenshot shows the example of csv inline datasource
 
 ![image](https://user-images.githubusercontent.com/153843/92713171-8dcb4c00-f352-11ea-9050-6757fbbe3158.png)
 
+### All Number fields (Timestamp, UserId and Metric)
+
+![image](https://user-images.githubusercontent.com/153843/92991051-bda45c00-f4d8-11ea-84dd-4ee1606e8125.png)
+
 ## Time formats
 
 Rows for the timestamp fields should be one of the standard javascript date format as specified [here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/Date).
