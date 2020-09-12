@@ -89,7 +89,7 @@ const JSONResults3 = new JSONParser({
     ]
 })
 describe('JSONParser', () => {
-    it('With Columns & Root Selctor', () => {
+    it('With Columns & Root Selector', () => {
         expect(JSONResults3.toTable().rows.length).toBe(3)
         expect(JSONResults3.toTable().rows[0].length).toBe(2)
         expect(JSONResults3.toTable().rows[1][0]).toBe('bar')

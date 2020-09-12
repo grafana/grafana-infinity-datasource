@@ -1,10 +1,7 @@
 import { flatten } from 'lodash';
 import { DataSourceApi } from '@grafana/data';
-import { getBackendSrv } from '@grafana/runtime';
+import { InfinityProvider } from './app/InfinityProvider';
 import { InfinityQuery } from './types';
-import { HTMLParser } from './app/HTMLParser';
-import { JSONParser } from './app/JSONParser';
-import { CSVParser } from './app/CSVParser';
 
 export class Datasource extends DataSourceApi<InfinityQuery> {
     constructor(instanceSettings: any) {
@@ -19,58 +16,20 @@ export class Datasource extends DataSourceApi<InfinityQuery> {
         const promises: any[] = [];
         options.targets.forEach((t: InfinityQuery) => {
             promises.push(new Promise((resolve, reject) => {
-                if (t.source === 'inline') {
-                    if (t.type === "html") {
-                        const htmlResults = new HTMLParser(t.data, t);
-                        if (t.format === 'table') {
-                            resolve(htmlResults.toTable());
-                        } else {
-                            resolve(htmlResults.toTimeSeries());
-                        }
-                    } else if (t.type === "json") {
-                        const jsonResults = new JSONParser(JSON.parse(t.data), t, new Date(options.range.to));
-                        if (t.format === 'table') {
-                            resolve(jsonResults.toTable());
-                        } else {
-                            resolve(jsonResults.toTimeSeries());
-                        }
-                    } else if (t.type === "csv") {
-                        const csvResults = new CSVParser(t.data, t);
-                        if (t.format === 'table') {
-                            resolve(csvResults.toTable());
-                        } else {
-                            resolve(csvResults.toTimeSeries());
-                        }
-                    }
-                } else {
-                    getBackendSrv().get(t.url)
-                        .then(res => {
-                            if (t.type === "html") {
-                                const htmlResults = new HTMLParser(res, t);
-                                if (t.format === 'table') {
-                                    resolve(htmlResults.toTable());
-                                } else {
-                                    resolve(htmlResults.toTimeSeries());
-                                }
-                            } else if (t.type === "json") {
-                                const jsonResults = new JSONParser(res, t);
-                                if (t.format === 'table') {
-                                    resolve(jsonResults.toTable());
-                                } else {
-                                    resolve(jsonResults.toTimeSeries());
-                                }
-                            } else if (t.type === "csv") {
-                                const csvResults = new CSVParser(res, t);
-                                if (t.format === 'table') {
-                                    resolve(csvResults.toTable());
-                                } else {
-                                    resolve(csvResults.toTimeSeries());
-                                }
-                            }
-                        }).catch(ex => {
-                            reject("Failed to retrieve data");
-                        });
-
+                switch (t.type) {
+                    case "csv":
+                    case "html":
+                    case "json":
+                        new InfinityProvider(t).query()
+                            .then(res => resolve(res))
+                            .catch(ex => {
+                                console.error(ex);
+                                reject("Failed to retrieve data");
+                            })
+                        break;
+                    default:
+                        reject("Unknown Query Type");
+                        break;
                 }
             }));
         });

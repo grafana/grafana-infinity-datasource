@@ -1,21 +1,32 @@
 import { forEach, toNumber } from 'lodash';
 import { load } from 'cheerio';
-import { InfinityQuery, ScrapColumn, GrafanaTableRow } from "./../types";
 import { InfinityParser } from './InfinityParser';
+import { InfinityQuery, ScrapColumn, GrafanaTableRow } from "./../../types";
 
 export class HTMLParser extends InfinityParser {
     constructor(HTMLResponse: string, target: InfinityQuery, endTime?: Date) {
         super(target);
+        const rootElements = this.formatInput(HTMLResponse);
+        this.constructTableData(rootElements);
+        this.constructTimeSeriesData(rootElements, endTime);
+    }
+    private formatInput(HTMLResponse: string) {
         const $ = load(HTMLResponse);
-        const rootElements = $(target.root_selector);
+        const rootElements = $(this.target.root_selector);
+        return rootElements;
+    }
+    private constructTableData(rootElements: Cheerio) {
         forEach(rootElements, r => {
             const row: GrafanaTableRow = [];
-            const $$ = load(r);
-            target.columns.forEach((c: ScrapColumn) => {
-                row.push($$(c.selector).text().trim());
+            const $ = load(r);
+            this.target.columns.forEach((c: ScrapColumn) => {
+                let value = $(c.selector).text().trim();
+                row.push(value);
             });
             this.rows.push(row);
         });
+    }
+    private constructTimeSeriesData(rootElements: Cheerio, endTime: Date | undefined) {
         this.NumbersColumns.forEach((metricColumn: ScrapColumn) => {
             forEach(rootElements, r => {
                 const $$ = load(r);
@@ -33,9 +44,10 @@ export class HTMLParser extends InfinityParser {
                     timestamp = new Date($$(FirstTimeColumn.selector).text().trim()).getTime();
                 }
                 if (seriesName) {
+                    let metric = toNumber($$(metricColumn.selector).text().trim().replace(/\,/g, ''));
                     this.series.push({
                         target: seriesName,
-                        datapoints: [[toNumber($$(metricColumn.selector).text().trim().replace(/\,/g, '')), timestamp]]
+                        datapoints: [[metric, timestamp]]
                     });
                 }
             });

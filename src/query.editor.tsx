@@ -68,17 +68,6 @@ export class InfinityQueryEditor extends PureComponent<EditorProps> {
                             defaultValue={{ value: 'url', label: 'URL' }}
                             onChange={e => this.onSelectChange(e, 'source', this.props)}
                         ></Select>
-                        <label className="gf-form-label query-keyword width-5">Format</label>
-                        <Select
-                            className="min-width-12 width-12"
-                            value={
-                                SCRAP_QUERY_RESULT_FORMATS.find((field: any) => field.value === this.props.query.format)
-                                || { value: 'table', label: 'Table' }
-                            }
-                            options={SCRAP_QUERY_RESULT_FORMATS}
-                            defaultValue={{ value: 'table', label: 'Table' }}
-                            onChange={e => this.onSelectChange(e, 'format', this.props)}
-                        ></Select>
                     </div>
                 </div>
                 {this.props.query.source === 'url' ? (
@@ -108,18 +97,22 @@ export class InfinityQueryEditor extends PureComponent<EditorProps> {
                             </div>
                         </div>
                     )}
-                <div className="gf-form-inline">
-                    <div className="gf-form">
-                        <label className="gf-form-label query-keyword width-8">Rows / Root</label>
-                        <input
-                            type="text"
-                            className="gf-form-input min-width-30"
-                            value={this.props.query.root_selector}
-                            placeholder=""
-                            onChange={e => this.onInputTextChange(e, `root_selector`, this.props)}
-                        ></input>
-                    </div>
-                </div>
+                {
+                    ['html', 'json'].indexOf(this.props.query.type) > -1 ? (
+                        <div className="gf-form-inline">
+                            <div className="gf-form">
+                                <label className="gf-form-label query-keyword width-8">Rows / Root</label>
+                                <input
+                                    type="text"
+                                    className="gf-form-input min-width-30"
+                                    value={this.props.query.root_selector}
+                                    placeholder=""
+                                    onChange={e => this.onInputTextChange(e, `root_selector`, this.props)}
+                                ></input>
+                            </div>
+                        </div>
+                    ) : <></>
+                }
                 {this.props.query.columns.length === 0 ? (
                     <div className="gf-form-inline">
                         <div className="gf-form">
@@ -142,7 +135,7 @@ export class InfinityQueryEditor extends PureComponent<EditorProps> {
                     return (<div>
                         <div className="gf-form-inline">
                             <div className="gf-form">
-                                <label className="gf-form-label width-8" title="Column">
+                                <label className="gf-form-label query-keyword width-8" title="Column">
                                     Column {index + 1}
                                 </label>
                                 <input
@@ -156,7 +149,7 @@ export class InfinityQueryEditor extends PureComponent<EditorProps> {
                                     type="text"
                                     className="gf-form-input min-width-8"
                                     value={column.selector}
-                                    placeholder="Selector"
+                                    placeholder={ this.props.query.type === 'csv'? 'Column Name' : 'Selector' }
                                     onChange={e => this.onInputTextChange(e, `columns[${index}].selector`, this.props)}
                                 ></input>
                                 <Select
@@ -178,7 +171,22 @@ export class InfinityQueryEditor extends PureComponent<EditorProps> {
                         </div>
                     </div>);
                 })
-                }
+                }                
+                <div className="gf-form-inline">
+                    <div className="gf-form">
+                        <label className="gf-form-label query-keyword width-8">Format</label>
+                        <Select
+                            className="min-width-12 width-12"
+                            value={
+                                SCRAP_QUERY_RESULT_FORMATS.find((field: any) => field.value === this.props.query.format)
+                                || { value: 'table', label: 'Table' }
+                            }
+                            options={SCRAP_QUERY_RESULT_FORMATS}
+                            defaultValue={{ value: 'table', label: 'Table' }}
+                            onChange={e => this.onSelectChange(e, 'format', this.props)}
+                        ></Select>
+                    </div>
+                </div>
             </div >
         );
     }
