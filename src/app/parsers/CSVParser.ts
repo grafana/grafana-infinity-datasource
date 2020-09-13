@@ -28,7 +28,7 @@ export class CSVParser extends InfinityParser {
                 if (c.type === 'timestamp') {
                     value = new Date(value)
                 } else if (c.type === 'number') {
-                    value = +(value)
+                    value = value === '' ? null : +(value)
                 }
                 row.push(value);
             });

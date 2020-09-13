@@ -1,30 +1,30 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { defaultsDeep } from "lodash";
 import { QueryEditorProps } from '@grafana/data';
 import { Datasource } from "./datasource";
 import { TypeChooser } from "./editors/TypeChooser";
-import { FormatChooser } from "./editors/FormatChooser";
-import { Scrapper } from "./editors/Scrapper";
+import { AdvancedOptions } from "./editors/AdvancedOptions";
+import { Scrapper as ScrapperOptions } from "./editors/Scrapper";
 import { InfinityQuery } from "./types";
 
 type EditorProps = QueryEditorProps<Datasource, InfinityQuery>;
 
-export class InfinityQueryEditor extends PureComponent<EditorProps> {
-    render() {
-        defaultsDeep(this.props.query, {
-            type: 'json',
-            source: 'url',
-            format: 'table',
-            url: '',
-            root_selector: '',
-            columns: []
-        });
-        return (
-            <div>
-                <TypeChooser onChange={this.props.onChange} query={this.props.query} />
-                <Scrapper onChange={this.props.onChange} query={this.props.query} />
-                <FormatChooser onChange={this.props.onChange} query={this.props.query} />
-            </div >
-        );
-    }
+export const InfinityQueryEditor: React.FC<EditorProps> = ({ query, onChange }) => {
+    
+    query = defaultsDeep(query, {
+        type: 'json',
+        source: 'url',
+        format: 'table',
+        url: '',
+        root_selector: '',
+        columns: []
+    });
+    
+    return (
+        <div>
+            <TypeChooser onChange={onChange} query={query} />
+            <ScrapperOptions onChange={onChange} query={query} />
+            <AdvancedOptions onChange={onChange} query={query} />
+        </div >
+    );
 }

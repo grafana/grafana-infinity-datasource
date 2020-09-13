@@ -1,7 +1,7 @@
 import { forEach, toNumber } from 'lodash';
 import { load } from 'cheerio';
 import { InfinityParser } from './InfinityParser';
-import { InfinityQuery, ScrapColumn, GrafanaTableRow } from "./../../types";
+import { InfinityQuery, ScrapColumn, GrafanaTableRow, GrafanaTableRowItem } from "./../../types";
 
 export class HTMLParser extends InfinityParser {
     constructor(HTMLResponse: string, target: InfinityQuery, endTime?: Date) {
@@ -20,7 +20,10 @@ export class HTMLParser extends InfinityParser {
             const row: GrafanaTableRow = [];
             const $ = load(r);
             this.target.columns.forEach((c: ScrapColumn) => {
-                let value = $(c.selector).text().trim();
+                let value: GrafanaTableRowItem = $(c.selector).text().trim();
+                if (c.type === 'number') {
+                    value = value === '' ? null : +value;
+                }
                 row.push(value);
             });
             this.rows.push(row);

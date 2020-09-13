@@ -9,7 +9,8 @@ export type GrafanaTableColumn = {
     text: string;
     type: string;
 };
-export type GrafanaTableRow = (string | number | object)[];
+export type GrafanaTableRowItem = (string | number | object | null);
+export type GrafanaTableRow = GrafanaTableRowItem[];
 export type tableResult = {
     columns: GrafanaTableColumn[];
     rows: GrafanaTableRow;
