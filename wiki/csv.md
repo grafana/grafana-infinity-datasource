@@ -1,7 +1,7 @@
 ## CSV Features & Summary
 
 <p align="center">
-    <img src="https://user-images.githubusercontent.com/153843/92716030-316a2b80-f356-11ea-956f-71683cea3e33.png" width="700" height="500"></img>
+    <img src="https://user-images.githubusercontent.com/153843/92571108-9e0ff800-f27a-11ea-9fe9-9f9dcbd7125a.png" width="700" height="500"></img>
 </p>
 
 Select **Type** of the query to `CSV`. You can either specify the URL of the CSV file or can provide inline CSV. Though your csv file have columns, specify them as columns manually and only that fields will be considered for display. Columns will appear in the same order you specify. Each column will have following properties
