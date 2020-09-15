@@ -24,13 +24,14 @@ export interface ScrapColumn {
 }
 export interface InfinityQuery extends DataQuery {
     type: 'json' | 'html' | 'csv' | 'series';
-    source: 'url' | 'inline' | 'random-walk';
+    source: 'url' | 'inline' | 'random-walk' | 'expression';
     url: string;
     data: string;
     root_selector: string;
     columns: ScrapColumn[];
     alias?: string;
     seriesCount?: number;
+    expression?: string;
     format: 'table' | 'timeseries';
 }
 export const SCRAP_QUERY_TYPES = [{
@@ -64,6 +65,10 @@ export const SCRAP_QUERY_SOURCES = [{
 }, {
     label: 'Random Walk',
     value: 'random-walk',
+    supported_types: ['series']
+}, {
+    label: 'Expression',
+    value: 'expression',
     supported_types: ['series']
 }];
 export const SCRAP_QUERY_RESULT_COLUMN_FORMATS = [{

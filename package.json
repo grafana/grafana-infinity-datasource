@@ -28,18 +28,20 @@
   },
   "homepage": "https://github.com/yesoreyeram/grafana-infinity-datasource#readme",
   "dependencies": {
-    "@grafana/runtime": "7.1.5",
     "@grafana/data": "7.1.5",
+    "@grafana/runtime": "7.1.5",
     "@grafana/ui": "7.1.5",
     "cheerio": "^1.0.0-rc.3",
     "csv-parse": "^4.12.0",
-    "lodash": "^4.17.19"
+    "lodash": "^4.17.19",
+    "mathjs": "^7.2.0"
   },
   "devDependencies": {
     "@grafana/toolkit": "7.1.5",
     "@types/cheerio": "^0.22.21",
     "@types/grafana": "github:CorpGlory/types-grafana.git",
     "@types/lodash": "^4.14.149",
+    "@types/mathjs": "^6.0.5",
     "babel": "^6.23.0",
     "babel-core": "^6.26.3",
     "babel-loader": "^8.1.0",
