@@ -15,7 +15,7 @@ export class Datasource extends DataSourceApi<InfinityQuery> {
     }
     query(options: any) {
         const promises: any[] = [];
-        options.targets.forEach((t: InfinityQuery) => {
+        options.targets.filter((t: InfinityQuery) => t.hide !== true).forEach((t: InfinityQuery) => {
             promises.push(new Promise((resolve, reject) => {
                 switch (t.type) {
                     case "csv":
