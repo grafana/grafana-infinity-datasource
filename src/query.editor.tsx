@@ -5,12 +5,13 @@ import { Datasource } from "./datasource";
 import { TypeChooser } from "./editors/TypeChooser";
 import { AdvancedOptions } from "./editors/AdvancedOptions";
 import { Scrapper as ScrapperOptions } from "./editors/Scrapper";
+import { SeriesEditor } from "./editors/Series";
 import { InfinityQuery } from "./types";
 
 type EditorProps = QueryEditorProps<Datasource, InfinityQuery>;
 
 export const InfinityQueryEditor: React.FC<EditorProps> = ({ query, onChange }) => {
-    
+
     query = defaultsDeep(query, {
         type: 'json',
         source: 'url',
@@ -19,11 +20,11 @@ export const InfinityQueryEditor: React.FC<EditorProps> = ({ query, onChange }) 
         root_selector: '',
         columns: []
     });
-    
+
     return (
         <div>
             <TypeChooser onChange={onChange} query={query} />
-            <ScrapperOptions onChange={onChange} query={query} />
+            { query.type === 'series' ? <SeriesEditor onChange={onChange} query={query} /> : <ScrapperOptions onChange={onChange} query={query} />}
             <AdvancedOptions onChange={onChange} query={query} />
         </div >
     );

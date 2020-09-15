@@ -23,12 +23,14 @@ export interface ScrapColumn {
     type: "string" | "number" | "timestamp";
 }
 export interface InfinityQuery extends DataQuery {
-    type: 'json' | 'html' | 'csv';
-    source: 'url' | 'inline';
+    type: 'json' | 'html' | 'csv' | 'series';
+    source: 'url' | 'inline' | 'random-walk';
     url: string;
     data: string;
     root_selector: string;
     columns: ScrapColumn[];
+    alias?: string;
+    seriesCount?: number;
     format: 'table' | 'timeseries';
 }
 export const SCRAP_QUERY_TYPES = [{
@@ -40,6 +42,9 @@ export const SCRAP_QUERY_TYPES = [{
 }, {
     label: 'CSV',
     value: 'csv'
+}, {
+    label: 'Series',
+    value: 'series'
 }];
 export const SCRAP_QUERY_RESULT_FORMATS = [{
     label: 'Table',
@@ -50,10 +55,16 @@ export const SCRAP_QUERY_RESULT_FORMATS = [{
 }];
 export const SCRAP_QUERY_SOURCES = [{
     label: 'URL',
-    value: 'url'
+    value: 'url',
+    supported_types: ['csv', 'json', 'html']
 }, {
     label: 'Inline',
-    value: 'inline'
+    value: 'inline',
+    supported_types: ['csv', 'json', 'html']
+}, {
+    label: 'Random Walk',
+    value: 'random-walk',
+    supported_types: ['series']
 }];
 export const SCRAP_QUERY_RESULT_COLUMN_FORMATS = [{
     label: 'String',

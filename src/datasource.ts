@@ -2,6 +2,7 @@ import { flatten } from 'lodash';
 import { DataSourceApi } from '@grafana/data';
 import { InfinityProvider } from './app/InfinityProvider';
 import { InfinityQuery } from './types';
+import { SeriesProvider } from './app/SeriesProvider';
 
 export class Datasource extends DataSourceApi<InfinityQuery> {
     constructor(instanceSettings: any) {
@@ -21,6 +22,14 @@ export class Datasource extends DataSourceApi<InfinityQuery> {
                     case "html":
                     case "json":
                         new InfinityProvider(t).query()
+                            .then(res => resolve(res))
+                            .catch(ex => {
+                                console.error(ex);
+                                reject("Failed to retrieve data");
+                            })
+                        break;
+                    case "series":
+                        new SeriesProvider(t).query(options.range.from, options.range.to)
                             .then(res => resolve(res))
                             .catch(ex => {
                                 console.error(ex);

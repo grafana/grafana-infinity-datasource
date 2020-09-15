@@ -21,14 +21,18 @@ export const AdvancedOptions: React.FC<AdvancedOptionsProps> = ({ query, onChang
     return (
         <div className="gf-form-inline">
             <div className="gf-form">
-                <label className="gf-form-label query-keyword width-8">Format</label>
-                <Select
-                    className="min-width-12 width-12"
-                    value={SCRAP_QUERY_RESULT_FORMATS.find((field: any) => field.value === query.format) || defaultFormat}
-                    options={SCRAP_QUERY_RESULT_FORMATS}
-                    defaultValue={defaultFormat}
-                    onChange={e => onSelectChange(e, 'format')}
-                ></Select>
+                {query.type === 'series' ? <></> :
+                    <>
+                        <label className="gf-form-label query-keyword width-8">Format</label>
+                        <Select
+                            className="min-width-12 width-12"
+                            value={SCRAP_QUERY_RESULT_FORMATS.find((field: any) => field.value === query.format) || defaultFormat}
+                            options={SCRAP_QUERY_RESULT_FORMATS}
+                            defaultValue={defaultFormat}
+                            onChange={e => onSelectChange(e, 'format')}
+                        ></Select>
+                    </>
+                }
             </div>
         </div>
 

@@ -13,8 +13,16 @@ export const TypeChooser: React.FC<TypeChooserProps> = ({ query, onChange }) => 
 
     const defaultType = { value: 'json', label: 'JSON' };
     const defaultSource = { value: 'url', label: 'URL' };
+    const defaultSourceSeries = { value: 'random-walk', label: 'Random Walk' }
 
     const onSelectChange = (selectableItem: SelectableValue, field: string) => {
+        if (field === 'type') {
+            if (selectableItem.value === 'series') {
+                set(query, 'source', defaultSourceSeries.value)
+            } else {
+                set(query, 'source', defaultSource.value)
+            }
+        }
         set(query, field, selectableItem.value);
         onChange(query);
     }
@@ -30,11 +38,11 @@ export const TypeChooser: React.FC<TypeChooserProps> = ({ query, onChange }) => 
                     defaultValue={defaultType}
                     onChange={e => onSelectChange(e, 'type')}
                 ></Select>
-                <label className="gf-form-label query-keyword width-5">Source</label>
+                <label className="gf-form-label query-keyword width-6">{query.type === 'series' ? 'Scenario' : 'Source'}</label>
                 <Select
                     className="min-width-12 width-12"
                     value={SCRAP_QUERY_SOURCES.find((field: any) => field.value === query.source) || defaultSource}
-                    options={SCRAP_QUERY_SOURCES}
+                    options={SCRAP_QUERY_SOURCES.filter(field => field.supported_types.indexOf(query.type) > -1)}
                     defaultValue={defaultSource}
                     onChange={e => onSelectChange(e, 'source')}
                 ></Select>
