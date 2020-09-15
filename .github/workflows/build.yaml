@@ -30,13 +30,6 @@ jobs:
         commit_message: publish docs
         push_options: --force
         file_pattern: docs
-    - name: Publish website
-      run: | 
-        cd website;
-        yarn install;
-        git config --global user.email "actions-user@github.com"
-        git config --global user.name "actions-user"
-        GIT_USER=yesoreyeram CURRENT_BRANCH=master yarn deploy;
     - uses: actions/setup-go@master
       with:
         go-version: "1.13.3"
