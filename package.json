@@ -1,7 +1,7 @@
 {
   "name": "grafana-infinity-datasource",
   "version": "0.2.0",
-  "description": "Infinity data source plugin for Grafana",
+  "description": "Infinity data source plugin for Grafana. Do infinite things with Grafana. HTML, CSV, JSON & GraphQL Scrapping.",
   "main": "dist/module.js",
   "scripts": {
     "build": "grafana-toolkit plugin:build",
@@ -19,6 +19,15 @@
     "grafana",
     "grafana infinity",
     "grafana utils",
+    "inline",
+    "random walk",
+    "json",
+    "simple-json",
+    "graphql",
+    "csv",
+    "html",
+    "url",
+    "scraping",
     "web scraping"
   ],
   "author": "Sriramajeyam Sugumaran",

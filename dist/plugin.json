@@ -7,7 +7,7 @@
   "info": {
     "version": "0.2.0",
     "updated": "2020-09-18",
-    "description": "Grafana Infinity Datasource",
+    "description": "Do infinite things with Grafana. HTML, CSV, JSON & GraphQL Scrapping.",
     "author": {
       "name": "Sriramajeyam Sugumaran",
       "url": "https://www.google.com/search?q=Sriramajeyam+Sugumaran"
@@ -18,6 +18,14 @@
     },
     "keywords": [
       "grafana",
+      "inline",
+      "random walk",
+      "json",
+      "simple-json",
+      "graphql",
+      "csv",
+      "html",
+      "url",
       "scraping"
     ],
     "screenshots": [],
