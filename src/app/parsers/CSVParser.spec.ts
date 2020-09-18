@@ -7,6 +7,9 @@ const CSVResults1 = new CSVParser(``, {
     data: '',
     format: 'table',
     url: '',
+    url_options: {
+        method: 'GET'
+    },
     root_selector: '',
     columns: []
 })
@@ -29,6 +32,9 @@ china,11
     data: '',
     format: 'table',
     url: '',
+    url_options: {
+        method: 'GET'
+    },
     root_selector: '',
     columns: [
         {
@@ -76,6 +82,9 @@ year,country,population
     data: '',
     format: 'table',
     url: '',
+    url_options: {
+        method: 'GET'
+    },
     root_selector: '',
     columns: [
         {

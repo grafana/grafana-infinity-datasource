@@ -1,6 +1,7 @@
 import React, { ChangeEvent } from "react";
 import { set } from "lodash";
 import { ScrapperColumns } from "./ScrapperColumns";
+import { URLOptions } from "./URLOptions";
 import { InfinityQuery } from "./../types";
 
 interface ScrapperProps {
@@ -29,6 +30,7 @@ export class Scrapper extends React.PureComponent<ScrapperProps>{
                                 placeholder="https://jsonplaceholder.typicode.com/todos"
                                 onChange={e => this.onInputTextChange(e, `url`, this.props)}
                             ></input>
+                            <URLOptions onChange={this.props.onChange} query={this.props.query} />
                         </div>
                     </div>
                 ) : (
@@ -46,7 +48,7 @@ export class Scrapper extends React.PureComponent<ScrapperProps>{
                         </div>
                     )}
                 {
-                    ['html', 'json'].indexOf(this.props.query.type) > -1 ? (
+                    ['html', 'json', 'graphql'].indexOf(this.props.query.type) > -1 ? (
                         <div className="gf-form-inline">
                             <div className="gf-form">
                                 <label className="gf-form-label query-keyword width-8">Rows / Root</label>

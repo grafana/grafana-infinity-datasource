@@ -29,9 +29,13 @@ export interface DataOverride {
 
 }
 export interface InfinityQuery extends DataQuery {
-    type: 'json' | 'html' | 'csv' | 'series';
+    type: 'json' | 'html' | 'csv' | 'graphql' | 'series';
     source: 'url' | 'inline' | 'random-walk' | 'expression';
     url: string;
+    url_options: {
+        method: 'GET' | 'POST',
+        data?: string;
+    };
     data: string;
     root_selector: string;
     columns: ScrapColumn[];
@@ -51,6 +55,9 @@ export const SCRAP_QUERY_TYPES = [{
     label: 'HTML',
     value: 'html'
 }, {
+    label: 'GraphQL',
+    value: 'graphql'
+}, {
     label: 'Series',
     value: 'series'
 }];
@@ -64,11 +71,11 @@ export const SCRAP_QUERY_RESULT_FORMATS = [{
 export const SCRAP_QUERY_SOURCES = [{
     label: 'URL',
     value: 'url',
-    supported_types: ['csv', 'json', 'html']
+    supported_types: ['csv', 'json', 'html', 'graphql']
 }, {
     label: 'Inline',
     value: 'inline',
-    supported_types: ['csv', 'json', 'html']
+    supported_types: ['csv', 'json']
 }, {
     label: 'Random Walk',
     value: 'random-walk',

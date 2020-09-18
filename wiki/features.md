@@ -7,7 +7,7 @@
 ## Features
 
 * Inline CSV / JSON datasource
-* JSON / CSV / HTML urls as a data source
+* JSON / CSV / HTML / GraphQL urls as a data source
 * Turn any website into grafana datasource
 * Mathematical generated timeseries & Random Walk
 

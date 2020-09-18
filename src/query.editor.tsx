@@ -17,6 +17,10 @@ export const InfinityQueryEditor: React.FC<EditorProps> = ({ query, onChange }) 
         source: 'inline',
         format: 'table',
         url: '',
+        url_options: {
+            method: 'GET',
+            data: ''
+        },
         data: '',
         root_selector: '',
         columns: []

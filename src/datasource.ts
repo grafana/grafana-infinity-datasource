@@ -21,6 +21,7 @@ export class Datasource extends DataSourceApi<InfinityQuery> {
                     case "csv":
                     case "html":
                     case "json":
+                    case "graphql":
                         new InfinityProvider(t).query()
                             .then(res => resolve(res))
                             .catch(ex => {

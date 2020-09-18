@@ -4,6 +4,7 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 
 ## [ 0.2.0 ]
 
+- GraphQL Support
 - Mathematical expressions and Random Walk
 
 ## [ 0.1.0 ]

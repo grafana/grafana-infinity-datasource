@@ -7,6 +7,9 @@ const JSONResults1 = new JSONParser({}, {
     data: '',
     format: 'table',
     url: '',
+    url_options: {
+        method: 'GET'
+    },
     root_selector: '',
     columns: []
 })
@@ -33,6 +36,9 @@ const JSONResults2 = new JSONParser([
     data: '',
     format: 'table',
     url: '',
+    url_options: {
+        method: 'GET'
+    },
     root_selector: '',
     columns: [
         {
@@ -74,6 +80,9 @@ const JSONResults3 = new JSONParser({
     data: '',
     format: 'table',
     url: '',
+    url_options: {
+        method: 'GET'
+    },
     root_selector: 'users',
     columns: [
         {
