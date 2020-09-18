@@ -3,6 +3,7 @@ import { DataLinkInput } from '@grafana/ui';
 import { VariableOrigin } from '@grafana/data';
 import { set, defaultsDeep } from 'lodash';
 import { InfinityQuery } from '../types';
+import { SeriesAdvancedOptions } from './SeriesAdvancedOptions';
 
 interface ScrapperProps {
     query: InfinityQuery;
@@ -47,6 +48,11 @@ export const SeriesEditor: React.FC<ScrapperProps> = ({ query, onChange }) => {
                                 ]} value={query.expression || '                                             '} placeholder="Expression" />
                             </> : <></>
                     }
+                </div>
+            </div>
+            <div className="gf-form-inline">
+                <div className="gf-form">
+                    <SeriesAdvancedOptions onChange={onChange} query={query} />
                 </div>
             </div>
         </>

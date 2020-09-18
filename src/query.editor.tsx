@@ -13,10 +13,11 @@ type EditorProps = QueryEditorProps<Datasource, InfinityQuery>;
 export const InfinityQueryEditor: React.FC<EditorProps> = ({ query, onChange }) => {
 
     query = defaultsDeep(query, {
-        type: 'json',
-        source: 'url',
+        type: 'csv',
+        source: 'inline',
         format: 'table',
         url: '',
+        data: '',
         root_selector: '',
         columns: []
     });

@@ -1,7 +1,7 @@
 import { sample } from "lodash";
 import * as math from 'mathjs';
 import { RANDOM_WORDS } from '../config';
-import { InfinityQuery, dataPoint } from '../types';
+import { InfinityQuery, dataPoint, DataOverride } from '../types';
 
 const getStepFromRange = (startTime: number, endTime: number): number => {
     const MINUTE = 60 * 1000;
@@ -45,14 +45,54 @@ class RandomWalk {
             dataPointTime = dataPointTime + step;
         }
     }
-    mapWithExpression(expression: string = `$i`): dataPoint[] {
-        return this.datapoints.map((dp, index) => {
+    mapWithExpression(expression: string = `$i`, points: dataPoint[] = this.datapoints): dataPoint[] {
+        return points.map((dp, index) => {
             let expression1 = expression === '' ? '$i' : expression;
             expression1 = expression1.replace(/\${__index}/g, index.toString());
             expression1 = expression1.replace(/\${__value.index}/g, index.toString());
             let value = math.evaluate(expression1, { "$i": index });
             return [value, dp[1]];
         })
+    }
+    overrideDatapoints(overrides: DataOverride[], points: dataPoint[] = this.datapoints) {
+        return points.map((dp, index) => {
+            let value = dp[0];
+            let matchingCondition = overrides.find(ov => {
+                let value1 = ov.values[0];
+                value1 = value1.replace(/\${__index}/g, index.toString());
+                value1 = value1.replace(/\${__value.index}/g, index.toString());
+                value1 = value1.replace(/\${__value.value}/g, dp[0] === null ? 'null' : dp[0].toString());
+                value1 = math.evaluate(value1, { "$i": index });
+                let value2 = ov.values[1];
+                value2 = value2.replace(/\${__index}/g, index.toString());
+                value2 = value2.replace(/\${__value.index}/g, index.toString());
+                value2 = value2.replace(/\${__value.value}/g, dp[0] === null ? 'null' : dp[0].toString());
+                value2 = math.evaluate(value2, { "$i": index });
+                let operator = ov.operator;
+                switch (operator) {
+                    case "<":
+                        return value1 < value2;
+                    case "<=":
+                        return value1 <= value2;
+                    case ">":
+                        return value1 > value2;
+                    case ">=":
+                        return value1 >= value2;
+                    case "=":
+                        return value1 === value2;
+                    case "!=":
+                        return value1 !== value2;
+                    default:
+                        return false;
+                }
+            })
+            if (matchingCondition) {
+                let oValue = matchingCondition.override;
+                oValue = oValue.replace(/\${__value.value}/g, dp[0] === null ? 'null' : dp[0].toString());
+                value = ['null', ''].indexOf(oValue.toLowerCase()) > -1 ? null : math.evaluate(oValue, { "$i": index });
+            }
+            return [value, dp[1]];
+        });
     }
 }
 
@@ -79,7 +119,7 @@ export class SeriesProvider {
                         }
                         result.push({
                             target: seriesName,
-                            datapoints,
+                            datapoints: rw.overrideDatapoints(this.target.dataOverrides || [], datapoints),
                         });
                     }
                 } else {
@@ -92,7 +132,7 @@ export class SeriesProvider {
                     }
                     result.push({
                         target: this.target.alias || 'Random Walk',
-                        datapoints,
+                        datapoints: rw.overrideDatapoints(this.target.dataOverrides || [], datapoints),
                     });
                 }
             }

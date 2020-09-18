@@ -22,6 +22,12 @@ export interface ScrapColumn {
     text: string;
     type: "string" | "number" | "timestamp";
 }
+export interface DataOverride {
+    values: string[];
+    operator: string;
+    override: string;
+
+}
 export interface InfinityQuery extends DataQuery {
     type: 'json' | 'html' | 'csv' | 'series';
     source: 'url' | 'inline' | 'random-walk' | 'expression';
@@ -32,17 +38,18 @@ export interface InfinityQuery extends DataQuery {
     alias?: string;
     seriesCount?: number;
     expression?: string;
+    dataOverrides?: any[];
     format: 'table' | 'timeseries';
 }
 export const SCRAP_QUERY_TYPES = [{
+    label: 'CSV',
+    value: 'csv'
+}, {
     label: 'JSON',
     value: 'json'
 }, {
     label: 'HTML',
     value: 'html'
-}, {
-    label: 'CSV',
-    value: 'csv'
 }, {
     label: 'Series',
     value: 'series'
