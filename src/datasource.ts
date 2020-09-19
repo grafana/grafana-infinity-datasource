@@ -25,16 +25,14 @@ export class Datasource extends DataSourceApi<InfinityQuery> {
                         new InfinityProvider(t).query()
                             .then(res => resolve(res))
                             .catch(ex => {
-                                console.error(ex);
-                                reject("Failed to retrieve data");
+                                reject(ex);
                             })
                         break;
                     case "series":
                         new SeriesProvider(t).query(options.range.from, options.range.to)
                             .then(res => resolve(res))
                             .catch(ex => {
-                                console.error(ex);
-                                reject("Failed to retrieve data");
+                                reject(ex);
                             })
                         break;
                     default:

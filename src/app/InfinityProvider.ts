@@ -43,8 +43,7 @@ export class InfinityProvider {
                     .then(res => {
                         resolve(this.formatResults(res));
                     }).catch(ex => {
-                        console.error(ex);
-                        reject("Failed to retrieve data");
+                        reject(ex);
                     });
             }
         })
