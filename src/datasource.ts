@@ -5,12 +5,20 @@ import { InfinityQuery } from './types';
 import { SeriesProvider } from './app/SeriesProvider';
 
 export class Datasource extends DataSourceApi<InfinityQuery> {
-    constructor(instanceSettings: any) {
+    constructor(private instanceSettings: any) {
         super(instanceSettings);
     }
     testDatasource() {
         return new Promise(async (resolve: any, reject: any) => {
-            reject({ message: 'Not Implemented', status: 'error' });
+            if (this.instanceSettings.jsonData && this.instanceSettings.jsonData.datasource_mode && this.instanceSettings.jsonData.datasource_mode === 'basic') {
+                resolve({ message: 'No checks required', status: 'success' });
+            } else {
+                if (this.instanceSettings.url) {
+                    resolve({ message: 'No checks performed', status: 'success' });
+                } else {
+                    reject({ message: 'Missing URL', status: 'error' });
+                }
+            }
         });
     }
     query(options: any) {
@@ -22,7 +30,7 @@ export class Datasource extends DataSourceApi<InfinityQuery> {
                     case "html":
                     case "json":
                     case "graphql":
-                        new InfinityProvider(t).query()
+                        new InfinityProvider(t, this.instanceSettings).query()
                             .then(res => resolve(res))
                             .catch(ex => {
                                 reject(ex);

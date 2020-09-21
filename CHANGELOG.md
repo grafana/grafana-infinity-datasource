@@ -2,6 +2,10 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
+## [0.3.0]
+
+- Authentication support
+
 ## [ 0.2.0 ]
 
 - GraphQL Support
