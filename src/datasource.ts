@@ -1,13 +1,15 @@
 import { flatten } from 'lodash';
-import { DataSourceApi} from '@grafana/data';
+import { DataSourceApi } from '@grafana/data';
 import { InfinityProvider } from './app/InfinityProvider';
 import { SeriesProvider } from './app/SeriesProvider';
 import { replaceVariables } from './utils';
-import { InfinityQuery } from './types';
+import { InfinityQuery, GlobalInfinityQuery } from './types';
 
 export class Datasource extends DataSourceApi<InfinityQuery> {
-    constructor(private instanceSettings: any) {
-        super(instanceSettings);
+    instanceSettings: any;
+    constructor(iSettings: any) {
+        super(iSettings);
+        this.instanceSettings = iSettings;
     }
     testDatasource() {
         return new Promise(async (resolve: any, reject: any) => {
@@ -25,6 +27,10 @@ export class Datasource extends DataSourceApi<InfinityQuery> {
     query(options: any) {
         const promises: any[] = [];
         options.targets.filter((t: InfinityQuery) => t.hide !== true).forEach((t: InfinityQuery) => {
+            if (t.type === 'global' && t.global_query_id && this.instanceSettings.jsonData.global_queries && this.instanceSettings.jsonData.global_queries.length > 0) {
+                let matchingQuery: GlobalInfinityQuery = this.instanceSettings.jsonData.global_queries.find((q: GlobalInfinityQuery) => q.id === t.global_query_id);
+                t = matchingQuery ? matchingQuery.query : t;
+            }
             promises.push(new Promise((resolve, reject) => {
                 switch (t.type) {
                     case "csv":
@@ -43,6 +49,9 @@ export class Datasource extends DataSourceApi<InfinityQuery> {
                             .catch(ex => {
                                 reject(ex);
                             })
+                        break;
+                    case "global":
+                        reject("Query not found");
                         break;
                     default:
                         reject("Unknown Query Type");

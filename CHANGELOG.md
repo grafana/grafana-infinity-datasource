@@ -2,6 +2,10 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
+## [ 0.4.0 ]
+
+- Registered / Global Queries
+
 ## [ 0.3.0 ]
 
 - Authentication support

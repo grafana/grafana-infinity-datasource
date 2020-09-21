@@ -29,7 +29,7 @@ export interface DataOverride {
 
 }
 export interface InfinityQuery extends DataQuery {
-    type: 'json' | 'html' | 'csv' | 'graphql' | 'series';
+    type: 'json' | 'html' | 'csv' | 'graphql' | 'series' | 'global';
     source: 'url' | 'inline' | 'random-walk' | 'expression';
     url: string;
     url_options: {
@@ -38,12 +38,18 @@ export interface InfinityQuery extends DataQuery {
     };
     data: string;
     root_selector: string;
+    global_query_id?: string;
     columns: ScrapColumn[];
     alias?: string;
     seriesCount?: number;
     expression?: string;
-    dataOverrides?: any[];
+    dataOverrides?: DataOverride[];
     format: 'table' | 'timeseries';
+}
+export interface GlobalInfinityQuery {
+    name: string;
+    id: string;
+    query:InfinityQuery;
 }
 export const SCRAP_QUERY_TYPES = [{
     label: 'CSV',
@@ -60,6 +66,9 @@ export const SCRAP_QUERY_TYPES = [{
 }, {
     label: 'Series',
     value: 'series'
+}, {
+    label: 'Global Query',
+    value: 'global'
 }];
 export const SCRAP_QUERY_RESULT_FORMATS = [{
     label: 'Table',
