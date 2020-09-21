@@ -9,12 +9,12 @@
 * Inline CSV / JSON datasource
 * JSON / CSV / HTML / GraphQL urls as a data source
 * Turn any website into grafana datasource
+* Generic Auth support
 * Mathematical generated timeseries & Random Walk
 
 ### Road Map / Upcoming features
 
 * Header-less CSV files support
-* Generic Auth Page
 * Selecting attributes of HTML elements instead of text of the html element
 * Custom fields support. Example: Sum of two fields. Joining two fields etc.
 * Filter the results. Example: Ignore-first-row, Ignore-nth-rows, Ignore-odd, Ignore-even, value-above-30, first-20 etc.

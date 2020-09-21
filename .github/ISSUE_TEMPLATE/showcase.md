@@ -1,7 +1,7 @@
 ---
 name: Showcase
 about: Showcase what you have done with this plugin
-title: "[Bug] Title"
+title: "[Showcase] Title"
 labels: showcase
 assignees: ''
 
@@ -9,7 +9,7 @@ assignees: ''
 
 **Describe what you have done**
 
-Simle description of what you have done
+Simple description of what you have done
 
 **Screenshots**
 

@@ -1,8 +1,9 @@
 import { flatten } from 'lodash';
-import { DataSourceApi } from '@grafana/data';
+import { DataSourceApi} from '@grafana/data';
 import { InfinityProvider } from './app/InfinityProvider';
-import { InfinityQuery } from './types';
 import { SeriesProvider } from './app/SeriesProvider';
+import { replaceVariables } from './utils';
+import { InfinityQuery } from './types';
 
 export class Datasource extends DataSourceApi<InfinityQuery> {
     constructor(private instanceSettings: any) {
@@ -30,14 +31,14 @@ export class Datasource extends DataSourceApi<InfinityQuery> {
                     case "html":
                     case "json":
                     case "graphql":
-                        new InfinityProvider(t, this.instanceSettings).query()
+                        new InfinityProvider(replaceVariables(t, options.scopedVars), this.instanceSettings).query()
                             .then(res => resolve(res))
                             .catch(ex => {
                                 reject(ex);
                             })
                         break;
                     case "series":
-                        new SeriesProvider(t).query(options.range.from, options.range.to)
+                        new SeriesProvider(replaceVariables(t, options.scopedVars)).query(options.range.from, options.range.to)
                             .then(res => resolve(res))
                             .catch(ex => {
                                 reject(ex);

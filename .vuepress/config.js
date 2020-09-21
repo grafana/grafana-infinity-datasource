@@ -40,6 +40,7 @@ module.exports = {
             ['/wiki/json', 'JSON'],
             ['/wiki/graphql', 'GraphQL'],
             ['/wiki/html', 'HTML'],
+            ['/wiki/showcase/github-stats','Github Example'],
             ['/wiki/installation', 'Installation'],
             ['/CHANGELOG', 'Change Log']
         ]
