@@ -12,7 +12,7 @@ The URL returns an array of objects. Each item in the array goes as a table row.
 
 Instead of specifying URL, you can hardcoded JSON object. For example, you can specify the json as shown in the below example
 
-```
+```json
 [
   { "country": "india", "population": 420 },
   { "country": "india", "population": 440 },

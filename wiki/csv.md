@@ -26,7 +26,7 @@ Ignore the root / rows as each line of CSV will be your rows.
 
 Instead of specifying URL, you can use hardcoded csv values. For example, you can specify the csv in the following format
 
-```
+```csv
 country,population,capital
 india,200,mumbai
 india,100,chennai

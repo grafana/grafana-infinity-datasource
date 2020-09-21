@@ -13,7 +13,7 @@ Sample Query given in the below example. You can customize your query to bring t
 
 Query Used:
 
-```
+```graphql
 {
   repository(owner:"$GithubUser", name:"$GithubRepo") {
     issues(last:20) {

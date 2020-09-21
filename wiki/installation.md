@@ -10,7 +10,7 @@ Download the zip file from [github](https://github.com/yesoreyeram/grafana-infin
 
 If you are using grafana-cli, execute the following command to install the plugin
 
-```
+```sh
 grafana-cli --pluginUrl https://github.com/yesoreyeram/grafana-infinity-datasource/archive/master.zip plugins install yesoreyeram-infinity-datasource
 ```
 
@@ -18,7 +18,7 @@ grafana-cli --pluginUrl https://github.com/yesoreyeram/grafana-infinity-datasour
 
 If you use helm chart to provision grafana, use the following config to install the plugin
 
-```
+```yml
 plugins:
   - https://github.com/yesoreyeram/grafana-infinity-datasource/archive/master.zip;yesoreyeram-infinity-datasource
 ```
@@ -47,7 +47,7 @@ If you want to [provision](https://grafana.com/docs/grafana/latest/administratio
 
 If you need to provision via file, use the following settings for the basic use cases.
 
-```
+```yaml
 - name: <<YOUR DATASOURCE INSTANCE NAME>>
   type: yesoreyeram-infinity-datasource
   access: proxy
@@ -62,18 +62,18 @@ If you need to provision via file, use the following settings for the basic use 
 
 If you need an advanced version of the datasource, use the following format.
 
-```
-- name: <<YOUR DATASOURCE INSTANCE NAME. Example: Github>>
+```yaml
+- name: <<YOUR DATASOURCE INSTANCE NAME. Example -- Github>>
   type: yesoreyeram-infinity-datasource
   access: proxy
   isDefault: false
-  url: <<YOUR URL. Example : https://api.github.com/graphql>>
+  url: <<YOUR URL. Example -- https://api.github.com/graphql>>
   basicAuth: true
-  basicAuthUser: <<YOUR USER NAME. Example: mygithubid>>
+  basicAuthUser: <<YOUR USER NAME. Example -- mygithubid>>
   jsonData:
        datasource_mode: "advanced"
   secureJsonData:
-       basicAuthPassword: <<YOUR PASSWORD: MY_Github_PAT_Token>>
+       basicAuthPassword: <<YOUR PASSWORD. Example -- MY_Github_PAT_Token>>
   version: 1
   readOnly: true
 ```
