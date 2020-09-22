@@ -1,8 +1,8 @@
 ## Github Stats
 
-We can leverage [Github graphql API](https://docs.github.com/en/graphql) to query the github stats using the plugin.
+![image](https://user-images.githubusercontent.com/153843/93846498-1d9abf80-fc9c-11ea-90ed-4c569b088d99.png)
 
-![image](https://user-images.githubusercontent.com/153843/93736971-c3392a80-fbd9-11ea-8597-dac9c0f9641b.png)
+We can leverage [Github graphql API](https://docs.github.com/en/graphql) to query the github stats using this infinity plugin graphql api.
 
 Sample Query given in the below example. You can customize your query to bring the stats you needed.
 
@@ -37,3 +37,38 @@ Query Used:
 Select **Advanced** mode and use your github username and PAT token as password
 
 ![image](https://user-images.githubusercontent.com/153843/93736929-b1578780-fbd9-11ea-9413-5585ff79d3a8.png)
+
+
+## Github Organization Summary example
+
+![image](https://user-images.githubusercontent.com/153843/93846498-1d9abf80-fc9c-11ea-90ed-4c569b088d99.png)
+
+corresponding query used is given below
+
+```graphql
+{
+  repositoryOwner(login: "$GithubUser") {
+    repositories(first: 100) {
+      data: nodes {
+        name
+        stargazers {
+          totalCount
+        }
+        openissues: issues(states: OPEN) {
+          totalCount
+        }
+        openpr:pullRequests(states:OPEN) {
+          totalCount
+        }
+      }
+    }
+  }
+}
+
+```
+
+Note:
+
+* Queries are not paginated
+* Github rate limits apply
+* If you need paginated and full set of results, use grafana [github stats plugin](https://grafana.com/grafana/plugins/grafana-github-datasource)
