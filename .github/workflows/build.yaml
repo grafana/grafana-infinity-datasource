@@ -14,10 +14,6 @@ jobs:
     - uses: actions/setup-node@v1
       with:
         node-version: 12.x
-    - name: Setup Environment
-      run: |
-        apt-get install -y fontconfig zip jq
-        curl -fL -o /usr/local/bin/grabpl "https://grafana-downloads.storage.googleapis.com/grafana-build-pipeline/v0.5.15/grabpl"
     - name: Install dependencies
       run: |
         yarn install --frozen-lockfile;
@@ -27,8 +23,6 @@ jobs:
     - name: Build
       run: |
         yarn build;
-        yarn build:ci;
-        yarn build:ci-package;
         echo $(date) > dist/LAST_UPDATED;
     - name: Build Docs
       run: |
