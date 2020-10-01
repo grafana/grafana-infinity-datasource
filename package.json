@@ -5,6 +5,8 @@
   "main": "dist/module.js",
   "scripts": {
     "build": "grafana-toolkit plugin:build",
+    "build:ci": "grafana-toolkit plugin:ci-build --finish",
+    "build:ci-package": "grafana-toolkit plugin:ci-package",
     "test": "grafana-toolkit plugin:test",
     "dev": "grafana-toolkit plugin:dev",
     "watch": "grafana-toolkit plugin:dev --watch",

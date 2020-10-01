@@ -22,7 +22,9 @@ jobs:
         yarn test;
     - name: Build
       run: |
-        yarn build;        
+        yarn build;
+        yarn build:ci;
+        yarn build:ci-package;
         echo $(date) > dist/LAST_UPDATED;
     - name: Build Docs
       run: |
