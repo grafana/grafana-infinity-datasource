@@ -20,6 +20,10 @@ jobs:
     - name: Test
       run: |
         yarn test;
+    - name: Build
+      run: |
+        yarn build;        
+        echo $(date) > dist/LAST_UPDATED;
     - name: Build Docs
       run: |
         yarn docs:build;
@@ -27,9 +31,9 @@ jobs:
     - name: Publish Updated Type Docs
       uses: stefanzweifel/git-auto-commit-action@v4
       with:
-        commit_message: publish docs
+        commit_message: ci build
         push_options: --force
-        file_pattern: docs
+        file_pattern: dist docs
     - uses: actions/setup-go@master
       with:
         go-version: "1.13.3"

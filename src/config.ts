@@ -25,7 +25,9 @@ Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac tu
 `;
 
 export const RANDOM_WORDS = [
-    ...new Set(
-        LOREM.replace(/\n/g, "").split(" ").map((a) => a.trim().toLowerCase()),
-    )
-].filter(Boolean)
+  ...new Set(
+    LOREM.replace(/\n/g, '')
+      .split(' ')
+      .map(a => a.trim().toLowerCase())
+  ),
+].filter(Boolean);
