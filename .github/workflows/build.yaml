@@ -16,7 +16,7 @@ jobs:
         node-version: 12.x
     - name: Setup Environment
       run: |
-        apk add --no-cache fontconfig zip jq
+        apt-get install -y fontconfig zip jq
         curl -fL -o /usr/local/bin/grabpl "https://grafana-downloads.storage.googleapis.com/grafana-build-pipeline/v0.5.15/grabpl"
     - name: Install dependencies
       run: |
