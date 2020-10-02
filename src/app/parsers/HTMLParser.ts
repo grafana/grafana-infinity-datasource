@@ -25,6 +25,10 @@ export class HTMLParser extends InfinityParser {
           .trim();
         if (c.type === 'number') {
           value = value === '' ? null : +value;
+        } else if (c.type === 'timestamp'){
+          value = new Date(value)
+        } else if (c.type === 'timestamp_epoch'){
+          value = new Date(parseInt(value))
         }
         row.push(value);
       });
@@ -46,11 +50,19 @@ export class HTMLParser extends InfinityParser {
         let timestamp = endTime ? endTime.getTime() : new Date().getTime();
         if (this.TimeColumns.length >= 1) {
           const FirstTimeColumn = this.TimeColumns[0];
-          timestamp = new Date(
-            $$(FirstTimeColumn.selector)
-              .text()
-              .trim()
-          ).getTime();
+          if (FirstTimeColumn.type === 'timestamp') {
+            timestamp = new Date(
+              $$(FirstTimeColumn.selector)
+                .text()
+                .trim()
+            ).getTime();
+          } else if (FirstTimeColumn.type === 'timestamp_epoch') {
+            timestamp = new Date(
+              parseInt($$(FirstTimeColumn.selector)
+                .text()
+                .trim())
+            ).getTime();
+          }
         }
         if (seriesName) {
           let metric = toNumber(

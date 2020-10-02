@@ -16,11 +16,10 @@ export type tableResult = {
   rows: GrafanaTableRow;
 };
 export type queryResult = timeSeriesResult | tableResult;
-
 export interface ScrapColumn {
   selector: string;
   text: string;
-  type: 'string' | 'number' | 'timestamp';
+  type: 'string' | 'number' | 'timestamp' | 'timestamp_epoch';
 }
 export interface DataOverride {
   values: string[];
@@ -121,4 +120,8 @@ export const SCRAP_QUERY_RESULT_COLUMN_FORMATS = [
     label: 'Timestamp',
     value: 'timestamp',
   },
+  {
+    label: 'Timestamp ( UNIX ms )',
+    value: 'timestamp_epoch'
+  }
 ];

@@ -43,11 +43,9 @@ Below screenshot shows the example of csv inline datasource
 
 ### One time field and one metric field
 
-
 ![image](https://user-images.githubusercontent.com/153843/92711761-b81c0a00-f350-11ea-9e57-30982f9322fe.png)
 
 ### One time field, one string field and one metric field
-
 
 ![image](https://user-images.githubusercontent.com/153843/92711827-c66a2600-f350-11ea-9941-4d8d03a5dc6c.png)
 
@@ -95,3 +93,15 @@ Thu Nov 23 2017 10:30:20 GMT+0000 (Greenwich Mean Time),10.1
 "Sat, 23 Dec 2017 10:30:20 GMT",12
 01/29/2018,12.4
 ```
+
+### UNIX EPOCH Time formats
+
+If your data is in unix epoch time formats (unix milliseconds format), You can select **Timestamp ( UNIX ms )** / **timestamp_epoch** as as type. Below snippet shows some examples
+
+```
+Year,Population
+1262304000000,200
+1293840000000,201
+```
+
+In the above example, first row represents year 2010 and second row represents 2011.

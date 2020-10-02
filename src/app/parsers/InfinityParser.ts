@@ -14,7 +14,7 @@ export class InfinityParser {
     this.target = target;
     this.StringColumns = target.columns.filter(t => t.type === 'string');
     this.NumbersColumns = target.columns.filter(t => t.type === 'number');
-    this.TimeColumns = target.columns.filter(t => t.type === 'timestamp');
+    this.TimeColumns = target.columns.filter(t => t.type === 'timestamp' || t.type === 'timestamp_epoch');
   }
   toTable() {
     return {
