@@ -28,7 +28,7 @@ export class CSVParser extends InfinityParser {
         if (c.type === 'timestamp') {
           value = new Date(value);
         } else if (c.type === 'timestamp_epoch') {
-          value = new Date(parseInt(value));
+          value = new Date(parseInt(value, 10));
         } else if (c.type === 'number') {
           value = value === '' ? null : +value;
         }
@@ -54,7 +54,7 @@ export class CSVParser extends InfinityParser {
           if (FirstTimeColumn.type === 'timestamp') {
             timestamp = new Date(get(r, FirstTimeColumn.selector)).getTime();
           } else if (FirstTimeColumn.type === 'timestamp_epoch') {
-            timestamp = new Date(parseInt(get(r, FirstTimeColumn.selector))).getTime();
+            timestamp = new Date(parseInt(get(r, FirstTimeColumn.selector), 10)).getTime();
           }
         }
         let metric = get(r, metricColumn.selector);

@@ -124,25 +124,25 @@ const JSONResults4 = new JSONParser(
         name: 'foo',
         age: 20,
         year: 2010,
-        date: 1262304000000
+        date: 1262304000000,
       },
       {
         name: 'bar',
         age: 25,
-        year: "2011",
-        date: 1293840000000
+        year: '2011',
+        date: 1293840000000,
       },
       {
         name: 'baz',
         age: 30,
-        year: "2012/01",
-        date: "1325376000000"
+        year: '2012/01',
+        date: '1325376000000',
       },
       {
         name: 'apple',
         age: 32,
-        year: "2013/12/25",
-        date: 1387929600000
+        year: '2013/12/25',
+        date: 1387929600000,
       },
     ],
   },
@@ -187,14 +187,14 @@ describe('JSONParser', () => {
     expect(JSONResults4.toTable().rows[0].length).toBe(4);
     expect(JSONResults4.toTable().rows[1][0]).toBe('bar');
     expect(JSONResults4.toTable().rows[2][1]).toBe(30);
-    expect(JSONResults4.toTable().rows[0][2]).toStrictEqual(new Date("2010-01-01T00:00:00.000Z"));
-    expect(JSONResults4.toTable().rows[1][2]).toStrictEqual(new Date("2011-01-01T00:00:00.000Z"));
-    expect(JSONResults4.toTable().rows[2][2]).toStrictEqual(new Date("2012-01-01T00:00:00.000Z"));
-    expect(JSONResults4.toTable().rows[3][2]).toStrictEqual(new Date("2013-12-25T00:00:00.000Z"));
-    expect(JSONResults4.toTable().rows[0][3]).toStrictEqual(new Date("2010-01-01T00:00:00.000Z"));
-    expect(JSONResults4.toTable().rows[1][3]).toStrictEqual(new Date("2011-01-01T00:00:00.000Z"));
-    expect(JSONResults4.toTable().rows[2][3]).toStrictEqual(new Date("2012-01-01T00:00:00.000Z"));
-    expect(JSONResults4.toTable().rows[3][3]).toStrictEqual(new Date("2013-12-25T00:00:00.000Z"));
+    expect(JSONResults4.toTable().rows[0][2]).toStrictEqual(new Date('2010-01-01T00:00:00.000Z'));
+    expect(JSONResults4.toTable().rows[1][2]).toStrictEqual(new Date('2011-01-01T00:00:00.000Z'));
+    expect(JSONResults4.toTable().rows[2][2]).toStrictEqual(new Date('2012-01-01T00:00:00.000Z'));
+    expect(JSONResults4.toTable().rows[3][2]).toStrictEqual(new Date('2013-12-25T00:00:00.000Z'));
+    expect(JSONResults4.toTable().rows[0][3]).toStrictEqual(new Date('2010-01-01T00:00:00.000Z'));
+    expect(JSONResults4.toTable().rows[1][3]).toStrictEqual(new Date('2011-01-01T00:00:00.000Z'));
+    expect(JSONResults4.toTable().rows[2][3]).toStrictEqual(new Date('2012-01-01T00:00:00.000Z'));
+    expect(JSONResults4.toTable().rows[3][3]).toStrictEqual(new Date('2013-12-25T00:00:00.000Z'));
     expect(JSONResults4.toTable().columns.length).toBe(4);
   });
 });

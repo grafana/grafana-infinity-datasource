@@ -25,10 +25,10 @@ export class HTMLParser extends InfinityParser {
           .trim();
         if (c.type === 'number') {
           value = value === '' ? null : +value;
-        } else if (c.type === 'timestamp'){
-          value = new Date(value)
-        } else if (c.type === 'timestamp_epoch'){
-          value = new Date(parseInt(value))
+        } else if (c.type === 'timestamp') {
+          value = new Date(value);
+        } else if (c.type === 'timestamp_epoch') {
+          value = new Date(parseInt(value, 10));
         }
         row.push(value);
       });
@@ -58,9 +58,12 @@ export class HTMLParser extends InfinityParser {
             ).getTime();
           } else if (FirstTimeColumn.type === 'timestamp_epoch') {
             timestamp = new Date(
-              parseInt($$(FirstTimeColumn.selector)
-                .text()
-                .trim())
+              parseInt(
+                $$(FirstTimeColumn.selector)
+                  .text()
+                  .trim(),
+                10
+              )
             ).getTime();
           }
         }

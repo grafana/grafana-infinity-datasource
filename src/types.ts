@@ -122,6 +122,6 @@ export const SCRAP_QUERY_RESULT_COLUMN_FORMATS = [
   },
   {
     label: 'Timestamp ( UNIX ms )',
-    value: 'timestamp_epoch'
-  }
+    value: 'timestamp_epoch',
+  },
 ];
