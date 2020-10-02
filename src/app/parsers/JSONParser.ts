@@ -28,7 +28,7 @@ export class JSONParser extends InfinityParser {
       this.target.columns.forEach((c: ScrapColumn) => {
         let value = get(r, c.selector, '');
         if (c.type === 'timestamp') {
-          value = new Date(value);
+          value = new Date(value + "");
         } else if (c.type === 'number') {
           value = value === '' ? null : +value;
         }
@@ -51,7 +51,7 @@ export class JSONParser extends InfinityParser {
         let timestamp = endTime ? endTime.getTime() : new Date().getTime();
         if (this.TimeColumns.length >= 1) {
           const FirstTimeColumn = this.TimeColumns[0];
-          timestamp = new Date(get(r, FirstTimeColumn.selector)).getTime();
+          timestamp = new Date(get(r, FirstTimeColumn.selector) + "").getTime();
         }
         let metric = toNumber(get(r, metricColumn.selector));
         this.series.push({
