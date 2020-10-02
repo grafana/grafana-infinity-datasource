@@ -5,6 +5,8 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 ## [ 0.4.0 ]
 
 - Registered / Global Queries
+- UNIX EPOCH / millisecond timestamp format
+- Bug fixes
 
 ## [ 0.3.0 ]
 
