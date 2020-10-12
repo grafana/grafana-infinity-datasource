@@ -6,6 +6,7 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 
 - Registered / Global Queries
 - UNIX EPOCH / millisecond timestamp format
+- Template variables support. Collection & CollectionLookup
 - Bug fixes
 
 ## [ 0.3.0 ]

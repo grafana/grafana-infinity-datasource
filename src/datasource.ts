@@ -1,5 +1,6 @@
-import { flatten } from 'lodash';
+import { flatten, chunk, last } from 'lodash';
 import { DataSourceApi } from '@grafana/data';
+import { getTemplateSrv } from '@grafana/runtime';
 import { InfinityProvider } from './app/InfinityProvider';
 import { SeriesProvider } from './app/SeriesProvider';
 import { replaceVariables } from './utils';
@@ -88,8 +89,43 @@ export class Datasource extends DataSourceApi<InfinityQuery> {
   }
   metricFindQuery(query: string) {
     const promises: any[] = [];
+    let replacedQuery = getTemplateSrv().replace(query);
+    if (replacedQuery.startsWith('Collection(') && replacedQuery.endsWith(')')) {
+      let actualQuery = replacedQuery.replace('Collection(', '').slice(0, -1);
+      promises.push(
+        new Promise((resolve, reject) => {
+          let out = chunk(actualQuery.split(','), 2).map(value => {
+            return {
+              text: value[0],
+              value: value[1],
+            };
+          });
+          resolve(out);
+        })
+      );
+    } else if (replacedQuery.startsWith('CollectionLookup(') && replacedQuery.endsWith(')')) {
+      let actualQuery = replacedQuery.replace('CollectionLookup(', '').slice(0, -1);
+      let querySplit = actualQuery.split(',');
+      promises.push(
+        new Promise((resolve, reject) => {
+          let chunkCollection = chunk(querySplit, 2);
+          let out = chunkCollection
+            .slice(0, -1)
+            .map(value => {
+              return {
+                key: value[0],
+                value: value[1],
+              };
+            })
+            .find(v => {
+              return v.key === last(querySplit);
+            });
+          resolve(out ? [out] : []);
+        })
+      );
+    }
     return Promise.all(promises).then(results => {
-      return [];
+      return flatten(results);
     });
   }
 }
