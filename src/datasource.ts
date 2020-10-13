@@ -120,7 +120,30 @@ export class Datasource extends DataSourceApi<InfinityQuery> {
             .find(v => {
               return v.key === last(querySplit);
             });
-          resolve(out ? [out] : []);
+          resolve(
+            out
+              ? [
+                  {
+                    text: out.key,
+                    value: out.value,
+                  },
+                ]
+              : []
+          );
+        })
+      );
+    } else if (replacedQuery.startsWith('Join(') && replacedQuery.endsWith(')')) {
+      let actualQuery = replacedQuery.replace('Join(', '').slice(0, -1);
+      let querySplit = actualQuery.split(',');
+      promises.push(
+        new Promise((resolve, reject) => {
+          let out = querySplit.join('');
+          resolve([
+            {
+              value: out,
+              text: out,
+            },
+          ]);
         })
       );
     }
