@@ -147,7 +147,7 @@ export class Datasource extends DataSourceApi<InfinityQuery> {
         })
       );
     } else if (replacedQuery.startsWith('Random(') && replacedQuery.endsWith(')')) {
-      let replacedQuery = getTemplateSrv().replace(query,undefined,'csv');
+      let replacedQuery = getTemplateSrv().replace(query, undefined, 'csv');
       let actualQuery = replacedQuery.replace('Random(', '').slice(0, -1);
       let querySplit = actualQuery.split(',');
       promises.push(
