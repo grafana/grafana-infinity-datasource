@@ -1,4 +1,4 @@
-import { flatten, chunk, last } from 'lodash';
+import { flatten, chunk, last, sample } from 'lodash';
 import { DataSourceApi } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
 import { InfinityProvider } from './app/InfinityProvider';
@@ -138,6 +138,21 @@ export class Datasource extends DataSourceApi<InfinityQuery> {
       promises.push(
         new Promise((resolve, reject) => {
           let out = querySplit.join('');
+          resolve([
+            {
+              value: out,
+              text: out,
+            },
+          ]);
+        })
+      );
+    } else if (replacedQuery.startsWith('Random(') && replacedQuery.endsWith(')')) {
+      let replacedQuery = getTemplateSrv().replace(query,undefined,'csv');
+      let actualQuery = replacedQuery.replace('Random(', '').slice(0, -1);
+      let querySplit = actualQuery.split(',');
+      promises.push(
+        new Promise((resolve, reject) => {
+          let out = sample(querySplit);
           resolve([
             {
               value: out,
