@@ -5,13 +5,13 @@ module.exports = {
     dest: 'docs',
     head: [
         ['meta', { property: 'og:title', content: 'Grafana Infinity Datasource Plugin' }],
-        ['meta', { property: 'og:description', content: 'Do infinite things with Grafana. Turn any website into beautiful grafana dashboards. Supports HTML, CSV, JSON documents.' }],
+        ['meta', { property: 'og:description', content: 'Do infinite things with Grafana. Turn any website into beautiful grafana dashboards. Supports HTML, CSV, JSON, XML & GraphQL documents.' }],
         ['meta', { property: 'og:image', content: 'https://user-images.githubusercontent.com/153843/92741922-03491380-f377-11ea-9c31-9a744afd3388.png' }],
         ['meta', { property: 'og:url', content: 'https://yesoreyeram.github.io/grafana-infinity-datasource' }],
         ['meta', { property: 'twitter:card', content: 'summary_large_image' }],
         ['meta', { property: 'twitter:site', content: '@yesoreyeram.github.io/grafana-infinity-datasource' }],
         ['meta', { property: 'twitter:title', content: 'Grafana Infinity Datasource Plugin.' }],
-        ['meta', { property: 'twitter:description', content: 'Do infinite things with Grafana. Turn any website into beautiful grafana dashboards. Supports HTML, CSV, JSON documents.' }],
+        ['meta', { property: 'twitter:description', content: 'Do infinite things with Grafana. Turn any website into beautiful grafana dashboards. Supports HTML, CSV, JSON, XML & GraphQL documents.' }],
         ['meta', { property: 'twitter:image', content: 'https://user-images.githubusercontent.com/153843/92741922-03491380-f377-11ea-9c31-9a744afd3388.png' }]
     ],
     themeConfig: {
@@ -39,6 +39,7 @@ module.exports = {
             ['/wiki/csv', 'CSV'],
             ['/wiki/json', 'JSON'],
             ['/wiki/graphql', 'GraphQL'],
+            ['/wiki/xml', 'XML'],
             ['/wiki/html', 'HTML'],
             ['/wiki/global-queries', 'Global Queries'],
             ['/wiki/template-variables', 'Template Variables'],

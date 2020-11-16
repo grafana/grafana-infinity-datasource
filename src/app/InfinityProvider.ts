@@ -3,17 +3,21 @@ import { InfinityQuery } from '../types';
 import { HTMLParser } from './parsers/HTMLParser';
 import { JSONParser } from './parsers/JSONParser';
 import { CSVParser } from './parsers/CSVParser';
+import { XMLParser } from './parsers/XMLParser';
 import { DatasourceMode } from '../config.editor';
 
 export class InfinityProvider {
   constructor(private target: InfinityQuery, private instanceSettings: any) {}
-  formatResults(res: any) {
+  async formatResults(res: any) {
     switch (this.target.type) {
       case 'html':
         return new HTMLParser(res, this.target).getResults();
       case 'json':
       case 'graphql':
         return new JSONParser(res, this.target).getResults();
+      case 'xml':
+        let xmldata = await new XMLParser(res, this.target);
+        return xmldata.getResults();
       case 'csv':
         return new CSVParser(res, this.target).getResults();
       default:

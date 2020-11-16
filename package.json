@@ -1,7 +1,7 @@
 {
   "name": "grafana-infinity-datasource",
-  "version": "0.4.0",
-  "description": "Infinity data source plugin for Grafana. Do infinite things with Grafana. HTML, CSV, JSON & GraphQL Scrapping.",
+  "version": "0.5.0",
+  "description": "Infinity data source plugin for Grafana. Do infinite things with Grafana. HTML, CSV, JSON, XML & GraphQL Scrapping.",
   "main": "dist/module.js",
   "scripts": {
     "build": "grafana-toolkit plugin:build",
@@ -28,6 +28,7 @@
     "graphql",
     "csv",
     "html",
+    "xml",
     "url",
     "scraping",
     "web scraping"
@@ -45,7 +46,8 @@
     "cheerio": "^1.0.0-rc.3",
     "csv-parse": "^4.12.0",
     "lodash": "^4.17.19",
-    "mathjs": "^7.2.0"
+    "mathjs": "^7.2.0",
+    "xml2js": "^0.4.23"
   },
   "devDependencies": {
     "@grafana/toolkit": "7.1.5",
@@ -53,6 +55,7 @@
     "@types/grafana": "github:CorpGlory/types-grafana.git",
     "@types/lodash": "^4.14.149",
     "@types/mathjs": "^6.0.5",
+    "@types/xml2js": "^0.4.6",
     "babel": "^6.23.0",
     "babel-core": "^6.26.3",
     "babel-loader": "^8.1.0",

@@ -52,7 +52,7 @@ export class Scrapper extends React.PureComponent<ScrapperProps> {
             </div>
           </div>
         )}
-        {['html', 'json', 'graphql'].indexOf(this.props.query.type) > -1 ? (
+        {['html', 'json', 'xml', 'graphql'].indexOf(this.props.query.type) > -1 ? (
           <div className="gf-form-inline">
             <div className="gf-form">
               <label className="gf-form-label query-keyword width-8">Rows / Root</label>

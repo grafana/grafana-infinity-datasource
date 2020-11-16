@@ -34,7 +34,7 @@ export const InfinityQueryEditor: React.FC<InfinityEditorProps> = ({ query, onCh
     <div>
       <TypeChooser onChange={onChange} query={query} mode={mode} instanceSettings={instanceSettings} />
       {query.type === 'series' ? <SeriesEditor onChange={onChange} query={query} /> : <></>}
-      {['csv', 'html', 'json', 'graphql'].indexOf(query.type) > -1 ? (
+      {['csv', 'html', 'json', 'graphql', 'xml'].indexOf(query.type) > -1 ? (
         <ScrapperOptions onChange={onChange} query={query} />
       ) : (
         <></>
