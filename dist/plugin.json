@@ -5,9 +5,9 @@
   "metrics": true,
   "annotations": false,
   "info": {
-    "version": "0.4.0",
-    "updated": "2020-10-26",
-    "description": "Do infinite things with Grafana. HTML, CSV, JSON & GraphQL Scrapping.",
+    "version": "0.5.0",
+    "updated": "2020-11-16",
+    "description": "Do infinite things with Grafana. HTML, CSV, JSON, XML & GraphQL Scrapping.",
     "author": {
       "name": "Sriramajeyam Sugumaran",
       "url": "https://www.google.com/search?q=Sriramajeyam+Sugumaran"
@@ -24,6 +24,7 @@
       "simple-json",
       "graphql",
       "csv",
+      "xml",
       "html",
       "url",
       "scraping"
