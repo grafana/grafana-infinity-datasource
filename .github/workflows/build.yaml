@@ -28,19 +28,9 @@ jobs:
       run: |
         yarn docs:build;
         rm -rf docs/dist;
-    - name: Publish Updated Type Docs
+    - name: Publish Docs
       uses: stefanzweifel/git-auto-commit-action@v4
       with:
         commit_message: ci build
         push_options: --force
-        file_pattern: dist docs
-    - uses: actions/setup-go@master
-      with:
-        go-version: "1.13.3"
-    - name: Lint Plugin
-      run: |
-        git clone https://github.com/grafana/plugin-validator;
-        cd ./plugin-validator/cmd/plugincheck;
-        go install
-        cd ../../;
-        plugincheck -url https://github.com/yesoreyeram/grafana-infinity-datasource;
+        file_pattern: docs;
