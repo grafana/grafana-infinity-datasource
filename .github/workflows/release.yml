@@ -29,7 +29,7 @@ jobs:
         yarn docs:build;
         rm -rf docs/dist;
     - name: Sign plugin
-      run: npx @grafana/toolkit@canary plugin:sign
+      run: yarn sign;
       env:
         GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
     - name: Get plugin information
@@ -80,3 +80,11 @@ jobs:
         asset_path: ./${{ env.GRAFANA_PLUGIN_ARTIFACT_CHECKSUM }}
         asset_name: ${{ env.GRAFANA_PLUGIN_ARTIFACT_CHECKSUM }}
         asset_content_type: text/plain
+    - name: Get checksum
+      run: |
+        echo "GRAFANA_PLUGIN_CHECKSUM=$(cat ./${{ env.GRAFANA_PLUGIN_ARTIFACT_CHECKSUM }} | cut -d' ' -f1)" >> $GITHUB_ENV
+    - name: Publish to Grafana.com
+      run: |
+        echo Publish your plugin to grafana.com/plugins by opening a PR to https://github.com/grafana/grafana-plugin-repository with the following entry:
+        echo
+        echo '{ "id": "${{ env.GRAFANA_PLUGIN_ID }}", "type": "${{ env.GRAFANA_PLUGIN_TYPE }}", "url": "https://github.com/${{ github.repository }}", "versions": [ { "version": "${{ env.GRAFANA_PLUGIN_VERSION }}", "commit": "${{ github.sha }}", "url": "https://github.com/${{ github.repository }}", "download": { "any": { "url": "${{ steps.upload-plugin-asset.outputs.browser_download_url }}", "md5": "${{ env.GRAFANA_PLUGIN_CHECKSUM }}" } } } ] }' | jq .
