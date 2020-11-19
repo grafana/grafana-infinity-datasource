@@ -78,16 +78,16 @@ jobs:
     - name: Get checksum
       run: |
         echo "GRAFANA_PLUGIN_CHECKSUM=$(cat ./${{ env.GRAFANA_PLUGIN_ARTIFACT_CHECKSUM }} | cut -d' ' -f1)" >> $GITHUB_ENV
-    # - uses: actions/setup-go@master
-    #   with:
-    #     go-version: "1.13.3"
-    # - name: Lint Plugin
-    #   run: |
-    #     git clone https://github.com/grafana/plugin-validator;
-    #     cd ./plugin-validator/cmd/plugincheck;
-    #     go install
-    #     cd ../../;
-    #     plugincheck -url ${{ steps.upload-plugin-asset.outputs.browser_download_url }};
+    - uses: actions/setup-go@master
+      with:
+        go-version: "1.13.3"
+    - name: Lint Plugin
+      run: |
+        git clone https://github.com/grafana/plugin-validator;
+        cd ./plugin-validator/cmd/plugincheck;
+        go install
+        cd ../../;
+        plugincheck ${{ steps.upload-plugin-asset.outputs.browser_download_url }};
     - name: Publish to Grafana.com
       run: |
         echo Publish your plugin to grafana.com/plugins by opening a PR to https://github.com/grafana/grafana-plugin-repository with the following entry:
