@@ -11,7 +11,7 @@ features:
 - title: Use URLs as datasource
   details: Get the data from any public url
 - title: Support for multiple formats
-  details: Support for CSV, JSON, GraphQL and HTML formats
+  details: Support for CSV, JSON, GraphQL, XML and HTML formats
 footer: Apache 2.0 Licensed | Authored by Sriramajeyam Sugumaran
 ---
 
