@@ -26,11 +26,13 @@ jobs:
         echo $(date) > dist/LAST_UPDATED;
     - name: Build Docs
       run: |
+        rm -rf docs/;
         yarn docs:build;
+        echo $(date) > docs/LAST_UPDATED;
         rm -rf docs/dist;
     - name: Publish Docs
       uses: stefanzweifel/git-auto-commit-action@v4
       with:
-        commit_message: ci build
+        commit_message: docs update
         push_options: --force
         file_pattern: docs;
