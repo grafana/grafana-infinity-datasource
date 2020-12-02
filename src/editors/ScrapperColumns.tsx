@@ -63,9 +63,7 @@ export const ScrapperColumns: React.FC<ScrapperColumnsProps> = ({ query, onChang
               <label className="gf-form-label query-keyword width-8" title="Column">
                 Column {index + 1}
               </label>
-              <label className="gf-form-label width-8">
-                {query.type === 'csv' ? 'Column Name' : 'Selector'}
-              </label>
+              <label className="gf-form-label width-8">{query.type === 'csv' ? 'Column Name' : 'Selector'}</label>
               <input
                 type="text"
                 className="gf-form-input min-width-8"
@@ -73,9 +71,7 @@ export const ScrapperColumns: React.FC<ScrapperColumnsProps> = ({ query, onChang
                 placeholder={query.type === 'csv' ? 'Column Name' : 'Selector'}
                 onChange={e => onInputTextChange(e, `columns[${index}].selector`)}
               ></input>
-              <label className="gf-form-label width-2">
-                as
-              </label>
+              <label className="gf-form-label width-2">as</label>
               <input
                 type="text"
                 className="gf-form-input min-width-8"
