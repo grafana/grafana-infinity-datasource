@@ -55,8 +55,7 @@ jobs:
         ls -lh docs/wiki;
         rm -rf docs/dist;
     - name: Publish Docs
-      uses: stefanzweifel/git-auto-commit-action@v4
-      with:
-        commit_message: docs update
-        push_options: --force
-        file_pattern: docs;
+      run: |
+        git add docs/;
+        git commit -m "Docs update";
+        git push;
