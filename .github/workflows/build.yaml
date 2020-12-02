@@ -56,6 +56,8 @@ jobs:
         rm -rf docs/dist;
     - name: Publish Docs
       run: |
+        git config --global user.email "actions@github.com";
+        git config --global user.name "Github Actions";
         git add docs/;
         git commit -m "Docs update";
         git push;
