@@ -95,3 +95,22 @@ If you need an advanced version of the datasource, use the following format.
   version: 1
   readOnly: true
 ```
+
+### CORS Issues
+
+If the API endpoints or web pages are protected by CORS, you cannot query them directly. Either you need to use a cors proxy or grafana proxy
+
+#### CORS proxy
+
+You can use proxy servers or hosted services as mentioned [here](https://stackoverflow.com/a/32167044/1576253) to overcome the CORS issue. Example: Use **https://cors-anywhere.herokuapp.com/https://en.wikipedia.org/wiki/FIFA_World_Cup** to connect with wikipedia.
+ 
+You can setup your own cors-anywhere proxy by cloning https://github.com/Rob--W/cors-anywhere as mentioned [here](https://stackoverflow.com/a/47085173/1576253)
+
+#### Grafana Proxy
+
+Alternatively, you can use grafana proxy as to overcome the CORS issue. The limitation of using grafana proxy is that you need to create datasource for each domains you are trying to connect. Specify the domain of URL in `https://example.com` format. (without trailing spaces). In the below example, screenshots explaining how to connect wikipedia via the grafana proxy.
+
+![image](https://user-images.githubusercontent.com/153843/100860274-35ef3d80-3488-11eb-929b-be096edadb8a.png)
+
+![image](https://user-images.githubusercontent.com/153843/100860310-430c2c80-3488-11eb-9fe5-168e22fa55a2.png)
+

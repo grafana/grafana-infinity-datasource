@@ -1,4 +1,5 @@
-import { forEach, get, toNumber } from 'lodash';
+import { forEach, get, toNumber, flatten } from 'lodash';
+import { JSONPath } from 'jsonpath-plus';
 import { InfinityParser } from './InfinityParser';
 import { InfinityQuery, ScrapColumn, GrafanaTableRow } from './../../types';
 
@@ -17,8 +18,18 @@ export class JSONParser extends InfinityParser {
     if (typeof JSONResponse === 'string') {
       JSONResponse = JSON.parse(JSONResponse);
     }
-    if (this.target.root_selector) {
-      JSONResponse = get(JSONResponse, this.target.root_selector);
+    const rootSelect = this.target.root_selector;
+    if (rootSelect) {
+      if (rootSelect.startsWith('$')) {
+        JSONResponse = flatten(
+          JSONPath({
+            path: this.target.root_selector,
+            json: JSONResponse,
+          })
+        );
+      } else {
+        JSONResponse = get(JSONResponse, this.target.root_selector);
+      }
     }
     return JSONResponse;
   }

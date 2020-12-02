@@ -5,6 +5,7 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 ## [ 0.6.0 ]
 
 - Plugin signed
+- JSONPath support for JSON root selector
 
 ## [ 0.5.0 ]
 
