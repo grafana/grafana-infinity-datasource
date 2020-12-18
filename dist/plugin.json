@@ -1,0 +1,46 @@
+{
+  "name": "Infinity",
+  "id": "yesoreyeram-infinity-datasource",
+  "type": "datasource",
+  "metrics": true,
+  "annotations": false,
+  "info": {
+    "version": "0.6.0",
+    "updated": "2020-12-18",
+    "description": "Do infinite things with Grafana. HTML, CSV, JSON, XML & GraphQL Scrapping.",
+    "author": {
+      "name": "Sriramajeyam Sugumaran",
+      "url": "https://www.google.com/search?q=Sriramajeyam+Sugumaran"
+    },
+    "logos": {
+      "small": "img/Infinity.png",
+      "large": "img/Infinity.png"
+    },
+    "keywords": [
+      "grafana",
+      "inline",
+      "random walk",
+      "json",
+      "simple-json",
+      "graphql",
+      "csv",
+      "xml",
+      "html",
+      "url",
+      "scraping"
+    ],
+    "screenshots": [],
+    "links": [
+      {
+        "name": "Github",
+        "url": "https://github.com/yesoreyeram/grafana-infinity-datasource"
+      }
+    ]
+  },
+  "dependencies": {
+    "grafanaDependency": ">=7.0.0",
+    "plugins": []
+  },
+  "includes": [],
+  "routes": []
+}
