@@ -1,4 +1,5 @@
-import { forEach, get, toNumber } from 'lodash';
+import { forEach, get, toNumber, flatten } from 'lodash';
+import { JSONPath } from 'jsonpath-plus';
 import { InfinityParser } from './InfinityParser';
 import { InfinityQuery, ScrapColumn, GrafanaTableRow } from './../../types';
 
@@ -17,8 +18,18 @@ export class JSONParser extends InfinityParser {
     if (typeof JSONResponse === 'string') {
       JSONResponse = JSON.parse(JSONResponse);
     }
-    if (this.target.root_selector) {
-      JSONResponse = get(JSONResponse, this.target.root_selector);
+    const rootSelect = this.target.root_selector;
+    if (rootSelect) {
+      if (rootSelect.startsWith('$')) {
+        JSONResponse = flatten(
+          JSONPath({
+            path: this.target.root_selector,
+            json: JSONResponse,
+          })
+        );
+      } else {
+        JSONResponse = get(JSONResponse, this.target.root_selector);
+      }
     }
     return JSONResponse;
   }
@@ -31,6 +42,8 @@ export class JSONParser extends InfinityParser {
           value = new Date(value + '');
         } else if (c.type === 'timestamp_epoch') {
           value = new Date(parseInt(value, 10));
+        } else if (c.type === 'timestamp_epoch_s') {
+          value = new Date(parseInt(value, 10) * 1000);
         } else if (c.type === 'number') {
           value = value === '' ? null : +value;
         }
@@ -57,6 +70,8 @@ export class JSONParser extends InfinityParser {
             timestamp = new Date(get(r, FirstTimeColumn.selector) + '').getTime();
           } else if (FirstTimeColumn.type === 'timestamp_epoch') {
             timestamp = new Date(parseInt(get(r, FirstTimeColumn.selector), 10)).getTime();
+          } else if (FirstTimeColumn.type === 'timestamp_epoch_s') {
+            timestamp = new Date(parseInt(get(r, FirstTimeColumn.selector), 10) * 1000).getTime();
           }
         }
         let metric = toNumber(get(r, metricColumn.selector));

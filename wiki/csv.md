@@ -105,3 +105,5 @@ Year,Population
 ```
 
 In the above example, first row represents year 2010 and second row represents 2011.
+
+Unix epoch time also supported. You can select **Timestamp ( UNIX s )** / **timestamp_epoch_s** as type if your api data is in seconds.

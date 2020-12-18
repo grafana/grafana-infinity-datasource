@@ -19,7 +19,7 @@ export type queryResult = timeSeriesResult | tableResult;
 export interface ScrapColumn {
   selector: string;
   text: string;
-  type: 'string' | 'number' | 'timestamp' | 'timestamp_epoch';
+  type: 'string' | 'number' | 'timestamp' | 'timestamp_epoch' | 'timestamp_epoch_s';
 }
 export interface DataOverride {
   values: string[];
@@ -127,5 +127,9 @@ export const SCRAP_QUERY_RESULT_COLUMN_FORMATS = [
   {
     label: 'Timestamp ( UNIX ms )',
     value: 'timestamp_epoch',
+  },
+  {
+    label: 'Timestamp ( UNIX s )',
+    value: 'timestamp_epoch_s',
   },
 ];

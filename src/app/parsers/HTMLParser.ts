@@ -29,6 +29,8 @@ export class HTMLParser extends InfinityParser {
           value = new Date(value);
         } else if (c.type === 'timestamp_epoch') {
           value = new Date(parseInt(value, 10));
+        } else if (c.type === 'timestamp_epoch_s') {
+          value = new Date(parseInt(value, 10) * 1000);
         }
         row.push(value);
       });
@@ -64,6 +66,15 @@ export class HTMLParser extends InfinityParser {
                   .trim(),
                 10
               )
+            ).getTime();
+          } else if (FirstTimeColumn.type === 'timestamp_epoch_s') {
+            timestamp = new Date(
+              parseInt(
+                $$(FirstTimeColumn.selector)
+                  .text()
+                  .trim(),
+                10
+              ) * 1000
             ).getTime();
           }
         }

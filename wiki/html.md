@@ -24,15 +24,7 @@ Example :
 
 * Only symmetrical data can be scrapped. (Example: `table` elements with `colspan` or `rowspan` might break the scrapping)
 * Only text element is supported. Attribute scraping not available
-* Use CORS servers as a proxy if the websites blocks CORS request
-* Only open web pages can be scrapped. Authentication not available.
-* Scrapping is limited to GET method
-* Websites may block you/your IP address, If the scrapping is at frequent refresh rate.
-* There won't be any caching
 * To scrap the AJAX content, use JSON api
-
-## CORS setup
-
-Some URLs you might not able to access directly due to CORS restriction set by the websites. At that time, you may need to use proxy servers or hosted services as mentioned [here](https://stackoverflow.com/a/32167044/1576253). Example: Use **https://cors-anywhere.herokuapp.com/https://en.wikipedia.org/wiki/FIFA_World_Cup** to connect with wikipedia.
-
-You can setup your own cors-anywhere proxy by cloning https://github.com/Rob--W/cors-anywhere as mentioned [here](https://stackoverflow.com/a/47085173/1576253)
+* Websites may block you/your IP address, If the scrapping is at high frequency/refresh rate.
+* Caching is not implemented. So be aware of the rate limits.
+* Use CORS servers as a proxy if the websites blocks CORS request. Refer the installation page about setting up CORS proxy.
