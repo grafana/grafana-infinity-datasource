@@ -1,5 +1,8 @@
 blank_issues_enabled: false
 contact_links:
+  - name: Feature Request
+    url: https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/new?category=ideas
+    about: Suggest an idea for this project
   - name: Questions?
     url: https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/new?category=q-a
     about: Use our Q&A Section in our docs to get answers for your questions
