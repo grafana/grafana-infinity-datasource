@@ -6,7 +6,7 @@
   "annotations": false,
   "info": {
     "version": "0.6.0",
-    "updated": "2020-12-18",
+    "updated": "2020-12-23",
     "description": "Do infinite things with Grafana. HTML, CSV, JSON, XML & GraphQL Scrapping.",
     "author": {
       "name": "Sriramajeyam Sugumaran",
