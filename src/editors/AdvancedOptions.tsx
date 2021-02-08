@@ -2,14 +2,16 @@ import React from 'react';
 import { set } from 'lodash';
 import { Select } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
+import { TableFilter } from './TableFilters';
 import { SCRAP_QUERY_RESULT_FORMATS, InfinityQuery } from '../types';
 
 interface AdvancedOptionsProps {
   query: InfinityQuery;
+  onRunQuery: any;
   onChange: (value: any) => void;
 }
 
-export const AdvancedOptions: React.FC<AdvancedOptionsProps> = ({ query, onChange }) => {
+export const AdvancedOptions: React.FC<AdvancedOptionsProps> = ({ query, onChange, onRunQuery }) => {
   const defaultFormat = { value: 'table', label: 'Table' };
 
   const onSelectChange = (selectableItem: SelectableValue, field: string) => {
@@ -32,6 +34,7 @@ export const AdvancedOptions: React.FC<AdvancedOptionsProps> = ({ query, onChang
               defaultValue={defaultFormat}
               onChange={e => onSelectChange(e, 'format')}
             ></Select>
+            <TableFilter query={query} onChange={onChange} onRunQuery={onRunQuery}></TableFilter>
           </>
         )}
       </div>

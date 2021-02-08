@@ -26,6 +26,35 @@ export interface DataOverride {
   operator: string;
   override: string;
 }
+export enum FilterOperator {
+  Contains = 'contains',
+  ContainsIgnoreCase = 'contains_ignorecase',
+  EndsWith = 'endswith',
+  EndsWithIgnoreCase = 'endswith_ignorecase',
+  Equals = 'equals',
+  EqualsIgnoreCase = 'equals_ignorecase',
+  NotContains = 'notcontains',
+  NotContainsIgnoreCase = 'notcontains_ignorecase',
+  NotEquals = 'notequals',
+  NotEqualsIgnoreCase = 'notequals_ignorecase',
+  StartsWith = 'starswith',
+  StartsWithIgnoreCase = 'starswith_ignorecase',
+  RegexMatch = 'regex',
+  RegexNotMatch = 'regex_not',
+  In = 'in',
+  NotIn = 'notin',
+  NumberEquals = '==',
+  NumberNotEquals = '!=',
+  NumberLessThan = '<',
+  NumberLessThanOrEqualTo = '<=',
+  NumberGreaterThan = '>',
+  NumberGreaterThanOrEqualTo = '>=',
+}
+export interface InfinityFilter {
+  field: string;
+  operator: FilterOperator;
+  value: string[];
+}
 export interface InfinityQuery extends DataQuery {
   type: 'json' | 'html' | 'csv' | 'xml' | 'graphql' | 'series' | 'global';
   source: 'url' | 'inline' | 'random-walk' | 'expression';
@@ -41,6 +70,7 @@ export interface InfinityQuery extends DataQuery {
   alias?: string;
   seriesCount?: number;
   expression?: string;
+  filters: InfinityFilter[];
   dataOverrides?: DataOverride[];
   format: 'table' | 'timeseries';
 }

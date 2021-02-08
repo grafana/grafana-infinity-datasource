@@ -12,10 +12,17 @@ interface InfinityEditorProps {
   instanceSettings: any;
   mode: 'standard' | 'global';
   onChange: any;
+  onRunQuery: any;
   query: InfinityQuery;
 }
 
-export const InfinityQueryEditor: React.FC<InfinityEditorProps> = ({ query, onChange, mode, instanceSettings }) => {
+export const InfinityQueryEditor: React.FC<InfinityEditorProps> = ({
+  query,
+  onChange,
+  mode,
+  instanceSettings,
+  onRunQuery,
+}) => {
   query = defaultsDeep(query, {
     type: 'csv',
     source: 'inline',
@@ -39,7 +46,7 @@ export const InfinityQueryEditor: React.FC<InfinityEditorProps> = ({ query, onCh
       ) : (
         <></>
       )}
-      {query.type !== 'global' ? <AdvancedOptions onChange={onChange} query={query} /> : <></>}
+      {query.type !== 'global' ? <AdvancedOptions onChange={onChange} query={query} onRunQuery={onRunQuery} /> : <></>}
     </div>
   );
 };
@@ -63,6 +70,7 @@ export const QueryEditor: React.FC<EditorProps> = props => {
     <div>
       <InfinityQueryEditor
         onChange={onChange}
+        onRunQuery={props.onRunQuery}
         query={query}
         mode="standard"
         instanceSettings={props.datasource.instanceSettings}

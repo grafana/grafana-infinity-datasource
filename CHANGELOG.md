@@ -7,6 +7,7 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 - Plugin signed
 - JSONPath support for JSON root selector
 - Support for Unix/epoch seconds format
+- Support for filtering rows
 
 ## [ 0.5.0 ]
 

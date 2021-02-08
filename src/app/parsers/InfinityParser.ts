@@ -1,4 +1,5 @@
 import { uniq, flatten } from 'lodash';
+import { filterResults } from './filter';
 import { InfinityQuery, ScrapColumn, GrafanaTableRow, timeSeriesResult } from './../../types';
 
 export class InfinityParser {
@@ -32,6 +33,9 @@ export class InfinityParser {
     });
   }
   getResults() {
+    if (this.target.filters && this.target.filters.length > 0) {
+      this.rows = filterResults(this.rows, this.target.columns, this.target.filters);
+    }
     if (this.target.format === 'timeseries') {
       return this.toTimeSeries();
     } else {
