@@ -2,7 +2,14 @@ import React from 'react';
 import { set } from 'lodash';
 import { Select } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
-import { SCRAP_QUERY_TYPES, SCRAP_QUERY_SOURCES, InfinityQuery, GlobalInfinityQuery } from './../types';
+import {
+  SCRAP_QUERY_TYPES,
+  SCRAP_QUERY_SOURCES,
+  InfinityQuery,
+  GlobalInfinityQuery,
+  InfinityQueryType,
+  InfinityQuerySources,
+} from './../types';
 
 interface TypeChooserProps {
   mode: string;
@@ -12,11 +19,11 @@ interface TypeChooserProps {
 }
 
 export const TypeChooser: React.FC<TypeChooserProps> = ({ query, onChange, mode, instanceSettings }) => {
-  const defaultType = { value: 'json', label: 'JSON' };
-  const defaultSource = { value: 'url', label: 'URL' };
-  const defaultSourceSeries = { value: 'random-walk', label: 'Random Walk' };
+  const defaultType: SelectableValue<InfinityQueryType> = { value: 'json', label: 'JSON' };
+  const defaultSource: SelectableValue<InfinityQuerySources> = { value: 'url', label: 'URL' };
+  const defaultSourceSeries: SelectableValue<InfinityQuerySources> = { value: 'random-walk', label: 'Random Walk' };
 
-  const onSelectChange = (selectableItem: SelectableValue, field: string) => {
+  const onSelectChange = (selectableItem: SelectableValue, field: keyof InfinityQuery) => {
     if (field === 'type') {
       if (selectableItem.value === 'series') {
         set(query, 'source', defaultSourceSeries.value);

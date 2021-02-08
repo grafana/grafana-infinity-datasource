@@ -12,7 +12,7 @@ interface ScrapperProps {
 export class Scrapper extends React.PureComponent<ScrapperProps> {
   onInputTextChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    field: string,
+    field: keyof InfinityQuery,
     props: any,
     splitIntoArray = false
   ) => {

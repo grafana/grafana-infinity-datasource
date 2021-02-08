@@ -1,7 +1,7 @@
 import { SelectableValue } from '@grafana/data';
 import { GrafanaTableRow, ScrapColumn, InfinityFilter, FilterOperator } from './../../types';
 
-export const filterOperators: SelectableValue<FilterOperator>[] = [
+export const filterOperators: Array<SelectableValue<FilterOperator>> = [
   { label: 'Equals', value: FilterOperator.Equals },
   { label: 'Not Equals', value: FilterOperator.NotEquals },
   { label: 'Contains', value: FilterOperator.Contains },

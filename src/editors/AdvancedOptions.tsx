@@ -3,7 +3,7 @@ import { set } from 'lodash';
 import { Select } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
 import { TableFilter } from './TableFilters';
-import { SCRAP_QUERY_RESULT_FORMATS, InfinityQuery } from '../types';
+import { SCRAP_QUERY_RESULT_FORMATS, InfinityQuery, InfinityQueryFormat } from '../types';
 
 interface AdvancedOptionsProps {
   query: InfinityQuery;
@@ -12,7 +12,7 @@ interface AdvancedOptionsProps {
 }
 
 export const AdvancedOptions: React.FC<AdvancedOptionsProps> = ({ query, onChange, onRunQuery }) => {
-  const defaultFormat = { value: 'table', label: 'Table' };
+  const defaultFormat: SelectableValue<InfinityQueryFormat> = { value: 'table', label: 'Table' };
 
   const onSelectChange = (selectableItem: SelectableValue, field: string) => {
     set(query, field, selectableItem.value);

@@ -8,7 +8,7 @@ import {
 } from '@grafana/data';
 import { DataSourceHttpSettings, Select } from '@grafana/ui';
 import { InfinityQueryEditor } from './query.editor';
-import { GlobalInfinityQuery } from './types';
+import { GlobalInfinityQuery, InfinityQuery } from './types';
 
 export enum DatasourceMode {
   Basic = 'basic',
@@ -29,6 +29,19 @@ interface InfinityDataSourceJSONOptions extends DataSourceJsonData {
 
 export type Props = DataSourcePluginOptionsEditorProps<InfinityDataSourceJSONOptions>;
 
+const DefaultGlobalQuery: InfinityQuery = {
+  refId: '',
+  type: 'csv',
+  source: 'inline',
+  data: '',
+  url: '',
+  url_options: { method: 'GET' },
+  root_selector: '',
+  columns: [],
+  filters: [],
+  format: 'table',
+};
+
 export const InfinityConfigEditor: React.FC<Props> = (props: Props) => {
   const { options, onOptionsChange } = props;
 
@@ -43,14 +56,7 @@ export const InfinityConfigEditor: React.FC<Props> = (props: Props) => {
       name: 'My Query',
       id: `my-query-${options.jsonData.global_queries.length + 1}`,
       query: {
-        type: 'csv',
-        source: 'inline',
-        data: '',
-        url: '',
-        url_options: { method: 'GET' },
-        root_selector: '',
-        columns: [],
-        format: 'table',
+        ...DefaultGlobalQuery,
         refId: `my-query-${options.jsonData.global_queries.length + 1}`,
       },
     });
@@ -139,6 +145,7 @@ export const InfinityConfigEditor: React.FC<Props> = (props: Props) => {
                       onChange={() =>
                         updateDatasourcePluginJsonDataOption(props, 'global_queries', options.jsonData.global_queries)
                       }
+                      onRunQuery={() => {}}
                       instanceSettings={options}
                     />
                   </div>

@@ -32,7 +32,7 @@ export const TableFilter: React.FC<TableFiltersProps> = props => {
     onChange(query);
   };
   const removeFilter = (index: number) => {
-    const filters = query.filters;
+    const filters = query.filters || [];
     filters.splice(index, 1);
     onChange({ ...query, filters });
   };

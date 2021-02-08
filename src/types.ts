@@ -1,4 +1,4 @@
-import { DataQuery } from '@grafana/data';
+import { DataQuery, SelectableValue } from '@grafana/data';
 
 export type dataPoint = [number | null, number];
 export type timeSeriesResult = {
@@ -16,6 +16,13 @@ export type tableResult = {
   rows: GrafanaTableRow;
 };
 export type queryResult = timeSeriesResult | tableResult;
+export type InfinityQueryType = 'json' | 'html' | 'csv' | 'xml' | 'graphql' | 'series' | 'global';
+export type InfinityQueryFormat = 'table' | 'timeseries';
+export type InfinityQuerySources = 'url' | 'inline' | 'random-walk' | 'expression';
+export type ScrapColumnFormat = 'string' | 'number' | 'timestamp' | 'timestamp_epoch' | 'timestamp_epoch_s';
+interface ScrapQuerySources extends SelectableValue<InfinityQuerySources> {
+  supported_types: InfinityQueryType[];
+}
 export interface ScrapColumn {
   selector: string;
   text: string;
@@ -55,9 +62,10 @@ export interface InfinityFilter {
   operator: FilterOperator;
   value: string[];
 }
+
 export interface InfinityQuery extends DataQuery {
-  type: 'json' | 'html' | 'csv' | 'xml' | 'graphql' | 'series' | 'global';
-  source: 'url' | 'inline' | 'random-walk' | 'expression';
+  type: InfinityQueryType;
+  source: InfinityQuerySources;
   url: string;
   url_options: {
     method: 'GET' | 'POST';
@@ -70,16 +78,16 @@ export interface InfinityQuery extends DataQuery {
   alias?: string;
   seriesCount?: number;
   expression?: string;
-  filters: InfinityFilter[];
+  filters?: InfinityFilter[];
   dataOverrides?: DataOverride[];
-  format: 'table' | 'timeseries';
+  format: InfinityQueryFormat;
 }
 export interface GlobalInfinityQuery {
   name: string;
   id: string;
   query: InfinityQuery;
 }
-export const SCRAP_QUERY_TYPES = [
+export const SCRAP_QUERY_TYPES: Array<SelectableValue<InfinityQueryType>> = [
   {
     label: 'CSV',
     value: 'csv',
@@ -109,7 +117,7 @@ export const SCRAP_QUERY_TYPES = [
     value: 'global',
   },
 ];
-export const SCRAP_QUERY_RESULT_FORMATS = [
+export const SCRAP_QUERY_RESULT_FORMATS: Array<SelectableValue<InfinityQueryFormat>> = [
   {
     label: 'Table',
     value: 'table',
@@ -119,7 +127,7 @@ export const SCRAP_QUERY_RESULT_FORMATS = [
     value: 'timeseries',
   },
 ];
-export const SCRAP_QUERY_SOURCES = [
+export const SCRAP_QUERY_SOURCES: ScrapQuerySources[] = [
   {
     label: 'URL',
     value: 'url',
@@ -141,7 +149,7 @@ export const SCRAP_QUERY_SOURCES = [
     supported_types: ['series'],
   },
 ];
-export const SCRAP_QUERY_RESULT_COLUMN_FORMATS = [
+export const SCRAP_QUERY_RESULT_COLUMN_FORMATS: Array<SelectableValue<ScrapColumnFormat>> = [
   {
     label: 'String',
     value: 'string',

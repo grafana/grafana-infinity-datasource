@@ -16,6 +16,20 @@ interface InfinityEditorProps {
   query: InfinityQuery;
 }
 
+const defaultQuery: Partial<InfinityQuery> = {
+  type: 'csv',
+  source: 'inline',
+  format: 'table',
+  url: '',
+  url_options: {
+    method: 'GET',
+    data: '',
+  },
+  data: '',
+  root_selector: '',
+  columns: [],
+  filters: [],
+};
 export const InfinityQueryEditor: React.FC<InfinityEditorProps> = ({
   query,
   onChange,
@@ -23,20 +37,7 @@ export const InfinityQueryEditor: React.FC<InfinityEditorProps> = ({
   instanceSettings,
   onRunQuery,
 }) => {
-  query = defaultsDeep(query, {
-    type: 'csv',
-    source: 'inline',
-    format: 'table',
-    url: '',
-    url_options: {
-      method: 'GET',
-      data: '',
-    },
-    data: '',
-    root_selector: '',
-    columns: [],
-  });
-
+  query = defaultsDeep(query, defaultQuery);
   return (
     <div>
       <TypeChooser onChange={onChange} query={query} mode={mode} instanceSettings={instanceSettings} />

@@ -14,7 +14,7 @@ export const SeriesEditor: React.FC<ScrapperProps> = ({ query, onChange }) => {
   query = defaultsDeep(query, {
     alias: 'Random Walk',
   });
-  const onInputTextChange = (value: string | number, field: string) => {
+  const onInputTextChange = (value: string | number, field: keyof InfinityQuery) => {
     set(query, field, value);
     onChange(query);
   };
