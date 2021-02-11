@@ -1,10 +1,10 @@
 import { flatten, chunk, last, sample } from 'lodash';
-import { DataSourceApi } from '@grafana/data';
+import { DataSourceApi, DataQueryResponse, AnnotationEvent } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
 import { InfinityProvider } from './app/InfinityProvider';
 import { SeriesProvider } from './app/SeriesProvider';
 import { replaceVariables } from './utils';
-import { InfinityQuery, GlobalInfinityQuery } from './types';
+import { InfinityQuery, GlobalInfinityQuery, VariableQuery, MetricFindValue } from './types';
 
 export class Datasource extends DataSourceApi<InfinityQuery> {
   instanceSettings: any;
@@ -29,7 +29,7 @@ export class Datasource extends DataSourceApi<InfinityQuery> {
       }
     });
   }
-  query(options: any) {
+  query(options: any): Promise<DataQueryResponse> {
     const promises: any[] = [];
     options.targets
       .filter((t: InfinityQuery) => t.hide !== true)
@@ -82,86 +82,96 @@ export class Datasource extends DataSourceApi<InfinityQuery> {
       return { data: flatten(results) };
     });
   }
-  annotationQuery(options: any) {
+  annotationQuery(options: any): Promise<AnnotationEvent[]> {
     const promises: any[] = [];
     return Promise.all(promises).then(results => {
       return [];
     });
   }
-  metricFindQuery(query: string) {
+  metricFindQuery(query: VariableQuery): Promise<MetricFindValue[]> {
     const promises: any[] = [];
-    let replacedQuery = getTemplateSrv().replace(query);
-    if (replacedQuery.startsWith('Collection(') && replacedQuery.endsWith(')')) {
-      let actualQuery = replacedQuery.replace('Collection(', '').slice(0, -1);
-      promises.push(
-        new Promise((resolve, reject) => {
-          let out = chunk(actualQuery.split(','), 2).map(value => {
-            return {
-              text: value[0],
-              value: value[1],
-            };
-          });
-          resolve(out);
-        })
-      );
-    } else if (replacedQuery.startsWith('CollectionLookup(') && replacedQuery.endsWith(')')) {
-      let actualQuery = replacedQuery.replace('CollectionLookup(', '').slice(0, -1);
-      let querySplit = actualQuery.split(',');
-      promises.push(
-        new Promise((resolve, reject) => {
-          let chunkCollection = chunk(querySplit, 2);
-          let out = chunkCollection
-            .slice(0, -1)
-            .map(value => {
-              return {
-                key: value[0],
-                value: value[1],
-              };
+    switch (query.queryType) {
+      case 'legacy':
+      case undefined:
+      default:
+        const originalQueryString = typeof query === 'string' ? query : query.query;
+        let replacedQuery = getTemplateSrv().replace(originalQueryString);
+        if (replacedQuery.startsWith('Collection(') && replacedQuery.endsWith(')')) {
+          let actualQuery = replacedQuery.replace('Collection(', '').slice(0, -1);
+          promises.push(
+            new Promise((resolve, reject) => {
+              let out = chunk(actualQuery.split(','), 2).map(value => {
+                return {
+                  text: value[0],
+                  value: value[1],
+                };
+              });
+              resolve(out);
             })
-            .find(v => {
-              return v.key === last(querySplit);
-            });
-          resolve(
-            out
-              ? [
-                  {
-                    text: out.key,
-                    value: out.value,
-                  },
-                ]
-              : []
           );
-        })
-      );
-    } else if (replacedQuery.startsWith('Join(') && replacedQuery.endsWith(')')) {
-      let actualQuery = replacedQuery.replace('Join(', '').slice(0, -1);
-      let querySplit = actualQuery.split(',');
-      promises.push(
-        new Promise((resolve, reject) => {
-          let out = querySplit.join('');
-          resolve([
-            {
-              value: out,
-              text: out,
-            },
-          ]);
-        })
-      );
-    } else if (replacedQuery.startsWith('Random(') && replacedQuery.endsWith(')')) {
-      let replacedQuery = getTemplateSrv().replace(query, undefined, 'csv');
-      let actualQuery = replacedQuery.replace('Random(', '').slice(0, -1);
-      let querySplit = actualQuery.split(',');
-      promises.push(
-        new Promise((resolve, reject) => {
-          let out = sample(querySplit);
-          resolve([
-            {
-              value: out,
-              text: out,
-            },
-          ]);
-        })
-      );
+        } else if (replacedQuery.startsWith('CollectionLookup(') && replacedQuery.endsWith(')')) {
+          let actualQuery = replacedQuery.replace('CollectionLookup(', '').slice(0, -1);
+          let querySplit = actualQuery.split(',');
+          promises.push(
+            new Promise((resolve, reject) => {
+              let chunkCollection = chunk(querySplit, 2);
+              let out = chunkCollection
+                .slice(0, -1)
+                .map(value => {
+                  return {
+                    key: value[0],
+                    value: value[1],
+                  };
+                })
+                .find(v => {
+                  return v.key === last(querySplit);
+                });
+              resolve(
+                out
+                  ? [
+                      {
+                        text: out.value,
+                        value: out.value,
+                      },
+                    ]
+                  : []
+              );
+            })
+          );
+        } else if (replacedQuery.startsWith('Join(') && replacedQuery.endsWith(')')) {
+          let actualQuery = replacedQuery.replace('Join(', '').slice(0, -1);
+          let querySplit = actualQuery.split(',');
+          promises.push(
+            new Promise((resolve, reject) => {
+              let out = querySplit.join('');
+              resolve([
+                {
+                  value: out,
+                  text: out,
+                },
+              ]);
+            })
+          );
+        } else if (replacedQuery.startsWith('Random(') && replacedQuery.endsWith(')')) {
+          let replacedQuery = getTemplateSrv().replace(originalQueryString, undefined, 'csv');
+          promises.push(
+            new Promise((resolve, reject) => {
+              let out = sample(
+                replacedQuery
+                  .replace('Random(', '')
+                  .slice(0, -1)
+                  .split(',')
+              );
+              resolve([
+                {
+                  value: out,
+                  text: out,
+                },
+              ]);
+            })
+          );
+        }
+        break;
     }
     return Promise.all(promises).then(results => {
       return flatten(results);

@@ -1,5 +1,11 @@
 import { DataQuery, SelectableValue } from '@grafana/data';
 
+export interface MetricFindValue {
+  text: string;
+  value?: string | number;
+  expandable?: boolean;
+}
+
 export type dataPoint = [number | null, number];
 export type timeSeriesResult = {
   target: string;
@@ -171,3 +177,8 @@ export const SCRAP_QUERY_RESULT_COLUMN_FORMATS: Array<SelectableValue<ScrapColum
     value: 'timestamp_epoch_s',
   },
 ];
+export type VariableQueryType = 'legacy';
+export type VariableQuery = {
+  queryType: VariableQueryType;
+  query: string;
+};
