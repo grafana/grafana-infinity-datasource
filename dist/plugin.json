@@ -6,15 +6,15 @@
   "annotations": false,
   "info": {
     "version": "0.6.0",
-    "updated": "2021-02-08",
+    "updated": "2021-02-11",
     "description": "Do infinite things with Grafana. HTML, CSV, JSON, XML & GraphQL Scrapping.",
     "author": {
       "name": "Sriramajeyam Sugumaran",
       "url": "https://www.google.com/search?q=Sriramajeyam+Sugumaran"
     },
     "logos": {
-      "small": "img/Infinity.png",
-      "large": "img/Infinity.png"
+      "small": "img/icon.svg",
+      "large": "img/icon.svg"
     },
     "keywords": [
       "grafana",
