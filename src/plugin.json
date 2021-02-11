@@ -13,8 +13,8 @@
       "url": "https://www.google.com/search?q=Sriramajeyam+Sugumaran"
     },
     "logos": {
-      "small": "img/Infinity.png",
-      "large": "img/Infinity.png"
+      "small": "img/icon.svg",
+      "large": "img/icon.svg"
     },
     "keywords": [
       "grafana",
