@@ -22,7 +22,7 @@ const DATASOURCE_MODES = [
 
 const DEFAULT_DATASOURCE_MODE = DATASOURCE_MODES.find(d => d.value === DatasourceMode.Basic);
 
-interface InfinityDataSourceJSONOptions extends DataSourceJsonData {
+export interface InfinityDataSourceJSONOptions extends DataSourceJsonData {
   datasource_mode?: DatasourceMode;
   global_queries?: GlobalInfinityQuery[];
 }

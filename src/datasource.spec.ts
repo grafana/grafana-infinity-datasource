@@ -1,3 +1,4 @@
+import { PluginType } from '@grafana/data';
 import { Datasource } from './datasource';
 
 function TemplateSrvStub(this: any) {
@@ -14,10 +15,39 @@ jest.mock('@grafana/runtime', () => ({
   getTemplateSrv: () => templateSrv,
 }));
 
+const DummyDatasource = {
+  id: 1,
+  uid: '',
+  name: '',
+  type: 'yesoreyeram-infinity-datasource',
+  meta: {
+    id: '',
+    name: '',
+    module: '',
+    type: PluginType.datasource,
+    baseUrl: '',
+    info: {
+      description: '',
+      screenshots: [],
+      updated: '',
+      version: '',
+      links: [],
+      logos: {
+        small: '',
+        large: '',
+      },
+      author: {
+        name: '',
+      },
+    },
+  },
+  jsonData: {},
+};
+
 describe('metricFindQuery - Random', () => {
   it('Random', () => {
     expect.assertions(1);
-    new Datasource({})
+    new Datasource(DummyDatasource)
       .metricFindQuery({
         query: 'Random(A,B,C,D)',
         queryType: 'legacy',
@@ -34,7 +64,7 @@ describe('metricFindQuery - Random', () => {
 describe('metricFindQuery - Join', () => {
   it('Join', () => {
     expect.assertions(1);
-    new Datasource({})
+    new Datasource(DummyDatasource)
       .metricFindQuery({
         query: 'Join(A,B,C,D)',
         queryType: 'legacy',
@@ -51,7 +81,7 @@ describe('metricFindQuery - Join', () => {
 describe('metricFindQuery - Collection', () => {
   it('Collection', () => {
     expect.assertions(5);
-    new Datasource({})
+    new Datasource(DummyDatasource)
       .metricFindQuery({
         query: 'Collection(A,B,C,D)',
         queryType: 'legacy',
@@ -72,7 +102,7 @@ describe('metricFindQuery - Collection', () => {
 describe('metricFindQuery - CollectionLookup', () => {
   it('CollectionLookup', () => {
     expect.assertions(3);
-    new Datasource({})
+    new Datasource(DummyDatasource)
       .metricFindQuery({
         query: 'CollectionLookup(pd,prod-server,np,nonprod-server,dev,dev-server,np)',
         queryType: 'legacy',
@@ -88,7 +118,7 @@ describe('metricFindQuery - CollectionLookup', () => {
   });
   it('CollectionLookup', () => {
     expect.assertions(3);
-    new Datasource({})
+    new Datasource(DummyDatasource)
       .metricFindQuery({
         query: 'CollectionLookup(A,a,B,b,C,c,D,d,C)',
         queryType: 'legacy',
@@ -104,7 +134,7 @@ describe('metricFindQuery - CollectionLookup', () => {
   });
   it('CollectionLookup', () => {
     expect.assertions(1);
-    new Datasource({})
+    new Datasource(DummyDatasource)
       .metricFindQuery({
         query: 'CollectionLookup(A,a,B,b,C,c,D,d,E)',
         queryType: 'legacy',

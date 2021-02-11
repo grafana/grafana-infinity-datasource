@@ -1,14 +1,22 @@
 import { flatten, chunk, last, sample } from 'lodash';
-import { DataSourceApi, DataQueryResponse, AnnotationEvent } from '@grafana/data';
+import {
+  DataSourceApi,
+  DataQueryResponse,
+  AnnotationQueryRequest,
+  AnnotationEvent,
+  DataSourceInstanceSettings,
+  DataQueryRequest,
+} from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
 import { InfinityProvider } from './app/InfinityProvider';
 import { SeriesProvider } from './app/SeriesProvider';
 import { replaceVariables } from './utils';
+import { InfinityDataSourceJSONOptions } from './config.editor';
 import { InfinityQuery, GlobalInfinityQuery, VariableQuery, MetricFindValue } from './types';
 
 export class Datasource extends DataSourceApi<InfinityQuery> {
-  instanceSettings: any;
-  constructor(iSettings: any) {
+  instanceSettings: DataSourceInstanceSettings<InfinityDataSourceJSONOptions>;
+  constructor(iSettings: DataSourceInstanceSettings<InfinityDataSourceJSONOptions>) {
     super(iSettings);
     this.instanceSettings = iSettings;
   }
@@ -29,7 +37,7 @@ export class Datasource extends DataSourceApi<InfinityQuery> {
       }
     });
   }
-  query(options: any): Promise<DataQueryResponse> {
+  query(options: DataQueryRequest<InfinityQuery>): Promise<DataQueryResponse> {
     const promises: any[] = [];
     options.targets
       .filter((t: InfinityQuery) => t.hide !== true)
@@ -40,7 +48,7 @@ export class Datasource extends DataSourceApi<InfinityQuery> {
           this.instanceSettings.jsonData.global_queries &&
           this.instanceSettings.jsonData.global_queries.length > 0
         ) {
-          let matchingQuery: GlobalInfinityQuery = this.instanceSettings.jsonData.global_queries.find(
+          let matchingQuery = this.instanceSettings.jsonData.global_queries.find(
             (q: GlobalInfinityQuery) => q.id === t.global_query_id
           );
           t = matchingQuery ? matchingQuery.query : t;
@@ -62,7 +70,7 @@ export class Datasource extends DataSourceApi<InfinityQuery> {
                 break;
               case 'series':
                 new SeriesProvider(replaceVariables(t, options.scopedVars))
-                  .query(options.range.from, options.range.to)
+                  .query(options.range.from.unix(), options.range.to.unix())
                   .then(res => resolve(res))
                   .catch(ex => {
                     reject(ex);
@@ -82,7 +90,7 @@ export class Datasource extends DataSourceApi<InfinityQuery> {
       return { data: flatten(results) };
     });
   }
-  annotationQuery(options: any): Promise<AnnotationEvent[]> {
+  annotationQuery(options: AnnotationQueryRequest<InfinityQuery>): Promise<AnnotationEvent[]> {
     const promises: any[] = [];
     return Promise.all(promises).then(results => {
       return [];
