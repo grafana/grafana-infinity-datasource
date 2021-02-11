@@ -70,7 +70,7 @@ export class Datasource extends DataSourceApi<InfinityQuery> {
                 break;
               case 'series':
                 new SeriesProvider(replaceVariables(t, options.scopedVars))
-                  .query(options.range.from.unix(), options.range.to.unix())
+                  .query(new Date(options.range.from.toDate()).getTime(), new Date(options.range.to.toDate()).getTime())
                   .then(res => resolve(res))
                   .catch(ex => {
                     reject(ex);
