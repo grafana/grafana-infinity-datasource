@@ -10,7 +10,7 @@ import {
 import { getTemplateSrv } from '@grafana/runtime';
 import { InfinityProvider } from './app/InfinityProvider';
 import { SeriesProvider } from './app/SeriesProvider';
-import { replaceVariables } from './utils';
+import { replaceVariables, getTemplateVariablesFromResult } from './utils';
 import { InfinityDataSourceJSONOptions } from './config.editor';
 import { InfinityQuery, GlobalInfinityQuery, VariableQuery, MetricFindValue } from './types';
 
@@ -99,6 +99,31 @@ export class Datasource extends DataSourceApi<InfinityQuery> {
   metricFindQuery(query: VariableQuery): Promise<MetricFindValue[]> {
     const promises: any[] = [];
     switch (query.queryType) {
+      case 'infinity':
+        if (query.infinityQuery !== undefined) {
+          promises.push(
+            new Promise((resolve, reject) => {
+              if (query.infinityQuery) {
+                new InfinityProvider(replaceVariables(query.infinityQuery, {}), this.instanceSettings)
+                  .query()
+                  .then((res: any) => {
+                    if (res && res.rows) {
+                      let results = getTemplateVariablesFromResult(res);
+                      resolve(results);
+                    } else {
+                      resolve([]);
+                    }
+                  })
+                  .catch(ex => {
+                    reject(ex);
+                  });
+              } else {
+                reject('No valid query found');
+              }
+            })
+          );
+        }
+        break;
       case 'legacy':
       case undefined:
       default:

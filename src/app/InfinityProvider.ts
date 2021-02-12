@@ -43,14 +43,18 @@ export class InfinityProvider {
           });
         }
       }
-      getBackendSrv()
-        .datasourceRequest(requestObject)
-        .then(res => {
-          resolve(res.data);
-        })
-        .catch(ex => {
-          reject(ex);
-        });
+      if (requestObject.url) {
+        getBackendSrv()
+          .datasourceRequest(requestObject)
+          .then(res => {
+            resolve(res.data);
+          })
+          .catch(ex => {
+            reject(ex);
+          });
+      } else {
+        reject('Invalid URL');
+      }
     });
   }
   query() {

@@ -2,10 +2,11 @@ import React, { ChangeEvent, useState } from 'react';
 import { set } from 'lodash';
 import { ScrapperColumns } from './ScrapperColumns';
 import { URLOptions } from './URLOptions';
-import { InfinityQuery } from './../types';
+import { InfinityQuery, EditorMode } from './../types';
 
 interface ScrapperProps {
   query: InfinityQuery;
+  mode: EditorMode;
   onChange: (value: any) => void;
 }
 
@@ -22,12 +23,13 @@ export const Scrapper: React.FC<ScrapperProps> = props => {
     set(query, field, value);
     onChange(query);
   };
+  const LABEL_WIDTH = props.mode === 'variable' ? 10 : 8;
   return (
     <>
       {props.query.source === 'url' ? (
         <div className="gf-form-inline">
           <div className="gf-form">
-            <label className="gf-form-label query-keyword width-8">URL</label>
+            <label className={`gf-form-label query-keyword width-${LABEL_WIDTH}`}>URL</label>
             <input
               type="text"
               className="gf-form-input min-width-30"
@@ -41,7 +43,7 @@ export const Scrapper: React.FC<ScrapperProps> = props => {
       ) : (
         <div className="gf-form-inline">
           <div className="gf-form">
-            <label className="gf-form-label query-keyword width-8">Data</label>
+            <label className={`gf-form-label query-keyword width-${LABEL_WIDTH}`}>Data</label>
             <textarea
               rows={5}
               className="gf-form-input min-width-30"
@@ -56,7 +58,7 @@ export const Scrapper: React.FC<ScrapperProps> = props => {
       {['html', 'json', 'xml', 'graphql'].indexOf(props.query.type) > -1 ? (
         <div className="gf-form-inline">
           <div className="gf-form">
-            <label className="gf-form-label query-keyword width-8">Rows / Root</label>
+            <label className={`gf-form-label query-keyword width-${LABEL_WIDTH}`}>Rows / Root</label>
             <input
               type="text"
               className="gf-form-input min-width-30"

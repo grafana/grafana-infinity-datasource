@@ -6,11 +6,11 @@ import { TypeChooser } from './editors/TypeChooser';
 import { AdvancedOptions } from './editors/AdvancedOptions';
 import { Scrapper as ScrapperOptions } from './editors/Scrapper';
 import { SeriesEditor } from './editors/Series';
-import { InfinityQuery } from './types';
+import { InfinityQuery, EditorMode } from './types';
 
 interface InfinityEditorProps {
   instanceSettings: any;
-  mode: 'standard' | 'global';
+  mode: EditorMode;
   onChange: any;
   onRunQuery: any;
   query: InfinityQuery;
@@ -43,11 +43,15 @@ export const InfinityQueryEditor: React.FC<InfinityEditorProps> = ({
       <TypeChooser onChange={onChange} query={query} mode={mode} instanceSettings={instanceSettings} />
       {query.type === 'series' ? <SeriesEditor onChange={onChange} query={query} /> : <></>}
       {['csv', 'html', 'json', 'graphql', 'xml'].indexOf(query.type) > -1 ? (
-        <ScrapperOptions onChange={onChange} query={query} />
+        <ScrapperOptions onChange={onChange} query={query} mode={mode} />
       ) : (
         <></>
       )}
-      {query.type !== 'global' ? <AdvancedOptions onChange={onChange} query={query} onRunQuery={onRunQuery} /> : <></>}
+      {query.type !== 'global' ? (
+        <AdvancedOptions onChange={onChange} query={query} onRunQuery={onRunQuery} mode={mode} />
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

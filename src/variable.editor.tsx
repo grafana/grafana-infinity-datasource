@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { TextArea, Select } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
 import { Datasource } from './datasource';
-import { VariableQuery, VariableQueryType } from './types';
+import { InfinityQueryEditor } from './query.editor';
+import { VariableQuery, VariableQueryType, InfinityQuery } from './types';
 
 interface Props {
   query: VariableQuery;
@@ -12,13 +13,23 @@ interface Props {
 
 const VariableQueryTypes: Array<SelectableValue<VariableQueryType>> = [
   {
-    label: 'Legacy',
+    label: 'Infinity Query',
+    value: 'infinity',
+  },
+  {
+    label: 'Legacy ( Deprecated )',
     value: 'legacy',
   },
 ];
 
 const migrateVariableQuery = (query: VariableQuery | string): VariableQuery => {
-  if (typeof query === 'string') {
+  if (typeof query !== 'string' && query.queryType === undefined) {
+    return {
+      queryType: 'infinity',
+      query: '',
+      infinityQuery: DefaultVariableQuery,
+    };
+  } else if (typeof query === 'string') {
     return {
       queryType: 'legacy',
       query,
@@ -28,6 +39,19 @@ const migrateVariableQuery = (query: VariableQuery | string): VariableQuery => {
   }
 };
 
+const DefaultVariableQuery: InfinityQuery = {
+  refId: '',
+  type: 'csv',
+  source: 'inline',
+  data: '',
+  url: '',
+  url_options: { method: 'GET' },
+  root_selector: '',
+  columns: [],
+  filters: [],
+  format: 'table',
+};
+
 export const VariableEditor: React.FC<Props> = props => {
   let { query, onChange } = props;
 
@@ -35,20 +59,40 @@ export const VariableEditor: React.FC<Props> = props => {
 
   const [state, setState] = useState(query);
 
+  const getDefenition = (): string => {
+    if (state.queryType === 'infinity' && state.infinityQuery) {
+      return `(${state.infinityQuery.type} - ${state.infinityQuery.source})`;
+    }
+    return `(${state.queryType}) ${state.query}`;
+  };
+
   const onQueryChange = (value: string) => {
     setState({
       ...state,
       query: value,
     });
-    onChange(state, `(${state.queryType}) ${state.query}`);
+    onChange(state, getDefenition());
   };
 
-  const onQueryTypeChange = (queryType: VariableQueryType = 'legacy') => {
+  const onInfinityQueryChange = (infinityQuery: InfinityQuery) => {
     setState({
       ...state,
-      queryType,
+      infinityQuery,
     });
-    onChange(state, `(${state.queryType}) ${state.query}`);
+  };
+
+  const onInfinityQueryUpdate = (infinityQuery: InfinityQuery) => {
+    onInfinityQueryChange(infinityQuery);
+    onChange(state, getDefenition());
+  };
+
+  const onQueryTypeChange = (queryType: VariableQueryType) => {
+    setState({
+      ...state,
+      query: state.query || '',
+      queryType: queryType || 'infinity',
+    });
+    onChange(state, getDefenition());
   };
 
   return (
@@ -57,14 +101,14 @@ export const VariableEditor: React.FC<Props> = props => {
         <span className="gf-form-label width-10">Query Type</span>
         <Select
           options={VariableQueryTypes}
-          value={VariableQueryTypes.find(v => v.value === state.queryType)}
-          defaultValue={{ label: 'Legacy', value: 'legacy' }}
+          value={VariableQueryTypes.find(v => v.value === (state.queryType || 'infinity'))}
+          defaultValue={VariableQueryTypes[0]}
           onChange={e => {
-            onQueryTypeChange(e.value);
+            onQueryTypeChange(e.value as VariableQueryType);
           }}
         ></Select>
       </div>
-      {(query.queryType === 'legacy' || query.queryType === undefined) && (
+      {(state.queryType === 'legacy' || state.queryType === undefined) && (
         <div className="gf-form">
           <span className="gf-form-label width-10">Query</span>
           <TextArea
@@ -78,6 +122,17 @@ export const VariableEditor: React.FC<Props> = props => {
             onChange={e => onQueryChange(e.currentTarget.value)}
           ></TextArea>
         </div>
+      )}
+      {state.queryType === 'infinity' && (
+        <>
+          <InfinityQueryEditor
+            query={state.infinityQuery || DefaultVariableQuery}
+            mode="variable"
+            onChange={onInfinityQueryUpdate}
+            onRunQuery={onInfinityQueryUpdate}
+            instanceSettings={{}}
+          ></InfinityQueryEditor>
+        </>
       )}
     </>
   );

@@ -9,10 +9,11 @@ import {
   GlobalInfinityQuery,
   InfinityQueryType,
   InfinityQuerySources,
+  EditorMode,
 } from './../types';
 
 interface TypeChooserProps {
-  mode: string;
+  mode: EditorMode;
   instanceSettings: any;
   query: InfinityQuery;
   onChange: (value: any) => void;
@@ -49,14 +50,29 @@ export const TypeChooser: React.FC<TypeChooserProps> = ({ query, onChange, mode,
     };
   }) as SelectableValue[];
 
+  const getTypes = (mode: EditorMode): Array<SelectableValue<InfinityQueryType>> => {
+    switch (mode) {
+      case 'standard':
+        return SCRAP_QUERY_TYPES;
+      case 'variable':
+        return SCRAP_QUERY_TYPES.filter(a => a.value !== 'series' && a.value !== 'global');
+      case 'global':
+        return SCRAP_QUERY_TYPES.filter(a => a.value !== 'global');
+      default:
+        return [];
+    }
+  };
+
+  const LABEL_WIDTH = mode === 'variable' ? 10 : 8;
+
   return (
     <div className="gf-form-inline">
       <div className="gf-form">
-        <label className="gf-form-label query-keyword width-8">Type</label>
+        <label className={`gf-form-label query-keyword width-${LABEL_WIDTH}`}>Type</label>
         <Select
           className="min-width-12 width-12"
           value={SCRAP_QUERY_TYPES.find((field: SelectableValue) => field.value === query.type) || defaultType}
-          options={mode === 'standard' ? SCRAP_QUERY_TYPES : SCRAP_QUERY_TYPES.filter(a => a.value !== 'global')}
+          options={getTypes(mode)}
           defaultValue={defaultType}
           onChange={e => onSelectChange(e, 'type')}
         ></Select>

@@ -26,6 +26,7 @@ export type InfinityQueryType = 'json' | 'html' | 'csv' | 'xml' | 'graphql' | 's
 export type InfinityQueryFormat = 'table' | 'timeseries';
 export type InfinityQuerySources = 'url' | 'inline' | 'random-walk' | 'expression';
 export type ScrapColumnFormat = 'string' | 'number' | 'timestamp' | 'timestamp_epoch' | 'timestamp_epoch_s';
+export type EditorMode = 'standard' | 'global' | 'variable';
 interface ScrapQuerySources extends SelectableValue<InfinityQuerySources> {
   supported_types: InfinityQueryType[];
 }
@@ -177,8 +178,9 @@ export const SCRAP_QUERY_RESULT_COLUMN_FORMATS: Array<SelectableValue<ScrapColum
     value: 'timestamp_epoch_s',
   },
 ];
-export type VariableQueryType = 'legacy';
+export type VariableQueryType = 'legacy' | 'infinity';
 export type VariableQuery = {
   queryType: VariableQueryType;
   query: string;
+  infinityQuery?: InfinityQuery;
 };
