@@ -61,6 +61,7 @@
   "includes": [],
   "routes": [
     {
+<<<<<<< HEAD
       "path": "tokenauth",
       "method": "*",
       "url": "{{.JsonData.url}}",
@@ -71,8 +72,22 @@
           "client_secret": "{{.SecureJsonData.token_client_secret}}",
           "resource": "{{.JsonData.token_resource}}",
           "grant_type": "{{.JsonData.token_grant_type}}"
+=======
+      "path": "{{ .JsonData.path }}",
+      "url": "{{ .JsonData.url }}",
+      "tokenAuth": {
+        "url": "{{ .JsonData.tokenAuth.url }}",
+        "params": {
+          "grant_type": "{{ .JsonData.tokenAuth.grantType }}",
+          "client_id": "{{ .JsonData.tokenAuth.clientId }}",
+          "client_secret": "{{ .SecureJsonData.tokenAuth.clientSecret }}"
+>>>>>>> Added support for dynamic authentication
         }
       }
     }
   ]
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> Added support for dynamic authentication
