@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { set } from 'lodash';
 import { ScrapperColumns } from './ScrapperColumns';
 import { URLOptions } from './URLOptions';
@@ -9,8 +9,9 @@ interface ScrapperProps {
   onChange: (value: any) => void;
 }
 
-export class Scrapper extends React.PureComponent<ScrapperProps> {
-  onInputTextChange = (
+export const Scrapper: React.FC<ScrapperProps> = props => {
+  const [data, setData] = useState(props.query.data);
+  const onInputTextChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     field: keyof InfinityQuery,
     props: any,
@@ -21,55 +22,54 @@ export class Scrapper extends React.PureComponent<ScrapperProps> {
     set(query, field, value);
     onChange(query);
   };
-  render() {
-    return (
-      <>
-        {this.props.query.source === 'url' ? (
-          <div className="gf-form-inline">
-            <div className="gf-form">
-              <label className="gf-form-label query-keyword width-8">URL</label>
-              <input
-                type="text"
-                className="gf-form-input min-width-30"
-                value={this.props.query.url}
-                placeholder="https://jsonplaceholder.typicode.com/todos"
-                onChange={e => this.onInputTextChange(e, `url`, this.props)}
-              ></input>
-              <URLOptions onChange={this.props.onChange} query={this.props.query} />
-            </div>
+  return (
+    <>
+      {props.query.source === 'url' ? (
+        <div className="gf-form-inline">
+          <div className="gf-form">
+            <label className="gf-form-label query-keyword width-8">URL</label>
+            <input
+              type="text"
+              className="gf-form-input min-width-30"
+              value={props.query.url}
+              placeholder="https://jsonplaceholder.typicode.com/todos"
+              onChange={e => onInputTextChange(e, `url`, props)}
+            ></input>
+            <URLOptions onChange={props.onChange} query={props.query} />
           </div>
-        ) : (
-          <div className="gf-form-inline">
-            <div className="gf-form">
-              <label className="gf-form-label query-keyword width-8">Data</label>
-              <textarea
-                rows={5}
-                className="gf-form-input min-width-30"
-                value={this.props.query.data}
-                placeholder=""
-                onChange={e => this.onInputTextChange(e, `data`, this.props)}
-              ></textarea>
-            </div>
+        </div>
+      ) : (
+        <div className="gf-form-inline">
+          <div className="gf-form">
+            <label className="gf-form-label query-keyword width-8">Data</label>
+            <textarea
+              rows={5}
+              className="gf-form-input min-width-30"
+              value={data}
+              placeholder=""
+              onBlur={e => onInputTextChange(e, `data`, props)}
+              onChange={e => setData(e.target.value)}
+            ></textarea>
           </div>
-        )}
-        {['html', 'json', 'xml', 'graphql'].indexOf(this.props.query.type) > -1 ? (
-          <div className="gf-form-inline">
-            <div className="gf-form">
-              <label className="gf-form-label query-keyword width-8">Rows / Root</label>
-              <input
-                type="text"
-                className="gf-form-input min-width-30"
-                value={this.props.query.root_selector}
-                placeholder=""
-                onChange={e => this.onInputTextChange(e, `root_selector`, this.props)}
-              ></input>
-            </div>
+        </div>
+      )}
+      {['html', 'json', 'xml', 'graphql'].indexOf(props.query.type) > -1 ? (
+        <div className="gf-form-inline">
+          <div className="gf-form">
+            <label className="gf-form-label query-keyword width-8">Rows / Root</label>
+            <input
+              type="text"
+              className="gf-form-input min-width-30"
+              value={props.query.root_selector}
+              placeholder=""
+              onChange={e => onInputTextChange(e, `root_selector`, props)}
+            ></input>
           </div>
-        ) : (
-          <></>
-        )}
-        <ScrapperColumns onChange={this.props.onChange} query={this.props.query} />
-      </>
-    );
-  }
-}
+        </div>
+      ) : (
+        <></>
+      )}
+      <ScrapperColumns onChange={props.onChange} query={props.query} />
+    </>
+  );
+};
