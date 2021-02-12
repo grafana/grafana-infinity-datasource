@@ -15,7 +15,7 @@ export enum DatasourceMode {
   Advanced = 'advanced',
 }
 
-const DATASOURCE_MODES = [
+const DATASOURCE_MODES: Array<SelectableValue<DatasourceMode>> = [
   { value: DatasourceMode.Basic, label: 'Basic' },
   { value: DatasourceMode.Advanced, label: 'Advanced' },
 ];

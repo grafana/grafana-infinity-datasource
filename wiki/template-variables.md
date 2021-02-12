@@ -2,13 +2,13 @@
 
 ## Standard Mode ( Infinity Query )
 
-Like panels, you can have your own CSV/JSON in your variable. Only the expectation is to return one or more columns. This will give you the ability to get your variables set from CSV/JSON/XML or any other external sources.
+Like panels, you can have your own CSV/JSON in your variable. Variable queries are expected to return one or more columns. This will give you the ability to get your variables set from CSV/JSON/XML or any other external sources.
 
-If two columns returned, first column value will be used as display text and second column will be used as value. If more than 2 columns returned, all the results will be flattend and returned as variable.
+If two columns returned, first column value will be used as display text and second column will be used as value. If more than 2 columns returned, all the results will be flattened and returned as variable list.
 
 ## Legacy Mode Variable
 
-In legacy mode, you have the option to write in your query in the following formats. (This mode is deprecated)
+In legacy mode, you have the option to write in your query in the following formats.
 
 ### Collection ( Key value pair )
 

@@ -2,14 +2,21 @@ import React, { ChangeEvent } from 'react';
 import { set } from 'lodash';
 import { Select } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
-import { ScrapColumn, SCRAP_QUERY_RESULT_COLUMN_FORMATS, InfinityQuery, ScrapColumnFormat } from './../types';
+import {
+  ScrapColumn,
+  SCRAP_QUERY_RESULT_COLUMN_FORMATS,
+  InfinityQuery,
+  ScrapColumnFormat,
+  EditorMode,
+} from './../types';
 
 interface ScrapperColumnsProps {
   query: InfinityQuery;
+  mode: EditorMode;
   onChange: (value: any) => void;
 }
 
-export const ScrapperColumns: React.FC<ScrapperColumnsProps> = ({ query, onChange }: ScrapperColumnsProps) => {
+export const ScrapperColumns: React.FC<ScrapperColumnsProps> = ({ query, mode, onChange }: ScrapperColumnsProps) => {
   const defaultScrapResultFormat: SelectableValue<ScrapColumnFormat> = { value: 'string', label: 'String' };
 
   const onColumnAdd = () => {
@@ -36,13 +43,15 @@ export const ScrapperColumns: React.FC<ScrapperColumnsProps> = ({ query, onChang
     onChange(query);
   };
 
+  const LABEL_WIDTH = mode === 'variable' ? 10 : 8;
+
   return (
     <>
       {query.columns.length === 0 ? (
         <div className="gf-form-inline">
           <div className="gf-form">
             <div className="gf-form gf-form--grow">
-              <label className="gf-form-label query-keyword width-8" title="Columns">
+              <label className={`gf-form-label query-keyword width-${LABEL_WIDTH}`} title="Columns">
                 Columns
               </label>
             </div>
@@ -60,7 +69,7 @@ export const ScrapperColumns: React.FC<ScrapperColumnsProps> = ({ query, onChang
         return (
           <div className="gf-form-inline">
             <div className="gf-form">
-              <label className="gf-form-label query-keyword width-8" title="Column">
+              <label className={`gf-form-label query-keyword width-${LABEL_WIDTH}`} title="Column">
                 Column {index + 1}
               </label>
               <label className="gf-form-label width-8">{query.type === 'csv' ? 'Column Name' : 'Selector'}</label>
@@ -89,24 +98,16 @@ export const ScrapperColumns: React.FC<ScrapperColumnsProps> = ({ query, onChang
                 defaultValue={defaultScrapResultFormat}
                 onChange={e => onSelectChange(e, `columns[${index}].type`)}
               ></Select>
-              <span
-                className="btn btn-success btn-small"
-                style={{ margin: '5px' }}
-                onClick={() => {
-                  onColumnAdd();
-                }}
-              >
+              <button className="btn btn-success btn-small" style={{ margin: '5px' }} onClick={() => onColumnAdd()}>
                 +
-              </span>
-              <span
+              </button>
+              <button
                 className="btn btn-danger btn-small"
                 style={{ margin: '5px' }}
-                onClick={() => {
-                  onColumnRemove(index);
-                }}
+                onClick={() => onColumnRemove(index)}
               >
                 x
-              </span>
+              </button>
             </div>
           </div>
         );

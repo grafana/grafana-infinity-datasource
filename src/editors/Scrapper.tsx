@@ -71,7 +71,7 @@ export const Scrapper: React.FC<ScrapperProps> = props => {
       ) : (
         <></>
       )}
-      <ScrapperColumns onChange={props.onChange} query={props.query} />
+      <ScrapperColumns onChange={props.onChange} query={props.query} mode={props.mode} />
     </>
   );
 };

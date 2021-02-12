@@ -57,7 +57,7 @@ export const TableFilter: React.FC<TableFiltersProps> = props => {
   };
   return (
     <>
-      <label className="gf-form-label query-keyword width-8">
+      <label className="gf-form-label query-keyword width-10">
         Results Filter {query.filters && query.filters.length > 0 ? `( ${query.filters.length} )` : ''}
       </label>
       <label
