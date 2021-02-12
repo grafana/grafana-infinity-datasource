@@ -79,7 +79,7 @@
         "url": "{{ .JsonData.tokenAuth.url }}",
         "params": {
           "grant_type": "{{ .JsonData.tokenAuth.grantType }}",
-          "client_id": "{{ .JsonData.tokenAuth.clientId }}",
+          "client_id": "{{ .SecureJsonData.tokenAuth.clientId }}",
           "client_secret": "{{ .SecureJsonData.tokenAuth.clientSecret }}"
 >>>>>>> Added support for dynamic authentication
         }
