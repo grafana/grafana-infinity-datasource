@@ -58,18 +58,5 @@
     "plugins": []
   },
   "includes": [],
-  "routes": [
-    {
-      "path": "{{ .JsonData.path }}",
-      "url": "{{ .JsonData.url }}",
-      "tokenAuth": {
-        "url": "{{ .JsonData.tokenAuth.url }}",
-        "params": {
-          "grant_type": "{{ .JsonData.tokenAuth.grantType }}",
-          "client_id": "{{ .JsonData.tokenAuth.clientId }}",
-          "client_secret": "{{ .SecureJsonData.tokenAuth.clientSecret }}"
-        }
-      }
-    }
-  ]
+  "routes": []
 }
