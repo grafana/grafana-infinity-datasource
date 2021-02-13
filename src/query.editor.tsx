@@ -16,7 +16,7 @@ interface InfinityEditorProps {
   query: InfinityQuery;
 }
 
-const defaultQuery: Partial<InfinityQuery> = {
+const defaultQuery: Omit<InfinityQuery, 'refId'> = {
   type: 'csv',
   source: 'inline',
   format: 'table',
@@ -38,19 +38,16 @@ export const InfinityQueryEditor: React.FC<InfinityEditorProps> = ({
   onRunQuery,
 }) => {
   query = defaultsDeep(query, defaultQuery);
+  let canShowSeriesEditor = query.type === 'series';
+  let canShowScrapperOptions = ['csv', 'html', 'json', 'graphql', 'xml'].indexOf(query.type) > -1;
+  let canShowAdvancedOptions = query.type !== 'global';
   return (
     <div>
       <TypeChooser onChange={onChange} query={query} mode={mode} instanceSettings={instanceSettings} />
-      {query.type === 'series' ? <SeriesEditor onChange={onChange} query={query} /> : <></>}
-      {['csv', 'html', 'json', 'graphql', 'xml'].indexOf(query.type) > -1 ? (
-        <ScrapperOptions onChange={onChange} query={query} mode={mode} />
-      ) : (
-        <></>
-      )}
-      {query.type !== 'global' ? (
+      {canShowSeriesEditor && <SeriesEditor onChange={onChange} query={query} />}
+      {canShowScrapperOptions && <ScrapperOptions onChange={onChange} query={query} mode={mode} />}
+      {canShowAdvancedOptions && (
         <AdvancedOptions onChange={onChange} query={query} onRunQuery={onRunQuery} mode={mode} />
-      ) : (
-        <></>
       )}
     </div>
   );
