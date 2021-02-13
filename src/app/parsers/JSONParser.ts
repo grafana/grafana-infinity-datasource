@@ -2,6 +2,7 @@ import { forEach, get, toNumber, flatten } from 'lodash';
 import { JSONPath } from 'jsonpath-plus';
 import { InfinityParser } from './InfinityParser';
 import { InfinityQuery, ScrapColumn, GrafanaTableRow, ScrapColumnFormat } from './../../types';
+import { getColumnsFromObjectArray } from './utils';
 
 export class JSONParser extends InfinityParser {
   constructor(JSONResponse: object, target: InfinityQuery, endTime?: Date) {
@@ -34,9 +35,11 @@ export class JSONParser extends InfinityParser {
     return JSONResponse;
   }
   private constructTableData(JSONResponse: any[]) {
+    const columns = this.target.columns.length > 0 ? this.target.columns : getColumnsFromObjectArray(JSONResponse[0]);
+    this.AutoColumns = columns;
     forEach(JSONResponse, r => {
       const row: GrafanaTableRow = [];
-      this.target.columns.forEach((c: ScrapColumn) => {
+      columns.forEach((c: ScrapColumn) => {
         let value = get(r, c.selector, '');
         if (c.type === ScrapColumnFormat.Timestamp) {
           value = new Date(value + '');

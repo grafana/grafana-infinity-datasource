@@ -52,13 +52,13 @@ export class HTMLParser extends InfinityParser {
         let timestamp = endTime ? endTime.getTime() : new Date().getTime();
         if (this.TimeColumns.length >= 1) {
           const FirstTimeColumn = this.TimeColumns[0];
-          if (FirstTimeColumn.type === 'timestamp') {
+          if (FirstTimeColumn.type === ScrapColumnFormat.Timestamp) {
             timestamp = new Date(
               $$(FirstTimeColumn.selector)
                 .text()
                 .trim()
             ).getTime();
-          } else if (FirstTimeColumn.type === 'timestamp_epoch') {
+          } else if (FirstTimeColumn.type === ScrapColumnFormat.Timestamp_Epoch) {
             timestamp = new Date(
               parseInt(
                 $$(FirstTimeColumn.selector)
@@ -67,7 +67,7 @@ export class HTMLParser extends InfinityParser {
                 10
               )
             ).getTime();
-          } else if (FirstTimeColumn.type === 'timestamp_epoch_s') {
+          } else if (FirstTimeColumn.type === ScrapColumnFormat.Timestamp_Epoch_Seconds) {
             timestamp = new Date(
               parseInt(
                 $$(FirstTimeColumn.selector)

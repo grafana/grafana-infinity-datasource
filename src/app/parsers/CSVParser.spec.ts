@@ -128,3 +128,39 @@ describe('CSVParser', () => {
     expect(CSVResults3.toTimeSeries()[3].datapoints[0][0]).toBe(11);
   });
 });
+
+const CSVResults4 = new CSVParser(
+  `
+year,country,population
+1990,india,10
+1990,usa,7
+1990,uk,5
+1992,china,11
+1990,india,11
+1990,usa,8
+1990,uk,5
+1990,china,12
+`,
+  {
+    refId: '',
+    type: InfinityQueryType.CSV,
+    source: InfinityQuerySources.Inline,
+    data: '',
+    format: InfinityQueryFormat.Table,
+    url: '',
+    url_options: {
+      method: 'GET',
+    },
+    root_selector: '',
+    columns: [],
+  }
+);
+describe('CSVParser', () => {
+  it('Auto Columns Table', () => {
+    expect(CSVResults4.toTable().columns.length).toBe(3);
+    expect(CSVResults4.toTable().rows.length).toBe(8);
+    expect(CSVResults4.toTable().rows[1].length).toBe(3);
+    expect(CSVResults4.toTable().rows[3][0]).toBe('1992');
+    expect(CSVResults4.toTable().rows[1][1]).toBe('usa');
+  });
+});

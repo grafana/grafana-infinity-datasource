@@ -45,7 +45,9 @@ export const AdvancedOptions: React.FC<AdvancedOptionsProps> = ({ query, mode, o
                 ></Select>
               </>
             )}
-            <TableFilter query={query} onChange={onChange} onRunQuery={onRunQuery}></TableFilter>
+            {query.columns && query.columns.length > 0 && (
+              <TableFilter query={query} onChange={onChange} onRunQuery={onRunQuery}></TableFilter>
+            )}
           </>
         )}
       </div>
