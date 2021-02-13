@@ -6,6 +6,7 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 
 - Plugin signed
 - JSONPath support for JSON root selector
+- Autogenerate columns for CSV, JSON
 - Support for Unix/epoch seconds format
 - Support for filtering rows
 - Variable Query support
