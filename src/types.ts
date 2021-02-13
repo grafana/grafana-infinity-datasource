@@ -21,6 +21,11 @@ export type tableResult = {
   columns: GrafanaTableColumn[];
   rows: GrafanaTableRow;
 };
+export type HealthCheckResult = {
+  message: string;
+  status: 'success' | 'error';
+};
+
 export type queryResult = timeSeriesResult | tableResult;
 export type InfinityQueryType = 'json' | 'html' | 'csv' | 'xml' | 'graphql' | 'series' | 'global';
 export type InfinityQueryFormat = 'table' | 'timeseries';

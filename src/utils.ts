@@ -1,6 +1,5 @@
-import flatten from 'lodash/flatten';
 import { getTemplateSrv } from '@grafana/runtime';
-import { ScopedVars, SelectableValue } from '@grafana/data';
+import { ScopedVars } from '@grafana/data';
 import { InfinityQuery } from './types';
 
 export const replaceVariables = (query: InfinityQuery, scopedVars: ScopedVars): InfinityQuery => {
@@ -18,28 +17,4 @@ export const replaceVariables = (query: InfinityQuery, scopedVars: ScopedVars): 
     });
   }
   return query;
-};
-
-export const getTemplateVariablesFromResult = (res: any): Array<SelectableValue<string>> => {
-  if (res.columns && res.columns.length > 0) {
-    if (res.columns.length === 2) {
-      return res.rows.map((row: string[]) => {
-        return {
-          label: row[0],
-          value: row[1],
-          text: row[0],
-        };
-      });
-    } else {
-      return flatten(res.rows || []).map(res => {
-        return {
-          value: String(res),
-          label: String(res),
-          text: String(res),
-        };
-      });
-    }
-  } else {
-    return [];
-  }
 };

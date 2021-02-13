@@ -1,4 +1,4 @@
-import { flatten, chunk, last, sample } from 'lodash';
+import flatten from 'lodash/flatten';
 import {
   DataSourceApi,
   DataQueryResponse,
@@ -7,12 +7,12 @@ import {
   DataSourceInstanceSettings,
   DataQueryRequest,
 } from '@grafana/data';
-import { getTemplateSrv } from '@grafana/runtime';
 import { InfinityProvider } from './app/InfinityProvider';
 import { SeriesProvider } from './app/SeriesProvider';
-import { replaceVariables, getTemplateVariablesFromResult } from './utils';
+import { replaceVariables } from './utils';
+import { LegacyVariableProvider, InfinityVariableProvider } from './app/variablesQuery';
 import { InfinityDataSourceJSONOptions } from './config.editor';
-import { InfinityQuery, GlobalInfinityQuery, VariableQuery, MetricFindValue } from './types';
+import { InfinityQuery, GlobalInfinityQuery, VariableQuery, MetricFindValue, HealthCheckResult } from './types';
 
 export class Datasource extends DataSourceApi<InfinityQuery> {
   instanceSettings: DataSourceInstanceSettings<InfinityDataSourceJSONOptions>;
@@ -20,8 +20,8 @@ export class Datasource extends DataSourceApi<InfinityQuery> {
     super(iSettings);
     this.instanceSettings = iSettings;
   }
-  testDatasource() {
-    return new Promise(async (resolve: any, reject: any) => {
+  testDatasource(): Promise<HealthCheckResult> {
+    return new Promise((resolve, reject) => {
       if (
         this.instanceSettings.jsonData &&
         this.instanceSettings.jsonData.datasource_mode &&
@@ -100,110 +100,15 @@ export class Datasource extends DataSourceApi<InfinityQuery> {
     const promises: any[] = [];
     switch (query.queryType) {
       case 'infinity':
-        if (query.infinityQuery !== undefined) {
-          promises.push(
-            new Promise((resolve, reject) => {
-              if (query.infinityQuery) {
-                new InfinityProvider(replaceVariables(query.infinityQuery, {}), this.instanceSettings)
-                  .query()
-                  .then((res: any) => {
-                    if (res && res.rows) {
-                      let results = getTemplateVariablesFromResult(res);
-                      resolve(results);
-                    } else {
-                      resolve([]);
-                    }
-                  })
-                  .catch(ex => {
-                    reject(ex);
-                  });
-              } else {
-                reject('No valid query found');
-              }
-            })
-          );
+        if (query.infinityQuery) {
+          const infinityVariableProvider = new InfinityVariableProvider(query.infinityQuery, this.instanceSettings);
+          promises.push(infinityVariableProvider.query());
         }
         break;
       case 'legacy':
-      case undefined:
       default:
-        const originalQueryString = typeof query === 'string' ? query : query.query;
-        let replacedQuery = getTemplateSrv().replace(originalQueryString);
-        if (replacedQuery.startsWith('Collection(') && replacedQuery.endsWith(')')) {
-          let actualQuery = replacedQuery.replace('Collection(', '').slice(0, -1);
-          promises.push(
-            new Promise((resolve, reject) => {
-              let out = chunk(actualQuery.split(','), 2).map(value => {
-                return {
-                  text: value[0],
-                  value: value[1],
-                };
-              });
-              resolve(out);
-            })
-          );
-        } else if (replacedQuery.startsWith('CollectionLookup(') && replacedQuery.endsWith(')')) {
-          let actualQuery = replacedQuery.replace('CollectionLookup(', '').slice(0, -1);
-          let querySplit = actualQuery.split(',');
-          promises.push(
-            new Promise((resolve, reject) => {
-              let chunkCollection = chunk(querySplit, 2);
-              let out = chunkCollection
-                .slice(0, -1)
-                .map(value => {
-                  return {
-                    key: value[0],
-                    value: value[1],
-                  };
-                })
-                .find(v => {
-                  return v.key === last(querySplit);
-                });
-              resolve(
-                out
-                  ? [
-                      {
-                        text: out.value,
-                        value: out.value,
-                      },
-                    ]
-                  : []
-              );
-            })
-          );
-        } else if (replacedQuery.startsWith('Join(') && replacedQuery.endsWith(')')) {
-          let actualQuery = replacedQuery.replace('Join(', '').slice(0, -1);
-          let querySplit = actualQuery.split(',');
-          promises.push(
-            new Promise((resolve, reject) => {
-              let out = querySplit.join('');
-              resolve([
-                {
-                  value: out,
-                  text: out,
-                },
-              ]);
-            })
-          );
-        } else if (replacedQuery.startsWith('Random(') && replacedQuery.endsWith(')')) {
-          let replacedQuery = getTemplateSrv().replace(originalQueryString, undefined, 'csv');
-          promises.push(
-            new Promise((resolve, reject) => {
-              let out = sample(
-                replacedQuery
-                  .replace('Random(', '')
-                  .slice(0, -1)
-                  .split(',')
-              );
-              resolve([
-                {
-                  value: out,
-                  text: out,
-                },
-              ]);
-            })
-          );
-        }
+        const legacyVariableProvider = new LegacyVariableProvider(typeof query === 'string' ? query : query.query);
+        promises.push(legacyVariableProvider.query());
         break;
     }
     return Promise.all(promises).then(results => {
