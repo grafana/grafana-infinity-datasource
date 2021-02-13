@@ -1,7 +1,7 @@
 import { forEach, toNumber } from 'lodash';
 import { load } from 'cheerio';
 import { InfinityParser } from './InfinityParser';
-import { InfinityQuery, ScrapColumn, GrafanaTableRow, GrafanaTableRowItem } from './../../types';
+import { InfinityQuery, ScrapColumn, GrafanaTableRow, GrafanaTableRowItem, ScrapColumnFormat } from './../../types';
 
 export class HTMLParser extends InfinityParser {
   constructor(HTMLResponse: string, target: InfinityQuery, endTime?: Date) {
@@ -23,13 +23,13 @@ export class HTMLParser extends InfinityParser {
         let value: GrafanaTableRowItem = $(c.selector)
           .text()
           .trim();
-        if (c.type === 'number') {
+        if (c.type === ScrapColumnFormat.Number) {
           value = value === '' ? null : +value;
-        } else if (c.type === 'timestamp') {
+        } else if (c.type === ScrapColumnFormat.Timestamp) {
           value = new Date(value);
-        } else if (c.type === 'timestamp_epoch') {
+        } else if (c.type === ScrapColumnFormat.Timestamp_Epoch) {
           value = new Date(parseInt(value, 10));
-        } else if (c.type === 'timestamp_epoch_s') {
+        } else if (c.type === ScrapColumnFormat.Timestamp_Epoch_Seconds) {
           value = new Date(parseInt(value, 10) * 1000);
         }
         row.push(value);

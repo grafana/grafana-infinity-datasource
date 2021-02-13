@@ -1,13 +1,14 @@
 import { JSONParser } from './JSONParser';
+import { InfinityQuerySources, InfinityQueryFormat, InfinityQueryType, ScrapColumnFormat } from './../../types';
 
 const JSONResults1 = new JSONParser(
   {},
   {
     refId: '',
-    type: 'json',
-    source: 'inline',
+    type: InfinityQueryType.JSON,
+    source: InfinityQuerySources.Inline,
     data: '',
-    format: 'table',
+    format: InfinityQueryFormat.Table,
     url: '',
     url_options: {
       method: 'GET',
@@ -36,10 +37,10 @@ const JSONResults2 = new JSONParser(
   ],
   {
     refId: '',
-    type: 'json',
-    source: 'inline',
+    type: InfinityQueryType.JSON,
+    source: InfinityQuerySources.Inline,
     data: '',
-    format: 'table',
+    format: InfinityQueryFormat.Table,
     url: '',
     url_options: {
       method: 'GET',
@@ -48,7 +49,7 @@ const JSONResults2 = new JSONParser(
     columns: [
       {
         text: 'Name',
-        type: 'string',
+        type: ScrapColumnFormat.String,
         selector: 'name',
       },
     ],
@@ -83,10 +84,10 @@ const JSONResults3 = new JSONParser(
   },
   {
     refId: '',
-    type: 'json',
-    source: 'inline',
+    type: InfinityQueryType.JSON,
+    source: InfinityQuerySources.Inline,
     data: '',
-    format: 'table',
+    format: InfinityQueryFormat.Table,
     url: '',
     url_options: {
       method: 'GET',
@@ -95,12 +96,12 @@ const JSONResults3 = new JSONParser(
     columns: [
       {
         text: 'Name',
-        type: 'string',
+        type: ScrapColumnFormat.String,
         selector: 'name',
       },
       {
         text: 'Age',
-        type: 'string',
+        type: ScrapColumnFormat.String,
         selector: 'age',
       },
     ],
@@ -148,10 +149,10 @@ const JSONResults4 = new JSONParser(
   },
   {
     refId: '',
-    type: 'json',
-    source: 'inline',
+    type: InfinityQueryType.JSON,
+    source: InfinityQuerySources.Inline,
     data: '',
-    format: 'table',
+    format: InfinityQueryFormat.Table,
     url: '',
     url_options: {
       method: 'GET',
@@ -160,22 +161,22 @@ const JSONResults4 = new JSONParser(
     columns: [
       {
         text: 'Name',
-        type: 'string',
+        type: ScrapColumnFormat.String,
         selector: 'name',
       },
       {
         text: 'Age',
-        type: 'number',
+        type: ScrapColumnFormat.Number,
         selector: 'age',
       },
       {
         text: 'Year',
-        type: 'timestamp',
+        type: ScrapColumnFormat.Timestamp,
         selector: 'year',
       },
       {
         text: 'Date',
-        type: 'timestamp_epoch',
+        type: ScrapColumnFormat.Timestamp_Epoch,
         selector: 'date',
       },
     ],

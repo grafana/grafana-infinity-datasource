@@ -23,7 +23,7 @@ export const Scrapper: React.FC<ScrapperProps> = props => {
     set(query, field, value);
     onChange(query);
   };
-  const LABEL_WIDTH = props.mode === 'variable' ? 10 : 8;
+  const LABEL_WIDTH = props.mode === EditorMode.Variable ? 10 : 8;
   return (
     <>
       {props.query.source === 'url' ? (

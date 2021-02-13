@@ -20,9 +20,12 @@ interface TypeChooserProps {
 }
 
 export const TypeChooser: React.FC<TypeChooserProps> = ({ query, onChange, mode, instanceSettings }) => {
-  const defaultType: SelectableValue<InfinityQueryType> = { value: 'json', label: 'JSON' };
-  const defaultSource: SelectableValue<InfinityQuerySources> = { value: 'url', label: 'URL' };
-  const defaultSourceSeries: SelectableValue<InfinityQuerySources> = { value: 'random-walk', label: 'Random Walk' };
+  const defaultType: SelectableValue<InfinityQueryType> = { value: InfinityQueryType.JSON, label: 'JSON' };
+  const defaultSource: SelectableValue<InfinityQuerySources> = { value: InfinityQuerySources.URL, label: 'URL' };
+  const defaultSourceSeries: SelectableValue<InfinityQuerySources> = {
+    value: InfinityQuerySources.RandomWalk,
+    label: 'Random Walk',
+  };
 
   const onSelectChange = (selectableItem: SelectableValue, field: keyof InfinityQuery) => {
     if (field === 'type') {
@@ -52,18 +55,18 @@ export const TypeChooser: React.FC<TypeChooserProps> = ({ query, onChange, mode,
 
   const getTypes = (mode: EditorMode): Array<SelectableValue<InfinityQueryType>> => {
     switch (mode) {
-      case 'standard':
+      case EditorMode.Standard:
         return SCRAP_QUERY_TYPES;
-      case 'variable':
+      case EditorMode.Variable:
         return SCRAP_QUERY_TYPES.filter(a => a.value !== 'series' && a.value !== 'global');
-      case 'global':
+      case EditorMode.Global:
         return SCRAP_QUERY_TYPES.filter(a => a.value !== 'global');
       default:
         return [];
     }
   };
 
-  const LABEL_WIDTH = mode === 'variable' ? 10 : 8;
+  const LABEL_WIDTH = mode === EditorMode.Variable ? 10 : 8;
 
   return (
     <div className="gf-form-inline">

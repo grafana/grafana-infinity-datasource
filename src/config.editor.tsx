@@ -8,7 +8,14 @@ import {
 } from '@grafana/data';
 import { DataSourceHttpSettings, Select } from '@grafana/ui';
 import { InfinityQueryEditor } from './query.editor';
-import { GlobalInfinityQuery, InfinityQuery } from './types';
+import {
+  EditorMode,
+  GlobalInfinityQuery,
+  InfinityQuery,
+  InfinityQueryFormat,
+  InfinityQuerySources,
+  InfinityQueryType,
+} from './types';
 
 export enum DatasourceMode {
   Basic = 'basic',
@@ -31,15 +38,15 @@ export type Props = DataSourcePluginOptionsEditorProps<InfinityDataSourceJSONOpt
 
 const DefaultGlobalQuery: InfinityQuery = {
   refId: '',
-  type: 'csv',
-  source: 'inline',
+  type: InfinityQueryType.CSV,
+  source: InfinityQuerySources.Inline,
   data: '',
   url: '',
   url_options: { method: 'GET' },
   root_selector: '',
   columns: [],
   filters: [],
-  format: 'table',
+  format: InfinityQueryFormat.Table,
 };
 
 export const InfinityConfigEditor: React.FC<Props> = (props: Props) => {
@@ -141,7 +148,7 @@ export const InfinityConfigEditor: React.FC<Props> = (props: Props) => {
                   <div className="gf-form">
                     <InfinityQueryEditor
                       query={q.query}
-                      mode="global"
+                      mode={EditorMode.Global}
                       onChange={() =>
                         updateDatasourcePluginJsonDataOption(props, 'global_queries', options.jsonData.global_queries)
                       }

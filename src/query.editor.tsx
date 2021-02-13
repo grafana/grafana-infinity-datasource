@@ -6,7 +6,7 @@ import { TypeChooser } from './editors/TypeChooser';
 import { AdvancedOptions } from './editors/AdvancedOptions';
 import { Scrapper as ScrapperOptions } from './editors/Scrapper';
 import { SeriesEditor } from './editors/Series';
-import { InfinityQuery, EditorMode } from './types';
+import { InfinityQuery, EditorMode, InfinityQueryFormat, InfinityQuerySources, InfinityQueryType } from './types';
 
 interface InfinityEditorProps {
   instanceSettings: any;
@@ -17,9 +17,9 @@ interface InfinityEditorProps {
 }
 
 const defaultQuery: Omit<InfinityQuery, 'refId'> = {
-  type: 'csv',
-  source: 'inline',
-  format: 'table',
+  type: InfinityQueryType.CSV,
+  source: InfinityQuerySources.Inline,
+  format: InfinityQueryFormat.Table,
   url: '',
   url_options: {
     method: 'GET',
@@ -74,7 +74,7 @@ export const QueryEditor: React.FC<EditorProps> = props => {
         onChange={onChange}
         onRunQuery={props.onRunQuery}
         query={query}
-        mode="standard"
+        mode={EditorMode.Standard}
         instanceSettings={props.datasource.instanceSettings}
       />
     </div>

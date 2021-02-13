@@ -1,11 +1,12 @@
 import { CSVParser } from './CSVParser';
+import { InfinityQuerySources, InfinityQueryFormat, InfinityQueryType, ScrapColumnFormat } from './../../types';
 
 const CSVResults1 = new CSVParser(``, {
   refId: '',
-  type: 'json',
-  source: 'inline',
+  type: InfinityQueryType.CSV,
+  source: InfinityQuerySources.Inline,
   data: '',
-  format: 'table',
+  format: InfinityQueryFormat.Table,
   url: '',
   url_options: {
     method: 'GET',
@@ -29,10 +30,10 @@ china,11
 `,
   {
     refId: '',
-    type: 'json',
-    source: 'inline',
+    type: InfinityQueryType.CSV,
+    source: InfinityQuerySources.Inline,
     data: '',
-    format: 'table',
+    format: InfinityQueryFormat.Table,
     url: '',
     url_options: {
       method: 'GET',
@@ -41,12 +42,12 @@ china,11
     columns: [
       {
         text: 'Country',
-        type: 'string',
+        type: ScrapColumnFormat.String,
         selector: 'country',
       },
       {
         text: 'Population',
-        type: 'number',
+        type: ScrapColumnFormat.Number,
         selector: 'population',
       },
     ],
@@ -82,10 +83,10 @@ year,country,population
 `,
   {
     refId: '',
-    type: 'json',
-    source: 'inline',
+    type: InfinityQueryType.CSV,
+    source: InfinityQuerySources.Inline,
     data: '',
-    format: 'table',
+    format: InfinityQueryFormat.Table,
     url: '',
     url_options: {
       method: 'GET',
@@ -94,17 +95,17 @@ year,country,population
     columns: [
       {
         text: 'Year',
-        type: 'timestamp',
+        type: ScrapColumnFormat.Timestamp,
         selector: 'year',
       },
       {
         text: 'Country',
-        type: 'string',
+        type: ScrapColumnFormat.String,
         selector: 'country',
       },
       {
         text: 'Population',
-        type: 'number',
+        type: ScrapColumnFormat.Number,
         selector: 'population',
       },
     ],

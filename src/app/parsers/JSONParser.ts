@@ -1,7 +1,7 @@
 import { forEach, get, toNumber, flatten } from 'lodash';
 import { JSONPath } from 'jsonpath-plus';
 import { InfinityParser } from './InfinityParser';
-import { InfinityQuery, ScrapColumn, GrafanaTableRow } from './../../types';
+import { InfinityQuery, ScrapColumn, GrafanaTableRow, ScrapColumnFormat } from './../../types';
 
 export class JSONParser extends InfinityParser {
   constructor(JSONResponse: object, target: InfinityQuery, endTime?: Date) {
@@ -38,13 +38,13 @@ export class JSONParser extends InfinityParser {
       const row: GrafanaTableRow = [];
       this.target.columns.forEach((c: ScrapColumn) => {
         let value = get(r, c.selector, '');
-        if (c.type === 'timestamp') {
+        if (c.type === ScrapColumnFormat.Timestamp) {
           value = new Date(value + '');
-        } else if (c.type === 'timestamp_epoch') {
+        } else if (c.type === ScrapColumnFormat.Timestamp_Epoch) {
           value = new Date(parseInt(value, 10));
-        } else if (c.type === 'timestamp_epoch_s') {
+        } else if (c.type === ScrapColumnFormat.Timestamp_Epoch_Seconds) {
           value = new Date(parseInt(value, 10) * 1000);
-        } else if (c.type === 'number') {
+        } else if (c.type === ScrapColumnFormat.Number) {
           value = value === '' ? null : +value;
         }
         row.push(value);
@@ -66,11 +66,11 @@ export class JSONParser extends InfinityParser {
         let timestamp = endTime ? endTime.getTime() : new Date().getTime();
         if (this.TimeColumns.length >= 1) {
           const FirstTimeColumn = this.TimeColumns[0];
-          if (FirstTimeColumn.type === 'timestamp') {
+          if (FirstTimeColumn.type === ScrapColumnFormat.Timestamp) {
             timestamp = new Date(get(r, FirstTimeColumn.selector) + '').getTime();
-          } else if (FirstTimeColumn.type === 'timestamp_epoch') {
+          } else if (FirstTimeColumn.type === ScrapColumnFormat.Timestamp_Epoch) {
             timestamp = new Date(parseInt(get(r, FirstTimeColumn.selector), 10)).getTime();
-          } else if (FirstTimeColumn.type === 'timestamp_epoch_s') {
+          } else if (FirstTimeColumn.type === ScrapColumnFormat.Timestamp_Epoch_Seconds) {
             timestamp = new Date(parseInt(get(r, FirstTimeColumn.selector), 10) * 1000).getTime();
           }
         }

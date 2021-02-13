@@ -12,7 +12,14 @@ import { SeriesProvider } from './app/SeriesProvider';
 import { replaceVariables } from './utils';
 import { LegacyVariableProvider, InfinityVariableProvider } from './app/variablesQuery';
 import { InfinityDataSourceJSONOptions } from './config.editor';
-import { InfinityQuery, GlobalInfinityQuery, VariableQuery, MetricFindValue, HealthCheckResult } from './types';
+import {
+  InfinityQuery,
+  GlobalInfinityQuery,
+  VariableQuery,
+  MetricFindValue,
+  HealthCheckResult,
+  HealthCheckResultStatus,
+} from './types';
 
 export class Datasource extends DataSourceApi<InfinityQuery> {
   instanceSettings: DataSourceInstanceSettings<InfinityDataSourceJSONOptions>;
@@ -27,12 +34,12 @@ export class Datasource extends DataSourceApi<InfinityQuery> {
         this.instanceSettings.jsonData.datasource_mode &&
         this.instanceSettings.jsonData.datasource_mode === 'basic'
       ) {
-        resolve({ message: 'No checks required', status: 'success' });
+        resolve({ message: 'No checks required', status: HealthCheckResultStatus.Success });
       } else {
         if (this.instanceSettings.url) {
-          resolve({ message: 'No checks performed', status: 'success' });
+          resolve({ message: 'No checks performed', status: HealthCheckResultStatus.Success });
         } else {
-          reject({ message: 'Missing URL', status: 'error' });
+          reject({ message: 'Missing URL', status: HealthCheckResultStatus.Failure });
         }
       }
     });

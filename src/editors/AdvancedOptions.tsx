@@ -3,7 +3,13 @@ import { set } from 'lodash';
 import { Select } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
 import { TableFilter } from './TableFilters';
-import { SCRAP_QUERY_RESULT_FORMATS, InfinityQuery, InfinityQueryFormat, EditorMode } from '../types';
+import {
+  SCRAP_QUERY_RESULT_FORMATS,
+  InfinityQuery,
+  InfinityQueryFormat,
+  EditorMode,
+  InfinityQueryType,
+} from '../types';
 
 interface AdvancedOptionsProps {
   query: InfinityQuery;
@@ -13,7 +19,7 @@ interface AdvancedOptionsProps {
 }
 
 export const AdvancedOptions: React.FC<AdvancedOptionsProps> = ({ query, mode, onChange, onRunQuery }) => {
-  const defaultFormat: SelectableValue<InfinityQueryFormat> = { value: 'table', label: 'Table' };
+  const defaultFormat: SelectableValue<InfinityQueryFormat> = SCRAP_QUERY_RESULT_FORMATS[0];
 
   const onSelectChange = (selectableItem: SelectableValue, field: string) => {
     set(query, field, selectableItem.value);
@@ -23,11 +29,11 @@ export const AdvancedOptions: React.FC<AdvancedOptionsProps> = ({ query, mode, o
   return (
     <div className="gf-form-inline">
       <div className="gf-form">
-        {query.type === 'series' ? (
+        {query.type === InfinityQueryType.Series ? (
           <></>
         ) : (
           <>
-            {mode !== 'variable' && (
+            {mode !== EditorMode.Variable && (
               <>
                 <label className="gf-form-label query-keyword width-8">Format</label>
                 <Select

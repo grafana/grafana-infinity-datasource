@@ -4,7 +4,15 @@ import { TextArea, Select } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
 import { Datasource } from './datasource';
 import { InfinityQueryEditor } from './query.editor';
-import { VariableQuery, VariableQueryType, InfinityQuery } from './types';
+import {
+  VariableQuery,
+  VariableQueryType,
+  InfinityQuery,
+  InfinityQuerySources,
+  InfinityQueryFormat,
+  EditorMode,
+  InfinityQueryType,
+} from './types';
 
 interface Props {
   query: VariableQuery;
@@ -15,25 +23,25 @@ interface Props {
 const VariableQueryTypes: Array<SelectableValue<VariableQueryType>> = [
   {
     label: 'Infinity Query',
-    value: 'infinity',
+    value: VariableQueryType.Infinity,
   },
   {
     label: 'Legacy',
-    value: 'legacy',
+    value: VariableQueryType.Legacy,
   },
 ];
 
 const DefaultVariableQuery: InfinityQuery = {
   refId: '',
-  type: 'csv',
-  source: 'inline',
+  type: InfinityQueryType.CSV,
+  source: InfinityQuerySources.Inline,
   data: '',
   url: '',
   url_options: { method: 'GET' },
   root_selector: '',
   columns: [],
   filters: [],
-  format: 'table',
+  format: InfinityQueryFormat.Table,
 };
 
 export const VariableEditor: React.FC<Props> = props => {
@@ -42,7 +50,7 @@ export const VariableEditor: React.FC<Props> = props => {
   if (typeof query === 'string' && query === '') {
     onChange(
       {
-        queryType: 'infinity',
+        queryType: VariableQueryType.Infinity,
         query: '',
         infinityQuery: DefaultVariableQuery,
       },
@@ -58,12 +66,12 @@ export const VariableEditor: React.FC<Props> = props => {
   } else {
     if (query) {
       query = {
-        queryType: 'legacy',
+        queryType: VariableQueryType.Legacy,
         query: query,
       };
     } else {
       query = {
-        queryType: 'infinity',
+        queryType: VariableQueryType.Infinity,
         query: '',
         infinityQuery: DefaultVariableQuery,
       };
@@ -73,7 +81,7 @@ export const VariableEditor: React.FC<Props> = props => {
   const [state, setState] = useState(query);
 
   const getDefenition = (): string => {
-    if (state.queryType === 'infinity' && state.infinityQuery) {
+    if (state.queryType === VariableQueryType.Infinity && state.infinityQuery) {
       return `(${state.infinityQuery.type} - ${state.infinityQuery.source})` + JSON.stringify(state.infinityQuery);
     }
     return `(${state.queryType}) ${state.query}`;
@@ -95,7 +103,7 @@ export const VariableEditor: React.FC<Props> = props => {
     setState({
       ...state,
       query: state.query || '',
-      queryType: queryType || 'infinity',
+      queryType: queryType || VariableQueryType.Infinity,
     });
     onChange(state, getDefenition());
   };
@@ -125,7 +133,7 @@ export const VariableEditor: React.FC<Props> = props => {
         <>
           <InfinityQueryEditor
             query={state.infinityQuery || DefaultVariableQuery}
-            mode="variable"
+            mode={EditorMode.Variable}
             onChange={onInfinityQueryUpdate}
             onRunQuery={onInfinityQueryUpdate}
             instanceSettings={{}}

@@ -1,5 +1,5 @@
 import { getBackendSrv, BackendSrvRequest } from '@grafana/runtime';
-import { InfinityQuery } from '../types';
+import { InfinityQuery, InfinityQueryType } from '../types';
 import { HTMLParser } from './parsers/HTMLParser';
 import { JSONParser } from './parsers/JSONParser';
 import { CSVParser } from './parsers/CSVParser';
@@ -10,15 +10,15 @@ export class InfinityProvider {
   constructor(private target: InfinityQuery, private instanceSettings: any) {}
   async formatResults(res: any) {
     switch (this.target.type) {
-      case 'html':
+      case InfinityQueryType.HTML:
         return new HTMLParser(res, this.target).getResults();
-      case 'json':
-      case 'graphql':
+      case InfinityQueryType.JSON:
+      case InfinityQueryType.GraphQL:
         return new JSONParser(res, this.target).getResults();
-      case 'xml':
+      case InfinityQueryType.XML:
         let xmldata = await new XMLParser(res, this.target);
         return xmldata.getResults();
-      case 'csv':
+      case InfinityQueryType.CSV:
         return new CSVParser(res, this.target).getResults();
       default:
         return undefined;
@@ -37,7 +37,7 @@ export class InfinityProvider {
       }
       if (this.target.url_options && this.target.url_options.method === 'POST') {
         requestObject.data = this.target.url_options.data || '';
-        if (this.target.type === 'graphql') {
+        if (this.target.type === InfinityQueryType.GraphQL) {
           requestObject.data = JSON.stringify({
             query: `${this.target.url_options.data}`,
           });

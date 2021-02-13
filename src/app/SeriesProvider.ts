@@ -1,7 +1,7 @@
 import { sample } from 'lodash';
 import * as math from 'mathjs';
 import { RANDOM_WORDS } from '../config';
-import { InfinityQuery, dataPoint, DataOverride } from '../types';
+import { InfinityQuery, dataPoint, DataOverride, InfinityQuerySources } from '../types';
 
 const getStepFromRange = (startTime: number, endTime: number): number => {
   const MINUTE = 60 * 1000;
@@ -93,7 +93,10 @@ export class SeriesProvider {
   query(startTime: number, endTime: number) {
     return new Promise((resolve, reject) => {
       let result = [];
-      if (this.target.source === 'random-walk' || this.target.source === 'expression') {
+      if (
+        this.target.source === InfinityQuerySources.RandomWalk ||
+        this.target.source === InfinityQuerySources.Expression
+      ) {
         if (this.target.seriesCount && this.target.seriesCount > 1) {
           for (let i = 1; i <= this.target.seriesCount; i++) {
             let seriesName = this.target.alias || sample(RANDOM_WORDS) || 'Random Walk';
@@ -104,7 +107,7 @@ export class SeriesProvider {
             }
             let rw = new RandomWalk(startTime, endTime);
             let datapoints = rw.datapoints;
-            if (this.target.source === 'expression') {
+            if (this.target.source === InfinityQuerySources.Expression) {
               let expression = this.target.expression || `$i`;
               expression = expression.replace(/\${__series.index}/g, (i - 1).toString());
               datapoints = rw.mapWithExpression(expression);
@@ -117,7 +120,7 @@ export class SeriesProvider {
         } else {
           let rw = new RandomWalk(startTime, endTime);
           let datapoints = rw.datapoints;
-          if (this.target.source === 'expression') {
+          if (this.target.source === InfinityQuerySources.Expression) {
             let expression = this.target.expression || `$i`;
             expression = expression.replace(/\${__series.index}/g, '0');
             datapoints = rw.mapWithExpression(expression);

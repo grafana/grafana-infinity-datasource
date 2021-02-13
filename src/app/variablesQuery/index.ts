@@ -11,10 +11,10 @@ import { InfinityDataSourceJSONOptions } from './../../config.editor';
 import { replaceVariables } from './../../utils';
 import { reject } from 'lodash';
 
-type VariableTokenLegacy = 'Collection' | 'CollectionLookup' | 'Random' | 'Join';
+export type VariableTokenLegacy = 'Collection' | 'CollectionLookup' | 'Random' | 'Join';
 
-const replaceTokenFromVariable = (query: string, token: VariableTokenLegacy): string => {
-  return query.replace(`${token}(`, '').slice(0, -1);
+export const replaceTokenFromVariable = (query: string, token: VariableTokenLegacy): string => {
+  return query.startsWith(`${token}(`) && query.endsWith(')') ? query.replace(`${token}(`, '').slice(0, -1) : query;
 };
 
 const getTemplateVariablesFromResult = (res: any): Array<SelectableValue<string>> => {

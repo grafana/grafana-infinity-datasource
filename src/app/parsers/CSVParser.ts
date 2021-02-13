@@ -1,7 +1,7 @@
 import { forEach, get, toNumber } from 'lodash';
 import parse from 'csv-parse/lib/sync';
 import { InfinityParser } from './InfinityParser';
-import { InfinityQuery, ScrapColumn, GrafanaTableRow } from './../../types';
+import { InfinityQuery, ScrapColumn, GrafanaTableRow, ScrapColumnFormat } from './../../types';
 
 export class CSVParser extends InfinityParser {
   constructor(CSVResponse: string, target: InfinityQuery, endTime?: Date) {
@@ -25,13 +25,13 @@ export class CSVParser extends InfinityParser {
       const row: GrafanaTableRow = [];
       this.target.columns.forEach((c: ScrapColumn) => {
         let value = get(r, c.selector, '');
-        if (c.type === 'timestamp') {
+        if (c.type === ScrapColumnFormat.Timestamp) {
           value = new Date(value);
-        } else if (c.type === 'timestamp_epoch') {
+        } else if (c.type === ScrapColumnFormat.Timestamp_Epoch) {
           value = new Date(parseInt(value, 10));
-        } else if (c.type === 'timestamp_epoch_s') {
+        } else if (c.type === ScrapColumnFormat.Timestamp_Epoch_Seconds) {
           value = new Date(parseInt(value, 10) * 1000);
-        } else if (c.type === 'number') {
+        } else if (c.type === ScrapColumnFormat.Number) {
           value = value === '' ? null : +value;
         }
         row.push(value);

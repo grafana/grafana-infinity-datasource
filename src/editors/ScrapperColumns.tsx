@@ -17,14 +17,17 @@ interface ScrapperColumnsProps {
 }
 
 export const ScrapperColumns: React.FC<ScrapperColumnsProps> = ({ query, mode, onChange }: ScrapperColumnsProps) => {
-  const defaultScrapResultFormat: SelectableValue<ScrapColumnFormat> = { value: 'string', label: 'String' };
+  const defaultScrapResultFormat: SelectableValue<ScrapColumnFormat> = {
+    value: ScrapColumnFormat.String,
+    label: 'String',
+  };
 
   const onColumnAdd = () => {
     const columns = query.columns || [];
     columns.push({
       text: '',
       selector: '',
-      type: 'string',
+      type: ScrapColumnFormat.String,
     });
     onChange({ ...query, columns });
   };
@@ -43,7 +46,7 @@ export const ScrapperColumns: React.FC<ScrapperColumnsProps> = ({ query, mode, o
     onChange(query);
   };
 
-  const LABEL_WIDTH = mode === 'variable' ? 10 : 8;
+  const LABEL_WIDTH = mode === EditorMode.Variable ? 10 : 8;
 
   return (
     <>

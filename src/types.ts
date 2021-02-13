@@ -21,31 +21,61 @@ export type tableResult = {
   columns: GrafanaTableColumn[];
   rows: GrafanaTableRow;
 };
+export const enum HealthCheckResultStatus {
+  Success = 'success',
+  Failure = 'error',
+}
 export type HealthCheckResult = {
   message: string;
-  status: 'success' | 'error';
+  status: HealthCheckResultStatus;
 };
 
 export type queryResult = timeSeriesResult | tableResult;
-export type InfinityQueryType = 'json' | 'html' | 'csv' | 'xml' | 'graphql' | 'series' | 'global';
-export type InfinityQueryFormat = 'table' | 'timeseries';
-export type InfinityQuerySources = 'url' | 'inline' | 'random-walk' | 'expression';
-export type ScrapColumnFormat = 'string' | 'number' | 'timestamp' | 'timestamp_epoch' | 'timestamp_epoch_s';
-export type EditorMode = 'standard' | 'global' | 'variable';
+export const enum InfinityQueryType {
+  JSON = 'json',
+  HTML = 'html',
+  CSV = 'csv',
+  XML = 'xml',
+  GraphQL = 'graphql',
+  Series = 'series',
+  Global = 'global',
+}
+export const enum InfinityQueryFormat {
+  Table = 'table',
+  TimeSeries = 'timeseries',
+}
+export const enum InfinityQuerySources {
+  URL = 'url',
+  Inline = 'inline',
+  RandomWalk = 'random-walk',
+  Expression = 'expression',
+}
+export const enum ScrapColumnFormat {
+  String = 'string',
+  Number = 'number',
+  Timestamp = 'timestamp',
+  Timestamp_Epoch = 'timestamp_epoch',
+  Timestamp_Epoch_Seconds = 'timestamp_epoch_s',
+}
+export const enum EditorMode {
+  Standard = 'standard',
+  Global = 'global',
+  Variable = 'variable',
+}
 interface ScrapQuerySources extends SelectableValue<InfinityQuerySources> {
   supported_types: InfinityQueryType[];
 }
 export interface ScrapColumn {
   selector: string;
   text: string;
-  type: 'string' | 'number' | 'timestamp' | 'timestamp_epoch' | 'timestamp_epoch_s';
+  type: ScrapColumnFormat;
 }
 export interface DataOverride {
   values: string[];
   operator: string;
   override: string;
 }
-export enum FilterOperator {
+export const enum FilterOperator {
   Contains = 'contains',
   ContainsIgnoreCase = 'contains_ignorecase',
   EndsWith = 'endswith',
@@ -102,88 +132,97 @@ export interface GlobalInfinityQuery {
 export const SCRAP_QUERY_TYPES: Array<SelectableValue<InfinityQueryType>> = [
   {
     label: 'CSV',
-    value: 'csv',
+    value: InfinityQueryType.CSV,
   },
   {
     label: 'JSON',
-    value: 'json',
+    value: InfinityQueryType.JSON,
   },
   {
     label: 'XML',
-    value: 'xml',
+    value: InfinityQueryType.XML,
   },
   {
     label: 'HTML',
-    value: 'html',
+    value: InfinityQueryType.HTML,
   },
   {
     label: 'GraphQL',
-    value: 'graphql',
+    value: InfinityQueryType.GraphQL,
   },
   {
     label: 'Series',
-    value: 'series',
+    value: InfinityQueryType.Series,
   },
   {
     label: 'Global Query',
-    value: 'global',
+    value: InfinityQueryType.Global,
   },
 ];
 export const SCRAP_QUERY_RESULT_FORMATS: Array<SelectableValue<InfinityQueryFormat>> = [
   {
     label: 'Table',
-    value: 'table',
+    value: InfinityQueryFormat.Table,
   },
   {
     label: 'Time Series',
-    value: 'timeseries',
+    value: InfinityQueryFormat.TimeSeries,
   },
 ];
 export const SCRAP_QUERY_SOURCES: ScrapQuerySources[] = [
   {
     label: 'URL',
-    value: 'url',
-    supported_types: ['csv', 'json', 'html', 'xml', 'graphql'],
+    value: InfinityQuerySources.URL,
+    supported_types: [
+      InfinityQueryType.CSV,
+      InfinityQueryType.JSON,
+      InfinityQueryType.HTML,
+      InfinityQueryType.XML,
+      InfinityQueryType.GraphQL,
+    ],
   },
   {
     label: 'Inline',
-    value: 'inline',
-    supported_types: ['csv', 'json', 'xml'],
+    value: InfinityQuerySources.Inline,
+    supported_types: [InfinityQueryType.CSV, InfinityQueryType.JSON, InfinityQueryType.XML],
   },
   {
     label: 'Random Walk',
-    value: 'random-walk',
-    supported_types: ['series'],
+    value: InfinityQuerySources.RandomWalk,
+    supported_types: [InfinityQueryType.Series],
   },
   {
     label: 'Expression',
-    value: 'expression',
-    supported_types: ['series'],
+    value: InfinityQuerySources.Expression,
+    supported_types: [InfinityQueryType.Series],
   },
 ];
 export const SCRAP_QUERY_RESULT_COLUMN_FORMATS: Array<SelectableValue<ScrapColumnFormat>> = [
   {
     label: 'String',
-    value: 'string',
+    value: ScrapColumnFormat.String,
   },
   {
     label: 'Number',
-    value: 'number',
+    value: ScrapColumnFormat.Number,
   },
   {
     label: 'Timestamp',
-    value: 'timestamp',
+    value: ScrapColumnFormat.Timestamp,
   },
   {
     label: 'Timestamp ( UNIX ms )',
-    value: 'timestamp_epoch',
+    value: ScrapColumnFormat.Timestamp_Epoch,
   },
   {
     label: 'Timestamp ( UNIX s )',
-    value: 'timestamp_epoch_s',
+    value: ScrapColumnFormat.Timestamp_Epoch_Seconds,
   },
 ];
-export type VariableQueryType = 'legacy' | 'infinity';
+export const enum VariableQueryType {
+  Legacy = 'legacy',
+  Infinity = 'infinity',
+}
 export type VariableQuery = {
   queryType: VariableQueryType;
   query: string;
