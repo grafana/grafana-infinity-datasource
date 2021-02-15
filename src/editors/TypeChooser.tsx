@@ -3,8 +3,10 @@ import { set } from 'lodash';
 import { Select } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
 import {
+  SCRAP_QUERY_RESULT_FORMATS,
   SCRAP_QUERY_TYPES,
   SCRAP_QUERY_SOURCES,
+  InfinityQueryFormat,
   InfinityQuery,
   GlobalInfinityQuery,
   InfinityQueryType,
@@ -20,6 +22,7 @@ interface TypeChooserProps {
 }
 
 export const TypeChooser: React.FC<TypeChooserProps> = ({ query, onChange, mode, instanceSettings }) => {
+  const defaultFormat: SelectableValue<InfinityQueryFormat> = SCRAP_QUERY_RESULT_FORMATS[0];
   const defaultType: SelectableValue<InfinityQueryType> = { value: InfinityQueryType.JSON, label: 'JSON' };
   const defaultSource: SelectableValue<InfinityQuerySources> = { value: InfinityQuerySources.URL, label: 'URL' };
   const defaultSourceSeries: SelectableValue<InfinityQuerySources> = {
@@ -73,13 +76,15 @@ export const TypeChooser: React.FC<TypeChooserProps> = ({ query, onChange, mode,
       <div className="gf-form">
         <label className={`gf-form-label query-keyword width-${LABEL_WIDTH}`}>Type</label>
         <Select
-          className="min-width-12 width-12"
+          className="min-width-8 width-8"
           value={SCRAP_QUERY_TYPES.find((field: SelectableValue) => field.value === query.type) || defaultType}
           options={getTypes(mode)}
           defaultValue={defaultType}
           onChange={e => onSelectChange(e, 'type')}
         ></Select>
-        <label className="gf-form-label query-keyword width-6">{query.type === 'series' ? 'Scenario' : 'Source'}</label>
+        <label className={`gf-form-label query-keyword width-4`}>
+          {query.type === 'series' ? 'Scenario' : 'Source'}
+        </label>
         {query.type === 'global' ? (
           <>
             {global_queries.length > 0 ? (
@@ -101,7 +106,7 @@ export const TypeChooser: React.FC<TypeChooserProps> = ({ query, onChange, mode,
           </>
         ) : (
           <Select
-            className="min-width-12 width-12"
+            className={`width-${query.type === 'series' ? 8 : 6}`}
             value={SCRAP_QUERY_SOURCES.find((field: SelectableValue) => field.value === query.source) || defaultSource}
             options={SCRAP_QUERY_SOURCES.filter(
               (field: SelectableValue) => field.supported_types.indexOf(query.type) > -1
@@ -109,6 +114,18 @@ export const TypeChooser: React.FC<TypeChooserProps> = ({ query, onChange, mode,
             defaultValue={defaultSource}
             onChange={e => onSelectChange(e, 'source')}
           ></Select>
+        )}
+        {query.type !== InfinityQueryType.Series && mode !== EditorMode.Variable && (
+          <>
+            <label className={`gf-form-label query-keyword width-4`}>Format</label>
+            <Select
+              className="min-width-8 width-8"
+              value={SCRAP_QUERY_RESULT_FORMATS.find((field: any) => field.value === query.format) || defaultFormat}
+              options={SCRAP_QUERY_RESULT_FORMATS}
+              defaultValue={defaultFormat}
+              onChange={e => onSelectChange(e, 'format')}
+            ></Select>
+          </>
         )}
       </div>
     </div>

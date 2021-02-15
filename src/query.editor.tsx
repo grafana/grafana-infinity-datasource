@@ -3,7 +3,7 @@ import { defaultsDeep } from 'lodash';
 import { QueryEditorProps } from '@grafana/data';
 import { Datasource } from './datasource';
 import { TypeChooser } from './editors/TypeChooser';
-import { AdvancedOptions } from './editors/AdvancedOptions';
+import { TableFilter } from './editors/TableFilters';
 import { Scrapper as ScrapperOptions } from './editors/Scrapper';
 import { SeriesEditor } from './editors/Series';
 import { InfinityQuery, EditorMode, InfinityQueryFormat, InfinityQuerySources, InfinityQueryType } from './types';
@@ -40,15 +40,15 @@ export const InfinityQueryEditor: React.FC<InfinityEditorProps> = ({
   query = defaultsDeep(query, defaultQuery);
   let canShowSeriesEditor = query.type === 'series';
   let canShowScrapperOptions = ['csv', 'html', 'json', 'graphql', 'xml'].indexOf(query.type) > -1;
-  let canShowAdvancedOptions = query.type !== 'global';
+  let canShowFilterEditor = !['global', 'series'].includes(query.type) && query.columns && query.columns.length > 0;
   return (
     <div>
       <TypeChooser onChange={onChange} query={query} mode={mode} instanceSettings={instanceSettings} />
       {canShowSeriesEditor && <SeriesEditor onChange={onChange} query={query} />}
-      {canShowScrapperOptions && <ScrapperOptions onChange={onChange} query={query} mode={mode} />}
-      {canShowAdvancedOptions && (
-        <AdvancedOptions onChange={onChange} query={query} onRunQuery={onRunQuery} mode={mode} />
+      {canShowScrapperOptions && (
+        <ScrapperOptions onChange={onChange} query={query} mode={mode} onRunQuery={onRunQuery} />
       )}
+      {canShowFilterEditor && <TableFilter query={query} onChange={onChange} onRunQuery={onRunQuery}></TableFilter>}
     </div>
   );
 };

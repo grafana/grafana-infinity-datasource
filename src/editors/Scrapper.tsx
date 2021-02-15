@@ -8,6 +8,7 @@ interface ScrapperProps {
   query: InfinityQuery;
   mode: EditorMode;
   onChange: (value: any) => void;
+  onRunQuery: any;
 }
 
 export const Scrapper: React.FC<ScrapperProps> = props => {
@@ -36,6 +37,7 @@ export const Scrapper: React.FC<ScrapperProps> = props => {
               value={props.query.url}
               placeholder="https://jsonplaceholder.typicode.com/todos"
               onChange={e => onInputTextChange(e, `url`, props)}
+              onBlur={props.onRunQuery}
             ></input>
             <URLOptions onChange={props.onChange} query={props.query} />
           </div>
