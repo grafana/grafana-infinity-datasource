@@ -1,11 +1,5 @@
 import flatten from 'lodash/flatten';
-import {
-  DataSourceApi,
-  DataQueryResponse,
-  AnnotationQueryRequest,
-  AnnotationEvent,
-  DataQueryRequest,
-} from '@grafana/data';
+import { DataSourceApi, DataQueryResponse, DataQueryRequest } from '@grafana/data';
 import { InfinityProvider } from './app/InfinityProvider';
 import { SeriesProvider } from './app/SeriesProvider';
 import { replaceVariables } from './app/InfinityQuery';
@@ -94,12 +88,6 @@ export class Datasource extends DataSourceApi<InfinityQuery> {
       });
     return Promise.all(promises).then(results => {
       return { data: flatten(results) };
-    });
-  }
-  annotationQuery(options: AnnotationQueryRequest<InfinityQuery>): Promise<AnnotationEvent[]> {
-    const promises: any[] = [];
-    return Promise.all(promises).then(results => {
-      return [];
     });
   }
   metricFindQuery(query: VariableQuery): Promise<MetricFindValue[]> {
