@@ -1,4 +1,5 @@
-import { replaceTokenFromVariable, VariableTokenLegacy } from './index';
+import { replaceTokenFromVariable } from './index';
+import { VariableTokenLegacy } from './../../types';
 
 const data: Array<[string, VariableTokenLegacy, string]> = [
   ['Collection(A,a,B,b)', 'Collection', 'A,a,B,b'],

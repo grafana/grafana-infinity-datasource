@@ -2,7 +2,6 @@ import React from 'react';
 import { defaultsDeep, set } from 'lodash';
 import {
   DataSourcePluginOptionsEditorProps,
-  DataSourceJsonData,
   updateDatasourcePluginJsonDataOption,
   SelectableValue,
 } from '@grafana/data';
@@ -15,24 +14,16 @@ import {
   InfinityQueryFormat,
   InfinityQuerySources,
   InfinityQueryType,
+  DatasourceMode,
+  InfinityDataSourceJSONOptions,
 } from './types';
-
-export enum DatasourceMode {
-  Basic = 'basic',
-  Advanced = 'advanced',
-}
 
 const DATASOURCE_MODES: Array<SelectableValue<DatasourceMode>> = [
   { value: DatasourceMode.Basic, label: 'Basic' },
   { value: DatasourceMode.Advanced, label: 'Advanced' },
 ];
 
-const DEFAULT_DATASOURCE_MODE = DATASOURCE_MODES.find(d => d.value === DatasourceMode.Basic);
-
-export interface InfinityDataSourceJSONOptions extends DataSourceJsonData {
-  datasource_mode?: DatasourceMode;
-  global_queries?: GlobalInfinityQuery[];
-}
+const DEFAULT_DATASOURCE_MODE = DATASOURCE_MODES[0];
 
 export type Props = DataSourcePluginOptionsEditorProps<InfinityDataSourceJSONOptions>;
 

@@ -1,9 +1,8 @@
-import { DataQuery, SelectableValue } from '@grafana/data';
+import { DataQuery, SelectableValue, DataSourceJsonData, DataSourceInstanceSettings } from '@grafana/data';
 
 export interface MetricFindValue {
   text: string;
-  value?: string | number;
-  expandable?: boolean;
+  value: string | number;
 }
 
 export type dataPoint = [number | null, number];
@@ -228,3 +227,15 @@ export type VariableQuery = {
   query: string;
   infinityQuery?: InfinityQuery;
 };
+
+export enum DatasourceMode {
+  Basic = 'basic',
+  Advanced = 'advanced',
+}
+
+export interface InfinityDataSourceJSONOptions extends DataSourceJsonData {
+  datasource_mode?: DatasourceMode;
+  global_queries?: GlobalInfinityQuery[];
+}
+export type VariableTokenLegacy = 'Collection' | 'CollectionLookup' | 'Random' | 'Join';
+export type InfinityInstanceSettings = DataSourceInstanceSettings<InfinityDataSourceJSONOptions>;

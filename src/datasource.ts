@@ -4,14 +4,12 @@ import {
   DataQueryResponse,
   AnnotationQueryRequest,
   AnnotationEvent,
-  DataSourceInstanceSettings,
   DataQueryRequest,
 } from '@grafana/data';
 import { InfinityProvider } from './app/InfinityProvider';
 import { SeriesProvider } from './app/SeriesProvider';
 import { replaceVariables } from './app/InfinityQuery';
 import { LegacyVariableProvider, InfinityVariableProvider } from './app/variablesQuery';
-import { InfinityDataSourceJSONOptions } from './config.editor';
 import {
   InfinityQuery,
   GlobalInfinityQuery,
@@ -19,11 +17,12 @@ import {
   MetricFindValue,
   HealthCheckResult,
   HealthCheckResultStatus,
+  InfinityInstanceSettings,
 } from './types';
 
 export class Datasource extends DataSourceApi<InfinityQuery> {
-  instanceSettings: DataSourceInstanceSettings<InfinityDataSourceJSONOptions>;
-  constructor(iSettings: DataSourceInstanceSettings<InfinityDataSourceJSONOptions>) {
+  instanceSettings: InfinityInstanceSettings;
+  constructor(iSettings: InfinityInstanceSettings) {
     super(iSettings);
     this.instanceSettings = iSettings;
   }

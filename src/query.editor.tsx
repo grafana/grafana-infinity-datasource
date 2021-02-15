@@ -17,8 +17,8 @@ interface InfinityEditorProps {
 }
 
 const defaultQuery: Omit<InfinityQuery, 'refId'> = {
-  type: InfinityQueryType.CSV,
-  source: InfinityQuerySources.Inline,
+  type: InfinityQueryType.JSON,
+  source: InfinityQuerySources.URL,
   format: InfinityQueryFormat.Table,
   url: '',
   url_options: {

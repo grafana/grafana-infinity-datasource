@@ -1,16 +1,13 @@
 import flatten from 'lodash/flatten';
-import { SelectableValue, DataSourceInstanceSettings } from '@grafana/data';
+import { SelectableValue } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
+import { InfinityProvider } from './../InfinityProvider';
+import { IsValidInfinityQuery, replaceVariables } from './../InfinityQuery';
+import { InfinityQuery, VariableTokenLegacy, InfinityInstanceSettings } from './../../types';
 import { CollectionVariable } from './Collection';
 import { CollectionLookupVariable } from './CollectionLookup';
 import { JoinVariable } from './Join';
 import { RandomVariable } from './Random';
-import { InfinityProvider } from './../InfinityProvider';
-import { IsValidInfinityQuery, replaceVariables } from './../InfinityQuery';
-import { InfinityQuery } from './../../types';
-import { InfinityDataSourceJSONOptions } from './../../config.editor';
-
-export type VariableTokenLegacy = 'Collection' | 'CollectionLookup' | 'Random' | 'Join';
 
 export const replaceTokenFromVariable = (query: string, token: VariableTokenLegacy): string => {
   return query.startsWith(`${token}(`) && query.endsWith(')') ? query.replace(`${token}(`, '').slice(0, -1) : query;
@@ -46,11 +43,8 @@ interface VariableProvider {
 
 export class InfinityVariableProvider implements VariableProvider {
   infinityQuery: InfinityQuery;
-  instanceSettings: DataSourceInstanceSettings<InfinityDataSourceJSONOptions>;
-  constructor(
-    infinityQuery: InfinityQuery,
-    instanceSettings: DataSourceInstanceSettings<InfinityDataSourceJSONOptions>
-  ) {
+  instanceSettings: InfinityInstanceSettings;
+  constructor(infinityQuery: InfinityQuery, instanceSettings: InfinityInstanceSettings) {
     this.infinityQuery = infinityQuery;
     this.instanceSettings = instanceSettings;
   }
