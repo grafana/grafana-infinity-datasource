@@ -1,8 +1,8 @@
 import React, { ChangeEvent, useState } from 'react';
 import { set } from 'lodash';
-import { ScrapperColumns } from './ScrapperColumns';
-import { URLOptions } from './URLOptions';
-import { InfinityQuery, EditorMode } from './../types';
+import { QueryColumnsEditor } from './query.columns.editor';
+import { URLOptionsEditor } from './query.url.options';
+import { InfinityQuery, EditorMode } from '../../types';
 
 interface ScrapperProps {
   query: InfinityQuery;
@@ -11,7 +11,7 @@ interface ScrapperProps {
   onRunQuery: any;
 }
 
-export const Scrapper: React.FC<ScrapperProps> = props => {
+export const URLEditor: React.FC<ScrapperProps> = props => {
   const [data, setData] = useState(props.query.data);
   const onInputTextChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -39,7 +39,7 @@ export const Scrapper: React.FC<ScrapperProps> = props => {
               onChange={e => onInputTextChange(e, `url`, props)}
               onBlur={props.onRunQuery}
             ></input>
-            <URLOptions onChange={props.onChange} query={props.query} />
+            <URLOptionsEditor onChange={props.onChange} query={props.query} />
           </div>
         </div>
       ) : (
@@ -73,7 +73,7 @@ export const Scrapper: React.FC<ScrapperProps> = props => {
       ) : (
         <></>
       )}
-      <ScrapperColumns onChange={props.onChange} query={props.query} mode={props.mode} />
+      <QueryColumnsEditor onChange={props.onChange} query={props.query} mode={props.mode} />
     </>
   );
 };

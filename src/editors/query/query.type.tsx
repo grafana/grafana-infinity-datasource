@@ -12,7 +12,7 @@ import {
   InfinityQueryType,
   InfinityQuerySources,
   EditorMode,
-} from './../types';
+} from '../../types';
 
 interface TypeChooserProps {
   mode: EditorMode;

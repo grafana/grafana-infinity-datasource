@@ -2,8 +2,8 @@ import React from 'react';
 import { DataLinkInput } from '@grafana/ui';
 import { VariableOrigin } from '@grafana/data';
 import { set, defaultsDeep } from 'lodash';
-import { InfinityQuery } from '../types';
-import { SeriesAdvancedOptions } from './SeriesAdvancedOptions';
+import { InfinityQuery } from '../../types';
+import { SeriesAdvancedOptions } from './query.series_options';
 
 interface ScrapperProps {
   query: InfinityQuery;

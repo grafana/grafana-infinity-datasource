@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Modal, Select } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
-import { filterOperators } from './../app/parsers/filter';
-import { InfinityQuery, InfinityFilter, FilterOperator } from './../types';
+import { filterOperators } from '../../app/parsers/filter';
+import { InfinityQuery, InfinityFilter, FilterOperator } from '../../types';
 
 interface TableFiltersProps {
   query: InfinityQuery;
@@ -56,8 +56,8 @@ export const TableFilter: React.FC<TableFiltersProps> = props => {
     onRunQuery();
   };
   return (
-    <>
-      <label className="gf-form-label query-keyword width-10">
+    <div className="gf-form">
+      <label className="gf-form-label query-keyword width-8">
         Results Filter {query.filters && query.filters.length > 0 ? `( ${query.filters.length} )` : ''}
       </label>
       <label
@@ -139,6 +139,6 @@ export const TableFilter: React.FC<TableFiltersProps> = props => {
         <br />
         <br />
       </Modal>
-    </>
+    </div>
   );
 };

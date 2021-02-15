@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { TextArea, Select } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
 import { Datasource } from '../datasource';
-import { InfinityQueryEditor } from './query.editor';
+import { InfinityQueryEditor } from './query/infinityQuery';
 import {
   VariableQuery,
   VariableQueryType,

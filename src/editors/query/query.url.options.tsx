@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { set } from 'lodash';
 import { Select, Modal } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
-import { InfinityQuery } from '../types';
+import { InfinityQuery } from '../../types';
 
 interface URLOptionsProps {
   query: InfinityQuery;
   onChange: (value: any) => void;
 }
 
-export const URLOptions: React.FC<URLOptionsProps> = ({ query, onChange }) => {
+export const URLOptionsEditor: React.FC<URLOptionsProps> = ({ query, onChange }) => {
   const [popupOpenStatus, setPopupOpenStatus] = useState(false);
 
   const URL_METHODS: SelectableValue[] = [

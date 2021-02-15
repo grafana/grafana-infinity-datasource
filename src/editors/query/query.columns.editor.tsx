@@ -8,15 +8,15 @@ import {
   InfinityQuery,
   ScrapColumnFormat,
   EditorMode,
-} from './../types';
+} from '../../types';
 
-interface ScrapperColumnsProps {
+interface QueryColumnProps {
   query: InfinityQuery;
   mode: EditorMode;
   onChange: (value: any) => void;
 }
 
-export const ScrapperColumns: React.FC<ScrapperColumnsProps> = ({ query, mode, onChange }: ScrapperColumnsProps) => {
+export const QueryColumnsEditor: React.FC<QueryColumnProps> = ({ query, mode, onChange }: QueryColumnProps) => {
   const defaultScrapResultFormat: SelectableValue<ScrapColumnFormat> = {
     value: ScrapColumnFormat.String,
     label: 'String',
