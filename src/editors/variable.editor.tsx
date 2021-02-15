@@ -1,18 +1,10 @@
-import defaults from 'lodash/defaults';
 import React, { useState } from 'react';
 import { TextArea, Select } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
 import { Datasource } from '../datasource';
 import { InfinityQueryEditor } from './query/infinityQuery';
-import {
-  VariableQuery,
-  VariableQueryType,
-  InfinityQuery,
-  InfinityQuerySources,
-  InfinityQueryFormat,
-  EditorMode,
-  InfinityQueryType,
-} from '../types';
+import { migrateLegacyQuery, DefaultInfinityQuery } from './../app/variablesQuery';
+import { VariableQuery, VariableQueryType, InfinityQuery, EditorMode } from '../types';
 
 interface Props {
   query: VariableQuery;
@@ -22,61 +14,17 @@ interface Props {
 
 const VariableQueryTypes: Array<SelectableValue<VariableQueryType>> = [
   {
-    label: 'Infinity Query',
-    value: VariableQueryType.Infinity,
-  },
-  {
     label: 'Legacy',
     value: VariableQueryType.Legacy,
   },
+  {
+    label: 'Infinity Query',
+    value: VariableQueryType.Infinity,
+  },
 ];
 
-const DefaultVariableQuery: InfinityQuery = {
-  refId: '',
-  type: InfinityQueryType.CSV,
-  source: InfinityQuerySources.Inline,
-  data: '',
-  url: '',
-  url_options: { method: 'GET' },
-  root_selector: '',
-  columns: [],
-  filters: [],
-  format: InfinityQueryFormat.Table,
-};
-
 export const VariableEditor: React.FC<Props> = props => {
-  let { query, onChange } = props;
-
-  if (typeof query === 'string' && query === '') {
-    onChange(
-      {
-        queryType: VariableQueryType.Infinity,
-        query: '',
-        infinityQuery: DefaultVariableQuery,
-      },
-      JSON.stringify(DefaultVariableQuery)
-    );
-  }
-  if (typeof query !== 'string') {
-    query = defaults(query || {}, {
-      queryType: 'infinity',
-      query: '',
-      infinityQuery: DefaultVariableQuery,
-    });
-  } else {
-    if (query) {
-      query = {
-        queryType: VariableQueryType.Legacy,
-        query: query,
-      };
-    } else {
-      query = {
-        queryType: VariableQueryType.Infinity,
-        query: '',
-        infinityQuery: DefaultVariableQuery,
-      };
-    }
-  }
+  let query = migrateLegacyQuery(props.query);
 
   const [state, setState] = useState(query);
 
@@ -87,25 +35,20 @@ export const VariableEditor: React.FC<Props> = props => {
     return `(${state.queryType}) ${state.query}`;
   };
 
-  const onInfinityQueryChange = (infinityQuery: InfinityQuery) => {
+  const onInfinityQueryUpdate = (infinityQuery: InfinityQuery) => {
     setState({
       ...state,
       infinityQuery,
     });
-  };
-
-  const onInfinityQueryUpdate = (infinityQuery: InfinityQuery) => {
-    onInfinityQueryChange(infinityQuery);
-    onChange(state, getDefenition());
+    props.onChange(state, getDefenition());
   };
 
   const onQueryTypeChange = (queryType: VariableQueryType) => {
     setState({
       ...state,
-      query: state.query || '',
-      queryType: queryType || VariableQueryType.Infinity,
+      queryType: queryType || VariableQueryType.Legacy,
     });
-    onChange(state, getDefenition());
+    props.onChange(state, getDefenition());
   };
 
   const onQueryChange = (value: string) => {
@@ -113,7 +56,7 @@ export const VariableEditor: React.FC<Props> = props => {
       ...state,
       query: value,
     });
-    onChange(state, getDefenition());
+    props.onChange(state, getDefenition());
   };
 
   return (
@@ -122,7 +65,7 @@ export const VariableEditor: React.FC<Props> = props => {
         <span className="gf-form-label width-10">Query Type</span>
         <Select
           options={VariableQueryTypes}
-          value={VariableQueryTypes.find(v => v.value === state.queryType || VariableQueryTypes[0])}
+          value={VariableQueryTypes.find(v => v.value === state.queryType)}
           defaultValue={VariableQueryTypes[0]}
           onChange={e => {
             onQueryTypeChange(e.value as VariableQueryType);
@@ -132,7 +75,7 @@ export const VariableEditor: React.FC<Props> = props => {
       {state.queryType === 'infinity' && (
         <>
           <InfinityQueryEditor
-            query={state.infinityQuery || DefaultVariableQuery}
+            query={state.infinityQuery || DefaultInfinityQuery}
             mode={EditorMode.Variable}
             onChange={onInfinityQueryUpdate}
             onRunQuery={onInfinityQueryUpdate}
@@ -147,7 +90,7 @@ export const VariableEditor: React.FC<Props> = props => {
             css={{}}
             rows={1}
             className="gf-form-input"
-            placeholder="metric name or tags query"
+            placeholder="Collection(India,in,United Kingom,uk)"
             required={true}
             value={typeof query === 'string' ? query : state.query}
             onBlur={e => onQueryChange(e.target.value)}

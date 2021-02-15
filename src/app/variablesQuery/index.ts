@@ -9,6 +9,9 @@ import {
   InfinityInstanceSettings,
   VariableQuery,
   VariableQueryType,
+  InfinityQueryType,
+  InfinityQuerySources,
+  InfinityQueryFormat,
 } from './../../types';
 import { CollectionVariable } from './Collection';
 import { CollectionLookupVariable } from './CollectionLookup';
@@ -43,6 +46,19 @@ const getTemplateVariablesFromResult = (res: any): Array<SelectableValue<string>
   }
 };
 
+export const DefaultInfinityQuery: InfinityQuery = {
+  refId: '',
+  type: InfinityQueryType.CSV,
+  source: InfinityQuerySources.Inline,
+  data: '',
+  url: '',
+  url_options: { method: 'GET' },
+  root_selector: '',
+  columns: [],
+  filters: [],
+  format: InfinityQueryFormat.Table,
+};
+
 export const migrateLegacyQuery = (query: VariableQuery | string): VariableQuery => {
   if (typeof query === 'string') {
     return {
@@ -50,7 +66,10 @@ export const migrateLegacyQuery = (query: VariableQuery | string): VariableQuery
       queryType: VariableQueryType.Legacy,
     };
   } else if (query && query.queryType) {
-    return query;
+    return {
+      ...query,
+      infinityQuery: query.infinityQuery || DefaultInfinityQuery,
+    };
   } else {
     return {
       query: '',
