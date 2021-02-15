@@ -1,12 +1,12 @@
 import React from 'react';
 import { defaultsDeep } from 'lodash';
 import { QueryEditorProps } from '@grafana/data';
-import { Datasource } from './datasource';
-import { TypeChooser } from './editors/TypeChooser';
-import { TableFilter } from './editors/TableFilters';
-import { Scrapper as ScrapperOptions } from './editors/Scrapper';
-import { SeriesEditor } from './editors/Series';
-import { InfinityQuery, EditorMode, InfinityQueryFormat, InfinityQuerySources, InfinityQueryType } from './types';
+import { Datasource } from '../datasource';
+import { TypeChooser } from './TypeChooser';
+import { TableFilter } from './TableFilters';
+import { Scrapper as ScrapperOptions } from './Scrapper';
+import { SeriesEditor } from './Series';
+import { InfinityQuery, EditorMode, InfinityQueryFormat, InfinityQuerySources, InfinityQueryType } from '../types';
 
 interface InfinityEditorProps {
   instanceSettings: any;
@@ -69,7 +69,7 @@ export const QueryEditor: React.FC<EditorProps> = props => {
     global_query_id: default_global_query_id,
   });
   return (
-    <div>
+    <>
       <InfinityQueryEditor
         onChange={onChange}
         onRunQuery={props.onRunQuery}
@@ -77,6 +77,6 @@ export const QueryEditor: React.FC<EditorProps> = props => {
         mode={EditorMode.Standard}
         instanceSettings={props.datasource.instanceSettings}
       />
-    </div>
+    </>
   );
 };

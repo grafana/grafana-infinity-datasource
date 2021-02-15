@@ -16,7 +16,7 @@ import {
   InfinityQueryType,
   DatasourceMode,
   InfinityDataSourceJSONOptions,
-} from './types';
+} from '../types';
 
 const DATASOURCE_MODES: Array<SelectableValue<DatasourceMode>> = [
   { value: DatasourceMode.Basic, label: 'Basic' },

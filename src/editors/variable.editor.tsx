@@ -2,7 +2,7 @@ import defaults from 'lodash/defaults';
 import React, { useState } from 'react';
 import { TextArea, Select } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
-import { Datasource } from './datasource';
+import { Datasource } from '../datasource';
 import { InfinityQueryEditor } from './query.editor';
 import {
   VariableQuery,
@@ -12,7 +12,7 @@ import {
   InfinityQueryFormat,
   EditorMode,
   InfinityQueryType,
-} from './types';
+} from '../types';
 
 interface Props {
   query: VariableQuery;
