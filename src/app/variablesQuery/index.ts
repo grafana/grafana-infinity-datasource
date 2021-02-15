@@ -3,7 +3,13 @@ import { SelectableValue } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
 import { InfinityProvider } from './../InfinityProvider';
 import { IsValidInfinityQuery, replaceVariables } from './../InfinityQuery';
-import { InfinityQuery, VariableTokenLegacy, InfinityInstanceSettings } from './../../types';
+import {
+  InfinityQuery,
+  VariableTokenLegacy,
+  InfinityInstanceSettings,
+  VariableQuery,
+  VariableQueryType,
+} from './../../types';
 import { CollectionVariable } from './Collection';
 import { CollectionLookupVariable } from './CollectionLookup';
 import { JoinVariable } from './Join';
@@ -34,6 +40,22 @@ const getTemplateVariablesFromResult = (res: any): Array<SelectableValue<string>
     }
   } else {
     return [];
+  }
+};
+
+export const migrateLegacyQuery = (query: VariableQuery | string): VariableQuery => {
+  if (typeof query === 'string') {
+    return {
+      query: query,
+      queryType: VariableQueryType.Legacy,
+    };
+  } else if (query && query.queryType) {
+    return query;
+  } else {
+    return {
+      query: '',
+      queryType: VariableQueryType.Legacy,
+    };
   }
 };
 

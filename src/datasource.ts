@@ -3,7 +3,7 @@ import { DataSourceApi, DataQueryResponse, DataQueryRequest } from '@grafana/dat
 import { InfinityProvider } from './app/InfinityProvider';
 import { SeriesProvider } from './app/SeriesProvider';
 import { replaceVariables } from './app/InfinityQuery';
-import { LegacyVariableProvider, InfinityVariableProvider } from './app/variablesQuery';
+import { LegacyVariableProvider, InfinityVariableProvider, migrateLegacyQuery } from './app/variablesQuery';
 import {
   InfinityQuery,
   GlobalInfinityQuery,
@@ -19,6 +19,20 @@ export class Datasource extends DataSourceApi<InfinityQuery> {
   constructor(iSettings: InfinityInstanceSettings) {
     super(iSettings);
     this.instanceSettings = iSettings;
+  }
+  private overrideWithGlobalQuery(t: InfinityQuery): InfinityQuery {
+    if (
+      t.type === 'global' &&
+      t.global_query_id &&
+      this.instanceSettings.jsonData.global_queries &&
+      this.instanceSettings.jsonData.global_queries.length > 0
+    ) {
+      let matchingQuery = this.instanceSettings.jsonData.global_queries.find(
+        (q: GlobalInfinityQuery) => q.id === t.global_query_id
+      );
+      t = matchingQuery ? matchingQuery.query : t;
+    }
+    return t;
   }
   testDatasource(): Promise<HealthCheckResult> {
     return new Promise((resolve, reject) => {
@@ -42,17 +56,7 @@ export class Datasource extends DataSourceApi<InfinityQuery> {
     options.targets
       .filter((t: InfinityQuery) => t.hide !== true)
       .forEach((t: InfinityQuery) => {
-        if (
-          t.type === 'global' &&
-          t.global_query_id &&
-          this.instanceSettings.jsonData.global_queries &&
-          this.instanceSettings.jsonData.global_queries.length > 0
-        ) {
-          let matchingQuery = this.instanceSettings.jsonData.global_queries.find(
-            (q: GlobalInfinityQuery) => q.id === t.global_query_id
-          );
-          t = matchingQuery ? matchingQuery.query : t;
-        }
+        t = this.overrideWithGlobalQuery(t);
         promises.push(
           new Promise((resolve, reject) => {
             switch (t.type) {
@@ -90,23 +94,28 @@ export class Datasource extends DataSourceApi<InfinityQuery> {
       return { data: flatten(results) };
     });
   }
-  metricFindQuery(query: VariableQuery): Promise<MetricFindValue[]> {
-    const promises: any[] = [];
-    switch (query.queryType) {
-      case 'infinity':
-        if (query.infinityQuery) {
-          const infinityVariableProvider = new InfinityVariableProvider(query.infinityQuery, this.instanceSettings);
-          promises.push(infinityVariableProvider.query());
-        }
-        break;
-      case 'legacy':
-      default:
-        const legacyVariableProvider = new LegacyVariableProvider(typeof query === 'string' ? query : query.query);
-        promises.push(legacyVariableProvider.query());
-        break;
-    }
-    return Promise.all(promises).then(results => {
-      return flatten(results);
+  metricFindQuery(originalQuery: VariableQuery): Promise<MetricFindValue[]> {
+    return new Promise(resolve => {
+      let query = migrateLegacyQuery(originalQuery);
+      switch (query.queryType) {
+        case 'infinity':
+          if (query.infinityQuery) {
+            const infinityVariableProvider = new InfinityVariableProvider(query.infinityQuery, this.instanceSettings);
+            infinityVariableProvider.query().then(res => {
+              resolve(flatten(res));
+            });
+          } else {
+            resolve([]);
+          }
+          break;
+        case 'legacy':
+        default:
+          const legacyVariableProvider = new LegacyVariableProvider(query.query);
+          legacyVariableProvider.query().then(res => {
+            resolve(flatten(res));
+          });
+          break;
+      }
     });
   }
 }
