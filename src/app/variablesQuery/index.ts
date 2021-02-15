@@ -6,10 +6,9 @@ import { CollectionLookupVariable } from './CollectionLookup';
 import { JoinVariable } from './Join';
 import { RandomVariable } from './Random';
 import { InfinityProvider } from './../InfinityProvider';
+import { IsValidInfinityQuery, replaceVariables } from './../InfinityQuery';
 import { InfinityQuery } from './../../types';
 import { InfinityDataSourceJSONOptions } from './../../config.editor';
-import { replaceVariables } from './../../utils';
-import { reject } from 'lodash';
 
 export type VariableTokenLegacy = 'Collection' | 'CollectionLookup' | 'Random' | 'Join';
 
@@ -56,8 +55,8 @@ export class InfinityVariableProvider implements VariableProvider {
     this.instanceSettings = instanceSettings;
   }
   query(): Promise<Array<SelectableValue<string>>> {
-    return new Promise(resolve => {
-      if (this.infinityQuery) {
+    return new Promise((resolve, reject) => {
+      if (IsValidInfinityQuery(this.infinityQuery)) {
         let provider = new InfinityProvider(replaceVariables(this.infinityQuery, {}), this.instanceSettings);
         provider
           .query()
@@ -70,7 +69,7 @@ export class InfinityVariableProvider implements VariableProvider {
             }
           })
           .catch(ex => {
-            reject(ex);
+            resolve([]);
           });
       } else {
         resolve([]);

@@ -9,7 +9,7 @@ import {
 } from '@grafana/data';
 import { InfinityProvider } from './app/InfinityProvider';
 import { SeriesProvider } from './app/SeriesProvider';
-import { replaceVariables } from './utils';
+import { replaceVariables } from './app/InfinityQuery';
 import { LegacyVariableProvider, InfinityVariableProvider } from './app/variablesQuery';
 import { InfinityDataSourceJSONOptions } from './config.editor';
 import {
