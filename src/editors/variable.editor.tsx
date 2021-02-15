@@ -3,7 +3,7 @@ import { TextArea, Select } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
 import { Datasource } from '../datasource';
 import { InfinityQueryEditor } from './query/infinityQuery';
-import { migrateLegacyQuery, DefaultInfinityQuery } from './../app/variablesQuery';
+import { migrateLegacyQuery } from './../app/variablesQuery';
 import { VariableQuery, VariableQueryType, InfinityQuery, EditorMode } from '../types';
 
 interface Props {
@@ -17,16 +17,12 @@ const VariableQueryTypes: Array<SelectableValue<VariableQueryType>> = [
     label: 'Legacy',
     value: VariableQueryType.Legacy,
   },
-  {
-    label: 'Infinity Query',
-    value: VariableQueryType.Infinity,
-  },
 ];
 
 export const VariableEditor: React.FC<Props> = props => {
   let query = migrateLegacyQuery(props.query);
 
-  const [state, setState] = useState(query);
+  const [state, setState] = useState<VariableQuery>(query);
 
   const getDefenition = (): string => {
     if (state.queryType === VariableQueryType.Infinity && state.infinityQuery) {
@@ -46,7 +42,7 @@ export const VariableEditor: React.FC<Props> = props => {
   const onQueryTypeChange = (queryType: VariableQueryType) => {
     setState({
       ...state,
-      queryType: queryType || VariableQueryType.Legacy,
+      queryType,
     });
     props.onChange(state, getDefenition());
   };
@@ -72,10 +68,10 @@ export const VariableEditor: React.FC<Props> = props => {
           }}
         ></Select>
       </div>
-      {state.queryType === 'infinity' && (
+      {state.queryType === 'infinity' && state.infinityQuery && (
         <>
           <InfinityQueryEditor
-            query={state.infinityQuery || DefaultInfinityQuery}
+            query={state.infinityQuery}
             mode={EditorMode.Variable}
             onChange={onInfinityQueryUpdate}
             onRunQuery={onInfinityQueryUpdate}
