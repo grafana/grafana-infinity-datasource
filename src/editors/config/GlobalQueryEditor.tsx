@@ -109,7 +109,7 @@ export const GlobalQueryEditor: React.FC<Props> = (props: Props) => {
               </>
             ))}
           <button className="btn btn-primary" onClick={addGlobalQuery}>
-            Add Global Query
+            Add Globals Query
           </button>
           <br />
           <br />
