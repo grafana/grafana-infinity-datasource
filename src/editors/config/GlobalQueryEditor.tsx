@@ -58,7 +58,7 @@ export const GlobalQueryEditor: React.FC<Props> = (props: Props) => {
       {options.jsonData.global_queries && options.jsonData.global_queries.length === 0 ? (
         <>
           <button className="btn btn-primary" onClick={addGlobalQuery}>
-            Add Global Query
+            Add Globals Query
           </button>
         </>
       ) : (
