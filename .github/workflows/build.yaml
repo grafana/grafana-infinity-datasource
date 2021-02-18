@@ -50,6 +50,7 @@ jobs:
     - name: Build Docs
       run: |
         rm -rf docs/;
+        cp ./.vuepress/README.md .
         yarn docs:build;
         echo $(date) > docs/LAST_UPDATED;
         ls -lh docs/wiki;

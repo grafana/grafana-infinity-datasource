@@ -46,6 +46,10 @@ jobs:
     - name: Build
       run: |
         yarn build;
+    - name: Generate README
+      run: |
+        chmod +x ./scripts/consolidate-readme.sh
+        ./scripts/consolidate-readme.sh
     - name: Sign plugin
       run: yarn sign;
       env:

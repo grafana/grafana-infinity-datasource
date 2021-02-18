@@ -1,7 +1,7 @@
 {
   "name": "grafana-infinity-datasource",
   "version": "0.6.0",
-  "description": "Infinity data source plugin for Grafana. Do infinite things with Grafana. HTML, CSV, JSON, XML & GraphQL Scrapping.",
+  "description": "JSON, CSV, XML, GraphQL & HTML datasource for Grafana. Do infinite things with Grafana.",
   "main": "dist/module.js",
   "scripts": {
     "build": "grafana-toolkit plugin:build",
