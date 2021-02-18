@@ -25,7 +25,9 @@
         <a href="#license">License</a>
     </p>
     <br />
-    <a href="https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/34" target="_blank"><img src="https://user-images.githubusercontent.com/153843/108427049-7dd66300-7234-11eb-8d27-cec50945a66c.png" width="400"/></a>
+    <p align="center">
+        <a href="https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/34" target="_blank"><img src="https://user-images.githubusercontent.com/153843/108427049-7dd66300-7234-11eb-8d27-cec50945a66c.png" width="600"/></a>
+    </p>
     <br/>
     <br/>
 </div>
