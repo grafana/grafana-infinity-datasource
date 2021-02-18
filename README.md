@@ -25,6 +25,9 @@
         <a href="#license">License</a>
     </p>
     <br />
+    <a href="https://gist.githubusercontent.com/yesoreyeram/2433ce69862f452b9d0460c947ee191f/raw/a14d602fc434788a6e0b6df252e5947d5917091b/population.json" target="_blank"><img src="https://user-images.githubusercontent.com/153843/108412859-39da6280-7222-11eb-86c6-18ec03720ee2.png" width="400"/></a>
+    <br/>
+    <br/>
 </div>
 
 ## Key Features
@@ -34,6 +37,10 @@
 * Support for Authenticated URLs
 * Utility variables
 * Mathmatical series Generation
+
+## JSON
+
+More information about using JSON datasource is available in the [github discussion](https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/34). 
 
 ## License
 
