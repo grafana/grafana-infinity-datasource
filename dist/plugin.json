@@ -6,8 +6,8 @@
   "annotations": false,
   "info": {
     "version": "0.6.0",
-    "updated": "2021-02-15",
-    "description": "Do infinite things with Grafana. HTML, CSV, JSON, XML & GraphQL Scrapping.",
+    "updated": "2021-02-18",
+    "description": "JSON, CSV, XML, GraphQL & HTML datasource for Grafana. Do infinite things with Grafana.",
     "author": {
       "name": "Sriramajeyam Sugumaran",
       "url": "https://www.google.com/search?q=Sriramajeyam+Sugumaran"
@@ -18,22 +18,38 @@
     },
     "keywords": [
       "grafana",
-      "inline",
-      "random walk",
       "json",
-      "simple-json",
-      "graphql",
       "csv",
       "xml",
       "html",
+      "graphql",
+      "simple-json",
       "url",
+      "inline",
+      "random walk",
       "scraping"
     ],
     "screenshots": [],
     "links": [
       {
+        "name": "Wiki",
+        "url": "https://yesoreyeram.github.io/grafana-infinity-datasource"
+      },
+      {
         "name": "Github",
         "url": "https://github.com/yesoreyeram/grafana-infinity-datasource"
+      },
+      {
+        "name": "Need Help?",
+        "url": "https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/categories/q-a"
+      },
+      {
+        "name": "Report Bug",
+        "url": "https://github.com/yesoreyeram/grafana-infinity-datasource/issues/new/choose"
+      },
+      {
+        "name": "Examples",
+        "url": "https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/categories/show-and-tell"
       }
     ]
   },
