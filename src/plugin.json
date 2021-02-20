@@ -1,4 +1,5 @@
 {
+  "$schema": "https://raw.githubusercontent.com/grafana/grafana/master/docs/sources/developers/plugins/plugin.schema.json",
   "name": "Infinity",
   "id": "yesoreyeram-infinity-datasource",
   "type": "datasource",
@@ -58,5 +59,20 @@
     "plugins": []
   },
   "includes": [],
-  "routes": []
+  "routes": [
+    {
+      "path": "tokenauth",
+      "method": "*",
+      "url": "{{.JsonData.url}}",
+      "tokenAuth": {
+        "url": "{{.JsonData.token_url}}",
+        "params": {
+          "client_id": "{{.JsonData.token_client_id}}",
+          "client_secret": "{{.SecureJsonData.token_client_secret}}",
+          "resource": "{{.JsonData.token_resource}}",
+          "grant_type": "{{.JsonData.token_grant_type}}"
+        }
+      }
+    }
+  ]
 }

@@ -48,14 +48,32 @@ Once the plugin installed, you need to create an instance of the datasource. To 
 * Go to `http://localhost:3000/datasources` and select *Add data source*
 * Search for **Infinity** plugin
 * Give some name. Any name. Sure; Your kitten names are allowed.
-* Select mode as `Basic`
+* Select authentication mode as `None` / `basic`
 * Save.
 
-If you ever need an URL to be authenticated or proxy through grafana server, you need to use `Advanced` mode.  With advanced mode consider the following.
+### Advanced Authentication
+
+If you ever need an URL to be authenticated or proxy through grafana server, you need to use `Advanced Auth`/ `advanced` mode.  With basic auth mode consider the following.
 
 * Only one domain allowed. (If you need to access multiple domains, use multiple instances of the datasource)
 * Specify the domain name as the URL in the datasource settings. This can also contain common url path. Example: `https://api.github.com/graphql`
 * While querying, use the remaining part of the the URL. For example, using `/my-endpoint` will yield the final url as `https://api.github.com/graphql/my-endpoint`
+
+### Token Authentication
+
+In case if you need to use token authentication, you need to select `Token Auth` / `tokenAuth` as your authentication mode. Consider the following properties. 
+
+* Only one domain allowed. (If you need to access multiple domains, use multiple instances of the datasource)
+* Specify the domain name as the URL in the datasource settings. This can also contain common url path. Example: `https://management.azure.com`
+* While querying, use the remaining part of the the URL. For example, using `/subscriptions?api-version=2020-01-01` will yield the final url as `https://management.azure.com/subscriptions?api-version=2020-01-01`
+
+for token generation, following additional properties need to specified
+
+* Token URL / token_url. Example : `https://login.microsoftonline.com/<TenantID>/oauth2/token`
+* Client ID / token_client_id. Example : `xxxx-xxx-xxx-xxxx`
+* Client Secret / token_client_secret. Example : `xyz123123`
+* Resource / token_resource. Example : `https://management.azure.com/`
+* Grant type / token_grant_type. Example : `client_credentials`
 
 ## Provisioning
 

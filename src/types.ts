@@ -231,11 +231,20 @@ export type VariableQuery = {
 export enum DatasourceMode {
   Basic = 'basic',
   Advanced = 'advanced',
+  TokenAuth = 'tokenAuth',
 }
 
 export interface InfinityDataSourceJSONOptions extends DataSourceJsonData {
   datasource_mode?: DatasourceMode;
   global_queries?: GlobalInfinityQuery[];
+  url?: string;
+  token_url?: string;
+  token_grant_type?: string;
+  token_client_id?: string;
+  token_resource?: string;
+}
+export interface InfinityDataSourceSecureJSONOptions {
+  token_client_secret?: string;
 }
 export type VariableTokenLegacy = 'Collection' | 'CollectionLookup' | 'Random' | 'Join';
 export type InfinityInstanceSettings = DataSourceInstanceSettings<InfinityDataSourceJSONOptions>;

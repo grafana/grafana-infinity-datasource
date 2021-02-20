@@ -6,11 +6,13 @@ import {
   SelectableValue,
 } from '@grafana/data';
 import { DataSourceHttpSettings, Select } from '@grafana/ui';
+import { TokenAuthEditor } from './TokenAuthEditor';
 import { DatasourceMode, InfinityDataSourceJSONOptions } from '../../types';
 
 const DATASOURCE_MODES: Array<SelectableValue<DatasourceMode>> = [
-  { value: DatasourceMode.Basic, label: 'Basic' },
-  { value: DatasourceMode.Advanced, label: 'Advanced' },
+  { value: DatasourceMode.Basic, label: 'None' },
+  { value: DatasourceMode.Advanced, label: 'Advanced Auth' },
+  { value: DatasourceMode.TokenAuth, label: 'Token Auth' },
 ];
 
 const DEFAULT_DATASOURCE_MODE = DATASOURCE_MODES[0];
@@ -28,7 +30,7 @@ export const DatasourceModeEditor: React.FC<Props> = (props: Props) => {
     <>
       <div className="gf-form-inline">
         <div className="gf-form">
-          <label className="gf-form-label width-10">Mode</label>
+          <label className="gf-form-label width-10">Authentication Mode</label>
           <Select
             className="min-width-12 width-12"
             value={
@@ -54,6 +56,7 @@ export const DatasourceModeEditor: React.FC<Props> = (props: Props) => {
           </div>
         </div>
       )}
+      {options.jsonData.datasource_mode === DatasourceMode.TokenAuth && <TokenAuthEditor {...props} />}
     </>
   );
 };

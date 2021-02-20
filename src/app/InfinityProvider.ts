@@ -36,6 +36,10 @@ export class InfinityProvider {
       const urlPath = target.url;
       requestObject.url = [instanceSettingsUrl, urlPath].join('/');
     }
+    if (instanceSettings.jsonData.datasource_mode === DatasourceMode.TokenAuth) {
+      const instanceSettingsUrl = instanceSettings.url;
+      requestObject.url = [instanceSettingsUrl, 'tokenauth', target.url].join('/');
+    }
     if (target.url_options && target.url_options.method === 'POST') {
       requestObject.data = target.url_options.data || '';
       if (target.type === InfinityQueryType.GraphQL) {
