@@ -11,8 +11,8 @@ import { DatasourceMode, InfinityDataSourceJSONOptions } from '../../types';
 
 const DATASOURCE_MODES: Array<SelectableValue<DatasourceMode>> = [
   { value: DatasourceMode.Basic, label: 'None' },
-  { value: DatasourceMode.Advanced, label: 'Advanced Auth' },
-  { value: DatasourceMode.TokenAuth, label: 'Token Auth' },
+  { value: DatasourceMode.Advanced, label: 'AdvancedAuth' },
+  { value: DatasourceMode.TokenAuth, label: 'TokenAuth' },
 ];
 
 const DEFAULT_DATASOURCE_MODE = DATASOURCE_MODES[0];
@@ -30,7 +30,7 @@ export const DatasourceModeEditor: React.FC<Props> = (props: Props) => {
     <>
       <div className="gf-form-inline">
         <div className="gf-form">
-          <label className="gf-form-label width-10">Authentication Mode</label>
+          <label className="gf-form-label width-10">Mode</label>
           <Select
             className="min-width-12 width-12"
             value={
