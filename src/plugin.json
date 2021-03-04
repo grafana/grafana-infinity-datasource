@@ -31,8 +31,7 @@
       "scraping"
     ],
     "screenshots": [],
-    "links": [
-      {
+    "links": [{
         "name": "Wiki",
         "url": "https://yesoreyeram.github.io/grafana-infinity-datasource"
       },
@@ -59,35 +58,19 @@
     "plugins": []
   },
   "includes": [],
-  "routes": [
-    {
-<<<<<<< HEAD
-      "path": "tokenauth",
-      "method": "*",
-      "url": "{{.JsonData.url}}",
-      "tokenAuth": {
-        "url": "{{.JsonData.token_url}}",
-        "params": {
-          "client_id": "{{.JsonData.token_client_id}}",
-          "client_secret": "{{.SecureJsonData.token_client_secret}}",
-          "resource": "{{.JsonData.token_resource}}",
-          "grant_type": "{{.JsonData.token_grant_type}}"
-=======
-      "path": "{{ .JsonData.path }}",
-      "url": "{{ .JsonData.url }}",
-      "tokenAuth": {
-        "url": "{{ .JsonData.tokenAuth.url }}",
-        "params": {
-          "grant_type": "{{ .JsonData.tokenAuth.grantType }}",
-          "client_id": "{{ .SecureJsonData.tokenAuth.clientId }}",
-          "client_secret": "{{ .SecureJsonData.tokenAuth.clientSecret }}"
->>>>>>> Added support for dynamic authentication
-        }
+  "routes": [{
+    "path": "tokenauth",
+    "method": "*",
+    "url": "{{.JsonData.url}}",
+    "tokenAuth": {
+      "url": "{{.JsonData.token_url}}",
+      "params": {
+        "client_id": "{{.JsonData.token_client_id}}",
+        "client_secret": "{{.SecureJsonData.token_client_secret}}",
+        "resource": "{{.JsonData.token_resource}}",
+        "grant_type": "{{.JsonData.token_grant_type}}"
+
       }
     }
-  ]
-<<<<<<< HEAD
+  }]
 }
-=======
-}
->>>>>>> Added support for dynamic authentication

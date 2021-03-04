@@ -3,7 +3,6 @@ import { defaultsDeep, set } from 'lodash';
 import { DataSourcePluginOptionsEditorProps, updateDatasourcePluginJsonDataOption } from '@grafana/data';
 import { InfinityQueryEditor } from '../query/infinityQuery';
 import {
-<<<<<<< HEAD:src/editors/config/GlobalQueryEditor.tsx
   EditorMode,
   GlobalInfinityQuery,
   InfinityQuery,
@@ -13,33 +12,6 @@ import {
   DatasourceMode,
   InfinityDataSourceJSONOptions,
 } from '../../types';
-=======
-  DataSourcePluginOptionsEditorProps,
-  DataSourceJsonData,
-  updateDatasourcePluginJsonDataOption,
-  SelectableValue,
-} from '@grafana/data';
-import { DataSourceHttpSettings, Select } from '@grafana/ui';
-import { InfinityQueryEditor } from './query.editor';
-import { GlobalInfinityQuery, InfinityQuery } from './types';
-
-export enum DatasourceMode {
-  Basic = 'basic',
-  Advanced = 'advanced',
-}
-
-const DATASOURCE_MODES = [
-  { value: DatasourceMode.Basic, label: 'Basic' },
-  { value: DatasourceMode.Advanced, label: 'Advanced' },
-];
-
-const DEFAULT_DATASOURCE_MODE = DATASOURCE_MODES.find(d => d.value === DatasourceMode.Advanced);
-
-export interface InfinityDataSourceJSONOptions extends DataSourceJsonData {
-  datasource_mode?: DatasourceMode;
-  global_queries?: GlobalInfinityQuery[];
-}
->>>>>>> name check:src/config.editor.tsx
 
 export type Props = DataSourcePluginOptionsEditorProps<InfinityDataSourceJSONOptions>;
 
