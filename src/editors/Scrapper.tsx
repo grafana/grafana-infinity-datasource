@@ -2,7 +2,7 @@ import React, { ChangeEvent } from 'react';
 import { set } from 'lodash';
 import { ScrapperColumns } from './ScrapperColumns';
 import { URLOptions } from './URLOptions';
-import { InfinityQuery } from './../types';
+import { InfinityQuery } from '../../shared/types';
 
 interface ScrapperProps {
   query: InfinityQuery;

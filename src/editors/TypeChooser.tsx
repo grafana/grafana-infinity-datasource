@@ -2,7 +2,7 @@ import React from 'react';
 import { set } from 'lodash';
 import { Select } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
-import { SCRAP_QUERY_TYPES, SCRAP_QUERY_SOURCES, InfinityQuery, GlobalInfinityQuery } from './../types';
+import { SCRAP_QUERY_TYPES, SCRAP_QUERY_SOURCES, InfinityQuery, GlobalInfinityQuery } from '../../shared/types';
 
 interface TypeChooserProps {
   mode: string;

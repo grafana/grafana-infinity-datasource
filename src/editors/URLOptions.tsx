@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { set } from 'lodash';
 import { Select, Modal } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
-import { InfinityQuery } from '../types';
+import { InfinityQuery } from '../../shared/types';
 
 interface URLOptionsProps {
   query: InfinityQuery;

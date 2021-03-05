@@ -5,7 +5,7 @@
     "types"
   ],
   "compilerOptions": {
-    "rootDir": "./src",
+    "rootDirs": [ "./src", "./shared" ],
     "baseUrl": "./src",
     "typeRoots": [
       "./node_modules/@types"

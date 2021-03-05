@@ -1,5 +1,5 @@
 import { getBackendSrv, BackendSrvRequest } from '@grafana/runtime';
-import { InfinityQuery } from '../types';
+import { InfinityQuery } from '../../shared/types';
 import { HTMLParser } from './parsers/HTMLParser';
 import { JSONParser } from './parsers/JSONParser';
 import { CSVParser } from './parsers/CSVParser';

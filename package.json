@@ -11,7 +11,9 @@
     "dev": "grafana-toolkit plugin:dev",
     "watch": "grafana-toolkit plugin:dev --watch",
     "docs:dev": "vuepress dev",
-    "docs:build": "vuepress build"
+    "docs:build": "vuepress build",
+    "backend": "./node_modules/@grafana/tsbackend/bin/grafana-tsbackend gpx_infinity_darwin_amd64",
+    "restart:backend": "kill $(ps -ef | grep gpx_infinity_darwin_amd64 | grep -v grep | awk '{ print $2 }')"   
   },
   "repository": {
     "type": "git",
@@ -45,7 +47,10 @@
     "cheerio": "^1.0.0-rc.3",
     "csv-parse": "^4.12.0",
     "lodash": "^4.17.19",
-    "mathjs": "^7.2.0"
+    "mathjs": "^7.2.0",
+    "grpc": "^1.24.3",
+    "google-protobuf": "^3.12.2",
+    "@grafana/tsbackend": "grafana/grafana-plugin-sdk-typescript"
   },
   "devDependencies": {
     "@grafana/toolkit": "7.1.5",

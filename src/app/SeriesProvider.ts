@@ -1,7 +1,7 @@
 import { sample } from 'lodash';
 import * as math from 'mathjs';
 import { RANDOM_WORDS } from '../config';
-import { InfinityQuery, dataPoint, DataOverride } from '../types';
+import { InfinityQuery, dataPoint, DataOverride } from '../../shared/types';
 
 const getStepFromRange = (startTime: number, endTime: number): number => {
   const MINUTE = 60 * 1000;

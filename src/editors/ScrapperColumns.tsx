@@ -2,7 +2,7 @@ import React, { ChangeEvent } from 'react';
 import { set } from 'lodash';
 import { Select } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
-import { ScrapColumn, SCRAP_QUERY_RESULT_COLUMN_FORMATS, InfinityQuery } from './../types';
+import { ScrapColumn, SCRAP_QUERY_RESULT_COLUMN_FORMATS, InfinityQuery } from '../../shared/types';
 
 interface ScrapperColumnsProps {
   query: InfinityQuery;

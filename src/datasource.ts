@@ -4,7 +4,7 @@ import { getTemplateSrv } from '@grafana/runtime';
 import { InfinityProvider } from './app/InfinityProvider';
 import { SeriesProvider } from './app/SeriesProvider';
 import { replaceVariables } from './utils';
-import { InfinityQuery, GlobalInfinityQuery } from './types';
+import { InfinityQuery, GlobalInfinityQuery } from '../shared/types';
 
 export class Datasource extends DataSourceApi<InfinityQuery> {
   instanceSettings: any;

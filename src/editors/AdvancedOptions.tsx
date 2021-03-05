@@ -2,7 +2,7 @@ import React from 'react';
 import { set } from 'lodash';
 import { Select } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
-import { SCRAP_QUERY_RESULT_FORMATS, InfinityQuery } from '../types';
+import { SCRAP_QUERY_RESULT_FORMATS, InfinityQuery } from '../../shared/types';
 
 interface AdvancedOptionsProps {
   query: InfinityQuery;

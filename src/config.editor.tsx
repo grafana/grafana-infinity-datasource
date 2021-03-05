@@ -8,7 +8,7 @@ import {
 } from '@grafana/data';
 import { DataSourceHttpSettings, Select } from '@grafana/ui';
 import { InfinityQueryEditor } from './query.editor';
-import { GlobalInfinityQuery } from './types';
+import { GlobalInfinityQuery } from '../shared/types';
 
 export enum DatasourceMode {
   Basic = 'basic',
