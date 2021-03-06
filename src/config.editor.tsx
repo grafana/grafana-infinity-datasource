@@ -2,18 +2,12 @@ import React from 'react';
 import { defaultsDeep, set } from 'lodash';
 import {
   DataSourcePluginOptionsEditorProps,
-  DataSourceJsonData,
   updateDatasourcePluginJsonDataOption,
   SelectableValue,
 } from '@grafana/data';
 import { DataSourceHttpSettings, Select } from '@grafana/ui';
 import { InfinityQueryEditor } from './query.editor';
-import { GlobalInfinityQuery } from '../shared/types';
-
-export enum DatasourceMode {
-  Basic = 'basic',
-  Advanced = 'advanced',
-}
+import { GlobalInfinityQuery, InfinityOptions, DatasourceMode } from '../shared/types';
 
 const DATASOURCE_MODES = [
   { value: DatasourceMode.Basic, label: 'Basic' },
@@ -22,12 +16,7 @@ const DATASOURCE_MODES = [
 
 const DEFAULT_DATASOURCE_MODE = DATASOURCE_MODES.find(d => d.value === DatasourceMode.Basic);
 
-interface InfinityDataSourceJSONOptions extends DataSourceJsonData {
-  datasource_mode?: DatasourceMode;
-  global_queries?: GlobalInfinityQuery[];
-}
-
-export type Props = DataSourcePluginOptionsEditorProps<InfinityDataSourceJSONOptions>;
+export type Props = DataSourcePluginOptionsEditorProps<InfinityOptions>;
 
 export const InfinityConfigEditor: React.FC<Props> = (props: Props) => {
   const { options, onOptionsChange } = props;

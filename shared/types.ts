@@ -1,4 +1,4 @@
-import { DataQuery } from '@grafana/data';
+import { DataQuery, DataSourceJsonData } from '@grafana/data';
 
 export type dataPoint = [number | null, number];
 export type timeSeriesResult = {
@@ -25,6 +25,16 @@ export interface DataOverride {
   values: string[];
   operator: string;
   override: string;
+}
+
+export enum DatasourceMode {
+  Basic = 'basic',
+  Advanced = 'advanced',
+}
+
+export interface InfinityOptions extends DataSourceJsonData {
+  datasource_mode?: DatasourceMode;
+  global_queries?: GlobalInfinityQuery[];
 }
 export interface InfinityQuery extends DataQuery {
   type: 'json' | 'html' | 'csv' | 'graphql' | 'series' | 'global';

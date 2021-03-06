@@ -1,14 +1,13 @@
 import { flatten, chunk, last } from 'lodash';
-import { DataSourceApi } from '@grafana/data';
-import { getTemplateSrv } from '@grafana/runtime';
-import { InfinityProvider } from './app/InfinityProvider';
-import { SeriesProvider } from './app/SeriesProvider';
-import { replaceVariables } from './utils';
-import { InfinityQuery, GlobalInfinityQuery } from '../shared/types';
+import { DataQueryRequest, DataQueryResponse, DataSourceInstanceSettings } from '@grafana/data';
+import { getTemplateSrv, DataSourceWithBackend } from '@grafana/runtime';
+import { InfinityQuery, InfinityOptions } from '../shared/types';
+import { replaceVariables } from '../shared/utils';
+import { Observable } from 'rxjs';
 
-export class Datasource extends DataSourceApi<InfinityQuery> {
+export class DataSource extends DataSourceWithBackend<InfinityQuery, InfinityOptions> {
   instanceSettings: any;
-  constructor(iSettings: any) {
+  constructor(iSettings: DataSourceInstanceSettings<InfinityOptions>) {
     super(iSettings);
     this.instanceSettings = iSettings;
   }
@@ -29,56 +28,12 @@ export class Datasource extends DataSourceApi<InfinityQuery> {
       }
     });
   }
-  query(options: any) {
-    const promises: any[] = [];
-    options.targets
-      .filter((t: InfinityQuery) => t.hide !== true)
-      .forEach((t: InfinityQuery) => {
-        if (
-          t.type === 'global' &&
-          t.global_query_id &&
-          this.instanceSettings.jsonData.global_queries &&
-          this.instanceSettings.jsonData.global_queries.length > 0
-        ) {
-          let matchingQuery: GlobalInfinityQuery = this.instanceSettings.jsonData.global_queries.find(
-            (q: GlobalInfinityQuery) => q.id === t.global_query_id
-          );
-          t = matchingQuery ? matchingQuery.query : t;
-        }
-        promises.push(
-          new Promise((resolve, reject) => {
-            switch (t.type) {
-              case 'csv':
-              case 'html':
-              case 'json':
-              case 'graphql':
-                new InfinityProvider(replaceVariables(t, options.scopedVars), this.instanceSettings)
-                  .query()
-                  .then(res => resolve(res))
-                  .catch(ex => {
-                    reject(ex);
-                  });
-                break;
-              case 'series':
-                new SeriesProvider(replaceVariables(t, options.scopedVars))
-                  .query(options.range.from, options.range.to)
-                  .then(res => resolve(res))
-                  .catch(ex => {
-                    reject(ex);
-                  });
-                break;
-              case 'global':
-                reject('Query not found');
-                break;
-              default:
-                reject('Unknown Query Type');
-                break;
-            }
-          })
-        );
-      });
-    return Promise.all(promises).then(results => {
-      return { data: flatten(results) };
+  query(request: DataQueryRequest<InfinityQuery>): Observable<DataQueryResponse> {
+    return super.query({
+      ...request,
+      targets: request.targets
+        .filter((t: InfinityQuery) => t.hide !== true)
+        .map((t: InfinityQuery) => replaceVariables(t, request.scopedVars)),
     });
   }
   annotationQuery(options: any) {

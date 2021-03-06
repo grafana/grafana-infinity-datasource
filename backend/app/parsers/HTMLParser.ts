@@ -1,7 +1,8 @@
 import { forEach, toNumber } from 'lodash';
 import { load } from 'cheerio';
 import { InfinityParser } from './InfinityParser';
-import { InfinityQuery, ScrapColumn, GrafanaTableRow, GrafanaTableRowItem } from './../../types';
+import { InfinityQuery, ScrapColumn, GrafanaTableRow, GrafanaTableRowItem } from '../../../shared/types';
+import 'cheerio';
 
 export class HTMLParser extends InfinityParser {
   constructor(HTMLResponse: string, target: InfinityQuery, endTime?: Date) {
@@ -15,7 +16,7 @@ export class HTMLParser extends InfinityParser {
     const rootElements = $(this.target.root_selector);
     return rootElements;
   }
-  private constructTableData(rootElements: Cheerio) {
+  private constructTableData(rootElements: cheerio.Cheerio) {
     forEach(rootElements, r => {
       const row: GrafanaTableRow = [];
       const $ = load(r);
@@ -35,7 +36,7 @@ export class HTMLParser extends InfinityParser {
       this.rows.push(row);
     });
   }
-  private constructTimeSeriesData(rootElements: Cheerio, endTime: Date | undefined) {
+  private constructTimeSeriesData(rootElements: cheerio.Cheerio, endTime: Date | undefined) {
     this.NumbersColumns.forEach((metricColumn: ScrapColumn) => {
       forEach(rootElements, r => {
         const $$ = load(r);

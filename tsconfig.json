@@ -2,7 +2,7 @@
   "extends": "./node_modules/@grafana/toolkit/src/config/tsconfig.plugin.json",
   "include": [
     "src",
-    "types"
+    "types", "shared/utils.ts", "shared/config.ts"
   ],
   "compilerOptions": {
     "rootDirs": [ "./src", "./shared" ],

@@ -1,6 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SCRAP_QUERY_RESULT_COLUMN_FORMATS = exports.SCRAP_QUERY_SOURCES = exports.SCRAP_QUERY_RESULT_FORMATS = exports.SCRAP_QUERY_TYPES = void 0;
+exports.SCRAP_QUERY_RESULT_COLUMN_FORMATS = exports.SCRAP_QUERY_SOURCES = exports.SCRAP_QUERY_RESULT_FORMATS = exports.SCRAP_QUERY_TYPES = exports.DatasourceMode = void 0;
+var DatasourceMode;
+(function (DatasourceMode) {
+    DatasourceMode["Basic"] = "basic";
+    DatasourceMode["Advanced"] = "advanced";
+})(DatasourceMode = exports.DatasourceMode || (exports.DatasourceMode = {}));
 exports.SCRAP_QUERY_TYPES = [
     {
         label: 'CSV',

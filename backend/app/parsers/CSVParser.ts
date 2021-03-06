@@ -1,34 +1,32 @@
 import { forEach, get, toNumber } from 'lodash';
+import parse from 'csv-parse/lib/sync';
 import { InfinityParser } from './InfinityParser';
-import { InfinityQuery, ScrapColumn, GrafanaTableRow } from './../../types';
+import { InfinityQuery, ScrapColumn, GrafanaTableRow } from '../../../shared/types';
 
-export class JSONParser extends InfinityParser {
-  constructor(JSONResponse: object, target: InfinityQuery, endTime?: Date) {
+export class CSVParser extends InfinityParser {
+  constructor(CSVResponse: string, target: InfinityQuery, endTime?: Date) {
     super(target);
-    const jsonResponse = this.formatInput(JSONResponse);
-    if (Array.isArray(jsonResponse)) {
-      this.constructTableData(jsonResponse);
-      this.constructTimeSeriesData(jsonResponse, endTime);
-    } else {
-      this.constructSingleTableData(jsonResponse);
+    const records = this.formatInput(CSVResponse);
+    if (Array.isArray(records)) {
+      this.constructTableData(records);
+      this.constructTimeSeriesData(records, endTime);
     }
   }
-  private formatInput(JSONResponse: object) {
-    if (typeof JSONResponse === 'string') {
-      JSONResponse = JSON.parse(JSONResponse);
-    }
-    if (this.target.root_selector) {
-      JSONResponse = get(JSONResponse, this.target.root_selector);
-    }
-    return JSONResponse;
+  private formatInput(CSVResponse: string) {
+    const options = {
+      columns: true,
+      skip_empty_lines: true,
+    };
+    const records = parse(CSVResponse, options);
+    return records;
   }
-  private constructTableData(JSONResponse: any[]) {
-    forEach(JSONResponse, r => {
+  private constructTableData(records: any[]) {
+    forEach(records, r => {
       const row: GrafanaTableRow = [];
       this.target.columns.forEach((c: ScrapColumn) => {
         let value = get(r, c.selector, '');
         if (c.type === 'timestamp') {
-          value = new Date(value + '');
+          value = new Date(value);
         } else if (c.type === 'timestamp_epoch') {
           value = new Date(parseInt(value, 10));
         } else if (c.type === 'number') {
@@ -39,9 +37,9 @@ export class JSONParser extends InfinityParser {
       this.rows.push(row);
     });
   }
-  private constructTimeSeriesData(JSONResponse: object, endTime: Date | undefined) {
+  private constructTimeSeriesData(records: any[], endTime: Date | undefined) {
     this.NumbersColumns.forEach((metricColumn: ScrapColumn) => {
-      forEach(JSONResponse, r => {
+      forEach(records, r => {
         let seriesName = this.StringColumns.map(c => r[c.selector]).join(' ');
         if (this.NumbersColumns.length > 1) {
           seriesName += ` ${metricColumn.text}`;
@@ -54,24 +52,22 @@ export class JSONParser extends InfinityParser {
         if (this.TimeColumns.length >= 1) {
           const FirstTimeColumn = this.TimeColumns[0];
           if (FirstTimeColumn.type === 'timestamp') {
-            timestamp = new Date(get(r, FirstTimeColumn.selector) + '').getTime();
+            timestamp = new Date(get(r, FirstTimeColumn.selector)).getTime();
           } else if (FirstTimeColumn.type === 'timestamp_epoch') {
             timestamp = new Date(parseInt(get(r, FirstTimeColumn.selector), 10)).getTime();
           }
         }
-        let metric = toNumber(get(r, metricColumn.selector));
+        let metric = get(r, metricColumn.selector);
+        if (metric === '') {
+          metric = null;
+        } else {
+          metric = toNumber(metric);
+        }
         this.series.push({
           target: seriesName,
           datapoints: [[metric, timestamp]],
         });
       });
     });
-  }
-  private constructSingleTableData(JSONResponse: object) {
-    const row: GrafanaTableRow = [];
-    this.target.columns.forEach((c: ScrapColumn) => {
-      row.push(get(JSONResponse, c.selector, ''));
-    });
-    this.rows.push(row);
   }
 }

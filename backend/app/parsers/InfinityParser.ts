@@ -1,5 +1,5 @@
 import { uniq, flatten } from 'lodash';
-import { InfinityQuery, ScrapColumn, GrafanaTableRow, timeSeriesResult } from './../../types';
+import { InfinityQuery, ScrapColumn, GrafanaTableRow, timeSeriesResult } from '../../../shared/types';
 
 export class InfinityParser {
   target: InfinityQuery;

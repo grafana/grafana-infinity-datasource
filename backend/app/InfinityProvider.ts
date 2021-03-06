@@ -1,12 +1,15 @@
-import { getBackendSrv, BackendSrvRequest } from '@grafana/runtime';
-import { InfinityQuery } from '../../shared/types';
+import { BackendSrvImpl, DataSourceInstanceSettings } from '@grafana/tsbackend'
+import { BackendSrvRequest } from '@grafana/runtime';
+import { InfinityQuery, DatasourceMode, InfinityOptions } from '../../shared/types';
 import { HTMLParser } from './parsers/HTMLParser';
 import { JSONParser } from './parsers/JSONParser';
 import { CSVParser } from './parsers/CSVParser';
-import { DatasourceMode } from '../config.editor';
 
 export class InfinityProvider {
-  constructor(private target: InfinityQuery, private instanceSettings: any) {}
+  backendSrv: BackendSrvImpl;
+  constructor(private target: InfinityQuery, private instanceSettings: DataSourceInstanceSettings<InfinityOptions>) {
+    this.backendSrv = new BackendSrvImpl(instanceSettings)
+  }
   formatResults(res: any) {
     switch (this.target.type) {
       case 'html':
@@ -26,7 +29,7 @@ export class InfinityProvider {
         url: this.target.url,
         method: this.target.url_options && this.target.url_options.method ? this.target.url_options.method : 'GET',
       };
-      if (this.instanceSettings.jsonData.datasource_mode === DatasourceMode.Advanced) {
+      if (this.instanceSettings.json.datasource_mode === DatasourceMode.Advanced) {
         const instanceSettingsUrl = this.instanceSettings.url;
         const urlPath = this.target.url;
         requestObject.url = [instanceSettingsUrl, urlPath].join('/');
@@ -39,7 +42,7 @@ export class InfinityProvider {
           });
         }
       }
-      getBackendSrv()
+      this.backendSrv
         .datasourceRequest(requestObject)
         .then(res => {
           resolve(res.data);

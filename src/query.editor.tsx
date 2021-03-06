@@ -1,7 +1,7 @@
 import React from 'react';
 import { defaultsDeep } from 'lodash';
 import { QueryEditorProps } from '@grafana/data';
-import { Datasource } from './datasource';
+import { DataSource } from './datasource';
 import { TypeChooser } from './editors/TypeChooser';
 import { AdvancedOptions } from './editors/AdvancedOptions';
 import { Scrapper as ScrapperOptions } from './editors/Scrapper';
@@ -44,7 +44,7 @@ export const InfinityQueryEditor: React.FC<InfinityEditorProps> = ({ query, onCh
   );
 };
 
-type EditorProps = QueryEditorProps<Datasource, InfinityQuery>;
+type EditorProps = QueryEditorProps<DataSource, InfinityQuery>;
 
 export const QueryEditor: React.FC<EditorProps> = props => {
   let { query, onChange } = props;

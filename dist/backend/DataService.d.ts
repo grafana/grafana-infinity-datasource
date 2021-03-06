@@ -1,6 +1,6 @@
-import { DataFrame, DataService, DataRequest } from '@grafana/tsbackend';
-import { InfinityQuery } from '../shared//types';
-export declare class InfinityDataService extends DataService<InfinityQuery> {
+import { DataFrame, DataService, DataQuery, PluginContext } from '@grafana/tsbackend';
+import { InfinityQuery, InfinityOptions } from '../shared/types';
+export declare class InfinityDataService extends DataService<InfinityQuery, InfinityOptions> {
     constructor();
-    QueryData(request: DataRequest<InfinityQuery>): Promise<DataFrame[]>;
+    QueryData(request: DataQuery<InfinityQuery>, context: PluginContext<InfinityOptions>): Promise<DataFrame[]>;
 }
