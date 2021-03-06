@@ -1,4 +1,4 @@
-import { BackendSrvImpl, DataSourceInstanceSettings } from '@grafana/tsbackend'
+import { BackendSrvImpl, DataSourceInstanceSettings, logger } from '@grafana/tsbackend'
 import { BackendSrvRequest } from '@grafana/runtime';
 import { InfinityQuery, DatasourceMode, InfinityOptions } from '../../shared/types';
 import { HTMLParser } from './parsers/HTMLParser';
@@ -45,6 +45,7 @@ export class InfinityProvider {
       this.backendSrv
         .datasourceRequest(requestObject)
         .then(res => {
+          logger.debug("We got a response!!!!!!!!", res);
           resolve(res.data);
         })
         .catch(ex => {
