@@ -1,6 +1,6 @@
 {
   "name": "grafana-infinity-datasource",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "JSON, CSV, XML, GraphQL & HTML datasource for Grafana. Do infinite things with Grafana.",
   "main": "dist/module.js",
   "scripts": {
@@ -47,6 +47,7 @@
     "jsonpath-plus": "^4.0.0",
     "lodash": "^4.17.19",
     "mathjs": "^7.2.0",
+    "rxjs": "6.6.3",
     "xml2js": "^0.4.23"
   },
   "devDependencies": {
@@ -60,5 +61,8 @@
     "babel-core": "^6.26.3",
     "babel-loader": "^8.1.0",
     "vuepress": "^1.5.4"
+  },
+  "resolutions": {
+    "rxjs": "6.6.3"
   }
 }

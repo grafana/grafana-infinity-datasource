@@ -1,7 +1,9 @@
 {
-    "deno.enable": false,
-    "cSpell.words": [
-        "plugincheck",
-        "vuepress"
-    ]
+  "deno.enable": false,
+  "cSpell.words": [
+    "grafana",
+    "plugincheck",
+    "timeseries",
+    "vuepress"
+  ]
 }

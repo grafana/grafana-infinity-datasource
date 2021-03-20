@@ -2,11 +2,15 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
+## [ 0.7.0 ]
+
+- Initial preparation for migrating into backend plugin. 
+
 ## [ 0.6.0 ]
 
 - Plugin signed
 - JSONPath support for JSON root selector
-- Autogenerate columns for CSV, JSON
+- Auto generate columns for CSV, JSON
 - Support for Unix/epoch seconds format
 - Support for filtering rows
 - Variable Query support

@@ -1,5 +1,7 @@
+import { Observable } from 'rxjs';
 import flatten from 'lodash/flatten';
-import { DataSourceApi, DataQueryResponse, DataQueryRequest } from '@grafana/data';
+import { DataQueryResponse, DataQueryRequest } from '@grafana/data';
+import { DataSourceWithBackend } from '@grafana/runtime';
 import { InfinityProvider } from './app/InfinityProvider';
 import { SeriesProvider } from './app/SeriesProvider';
 import { replaceVariables } from './app/InfinityQuery';
@@ -12,9 +14,10 @@ import {
   HealthCheckResult,
   HealthCheckResultStatus,
   InfinityInstanceSettings,
+  InfinityDataSourceJSONOptions,
 } from './types';
 
-export class Datasource extends DataSourceApi<InfinityQuery> {
+export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityDataSourceJSONOptions> {
   instanceSettings: InfinityInstanceSettings;
   constructor(iSettings: InfinityInstanceSettings) {
     super(iSettings);
@@ -51,7 +54,7 @@ export class Datasource extends DataSourceApi<InfinityQuery> {
       }
     });
   }
-  query(options: DataQueryRequest<InfinityQuery>): Promise<DataQueryResponse> {
+  private getResults(options: DataQueryRequest<InfinityQuery>): Promise<DataQueryResponse> {
     const promises: any[] = [];
     options.targets
       .filter((t: InfinityQuery) => t.hide !== true)
@@ -90,8 +93,23 @@ export class Datasource extends DataSourceApi<InfinityQuery> {
           })
         );
       });
-    return Promise.all(promises).then(results => {
-      return { data: flatten(results) };
+    return Promise.all(promises)
+      .then(results => {
+        return { data: flatten(results) };
+      })
+      .catch(ex => {
+        throw ex;
+      });
+  }
+  query(options: DataQueryRequest<InfinityQuery>): Observable<DataQueryResponse> {
+    return new Observable<DataQueryResponse>(subscriber => {
+      this.getResults(options)
+        .then(result => {
+          subscriber.next(result);
+        })
+        .catch(error => {
+          subscriber.error(error);
+        });
     });
   }
   metricFindQuery(originalQuery: VariableQuery): Promise<MetricFindValue[]> {
