@@ -239,3 +239,16 @@ export interface InfinityDataSourceJSONOptions extends DataSourceJsonData {
 }
 export type VariableTokenLegacy = 'Collection' | 'CollectionLookup' | 'Random' | 'Join';
 export type InfinityInstanceSettings = DataSourceInstanceSettings<InfinityDataSourceJSONOptions>;
+
+export const DefaultInfinityQuery: InfinityQuery = {
+  refId: '',
+  type: InfinityQueryType.CSV,
+  source: InfinityQuerySources.Inline,
+  data: '',
+  url: '',
+  url_options: { method: 'GET' },
+  root_selector: '',
+  columns: [],
+  filters: [],
+  format: InfinityQueryFormat.Table,
+};

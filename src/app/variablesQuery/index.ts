@@ -1,4 +1,4 @@
-import flatten from 'lodash/flatten';
+import { flatten, defaultsDeep } from 'lodash';
 import { SelectableValue } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
 import { InfinityProvider } from './../InfinityProvider';
@@ -9,9 +9,7 @@ import {
   InfinityInstanceSettings,
   VariableQuery,
   VariableQueryType,
-  InfinityQueryType,
-  InfinityQuerySources,
-  InfinityQueryFormat,
+  DefaultInfinityQuery,
 } from './../../types';
 import { CollectionVariable } from './Collection';
 import { CollectionLookupVariable } from './CollectionLookup';
@@ -46,19 +44,6 @@ const getTemplateVariablesFromResult = (res: any): Array<SelectableValue<string>
   }
 };
 
-export const DefaultInfinityQuery: InfinityQuery = {
-  refId: '',
-  type: InfinityQueryType.CSV,
-  source: InfinityQuerySources.Inline,
-  data: '',
-  url: '',
-  url_options: { method: 'GET' },
-  root_selector: '',
-  columns: [],
-  filters: [],
-  format: InfinityQueryFormat.Table,
-};
-
 export const migrateLegacyQuery = (query: VariableQuery | string): VariableQuery => {
   if (typeof query === 'string') {
     return {
@@ -68,7 +53,7 @@ export const migrateLegacyQuery = (query: VariableQuery | string): VariableQuery
   } else if (query && query.queryType) {
     return {
       ...query,
-      infinityQuery: query.infinityQuery || DefaultInfinityQuery,
+      infinityQuery: defaultsDeep(query.infinityQuery, DefaultInfinityQuery),
     };
   } else {
     return {
