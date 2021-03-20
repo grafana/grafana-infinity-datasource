@@ -43,3 +43,18 @@ jobs:
       - name: Build
         run: |
           yarn build;
+      - name: Setup Go environment
+        if: steps.check-for-backend.outputs.has-backend == 'true'
+        uses: actions/setup-go@v2
+        with:
+          go-version: "1.16"
+      - name: Test backend
+        uses: magefile/mage-action@v1
+        with:
+          version: latest
+          args: coverage
+      - name: Build backend
+        uses: magefile/mage-action@v1
+        with:
+          version: latest
+          args: buildAll
