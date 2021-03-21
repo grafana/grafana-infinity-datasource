@@ -1,5 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
-import { set } from 'lodash';
+import React, { useState } from 'react';
 import { QueryColumnsEditor } from './query.columns.editor';
 import { URLOptionsEditor } from './query.url.options';
 import { InfinityQuery, EditorMode } from '../../types';
@@ -13,16 +12,9 @@ interface ScrapperProps {
 
 export const URLEditor: React.FC<ScrapperProps> = props => {
   const [data, setData] = useState(props.query.data);
-  const onInputTextChange = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    field: keyof InfinityQuery,
-    props: any,
-    splitIntoArray = false
-  ) => {
+  const onInputTextChange = (value: string, field: keyof InfinityQuery, props: any) => {
     const { query, onChange } = props;
-    const value = splitIntoArray ? event.target.value.split(',') : event.target.value;
-    set(query, field, value);
-    onChange(query);
+    onChange({ ...query, [field]: value });
   };
   const LABEL_WIDTH = props.mode === EditorMode.Variable ? 10 : 8;
   return (
@@ -36,7 +28,7 @@ export const URLEditor: React.FC<ScrapperProps> = props => {
               className="gf-form-input min-width-30"
               value={props.query.url}
               placeholder="https://jsonplaceholder.typicode.com/todos"
-              onChange={e => onInputTextChange(e, `url`, props)}
+              onChange={e => onInputTextChange(e.currentTarget.value, `url`, props)}
               onBlur={props.onRunQuery}
             ></input>
             <URLOptionsEditor onChange={props.onChange} query={props.query} />
@@ -51,7 +43,7 @@ export const URLEditor: React.FC<ScrapperProps> = props => {
               className="gf-form-input min-width-30"
               value={data}
               placeholder=""
-              onBlur={e => onInputTextChange(e, `data`, props)}
+              onBlur={e => onInputTextChange(e.currentTarget.value, `data`, props)}
               onChange={e => setData(e.target.value)}
             ></textarea>
           </div>
@@ -66,7 +58,7 @@ export const URLEditor: React.FC<ScrapperProps> = props => {
               className="gf-form-input min-width-30"
               value={props.query.root_selector}
               placeholder=""
-              onChange={e => onInputTextChange(e, `root_selector`, props)}
+              onChange={e => onInputTextChange(e.currentTarget.value, `root_selector`, props)}
             ></input>
           </div>
         </div>

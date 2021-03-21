@@ -49,6 +49,7 @@ export const migrateLegacyQuery = (query: VariableQuery | string): VariableQuery
     return {
       query: query,
       queryType: VariableQueryType.Legacy,
+      infinityQuery: DefaultInfinityQuery,
     };
   } else if (query && query.queryType) {
     return {
@@ -59,6 +60,7 @@ export const migrateLegacyQuery = (query: VariableQuery | string): VariableQuery
     return {
       query: '',
       queryType: VariableQueryType.Legacy,
+      infinityQuery: defaultsDeep(query.infinityQuery, DefaultInfinityQuery),
     };
   }
 };

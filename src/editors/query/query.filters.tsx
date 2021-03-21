@@ -22,24 +22,24 @@ export const TableFilter: React.FC<TableFiltersProps> = props => {
     });
   };
   const addFilter = () => {
-    query.filters = query.filters || [];
+    let filters = [...(query.filters || [])];
     let newFilter: InfinityFilter = {
       field: query.columns && query.columns.length > 0 ? query.columns[0].text : '',
       operator: FilterOperator.Equals,
       value: [''],
     };
-    query.filters.push(newFilter);
-    onChange(query);
+    filters.push(newFilter);
+    onChange({ ...query, filters });
   };
   const removeFilter = (index: number) => {
-    const filters = query.filters || [];
+    const filters = [...(query.filters || [])];
     filters.splice(index, 1);
     onChange({ ...query, filters });
   };
-  const onFilterFieldhange = (index: number, value: SelectableValue) => {
-    query.filters = query.filters || [];
-    query.filters[index].field = value.value;
-    onChange(query);
+  const onFilterFieldChange = (index: number, value: SelectableValue) => {
+    const filters = [...(query.filters || [])];
+    filters[index].field = value.value;
+    onChange({ ...query, filters });
   };
   const onFilterOperatorChange = (index: number, value: SelectableValue) => {
     query.filters = query.filters || [];
@@ -80,7 +80,7 @@ export const TableFilter: React.FC<TableFiltersProps> = props => {
                   options={getFields()}
                   defaultValue={getFields()[0]}
                   value={getFields().find(f => f.value === filter.field) || getFields()[0]}
-                  onChange={e => onFilterFieldhange(index, e)}
+                  onChange={e => onFilterFieldChange(index, e)}
                 ></Select>
                 <Select
                   className="width-8"
