@@ -73,7 +73,7 @@ export const URLEditor: React.FC<ScrapperProps> = props => {
       ) : (
         <></>
       )}
-      <QueryColumnsEditor onChange={props.onChange} query={{ ...state }} mode={props.mode} />
+      <QueryColumnsEditor onChange={props.onChange} query={{ ...query }} mode={props.mode} />
     </>
   );
 };
