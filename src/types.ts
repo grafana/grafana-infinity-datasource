@@ -20,7 +20,7 @@ export type tableResult = {
   columns: GrafanaTableColumn[];
   rows: GrafanaTableRow;
 };
-export const enum HealthCheckResultStatus {
+export enum HealthCheckResultStatus {
   Success = 'success',
   Failure = 'error',
 }
@@ -30,7 +30,7 @@ export type HealthCheckResult = {
 };
 
 export type queryResult = timeSeriesResult | tableResult;
-export const enum InfinityQueryType {
+export enum InfinityQueryType {
   JSON = 'json',
   HTML = 'html',
   CSV = 'csv',
@@ -39,24 +39,24 @@ export const enum InfinityQueryType {
   Series = 'series',
   Global = 'global',
 }
-export const enum InfinityQueryFormat {
+export enum InfinityQueryFormat {
   Table = 'table',
   TimeSeries = 'timeseries',
 }
-export const enum InfinityQuerySources {
+export enum InfinityQuerySources {
   URL = 'url',
   Inline = 'inline',
   RandomWalk = 'random-walk',
   Expression = 'expression',
 }
-export const enum ScrapColumnFormat {
+export enum ScrapColumnFormat {
   String = 'string',
   Number = 'number',
   Timestamp = 'timestamp',
   Timestamp_Epoch = 'timestamp_epoch',
   Timestamp_Epoch_Seconds = 'timestamp_epoch_s',
 }
-export const enum EditorMode {
+export enum EditorMode {
   Standard = 'standard',
   Global = 'global',
   Variable = 'variable',
@@ -74,7 +74,7 @@ export interface DataOverride {
   operator: string;
   override: string;
 }
-export const enum FilterOperator {
+export enum FilterOperator {
   Contains = 'contains',
   ContainsIgnoreCase = 'contains_ignorecase',
   EndsWith = 'endswith',
@@ -218,7 +218,7 @@ export const SCRAP_QUERY_RESULT_COLUMN_FORMATS: Array<SelectableValue<ScrapColum
     value: ScrapColumnFormat.Timestamp_Epoch_Seconds,
   },
 ];
-export const enum VariableQueryType {
+export enum VariableQueryType {
   Legacy = 'legacy',
   Infinity = 'infinity',
 }
