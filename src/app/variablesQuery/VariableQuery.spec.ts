@@ -1,5 +1,11 @@
-import { replaceTokenFromVariable, migrateLegacyQuery, DefaultInfinityQuery } from './index';
-import { InfinityQueryType, VariableQuery, VariableQueryType, VariableTokenLegacy } from './../../types';
+import { replaceTokenFromVariable, migrateLegacyQuery } from './index';
+import {
+  InfinityQueryType,
+  VariableQuery,
+  VariableQueryType,
+  VariableTokenLegacy,
+  DefaultInfinityQuery,
+} from './../../types';
 
 const data: Array<[string, VariableTokenLegacy, string]> = [
   ['Collection(A,a,B,b)', 'Collection', 'A,a,B,b'],
