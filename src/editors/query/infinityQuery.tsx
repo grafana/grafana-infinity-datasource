@@ -6,7 +6,7 @@ import { URLEditor } from './query.url';
 import { SeriesEditor } from './query.series';
 import { InfinityQuery, EditorMode, InfinityQueryFormat, InfinityQuerySources, InfinityQueryType } from '../../types';
 
-interface InfinityEditorProps {
+export interface InfinityEditorProps {
   instanceSettings: any;
   mode: EditorMode;
   onChange: any;

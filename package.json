@@ -10,7 +10,9 @@
     "dev": "grafana-toolkit plugin:dev",
     "watch": "grafana-toolkit plugin:dev --watch",
     "docs:dev": "vuepress dev",
-    "docs:build": "vuepress build"
+    "docs:build": "vuepress build",
+    "storybook": "NODE_PATH=src start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "repository": {
     "type": "git",
@@ -52,6 +54,10 @@
   },
   "devDependencies": {
     "@grafana/toolkit": "7.3.3",
+    "@storybook/addon-actions": "^6.1.21",
+    "@storybook/addon-essentials": "^6.1.21",
+    "@storybook/addon-links": "^6.1.21",
+    "@storybook/react": "^6.1.21",
     "@types/cheerio": "^0.22.21",
     "@types/grafana": "github:CorpGlory/types-grafana.git",
     "@types/lodash": "^4.14.149",
@@ -60,7 +66,9 @@
     "babel": "^6.23.0",
     "babel-core": "^6.26.3",
     "babel-loader": "^8.1.0",
+    "ts-loader": "^8.0.18",
     "tslib": "^2.1.0",
+    "typescript": "^4.2.3",
     "vuepress": "^1.5.4"
   },
   "resolutions": {
