@@ -10,7 +10,7 @@ interface InfinityEditorProps {
   instanceSettings: any;
   mode: EditorMode;
   onChange: any;
-  onRunQuery: any;
+  onRunQuery: () => void;
   query: InfinityQuery;
 }
 
@@ -38,14 +38,14 @@ export const InfinityQueryEditor: React.FC<InfinityEditorProps> = ({
   query = defaultsDeep(query, defaultQuery);
   let canShowType = true;
   let canShowSeriesEditor = query.type === 'series';
-  let canShowScrapperOptions = ['csv', 'html', 'json', 'graphql', 'xml'].indexOf(query.type) > -1;
+  let canShowURL = ['csv', 'html', 'json', 'graphql', 'xml'].indexOf(query.type) > -1;
   let canShowFilterEditor = !['global', 'series'].includes(query.type) && query.columns && query.columns.length > 0;
   return (
     <div>
-      {canShowType && <TypeChooser onChange={onChange} query={query} mode={mode} instanceSettings={instanceSettings} />}
-      {canShowSeriesEditor && <SeriesEditor onChange={onChange} query={query} />}
-      {canShowScrapperOptions && <URLEditor onChange={onChange} query={query} mode={mode} onRunQuery={onRunQuery} />}
-      {canShowFilterEditor && <TableFilter query={query} onChange={onChange} onRunQuery={onRunQuery}></TableFilter>}
+      {canShowType && <TypeChooser {...{ instanceSettings, mode, query, onChange }} />}
+      {canShowSeriesEditor && <SeriesEditor {...{ query, onChange }} />}
+      {canShowURL && <URLEditor {...{ mode, query, onChange, onRunQuery }} />}
+      {canShowFilterEditor && <TableFilter {...{ query, onChange, onRunQuery }} />}
     </div>
   );
 };

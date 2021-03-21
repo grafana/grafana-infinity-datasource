@@ -56,6 +56,10 @@ export const VariableEditor: React.FC<Props> = props => {
     props.onChange(state, getDefinition());
   };
 
+  const saveQuery = () => {
+    props.onChange(state, getDefinition());
+  };
+
   return (
     <>
       <div className="gf-form">
@@ -75,7 +79,7 @@ export const VariableEditor: React.FC<Props> = props => {
             query={{ ...state.infinityQuery }}
             mode={EditorMode.Variable}
             onChange={onInfinityQueryUpdate}
-            onRunQuery={onInfinityQueryUpdate}
+            onRunQuery={saveQuery}
             instanceSettings={props.datasource.instanceSettings}
           ></InfinityQueryEditor>
         </>
