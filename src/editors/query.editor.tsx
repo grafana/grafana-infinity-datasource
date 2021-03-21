@@ -3,30 +3,23 @@ import { defaultsDeep } from 'lodash';
 import { QueryEditorProps } from '@grafana/data';
 import { Datasource } from '../datasource';
 import { InfinityQueryEditor } from './query/infinityQuery';
-import { InfinityQuery, EditorMode } from '../types';
+import { getDefaultGlobalQueryID } from './../app/InfinityQuery';
+import { InfinityQuery, EditorMode, DefaultInfinityQuery } from '../types';
 
 type EditorProps = QueryEditorProps<Datasource, InfinityQuery>;
 
-export const QueryEditor: React.FC<EditorProps> = props => {
-  let { query, onChange } = props;
-  let default_global_query_id =
-    props.datasource.instanceSettings.jsonData.global_queries &&
-    props.datasource.instanceSettings.jsonData.global_queries.length > 0
-      ? props.datasource.instanceSettings.jsonData.global_queries[0].id
-      : '';
+export const QueryEditor: React.FC<EditorProps> = ({ datasource, query, onChange, onRunQuery }) => {
   query = defaultsDeep(query, {
-    query_mode: 'standard',
-    global_query_id: default_global_query_id,
+    ...DefaultInfinityQuery,
+    global_query_id: getDefaultGlobalQueryID(datasource.instanceSettings),
   });
   return (
-    <>
-      <InfinityQueryEditor
-        onChange={onChange}
-        onRunQuery={props.onRunQuery}
-        query={query}
-        mode={EditorMode.Standard}
-        instanceSettings={props.datasource.instanceSettings}
-      />
-    </>
+    <InfinityQueryEditor
+      onChange={onChange}
+      onRunQuery={onRunQuery}
+      query={query}
+      mode={EditorMode.Standard}
+      instanceSettings={datasource.instanceSettings}
+    />
   );
 };

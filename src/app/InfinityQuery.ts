@@ -1,6 +1,6 @@
 import { getTemplateSrv } from '@grafana/runtime';
 import { ScopedVars } from '@grafana/data';
-import { InfinityQuery, InfinityQuerySources, InfinityQueryType } from './../types';
+import { InfinityQuery, InfinityQuerySources, InfinityQueryType, InfinityInstanceSettings } from './../types';
 
 export const replaceVariables = (query: InfinityQuery, scopedVars: ScopedVars): InfinityQuery => {
   return {
@@ -38,4 +38,9 @@ export const IsValidInfinityQuery = (query: InfinityQuery): boolean => {
   } else {
     return query !== undefined && query.type !== undefined;
   }
+};
+
+export const getDefaultGlobalQueryID = (ins: InfinityInstanceSettings): string => {
+  let queries = ins.jsonData.global_queries;
+  return queries && queries.length > 0 ? queries[0].id : '';
 };
