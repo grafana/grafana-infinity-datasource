@@ -124,15 +124,15 @@ export const TableFilter: React.FC<TableFiltersProps> = props => {
             </div>
           </>
         )}
+        <span className="btn btn-success btn-medium" style={{ marginTop: '5px' }} onClick={closePopup}>
+          OK
+        </span>
         <span
           className="btn btn-primary btn-medium"
           style={{ marginTop: '5px', marginRight: '10px' }}
           onClick={addFilter}
         >
           Add filter
-        </span>
-        <span className="btn btn-success btn-medium" style={{ marginTop: '5px' }} onClick={closePopup}>
-          OK
         </span>
         <br />
         <br />

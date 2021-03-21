@@ -78,6 +78,15 @@ export const URLOptionsEditor: React.FC<URLOptionsProps> = ({ query, onChange })
                 ) : (
                   <></>
                 )}
+              </div>
+              <div className="gf-form-inline">
+                <div
+                  className="btn btn-success btn-medium"
+                  style={{ marginTop: '5px' }}
+                  onClick={e => setPopupOpenStatus(false)}
+                >
+                  OK
+                </div>
                 <br />
                 <br />
                 <br />
