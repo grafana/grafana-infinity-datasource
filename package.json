@@ -10,9 +10,7 @@
     "dev": "grafana-toolkit plugin:dev",
     "watch": "grafana-toolkit plugin:dev --watch",
     "docs:dev": "vuepress dev",
-    "docs:build": "vuepress build",
-    "storybook": "NODE_PATH=src start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "docs:build": "vuepress build"
   },
   "repository": {
     "type": "git",
@@ -35,7 +33,7 @@
     "web scraping"
   ],
   "author": "Sriramajeyam Sugumaran",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/yesoreyeram/grafana-infinity-datasource/issues"
   },
@@ -44,7 +42,7 @@
     "@grafana/data": "7.1.5",
     "@grafana/runtime": "7.1.5",
     "@grafana/ui": "7.1.5",
-    "cheerio": "^1.0.0-rc.3",
+    "cheerio": "^1.0.0-rc.6",
     "csv-parse": "^4.12.0",
     "jsonpath-plus": "^4.0.0",
     "lodash": "^4.17.19",
@@ -54,10 +52,6 @@
   },
   "devDependencies": {
     "@grafana/toolkit": "7.3.3",
-    "@storybook/addon-actions": "^6.1.21",
-    "@storybook/addon-essentials": "^6.1.21",
-    "@storybook/addon-links": "^6.1.21",
-    "@storybook/react": "^6.1.21",
     "@types/cheerio": "^0.22.21",
     "@types/grafana": "github:CorpGlory/types-grafana.git",
     "@types/lodash": "^4.14.149",

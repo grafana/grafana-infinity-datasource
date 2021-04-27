@@ -15,7 +15,7 @@ export class HTMLParser extends InfinityParser {
     const rootElements = $(this.target.root_selector);
     return rootElements;
   }
-  private constructTableData(rootElements: Cheerio) {
+  private constructTableData(rootElements: cheerio.Cheerio) {
     forEach(rootElements, r => {
       const row: GrafanaTableRow = [];
       const $ = load(r);
@@ -37,7 +37,7 @@ export class HTMLParser extends InfinityParser {
       this.rows.push(row);
     });
   }
-  private constructTimeSeriesData(rootElements: Cheerio, endTime: Date | undefined) {
+  private constructTimeSeriesData(rootElements: cheerio.Cheerio, endTime: Date | undefined) {
     this.NumbersColumns.forEach((metricColumn: ScrapColumn) => {
       forEach(rootElements, r => {
         const $$ = load(r);
