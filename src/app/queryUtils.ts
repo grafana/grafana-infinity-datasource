@@ -1,6 +1,6 @@
 import { getTemplateSrv } from '@grafana/runtime';
 import { ScopedVars } from '@grafana/data';
-import { InfinityQuery, InfinityQuerySources, InfinityQueryType, InfinityInstanceSettings } from './../types';
+import { InfinityQuery, InfinityQuerySources, InfinityQueryType, InfinityInstanceSettings } from '../types';
 
 export const replaceVariables = (query: InfinityQuery, scopedVars: ScopedVars): InfinityQuery => {
   return {

@@ -2,10 +2,9 @@ import { flatten, defaultsDeep } from 'lodash';
 import { SelectableValue } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
 import { InfinityProvider } from './../InfinityProvider';
-import { IsValidInfinityQuery, replaceVariables } from './../InfinityQuery';
+import { IsValidInfinityQuery, replaceVariables } from '../queryUtils';
 import {
   InfinityQuery,
-  VariableTokenLegacy,
   InfinityInstanceSettings,
   VariableQuery,
   VariableQueryType,
@@ -15,10 +14,6 @@ import { CollectionVariable } from './Collection';
 import { CollectionLookupVariable } from './CollectionLookup';
 import { JoinVariable } from './Join';
 import { RandomVariable } from './Random';
-
-export const replaceTokenFromVariable = (query: string, token: VariableTokenLegacy): string => {
-  return query.startsWith(`${token}(`) && query.endsWith(')') ? query.replace(`${token}(`, '').slice(0, -1) : query;
-};
 
 const getTemplateVariablesFromResult = (res: any): Array<SelectableValue<string>> => {
   if (res.columns && res.columns.length > 0) {
@@ -108,17 +103,13 @@ export class LegacyVariableProvider implements VariableProvider {
   query(): Promise<Array<SelectableValue<string>>> {
     return new Promise(resolve => {
       if (this.queryString.startsWith('Collection(') && this.queryString.endsWith(')')) {
-        let query = replaceTokenFromVariable(this.queryString, 'Collection');
-        resolve(CollectionVariable(query));
+        resolve(CollectionVariable(this.queryString));
       } else if (this.queryString.startsWith('CollectionLookup(') && this.queryString.endsWith(')')) {
-        let query = replaceTokenFromVariable(this.queryString, 'CollectionLookup');
-        resolve(CollectionLookupVariable(query));
+        resolve(CollectionLookupVariable(this.queryString));
       } else if (this.queryString.startsWith('Join(') && this.queryString.endsWith(')')) {
-        let query = replaceTokenFromVariable(this.queryString, 'Join');
-        resolve(JoinVariable(query));
+        resolve(JoinVariable(this.queryString));
       } else if (this.queryString.startsWith('Random(') && this.queryString.endsWith(')')) {
-        let query = replaceTokenFromVariable(this.queryString, 'Random');
-        resolve(RandomVariable(query));
+        resolve(RandomVariable(this.queryString));
       } else {
         resolve([]);
       }

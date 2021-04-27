@@ -4,7 +4,7 @@ import { DataQueryResponse, DataQueryRequest } from '@grafana/data';
 import { DataSourceWithBackend } from '@grafana/runtime';
 import { InfinityProvider } from './app/InfinityProvider';
 import { SeriesProvider } from './app/SeriesProvider';
-import { replaceVariables } from './app/InfinityQuery';
+import { replaceVariables } from './app/queryUtils';
 import { LegacyVariableProvider, InfinityVariableProvider, migrateLegacyQuery } from './app/variablesQuery';
 import {
   InfinityQuery,

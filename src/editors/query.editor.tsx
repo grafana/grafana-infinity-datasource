@@ -3,7 +3,7 @@ import { defaultsDeep } from 'lodash';
 import { QueryEditorProps } from '@grafana/data';
 import { Datasource } from '../datasource';
 import { InfinityQueryEditor } from './query/infinityQuery';
-import { getDefaultGlobalQueryID } from './../app/InfinityQuery';
+import { getDefaultGlobalQueryID } from '../app/queryUtils';
 import { InfinityQuery, EditorMode, DefaultInfinityQuery } from '../types';
 
 type EditorProps = QueryEditorProps<Datasource, InfinityQuery>;
