@@ -13,9 +13,12 @@ const data: Array<[string, string, Array<SelectableValue<string>>]> = [
     [{ value: 'np', text: 'np' }],
   ],
   [
-    'it should return correct kv pair when more than one arg matched',
+    'it should return correct kv pairs when more than one arg matched',
     'prod,pd,nonprod,np,nonprod,foo,nonprod',
-    [{ value: 'np', text: 'np' }],
+    [
+      { value: 'np', text: 'np' },
+      { value: 'foo', text: 'foo' },
+    ],
   ],
   ['it should return empty array when even number of args passed', 'prod,pd,nonprod,np', []],
   ['it should return empty array when no args matched', 'prod,pd,nonprod,np,foo', []],

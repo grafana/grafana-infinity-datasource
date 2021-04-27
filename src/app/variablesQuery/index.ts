@@ -44,7 +44,10 @@ export const migrateLegacyQuery = (query: VariableQuery | string): VariableQuery
     return {
       query: query,
       queryType: VariableQueryType.Legacy,
-      infinityQuery: DefaultInfinityQuery,
+      infinityQuery: {
+        refId: 'variable',
+        ...DefaultInfinityQuery,
+      },
     };
   } else if (query && query.queryType) {
     return {

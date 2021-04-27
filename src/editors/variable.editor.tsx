@@ -24,42 +24,22 @@ const VariableQueryTypes: Array<SelectableValue<VariableQueryType>> = [
 ];
 
 export const VariableEditor: React.FC<Props> = props => {
-  let query = migrateLegacyQuery(props.query);
-
-  const [state, setState] = useState<VariableQuery>(query);
-
-  const getDefinition = (): string => {
-    return `${props.datasource.name}- (${state.queryType}) ${state.query}`;
-  };
-
-  const onInfinityQueryUpdate = (infinityQuery: InfinityQuery) => {
-    setState({
-      ...state,
-      infinityQuery,
-    });
-    props.onChange(state, getDefinition());
-  };
-
-  const onQueryTypeChange = (queryType: VariableQueryType) => {
-    setState({
-      ...state,
-      queryType,
-    });
-    props.onChange(state, getDefinition());
-  };
-
-  const onQueryChange = (value: string) => {
-    setState({
-      ...state,
-      query: value,
-    });
-    props.onChange(state, getDefinition());
-  };
-
+  const [state, setState] = useState<VariableQuery>(migrateLegacyQuery(props.query));
   const saveQuery = () => {
-    props.onChange(state, getDefinition());
+    props.onChange(state, `${props.datasource.name}- (${state.queryType}) ${state.query}`);
   };
-
+  const onInfinityQueryUpdate = (infinityQuery: InfinityQuery) => {
+    setState({ ...state, infinityQuery });
+    saveQuery();
+  };
+  const onQueryTypeChange = (queryType: VariableQueryType) => {
+    setState({ ...state, queryType });
+    saveQuery();
+  };
+  const onQueryChange = (query: string) => {
+    setState({ ...state, query });
+    saveQuery();
+  };
   return (
     <>
       <div className="gf-form">
@@ -74,15 +54,13 @@ export const VariableEditor: React.FC<Props> = props => {
         ></Select>
       </div>
       {state.queryType === 'infinity' && state.infinityQuery && (
-        <>
-          <InfinityQueryEditor
-            query={{ ...state.infinityQuery }}
-            mode={EditorMode.Variable}
-            onChange={onInfinityQueryUpdate}
-            onRunQuery={saveQuery}
-            instanceSettings={props.datasource.instanceSettings}
-          ></InfinityQueryEditor>
-        </>
+        <InfinityQueryEditor
+          query={{ ...state.infinityQuery }}
+          mode={EditorMode.Variable}
+          onChange={onInfinityQueryUpdate}
+          onRunQuery={saveQuery}
+          instanceSettings={props.datasource.instanceSettings}
+        ></InfinityQueryEditor>
       )}
       {state.queryType === 'legacy' && (
         <div className="gf-form">
@@ -93,7 +71,7 @@ export const VariableEditor: React.FC<Props> = props => {
             className="gf-form-input"
             placeholder="Collection(India,in,United Kingdom,uk)"
             required={true}
-            value={typeof query === 'string' ? query : state.query}
+            value={state.query}
             onBlur={e => onQueryChange(e.currentTarget.value)}
             onChange={e => onQueryChange(e.currentTarget.value)}
           ></TextArea>

@@ -15,15 +15,15 @@ export const CollectionLookupVariable = (query: string): Array<SelectableValue<s
         value: value[1],
       };
     })
-    .find(v => {
+    .filter(v => {
       return v.key === last(querySplit);
     });
-  return out
-    ? [
-        {
-          text: out.value,
-          value: out.value,
-        },
-      ]
+  return out && out.length > 0
+    ? out.map(o => {
+        return {
+          value: o.value,
+          text: o.value,
+        };
+      })
     : [];
 };

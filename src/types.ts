@@ -225,7 +225,7 @@ export enum VariableQueryType {
 export type VariableQuery = {
   queryType: VariableQueryType;
   query: string;
-  infinityQuery?: InfinityQuery;
+  infinityQuery: InfinityQuery;
 };
 
 export enum DatasourceMode {
@@ -240,15 +240,14 @@ export interface InfinityDataSourceJSONOptions extends DataSourceJsonData {
 export type VariableTokenLegacy = 'Collection' | 'CollectionLookup' | 'Random' | 'Join';
 export type InfinityInstanceSettings = DataSourceInstanceSettings<InfinityDataSourceJSONOptions>;
 
-export const DefaultInfinityQuery: InfinityQuery = {
-  refId: '',
-  type: InfinityQueryType.CSV,
-  source: InfinityQuerySources.Inline,
+export const DefaultInfinityQuery: Omit<InfinityQuery, 'refId'> = {
+  type: InfinityQueryType.JSON,
+  source: InfinityQuerySources.URL,
+  format: InfinityQueryFormat.Table,
   data: '',
   url: '',
-  url_options: { method: 'GET' },
+  url_options: { method: 'GET', data: '' },
   root_selector: '',
   columns: [],
   filters: [],
-  format: InfinityQueryFormat.Table,
 };
