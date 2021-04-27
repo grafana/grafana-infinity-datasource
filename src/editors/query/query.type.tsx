@@ -19,9 +19,10 @@ interface TypeChooserProps {
   instanceSettings: any;
   query: InfinityQuery;
   onChange: (value: any) => void;
+  onRunQuery: () => void;
 }
 
-export const TypeChooser: React.FC<TypeChooserProps> = ({ query, onChange, mode, instanceSettings }) => {
+export const TypeChooser: React.FC<TypeChooserProps> = ({ query, onChange, onRunQuery, mode, instanceSettings }) => {
   const defaultFormat: SelectableValue<InfinityQueryFormat> = SCRAP_QUERY_RESULT_FORMATS[0];
   const defaultType: SelectableValue<InfinityQueryType> = { value: InfinityQueryType.JSON, label: 'JSON' };
   const defaultSource: SelectableValue<InfinityQuerySources> = { value: InfinityQuerySources.URL, label: 'URL' };
@@ -40,6 +41,7 @@ export const TypeChooser: React.FC<TypeChooserProps> = ({ query, onChange, mode,
     }
     set(query, field, selectableItem.value);
     onChange(query);
+    onRunQuery();
   };
 
   let global_queries =

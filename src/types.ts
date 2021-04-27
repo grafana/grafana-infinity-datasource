@@ -42,6 +42,7 @@ export enum InfinityQueryType {
 export enum InfinityQueryFormat {
   Table = 'table',
   TimeSeries = 'timeseries',
+  DataFrame = 'dataframe',
 }
 export enum InfinityQuerySources {
   URL = 'url',
@@ -166,6 +167,10 @@ export const SCRAP_QUERY_RESULT_FORMATS: Array<SelectableValue<InfinityQueryForm
   {
     label: 'Time Series',
     value: InfinityQueryFormat.TimeSeries,
+  },
+  {
+    label: 'Data Frame',
+    value: InfinityQueryFormat.DataFrame,
   },
 ];
 export const SCRAP_QUERY_SOURCES: ScrapQuerySources[] = [

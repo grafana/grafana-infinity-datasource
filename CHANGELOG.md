@@ -4,7 +4,8 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 
 ## [ 0.7.0 ]
 
-- Initial preparation for migrating into backend plugin. 
+- Placeholder for migrating into backend plugin
+- Data frame format added
 
 ## [ 0.6.0 ]
 

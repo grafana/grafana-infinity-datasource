@@ -28,7 +28,7 @@ export const InfinityQueryEditor: React.FC<InfinityEditorProps> = ({
   let canShowFilterEditor = !['global', 'series'].includes(query.type) && query.columns && query.columns.length > 0;
   return (
     <div>
-      {canShowType && <TypeChooser {...{ instanceSettings, mode, query, onChange }} />}
+      {canShowType && <TypeChooser {...{ instanceSettings, mode, query, onChange, onRunQuery }} />}
       {canShowSeriesEditor && <SeriesEditor {...{ query, onChange }} />}
       {canShowURLEditor && <URLEditor {...{ mode, query, onChange, onRunQuery }} />}
       {canShowFilterEditor && <TableFilter {...{ query, onChange, onRunQuery }} />}
