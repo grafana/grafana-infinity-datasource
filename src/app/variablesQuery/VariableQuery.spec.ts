@@ -22,7 +22,7 @@ describe('migrateLegacyQuery', () => {
     let newQuery = migrateLegacyQuery(originalQuery);
     expect(newQuery.queryType).toBe(VariableQueryType.Infinity);
     expect(newQuery.query).toBe(originalQuery.query);
-    expect(newQuery.infinityQuery?.type).toBe(InfinityQueryType.CSV);
+    expect(newQuery.infinityQuery?.type).toBe(InfinityQueryType.JSON);
   });
   it('Infinity Query', () => {
     let originalQuery: VariableQuery = {
@@ -33,6 +33,6 @@ describe('migrateLegacyQuery', () => {
     let newQuery = migrateLegacyQuery(originalQuery);
     expect(newQuery.queryType).toBe(VariableQueryType.Infinity);
     expect(newQuery.query).toBe(originalQuery.query);
-    expect(newQuery.infinityQuery?.type).toBe(InfinityQueryType.CSV);
+    expect(newQuery.infinityQuery?.type).toBe(InfinityQueryType.JSON);
   });
 });

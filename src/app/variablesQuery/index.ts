@@ -14,6 +14,7 @@ import { CollectionVariable } from './Collection';
 import { CollectionLookupVariable } from './CollectionLookup';
 import { JoinVariable } from './Join';
 import { RandomVariable } from './Random';
+import { Datasource } from './../../datasource';
 
 const getTemplateVariablesFromResult = (res: any): Array<SelectableValue<string>> => {
   if (res.columns && res.columns.length > 0) {
@@ -45,8 +46,8 @@ export const migrateLegacyQuery = (query: VariableQuery | string): VariableQuery
       query: query,
       queryType: VariableQueryType.Legacy,
       infinityQuery: {
-        refId: 'variable',
         ...DefaultInfinityQuery,
+        refId: 'variable',
       },
     };
   } else if (query && query.queryType) {
@@ -70,14 +71,18 @@ interface VariableProvider {
 export class InfinityVariableProvider implements VariableProvider {
   infinityQuery: InfinityQuery;
   instanceSettings: InfinityInstanceSettings;
-  constructor(infinityQuery: InfinityQuery, instanceSettings: InfinityInstanceSettings) {
+  constructor(
+    infinityQuery: InfinityQuery,
+    instanceSettings: InfinityInstanceSettings,
+    private datasource: Datasource
+  ) {
     this.infinityQuery = infinityQuery;
     this.instanceSettings = instanceSettings;
   }
   query(): Promise<Array<SelectableValue<string>>> {
     return new Promise((resolve, reject) => {
       if (IsValidInfinityQuery(this.infinityQuery)) {
-        let provider = new InfinityProvider(replaceVariables(this.infinityQuery, {}), this.instanceSettings);
+        let provider = new InfinityProvider(replaceVariables(this.infinityQuery, {}), this.datasource);
         provider
           .query()
           .then((res: any) => {

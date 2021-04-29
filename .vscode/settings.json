@@ -8,6 +8,7 @@
     "nodemodules",
     "outfile",
     "plugincheck",
+    "stretchr",
     "timeseries",
     "vuepress"
   ]

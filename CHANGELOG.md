@@ -6,6 +6,7 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 
 - Placeholder for migrating into backend plugin
 - Data frame format added
+- Custom secure query strings support added
 
 ## [ 0.6.0 ]
 

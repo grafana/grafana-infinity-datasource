@@ -68,7 +68,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityDat
               case 'json':
               case 'xml':
               case 'graphql':
-                new InfinityProvider(replaceVariables(t, options.scopedVars), this.instanceSettings)
+                new InfinityProvider(replaceVariables(t, options.scopedVars), this)
                   .query()
                   .then(res => resolve(res))
                   .catch(ex => {
@@ -118,7 +118,11 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityDat
       switch (query.queryType) {
         case 'infinity':
           if (query.infinityQuery) {
-            const infinityVariableProvider = new InfinityVariableProvider(query.infinityQuery, this.instanceSettings);
+            const infinityVariableProvider = new InfinityVariableProvider(
+              query.infinityQuery,
+              this.instanceSettings,
+              this
+            );
             infinityVariableProvider.query().then(res => {
               resolve(flatten(res));
             });

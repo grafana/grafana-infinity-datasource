@@ -1,15 +1,9 @@
-import { getBackendSrv, BackendSrvRequest } from '@grafana/runtime';
 import { CSVParser, JSONParser, XMLParser, HTMLParser } from './parsers';
-import {
-  DatasourceMode,
-  InfinityInstanceSettings,
-  InfinityQuery,
-  InfinityQuerySources,
-  InfinityQueryType,
-} from '../types';
+import { InfinityQuery, InfinityQuerySources, InfinityQueryType } from '../types';
+import { Datasource } from './../datasource';
 
 export class InfinityProvider {
-  constructor(private target: InfinityQuery, private instanceSettings: InfinityInstanceSettings) {}
+  constructor(private target: InfinityQuery, private datasource: Datasource) {}
   private async formatResults(res: any) {
     switch (this.target.type) {
       case InfinityQueryType.HTML:
@@ -26,41 +20,47 @@ export class InfinityProvider {
         return undefined;
     }
   }
-  private getRequestObject(target: InfinityQuery, instanceSettings: InfinityInstanceSettings): BackendSrvRequest {
-    let requestObject: BackendSrvRequest = {
-      url: target.url,
-      method: target.url_options && target.url_options.method ? target.url_options.method : 'GET',
-    };
-    if (instanceSettings.jsonData.datasource_mode === DatasourceMode.Advanced) {
-      const instanceSettingsUrl = instanceSettings.url;
-      const urlPath = target.url;
-      requestObject.url = [instanceSettingsUrl, urlPath].join('/');
-    }
-    if (target.url_options && target.url_options.method === 'POST') {
-      requestObject.data = target.url_options.data || '';
-      if (target.type === InfinityQueryType.GraphQL) {
-        requestObject.data = JSON.stringify({
-          query: `${target.url_options.data}`,
+  private proxyResults(query: InfinityQuery) {
+    return new Promise((resolve, reject) => {
+      this.datasource
+        .postResource('/proxy', query)
+        .then(res => {
+          resolve(res);
+        })
+        .catch(ex => {
+          reject(ex);
         });
-      }
-    }
-    return requestObject;
+    });
   }
+  // private getRequestObject(target: InfinityQuery, instanceSettings: InfinityInstanceSettings): BackendSrvRequest {
+  //   let requestObject: BackendSrvRequest = {
+  //     url: target.url,
+  //     method: target.url_options && target.url_options.method ? target.url_options.method : 'GET',
+  //   };
+  //   if (instanceSettings.jsonData.datasource_mode === DatasourceMode.Advanced) {
+  //     const instanceSettingsUrl = instanceSettings.url;
+  //     const urlPath = target.url;
+  //     requestObject.url = [instanceSettingsUrl, urlPath].join('/');
+  //   }
+  //   if (target.url_options && target.url_options.method === 'POST') {
+  //     requestObject.data = target.url_options.data || '';
+  //     if (target.type === InfinityQueryType.GraphQL) {
+  //       requestObject.data = JSON.stringify({
+  //         query: `${target.url_options.data}`,
+  //       });
+  //     }
+  //   }
+  //   return requestObject;
+  // }
   private fetchResults() {
     return new Promise((resolve, reject) => {
-      let requestObject = this.getRequestObject(this.target, this.instanceSettings);
-      if (requestObject.url) {
-        getBackendSrv()
-          .datasourceRequest(requestObject)
-          .then(res => {
-            resolve(res.data);
-          })
-          .catch(ex => {
-            reject(ex);
-          });
-      } else {
-        reject('Invalid URL');
-      }
+      this.proxyResults(this.target)
+        .then(res => {
+          resolve(res);
+        })
+        .catch(ex => {
+          reject(ex);
+        });
     });
   }
   query() {

@@ -230,7 +230,7 @@ export enum VariableQueryType {
 export type VariableQuery = {
   queryType: VariableQueryType;
   query: string;
-  infinityQuery: InfinityQuery;
+  infinityQuery?: InfinityQuery;
 };
 
 export enum DatasourceMode {
@@ -242,10 +242,17 @@ export interface InfinityDataSourceJSONOptions extends DataSourceJsonData {
   datasource_mode?: DatasourceMode;
   global_queries?: GlobalInfinityQuery[];
 }
+export interface SecureField {
+  id: string;
+  name: string;
+  value: string;
+  configured: boolean;
+}
 export type VariableTokenLegacy = 'Collection' | 'CollectionLookup' | 'Random' | 'Join';
 export type InfinityInstanceSettings = DataSourceInstanceSettings<InfinityDataSourceJSONOptions>;
 
-export const DefaultInfinityQuery: Omit<InfinityQuery, 'refId'> = {
+export const DefaultInfinityQuery: InfinityQuery = {
+  refId: '',
   type: InfinityQueryType.JSON,
   source: InfinityQuerySources.URL,
   format: InfinityQueryFormat.Table,

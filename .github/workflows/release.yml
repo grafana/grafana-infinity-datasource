@@ -78,6 +78,8 @@ jobs:
         echo "\n" >> $outfile
         cat ./wiki/html.md >> $outfile
         echo "\n" >> $outfile
+        cat ./wiki/url.md >> $outfile
+        echo "\n" >> $outfile
         cat ./wiki/global-queries.md >> $outfile
         echo "\n" >> $outfile
         cat ./wiki/template-variables.md >> $outfile

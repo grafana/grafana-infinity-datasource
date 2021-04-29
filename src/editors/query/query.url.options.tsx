@@ -36,7 +36,7 @@ export const URLOptionsEditor: React.FC<URLOptionsProps> = ({ query, onChange })
               onClick={e => setPopupOpenStatus(true)}
               style={{ padding: '10px' }}
             >
-              <i className="fa fa-expand fa-large btn btn-medium"></i>
+              <i className="fa fa-gear fa-large btn btn-medium"></i>
             </label>
             <Modal title={'Advanced Options'} isOpen={popupOpenStatus} onDismiss={() => setPopupOpenStatus(false)}>
               <div className="gf-form-inline">
@@ -69,7 +69,7 @@ export const URLOptionsEditor: React.FC<URLOptionsProps> = ({ query, onChange })
                       value={query.url_options.data}
                       placeholder="{
                                                 query : {
-                                                    # Write your query or mutation here
+                                                    # Write your query here
                                                 }
                                             }"
                       onChange={e => onInputTextChange(e.target.value, `url_options.data`)}
