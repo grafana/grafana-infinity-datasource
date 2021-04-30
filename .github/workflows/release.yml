@@ -12,6 +12,20 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+    - name: Generate release notes
+      run: |
+        awk 'BEGIN {FS="##"; RS=""} FNR==4 {print; exit}' ./CHANGELOG.md > $CHANGELOG
+    - name: Create release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        body: ${{ env.CHANGELOG }}
+        draft: false
+        prerelease: false
     - name: NodeJS Setup
       uses: actions/setup-node@v1
       with:
@@ -120,7 +134,7 @@ jobs:
         md5sum $GRAFANA_PLUGIN_ARTIFACT > $GRAFANA_PLUGIN_ARTIFACT_CHECKSUM
     - name: Generate release notes
       run: |
-        awk 'BEGIN {FS="##"; RS=""} FNR==4 {print; exit}' ./CHANGELOG.md > CHANGELOG
+        awk 'BEGIN {FS="##"; RS=""} FNR==4 {print; exit}' ./CHANGELOG.md > $CHANGELOG
     - name: Create release
       id: create_release
       uses: actions/create-release@v1
@@ -129,7 +143,7 @@ jobs:
       with:
         tag_name: ${{ github.ref }}
         release_name: Release ${{ github.ref }}
-        body: $(cat CHANGELOG }}
+        body: ${{ env.CHANGELOG }}
         draft: false
         prerelease: false
     - name: Add plugin to release
