@@ -16,7 +16,7 @@ jobs:
       run: |
         awk 'BEGIN {FS="##"; RS=""} FNR==4 {print; exit}' ./CHANGELOG.md > $CHANGELOG
     - name: Create release
-      id: create_release_)
+      id: create_release_0
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
