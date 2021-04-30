@@ -1,8 +1,5 @@
-name: Pull Requests - Frontend
-on:
-  pull_request:
-    paths:
-      - '**.ts'
+name: Pull Requests
+on: [pull_request]
 jobs:
   build:
     runs-on: ubuntu-20.04
@@ -46,3 +43,32 @@ jobs:
       - name: Build
         run: |
           yarn build
+      - name: Setup Go environment
+        uses: actions/setup-go@v2
+        with:
+          go-version: "1.16"
+      - name: Get go cache directory path
+        id: go-cache-paths
+        run: |
+          echo "::set-output name=go-build::$(go env GOCACHE)"
+          echo "::set-output name=go-mod::$(go env GOMODCACHE)"
+      - name: Go Build Cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.go-cache-paths.outputs.go-build }}
+          key: ${{ runner.os }}-go-build-${{ hashFiles('**/go.sum') }}
+      - name: Go Mod Cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.go-cache-paths.outputs.go-mod }}
+          key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}
+      - name: Test backend
+        uses: magefile/mage-action@v1
+        with:
+          version: latest
+          args: coverage
+      - name: Build backend
+        uses: magefile/mage-action@v1
+        with:
+          version: latest
+          args: buildAll
