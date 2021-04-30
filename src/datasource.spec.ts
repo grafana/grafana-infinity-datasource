@@ -45,7 +45,7 @@ const DummyDatasource = {
   jsonData: {},
 };
 
-describe('metricFindQuery - Random', () => {
+describe('metricFindQuery - Random Variable', () => {
   it('Random', () => {
     expect.assertions(1);
     new Datasource(DummyDatasource)

@@ -46,6 +46,28 @@ jobs:
     - name: Build
       run: |
         yarn build;
+    - name: Setup Go environment
+      uses: actions/setup-go@v2
+      with:
+        go-version: "1.16"
+    - name: Get go cache directory path
+      id: go-cache-paths
+      run: echo "::set-output name=go-mod::$(go env GOMODCACHE)"
+    - name: Go Mod Cache
+      uses: actions/cache@v2
+      with:
+        path: ${{ steps.go-cache-paths.outputs.go-mod }}
+        key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}
+    - name: Test backend
+      uses: magefile/mage-action@v1
+      with:
+        version: latest
+        args: coverage
+    - name: Build backend
+      uses: magefile/mage-action@v1
+      with:
+        version: latest
+        args: buildAll
     - name: Generate README
       run: |
         mkdir -p dist
@@ -63,6 +85,8 @@ jobs:
         cat ./wiki/xml.md >> $outfile
         echo "\n" >> $outfile
         cat ./wiki/html.md >> $outfile
+        echo "\n" >> $outfile
+        cat ./wiki/url.md >> $outfile
         echo "\n" >> $outfile
         cat ./wiki/global-queries.md >> $outfile
         echo "\n" >> $outfile

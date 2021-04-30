@@ -6,6 +6,7 @@ import {
   SelectableValue,
 } from '@grafana/data';
 import { DataSourceHttpSettings, Select } from '@grafana/ui';
+import { SecureFieldsEditor } from '../components/SecureFieldsEditor';
 import { DatasourceMode, InfinityDataSourceJSONOptions } from '../../types';
 
 const DATASOURCE_MODES: Array<SelectableValue<DatasourceMode>> = [
@@ -42,18 +43,24 @@ export const DatasourceModeEditor: React.FC<Props> = (props: Props) => {
         </div>
       </div>
       <br />
-      <br />
-      {options.jsonData.datasource_mode === DatasourceMode.Advanced && (
-        <div className="gf-form-inline">
-          <div className="gf-form">
+
+      <div className="gf-form-inline">
+        <div className="gf-form">
+          {options.jsonData.datasource_mode === DatasourceMode.Advanced && (
             <DataSourceHttpSettings
               defaultUrl=""
               dataSourceConfig={options}
               onChange={onOptionsChange}
             ></DataSourceHttpSettings>
-          </div>
+          )}
         </div>
-      )}
+        <div className="gf-form">
+          <SecureFieldsEditor dataSourceConfig={props.options} onChange={props.onOptionsChange} />
+        </div>
+      </div>
+      <div className="gf-form-inline">
+        <div className="gf-form"></div>
+      </div>
     </>
   );
 };

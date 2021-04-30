@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { useState } from 'react';
 import { set } from 'lodash';
 import { QueryColumnsEditor } from './query.columns.editor';
 import { URLOptionsEditor } from './query.url.options';
@@ -12,17 +12,16 @@ interface ScrapperProps {
 }
 
 export const URLEditor: React.FC<ScrapperProps> = props => {
-  const [data, setData] = useState(props.query.data);
-  const onInputTextChange = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    field: keyof InfinityQuery,
-    props: any,
-    splitIntoArray = false
-  ) => {
-    const { query, onChange } = props;
-    const value = splitIntoArray ? event.target.value.split(',') : event.target.value;
-    set(query, field, value);
-    onChange(query);
+  const { query, onChange, onRunQuery } = props;
+  const [state, setState] = useState<InfinityQuery>(props.query);
+  const onSave = () => {
+    onChange(state);
+    onRunQuery();
+  };
+  const updateState = (value: string, key: keyof InfinityQuery) => {
+    let newQuery = { ...query };
+    set(newQuery, key, value);
+    setState(newQuery);
   };
   const LABEL_WIDTH = props.mode === EditorMode.Variable ? 10 : 8;
   return (
@@ -34,12 +33,12 @@ export const URLEditor: React.FC<ScrapperProps> = props => {
             <input
               type="text"
               className="gf-form-input min-width-30"
-              value={props.query.url}
+              value={state.url}
               placeholder="https://jsonplaceholder.typicode.com/todos"
-              onChange={e => onInputTextChange(e, `url`, props)}
-              onBlur={props.onRunQuery}
+              onChange={e => updateState(e.currentTarget.value, `url`)}
+              onBlur={onSave}
             ></input>
-            <URLOptionsEditor onChange={props.onChange} query={props.query} />
+            <URLOptionsEditor onChange={props.onChange} query={{ ...state }} />
           </div>
         </div>
       ) : (
@@ -49,31 +48,32 @@ export const URLEditor: React.FC<ScrapperProps> = props => {
             <textarea
               rows={5}
               className="gf-form-input min-width-30"
-              value={data}
+              value={state.data}
               placeholder=""
-              onBlur={e => onInputTextChange(e, `data`, props)}
-              onChange={e => setData(e.target.value)}
+              onBlur={onSave}
+              onChange={e => updateState(e.currentTarget.value, 'data')}
             ></textarea>
           </div>
         </div>
       )}
-      {['html', 'json', 'xml', 'graphql'].indexOf(props.query.type) > -1 ? (
+      {['html', 'json', 'xml', 'graphql'].indexOf(state.type) > -1 ? (
         <div className="gf-form-inline">
           <div className="gf-form">
             <label className={`gf-form-label query-keyword width-${LABEL_WIDTH}`}>Rows / Root</label>
             <input
               type="text"
               className="gf-form-input min-width-30"
-              value={props.query.root_selector}
+              value={state.root_selector}
               placeholder=""
-              onChange={e => onInputTextChange(e, `root_selector`, props)}
+              onChange={e => updateState(e.currentTarget.value, `root_selector`)}
+              onBlur={onSave}
             ></input>
           </div>
         </div>
       ) : (
         <></>
       )}
-      <QueryColumnsEditor onChange={props.onChange} query={props.query} mode={props.mode} />
+      <QueryColumnsEditor onChange={props.onChange} query={{ ...query }} mode={props.mode} />
     </>
   );
 };

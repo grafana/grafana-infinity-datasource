@@ -1,6 +1,6 @@
 {
   "name": "grafana-infinity-datasource",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "JSON, CSV, XML, GraphQL & HTML datasource for Grafana. Do infinite things with Grafana.",
   "main": "dist/module.js",
   "scripts": {
@@ -33,7 +33,7 @@
     "web scraping"
   ],
   "author": "Sriramajeyam Sugumaran",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/yesoreyeram/grafana-infinity-datasource/issues"
   },
@@ -42,11 +42,12 @@
     "@grafana/data": "7.1.5",
     "@grafana/runtime": "7.1.5",
     "@grafana/ui": "7.1.5",
-    "cheerio": "^1.0.0-rc.3",
+    "cheerio": "^1.0.0-rc.6",
     "csv-parse": "^4.12.0",
     "jsonpath-plus": "^4.0.0",
     "lodash": "^4.17.19",
     "mathjs": "^7.2.0",
+    "rxjs": "6.6.3",
     "xml2js": "^0.4.23"
   },
   "devDependencies": {
@@ -59,6 +60,13 @@
     "babel": "^6.23.0",
     "babel-core": "^6.26.3",
     "babel-loader": "^8.1.0",
+    "ts-jest": "^26.5.4",
+    "ts-loader": "^8.0.18",
+    "tslib": "^2.1.0",
+    "typescript": "^4.2.3",
     "vuepress": "^1.5.4"
+  },
+  "resolutions": {
+    "rxjs": "6.6.3"
   }
 }

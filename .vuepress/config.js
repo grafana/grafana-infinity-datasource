@@ -41,6 +41,7 @@ module.exports = {
             ['/wiki/graphql', 'GraphQL'],
             ['/wiki/xml', 'XML'],
             ['/wiki/html', 'HTML'],
+            ['/wiki/url', 'URL'],
             ['/wiki/global-queries', 'Global Queries'],
             ['/wiki/template-variables', 'Template Variables'],
             ['/wiki/showcase/github-stats', 'Github Example'],

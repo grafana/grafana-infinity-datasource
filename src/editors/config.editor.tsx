@@ -15,6 +15,8 @@ export const InfinityConfigEditor: React.FC<Props> = ({ options, onOptionsChange
   return (
     <>
       <DatasourceModeEditor options={options} onOptionsChange={onOptionsChange} />
+      <br />
+      <br />
       <GlobalQueryEditor options={options} onOptionsChange={onOptionsChange} />
     </>
   );

@@ -2,11 +2,17 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
+## [ 0.7.0 ]
+
+- Placeholder for migrating into backend plugin
+- Data frame format added
+- Custom secure query strings support added
+
 ## [ 0.6.0 ]
 
 - Plugin signed
 - JSONPath support for JSON root selector
-- Autogenerate columns for CSV, JSON
+- Auto generate columns for CSV, JSON
 - Support for Unix/epoch seconds format
 - Support for filtering rows
 - Variable Query support
