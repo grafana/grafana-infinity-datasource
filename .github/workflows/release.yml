@@ -17,7 +17,7 @@ jobs:
       run: |
           echo 'CHANGELOG<<EOF' >> $GITHUB_ENV
           awk 'BEGIN {FS="##"; RS=""} FNR==4 {print; exit}' ./CHANGELOG.md >> $GITHUB_ENV
-          echo 'EOF' >> $CHANGELOG
+          echo 'EOF' >> $GITHUB_ENV
     - name: Create release
       id: create_release_0
       uses: actions/create-release@v1
