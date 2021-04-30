@@ -13,8 +13,8 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Generate release notes
-      run: |
-        awk 'BEGIN {FS="##"; RS=""} FNR==4 {print; exit}' ./CHANGELOG.md > $CHANGELOG
+      id: generate_changelog
+      run: echo "::set-output name=CHANGELOG::$(cat CHANGELOG.md)"
     - name: Create release
       id: create_release_0
       uses: actions/create-release@v1
@@ -23,7 +23,7 @@ jobs:
       with:
         tag_name: ${{ github.ref }}
         release_name: Release ${{ github.ref }}
-        body: ${{ env.CHANGELOG }}
+        body: ${{ steps.generate_changelog.outputs.CHANGELOG }}
         draft: false
         prerelease: false
     - name: NodeJS Setup
