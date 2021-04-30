@@ -1,5 +1,8 @@
-name: Pull Requests
-on: [pull_request]
+name: Pull Requests - Frontend
+on:
+  pull_request:
+    paths:
+      - '**.ts'
 jobs:
   build:
     runs-on: ubuntu-20.04
@@ -42,19 +45,4 @@ jobs:
           yarn test;
       - name: Build
         run: |
-          yarn build;
-      - name: Setup Go environment
-        if: steps.check-for-backend.outputs.has-backend == 'true'
-        uses: actions/setup-go@v2
-        with:
-          go-version: "1.16"
-      - name: Test backend
-        uses: magefile/mage-action@v1
-        with:
-          version: latest
-          args: coverage
-      - name: Build backend
-        uses: magefile/mage-action@v1
-        with:
-          version: latest
-          args: buildAll
+          yarn build
