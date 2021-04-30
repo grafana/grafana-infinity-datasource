@@ -19,9 +19,9 @@ func Test_getQueryURL(t *testing.T) {
 		{
 			settings: infinity.InfinitySettings{},
 			query: infinity.Query{
-				URL: "https://foo.com",
+				URL: "0.0.0.0",
 			},
-			want: "https://foo.com",
+			want: "0.0.0.0",
 		},
 		{
 			settings: infinity.InfinitySettings{},
