@@ -106,7 +106,7 @@ jobs:
         export GRAFANA_PLUGIN_ID=$(cat dist/plugin.json | jq -r .id)
         export GRAFANA_PLUGIN_VERSION=$(cat dist/plugin.json | jq -r .info.version)
         export GRAFANA_PLUGIN_TYPE=$(cat dist/plugin.json | jq -r .type)
-        export GRAFANA_PLUGIN_ARTIFACT=${GRAFANA_PLUGIN_ID}-${GRAFANA_PLUGIN_VERSION}.zip
+        export GRAFANA_PLUGIN_ARTIFACT=${GRAFANA_PLUGIN_ID}-${{ github.ref }}.zip
         export GRAFANA_PLUGIN_ARTIFACT_CHECKSUM=${GRAFANA_PLUGIN_ARTIFACT}.md5
         echo "GRAFANA_PLUGIN_ID=${GRAFANA_PLUGIN_ID}" >> $GITHUB_ENV
         echo "GRAFANA_PLUGIN_VERSION=${GRAFANA_PLUGIN_VERSION}" >> $GITHUB_ENV
