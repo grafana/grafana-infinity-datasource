@@ -149,7 +149,7 @@ func TestInfinityClient_GetResults(t *testing.T) {
 			}
 			gotO, err := client.GetResults(tt.query)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("InfinityClient.GetResults() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("GetResults() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			assert.Equal(t, tt.wantO, gotO)
