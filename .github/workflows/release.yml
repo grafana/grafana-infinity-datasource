@@ -12,23 +12,6 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: Generate release notes
-      id: generate_changelog
-      run: |
-          echo 'CHANGELOG<<EOF' >> $GITHUB_ENV
-          awk 'BEGIN {FS="##"; RS=""} FNR==4 {print; exit}' ./CHANGELOG.md >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
-    - name: Create release
-      id: create_release_0
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        body: ${{ steps.generate_changelog.outputs.CHANGELOG }}
-        draft: false
-        prerelease: false
     - name: NodeJS Setup
       uses: actions/setup-node@v1
       with:
@@ -135,9 +118,6 @@ jobs:
         mv dist $GRAFANA_PLUGIN_ID
         zip $GRAFANA_PLUGIN_ARTIFACT $GRAFANA_PLUGIN_ID -r
         md5sum $GRAFANA_PLUGIN_ARTIFACT > $GRAFANA_PLUGIN_ARTIFACT_CHECKSUM
-    - name: Generate release notes
-      run: |
-        awk 'BEGIN {FS="##"; RS=""} FNR==4 {print; exit}' ./CHANGELOG.md > $CHANGELOG
     - name: Create release
       id: create_release
       uses: actions/create-release@v1
@@ -146,7 +126,6 @@ jobs:
       with:
         tag_name: ${{ github.ref }}
         release_name: Release ${{ github.ref }}
-        body: ${{ env.CHANGELOG }}
         draft: false
         prerelease: false
     - name: Add plugin to release
