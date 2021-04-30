@@ -38,5 +38,6 @@ func (td *InfinityDatasource) proxyHandler(rw http.ResponseWriter, req *http.Req
 		fmt.Fprintf(rw, "%s", response)
 		return
 	}
-	fmt.Fprintf(rw, "%s", "invalid query")
+	rw.WriteHeader(http.StatusNotImplemented)
+	rw.Write([]byte("500 - Something bad happened! Invalid query."))
 }
