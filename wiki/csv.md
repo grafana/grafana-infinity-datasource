@@ -1,4 +1,9 @@
-## CSV Features & Summary
+---
+slug: "/wiki/csv"
+title: "CSV"
+---
+
+## CSV Features
 
 <p align="center">
     <img src="https://user-images.githubusercontent.com/153843/92571108-9e0ff800-f27a-11ea-9fe9-9f9dcbd7125a.png" width="700" height="500"></img>

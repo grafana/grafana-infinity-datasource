@@ -1,4 +1,7 @@
-## HTML URL / Web Scraping
+---
+slug: "/wiki/html"
+title: "HTML"
+---
 
 In the below example, we are going to convert the HTML URL `https://grafana.com/about/team/` into grafana datasource.
 

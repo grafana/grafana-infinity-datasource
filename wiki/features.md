@@ -1,4 +1,7 @@
-# Infinity Datasource
+---
+slug: "/features"
+title: "Infinity Datasource"
+---
 
 <p align="center">
   <img align="center" src="https://user-images.githubusercontent.com/153843/92741922-03491380-f377-11ea-9c31-9a744afd3388.png" width="800" height="400"/>

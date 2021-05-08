@@ -1,3 +1,7 @@
+---
+slug: "/showcase/github"
+title: "Github Stats"
+---
 ## Github Stats
 
 ![image](https://user-images.githubusercontent.com/153843/93846498-1d9abf80-fc9c-11ea-90ed-4c569b088d99.png)

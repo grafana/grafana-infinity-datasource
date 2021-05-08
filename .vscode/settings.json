@@ -9,7 +9,6 @@
     "outfile",
     "plugincheck",
     "stretchr",
-    "timeseries",
-    "vuepress"
+    "timeseries"
   ]
 }

@@ -1,3 +1,8 @@
+---
+slug: "/wiki/series"
+title: "Series"
+---
+
 ## Expression
 
 In order to generate simulated timeseries using mathematical expressions, you need to choose `Series` as Query type and `Expression` as query scenario/source.
