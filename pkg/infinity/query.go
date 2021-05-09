@@ -1,8 +1,20 @@
 package infinity
 
+type URLParam struct {
+	Key   string `json:"key"`
+	Value string `json:"value"`
+}
+
+type RequestHeader struct {
+	Key   string `json:"key"`
+	Value string `json:"value"`
+}
+
 type URLOptions struct {
-	Data   string `json:"data"`
-	Method string `json:"method"`
+	Data    string          `json:"data"`
+	Method  string          `json:"method"`
+	Params  []URLParam      `json:"params"`
+	Headers []RequestHeader `json:"headers"`
 }
 
 type InfinityColumn struct {

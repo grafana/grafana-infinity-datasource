@@ -1,5 +1,5 @@
 ---
-slug: "/features"
+slug: "/features2"
 title: "Infinity Datasource"
 ---
 

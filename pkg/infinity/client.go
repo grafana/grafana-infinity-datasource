@@ -8,6 +8,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"strings"
 )
 
@@ -23,15 +24,30 @@ func NewClient(settings InfinitySettings) (client *Client, err error) {
 	}, err
 }
 
-func GetQueryURL(settings InfinitySettings, query Query) string {
-	url := query.URL
-	if settings.DatasourceMode == DataSourceModeAdvanced {
-		url = fmt.Sprintf("%s%s", settings.URL, query.URL)
-	}
+func replaceSecret(input string, settings InfinitySettings) string {
 	for key, value := range settings.SecureQueryFields {
-		url = strings.ReplaceAll(url, fmt.Sprintf("${__qs.%s}", key), value)
+		input = strings.ReplaceAll(input, fmt.Sprintf("${__qs.%s}", key), value)
 	}
-	return url
+	return input
+}
+
+func GetQueryURL(settings InfinitySettings, query Query) string {
+	urlString := query.URL
+	if settings.DatasourceMode == DataSourceModeAdvanced {
+		urlString = fmt.Sprintf("%s%s", settings.URL, query.URL)
+	}
+	urlString = replaceSecret(urlString, settings)
+	u, err := url.Parse(urlString)
+	if err != nil {
+		return urlString
+	}
+	q := u.Query()
+	for _, param := range query.URLOptions.Params {
+		value := replaceSecret(param.Value, settings)
+		q.Set(param.Key, value)
+	}
+	u.RawQuery = q.Encode()
+	return u.String()
 }
 
 func getRequest(settings InfinitySettings, body io.Reader, query Query) (req *http.Request, err error) {
@@ -48,6 +64,10 @@ func getRequest(settings InfinitySettings, body io.Reader, query Query) (req *ht
 	req.Header.Set("User-Agent", "Grafana")
 	if query.Type == "json" || query.Type == "graphql" {
 		req.Header.Set("Content-Type", "application/json")
+	}
+	for _, header := range query.URLOptions.Headers {
+		value := replaceSecret(header.Value, settings)
+		req.Header.Set(header.Key, value)
 	}
 	for key, value := range settings.CustomHeaders {
 		req.Header.Set(key, value)

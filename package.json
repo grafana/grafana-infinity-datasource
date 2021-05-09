@@ -67,14 +67,14 @@
     "babel-loader": "^8.1.0",
     "bootstrap": "^5.0.0",
     "gatsby": "^3.4.0",
-    "gatsby-plugin-react-helmet": "^4.4.0",
     "gatsby-plugin-postcss": "^4.4.0",
+    "gatsby-plugin-react-helmet": "^4.4.0",
     "gatsby-source-filesystem": "^3.4.0",
     "gatsby-transformer-remark": "^4.1.0",
+    "react-helmet": "^6.1.0",
     "ts-jest": "^26.5.4",
     "ts-loader": "^8.0.18",
     "tslib": "^2.1.0",
-    "react-helmet": "^6.1.0",
     "typescript": "^4.2.3"
   },
   "resolutions": {

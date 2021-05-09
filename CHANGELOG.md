@@ -6,6 +6,7 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 
 - Data frame format added
 - Custom secure query strings support added
+- Support for custom headers and query strings in individual queries
 - Allow variables in root/rows selector
 - Placeholder for migrating into backend plugin
 

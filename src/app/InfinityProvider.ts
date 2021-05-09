@@ -23,21 +23,10 @@ export class InfinityProvider {
         return undefined;
     }
   }
-  private proxyResults(query: InfinityQuery) {
-    return new Promise((resolve, reject) => {
-      this.datasource
-        .postResource('/proxy', query)
-        .then(res => {
-          resolve(res);
-        })
-        .catch(ex => {
-          reject(ex);
-        });
-    });
-  }
   private fetchResults() {
     return new Promise((resolve, reject) => {
-      this.proxyResults(this.target)
+      this.datasource
+        .postResource('/proxy', this.target)
         .then(res => {
           resolve(res);
         })

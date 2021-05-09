@@ -104,7 +104,14 @@ export interface InfinityFilter {
   operator: FilterOperator;
   value: string[];
 }
-
+export interface QueryParam {
+  key: string;
+  value: string;
+}
+export interface QueryHeaders {
+  key: string;
+  value: string;
+}
 export interface InfinityQuery extends DataQuery {
   type: InfinityQueryType;
   source: InfinityQuerySources;
@@ -112,6 +119,8 @@ export interface InfinityQuery extends DataQuery {
   url_options: {
     method: 'GET' | 'POST';
     data?: string;
+    params?: QueryParam[];
+    headers?: QueryHeaders[];
   };
   data: string;
   root_selector: string;

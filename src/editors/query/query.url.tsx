@@ -39,7 +39,7 @@ export const URLEditor: React.FC<ScrapperProps> = props => {
               onChange={e => onInputTextChange(e, `url`, props)}
               onBlur={props.onRunQuery}
             ></input>
-            <URLOptionsEditor onChange={props.onChange} query={props.query} />
+            <URLOptionsEditor onChange={props.onChange} query={props.query} onRunQuery={props.onRunQuery} />
           </div>
         </div>
       ) : (
