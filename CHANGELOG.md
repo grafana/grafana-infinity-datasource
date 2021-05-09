@@ -4,9 +4,10 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 
 ## [ 0.7.0 ]
 
-- Placeholder for migrating into backend plugin
 - Data frame format added
 - Custom secure query strings support added
+- Allow variables in root/rows selector
+- Placeholder for migrating into backend plugin
 
 ## [ 0.6.0 ]
 

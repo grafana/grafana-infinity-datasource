@@ -54,6 +54,8 @@ export const DatasourceModeEditor: React.FC<Props> = (props: Props) => {
             ></DataSourceHttpSettings>
           )}
         </div>
+      </div>
+      <div className="gf-form-inline">
         <div className="gf-form">
           <SecureFieldsEditor dataSourceConfig={props.options} onChange={props.onOptionsChange} />
         </div>
