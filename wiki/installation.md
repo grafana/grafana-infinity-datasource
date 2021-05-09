@@ -1,4 +1,7 @@
-## Installation
+---
+slug: "/wiki/installation"
+title: "Installation"
+---
 
 There are multiple ways to install this plugin into your grafana instance
 

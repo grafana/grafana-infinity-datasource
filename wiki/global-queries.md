@@ -1,4 +1,7 @@
-## Global Queries / Registered Queries
+---
+slug: "/wiki/global-queries"
+title: "Global Queries / Registered Queries"
+---
 
 Working with same queries in multiple dashboards might be hard some times. To change a query, you need to update all the dashboards. So Infinity datasource gives an option to register queries globally and then allows to reuse the queries across dashboards.
 

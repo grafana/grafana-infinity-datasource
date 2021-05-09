@@ -1,3 +1,8 @@
+---
+slug: "/wiki/json"
+title: "JSON"
+---
+
 ## JSON URL
 
 In the below example, we are going to convert the JSON URL `https://jsonplaceholder.typicode.com/todos` into a grafana datasource.

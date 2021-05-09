@@ -1,3 +1,8 @@
+---
+slug: "/wiki/xml"
+title: "XML"
+---
+
 ## XML Inline
 
 In the below example, we are going to see how to use xml response in grafana

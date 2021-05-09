@@ -1,4 +1,8 @@
-## variables
+---
+slug: "/wiki/template-variables"
+title: "Template variables"
+---
+
 
 ## Standard Mode ( Infinity Query )
 

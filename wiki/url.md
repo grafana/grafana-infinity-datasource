@@ -1,4 +1,7 @@
-## URL
+---
+slug: "/wiki/url"
+title: "URL"
+---
 
 ### Secure keys in the URL query strings
 
