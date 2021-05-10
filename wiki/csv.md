@@ -1,8 +1,6 @@
-## CSV Features & Summary
+## CSV
 
-<p align="center">
-    <img src="https://user-images.githubusercontent.com/153843/92571108-9e0ff800-f27a-11ea-9fe9-9f9dcbd7125a.png" width="700" height="500"></img>
-</p>
+![](https://user-images.githubusercontent.com/153843/92571108-9e0ff800-f27a-11ea-9fe9-9f9dcbd7125a.png)
 
 Select **Type** of the query to `CSV`. You can either specify the URL of the CSV file or can provide inline CSV. 
 

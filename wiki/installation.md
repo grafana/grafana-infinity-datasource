@@ -2,6 +2,10 @@
 
 There are multiple ways to install this plugin into your grafana instance
 
+### Download from grafana.com
+
+Download the plugin from [grafana.com](https://grafana.com/grafana/plugins/yesoreyeram-infinity-datasource)
+
 ### Download and extract zip file
 
 Download the latest zip file from [github](https://github.com/yesoreyeram/grafana-infinity-datasource/releases) and extract into your grafana plugin folder. Then restart Grafana.
