@@ -52,7 +52,7 @@ func Test_getQueryURL(t *testing.T) {
 			query: infinity.Query{
 				URL: "/hello?key=val&key_one=${__qs.key_one}&key_two=${__qs.key_two}&foo=bar",
 			},
-			want: "https://foo.com/hello?key=val&key_one=val_one&key_two=val_two&foo=bar",
+			want: "https://foo.com/hello?foo=bar&key=val&key_one=val_one&key_two=val_two",
 		},
 	}
 	for _, tt := range tests {
