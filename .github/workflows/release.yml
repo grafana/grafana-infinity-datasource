@@ -86,7 +86,7 @@ jobs:
         # cat ./wiki/installation.md >> $outfile
         # cat ./wiki/configuration.md >> $outfile
         # cat ./wiki/provisioning.md >> $outfile
-        cat ./CHANGELOG.md >> $outfile
+        # cat ./CHANGELOG.md >> $outfile
     - name: Sign plugin
       run: yarn sign;
       env:
