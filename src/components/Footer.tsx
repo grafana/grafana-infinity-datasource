@@ -21,6 +21,7 @@ const FooterMenuitem: React.FC<{
 };
 
 export const Footer: React.FC<any> = () => {
+  const currentYear = new Date().getFullYear();
   return (
     <>
       <footer id="footer" className="footer mt-auto py-5" style={{ background: '#f2f5f7' }}>
@@ -37,9 +38,6 @@ export const Footer: React.FC<any> = () => {
                 </FooterMenuitem>
                 <FooterMenuitem to="/wiki/provisioning" internal={true}>
                   Provisioning
-                </FooterMenuitem>
-                <FooterMenuitem to="/wiki/installation" internal={true}>
-                  Query Editor
                 </FooterMenuitem>
               </ul>
             </div>
@@ -146,7 +144,7 @@ export const Footer: React.FC<any> = () => {
             </div>
           </div>
           <div className="row text-center mt-4">
-            <span className="muted ">Sriramajeyam Sugumaran</span>
+            <span className="muted ">Copyright © 2020-{currentYear} - Sriramajeyam Sugumaran</span>
           </div>
         </div>
       </footer>

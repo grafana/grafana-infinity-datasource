@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'gatsby';
 import { Layout } from '../components/Layout';
+import { Features } from './welcome';
 
 export default function Home() {
   const [hasRan, setHasRan] = useState(false);
@@ -47,14 +48,20 @@ export default function Home() {
             <Link
               className="btn btn-primary text-black"
               style={{ backgroundImage: 'linear-gradient(#FADE2A,#F05A28)', color: 'black', border: 'none' }}
-              to="/features"
+              to="/wiki/installation"
             >
-              Get Started
+              Install
+            </Link>
+            <Link
+              className="btn btn-primary text-black mx-4"
+              style={{ backgroundImage: 'linear-gradient(#FADE2A,#F05A28)', color: 'black', border: 'none' }}
+              to="/welcome"
+            >
+              Features
             </Link>
           </div>
-          <div className="product-device shadow-sm d-none d-md-block"></div>
-          <div className="product-device product-device-2 shadow-sm d-none d-md-block"></div>
         </div>
+        <Features />
         <p className="text-center my-4">
           <a
             href="https://github.com/yesoreyeram/grafana-infinity-datasource/actions?query=workflow%3A%22Build+%26+Publish%22"

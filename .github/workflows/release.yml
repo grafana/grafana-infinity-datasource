@@ -75,27 +75,18 @@ jobs:
         touch $outfile
         echo "" > $outfile
         cat README.md >> $outfile
-        echo "\n" >> $outfile
-        cat ./wiki/csv.md >> $outfile
-        echo "\n" >> $outfile
-        cat ./wiki/json.md >> $outfile
-        echo "\n" >> $outfile
-        cat ./wiki/graphql.md >> $outfile
-        echo "\n" >> $outfile
-        cat ./wiki/xml.md >> $outfile
-        echo "\n" >> $outfile
-        cat ./wiki/html.md >> $outfile
-        echo "\n" >> $outfile
-        cat ./wiki/url.md >> $outfile
-        echo "\n" >> $outfile
-        cat ./wiki/global-queries.md >> $outfile
-        echo "\n" >> $outfile
-        cat ./wiki/template-variables.md >> $outfile
-        echo "\n" >> $outfile
-        cat ./wiki/installation.md >> $outfile
-        echo "\n" >> $outfile
+        # cat ./wiki/csv.md >> $outfile
+        # cat ./wiki/json.md >> $outfile
+        # cat ./wiki/graphql.md >> $outfile
+        # cat ./wiki/xml.md >> $outfile
+        # cat ./wiki/html.md >> $outfile
+        # cat ./wiki/url.md >> $outfile
+        # cat ./wiki/global-queries.md >> $outfile
+        # cat ./wiki/template-variables.md >> $outfile
+        # cat ./wiki/installation.md >> $outfile
+        # cat ./wiki/configuration.md >> $outfile
+        # cat ./wiki/provisioning.md >> $outfile
         cat ./CHANGELOG.md >> $outfile
-        echo "\n" >> $outfile
     - name: Sign plugin
       run: yarn sign;
       env:

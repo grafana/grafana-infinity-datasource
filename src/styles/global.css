@@ -80,6 +80,11 @@ body {
   max-width: 800px;
 }
 
+img[src*='#center'] {
+  display: block;
+  margin: auto;
+}
+
 /* subheader */
 
 #topnav .nav-link:hover {
@@ -106,10 +111,6 @@ body {
     0%{background-position:0% 50%}
     50%{background-position:100% 50%}
     100%{background-position:0% 50%}
-}
-
-.feature-card {
-  cursor:pointer;
 }
 
 .feature-card:hover {
