@@ -5,7 +5,7 @@
   "metrics": true,
   "annotations": false,
   "info": {
-    "version": "0.6.0",
+    "version": "0.6.1",
     "updated": "2021-05-10",
     "description": "JSON, CSV, XML, GraphQL & HTML datasource for Grafana. Do infinite things with Grafana.",
     "author": {
