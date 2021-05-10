@@ -9,6 +9,10 @@ body {
 }
 
 @media (max-width: 991.98px) {
+  body {padding-top: 46px;}
+}
+
+@media (max-width: 991.98px) {
   .offcanvas-collapse {
     position: fixed;
     top: 56px; /* Height of navbar */
@@ -104,6 +108,19 @@ body {
     100%{background-position:0% 50%}
 }
 
+.feature-card {
+  cursor:pointer;
+}
+
+.feature-card:hover {
+  -webkit-animation: SubHeader 40s ease infinite;
+  -moz-animation: SubHeader 40s ease infinite;
+  animation: SubHeader 40s ease infinite;
+}
+
 #subnav .nav-link:hover {
   color: #f6f1c5;
+}
+code {
+  background: rgb(240, 240, 240);
 }

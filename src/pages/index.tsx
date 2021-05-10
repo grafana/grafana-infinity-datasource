@@ -31,7 +31,7 @@ export default function Home() {
             height: `${screenSize.height - 56}px`,
             backgroundSize: 'cover',
             backgroundColor: '#021E40',
-            backgroundImage: `url('https://play.grafana.org/public/img/login_background_dark.svg')`,
+            backgroundImage: `url('https://images.unsplash.com/photo-1620503374956-c942862f0372?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2250&q=80')`,
           }}
         >
           <div
@@ -40,9 +40,9 @@ export default function Home() {
               marginTop: `${screenSize.height / 4}px`,
             }}
           >
-            <h1 className="display-4 fw-lighter text-white">Grafana Infinity Datasource</h1>
+            <h1 className="display-4 fw-lighter text-dark">Grafana Infinity Datasource</h1>
             <br />
-            <p className="fw-normal text-white">Do infinite things with Grafana</p>
+            <p className="fw-normal text-dark">Do infinite things with Grafana</p>
             <br />
             <Link
               className="btn btn-primary text-black"

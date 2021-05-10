@@ -31,7 +31,7 @@ export const Header = (props: HeaderProps) => {
         aria-label="Main navigation"
       >
         <div className="container-fluid">
-          <Link className="text-white fw-bold px-2" to="/features" style={{ textDecoration: 'none' }}>
+          <Link className="text-white fw-bold px-2" to="/welcome" style={{ textDecoration: 'none' }}>
             {props.title}
           </Link>
           <button
@@ -70,11 +70,19 @@ export const Header = (props: HeaderProps) => {
                   Report Bug
                 </a>
               </li>
-              <li className="nav-item">
-                <Link className="nav-link rounded fw-bolder" to="/wiki/installation">
-                  Install
-                </Link>
-              </li>
+            </ul>
+            <ul className="navbar-nav d-flex mb-2 mb-lg-0">
+              <Link
+                className="nav-links rounded text-white fw-bolder"
+                to="/wiki/installation"
+                style={{
+                  padding: '5px 8px',
+                  textDecoration: 'none',
+                  background: 'linear-gradient(200deg, #FADE2A, #F05A28)',
+                }}
+              >
+                Install
+              </Link>
             </ul>
           </div>
         </div>
