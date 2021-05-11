@@ -1,5 +1,5 @@
 module.exports = {
-  pathPrefix: `/grafana-infinity-datasource`,
+  pathPrefix: process.env.GATSBY_PREFIX_PATHS === 'IGNORE' ? false : `/grafana-infinity-datasource`,
   siteMetadata: {
     title: `Grafana Infinity Datasource`,
     description: `Do infinite things with Grafana. Turn any website into beautiful grafana dashboards. Supports HTML, CSV, JSON, XML & GraphQL documents.`,
@@ -17,4 +17,4 @@ module.exports = {
       },
     },
   ],
-}
+};
