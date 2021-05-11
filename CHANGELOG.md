@@ -9,6 +9,7 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 - Support for custom headers and query strings in individual queries
 - Allow variables in root/rows selector
 - Placeholder for migrating into backend plugin
+- Vercel deployment added
 
 ## [ 0.6.1 ]
 
