@@ -1,16 +1,20 @@
-import React, { ReactChild } from 'react';
+import React from 'react';
 import { useStaticQuery, graphql } from 'gatsby';
 import { Helmet } from 'react-helmet';
-import { SubHeader } from './SubHeader';
+import { defineCustomElements as deckDeckGoHighlightElement } from '@deckdeckgo/highlight-code/dist/loader';
+import { SubMenu } from './SubMenu';
 import { Header } from './../components/Header';
 import { Footer } from './../components/Footer';
+import { SubHeader } from './../components/SubHeader';
 
 interface LayoutProps {
-  children: ReactChild;
-  showSubHeader: boolean;
+  showSubMenu: boolean;
+  title: string;
 }
 
-export const Layout = ({ children, showSubHeader }: LayoutProps) => {
+deckDeckGoHighlightElement();
+
+export const Layout: React.FC<LayoutProps> = props => {
   const data = useStaticQuery(
     graphql`
       query {
@@ -41,8 +45,11 @@ export const Layout = ({ children, showSubHeader }: LayoutProps) => {
         <title>{data.site.siteMetadata.title}</title>
       </Helmet>
       <Header title={data.site.siteMetadata.title} />
-      {showSubHeader && <SubHeader></SubHeader>}
-      <div>{children}</div>
+      {props.showSubMenu && <SubMenu></SubMenu>}
+      {props.title !== '' && <SubHeader title={props.title} />}
+      <main>
+        <div>{props.children}</div>
+      </main>
       <Footer />
     </>
   );

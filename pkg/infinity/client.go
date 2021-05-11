@@ -1,6 +1,8 @@
 package infinity
 
 import (
+	"crypto/tls"
+	"crypto/x509"
 	"encoding/base64"
 	"encoding/json"
 	"errors"
@@ -17,10 +19,46 @@ type Client struct {
 	HttpClient *http.Client
 }
 
+func GetTLSConfigFromSettings(settings InfinitySettings) (*tls.Config, error) {
+	tlsConfig := &tls.Config{
+		InsecureSkipVerify: settings.InsecureSkipVerify,
+		ServerName:         settings.ServerName,
+	}
+	if settings.TLSClientAuth {
+		if settings.TLSClientCert == "" || settings.TLSClientKey == "" {
+			return nil, errors.New("invalid Client cert or key")
+		}
+		cert, err := tls.X509KeyPair([]byte(settings.TLSClientCert), []byte(settings.TLSClientKey))
+		if err != nil {
+			return nil, err
+		}
+		tlsConfig.Certificates = []tls.Certificate{cert}
+	}
+	if settings.TLSAuthWithCACert && settings.TLSCACert != "" {
+		caPool := x509.NewCertPool()
+		ok := caPool.AppendCertsFromPEM([]byte(settings.TLSCACert))
+		if !ok {
+			return nil, errors.New("invalid TLS CA certificate")
+		}
+		tlsConfig.RootCAs = caPool
+	}
+	return tlsConfig, nil
+}
+
 func NewClient(settings InfinitySettings) (client *Client, err error) {
+	tlsConfig, err := GetTLSConfigFromSettings(settings)
+	if err != nil {
+		return nil, err
+	}
+	transport := &http.Transport{
+		TLSClientConfig: tlsConfig,
+	}
+	httpClient := &http.Client{
+		Transport: transport,
+	}
 	return &Client{
 		Settings:   settings,
-		HttpClient: &http.Client{},
+		HttpClient: httpClient,
 	}, err
 }
 
@@ -32,10 +70,7 @@ func replaceSecret(input string, settings InfinitySettings) string {
 }
 
 func GetQueryURL(settings InfinitySettings, query Query) string {
-	urlString := query.URL
-	if settings.DatasourceMode == DataSourceModeAdvanced {
-		urlString = fmt.Sprintf("%s%s", settings.URL, query.URL)
-	}
+	urlString := fmt.Sprintf("%s%s", settings.URL, query.URL)
 	urlString = replaceSecret(urlString, settings)
 	u, err := url.Parse(urlString)
 	if err != nil {
@@ -58,7 +93,7 @@ func getRequest(settings InfinitySettings, body io.Reader, query Query) (req *ht
 	default:
 		req, err = http.NewRequest("GET", url, nil)
 	}
-	if settings.DatasourceMode == DataSourceModeAdvanced && (settings.UserName != "" || settings.Password != "") {
+	if settings.BasicAuthEnabled && (settings.UserName != "" || settings.Password != "") {
 		req.Header.Add("Authorization", "Basic "+base64.StdEncoding.EncodeToString([]byte(settings.UserName+":"+settings.Password)))
 	}
 	req.Header.Set("User-Agent", "Grafana")

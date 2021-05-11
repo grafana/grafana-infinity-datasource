@@ -1,33 +1,34 @@
 import React from 'react';
-import { Link } from 'gatsby';
+import { useStaticQuery, graphql } from 'gatsby';
 
-const SubHeaderLink: React.FC<{ to: string; className?: string }> = props => {
-  return (
-    <Link className={`nav-link ${props.className}`} to={props.to}>
-      {props.children}
-    </Link>
+interface SubHeaderProps {
+  title: string;
+}
+
+export const SubHeader: React.FC<SubHeaderProps> = props => {
+  const data = useStaticQuery(
+    graphql`
+      query {
+        site {
+          siteMetadata {
+            wallpaper
+          }
+        }
+      }
+    `
   );
-};
-
-export const SubHeader = () => {
   return (
-    <>
-      <div className="nav-scroller shadow-sm" style={{ backgroundColor: '#021936' }}>
-        <nav id="subnav" className="nav nav-underline d-flex" aria-label="Secondary navigation">
-          <span className="ml-4"></span>
-          <SubHeaderLink to="/wiki/json">JSON</SubHeaderLink>
-          <SubHeaderLink to="/wiki/csv">CSV</SubHeaderLink>
-          <SubHeaderLink to="/wiki/graphql">GraphQL</SubHeaderLink>
-          <SubHeaderLink to="/wiki/xml">XML</SubHeaderLink>
-          <SubHeaderLink to="/wiki/html">HTML</SubHeaderLink>
-          <SubHeaderLink to="/wiki/url">URL</SubHeaderLink>
-          <SubHeaderLink to="/wiki/time-formats">Time Formats</SubHeaderLink>
-          <SubHeaderLink to="/wiki/template-variables">Template Variables</SubHeaderLink>
-          <SubHeaderLink to="/wiki/global-queries">Global Queries</SubHeaderLink>
-          <SubHeaderLink to="/wiki/configuration">Configuration</SubHeaderLink>
-          <SubHeaderLink to="/wiki/provisioning">Provisioning</SubHeaderLink>
-        </nav>
-      </div>
-    </>
+    <section
+      className="subheader py-5 text-center"
+      style={{
+        backgroundColor: '#021E40',
+        color: 'white',
+        backgroundPositionX: '80%',
+        backgroundPositionY: '30%',
+        backgroundImage: `url(${data.site.siteMetadata.wallpaper})`,
+      }}
+    >
+      <h1>{props.title}</h1>
+    </section>
   );
 };

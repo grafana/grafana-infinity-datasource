@@ -1,9 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'gatsby';
+import { Link, graphql } from 'gatsby';
 import { Layout } from '../components/Layout';
-import { Features } from './welcome';
+import { Features } from '../components/Features';
 
-export default function Home() {
+export interface HomeProps {
+  data: any;
+}
+
+export const pageQuery = graphql`
+  query {
+    site {
+      siteMetadata {
+        wallpaper
+      }
+    }
+  }
+`;
+
+export default function Home({ data }: HomeProps) {
   const [hasRan, setHasRan] = useState(false);
   const [screenSize, setScreenSize] = useState({
     height: 0,
@@ -23,16 +37,18 @@ export default function Home() {
     };
   }, [screenSize, hasRan]);
   return (
-    <Layout showSubHeader={false}>
+    <Layout showSubMenu={false} title="">
       <>
         <div
           className="position-relative overflow-hidden text-center"
           style={{
             width: '100%',
-            height: `${screenSize.height - 56}px`,
+            height: `${screenSize.height - 40}px`,
             backgroundSize: 'cover',
             backgroundColor: '#021E40',
-            backgroundImage: `url('https://images.unsplash.com/photo-1620503374956-c942862f0372?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2250&q=80')`,
+            backgroundPositionX: '10%',
+            backgroundPositionY: '10%',
+            backgroundImage: `url(${data.site.siteMetadata.wallpaper})`,
           }}
         >
           <div
@@ -41,16 +57,26 @@ export default function Home() {
               marginTop: `${screenSize.height / 4}px`,
             }}
           >
-            <h1 className="display-4 fw-lighter text-dark">Grafana Infinity Datasource</h1>
+            <h1 className="display-4 fw-bolder text-white" id="banner-title">
+              Grafana Infinity Datasource
+            </h1>
             <br />
-            <p className="fw-normal text-dark">Do infinite things with Grafana</p>
+            <p className="fw-normal text-white">
+              <span className="fw-bold">Do infinite things with Grafana.</span>
+              <br />
+              <br />
+              <span className="text-secondary">
+                Visualize data from JSON, CSV, JSON, XML GraphQL, HTML &amp; REST APIs. Also turns any website into
+                beautiful grafana dashboards.
+              </span>
+            </p>
             <br />
             <Link
               className="btn btn-primary text-black"
               style={{ backgroundImage: 'linear-gradient(#FADE2A,#F05A28)', color: 'black', border: 'none' }}
-              to="/wiki/installation"
+              to="/getting-started"
             >
-              Install
+              Getting started
             </Link>
             <Link
               className="btn btn-primary text-black mx-4"

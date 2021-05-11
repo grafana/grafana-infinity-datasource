@@ -3,15 +3,13 @@ slug: "/wiki/json"
 title: "JSON"
 ---
 
-## JSON Features
-
 ![](https://user-images.githubusercontent.com/153843/108427049-7dd66300-7234-11eb-8d27-cec50945a66c.png#center)
 
 Select **Type** of the query to `JSON`. You can either specify the URL of the JSON API, JSON file or can provide inline CSV. 
 
-## JSON URL
+## Using public JSON API endpoints
 
-Below example shows about fetching data from JSON URL.
+Below example shows about fetching data from a publicly accessible JSON URL/API endpoint.
 
 URL : https://jsonplaceholder.typicode.com/users
 
@@ -19,7 +17,7 @@ URL : https://jsonplaceholder.typicode.com/users
 
 In the above example, the data in the URL is array. So no need to configure any additional fields except url in the panel.
 
-## JSON URL - data in a json property
+## Accessing nested properties of JSON data
 
 URL : https://thingspeak.com/channels/38629/feed.json
 
@@ -72,7 +70,7 @@ In the root selector, you can use the selector in JSONPath format.
 
 Note: Any root selector that starts with $ will be considered as JSONPath selector
 
-![image](https://user-images.githubusercontent.com/153843/100856870-ddb63c80-3483-11eb-8e3c-791c161d3cc7.png)
+![image](https://user-images.githubusercontent.com/153843/100856870-ddb63c80-3483-11eb-8e3c-791c161d3cc7.png#center)
 
 Example:
 

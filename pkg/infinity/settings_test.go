@@ -46,10 +46,9 @@ func TestLoadSettings(t *testing.T) {
 				},
 			},
 			wantSettings: infinity.InfinitySettings{
-				DatasourceMode: infinity.DataSourceModeAdvanced,
-				URL:            "https://foo.com",
-				UserName:       "user",
-				Password:       "password",
+				URL:      "https://foo.com",
+				UserName: "user",
+				Password: "password",
 				CustomHeaders: map[string]string{
 					"header1": "headervalue1",
 				},

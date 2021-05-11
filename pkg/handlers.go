@@ -39,5 +39,5 @@ func (td *InfinityDatasource) proxyHandler(rw http.ResponseWriter, req *http.Req
 		return
 	}
 	rw.WriteHeader(http.StatusNotImplemented)
-	rw.Write([]byte("500 - Something bad happened! Invalid query."))
+	_, _ = rw.Write([]byte("500 - Something bad happened! Invalid query."))
 }

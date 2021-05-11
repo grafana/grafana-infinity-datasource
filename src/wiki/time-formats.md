@@ -28,7 +28,7 @@ Thu Nov 23 2017 10:30:20 GMT+0000 (Greenwich Mean Time),10.1
 01/29/2018,12.4
 ```
 
-### UNIX EPOCH Time formats
+## UNIX EPOCH Time formats
 
 If your data is in unix epoch time formats (unix milliseconds format), You can select **Timestamp ( UNIX ms )** / **timestamp_epoch** as as type. Below snippet shows some examples
 

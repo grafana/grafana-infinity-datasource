@@ -242,14 +242,18 @@ export type VariableQuery = {
   infinityQuery?: InfinityQuery;
 };
 
-export enum DatasourceMode {
-  Basic = 'basic',
-  Advanced = 'advanced',
-}
-
 export interface InfinityDataSourceJSONOptions extends DataSourceJsonData {
-  datasource_mode?: DatasourceMode;
+  tlsSkipVerify?: boolean;
+  tlsAuth?: boolean;
+  serverName?: string;
+  tlsAuthWithCACert?: boolean;
   global_queries?: GlobalInfinityQuery[];
+}
+export interface InfinityDataSourceSecureJSONOptions {
+  basicAuthPassword?: string;
+  tlsCACert?: string;
+  tlsClientCert?: string;
+  tlsClientKey?: string;
 }
 export interface SecureField {
   id: string;

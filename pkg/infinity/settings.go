@@ -8,42 +8,57 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 )
 
-type DataSourceMode string
-
-const (
-	DataSourceModeBasic    DataSourceMode = "basic"
-	DataSourceModeAdvanced DataSourceMode = "advanced"
-)
-
 type InfinitySettings struct {
-	DatasourceMode    DataSourceMode
-	URL               string
-	UserName          string
-	Password          string
-	CustomHeaders     map[string]string
-	SecureQueryFields map[string]string
+	URL                string
+	BasicAuthEnabled   bool
+	UserName           string
+	Password           string
+	CustomHeaders      map[string]string
+	SecureQueryFields  map[string]string
+	InsecureSkipVerify bool
+	ServerName         string
+	TLSClientAuth      bool
+	TLSAuthWithCACert  bool
+	TLSCACert          string
+	TLSClientCert      string
+	TLSClientKey       string
 }
 
 type InfinitySettingsJson struct {
-	DataSourceMode string `json:"datasource_mode,omitempty"`
+	InsecureSkipVerify bool   `json:"tlsSkipVerify,omitempty"`
+	ServerName         string `json:"serverName,omitempty"`
+	TLSClientAuth      bool   `json:"tlsClientAuth,omitempty"`
+	TLSAuthWithCACert  bool   `json:"tlsAuthWithCACert,omitempty"`
 }
 
 func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinitySettings, err error) {
+	settings.URL = config.URL
+	settings.BasicAuthEnabled = config.BasicAuthEnabled
+	settings.UserName = config.BasicAuthUser
 	infJson := InfinitySettingsJson{}
 	if config.JSONData != nil {
 		if err := json.Unmarshal(config.JSONData, &infJson); err != nil {
 			return settings, err
 		}
+		settings.InsecureSkipVerify = infJson.InsecureSkipVerify
+		settings.ServerName = infJson.ServerName
+		settings.TLSClientAuth = infJson.TLSClientAuth
+		settings.TLSAuthWithCACert = infJson.TLSAuthWithCACert
 	}
-	settings.URL = config.URL
-	settings.UserName = config.BasicAuthUser
-	settings.DatasourceMode = DataSourceMode(infJson.DataSourceMode)
-	val, ok := config.DecryptedSecureJSONData["basicAuthPassword"]
-	settings.CustomHeaders = GetSecrets(config, "httpHeaderName", "httpHeaderValue")
-	settings.SecureQueryFields = GetSecrets(config, "secureQueryName", "secureQueryValue")
-	if ok {
+	if val, ok := config.DecryptedSecureJSONData["basicAuthPassword"]; ok {
 		settings.Password = val
 	}
+	if val, ok := config.DecryptedSecureJSONData["tlsCACert"]; ok {
+		settings.TLSCACert = val
+	}
+	if val, ok := config.DecryptedSecureJSONData["tlsClientCert"]; ok {
+		settings.TLSClientCert = val
+	}
+	if val, ok := config.DecryptedSecureJSONData["tlsClientKey"]; ok {
+		settings.TLSClientKey = val
+	}
+	settings.CustomHeaders = GetSecrets(config, "httpHeaderName", "httpHeaderValue")
+	settings.SecureQueryFields = GetSecrets(config, "secureQueryName", "secureQueryValue")
 	return
 }
 

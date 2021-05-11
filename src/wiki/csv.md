@@ -3,8 +3,6 @@ slug: "/wiki/csv"
 title: "CSV"
 ---
 
-## CSV Features
-
 ![](https://user-images.githubusercontent.com/153843/92571108-9e0ff800-f27a-11ea-9fe9-9f9dcbd7125a.png#center)
 
 Select **Type** of the query to `CSV`. You can either specify the URL of the CSV file or can provide inline CSV. 
@@ -21,7 +19,7 @@ In the below example, we are using CSV file from thingspeak traffic analysis. As
 
 Sample data from the above csv
 
-```csv
+```bash
 created_at,entry_id,field1,field2
 2021-02-18 21:46:23 UTC,10458189,6.000000,12.000000
 2021-02-18 21:46:39 UTC,10458190,0.000000,36.000000
@@ -51,7 +49,7 @@ In the above example, we don't have any time field. We have a string field and a
 
 Sample Data
 
-```csv
+```bash
 Country,Population
 India,3000
 China,3500
@@ -86,7 +84,7 @@ Ignore the root / rows as each line of CSV will be your rows.
 
 Instead of specifying URL, you can also use hardcoded csv values. For example, you can specify the csv in the following format
 
-```csv
+```bash
 country,population,capital
 india,200,mumbai
 india,100,chennai

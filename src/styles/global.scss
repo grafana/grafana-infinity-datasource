@@ -1,3 +1,4 @@
+$BrandBG :#021E40;
 /* offcanvas */
 html,
 body {
@@ -5,7 +6,7 @@ body {
 }
 
 body {
-  padding-top: 56px;
+  padding-top: 50px;
 }
 
 @media (max-width: 991.98px) {
@@ -15,7 +16,7 @@ body {
 @media (max-width: 991.98px) {
   .offcanvas-collapse {
     position: fixed;
-    top: 56px; /* Height of navbar */
+    top: 44px; /* Height of navbar */
     bottom: 0;
     left: 100%;
     width: 100%;
@@ -75,9 +76,40 @@ body {
   background-color: #6f42c1;
 }
 
-.blog-post img {
-  width: 100%;
-  max-width: 800px;
+.blog-post {
+  h2 {
+    display: inline-block;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 10px solid $BrandBG;
+  }
+  img {
+    width: 100%;
+    max-width: 900px;
+    filter: drop-shadow(0 0 0.3rem $BrandBG);
+    border-radius: 10px;
+  }
+  table {
+    width: 80%;
+    max-width: 900px;
+    border: 1px solid black;
+    margin:20px auto;
+    td, th {
+      border: 1px solid black;
+      padding: 10px;
+    }
+  }
+  blockquote {
+    width: 80%;
+    display:block;
+    background-color: rgb(240, 240, 240);
+    padding: 10px;
+    border-left: 4px solid $BrandBG;
+    p {
+      padding: 0;
+      margin: 0;
+    }
+  }
 }
 
 img[src*='#center'] {
@@ -87,7 +119,7 @@ img[src*='#center'] {
 
 /* subheader */
 
-#topnav .nav-link:hover {
+#banner-title:hover, #topnav .nav-link:hover {
     background: linear-gradient(268deg, #FADE2A, #F05A28);
     background-clip: text;
     -webkit-background-clip: text;
@@ -96,7 +128,6 @@ img[src*='#center'] {
     -moz-animation: SubHeader 4s ease infinite;
     animation: SubHeader 4s ease infinite;
 }
-
 @-webkit-keyframes SubHeader {
     0%{background-position:0% 50%}
     50%{background-position:100% 50%}
@@ -122,6 +153,23 @@ img[src*='#center'] {
 #subnav .nav-link:hover {
   color: #f6f1c5;
 }
+
 code {
   background: rgb(240, 240, 240);
+}
+
+/* Accordion */
+
+.accordion-button:not(.collapsed) {
+  color: white;
+  background-color: #021E40;
+}
+
+// Code highlight
+
+.deckgo-highlight-code-carbon {
+  display: block;
+  width: 80%;
+  max-width: 900px;
+  margin:10px auto;
 }

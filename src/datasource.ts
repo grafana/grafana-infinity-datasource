@@ -11,8 +11,6 @@ import {
   GlobalInfinityQuery,
   VariableQuery,
   MetricFindValue,
-  HealthCheckResult,
-  HealthCheckResultStatus,
   InfinityInstanceSettings,
   InfinityDataSourceJSONOptions,
 } from './types';
@@ -36,23 +34,6 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityDat
       t = matchingQuery ? matchingQuery.query : t;
     }
     return t;
-  }
-  testDatasource(): Promise<HealthCheckResult> {
-    return new Promise((resolve, reject) => {
-      if (
-        this.instanceSettings.jsonData &&
-        this.instanceSettings.jsonData.datasource_mode &&
-        this.instanceSettings.jsonData.datasource_mode === 'basic'
-      ) {
-        resolve({ message: 'No checks required', status: HealthCheckResultStatus.Success });
-      } else {
-        if (this.instanceSettings.url) {
-          resolve({ message: 'No checks performed', status: HealthCheckResultStatus.Success });
-        } else {
-          reject({ message: 'Missing URL', status: HealthCheckResultStatus.Failure });
-        }
-      }
-    });
   }
   private getResults(options: DataQueryRequest<InfinityQuery>): Promise<DataQueryResponse> {
     const promises: any[] = [];

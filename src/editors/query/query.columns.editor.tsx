@@ -61,7 +61,7 @@ export const QueryColumnsEditor: React.FC<QueryColumnProps> = ({ query, mode, on
           </div>
           <div className="gf-form">
             <div className="gf-form gf-form--grow">
-              <span className="btn btn-success btn-small" style={{ marginTop: '5px' }} onClick={() => onColumnAdd()}>
+              <span className="btn btn-secondary btn-small" style={{ marginTop: '5px' }} onClick={() => onColumnAdd()}>
                 Add Columns
               </span>
             </div>

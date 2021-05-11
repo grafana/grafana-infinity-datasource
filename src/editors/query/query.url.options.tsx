@@ -83,7 +83,7 @@ export const URLOptionsEditor: React.FC<URLOptionsProps> = ({ query, onChange, o
     },
   ];
 
-  const placeholderGraphQLQUery = `{
+  const placeholderGraphQLQuery = `{
     query : {
         # Write your query here
     }
@@ -178,7 +178,7 @@ export const URLOptionsEditor: React.FC<URLOptionsProps> = ({ query, onChange, o
                                   rows={8}
                                   className="gf-form-input min-width-30"
                                   value={query.url_options.data}
-                                  placeholder={placeholderGraphQLQUery}
+                                  placeholder={placeholderGraphQLQuery}
                                   onChange={e => onInputTextChange(e.target.value, `url_options.data`)}
                                 ></textarea>
                               </div>

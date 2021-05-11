@@ -3,11 +3,9 @@ slug: "/wiki/xml"
 title: "XML"
 ---
 
-## XML Inline
-
 In the below example, we are going to see how to use xml response in grafana
 
-![image](https://user-images.githubusercontent.com/153843/99292060-a0716e00-2838-11eb-9af8-cf87adfd8fd5.png)
+![image](https://user-images.githubusercontent.com/153843/99292060-a0716e00-2838-11eb-9af8-cf87adfd8fd5.png#center)
 
 ```xml
 <users>
@@ -78,8 +76,8 @@ Column1 Name : Use `_` as the selector for the property `name`. Here `_` refers 
 
 You can also use the hosted XML via the URL. Example shown below demonstrates how we connect XML from this [gist](https://gist.githubusercontent.com/yesoreyeram/655a362eed0f51be24e16d3f1127a31d/raw/aa58549a5cf9d06dae1204b5a09be5d651adc744/text.xml).
 
-![image](https://user-images.githubusercontent.com/153843/99293208-39ed4f80-283a-11eb-831e-ae14d297a2f3.png)
+![image](https://user-images.githubusercontent.com/153843/99293208-39ed4f80-283a-11eb-831e-ae14d297a2f3.png#center)
 
 Sample example visualized using bar guage panel and timeseries format.
 
-![image](https://user-images.githubusercontent.com/153843/99294213-a9b00a00-283b-11eb-9b8b-26842c2bc69b.png)
+![image](https://user-images.githubusercontent.com/153843/99294213-a9b00a00-283b-11eb-9b8b-26842c2bc69b.png#center)
