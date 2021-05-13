@@ -120,10 +120,6 @@ func (client *Client) req(url string, body *strings.Reader, settings InfinitySet
 	if res.StatusCode >= http.StatusBadRequest {
 		return nil, errors.New(res.Status)
 	}
-	if isJSON {
-		err = json.NewDecoder(res.Body).Decode(&obj)
-		return obj, err
-	}
 	bodyBytes, err := ioutil.ReadAll(res.Body)
 	return string(bodyBytes), err
 }

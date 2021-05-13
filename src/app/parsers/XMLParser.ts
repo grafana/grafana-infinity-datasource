@@ -42,7 +42,17 @@ export class XMLParser extends InfinityParser {
         if (typeof r === 'string') {
           row.push(r);
         } else {
-          row.push(value);
+          if (['string', 'number', 'boolean'].includes(typeof value)) {
+            row.push(value);
+          } else if (value && typeof value.getMonth === 'function') {
+            row.push(value);
+          } else {
+            if (value && Array.isArray(value)) {
+              row.push(value.join(','));
+            } else {
+              row.push(JSON.stringify(value));
+            }
+          }
         }
       });
       this.rows.push(row);

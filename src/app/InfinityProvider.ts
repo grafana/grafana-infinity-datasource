@@ -26,7 +26,7 @@ export class InfinityProvider {
   private fetchResults() {
     return new Promise((resolve, reject) => {
       this.datasource
-        .postResource('/proxy', this.target)
+        .postResource('proxy', this.target)
         .then(res => {
           resolve(res);
         })

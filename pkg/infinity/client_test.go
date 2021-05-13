@@ -111,7 +111,7 @@ func TestInfinityClient_GetResults(t *testing.T) {
 				URL:  "/foo/bar",
 				Type: "json",
 			},
-			wantO: map[string]interface{}{"authenticated": true, "user": "foo"},
+			wantO: "{\n  \"authenticated\": true, \n  \"user\": \"foo\"\n}\n",
 		},
 		{
 			name: "should throw error when incorrect auth specified",
@@ -133,10 +133,7 @@ func TestInfinityClient_GetResults(t *testing.T) {
 				URL:  fmt.Sprintf("%s%s", mockJSONDomain, mockJSONURL),
 				Type: "json",
 			},
-			wantO: []interface{}{
-				map[string]interface{}{"name": "foo", "age": float64(20)},
-				map[string]interface{}{"name": "bar", "age": float64(25)},
-			},
+			wantO: "[\n  {\n    \"name\": \"foo\",\n    \"age\": 20\n  },\n  {\n    \"name\": \"bar\",\n    \"age\": 25\n  }\n]",
 		},
 	}
 	for _, tt := range tests {

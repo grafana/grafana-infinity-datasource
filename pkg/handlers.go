@@ -26,15 +26,6 @@ func (td *InfinityDatasource) proxyHandler(rw http.ResponseWriter, req *http.Req
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		if query.Type == "json" || query.Type == "graphql" {
-			queryJSON, err := json.MarshalIndent(response, "", "\t")
-			if err != nil {
-				http.Error(rw, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			fmt.Fprintf(rw, "%s", queryJSON)
-			return
-		}
 		fmt.Fprintf(rw, "%s", response)
 		return
 	}

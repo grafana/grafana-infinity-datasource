@@ -50,7 +50,13 @@ export class JSONParser extends InfinityParser {
         } else if (c.type === ScrapColumnFormat.Number) {
           value = value === '' ? null : +value;
         }
-        row.push(value);
+        if (['string', 'number', 'boolean'].includes(typeof value)) {
+          row.push(value);
+        } else if (value && typeof value.getMonth === 'function') {
+          row.push(value);
+        } else {
+          row.push(JSON.stringify(value));
+        }
       });
       this.rows.push(row);
     });
