@@ -24,7 +24,7 @@ export const SubHeader: React.FC<SubHeaderProps> = props => {
         backgroundColor: '#021E40',
         color: 'white',
         backgroundPositionX: '80%',
-        backgroundPositionY: '30%',
+        backgroundPositionY: '20%',
         backgroundImage: `url(${data.site.siteMetadata.wallpaper})`,
       }}
     >

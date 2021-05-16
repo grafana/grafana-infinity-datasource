@@ -55,19 +55,37 @@ export const Header = (props: HeaderProps) => {
               <li className="nav-item">
                 <a
                   className="nav-link"
-                  href="https://github.com/yesoreyeram/grafana-infinity-datasource"
+                  href="https://github.com/yesoreyeram/grafana-infinity-datasource/issues/new/choose"
                   target="_blank"
                 >
-                  Github
+                  <i className="fas fa-bug text-secondary"></i>
+                  <span className="px-2 small-screen-only">Report Bug</span>
                 </a>
               </li>
               <li className="nav-item">
                 <a
                   className="nav-link"
-                  href="https://github.com/yesoreyeram/grafana-infinity-datasource/issues/new/choose"
+                  href="https://github.com/yesoreyeram/grafana-infinity-datasource"
                   target="_blank"
                 >
-                  Report Bug
+                  <i className="fab fa-github text-secondary"></i>
+                  <span className="px-2 small-screen-only">Github</span>
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  href="https://www.youtube.com/playlist?list=PL4vVKeEREln5ub1qrSMrwAabU0FiSNtmC"
+                  className="nav-link"
+                  target="_blank"
+                >
+                  <i className="fab fa-youtube text-secondary"></i>
+                  <span className="px-2 small-screen-only">Youtube</span>
+                </a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="https://twitter.com/grafanaInfinity" target="_blank">
+                  <i className="fab fa-twitter text-secondary"></i>
+                  <span className="px-2 small-screen-only">Follow</span>
                 </a>
               </li>
             </ul>

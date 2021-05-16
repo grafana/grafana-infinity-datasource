@@ -14,9 +14,9 @@ If you need to provision via file, use the following settings for the basic use 
   type: yesoreyeram-infinity-datasource
   access: proxy
   isDefault: false
-  jsonData:
-       datasource_mode: "basic"
   version: 1
+  jsonData:
+       tlsSkipVerify: false
   readOnly: true
 ```
 
@@ -29,13 +29,19 @@ If you need an advanced version of the datasource, use the following format.
   type: yesoreyeram-infinity-datasource
   access: proxy
   isDefault: false
-  url: <<YOUR URL. Example -- https://api.github.com/graphql>>
+  url: <<YOUR URL. can be empty>>
   basicAuth: true
   basicAuthUser: <<YOUR USER NAME. Example -- github_id>>
   jsonData:
-       datasource_mode: "advanced"
+       tlsSkipVerify: <<true or false>> -- false by default
+       tlsAuth: <<true or false>> -- false by default
+       tlsAuthWithCACert: <<true or false>> -- false by default
+       serverName: <<server name that matches in certificate for tlsAuthWithCACert>>
   secureJsonData:
        basicAuthPassword: <<YOUR PASSWORD. Example -- MY_Github_PAT_Token>>
+       tlsCACert: <<Your TLS cert>>
+       tlsClientCert: <<Your client certificate>>
+       tlsClientKey: <<Your client key>>
   version: 1
   readOnly: true
 ```

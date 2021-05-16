@@ -44,12 +44,14 @@ export const Layout: React.FC<LayoutProps> = props => {
         <meta property="twitter:image" content={data.site.siteMetadata.socialImage} />
         <title>{data.site.siteMetadata.title}</title>
       </Helmet>
-      <Header title={data.site.siteMetadata.title} />
-      {props.showSubMenu && <SubMenu></SubMenu>}
-      {props.title !== '' && <SubHeader title={props.title} />}
-      <main>
-        <div>{props.children}</div>
-      </main>
+      <div>
+        <Header title={data.site.siteMetadata.title} />
+        {props.showSubMenu && <SubMenu></SubMenu>}
+        {props.title !== '' && <SubHeader title={props.title} />}
+        <main>
+          <div>{props.children}</div>
+        </main>
+      </div>
       <Footer />
     </>
   );

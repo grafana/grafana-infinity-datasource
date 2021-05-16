@@ -35,7 +35,8 @@ export class InfinityParser {
   }
   private canAutoGenerateColumns(): boolean {
     return (
-      [InfinityQueryType.CSV, InfinityQueryType.JSON].includes(this.target.type) && this.target.columns.length === 0
+      [InfinityQueryType.CSV, InfinityQueryType.JSON, InfinityQueryType.GraphQL].includes(this.target.type) &&
+      this.target.columns.length === 0
     );
   }
   toTable() {
