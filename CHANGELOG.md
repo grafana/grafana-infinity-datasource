@@ -4,12 +4,14 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 
 ## [ 0.7.0 ]
 
+- Local file support added (Read csv/json/xml from local file)
 - Data frame format added
 - Custom secure query strings support added
 - Support for custom headers and query strings in individual queries
 - Allow variables in root/rows selector
 - Placeholder for migrating into backend plugin
-- Vercel deployment added
+- Migrated website from vuepress to gatsby
+- Vercel deployment added for website
 
 ## [ 0.6.1 ]
 

@@ -100,10 +100,19 @@ export default function GettingStarted() {
               data-bs-parent="#accordionExample"
             >
               <div className="accordion-body">
-                Based on the URL/API you want to query, Choose the type from <Link to="/wiki/json">JSON</Link>,{' '}
-                <Link to="/wiki/csv">CSV</Link>, <Link to="/wiki/xml">XML</Link>,{' '}
-                <Link to="/wiki/graphql">GraphQL</Link> or <Link to="/wiki/html">HTML</Link> and then enter your URL.
-                <br />
+                <p>
+                  Based on the <b>URL/API</b> you want to query, Choose the type from <Link to="/wiki/json">JSON</Link>,{' '}
+                  <Link to="/wiki/csv">CSV</Link>, <Link to="/wiki/xml">XML</Link>,{' '}
+                  <Link to="/wiki/graphql">GraphQL</Link> or <Link to="/wiki/html">HTML</Link> and then enter your URL.
+                </p>
+                <p>
+                  Choose <b>Local file</b> option, in case if you are reading file from local server where grafana
+                  deployed.
+                </p>
+                <p>
+                  You can also choose <b>Inline</b> option, In case if you are performing adhoc/static analysis over
+                  inline data.
+                </p>
                 <div className="mt-2">
                   More details about the queries can be found in the individual sections of the APIs.
                 </div>

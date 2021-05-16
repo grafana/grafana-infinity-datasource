@@ -108,7 +108,7 @@ export const TypeChooser: React.FC<TypeChooserProps> = ({ query, onChange, onRun
           </>
         ) : (
           <Select
-            className={`width-${query.type === 'series' ? 8 : 6}`}
+            className="width-8"
             value={SCRAP_QUERY_SOURCES.find((field: SelectableValue) => field.value === query.source) || defaultSource}
             options={SCRAP_QUERY_SOURCES.filter(
               (field: SelectableValue) => field.supported_types.indexOf(query.type) > -1

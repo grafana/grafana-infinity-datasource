@@ -47,6 +47,7 @@ export enum InfinityQueryFormat {
 export enum InfinityQuerySources {
   URL = 'url',
   Inline = 'inline',
+  LocalFile = 'local-fs',
   RandomWalk = 'random-walk',
   Expression = 'expression',
 }
@@ -193,6 +194,11 @@ export const SCRAP_QUERY_SOURCES: ScrapQuerySources[] = [
       InfinityQueryType.XML,
       InfinityQueryType.GraphQL,
     ],
+  },
+  {
+    label: 'Local File',
+    value: InfinityQuerySources.LocalFile,
+    supported_types: [InfinityQueryType.CSV, InfinityQueryType.JSON, InfinityQueryType.XML],
   },
   {
     label: 'Inline',

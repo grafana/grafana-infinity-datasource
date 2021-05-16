@@ -21,12 +21,25 @@ func (td *InfinityDatasource) proxyHandler(rw http.ResponseWriter, req *http.Req
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		response, err := client.client.GetResults(query)
-		if err != nil {
-			http.Error(rw, err.Error(), http.StatusInternalServerError)
+		if query.Source == "url" {
+			response, err := client.client.GetResults(query)
+			if err != nil {
+				http.Error(rw, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			fmt.Fprintf(rw, "%s", response)
 			return
 		}
-		fmt.Fprintf(rw, "%s", response)
+		if query.Source == "local-fs" {
+			response, err := client.client.GetLocalFileContent(query)
+			if err != nil {
+				http.Error(rw, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			fmt.Fprintf(rw, "%s", response)
+			return
+		}
+		fmt.Fprintf(rw, "unknown query")
 		return
 	}
 	rw.WriteHeader(http.StatusNotImplemented)

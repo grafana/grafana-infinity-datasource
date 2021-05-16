@@ -11,6 +11,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
 )
 
@@ -143,4 +144,13 @@ func (client *Client) GetResults(query Query) (o interface{}, err error) {
 	default:
 		return client.req(query.URL, nil, client.Settings, isJSON, query)
 	}
+}
+
+func (client *Client) GetLocalFileContent(query Query) (o interface{}, err error) {
+	filePath := strings.TrimSpace(query.URL)
+	content, err := os.ReadFile(filePath)
+	if err != nil {
+		return nil, err
+	}
+	return string(content), nil
 }
