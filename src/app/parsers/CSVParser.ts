@@ -17,7 +17,11 @@ export class CSVParser extends InfinityParser {
     const options = {
       columns: true,
       skip_empty_lines: true,
+      delimiter: ',',
     };
+    if (this.target.csv_options?.delimiter) {
+      options.delimiter = this.target.csv_options.delimiter;
+    }
     const records = parse(CSVResponse, options);
     return records;
   }

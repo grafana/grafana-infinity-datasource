@@ -124,6 +124,9 @@ export interface InfinityQuery extends DataQuery {
     headers?: QueryHeaders[];
   };
   data: string;
+  csv_options?: {
+    delimiter?: string;
+  };
   root_selector: string;
   global_query_id?: string;
   columns: ScrapColumn[];
@@ -278,6 +281,9 @@ export const DefaultInfinityQuery: InfinityQuery = {
   data: '',
   url: '',
   url_options: { method: 'GET', data: '' },
+  csv_options: {
+    delimiter: ',',
+  },
   root_selector: '',
   columns: [],
   filters: [],
