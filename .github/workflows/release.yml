@@ -152,6 +152,11 @@ jobs:
         go install
         cd ../../;
         plugincheck ${{ steps.upload-plugin-asset.outputs.browser_download_url }};
+    - name: Test locally
+      run: |
+        echo To test the plugin locally, execute the following command.
+        echo
+        echo 'docker run -p 3000:3000 -e "GF_INSTALL_PLUGINS=${{ steps.upload-plugin-asset.outputs.browser_download_url }};yesoreyeram-infinity-datasource" grafana/grafana:latest'
     - name: Publish to Grafana.com
       run: |
         echo Publish your plugin to grafana.com/plugins by opening a PR to https://github.com/grafana/grafana-plugin-repository with the following entry:

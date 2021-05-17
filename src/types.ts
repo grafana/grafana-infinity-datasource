@@ -257,6 +257,10 @@ export interface InfinityDataSourceJSONOptions extends DataSourceJsonData {
   serverName?: string;
   tlsAuthWithCACert?: boolean;
   global_queries?: GlobalInfinityQuery[];
+  local_sources_options?: {
+    enabled: boolean;
+    allowed_paths?: string[];
+  };
 }
 export interface InfinityDataSourceSecureJSONOptions {
   basicAuthPassword?: string;

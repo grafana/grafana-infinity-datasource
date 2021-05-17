@@ -37,6 +37,11 @@ If you need an advanced version of the datasource, use the following format.
        tlsAuth: <<true or false>> -- false by default
        tlsAuthWithCACert: <<true or false>> -- false by default
        serverName: <<server name that matches in certificate for tlsAuthWithCACert>>
+       local_sources_options:
+          enabled: <<true or false>> -- false by default 
+          allowed_paths:
+               - /etc/path1
+               - /some/other/path
   secureJsonData:
        basicAuthPassword: <<YOUR PASSWORD. Example -- MY_Github_PAT_Token>>
        tlsCACert: <<Your TLS cert>>
