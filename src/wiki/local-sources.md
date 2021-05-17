@@ -1,6 +1,10 @@
 ---
 slug: '/wiki/local-sources'
 title: 'Local Sources / Files'
+previous_page_title: "Time Formats"
+previous_page_slug: "/wiki/time-formats"
+next_page_title: "Installation"
+next_page_slug: "/wiki/installation"
 ---
 
 ## Local Sources / Files

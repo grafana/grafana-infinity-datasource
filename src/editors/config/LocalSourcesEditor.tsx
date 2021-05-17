@@ -26,7 +26,7 @@ export const LocalSourcesEditor: React.FC<LocalSourcesEditorProps> = props => {
       },
     });
   };
-  const onPathAdded = (path: string = '/some-valid-path') => {
+  const onPathAdded = (path = '/some-valid-path') => {
     const allowed_paths = options.jsonData.local_sources_options?.allowed_paths || [];
     allowed_paths.push(path);
     onOptionsChange({

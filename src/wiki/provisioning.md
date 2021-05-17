@@ -1,6 +1,10 @@
 ---
 slug: "/wiki/provisioning"
 title: "Provisioning"
+previous_page_title: "Configuration"
+previous_page_slug: "/wiki/configuration"
+next_page_title: "URL"
+next_page_slug: "/wiki/url"
 ---
 
 If you want to [provision](https://grafana.com/docs/grafana/latest/administration/provisioning/#provisioning-grafana) your datasources via grafana provisioning feature, use the following settings

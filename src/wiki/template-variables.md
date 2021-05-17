@@ -1,6 +1,10 @@
 ---
 slug: "/wiki/template-variables"
 title: "Template variables"
+previous_page_title: "HTML"
+previous_page_slug: "/wiki/html"
+next_page_title: "Time Formats"
+next_page_slug: "/wiki/time-formats"
 ---
 
 ## Collection - (Legacy variable)

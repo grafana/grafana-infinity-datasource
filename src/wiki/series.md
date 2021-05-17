@@ -1,6 +1,10 @@
 ---
 slug: "/wiki/series"
 title: "Series"
+previous_page_title: "CSV"
+previous_page_slug: "/wiki/csv"
+next_page_title: "Global Queries"
+next_page_slug: "/wiki/global-queries"
 ---
 
 ## Expression

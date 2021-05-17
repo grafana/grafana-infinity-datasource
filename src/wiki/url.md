@@ -1,6 +1,10 @@
 ---
 slug: '/wiki/url'
 title: 'URL'
+previous_page_title: "Provisioning"
+previous_page_slug: "/wiki/provisioning"
+next_page_title: "Local sources"
+next_page_slug: "/wiki/local-sources"
 ---
 
 ## URL

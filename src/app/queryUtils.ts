@@ -2,14 +2,30 @@ import { getTemplateSrv } from '@grafana/runtime';
 import { ScopedVars } from '@grafana/data';
 import { InfinityQuery, InfinityQuerySources, InfinityQueryType, InfinityInstanceSettings } from '../types';
 
+const replaceVariable = (input: string, scopedVars: ScopedVars): string => {
+  return getTemplateSrv().replace(input || '', scopedVars, 'glob');
+};
+
 export const replaceVariables = (query: InfinityQuery, scopedVars: ScopedVars): InfinityQuery => {
   return {
     ...query,
-    url: getTemplateSrv().replace(query.url + '', scopedVars, 'glob'),
-    data: getTemplateSrv().replace(query.data + '', scopedVars, 'glob'),
+    url: replaceVariable(query.url, scopedVars),
+    data: replaceVariable(query.data, scopedVars),
     url_options: {
       ...query.url_options,
-      data: getTemplateSrv().replace(query.url_options?.data ? query.url_options.data : '', scopedVars, 'glob'),
+      data: replaceVariable(query.url_options?.data || '', scopedVars),
+      params: query.url_options.params?.map(param => {
+        return {
+          ...param,
+          value: getTemplateSrv().replace(param.value, scopedVars, 'glob'),
+        };
+      }),
+      headers: query.url_options.headers?.map(header => {
+        return {
+          ...header,
+          value: getTemplateSrv().replace(header.value, scopedVars, 'glob'),
+        };
+      }),
     },
     filters: (query.filters ? [...query.filters] : []).map(filter => {
       filter.value = filter.value.map(val => {

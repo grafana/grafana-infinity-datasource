@@ -1,6 +1,10 @@
 ---
 slug: "/wiki/global-queries"
 title: "Global Queries / Registered Queries"
+previous_page_title: "Provisioning"
+previous_page_slug: "/wiki/provisioning"
+next_page_title: "Configuration"
+next_page_slug: "/wiki/configuration"
 ---
 
 Working with same queries in multiple dashboards might be hard some times. To change a query, you need to update all the dashboards. So Infinity datasource gives an option to register queries globally and then allows to reuse the queries across dashboards.
@@ -14,7 +18,7 @@ To register a query, in the datasource instance settings perform the following a
 * Enter the query fields.
 * Click `Save`
 
-![image](https://user-images.githubusercontent.com/153843/93780448-1635d080-fc20-11ea-8c92-d6e91dbcf003.png)
+![image](https://user-images.githubusercontent.com/153843/93780448-1635d080-fc20-11ea-8c92-d6e91dbcf003.png#center)
 
 You can have multiple queries registered per datasource instance.
 
@@ -22,7 +26,7 @@ You can have multiple queries registered per datasource instance.
 
 In order to use the registered query in the dashboard, you have to select `Global Query` / `global` as type. Then select the query you needed from the list.
 
-![image](https://user-images.githubusercontent.com/153843/93780923-ab38c980-fc20-11ea-9d87-078233102905.png)
+![image](https://user-images.githubusercontent.com/153843/93780923-ab38c980-fc20-11ea-9d87-078233102905.png#center)
 
 ### Provision the global queries
 

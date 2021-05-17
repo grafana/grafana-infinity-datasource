@@ -1,14 +1,20 @@
 ---
 slug: "/wiki/configuration"
 title: "Configuration"
+previous_page_title: "Installation"
+previous_page_slug: "/wiki/installation"
+next_page_title: "Provisioning"
+next_page_slug: "/wiki/provisioning"
 ---
 
 Once the plugin installed, you need to create an instance of the datasource. To create an instance follow the steps
 
 * Go to `http://localhost:3000/datasources` and select *Add data source*
 * Search for **Infinity** plugin
-* Give some name to your datasource
+* Give a name to your datasource
 * Save.
+
+![image](https://user-images.githubusercontent.com/153843/118472644-f4ceab00-b700-11eb-89e1-eec404755cd0.png#center)
 
 This datasource can work out of the box without any additional configuration. If you need the URL to be authenticated or pass additional headers/query/tls settings, configure the corresponding section.
 

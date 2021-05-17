@@ -199,7 +199,18 @@ code {
   max-width: 900px;
   margin: 10px auto;
 }
-
+#prev-next-nav {
+  background-color: #dfe8ee;
+  a {
+    text-decoration: none;
+    color: $BrandBG;
+  }
+  .item {
+    &:hover{
+      background-color: #cad0d4;
+    }
+  }
+}
 #footer {
   background-color: #f2f5f7;
   h4,

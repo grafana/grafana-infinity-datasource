@@ -1,6 +1,10 @@
 ---
 slug: "/wiki/time-formats"
 title: "Time formats"
+previous_page_title: "Template variables"
+previous_page_slug: "/wiki/template-variables"
+next_page_title: "Local Sources"
+next_page_slug: "/wiki/local-sources"
 ---
 
 ## Time formats

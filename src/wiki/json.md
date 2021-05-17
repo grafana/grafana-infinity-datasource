@@ -1,6 +1,10 @@
 ---
 slug: "/wiki/json"
 title: "JSON"
+previous_page_title: "Home"
+previous_page_slug: "/welcome"
+next_page_title: "CSV"
+next_page_slug: "/wiki/csv"
 ---
 
 ![](https://user-images.githubusercontent.com/153843/108427049-7dd66300-7234-11eb-8d27-cec50945a66c.png#center)

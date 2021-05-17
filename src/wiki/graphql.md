@@ -1,6 +1,10 @@
 ---
 slug: "/wiki/graphql"
 title: "GraphQL"
+previous_page_title: "CSV"
+previous_page_slug: "/wiki/csv"
+next_page_title: "XML"
+next_page_slug: "/wiki/xml"
 ---
 
 With the infinity datasource, you can also scrap data from any GraphQL endpoints. This works exactly same way as JSON api. Instead of using `GET` method used by `JSON` api, this uses `POST` method with a body.

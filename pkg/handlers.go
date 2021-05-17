@@ -33,15 +33,14 @@ func (td *InfinityDatasource) proxyHandler(rw http.ResponseWriter, req *http.Req
 		if query.Source == "local-fs" {
 			response, err := client.client.GetLocalFileContent(query)
 			if err != nil {
-				http.Error(rw, err.Error(), http.StatusInternalServerError)
+				http.Error(rw, err.Error(), http.StatusForbidden)
 				return
 			}
 			fmt.Fprintf(rw, "%s", response)
 			return
 		}
-		fmt.Fprintf(rw, "unknown query")
+		http.Error(rw, "unknown query", http.StatusNotImplemented)
 		return
 	}
-	rw.WriteHeader(http.StatusNotImplemented)
-	_, _ = rw.Write([]byte("500 - Something bad happened! Invalid query."))
+	http.Error(rw, "500 - Something bad happened! Invalid query.", http.StatusInternalServerError)
 }

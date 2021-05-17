@@ -1,6 +1,10 @@
 ---
 slug: "/wiki/html"
 title: "HTML"
+previous_page_title: "XML"
+previous_page_slug: "/wiki/xml"
+next_page_title: "Variables"
+next_page_slug: "/wiki/template-variables"
 ---
 
 In the below example, we are going to convert the HTML URL `https://grafana.com/about/team/` into grafana datasource.

@@ -1,6 +1,10 @@
 ---
 slug: "/wiki/installation"
 title: "Installation"
+previous_page_title: "Home"
+previous_page_slug: "/welcome"
+next_page_title: "Configuration"
+next_page_slug: "/wiki/configuration"
 ---
 
 There are multiple ways to install this plugin into your grafana instance

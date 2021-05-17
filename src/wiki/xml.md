@@ -1,6 +1,10 @@
 ---
 slug: "/wiki/xml"
 title: "XML"
+previous_page_title: "GraphQL"
+previous_page_slug: "/wiki/graphql"
+next_page_title: "HTML"
+next_page_slug: "/wiki/html"
 ---
 
 In the below example, we are going to see how to use xml response in grafana

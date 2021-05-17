@@ -1,6 +1,10 @@
 ---
 slug: "/wiki/csv"
 title: "CSV"
+previous_page_title: "JSON"
+previous_page_slug: "/wiki/json"
+next_page_title: "GraphQL"
+next_page_slug: "/wiki/graphql"
 ---
 
 ![](https://user-images.githubusercontent.com/153843/92571108-9e0ff800-f27a-11ea-9fe9-9f9dcbd7125a.png#center)
