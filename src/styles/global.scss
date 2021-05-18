@@ -1,4 +1,11 @@
-$BrandBG: #021e40;
+html {
+  --brandBG : #021e40;
+  --scrollbarBG: #CFD8DC;
+  --thumbBG: #90A4AE;
+}
+
+$BrandBG: var(--brandBG);
+
 /* offcanvas */
 html,
 body {
@@ -7,8 +14,23 @@ body {
 
 body {
   padding-top: 50px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--thumbBG) var(--scrollbarBG);
 }
-
+body::-webkit-scrollbar {
+  width: 11px;
+}
+body::-webkit-scrollbar-track {
+  background: var(--scrollbarBG);
+}
+body::-webkit-scrollbar-thumb {
+  background-color: var(--thumbBG) ;
+  border-radius: 6px;
+  border: 3px solid var(--scrollbarBG);
+  &:hover{
+    background-color: var(--brandBG) ;
+  }
+}
 .small-screen-only {
   display: none;
 }
@@ -44,18 +66,17 @@ body {
   z-index: 2;
   height: 2.75rem;
   overflow-y: hidden;
-}
-
-.nav-scroller .nav {
-  display: flex;
-  flex-wrap: nowrap;
-  padding-bottom: 1rem;
-  margin-top: -1px;
-  overflow-x: auto;
-  color: rgba(255, 255, 255, 0.75);
-  text-align: center;
-  white-space: nowrap;
-  -webkit-overflow-scrolling: touch;
+  .nav {
+    display: flex;
+    flex-wrap: nowrap;
+    padding-bottom: 1rem;
+    margin-top: -1px;
+    overflow-x: auto;
+    color: rgba(255, 255, 255, 0.75);
+    text-align: center;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
 .nav-underline .nav-link {
@@ -63,10 +84,9 @@ body {
   padding-bottom: 0.75rem;
   font-size: 0.875rem;
   color: #6c757d;
-}
-
-.nav-underline .nav-link:hover {
-  color: #007bff;
+  &:hover{
+    color: #007bff;
+  }
 }
 
 .nav-underline .active {

@@ -14,22 +14,22 @@ export const replaceVariables = (query: InfinityQuery, scopedVars: ScopedVars): 
     url_options: {
       ...query.url_options,
       data: replaceVariable(query.url_options?.data || '', scopedVars),
-      params: query.url_options.params?.map(param => {
+      params: query.url_options?.params?.map(param => {
         return {
           ...param,
-          value: getTemplateSrv().replace(param.value, scopedVars, 'glob'),
+          value: getTemplateSrv().replace(param?.value || '', scopedVars, 'glob'),
         };
       }),
-      headers: query.url_options.headers?.map(header => {
+      headers: query.url_options?.headers?.map(header => {
         return {
           ...header,
-          value: getTemplateSrv().replace(header.value, scopedVars, 'glob'),
+          value: getTemplateSrv().replace(header?.value || '', scopedVars, 'glob'),
         };
       }),
     },
     filters: (query.filters ? [...query.filters] : []).map(filter => {
       filter.value = filter.value.map(val => {
-        return getTemplateSrv().replace(val, scopedVars, 'glob');
+        return getTemplateSrv().replace(val || '', scopedVars, 'glob');
       });
       return filter;
     }),
