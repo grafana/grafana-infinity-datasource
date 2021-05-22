@@ -7,6 +7,14 @@ next_page_title: "Time Formats"
 next_page_slug: "/wiki/time-formats"
 ---
 
+## Standard variable mode ( Infinity Query )
+
+Like panels, you can have your own CSV/JSON in your variable. Variable queries are expected to return one or more columns. This will give you the ability to get your variables set from CSV/JSON/XML or any other external sources.
+
+![image](https://user-images.githubusercontent.com/153843/119243000-d6323f00-bb5a-11eb-822e-99f39b32968d.png)
+
+> If two columns configured, first column value will be used as display text and second column will be used as value.(This will be useful when you want to have aliases for any non-user friendly IDs). If more than 2 columns returned, all the results will be flattened and returned as variable list.
+
 ## Collection - (Legacy variable)
 
 List of key value pair wrapped with `Collection()`. Text/key followed by values separated by commas.
@@ -53,9 +61,3 @@ Example : `Join($Environment,-hello-,$ServerName)` will produce a new string var
 Example : `Random(A,B,C)` will produce one of A/B/C. When creating a variable of this type, set it to refresh "on time range change", so it will produce random element when dashboard refreshes. 
 
 More details available in [this github issue](https://github.com/yesoreyeram/grafana-infinity-datasource/issues/4).
-
-## Standard variable mode ( Infinity Query )
-
-Like panels, you can have your own CSV/JSON in your variable. Variable queries are expected to return one or more columns. This will give you the ability to get your variables set from CSV/JSON/XML or any other external sources.
-
-If two columns returned, first column value will be used as display text and second column will be used as value. If more than 2 columns returned, all the results will be flattened and returned as variable list.

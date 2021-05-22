@@ -14,12 +14,12 @@ interface Props {
 
 const VariableQueryTypes: Array<SelectableValue<VariableQueryType>> = [
   {
-    label: 'Legacy',
-    value: VariableQueryType.Legacy,
-  },
-  {
     label: 'Infinity',
     value: VariableQueryType.Infinity,
+  },
+  {
+    label: 'Legacy',
+    value: VariableQueryType.Legacy,
   },
 ];
 
@@ -58,7 +58,7 @@ export const VariableEditor: React.FC<Props> = props => {
           query={{ ...state.infinityQuery }}
           mode={EditorMode.Variable}
           onChange={onInfinityQueryUpdate}
-          onRunQuery={saveQuery}
+          onRunQuery={() => {}}
           instanceSettings={props.datasource.instanceSettings}
         ></InfinityQueryEditor>
       )}
