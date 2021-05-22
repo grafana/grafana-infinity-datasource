@@ -11,17 +11,15 @@ next_page_slug: "/wiki/installation"
 
 If you need to retrieve the data from local file in the grafana server, you can use **Local File** as your source.
 
-
 ## Configuring local sources / local files
 
 In order to use the local files, first you need to enable them and provide list of allowed directories to query.
 
 ![image](https://user-images.githubusercontent.com/153843/118464665-0449f600-b6f9-11eb-916f-de974cf9e9c8.png#center)
 
-
 ## Querying local files
 
-Once you configured the local sources, you can query them in your query. 
+Once you configured the local sources, you can query them in your query.
 
 ![image](https://user-images.githubusercontent.com/153843/118464712-0f048b00-b6f9-11eb-9fa5-3a71b08bad2a.png#center)
 

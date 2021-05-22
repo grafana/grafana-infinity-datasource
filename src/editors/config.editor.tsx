@@ -7,7 +7,7 @@ import { GlobalQueryEditor } from './config/GlobalQueryEditor';
 import { SecureFieldsEditor } from './config/SecureFieldsEditor';
 import { URLEditor } from './config/URL';
 import { AuthEditor } from './config/Auth';
-import { LocalSourcesEditor } from './config/LocalSourcesEditor';
+// import { LocalSourcesEditor } from './config/LocalSourcesEditor';
 import { InfinityDataSourceJSONOptions } from '../types';
 
 export type Props = DataSourcePluginOptionsEditorProps<InfinityDataSourceJSONOptions>;
@@ -19,7 +19,7 @@ export const InfinityConfigEditor: React.FC<Props> = ({ options, onOptionsChange
   const [headersOpen, setHeadersOpen] = useState(false);
   const [queriesOpen, setQueriesOpen] = useState(false);
   const [globalsOpen, setGlobalsOpen] = useState(false);
-  const [localSourcesOpen, setLocalSourcesOpen] = useState(false);
+  // const [localSourcesOpen, setLocalSourcesOpen] = useState(false);
   options.jsonData = defaultsDeep(options.jsonData, {
     global_queries: [],
   });
@@ -87,7 +87,7 @@ export const InfinityConfigEditor: React.FC<Props> = ({ options, onOptionsChange
           <GlobalQueryEditor options={options} onOptionsChange={onOptionsChange} />
         </div>
       </Collapse>
-      <Collapse
+      {/* <Collapse
         label="Local Sources"
         isOpen={localSourcesOpen}
         collapsible={true}
@@ -96,7 +96,7 @@ export const InfinityConfigEditor: React.FC<Props> = ({ options, onOptionsChange
         <div style={{ padding: '0px 10px' }}>
           <LocalSourcesEditor options={options} onOptionsChange={onOptionsChange} />
         </div>
-      </Collapse>
+      </Collapse> */}
     </>
   );
 };

@@ -30,7 +30,7 @@ export const Features = () => {
             <Link className="display-6 text-white" to="/wiki/json" style={{ textDecoration: 'none' }}>
               JSON
             </Link>
-            <p className="text-white">Visualize data from any JSON APIs, URLs or Local files.</p>
+            <p className="text-white">Visualize data from any JSON APIs or URLs</p>
           </div>
         </div>
         <div className="col-sm-6 col-lg-6 mb-4" onClick={() => navigate('/wiki/csv')}>
@@ -46,7 +46,7 @@ export const Features = () => {
             <Link className="display-6 text-white" to="/wiki/json" style={{ textDecoration: 'none' }}>
               CSV
             </Link>
-            <p className="text-white">Visualize data from any CSV APIs, URLs or Local files.</p>
+            <p className="text-white">Visualize data from any CSV APIs, or URLs</p>
           </div>
         </div>
         <div className="col-sm-6 col-lg-4 mb-4" onClick={() => navigate('/wiki/graphql')}>

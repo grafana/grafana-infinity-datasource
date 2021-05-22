@@ -21,7 +21,7 @@ export const SubMenu = () => {
           <SubMenuLink to="/wiki/xml">XML</SubMenuLink>
           <SubMenuLink to="/wiki/html">HTML</SubMenuLink>
           <SubMenuLink to="/wiki/url">URL</SubMenuLink>
-          <SubMenuLink to="/wiki/local-sources">Local files</SubMenuLink>
+          {/* <SubMenuLink to="/wiki/local-sources">Local files</SubMenuLink> */}
           <SubMenuLink to="/wiki/time-formats">Time Formats</SubMenuLink>
           <SubMenuLink to="/wiki/template-variables">Template Variables</SubMenuLink>
           <SubMenuLink to="/wiki/global-queries">Global Queries</SubMenuLink>

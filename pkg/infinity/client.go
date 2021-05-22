@@ -11,7 +11,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"os"
 	"strings"
 )
 
@@ -146,23 +145,24 @@ func (client *Client) GetResults(query Query) (o interface{}, err error) {
 	}
 }
 
-func isFileAllowedToQuery(allowedPaths []string, path string) bool {
-	for _, allowedPath := range allowedPaths {
-		if strings.HasPrefix(strings.ToLower(path), strings.ToLower(allowedPath)) {
-			return true
-		}
-	}
-	return false
-}
+// func isFileAllowedToQuery(allowedPaths []string, path string) bool {
+// 	for _, allowedPath := range allowedPaths {
+// 		if strings.HasPrefix(strings.ToLower(path), strings.ToLower(allowedPath)) {
+// 			return true
+// 		}
+// 	}
+// 	return false
+// }
 
 func (client *Client) GetLocalFileContent(query Query) (o interface{}, err error) {
-	if isFileAllowedToQuery(client.Settings.LocalSources.AllowedPaths, query.URL) && client.Settings.LocalSources.Enabled {
-		filePath := strings.TrimSpace(query.URL)
-		content, err := os.ReadFile(filePath)
-		if err != nil {
-			return nil, err
-		}
-		return string(content), nil
-	}
-	return nil, errors.New("file path not allowed. Contact grafana admin to setup this in datasource settings")
+	return nil, errors.New("feature disabled")
+	// if isFileAllowedToQuery(client.Settings.LocalSources.AllowedPaths, query.URL) && client.Settings.LocalSources.Enabled {
+	// 	filePath := strings.TrimSpace(query.URL)
+	// 	content, err := os.ReadFile(filePath)
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
+	// 	return string(content), nil
+	// }
+	// return nil, errors.New("file path not allowed. Contact grafana admin to setup this in datasource settings")
 }
