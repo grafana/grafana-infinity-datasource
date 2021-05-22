@@ -126,6 +126,10 @@ export interface InfinityQuery extends DataQuery {
   data: string;
   csv_options?: {
     delimiter?: string;
+    skip_empty_lines?: boolean;
+    skip_lines_with_error?: boolean;
+    relax_column_count?: boolean;
+    columns?: string;
   };
   root_selector: string;
   global_query_id?: string;
@@ -287,6 +291,10 @@ export const DefaultInfinityQuery: InfinityQuery = {
   url_options: { method: 'GET', data: '' },
   csv_options: {
     delimiter: ',',
+    skip_empty_lines: false,
+    skip_lines_with_error: false,
+    relax_column_count: false,
+    columns: '',
   },
   root_selector: '',
   columns: [],

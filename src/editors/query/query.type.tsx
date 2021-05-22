@@ -13,6 +13,7 @@ import {
   InfinityQuerySources,
   EditorMode,
 } from '../../types';
+import { CSVOptionsEditor } from './csv_options';
 
 interface TypeChooserProps {
   mode: EditorMode;
@@ -128,6 +129,9 @@ export const TypeChooser: React.FC<TypeChooserProps> = ({ query, onChange, onRun
               onChange={e => onSelectChange(e, 'format')}
             ></Select>
           </>
+        )}
+        {query.type === InfinityQueryType.CSV && (
+          <CSVOptionsEditor query={query} onChange={onChange} onRunQuery={onRunQuery}></CSVOptionsEditor>
         )}
       </div>
     </div>

@@ -7,7 +7,7 @@ next_page_title: "GraphQL"
 next_page_slug: "/wiki/graphql"
 ---
 
-![](https://user-images.githubusercontent.com/153843/92571108-9e0ff800-f27a-11ea-9fe9-9f9dcbd7125a.png#center)
+![csv example](https://user-images.githubusercontent.com/153843/92571108-9e0ff800-f27a-11ea-9fe9-9f9dcbd7125a.png#center)
 
 Select **Type** of the query to `CSV`. You can either specify the URL of the CSV file or can provide inline CSV. 
 
@@ -17,7 +17,7 @@ Select **Type** of the query to `CSV`. You can either specify the URL of the CSV
 
 CSV URL : https://thingspeak.com/channels/38629/feed.csv
 
-In the below example, we are using CSV file from thingspeak traffic analysis. As you can see in the screenshot, you can visualize CSV as a table with just URL. 
+In the below example, we are using CSV file from thingspeak traffic analysis. As you can see in the screenshot, you can visualize CSV as a table with just URL.
 
 ![image](https://user-images.githubusercontent.com/153843/108428461-8465da00-7236-11eb-8769-b1c145cbe203.png#center)
 
@@ -49,7 +49,7 @@ URL : https://gist.githubusercontent.com/yesoreyeram/64a46b02f0bf87cb527d6270dd8
 
 ![image](https://user-images.githubusercontent.com/153843/108429819-639e8400-7238-11eb-8757-785e29a2394e.png#center)
 
-In the above example, we don't have any time field. We have a string field and a number field. In this case, by choosing format as timeseries we are simulating the point-in-time as timeseries data. With this option, you can use csv into visualizations like Bar Guage, Stats Panel, Guage panel etc.
+In the above example, we don't have any time field. We have a string field and a number field. In this case, by choosing format as timeseries we are simulating the point-in-time as timeseries data. With this option, you can use csv into visualizations like Bar Guage, Stats Panel, Gauge panel etc.
 
 Sample Data
 
@@ -100,6 +100,16 @@ canada,100,ottawa
 Below screenshot shows the example of csv inline datasource
 
 ![image](https://user-images.githubusercontent.com/153843/92571108-9e0ff800-f27a-11ea-9fe9-9f9dcbd7125a.png#center)
+
+## CSV Options
+
+| Option | Description |
+|--------|-------------|
+| Delimiter | If your csv file have any other delimiter than comma, then specify here. For tab delimited files, specify `\t` as delimiter |
+| Headers | If CSV file doesn't have headers, specify here as comma separated values here |
+| Skip empty lines | Check this if you want to skip the empty lines |
+| Skip lines with error | Check this if you want to skip the lines with error |
+| Relax column count | Check this if you want to relax the column count check |
 
 ## CSV to timeseries
 

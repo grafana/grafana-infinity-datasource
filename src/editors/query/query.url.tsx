@@ -19,10 +19,11 @@ export const URLEditor: React.FC<ScrapperProps> = props => {
     props: any,
     splitIntoArray = false
   ) => {
-    const { query, onChange } = props;
+    const { query, onChange, onRunQuery } = props;
     const value = splitIntoArray ? event.target.value.split(',') : event.target.value;
     set(query, field, value);
     onChange(query);
+    onRunQuery();
   };
   const LABEL_WIDTH = props.mode === EditorMode.Variable ? 10 : 8;
   return (
