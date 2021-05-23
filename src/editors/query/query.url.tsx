@@ -19,11 +19,10 @@ export const URLEditor: React.FC<ScrapperProps> = props => {
     props: any,
     splitIntoArray = false
   ) => {
-    const { query, onChange, onRunQuery } = props;
+    const { query, onChange } = props;
     const value = splitIntoArray ? event.target.value.split(',') : event.target.value;
     set(query, field, value);
     onChange(query);
-    onRunQuery();
   };
   const LABEL_WIDTH = props.mode === EditorMode.Variable ? 10 : 8;
   return (
@@ -56,7 +55,10 @@ export const URLEditor: React.FC<ScrapperProps> = props => {
               className="gf-form-input min-width-30"
               value={data}
               placeholder=""
-              onBlur={e => onInputTextChange(e, `data`, props)}
+              onBlur={e => {
+                onInputTextChange(e, `data`, props);
+                props.onRunQuery();
+              }}
               onChange={e => setData(e.target.value)}
             ></textarea>
           </div>
@@ -71,7 +73,10 @@ export const URLEditor: React.FC<ScrapperProps> = props => {
               className="gf-form-input min-width-30"
               value={props.query.root_selector}
               placeholder=""
-              onChange={e => onInputTextChange(e, `root_selector`, props)}
+              onChange={e => {
+                onInputTextChange(e, `root_selector`, props);
+                props.onRunQuery();
+              }}
             ></input>
           </div>
         </div>

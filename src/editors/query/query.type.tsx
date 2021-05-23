@@ -14,6 +14,7 @@ import {
   EditorMode,
 } from '../../types';
 import { CSVOptionsEditor } from './csv_options';
+import { JSONOptionsEditor } from './json_options';
 
 interface TypeChooserProps {
   mode: EditorMode;
@@ -132,6 +133,9 @@ export const TypeChooser: React.FC<TypeChooserProps> = ({ query, onChange, onRun
         )}
         {query.type === InfinityQueryType.CSV && (
           <CSVOptionsEditor query={query} onChange={onChange} onRunQuery={onRunQuery}></CSVOptionsEditor>
+        )}
+        {query.type === InfinityQueryType.JSON && (
+          <JSONOptionsEditor query={query} onChange={onChange} onRunQuery={onRunQuery}></JSONOptionsEditor>
         )}
       </div>
     </div>

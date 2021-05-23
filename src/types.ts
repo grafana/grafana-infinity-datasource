@@ -131,6 +131,9 @@ export interface InfinityQuery extends DataQuery {
     relax_column_count?: boolean;
     columns?: string;
   };
+  json_options?: {
+    root_is_not_array?: boolean;
+  };
   root_selector: string;
   global_query_id?: string;
   columns: ScrapColumn[];
