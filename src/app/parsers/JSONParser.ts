@@ -9,7 +9,7 @@ export class JSONParser extends InfinityParser {
     super(target);
     const jsonResponse = this.formatInput(JSONResponse);
     if (Array.isArray(jsonResponse) || (target.json_options && target.json_options.root_is_not_array)) {
-      this.constructTableData(jsonResponse as Array<any>);
+      this.constructTableData(jsonResponse as any[]);
       this.constructTimeSeriesData(jsonResponse, endTime);
     } else {
       this.constructSingleTableData(jsonResponse);

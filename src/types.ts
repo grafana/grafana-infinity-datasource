@@ -130,6 +130,7 @@ export interface InfinityQuery extends DataQuery {
     skip_lines_with_error?: boolean;
     relax_column_count?: boolean;
     columns?: string;
+    comment?: string;
   };
   json_options?: {
     root_is_not_array?: boolean;
@@ -298,6 +299,7 @@ export const DefaultInfinityQuery: InfinityQuery = {
     skip_lines_with_error: false,
     relax_column_count: false,
     columns: '',
+    comment: '',
   },
   root_selector: '',
   columns: [],

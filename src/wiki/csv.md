@@ -9,9 +9,11 @@ next_page_slug: "/wiki/graphql"
 
 ![csv example](https://user-images.githubusercontent.com/153843/92571108-9e0ff800-f27a-11ea-9fe9-9f9dcbd7125a.png#center)
 
-Select **Type** of the query to `CSV`. You can either specify the URL of the CSV file or can provide inline CSV. 
+Select **Type** of the query to `CSV`. You can either specify the URL of the CSV file or can provide inline CSV.
 
-> CSV data should have columns as its first line and comma delimited. By default, all the columns will be parsed and returned as strings. You need specify the column names and its types, in case if you need to parse them in correct format. 
+> CSV data should have columns as its first line and comma delimited. If not, specify them in the csv options. By default, all the columns will be parsed and returned as strings. You need specify the column names and its types, in case if you need to parse them in correct format.
+
+If your CSV doesn't have headers, you can specify them in the **CSV options** headers. Read more about the advance CSV settings like custom delimiters at below in CSV options section.
 
 ## CSV URL example
 
@@ -110,6 +112,17 @@ Below screenshot shows the example of csv inline datasource
 | Skip empty lines | Check this if you want to skip the empty lines |
 | Skip lines with error | Check this if you want to skip the lines with error |
 | Relax column count | Check this if you want to relax the column count check |
+| Comment | If your csv lines have comments, enter the comments delimiter. Treat all the characters after this one as a comment. Example: setting `#` will treat everything in each line after `#` as comment |
+
+> All these CSV options are available from version 0.7
+
+## CSV without headers
+
+If your CSV doesn't have headers, specify them in the **CSV Options** Headers option. You have list the headers in comma separated strings. Leave blank if your CSV have headers.
+
+## Custom delimiters / TSV file
+
+You can use custom delimiter for your CSV file. You can set them in the **CSV options** delimiter section. Specify `\t` for TSV files.
 
 ## CSV to timeseries
 

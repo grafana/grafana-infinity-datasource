@@ -7,6 +7,7 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 - Data frame format added
 - Custom secure query strings support added
 - Support for custom headers and query strings in individual queries
+- More CSV options - TSV, optional headers support, custom delimiters, etc
 - Allow variables in root/rows selector
 - Placeholder for migrating into backend plugin
 - Migrated website from vuepress to gatsby

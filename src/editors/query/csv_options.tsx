@@ -106,6 +106,24 @@ export const CSVOptionsEditor: React.FC<CSVOptionsEditorProps> = props => {
               }}
             ></input>
           </div>
+          <div className="gf-form">
+            <label className="gf-form-label query-keyword width-8">Comment</label>
+            <input
+              className="gf-form-input width-4"
+              type="text"
+              value={props.query.csv_options?.comment}
+              placeholder="#"
+              onChange={e => {
+                props.onChange({
+                  ...props.query,
+                  csv_options: {
+                    ...(props.query.csv_options || {}),
+                    comment: e.currentTarget.value,
+                  },
+                });
+              }}
+            ></input>
+          </div>
         </Drawer>
       )}
     </>
