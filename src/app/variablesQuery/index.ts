@@ -1,26 +1,20 @@
-import flatten from 'lodash/flatten';
+import { flatten, defaultsDeep } from 'lodash';
 import { SelectableValue } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
 import { InfinityProvider } from './../InfinityProvider';
-import { IsValidInfinityQuery, replaceVariables } from './../InfinityQuery';
+import { IsValidInfinityQuery, replaceVariables } from '../queryUtils';
 import {
   InfinityQuery,
-  VariableTokenLegacy,
   InfinityInstanceSettings,
   VariableQuery,
   VariableQueryType,
-  InfinityQueryType,
-  InfinityQuerySources,
-  InfinityQueryFormat,
+  DefaultInfinityQuery,
 } from './../../types';
 import { CollectionVariable } from './Collection';
 import { CollectionLookupVariable } from './CollectionLookup';
 import { JoinVariable } from './Join';
 import { RandomVariable } from './Random';
-
-export const replaceTokenFromVariable = (query: string, token: VariableTokenLegacy): string => {
-  return query.startsWith(`${token}(`) && query.endsWith(')') ? query.replace(`${token}(`, '').slice(0, -1) : query;
-};
+import { Datasource } from './../../datasource';
 
 const getTemplateVariablesFromResult = (res: any): Array<SelectableValue<string>> => {
   if (res.columns && res.columns.length > 0) {
@@ -46,34 +40,26 @@ const getTemplateVariablesFromResult = (res: any): Array<SelectableValue<string>
   }
 };
 
-export const DefaultInfinityQuery: InfinityQuery = {
-  refId: '',
-  type: InfinityQueryType.CSV,
-  source: InfinityQuerySources.Inline,
-  data: '',
-  url: '',
-  url_options: { method: 'GET' },
-  root_selector: '',
-  columns: [],
-  filters: [],
-  format: InfinityQueryFormat.Table,
-};
-
 export const migrateLegacyQuery = (query: VariableQuery | string): VariableQuery => {
   if (typeof query === 'string') {
     return {
       query: query,
       queryType: VariableQueryType.Legacy,
+      infinityQuery: {
+        ...DefaultInfinityQuery,
+        refId: 'variable',
+      },
     };
   } else if (query && query.queryType) {
     return {
       ...query,
-      infinityQuery: query.infinityQuery || DefaultInfinityQuery,
+      infinityQuery: defaultsDeep(query.infinityQuery, DefaultInfinityQuery),
     };
   } else {
     return {
       query: '',
       queryType: VariableQueryType.Legacy,
+      infinityQuery: defaultsDeep(query.infinityQuery, DefaultInfinityQuery),
     };
   }
 };
@@ -85,14 +71,18 @@ interface VariableProvider {
 export class InfinityVariableProvider implements VariableProvider {
   infinityQuery: InfinityQuery;
   instanceSettings: InfinityInstanceSettings;
-  constructor(infinityQuery: InfinityQuery, instanceSettings: InfinityInstanceSettings) {
+  constructor(
+    infinityQuery: InfinityQuery,
+    instanceSettings: InfinityInstanceSettings,
+    private datasource: Datasource
+  ) {
     this.infinityQuery = infinityQuery;
     this.instanceSettings = instanceSettings;
   }
   query(): Promise<Array<SelectableValue<string>>> {
     return new Promise((resolve, reject) => {
       if (IsValidInfinityQuery(this.infinityQuery)) {
-        let provider = new InfinityProvider(replaceVariables(this.infinityQuery, {}), this.instanceSettings);
+        let provider = new InfinityProvider(replaceVariables(this.infinityQuery, {}), this.datasource);
         provider
           .query()
           .then((res: any) => {
@@ -121,17 +111,13 @@ export class LegacyVariableProvider implements VariableProvider {
   query(): Promise<Array<SelectableValue<string>>> {
     return new Promise(resolve => {
       if (this.queryString.startsWith('Collection(') && this.queryString.endsWith(')')) {
-        let query = replaceTokenFromVariable(this.queryString, 'Collection');
-        resolve(CollectionVariable(query));
+        resolve(CollectionVariable(this.queryString));
       } else if (this.queryString.startsWith('CollectionLookup(') && this.queryString.endsWith(')')) {
-        let query = replaceTokenFromVariable(this.queryString, 'CollectionLookup');
-        resolve(CollectionLookupVariable(query));
+        resolve(CollectionLookupVariable(this.queryString));
       } else if (this.queryString.startsWith('Join(') && this.queryString.endsWith(')')) {
-        let query = replaceTokenFromVariable(this.queryString, 'Join');
-        resolve(JoinVariable(query));
+        resolve(JoinVariable(this.queryString));
       } else if (this.queryString.startsWith('Random(') && this.queryString.endsWith(')')) {
-        let query = replaceTokenFromVariable(this.queryString, 'Random');
-        resolve(RandomVariable(query));
+        resolve(RandomVariable(this.queryString));
       } else {
         resolve([]);
       }

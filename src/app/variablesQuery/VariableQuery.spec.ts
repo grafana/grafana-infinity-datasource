@@ -1,21 +1,5 @@
-import { replaceTokenFromVariable, migrateLegacyQuery, DefaultInfinityQuery } from './index';
-import { InfinityQueryType, VariableQuery, VariableQueryType, VariableTokenLegacy } from './../../types';
-
-const data: Array<[string, VariableTokenLegacy, string]> = [
-  ['Collection(A,a,B,b)', 'Collection', 'A,a,B,b'],
-  ['CollectionLookup(A,a,B,b,A)', 'CollectionLookup', 'A,a,B,b,A'],
-  ['Random(A,a,B,b,A)', 'Random', 'A,a,B,b,A'],
-  ['Join(A,a,B,b,A)', 'Join', 'A,a,B,b,A'],
-  ['Something(A,a,B,b,A)', 'Join', 'Something(A,a,B,b,A)'],
-];
-
-data.forEach((item, index) => {
-  describe('replaceTokenFromVariable', () => {
-    it(`replaceTokenFromVariable ${index + 1} ${item[1]}`, () => {
-      expect(replaceTokenFromVariable(item[0], item[1])).toBe(item[2]);
-    });
-  });
-});
+import { migrateLegacyQuery } from './index';
+import { InfinityQueryType, VariableQuery, VariableQueryType, DefaultInfinityQuery } from './../../types';
 
 describe('migrateLegacyQuery', () => {
   it('Empty Query', () => {
@@ -30,7 +14,7 @@ describe('migrateLegacyQuery', () => {
     expect(newQuery.queryType).toBe(VariableQueryType.Legacy);
     expect(newQuery.query).toBe(originalQuery);
   });
-  it('Empty Inifinity Query', () => {
+  it('Empty Infinity Query', () => {
     let originalQuery: VariableQuery = {
       queryType: VariableQueryType.Infinity,
       query: '',
@@ -38,9 +22,9 @@ describe('migrateLegacyQuery', () => {
     let newQuery = migrateLegacyQuery(originalQuery);
     expect(newQuery.queryType).toBe(VariableQueryType.Infinity);
     expect(newQuery.query).toBe(originalQuery.query);
-    expect(newQuery.infinityQuery?.type).toBe(InfinityQueryType.CSV);
+    expect(newQuery.infinityQuery?.type).toBe(InfinityQueryType.JSON);
   });
-  it('Inifinity Query', () => {
+  it('Infinity Query', () => {
     let originalQuery: VariableQuery = {
       queryType: VariableQueryType.Infinity,
       query: '',
@@ -49,6 +33,6 @@ describe('migrateLegacyQuery', () => {
     let newQuery = migrateLegacyQuery(originalQuery);
     expect(newQuery.queryType).toBe(VariableQueryType.Infinity);
     expect(newQuery.query).toBe(originalQuery.query);
-    expect(newQuery.infinityQuery?.type).toBe(InfinityQueryType.CSV);
+    expect(newQuery.infinityQuery?.type).toBe(InfinityQueryType.JSON);
   });
 });

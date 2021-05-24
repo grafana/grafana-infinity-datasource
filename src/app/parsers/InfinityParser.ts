@@ -9,6 +9,7 @@ import {
   InfinityQueryFormat,
   InfinityQueryType,
 } from './../../types';
+import { toDataFrame } from '@grafana/data';
 
 export class InfinityParser {
   target: InfinityQuery;
@@ -34,7 +35,8 @@ export class InfinityParser {
   }
   private canAutoGenerateColumns(): boolean {
     return (
-      [InfinityQueryType.CSV, InfinityQueryType.JSON].includes(this.target.type) && this.target.columns.length === 0
+      [InfinityQueryType.CSV, InfinityQueryType.JSON, InfinityQueryType.GraphQL].includes(this.target.type) &&
+      this.target.columns.length === 0
     );
   }
   toTable() {
@@ -67,6 +69,9 @@ export class InfinityParser {
     }
     if (this.target.format === InfinityQueryFormat.TimeSeries) {
       return this.toTimeSeries();
+    } else if (this.target.format === InfinityQueryFormat.DataFrame) {
+      const frame = toDataFrame(this.toTable());
+      return frame;
     } else {
       return this.toTable();
     }

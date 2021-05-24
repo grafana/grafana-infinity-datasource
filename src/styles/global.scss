@@ -1,0 +1,249 @@
+html {
+  --brandBG : #021e40;
+  --scrollbarBG: #CFD8DC;
+  --thumbBG: #90A4AE;
+}
+
+$BrandBG: var(--brandBG);
+
+/* offcanvas */
+html,
+body {
+  overflow-x: hidden;
+}
+
+body {
+  padding-top: 50px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--thumbBG) var(--scrollbarBG);
+}
+body::-webkit-scrollbar {
+  width: 11px;
+}
+body::-webkit-scrollbar-track {
+  background: var(--scrollbarBG);
+}
+body::-webkit-scrollbar-thumb {
+  background-color: var(--thumbBG) ;
+  border-radius: 6px;
+  border: 3px solid var(--scrollbarBG);
+  &:hover{
+    background-color: var(--brandBG) ;
+  }
+}
+.small-screen-only {
+  display: none;
+}
+
+@media (max-width: 991.98px) {
+  body {
+    padding-top: 46px;
+  }
+  .small-screen-only {
+    display: inline;
+  }
+  .offcanvas-collapse {
+    position: fixed;
+    top: 44px; /* Height of navbar */
+    bottom: 0;
+    left: 100%;
+    width: 100%;
+    padding-right: 1rem;
+    padding-left: 1rem;
+    overflow-y: auto;
+    visibility: hidden;
+    background-color: #343a40;
+    transition: transform 0.3s ease-in-out, visibility 0.3s ease-in-out;
+  }
+  .offcanvas-collapse.open {
+    visibility: visible;
+    transform: translateX(-100%);
+  }
+}
+
+.nav-scroller {
+  position: relative;
+  z-index: 2;
+  height: 2.75rem;
+  overflow-y: hidden;
+  .nav {
+    display: flex;
+    flex-wrap: nowrap;
+    padding-bottom: 1rem;
+    margin-top: -1px;
+    overflow-x: auto;
+    color: rgba(255, 255, 255, 0.75);
+    text-align: center;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+.nav-underline .nav-link {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  font-size: 0.875rem;
+  color: #6c757d;
+  &:hover{
+    color: #007bff;
+  }
+}
+
+.nav-underline .active {
+  font-weight: 500;
+  color: #343a40;
+}
+
+.text-white-50 {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.bg-purple {
+  background-color: #6f42c1;
+}
+
+.blog-post {
+  h2 {
+    display: inline-block;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 10px solid $BrandBG;
+  }
+  img {
+    width: 100%;
+    max-width: 900px;
+    filter: drop-shadow(0 0 0.3rem $BrandBG);
+    border-radius: 10px;
+  }
+  table {
+    width: 80%;
+    max-width: 900px;
+    border: 1px solid black;
+    margin: 20px auto;
+    td,
+    th {
+      border: 1px solid black;
+      padding: 10px;
+    }
+  }
+  blockquote {
+    width: 80%;
+    display: block;
+    background-color: rgb(240, 240, 240);
+    padding: 10px;
+    border-left: 4px solid $BrandBG;
+    p {
+      padding: 0;
+      margin: 0;
+    }
+  }
+}
+
+img[src*='#center'] {
+  display: block;
+  margin: auto;
+}
+
+/* subheader */
+
+#banner-title:hover,
+#topnav .nav-link:hover {
+  background: linear-gradient(268deg, #fade2a, #f05a28);
+  background-clip: text;
+  -webkit-background-clip: text;
+  background-size: 600% 600%;
+  -webkit-animation: SubHeader 4s ease infinite;
+  -moz-animation: SubHeader 4s ease infinite;
+  animation: SubHeader 4s ease infinite;
+}
+@-webkit-keyframes SubHeader {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@-moz-keyframes SubHeader {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@keyframes SubHeader {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.feature-card:hover {
+  -webkit-animation: SubHeader 40s ease infinite;
+  -moz-animation: SubHeader 40s ease infinite;
+  animation: SubHeader 40s ease infinite;
+}
+
+#subnav .nav-link:hover {
+  color: #f6f1c5;
+}
+
+code {
+  background: rgb(240, 240, 240);
+}
+
+/* Accordion */
+
+.accordion-button:not(.collapsed) {
+  color: white;
+  background-color: #021e40;
+}
+
+// Code highlight
+
+.deckgo-highlight-code-carbon {
+  display: block;
+  width: 80%;
+  max-width: 900px;
+  margin: 10px auto;
+}
+#prev-next-nav {
+  background-color: #dfe8ee;
+  a {
+    text-decoration: none;
+    color: $BrandBG;
+  }
+  .item {
+    &:hover{
+      background-color: #cad0d4;
+    }
+  }
+}
+#footer {
+  background-color: #f2f5f7;
+  h4,
+  h4 a {
+    text-decoration: none;
+    color: $BrandBG;
+  }
+  .footer-menu-item {
+    a,
+    a:active,
+    a:visited {
+      text-decoration: none;
+      color: #6c757d;
+    }
+  }
+}

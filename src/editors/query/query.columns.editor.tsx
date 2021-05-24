@@ -23,7 +23,7 @@ export const QueryColumnsEditor: React.FC<QueryColumnProps> = ({ query, mode, on
   };
 
   const onColumnAdd = () => {
-    const columns = query.columns || [];
+    const columns = [...(query.columns || [])];
     columns.push({
       text: '',
       selector: '',
@@ -32,7 +32,7 @@ export const QueryColumnsEditor: React.FC<QueryColumnProps> = ({ query, mode, on
     onChange({ ...query, columns });
   };
   const onColumnRemove = (index: number) => {
-    const columns = query.columns;
+    const columns = [...query.columns];
     columns.splice(index, 1);
     onChange({ ...query, columns });
   };
@@ -50,7 +50,7 @@ export const QueryColumnsEditor: React.FC<QueryColumnProps> = ({ query, mode, on
 
   return (
     <>
-      {query.columns.length === 0 ? (
+      {(query.columns || []).length === 0 ? (
         <div className="gf-form-inline">
           <div className="gf-form">
             <div className="gf-form gf-form--grow">
@@ -61,7 +61,7 @@ export const QueryColumnsEditor: React.FC<QueryColumnProps> = ({ query, mode, on
           </div>
           <div className="gf-form">
             <div className="gf-form gf-form--grow">
-              <span className="btn btn-success btn-small" style={{ marginTop: '5px' }} onClick={() => onColumnAdd()}>
+              <span className="btn btn-secondary btn-small" style={{ marginTop: '5px' }} onClick={() => onColumnAdd()}>
                 Add Columns
               </span>
             </div>

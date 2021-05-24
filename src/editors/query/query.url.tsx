@@ -27,10 +27,12 @@ export const URLEditor: React.FC<ScrapperProps> = props => {
   const LABEL_WIDTH = props.mode === EditorMode.Variable ? 10 : 8;
   return (
     <>
-      {props.query.source === 'url' ? (
+      {['url', 'local-fs'].includes(props.query.source) ? (
         <div className="gf-form-inline">
           <div className="gf-form">
-            <label className={`gf-form-label query-keyword width-${LABEL_WIDTH}`}>URL</label>
+            <label className={`gf-form-label query-keyword width-${LABEL_WIDTH}`}>
+              {props.query.source === 'url' ? 'URL' : 'File full path'}
+            </label>
             <input
               type="text"
               className="gf-form-input min-width-30"
@@ -39,7 +41,9 @@ export const URLEditor: React.FC<ScrapperProps> = props => {
               onChange={e => onInputTextChange(e, `url`, props)}
               onBlur={props.onRunQuery}
             ></input>
-            <URLOptionsEditor onChange={props.onChange} query={props.query} />
+            {props.query.source === 'url' && (
+              <URLOptionsEditor onChange={props.onChange} query={props.query} onRunQuery={props.onRunQuery} />
+            )}
           </div>
         </div>
       ) : (
@@ -51,7 +55,10 @@ export const URLEditor: React.FC<ScrapperProps> = props => {
               className="gf-form-input min-width-30"
               value={data}
               placeholder=""
-              onBlur={e => onInputTextChange(e, `data`, props)}
+              onBlur={e => {
+                onInputTextChange(e, `data`, props);
+                props.onRunQuery();
+              }}
               onChange={e => setData(e.target.value)}
             ></textarea>
           </div>
@@ -66,7 +73,10 @@ export const URLEditor: React.FC<ScrapperProps> = props => {
               className="gf-form-input min-width-30"
               value={props.query.root_selector}
               placeholder=""
-              onChange={e => onInputTextChange(e, `root_selector`, props)}
+              onChange={e => {
+                onInputTextChange(e, `root_selector`, props);
+                props.onRunQuery();
+              }}
             ></input>
           </div>
         </div>

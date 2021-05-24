@@ -15,9 +15,20 @@ export class CSVParser extends InfinityParser {
   }
   private formatInput(CSVResponse: string) {
     const options = {
-      columns: true,
-      skip_empty_lines: true,
+      columns:
+        this.target.csv_options && this.target.csv_options.columns ? this.target.csv_options.columns.split(',') : true,
+      delimiter:
+        this.target.csv_options && this.target.csv_options.delimiter
+          ? [this.target.csv_options.delimiter.replace('\\t', '\t')]
+          : [','],
+      skip_empty_lines: this.target.csv_options?.skip_empty_lines || false,
+      skip_lines_with_error: this.target.csv_options?.skip_lines_with_error || false,
+      relax_column_count: this.target.csv_options?.relax_column_count || false,
+      comment: '',
     };
+    if (this.target.csv_options && this.target.csv_options.comment) {
+      options.comment = this.target.csv_options.comment;
+    }
     const records = parse(CSVResponse, options);
     return records;
   }

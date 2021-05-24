@@ -1,13 +1,16 @@
 {
+  "$schema": "https://raw.githubusercontent.com/grafana/grafana/master/docs/sources/developers/plugins/plugin.schema.json",
   "name": "Infinity",
   "id": "yesoreyeram-infinity-datasource",
   "type": "datasource",
+  "backend": true,
+  "executable": "gpx_infinity",
   "metrics": true,
   "annotations": false,
   "info": {
     "version": "%VERSION%",
     "updated": "%TODAY%",
-    "description": "JSON, CSV, XML, GraphQL & HTML datasource for Grafana. Do infinite things with Grafana.",
+    "description": "JSON, CSV, XML, GraphQL, HTML and REST API datasource for Grafana. Do infinite things with Grafana. Visualize data from anywhere",
     "author": {
       "name": "Sriramajeyam Sugumaran",
       "url": "https://www.google.com/search?q=Sriramajeyam+Sugumaran"
@@ -29,7 +32,24 @@
       "random walk",
       "scraping"
     ],
-    "screenshots": [],
+    "screenshots": [
+      {
+        "name": "features",
+        "path": "img/slide-features.png"
+      },
+      {
+        "name": "rest-api",
+        "path": "img/slide-rest-api.png"
+      },
+      {
+        "name": "variables",
+        "path": "img/slide-variables.png"
+      },
+      {
+        "name": "series",
+        "path": "img/slide-series.png"
+      }
+    ],
     "links": [
       {
         "name": "Wiki",

@@ -46,19 +46,39 @@ jobs:
     - name: Build
       run: |
         yarn build;
-        echo $(date) > dist/LAST_UPDATED;
     - name: Build Docs
       run: |
         rm -rf docs/;
-        cp ./.vuepress/README.md .
         yarn docs:build;
+        mkdir -p docs;
+        cp -r public/ docs/
         echo $(date) > docs/LAST_UPDATED;
-        ls -lh docs/wiki;
-        rm -rf docs/dist;
     - name: Publish Docs
       run: |
         git config --global user.email "actions@github.com";
         git config --global user.name "Github Actions";
-        git add -f dist/ docs/;
-        git commit -m "Publish & Docs update";
+        git add -f docs/;
+        git commit -m "Docs update";
         git push;
+    - name: Setup Go environment
+      uses: actions/setup-go@v2
+      with:
+        go-version: "1.16"
+    - name: Get go cache directory path
+      id: go-cache-paths
+      run: echo "::set-output name=go-mod::$(go env GOMODCACHE)"
+    - name: Go Mod Cache
+      uses: actions/cache@v2
+      with:
+        path: ${{ steps.go-cache-paths.outputs.go-mod }}
+        key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}
+    - name: Test backend
+      uses: magefile/mage-action@v1
+      with:
+        version: latest
+        args: coverage
+    - name: Build backend
+      uses: magefile/mage-action@v1
+      with:
+        version: latest
+        args: buildAll

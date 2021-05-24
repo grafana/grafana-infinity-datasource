@@ -46,22 +46,28 @@ jobs:
     - name: Build
       run: |
         yarn build;
-    - name: Generate README
-      run: |
-        mkdir -p dist
-        outfile=./dist/README.md
-        touch $outfile
-        echo "" > $outfile
-        cat README.md >> $outfile
-        cat ./wiki/csv.md >> $outfile
-        cat ./wiki/json.md >> $outfile
-        cat ./wiki/graphql.md >> $outfile
-        cat ./wiki/xml.md >> $outfile
-        cat ./wiki/html.md >> $outfile
-        cat ./wiki/global-queries.md >> $outfile
-        cat ./wiki/template-variables.md >> $outfile
-        cat ./wiki/installation.md >> $outfile
-        cat ./CHANGELOG.md >> $outfile
+    - name: Setup Go environment
+      uses: actions/setup-go@v2
+      with:
+        go-version: "1.16"
+    - name: Get go cache directory path
+      id: go-cache-paths
+      run: echo "::set-output name=go-mod::$(go env GOMODCACHE)"
+    - name: Go Mod Cache
+      uses: actions/cache@v2
+      with:
+        path: ${{ steps.go-cache-paths.outputs.go-mod }}
+        key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}
+    - name: Test backend
+      uses: magefile/mage-action@v1
+      with:
+        version: latest
+        args: coverage
+    - name: Build backend
+      uses: magefile/mage-action@v1
+      with:
+        version: latest
+        args: buildAll
     - name: Sign plugin
       run: yarn sign;
       env:
@@ -127,6 +133,11 @@ jobs:
         go install
         cd ../../;
         plugincheck ${{ steps.upload-plugin-asset.outputs.browser_download_url }};
+    - name: Test locally
+      run: |
+        echo To test the plugin locally, execute the following command.
+        echo
+        echo 'docker run -p 3000:3000 -e "GF_INSTALL_PLUGINS=${{ steps.upload-plugin-asset.outputs.browser_download_url }};yesoreyeram-infinity-datasource" grafana/grafana:latest'
     - name: Publish to Grafana.com
       run: |
         echo Publish your plugin to grafana.com/plugins by opening a PR to https://github.com/grafana/grafana-plugin-repository with the following entry:

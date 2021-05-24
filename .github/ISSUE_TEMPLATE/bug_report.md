@@ -14,8 +14,9 @@ A clear and concise description of what the bug is.
 If applicable, add screenshots to help explain your problem.
 
 **Version Details:**
- - Grafana version : 
- - Plugin version :
+
+- Grafana version :
+- Plugin version :
 
 **Additional context**
 Add any other context about the problem here.

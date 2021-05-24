@@ -8,8 +8,8 @@ export class JSONParser extends InfinityParser {
   constructor(JSONResponse: object, target: InfinityQuery, endTime?: Date) {
     super(target);
     const jsonResponse = this.formatInput(JSONResponse);
-    if (Array.isArray(jsonResponse)) {
-      this.constructTableData(jsonResponse);
+    if (Array.isArray(jsonResponse) || (target.json_options && target.json_options.root_is_not_array)) {
+      this.constructTableData(jsonResponse as any[]);
       this.constructTimeSeriesData(jsonResponse, endTime);
     } else {
       this.constructSingleTableData(jsonResponse);
@@ -24,12 +24,12 @@ export class JSONParser extends InfinityParser {
       if (rootSelect.startsWith('$')) {
         JSONResponse = flatten(
           JSONPath({
-            path: this.target.root_selector,
+            path: rootSelect,
             json: JSONResponse,
           })
         );
       } else {
-        JSONResponse = get(JSONResponse, this.target.root_selector);
+        JSONResponse = get(JSONResponse, rootSelect);
       }
     }
     return JSONResponse;
@@ -37,10 +37,15 @@ export class JSONParser extends InfinityParser {
   private constructTableData(JSONResponse: any[]) {
     const columns = this.target.columns.length > 0 ? this.target.columns : getColumnsFromObjectArray(JSONResponse[0]);
     this.AutoColumns = columns;
-    forEach(JSONResponse, r => {
+    forEach(JSONResponse, (r, rowKey) => {
       const row: GrafanaTableRow = [];
       columns.forEach((c: ScrapColumn) => {
         let value = get(r, c.selector, '');
+        if (c.selector === '$$key') {
+          value = rowKey;
+        } else if (c.selector === '$$value') {
+          value = JSON.stringify(r);
+        }
         if (c.type === ScrapColumnFormat.Timestamp) {
           value = new Date(value + '');
         } else if (c.type === ScrapColumnFormat.Timestamp_Epoch) {
@@ -50,7 +55,13 @@ export class JSONParser extends InfinityParser {
         } else if (c.type === ScrapColumnFormat.Number) {
           value = value === '' ? null : +value;
         }
-        row.push(value);
+        if (['string', 'number', 'boolean'].includes(typeof value)) {
+          row.push(value);
+        } else if (value && typeof value.getMonth === 'function') {
+          row.push(value);
+        } else {
+          row.push(JSON.stringify(value));
+        }
       });
       this.rows.push(row);
     });

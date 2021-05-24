@@ -13,15 +13,18 @@ import {
   InfinityQuerySources,
   EditorMode,
 } from '../../types';
+import { CSVOptionsEditor } from './csv_options';
+import { JSONOptionsEditor } from './json_options';
 
 interface TypeChooserProps {
   mode: EditorMode;
   instanceSettings: any;
   query: InfinityQuery;
   onChange: (value: any) => void;
+  onRunQuery: () => void;
 }
 
-export const TypeChooser: React.FC<TypeChooserProps> = ({ query, onChange, mode, instanceSettings }) => {
+export const TypeChooser: React.FC<TypeChooserProps> = ({ query, onChange, onRunQuery, mode, instanceSettings }) => {
   const defaultFormat: SelectableValue<InfinityQueryFormat> = SCRAP_QUERY_RESULT_FORMATS[0];
   const defaultType: SelectableValue<InfinityQueryType> = { value: InfinityQueryType.JSON, label: 'JSON' };
   const defaultSource: SelectableValue<InfinityQuerySources> = { value: InfinityQuerySources.URL, label: 'URL' };
@@ -40,6 +43,7 @@ export const TypeChooser: React.FC<TypeChooserProps> = ({ query, onChange, mode,
     }
     set(query, field, selectableItem.value);
     onChange(query);
+    onRunQuery();
   };
 
   let global_queries =
@@ -106,7 +110,7 @@ export const TypeChooser: React.FC<TypeChooserProps> = ({ query, onChange, mode,
           </>
         ) : (
           <Select
-            className={`width-${query.type === 'series' ? 8 : 6}`}
+            className="width-8"
             value={SCRAP_QUERY_SOURCES.find((field: SelectableValue) => field.value === query.source) || defaultSource}
             options={SCRAP_QUERY_SOURCES.filter(
               (field: SelectableValue) => field.supported_types.indexOf(query.type) > -1
@@ -126,6 +130,12 @@ export const TypeChooser: React.FC<TypeChooserProps> = ({ query, onChange, mode,
               onChange={e => onSelectChange(e, 'format')}
             ></Select>
           </>
+        )}
+        {query.type === InfinityQueryType.CSV && (
+          <CSVOptionsEditor query={query} onChange={onChange} onRunQuery={onRunQuery}></CSVOptionsEditor>
+        )}
+        {query.type === InfinityQueryType.JSON && (
+          <JSONOptionsEditor query={query} onChange={onChange} onRunQuery={onRunQuery}></JSONOptionsEditor>
         )}
       </div>
     </div>
