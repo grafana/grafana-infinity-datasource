@@ -68,25 +68,6 @@ jobs:
       with:
         version: latest
         args: buildAll
-    - name: Generate README
-      run: |
-        mkdir -p dist
-        outfile=./dist/README.md
-        touch $outfile
-        echo "" > $outfile
-        cat README.md >> $outfile
-        # cat ./wiki/csv.md >> $outfile
-        # cat ./wiki/json.md >> $outfile
-        # cat ./wiki/graphql.md >> $outfile
-        # cat ./wiki/xml.md >> $outfile
-        # cat ./wiki/html.md >> $outfile
-        # cat ./wiki/url.md >> $outfile
-        # cat ./wiki/global-queries.md >> $outfile
-        # cat ./wiki/template-variables.md >> $outfile
-        # cat ./wiki/installation.md >> $outfile
-        # cat ./wiki/configuration.md >> $outfile
-        # cat ./wiki/provisioning.md >> $outfile
-        # cat ./CHANGELOG.md >> $outfile
     - name: Sign plugin
       run: yarn sign;
       env:

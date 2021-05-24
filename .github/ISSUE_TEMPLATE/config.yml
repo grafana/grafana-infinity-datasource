@@ -5,7 +5,7 @@ contact_links:
     about: Use our Q&A Section in our docs to get answers for your questions
   - name: Showcase
     url: https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/new?category=show-and-tell
-    about: Have an inspiring usecase? Use our show & tell section
+    about: Have an inspiring use-case? Use our show & tell section to share with the community.
   - name: Docs
     url: https://yesoreyeram.github.io/grafana-infinity-datasource
     about: Docs

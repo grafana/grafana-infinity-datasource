@@ -13,7 +13,7 @@ There are multiple ways to install this plugin into your grafana instance
 
 Download the latest zip file from [grafana.com plugins page](https://grafana.com/grafana/plugins/yesoreyeram-infinity-datasource/) using the instructions provided there.
 
-### Install from github 
+### Install from github
 
 Download the required version of release zip file from [github](https://github.com/yesoreyeram/grafana-infinity-datasource/releases) and extract into your grafana plugin folder. Then restart Grafana.
 
@@ -34,7 +34,7 @@ grafana-cli --pluginUrl <ZIP_FILE_URL> plugins install yesoreyeram-infinity-data
 Example:
 
 ```shell
-grafana-cli --pluginUrl https://github.com/yesoreyeram/grafana-infinity-datasource/releases/download/v0.6.1/yesoreyeram-infinity-datasource-0.6.1.zip plugins install yesoreyeram-infinity-datasource
+grafana-cli --pluginUrl https://github.com/yesoreyeram/grafana-infinity-datasource/releases/download/v0.7.0/yesoreyeram-infinity-datasource-0.7.0.zip plugins install yesoreyeram-infinity-datasource
 ```
 
 ### Install using helm chart
@@ -57,7 +57,7 @@ Example:
 
 ```yml
 plugins:
-  - https://github.com/yesoreyeram/grafana-infinity-datasource/releases/download/v0.6.1/yesoreyeram-infinity-datasource-0.6.1.zip;yesoreyeram-infinity-datasource
+  - https://github.com/yesoreyeram/grafana-infinity-datasource/releases/download/v0.7.0/yesoreyeram-infinity-datasource-0.7.0.zip;yesoreyeram-infinity-datasource
 ```
 
 ### Install using docker
@@ -71,5 +71,5 @@ docker run -p 3000:3000 -e "GF_INSTALL_PLUGINS=yesoreyeram-infinity-datasource" 
 If you need to install a custom version of the plugin with docker, use the following command.
 
 ```shell
-docker run -p 3000:3000 -e "GF_INSTALL_PLUGINS=https://github.com/yesoreyeram/grafana-infinity-datasource/releases/download/v0.7.0-alpha3/yesoreyeram-infinity-datasource-0.7.0.zip;yesoreyeram-infinity-datasource" grafana/grafana:7.5.3
+docker run -p 3000:3000 -e "GF_INSTALL_PLUGINS=https://github.com/yesoreyeram/grafana-infinity-datasource/releases/download/v0.7.0/yesoreyeram-infinity-datasource-0.7.0.zip;yesoreyeram-infinity-datasource" grafana/grafana:7.5.3
 ```
