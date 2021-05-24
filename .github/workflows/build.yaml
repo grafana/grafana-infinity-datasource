@@ -50,8 +50,7 @@ jobs:
       run: |
         rm -rf docs/;
         yarn docs:build;
-        mkdir -p docs;
-        cp -r public/ docs/
+        mv public docs
         echo $(date) > docs/LAST_UPDATED;
     - name: Publish Docs
       run: |
