@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import flatten from 'lodash/flatten';
-import { DataQueryResponse, DataQueryRequest } from '@grafana/data';
+import { DataQueryResponse, DataQueryRequest, LoadingState } from '@grafana/data';
 import { DataSourceWithBackend } from '@grafana/runtime';
 import { InfinityProvider } from './app/InfinityProvider';
 import { SeriesProvider } from './app/SeriesProvider';
@@ -86,10 +86,14 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityDat
     return new Observable<DataQueryResponse>(subscriber => {
       this.getResults(options)
         .then(result => {
-          subscriber.next(result);
+          subscriber.next({ ...result, state: LoadingState.Done });
         })
         .catch(error => {
+          subscriber.next({ data: [], error, state: LoadingState.Error });
           subscriber.error(error);
+        })
+        .finally(() => {
+          subscriber.complete();
         });
     });
   }
