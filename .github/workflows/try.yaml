@@ -1,4 +1,4 @@
-name: Pull Requests
+name: Try
 on: [pull_request]
 jobs:
   build:

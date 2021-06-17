@@ -13,7 +13,8 @@
     "functions": [],
     "variables": {
         "resource-location": "[deployment().location]",
-        "vnet-name": "[concat(parameters('resourceGroupName'),'-vnet')]"
+        "vnet-name": "[concat(parameters('resourceGroupName'),'-vnet')]",
+        "nsg-name": "[concat(parameters('resourceGroupName'),'-nsg')]"
     },
     "resources": [
         {
@@ -96,6 +97,33 @@
                                 ],
                                 "virtualNetworkPeerings": [],
                                 "enableDdosProtection": false
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Network/networkSecurityGroups",
+                            "apiVersion": "2020-11-01",
+                            "name": "[variables('nsg-name')]",
+                            "location": "[variables('resource-location')]",
+                            "properties": {
+                                "securityRules": [
+                                    {
+                                        "name": "SSH",
+                                        "properties": {
+                                            "protocol": "TCP",
+                                            "sourcePortRange": "*",
+                                            "destinationPortRange": "22",
+                                            "sourceAddressPrefix": "*",
+                                            "destinationAddressPrefix": "*",
+                                            "access": "Allow",
+                                            "priority": 300,
+                                            "direction": "Inbound",
+                                            "sourcePortRanges": [],
+                                            "destinationPortRanges": [],
+                                            "sourceAddressPrefixes": [],
+                                            "destinationAddressPrefixes": []
+                                        }
+                                    }
+                                ]
                             }
                         }
                     ]
