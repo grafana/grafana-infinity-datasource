@@ -1,7 +1,8 @@
+import { getTemplateSrv } from '@grafana/runtime';
 import { CSVParser, JSONParser, XMLParser, HTMLParser } from './parsers';
 import { InfinityQuery, InfinityQuerySources, InfinityQueryType } from '../types';
 import { Datasource } from './../datasource';
-import { getTemplateSrv } from '@grafana/runtime';
+import { normalizeURL } from './utils';
 
 export class InfinityProvider {
   constructor(private target: InfinityQuery, private datasource: Datasource) {}
@@ -25,8 +26,10 @@ export class InfinityProvider {
   }
   private fetchResults() {
     return new Promise((resolve, reject) => {
+      const target = this.target;
+      target.url = normalizeURL(target.url);
       this.datasource
-        .postResource('proxy', this.target)
+        .postResource('proxy', target)
         .then(res => {
           resolve(res);
         })

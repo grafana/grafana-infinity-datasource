@@ -2,6 +2,11 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
+## [ 0.7.2 ]
+
+- Github URLs normalized
+- Auto find array data
+
 ## [ 0.7.1 ]
 
 - Fix for [mixed datasource mode not working in 0.7](https://github.com/yesoreyeram/grafana-infinity-datasource/issues/78)

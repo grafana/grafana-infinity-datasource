@@ -7,13 +7,29 @@ import { getColumnsFromObjectArray } from './utils';
 export class JSONParser extends InfinityParser {
   constructor(JSONResponse: object, target: InfinityQuery, endTime?: Date) {
     super(target);
-    const jsonResponse = this.formatInput(JSONResponse);
+    let jsonResponse = this.formatInput(JSONResponse);
+    if (!(Array.isArray(jsonResponse) || (this.target.json_options && this.target.json_options.root_is_not_array))) {
+      jsonResponse = this.findArrayData(jsonResponse);
+    }
     if (Array.isArray(jsonResponse) || (target.json_options && target.json_options.root_is_not_array)) {
       this.constructTableData(jsonResponse as any[]);
       this.constructTimeSeriesData(jsonResponse, endTime);
     } else {
       this.constructSingleTableData(jsonResponse);
     }
+  }
+  private findArrayData(input: any): object {
+    const arrayItems: any[] = Object.keys(input)
+      .filter((key: string) => {
+        return Array.isArray(input[key]);
+      })
+      .map(key => {
+        return input[key];
+      });
+    if (arrayItems.length > 0) {
+      return arrayItems[0];
+    }
+    return input;
   }
   private formatInput(JSONResponse: object) {
     if (typeof JSONResponse === 'string') {
