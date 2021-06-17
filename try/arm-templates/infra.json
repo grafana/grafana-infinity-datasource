@@ -2,11 +2,11 @@
     "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "deployment-name": {
+        "deploymentName": {
             "type": "string",
             "defaultValue": "grafana-deployment"
         },
-        "resource-group-name": {
+        "resourceGroupName": {
             "type": "string"
         }
     },
@@ -16,7 +16,7 @@
     },
     "resources": [
         {
-            "name": "[parameters('resource-group-name')]",
+            "name": "[parameters('resourceGroupName')]",
             "type": "Microsoft.Resources/resourceGroups",
             "apiVersion": "2019-10-01",
             "location": "[variables('resource-location')]",
@@ -26,11 +26,11 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-06-01",
-            "resourceGroup": "[parameters('resource-group-name')]",
+            "resourceGroup": "[parameters('resourceGroupName')]",
             "dependsOn": [
-                "[parameters('resource-group-name')]"
+                "[parameters('resourceGroupName')]"
             ],
-            "name": "[parameters('deployment-name')]",
+            "name": "[parameters('deploymentName')]",
             "properties": {
                 "mode": "Incremental",
                 "template": {

@@ -20,5 +20,5 @@ jobs:
           region: eastus
           template: try/arm-templates/infra.json
           parameters: |
-            deployment-name=grafana-deployment
-            resource-group-name=grafana-infinity-datasource
+            deploymentName=grafana-deployment
+            resourceGroupName=grafana-infinity-datasource
