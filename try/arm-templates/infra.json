@@ -13,8 +13,10 @@
     "functions": [],
     "variables": {
         "resource-location": "[deployment().location]",
+        "domainNameLabel": "[concat(parameters('resourceGroupName'))]",
         "vnet-name": "[concat(parameters('resourceGroupName'),'-vnet')]",
-        "nsg-name": "[concat(parameters('resourceGroupName'),'-nsg')]"
+        "nsg-name": "[concat(parameters('resourceGroupName'),'-nsg')]",
+        "ip-name": "[concat(parameters('resourceGroupName'),'-ip')]"
     },
     "resources": [
         {
@@ -124,6 +126,26 @@
                                         }
                                     }
                                 ]
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Network/publicIPAddresses",
+                            "apiVersion": "2020-11-01",
+                            "name": "[variables('ip-name')]",
+                            "location": "[variables('resource-location')]",
+                            "sku": {
+                                "name": "Basic",
+                                "tier": "Regional"
+                            },
+                            "properties": {
+                                "publicIPAddressVersion": "IPv4",
+                                "publicIPAllocationMethod": "Static",
+                                "idleTimeoutInMinutes": 4,
+                                "dnsSettings": {
+                                    "domainNameLabel": "[variables('domainNameLabel')]",
+                                    "fqdn": "[concat(variables('domainNameLabel'),'.',variables('resource-location'),'.cloudapp.azure.com')]"
+                                },
+                                "ipTags": []
                             }
                         }
                     ]
