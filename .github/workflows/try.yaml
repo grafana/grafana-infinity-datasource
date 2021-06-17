@@ -1,0 +1,23 @@
+name: Pull Requests
+on: [pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        node-version: [12.x]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS  }}
+      - name: Deploy ARM Template
+        uses: azure/arm-deploy@v1
+        with:
+          scope: subscription
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          region: eastus
+          template: $GITHUB_WORKSPACE/try/arm-templates/infra.json
+          parameters: deployment-name=grafana-deployment
+            resource-group-name=grafana-infinity-datasource
