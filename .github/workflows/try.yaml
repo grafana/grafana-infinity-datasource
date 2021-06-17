@@ -19,6 +19,5 @@ jobs:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           region: eastus
           template: try/arm-templates/infra.json
-          parameters: |
-            deploymentName=grafana-deployment
+          parameters: deploymentName=grafana-deployment
             resourceGroupName=grafana-infinity-datasource
