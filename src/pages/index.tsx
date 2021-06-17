@@ -100,7 +100,7 @@ export default function Home({ data }: HomeProps) {
             <img src="https://img.shields.io/github/issues/yesoreyeram/grafana-infinity-datasource" />
           </a>
           <a
-            href="https://github.com/yesoreyeram/grafana-infinity-datasource/blob/master/LICENSE"
+            href="https://github.com/yesoreyeram/grafana-infinity-datasource/blob/main/LICENSE"
             target="_blank"
             className="mx-2"
           >
