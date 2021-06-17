@@ -18,6 +18,7 @@ jobs:
           scope: subscription
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           region: eastus
-          template: $GITHUB_WORKSPACE/try/arm-templates/infra.json
-          parameters: deployment-name=grafana-deployment
+          template: try/arm-templates/infra.json
+          parameters: |
+            deployment-name=grafana-deployment
             resource-group-name=grafana-infinity-datasource
