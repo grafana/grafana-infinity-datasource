@@ -40,7 +40,7 @@
                         {
                             "type": "Microsoft.Storage/storageAccounts",
                             "apiVersion": "2021-01-01",
-                            "name": "[concat('storage', uniqueString(resourceGroup().id))]",
+                            "name": "[concat(uniqueString(concat(subscription().id,'/resourceGroups',parameters('resourceGroupName'))),'storage')]",
                             "location": "eastus",
                             "sku": {
                                 "name": "Standard_LRS",
