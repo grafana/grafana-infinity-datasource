@@ -12,6 +12,12 @@ jobs:
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS  }}
+      - name: Azure CLI script
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.21.1
+          inlineScript: |
+            az deployment sub create --name infinity-deploy --location eastus --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }} --template-file ./try/arm-templates/infra.json --parameters @try/arm-templates/infra.parameters.json --parameters resourceGroupName=grafana-infinity-datasource
       - name: Deploy ARM Template
         uses: azure/arm-deploy@v1
         with:
