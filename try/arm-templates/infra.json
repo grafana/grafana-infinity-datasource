@@ -1,0 +1,46 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "deployment-name": {
+            "type": "string",
+            "defaultValue": "grafana-deployment"
+        },
+        "resource-group-name": {
+            "type": "string"
+        }
+    },
+    "functions": [],
+    "variables": {
+        "resource-location": "[deployment().location]"
+    },
+    "resources": [
+        {
+            "name": "[parameters('resource-group-name')]",
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2019-10-01",
+            "location": "[variables('resource-location')]",
+            "dependsOn": [],
+            "tags": {}
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
+            "resourceGroup": "[parameters('resource-group-name')]",
+            "dependsOn": [
+                "[parameters('resource-group-name')]"
+            ],
+            "name": "[parameters('deployment-name')]",
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "resources": [
+                    ]
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}
