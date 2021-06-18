@@ -16,10 +16,20 @@ sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-
 sudo chmod +x /usr/local/bin/docker-compose
 docker-compose --version
 
+echo "install certbot"
+cd ~/grafana-infinity-datasource
+sudo snap install core; sudo snap refresh core
+sudo snap install --classic certbot
+sudo ln -s -f /snap/bin/certbot /usr/bin/certbot
+sudo docker-compose -f ./try/docker-compose.yml down
+sudo certbot certonly --standalone --non-interactive --agree-tos --email admin@grafana.online -d app.grafana.online
+sudo chown -R $(whoami) /etc/letsencrypt/live
+mkdir -p ~/grafana-infinity-datasource/certs
+cp -r /etc/letsencrypt/live/app.grafana.online/* ~/grafana-infinity-datasource/certs
+
 echo "starting grafana"
 cd ~/grafana-infinity-datasource
 sudo docker-compose -f ./try/docker-compose.yml pull
-sudo docker-compose -f ./try/docker-compose.yml down
 sudo docker-compose -f ./try/docker-compose.yml up --detach
 
 exit 0;
