@@ -29,3 +29,8 @@ jobs:
             whoami
             ls -al
             sudo apt-get --yes update
+            git clone https://github.com/yesoreyeram/grafana-infinity-datasource
+            git checkout try
+            cd grafana-infinity-datasource
+            chmod +x ./try/scripts/install.sh 
+            ./try/scripts/install.sh
