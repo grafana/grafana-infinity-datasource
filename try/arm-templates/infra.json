@@ -231,11 +231,6 @@
                                     "adminUsername": "[variables('vm-admin-username')]",
                                     "linuxConfiguration": {
                                         "disablePasswordAuthentication": true,
-                                        "provisionVMAgent": true,
-                                        "patchSettings": {
-                                            "patchMode": "ImageDefault",
-                                            "assessmentMode": "ImageDefault"
-                                        },
                                         "ssh": {
                                             "publicKeys": [
                                                 {
