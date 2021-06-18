@@ -224,7 +224,7 @@
                                 "enableAcceleratedNetworking": false,
                                 "enableIPForwarding": false,
                                 "networkSecurityGroup": {
-                                    "id": "/subscriptions/fc2be19c-f9f0-420d-9ccc-b175e3e5498e/resourceGroups/newrelic-dev/providers/Microsoft.Network/networkSecurityGroups/newrelic-dev-nsg"
+                                    "id": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',parameters('resourceGroupName'),'/providers/Microsoft.Network/networkSecurityGroups/',variables('nsg-name'))]"
                                 }
                             }
                         },
