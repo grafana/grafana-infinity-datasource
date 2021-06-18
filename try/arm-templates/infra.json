@@ -219,8 +219,7 @@
                                         "createOption": "FromImage",
                                         "caching": "ReadWrite",
                                         "managedDisk": {
-                                            "storageAccountType": "Premium_LRS",
-                                            "id": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',parameters('resourceGroupName'),'/providers/Microsoft.Compute/disks/',variables('disk-name-os'))]"
+                                            "storageAccountType": "Premium_LRS"
                                         },
                                         "diskSizeGB": 30
                                     },
