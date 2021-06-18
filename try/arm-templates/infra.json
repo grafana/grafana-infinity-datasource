@@ -8,6 +8,9 @@
         },
         "resourceGroupName": {
             "type": "string"
+        },
+        "adminPublicKey": {
+            "type": "securestring"
         }
     },
     "functions": [],
@@ -15,8 +18,13 @@
         "resource-location": "[deployment().location]",
         "domainNameLabel": "[concat(parameters('resourceGroupName'))]",
         "vnet-name": "[concat(parameters('resourceGroupName'),'-vnet')]",
+        "subnet-name": "grafana",
         "nsg-name": "[concat(parameters('resourceGroupName'),'-nsg')]",
-        "ip-name": "[concat(parameters('resourceGroupName'),'-ip')]"
+        "ip-name": "[concat(parameters('resourceGroupName'),'-ip')]",
+        "nic-name": "[concat(parameters('resourceGroupName'),'-nic')]",
+        "vm-name": "[concat(parameters('resourceGroupName'),'-vm')]",
+        "vm-admin-username": "sriramajeyam",
+        "disk-name-os": "[concat(variables('vm-name'), '-osdisk')]"
     },
     "resources": [
         {
@@ -88,7 +96,7 @@
                                 },
                                 "subnets": [
                                     {
-                                        "name": "default",
+                                        "name": "[variables('subnet-name')]",
                                         "properties": {
                                             "addressPrefix": "10.1.0.0/24",
                                             "delegations": [],
@@ -146,6 +154,108 @@
                                     "fqdn": "[concat(variables('domainNameLabel'),'.',variables('resource-location'),'.cloudapp.azure.com')]"
                                 },
                                 "ipTags": []
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Network/networkInterfaces",
+                            "apiVersion": "2020-11-01",
+                            "name": "[variables('nic-name')]",
+                            "location": "[variables('resource-location')]",
+                            "dependsOn": [
+                                "[variables('ip-name')]",
+                                "[variables('vnet-name')]",
+                                "[variables('nsg-name')]"
+                            ],
+                            "properties": {
+                                "ipConfigurations": [
+                                    {
+                                        "name": "ipconfig1",
+                                        "properties": {
+                                            "privateIPAddress": "10.1.0.4",
+                                            "privateIPAllocationMethod": "Dynamic",
+                                            "publicIPAddress": {
+                                                "id": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',parameters('resourceGroupName'),'/providers/Microsoft.Network/publicIPAddresses/',variables('ip-name'))]"
+                                            },
+                                            "subnet": {
+                                                "id": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',parameters('resourceGroupName'),'/providers/Microsoft.Network/virtualNetworks/',variables('vnet-name'),'/subnets/',variables('subnet-name'))]"
+                                            },
+                                            "primary": true,
+                                            "privateIPAddressVersion": "IPv4"
+                                        }
+                                    }
+                                ],
+                                "dnsSettings": {
+                                    "dnsServers": []
+                                },
+                                "enableAcceleratedNetworking": false,
+                                "enableIPForwarding": false,
+                                "networkSecurityGroup": {
+                                    "id": "/subscriptions/fc2be19c-f9f0-420d-9ccc-b175e3e5498e/resourceGroups/newrelic-dev/providers/Microsoft.Network/networkSecurityGroups/newrelic-dev-nsg"
+                                }
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Compute/virtualMachines",
+                            "apiVersion": "2020-12-01",
+                            "name": "[variables('vm-name')]",
+                            "location": "[variables('resource-location')]",
+                            "dependsOn": [
+                                "[variables('nic-name')]"
+                            ],
+                            "properties": {
+                                "hardwareProfile": {
+                                    "vmSize": "Standard_B1s"
+                                },
+                                "storageProfile": {
+                                    "imageReference": {
+                                        "publisher": "canonical",
+                                        "offer": "0001-com-ubuntu-server-focal",
+                                        "sku": "20_04-lts",
+                                        "version": "latest"
+                                    },
+                                    "osDisk": {
+                                        "osType": "Linux",
+                                        "name": "[variables('disk-name-os')]",
+                                        "createOption": "FromImage",
+                                        "caching": "ReadWrite",
+                                        "managedDisk": {
+                                            "storageAccountType": "Premium_LRS",
+                                            "id": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',parameters('resourceGroupName'),'/providers/Microsoft.Compute/disks/',variables('disk-name-os'))]"
+                                        },
+                                        "diskSizeGB": 30
+                                    },
+                                    "dataDisks": []
+                                },
+                                "osProfile": {
+                                    "computerName": "[variables('vm-name')]",
+                                    "adminUsername": "[variables('vm-admin-username')]",
+                                    "linuxConfiguration": {
+                                        "disablePasswordAuthentication": true,
+                                        "provisionVMAgent": true,
+                                        "patchSettings": {
+                                            "patchMode": "ImageDefault",
+                                            "assessmentMode": "ImageDefault"
+                                        },
+                                        "ssh": {
+                                            "publicKeys": [
+                                                {
+                                                    "path": "[concat('/home/', variables('vm-admin-username'), '/.ssh/authorized_keys')]",
+                                                    "keyData": "[parameters('adminPublicKey')]"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "secrets": [],
+                                    "allowExtensionOperations": true,
+                                    "requireGuestProvisionSignal": true
+                                },
+                                "networkProfile": {
+                                    "networkInterfaces": [
+                                        {
+                                            "id": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',parameters('resourceGroupName'),'/providers/Microsoft.Network/networkInterfaces/',variables('nic-name'))]"
+                                        }
+                                    ]
+                                }
                             }
                         }
                     ]

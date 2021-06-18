@@ -1,14 +1,14 @@
-# name: Pull Requests
-# on: [pull_request]
-# jobs:
-#   build:
-#     runs-on: ubuntu-20.04
-#     strategy:
-#       matrix:
-#         node-version: [12.x]
-#     steps:
-#       - name: Checkout
-#         uses: actions/checkout@v2
+name: Pull Requests
+on: [pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        node-version: [12.x]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 #       - name: NodeJS Setup
 #         uses: actions/setup-node@v1
 #         with:

@@ -7,6 +7,9 @@
     },
     "resourceGroupName": {
       "value": "grafana-infinity-datasource"
+    },
+    "adminPublicKey": {
+      "value": "helloworld"
     }
   }
 }

@@ -17,4 +17,4 @@ jobs:
         with:
           azcliversion: 2.25.0
           inlineScript: |
-            az deployment sub create --name infinity-deploy --location eastus --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }} --template-file ./try/arm-templates/infra.json --parameters @try/arm-templates/infra.parameters.json --parameters resourceGroupName=grafana-infinity-datasource
+            az deployment sub create --name infinity-deploy --location eastus --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }} --template-file ./try/arm-templates/infra.json --parameters @try/arm-templates/infra.parameters.json --parameters resourceGroupName=grafana-infinity-datasource adminPublicKey=${{ secrets.SSH_PUBLIC_KEY  }}
