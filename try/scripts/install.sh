@@ -19,6 +19,6 @@ docker-compose --version
 echo "starting grafana"
 cd ~/grafana-infinity-datasource
 sudo docker-compose -f ./try/docker-compose.yml pull
-sudo docker-compose -d -f ./try/docker-compose.yml up
+sudo docker-compose -f ./try/docker-compose.yml up --detach
 
 exit 0;
