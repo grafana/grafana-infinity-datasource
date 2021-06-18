@@ -132,6 +132,40 @@
                                             "sourceAddressPrefixes": [],
                                             "destinationAddressPrefixes": []
                                         }
+                                    },
+                                    {
+                                        "name": "HTTP",
+                                        "properties": {
+                                            "protocol": "TCP",
+                                            "sourcePortRange": "*",
+                                            "destinationPortRange": "80",
+                                            "sourceAddressPrefix": "*",
+                                            "destinationAddressPrefix": "*",
+                                            "access": "Allow",
+                                            "priority": 301,
+                                            "direction": "Inbound",
+                                            "sourcePortRanges": [],
+                                            "destinationPortRanges": [],
+                                            "sourceAddressPrefixes": [],
+                                            "destinationAddressPrefixes": []
+                                        }
+                                    },
+                                    {
+                                        "name": "HTTP",
+                                        "properties": {
+                                            "protocol": "TCP",
+                                            "sourcePortRange": "*",
+                                            "destinationPortRange": "443",
+                                            "sourceAddressPrefix": "*",
+                                            "destinationAddressPrefix": "*",
+                                            "access": "Allow",
+                                            "priority": 302,
+                                            "direction": "Inbound",
+                                            "sourcePortRanges": [],
+                                            "destinationPortRanges": [],
+                                            "sourceAddressPrefixes": [],
+                                            "destinationAddressPrefixes": []
+                                        }
                                     }
                                 ]
                             }
