@@ -92,13 +92,13 @@
                             "location": "[variables('resource-location')]",
                             "properties": {
                                 "addressSpace": {
-                                    "addressPrefixes": [ "10.1.0.0/16" ]
+                                    "addressPrefixes": [ "10.0.0.0/16" ]
                                 },
                                 "subnets": [
                                     {
                                         "name": "[variables('subnet-name')]",
                                         "properties": {
-                                            "addressPrefix": "10.1.0.0/24",
+                                            "addressPrefix": "10.0.0.0/24",
                                             "delegations": [],
                                             "privateEndpointNetworkPolicies": "Enabled",
                                             "privateLinkServiceNetworkPolicies": "Enabled"
@@ -205,7 +205,7 @@
                                     {
                                         "name": "ipconfig1",
                                         "properties": {
-                                            "privateIPAddress": "10.1.0.4",
+                                            "privateIPAddress": "10.0.0.4",
                                             "privateIPAllocationMethod": "Dynamic",
                                             "publicIPAddress": {
                                                 "id": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',parameters('resourceGroupName'),'/providers/Microsoft.Network/publicIPAddresses/',variables('ip-name'))]"

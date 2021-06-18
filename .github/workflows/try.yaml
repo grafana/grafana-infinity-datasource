@@ -1,5 +1,8 @@
 name: Try
-on: [pull_request]
+on:
+  push:
+    branches:
+      - main
 jobs:
   build:
     runs-on: ubuntu-20.04
@@ -31,7 +34,6 @@ jobs:
               git clone https://github.com/yesoreyeram/grafana-infinity-datasource
             fi
             cd grafana-infinity-datasource
-            git checkout try
             git pull
             chmod +x ./try/scripts/install.sh 
             ./try/scripts/install.sh
