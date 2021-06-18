@@ -151,7 +151,7 @@
                                         }
                                     },
                                     {
-                                        "name": "HTTP",
+                                        "name": "HTTPS",
                                         "properties": {
                                             "protocol": "TCP",
                                             "sourcePortRange": "*",
