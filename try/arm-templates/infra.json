@@ -1,0 +1,294 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "deploymentName": {
+            "type": "string",
+            "defaultValue": "grafana-deployment"
+        },
+        "resourceGroupName": {
+            "type": "string"
+        },
+        "adminPublicKey": {
+            "type": "securestring"
+        }
+    },
+    "functions": [],
+    "variables": {
+        "resource-location": "[deployment().location]",
+        "domainNameLabel": "[concat(parameters('resourceGroupName'))]",
+        "vnet-name": "[concat(parameters('resourceGroupName'),'-vnet')]",
+        "subnet-name": "grafana",
+        "nsg-name": "[concat(parameters('resourceGroupName'),'-nsg')]",
+        "ip-name": "[concat(parameters('resourceGroupName'),'-ip')]",
+        "nic-name": "[concat(parameters('resourceGroupName'),'-nic')]",
+        "vm-name": "[concat(parameters('resourceGroupName'),'-vm')]",
+        "vm-admin-username": "sriramajeyam",
+        "disk-name-os": "[concat(variables('vm-name'), '-osdisk')]"
+    },
+    "resources": [
+        {
+            "name": "[parameters('resourceGroupName')]",
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2019-10-01",
+            "location": "[variables('resource-location')]",
+            "dependsOn": [],
+            "tags": {}
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
+            "resourceGroup": "[parameters('resourceGroupName')]",
+            "dependsOn": [
+                "[parameters('resourceGroupName')]"
+            ],
+            "name": "[parameters('deploymentName')]",
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "resources": [
+                        {
+                            "type": "Microsoft.Storage/storageAccounts",
+                            "apiVersion": "2021-01-01",
+                            "name": "[concat(uniqueString(concat(subscription().id,'/resourceGroups',parameters('resourceGroupName'))),'storage')]",
+                            "location": "eastus",
+                            "sku": {
+                                "name": "Standard_LRS",
+                                "tier": "Standard"
+                            },
+                            "kind": "StorageV2",
+                            "properties": {
+                                "minimumTlsVersion": "TLS1_2",
+                                "allowBlobPublicAccess": false,
+                                "networkAcls": {
+                                    "bypass": "AzureServices",
+                                    "virtualNetworkRules": [],
+                                    "ipRules": [],
+                                    "defaultAction": "Allow"
+                                },
+                                "supportsHttpsTrafficOnly": true,
+                                "encryption": {
+                                    "services": {
+                                        "file": {
+                                            "keyType": "Account",
+                                            "enabled": true
+                                        },
+                                        "blob": {
+                                            "keyType": "Account",
+                                            "enabled": true
+                                        }
+                                    },
+                                    "keySource": "Microsoft.Storage"
+                                },
+                                "accessTier": "Hot"
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Network/virtualNetworks",
+                            "apiVersion": "2020-11-01",
+                            "name": "[variables('vnet-name')]",
+                            "location": "[variables('resource-location')]",
+                            "properties": {
+                                "addressSpace": {
+                                    "addressPrefixes": [ "10.0.0.0/16" ]
+                                },
+                                "subnets": [
+                                    {
+                                        "name": "[variables('subnet-name')]",
+                                        "properties": {
+                                            "addressPrefix": "10.0.0.0/24",
+                                            "delegations": [],
+                                            "privateEndpointNetworkPolicies": "Enabled",
+                                            "privateLinkServiceNetworkPolicies": "Enabled"
+                                        }
+                                    }
+                                ],
+                                "virtualNetworkPeerings": [],
+                                "enableDdosProtection": false
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Network/networkSecurityGroups",
+                            "apiVersion": "2020-11-01",
+                            "name": "[variables('nsg-name')]",
+                            "location": "[variables('resource-location')]",
+                            "properties": {
+                                "securityRules": [
+                                    {
+                                        "name": "SSH",
+                                        "properties": {
+                                            "protocol": "TCP",
+                                            "sourcePortRange": "*",
+                                            "destinationPortRange": "22",
+                                            "sourceAddressPrefix": "*",
+                                            "destinationAddressPrefix": "*",
+                                            "access": "Allow",
+                                            "priority": 300,
+                                            "direction": "Inbound",
+                                            "sourcePortRanges": [],
+                                            "destinationPortRanges": [],
+                                            "sourceAddressPrefixes": [],
+                                            "destinationAddressPrefixes": []
+                                        }
+                                    },
+                                    {
+                                        "name": "HTTP",
+                                        "properties": {
+                                            "protocol": "TCP",
+                                            "sourcePortRange": "*",
+                                            "destinationPortRange": "80",
+                                            "sourceAddressPrefix": "*",
+                                            "destinationAddressPrefix": "*",
+                                            "access": "Allow",
+                                            "priority": 301,
+                                            "direction": "Inbound",
+                                            "sourcePortRanges": [],
+                                            "destinationPortRanges": [],
+                                            "sourceAddressPrefixes": [],
+                                            "destinationAddressPrefixes": []
+                                        }
+                                    },
+                                    {
+                                        "name": "HTTPS",
+                                        "properties": {
+                                            "protocol": "TCP",
+                                            "sourcePortRange": "*",
+                                            "destinationPortRange": "443",
+                                            "sourceAddressPrefix": "*",
+                                            "destinationAddressPrefix": "*",
+                                            "access": "Allow",
+                                            "priority": 302,
+                                            "direction": "Inbound",
+                                            "sourcePortRanges": [],
+                                            "destinationPortRanges": [],
+                                            "sourceAddressPrefixes": [],
+                                            "destinationAddressPrefixes": []
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Network/publicIPAddresses",
+                            "apiVersion": "2020-11-01",
+                            "name": "[variables('ip-name')]",
+                            "location": "[variables('resource-location')]",
+                            "sku": {
+                                "name": "Basic",
+                                "tier": "Regional"
+                            },
+                            "properties": {
+                                "publicIPAddressVersion": "IPv4",
+                                "publicIPAllocationMethod": "Static",
+                                "idleTimeoutInMinutes": 4,
+                                "dnsSettings": {
+                                    "domainNameLabel": "[variables('domainNameLabel')]",
+                                    "fqdn": "[concat(variables('domainNameLabel'),'.',variables('resource-location'),'.cloudapp.azure.com')]"
+                                },
+                                "ipTags": []
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Network/networkInterfaces",
+                            "apiVersion": "2020-11-01",
+                            "name": "[variables('nic-name')]",
+                            "location": "[variables('resource-location')]",
+                            "dependsOn": [
+                                "[variables('ip-name')]",
+                                "[variables('vnet-name')]",
+                                "[variables('nsg-name')]"
+                            ],
+                            "properties": {
+                                "ipConfigurations": [
+                                    {
+                                        "name": "ipconfig1",
+                                        "properties": {
+                                            "privateIPAddress": "10.0.0.4",
+                                            "privateIPAllocationMethod": "Dynamic",
+                                            "publicIPAddress": {
+                                                "id": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',parameters('resourceGroupName'),'/providers/Microsoft.Network/publicIPAddresses/',variables('ip-name'))]"
+                                            },
+                                            "subnet": {
+                                                "id": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',parameters('resourceGroupName'),'/providers/Microsoft.Network/virtualNetworks/',variables('vnet-name'),'/subnets/',variables('subnet-name'))]"
+                                            },
+                                            "primary": true,
+                                            "privateIPAddressVersion": "IPv4"
+                                        }
+                                    }
+                                ],
+                                "dnsSettings": {
+                                    "dnsServers": []
+                                },
+                                "enableAcceleratedNetworking": false,
+                                "enableIPForwarding": false,
+                                "networkSecurityGroup": {
+                                    "id": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',parameters('resourceGroupName'),'/providers/Microsoft.Network/networkSecurityGroups/',variables('nsg-name'))]"
+                                }
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Compute/virtualMachines",
+                            "apiVersion": "2020-12-01",
+                            "name": "[variables('vm-name')]",
+                            "location": "[variables('resource-location')]",
+                            "dependsOn": [
+                                "[variables('nic-name')]"
+                            ],
+                            "properties": {
+                                "hardwareProfile": {
+                                    "vmSize": "Standard_B1s"
+                                },
+                                "storageProfile": {
+                                    "imageReference": {
+                                        "publisher": "canonical",
+                                        "offer": "0001-com-ubuntu-server-focal",
+                                        "sku": "20_04-lts",
+                                        "version": "latest"
+                                    },
+                                    "osDisk": {
+                                        "osType": "Linux",
+                                        "name": "[variables('disk-name-os')]",
+                                        "createOption": "FromImage",
+                                        "caching": "ReadWrite",
+                                        "managedDisk": {
+                                            "storageAccountType": "Premium_LRS"
+                                        },
+                                        "diskSizeGB": 30
+                                    },
+                                    "dataDisks": []
+                                },
+                                "osProfile": {
+                                    "computerName": "[variables('vm-name')]",
+                                    "adminUsername": "[variables('vm-admin-username')]",
+                                    "linuxConfiguration": {
+                                        "disablePasswordAuthentication": true,
+                                        "ssh": {
+                                            "publicKeys": [
+                                                {
+                                                    "path": "[concat('/home/', variables('vm-admin-username'), '/.ssh/authorized_keys')]",
+                                                    "keyData": "[parameters('adminPublicKey')]"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "secrets": [],
+                                    "allowExtensionOperations": true
+                                },
+                                "networkProfile": {
+                                    "networkInterfaces": [
+                                        {
+                                            "id": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',parameters('resourceGroupName'),'/providers/Microsoft.Network/networkInterfaces/',variables('nic-name'))]"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}

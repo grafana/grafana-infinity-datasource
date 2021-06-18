@@ -291,7 +291,7 @@ export const DefaultInfinityQuery: InfinityQuery = {
   source: InfinityQuerySources.URL,
   format: InfinityQueryFormat.Table,
   data: '',
-  url: '',
+  url: 'https://jsonplaceholder.typicode.com/users',
   url_options: { method: 'GET', data: '' },
   csv_options: {
     delimiter: ',',

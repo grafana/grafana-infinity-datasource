@@ -1,0 +1,39 @@
+name: Try
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        node-version: [12.x]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS  }}
+      - name: Azure CLI script
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.25.0
+          inlineScript: |
+            az deployment sub create --name infinity-deploy --location eastus --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }} --template-file ./try/arm-templates/infra.json --parameters @try/arm-templates/infra.parameters.json --parameters resourceGroupName=grafana-infinity-datasource adminPublicKey="${{ secrets.SSH_PUBLIC_KEY  }}"
+      - name: execute commands on remote computer
+        uses: appleboy/ssh-action@master
+        with:
+          host: grafana-infinity-datasource.eastus.cloudapp.azure.com
+          port: 22
+          username: sriramajeyam
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            if [ ! -d "grafana-infinity-datasource" ] 
+            then
+              git clone https://github.com/yesoreyeram/grafana-infinity-datasource
+            fi
+            cd grafana-infinity-datasource
+            git pull
+            chmod +x ./try/scripts/install.sh 
+            ./try/scripts/install.sh

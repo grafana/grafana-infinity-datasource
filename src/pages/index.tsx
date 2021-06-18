@@ -66,8 +66,8 @@ export default function Home({ data }: HomeProps) {
               <br />
               <br />
               <span className="text-secondary">
-                Visualize data from JSON, CSV, JSON, XML GraphQL, HTML &amp; REST APIs. Also turns any website into
-                beautiful grafana dashboards.
+                Visualize data from JSON, CSV, XML, GraphQL, HTML &amp; REST APIs. Also turns any website into grafana
+                dashboard.
               </span>
             </p>
             <br />
