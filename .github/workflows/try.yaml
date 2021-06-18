@@ -37,7 +37,7 @@ jobs:
             sudo apt install --yes docker-ce
             docker --version
             git clone https://github.com/yesoreyeram/grafana-infinity-datasource
-            git checkout try
             cd grafana-infinity-datasource
+            git checkout try
             chmod +x ./try/scripts/install.sh 
             ./try/scripts/install.sh
