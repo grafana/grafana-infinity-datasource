@@ -25,9 +25,9 @@ sudo docker-compose -f ./try/docker-compose.yml down
 sudo certbot certonly --standalone --non-interactive --agree-tos --email admin@grafana.online -d app.grafana.online
 sudo chown -R $(whoami) /etc/letsencrypt/live
 sudo chown -R $(whoami) /etc/letsencrypt/archive
-mkdir -p ~/grafana-infinity-datasource/certs
-cp -r /etc/letsencrypt/live/app.grafana.online/* ~/grafana-infinity-datasource/try/certs
-cp -r /etc/letsencrypt/archive/app.grafana.online/* ~/grafana-infinity-datasource/try/certs
+mkdir -p ~/grafana-infinity-datasource/try/certs
+sudo cp -r /etc/letsencrypt/live/app.grafana.online/* ~/grafana-infinity-datasource/try/certs
+sudo cp -r /etc/letsencrypt/archive/app.grafana.online/* ~/grafana-infinity-datasource/try/certs
 
 echo "starting grafana"
 cd ~/grafana-infinity-datasource
