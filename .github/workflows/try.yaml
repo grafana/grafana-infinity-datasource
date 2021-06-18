@@ -26,7 +26,10 @@ jobs:
           username: sriramajeyam
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            git clone https://github.com/yesoreyeram/grafana-infinity-datasource
+            if [ ! -d "grafana-infinity-datasource" ] 
+            then
+              git clone https://github.com/yesoreyeram/grafana-infinity-datasource
+            fi
             cd grafana-infinity-datasource
             git checkout try
             git pull

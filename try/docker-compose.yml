@@ -8,7 +8,7 @@ services:
     ports:
       - '80:3000'
     volumes:
-      - ~/grafana-infinity-datasource-data:/var/lib/grafana
+      - ./data:/var/lib/grafana
       - ./config/provisioning/datasources:/etc/grafana/provisioning/datasources
       - ./config/config.ini:/var/lib/grafana/config.ini
     environment:
