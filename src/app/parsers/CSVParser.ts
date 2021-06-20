@@ -29,7 +29,7 @@ export class CSVParser extends InfinityParser {
     if (this.target.csv_options && this.target.csv_options.comment) {
       options.comment = this.target.csv_options.comment;
     }
-    const records = parse(CSVResponse, options);
+    const records = parse(CSVResponse.trim(), options);
     return records;
   }
   private constructTableData(records: any[]) {
