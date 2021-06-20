@@ -12,7 +12,7 @@ function TemplateSrvStub(this: any) {
 const templateSrv = new TemplateSrvStub();
 
 jest.mock('@grafana/runtime', () => ({
-  ...((jest.requireActual('@grafana/runtime') as unknown) as object),
+  ...(jest.requireActual('@grafana/runtime') as unknown as object),
   getTemplateSrv: () => templateSrv,
 }));
 
@@ -53,10 +53,10 @@ describe('metricFindQuery - Random Variable', () => {
         query: 'Random(A,B,C,D)',
         queryType: VariableQueryType.Legacy,
       })
-      .then(res => {
+      .then((res) => {
         expect(['A', 'B', 'C', 'D']).toContain(res[0].text);
       })
-      .catch(ex => {
+      .catch((ex) => {
         expect(ex).toEqual(new Error());
       });
   });
@@ -70,10 +70,10 @@ describe('metricFindQuery - Join', () => {
         query: 'Join(A,B,C,D)',
         queryType: VariableQueryType.Legacy,
       })
-      .then(res => {
+      .then((res) => {
         expect(res[0].text).toBe('ABCD');
       })
-      .catch(ex => {
+      .catch((ex) => {
         expect(ex).toEqual(new Error());
       });
   });
@@ -87,14 +87,14 @@ describe('metricFindQuery - Collection', () => {
         query: 'Collection(A,B,C,D)',
         queryType: VariableQueryType.Legacy,
       })
-      .then(res => {
+      .then((res) => {
         expect(res.length).toBe(2);
         expect(res[0].text).toBe('A');
         expect(res[0].value).toBe('B');
         expect(res[1].text).toBe('C');
         expect(res[1].value).toBe('D');
       })
-      .catch(ex => {
+      .catch((ex) => {
         expect(ex).toEqual(new Error());
       });
   });
@@ -108,12 +108,12 @@ describe('metricFindQuery - CollectionLookup', () => {
         query: 'CollectionLookup(pd,prod-server,np,nonprod-server,dev,dev-server,np)',
         queryType: VariableQueryType.Legacy,
       })
-      .then(res => {
+      .then((res) => {
         expect(res.length).toBe(1);
         expect(res[0].value).toBe('nonprod-server');
         expect(res[0].text).toBe('nonprod-server');
       })
-      .catch(ex => {
+      .catch((ex) => {
         expect(ex).toEqual(new Error());
       });
   });
@@ -124,12 +124,12 @@ describe('metricFindQuery - CollectionLookup', () => {
         query: 'CollectionLookup(A,a,B,b,C,c,D,d,C)',
         queryType: VariableQueryType.Legacy,
       })
-      .then(res => {
+      .then((res) => {
         expect(res.length).toBe(1);
         expect(res[0].value).toBe('c');
         expect(res[0].text).toBe('c');
       })
-      .catch(ex => {
+      .catch((ex) => {
         expect(ex).toEqual(new Error());
       });
   });
@@ -140,10 +140,10 @@ describe('metricFindQuery - CollectionLookup', () => {
         query: 'CollectionLookup(A,a,B,b,C,c,D,d,E)',
         queryType: VariableQueryType.Legacy,
       })
-      .then(res => {
+      .then((res) => {
         expect(res.length).toBe(0);
       })
-      .catch(ex => {
+      .catch((ex) => {
         expect(ex).toEqual(new Error());
       });
   });

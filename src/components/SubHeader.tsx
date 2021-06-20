@@ -5,7 +5,7 @@ interface SubHeaderProps {
   title: string;
 }
 
-export const SubHeader: React.FC<SubHeaderProps> = props => {
+export const SubHeader: React.FC<SubHeaderProps> = (props) => {
   const data = useStaticQuery(
     graphql`
       query {

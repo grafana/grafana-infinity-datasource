@@ -24,7 +24,7 @@ export const GlobalQuerySelector = (props: SourceSelectorProps) => {
         <Select
           options={global_queries}
           value={query.global_query_id}
-          onChange={e => onChange({ ...query, global_query_id: e.value })}
+          onChange={(e) => onChange({ ...query, global_query_id: e.value })}
         ></Select>
       ) : (
         <label className="gf-form-label width-8">No Queries found</label>

@@ -9,17 +9,17 @@ export const CollectionLookupVariable = (query: string): Array<SelectableValue<s
   let chunkCollection = chunk(querySplit, 2);
   let out = chunkCollection
     .slice(0, -1)
-    .map(value => {
+    .map((value) => {
       return {
         key: value[0],
         value: value[1],
       };
     })
-    .filter(v => {
+    .filter((v) => {
       return v.key === last(querySplit);
     });
   return out && out.length > 0
-    ? out.map(o => {
+    ? out.map((o) => {
         return {
           value: o.value,
           text: o.value,

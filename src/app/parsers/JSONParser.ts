@@ -23,7 +23,7 @@ export class JSONParser extends InfinityParser {
       .filter((key: string) => {
         return Array.isArray(input[key]);
       })
-      .map(key => {
+      .map((key) => {
         return input[key];
       });
     if (arrayItems.length > 0) {
@@ -84,8 +84,8 @@ export class JSONParser extends InfinityParser {
   }
   private constructTimeSeriesData(JSONResponse: object, endTime: Date | undefined) {
     this.NumbersColumns.forEach((metricColumn: ScrapColumn) => {
-      forEach(JSONResponse, r => {
-        let seriesName = this.StringColumns.map(c => r[c.selector]).join(' ');
+      forEach(JSONResponse, (r) => {
+        let seriesName = this.StringColumns.map((c) => r[c.selector]).join(' ');
         if (this.NumbersColumns.length > 1) {
           seriesName += ` ${metricColumn.text}`;
         }

@@ -70,7 +70,7 @@ export const QueryColumnsEditor: React.FC<QueryColumnProps> = ({ query, mode, on
       ) : null}
       {query.columns.map((column: ScrapColumn, index: number) => {
         return (
-          <div className="gf-form-inline">
+          <div className="gf-form-inline" key={index}>
             <div className="gf-form">
               <label className={`gf-form-label query-keyword width-${LABEL_WIDTH}`} title="Column">
                 Column {index + 1}
@@ -81,7 +81,7 @@ export const QueryColumnsEditor: React.FC<QueryColumnProps> = ({ query, mode, on
                 className="gf-form-input min-width-8"
                 value={column.selector}
                 placeholder={query.type === 'csv' ? 'Column Name' : 'Selector'}
-                onChange={e => onInputTextChange(e, `columns[${index}].selector`)}
+                onChange={(e) => onInputTextChange(e, `columns[${index}].selector`)}
               ></input>
               <label className="gf-form-label width-2">as</label>
               <input
@@ -89,7 +89,7 @@ export const QueryColumnsEditor: React.FC<QueryColumnProps> = ({ query, mode, on
                 className="gf-form-input min-width-8"
                 value={column.text}
                 placeholder="Title"
-                onChange={e => onInputTextChange(e, `columns[${index}].text`)}
+                onChange={(e) => onInputTextChange(e, `columns[${index}].text`)}
               ></input>
               <Select
                 className="min-width-12 width-12"
@@ -99,7 +99,7 @@ export const QueryColumnsEditor: React.FC<QueryColumnProps> = ({ query, mode, on
                 }
                 options={SCRAP_QUERY_RESULT_COLUMN_FORMATS}
                 defaultValue={defaultScrapResultFormat}
-                onChange={e => onSelectChange(e, `columns[${index}].type`)}
+                onChange={(e) => onSelectChange(e, `columns[${index}].type`)}
               ></Select>
               <button className="btn btn-success btn-small" style={{ margin: '5px' }} onClick={() => onColumnAdd()}>
                 +

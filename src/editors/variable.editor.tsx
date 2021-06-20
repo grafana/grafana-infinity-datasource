@@ -23,7 +23,7 @@ const VariableQueryTypes: Array<SelectableValue<VariableQueryType>> = [
   },
 ];
 
-export const VariableEditor: React.FC<Props> = props => {
+export const VariableEditor: React.FC<Props> = (props) => {
   const [state, setState] = useState<VariableQuery>(migrateLegacyQuery(props.query));
   const saveQuery = () => {
     props.onChange(state, `${props.datasource.name}- (${state.queryType}) ${state.query}`);
@@ -46,9 +46,9 @@ export const VariableEditor: React.FC<Props> = props => {
         <span className="gf-form-label width-10">Query Type</span>
         <Select
           options={VariableQueryTypes}
-          value={VariableQueryTypes.find(v => v.value === state.queryType)}
+          value={VariableQueryTypes.find((v) => v.value === state.queryType)}
           defaultValue={VariableQueryTypes[0]}
-          onChange={e => {
+          onChange={(e) => {
             onQueryTypeChange(e.value as VariableQueryType);
           }}
         ></Select>
@@ -72,8 +72,8 @@ export const VariableEditor: React.FC<Props> = props => {
             placeholder="Collection(India,in,United Kingdom,uk)"
             required={true}
             value={state.query}
-            onBlur={e => onQueryChange(e.currentTarget.value)}
-            onChange={e => onQueryChange(e.currentTarget.value)}
+            onBlur={(e) => onQueryChange(e.currentTarget.value)}
+            onChange={(e) => onQueryChange(e.currentTarget.value)}
           ></TextArea>
         </div>
       )}

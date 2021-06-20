@@ -5,7 +5,7 @@ interface ListLinkProps {
   to: string;
 }
 
-const ListLink: React.FC<ListLinkProps> = props => (
+const ListLink: React.FC<ListLinkProps> = (props) => (
   <li className={`nav-item`}>
     <Link className="nav-link" aria-current="page" to={props.to}>
       {props.children}
@@ -57,6 +57,7 @@ export const Header = (props: HeaderProps) => {
                   className="nav-link"
                   href="https://github.com/yesoreyeram/grafana-infinity-datasource/issues/new/choose"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   <i className="fas fa-bug text-secondary"></i>
                   <span className="px-2 small-screen-only">Report Bug</span>
@@ -67,6 +68,7 @@ export const Header = (props: HeaderProps) => {
                   className="nav-link"
                   href="https://github.com/yesoreyeram/grafana-infinity-datasource"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   <i className="fab fa-github text-secondary"></i>
                   <span className="px-2 small-screen-only">Github</span>
@@ -77,13 +79,14 @@ export const Header = (props: HeaderProps) => {
                   href="https://www.youtube.com/playlist?list=PL4vVKeEREln5ub1qrSMrwAabU0FiSNtmC"
                   className="nav-link"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   <i className="fab fa-youtube text-secondary"></i>
                   <span className="px-2 small-screen-only">Youtube</span>
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="https://twitter.com/grafanaInfinity" target="_blank">
+                <a className="nav-link" href="https://twitter.com/grafanaInfinity" target="_blank" rel="noreferrer">
                   <i className="fab fa-twitter text-secondary"></i>
                   <span className="px-2 small-screen-only">Follow</span>
                 </a>

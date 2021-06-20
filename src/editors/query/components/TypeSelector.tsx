@@ -21,9 +21,9 @@ export const TypeSelector = (props: TypeSelectorProps) => {
       case EditorMode.Standard:
         return SCRAP_QUERY_TYPES;
       case EditorMode.Variable:
-        return SCRAP_QUERY_TYPES.filter(a => a.value !== 'series' && a.value !== 'global');
+        return SCRAP_QUERY_TYPES.filter((a) => a.value !== 'series' && a.value !== 'global');
       case EditorMode.Global:
-        return SCRAP_QUERY_TYPES.filter(a => a.value !== 'global');
+        return SCRAP_QUERY_TYPES.filter((a) => a.value !== 'global');
       default:
         return [];
     }
@@ -35,7 +35,7 @@ export const TypeSelector = (props: TypeSelectorProps) => {
       <Select
         className="min-width-8 width-8"
         options={getTypes()}
-        onChange={e => {
+        onChange={(e) => {
           onChange({
             ...query,
             type: e.value as InfinityQueryType,

@@ -51,16 +51,16 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityDat
               case 'graphql':
                 new InfinityProvider(replaceVariables(t, options.scopedVars), this)
                   .query()
-                  .then(res => resolve(res))
-                  .catch(ex => {
+                  .then((res) => resolve(res))
+                  .catch((ex) => {
                     reject(ex);
                   });
                 break;
               case 'series':
                 new SeriesProvider(replaceVariables(t, options.scopedVars))
                   .query(new Date(options.range.from.toDate()).getTime(), new Date(options.range.to.toDate()).getTime())
-                  .then(res => resolve(res))
-                  .catch(ex => {
+                  .then((res) => resolve(res))
+                  .catch((ex) => {
                     reject(ex);
                   });
                 break;
@@ -75,20 +75,20 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityDat
         );
       });
     return Promise.all(promises)
-      .then(results => {
+      .then((results) => {
         return { data: flatten(results) };
       })
-      .catch(ex => {
+      .catch((ex) => {
         throw ex;
       });
   }
   query(options: DataQueryRequest<InfinityQuery>): Observable<DataQueryResponse> {
-    return new Observable<DataQueryResponse>(subscriber => {
+    return new Observable<DataQueryResponse>((subscriber) => {
       this.getResults(options)
-        .then(result => {
+        .then((result) => {
           subscriber.next({ ...result, state: LoadingState.Done });
         })
-        .catch(error => {
+        .catch((error) => {
           subscriber.next({ data: [], error, state: LoadingState.Error });
           subscriber.error(error);
         })
@@ -98,7 +98,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityDat
     });
   }
   metricFindQuery(originalQuery: VariableQuery): Promise<MetricFindValue[]> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       let query = migrateLegacyQuery(originalQuery);
       switch (query.queryType) {
         case 'infinity':
@@ -108,7 +108,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityDat
               this.instanceSettings,
               this
             );
-            infinityVariableProvider.query().then(res => {
+            infinityVariableProvider.query().then((res) => {
               resolve(flatten(res));
             });
           } else {
@@ -118,7 +118,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityDat
         case 'legacy':
         default:
           const legacyVariableProvider = new LegacyVariableProvider(query.query);
-          legacyVariableProvider.query().then(res => {
+          legacyVariableProvider.query().then((res) => {
             resolve(flatten(res));
           });
           break;

@@ -35,7 +35,7 @@ const SecureFieldEditor: React.FC<SecureFieldEditorProps> = ({
         placeholder="key"
         labelWidth={8}
         value={secureField.name || ''}
-        onChange={e => onChange({ ...secureField, name: e.target.value })}
+        onChange={(e) => onChange({ ...secureField, name: e.target.value })}
         onBlur={onBlur}
       ></FormField>
       <SecretFormField
@@ -47,7 +47,7 @@ const SecureFieldEditor: React.FC<SecureFieldEditorProps> = ({
         inputWidth={secureField.configured ? 11 : 12}
         placeholder={`${title} value`}
         onReset={() => onReset(secureField.id)}
-        onChange={e => onChange({ ...secureField, value: e.target.value })}
+        onChange={(e) => onChange({ ...secureField, value: e.target.value })}
         onBlur={onBlur}
       ></SecretFormField>
       <Button
@@ -55,7 +55,7 @@ const SecureFieldEditor: React.FC<SecureFieldEditorProps> = ({
         aria-label={`Remove ${title}`}
         variant="secondary"
         size="xs"
-        onClick={_e => onRemove(secureField.id)}
+        onClick={(_e) => onRemove(secureField.id)}
       >
         <IconButton name="trash-alt" />
       </Button>
@@ -87,7 +87,7 @@ export class SecureFieldsEditor extends PureComponent<Props, State> {
     this.state = {
       secureFields: Object.keys(jsonData)
         .sort()
-        .filter(key => key.startsWith(this.props.secureFieldName))
+        .filter((key) => key.startsWith(this.props.secureFieldName))
         .map((key, index) => {
           return {
             id: uniqueId(),
@@ -125,7 +125,7 @@ export class SecureFieldsEditor extends PureComponent<Props, State> {
   };
 
   onSecureFieldAdd = () => {
-    this.setState(prevState => {
+    this.setState((prevState) => {
       return { secureFields: [...prevState.secureFields, { id: uniqueId(), name: '', value: '', configured: false }] };
     });
   };
@@ -163,7 +163,7 @@ export class SecureFieldsEditor extends PureComponent<Props, State> {
   onSecureFieldRemove = (headerId: string) => {
     this.setState(
       ({ secureFields: headers }) => ({
-        secureFields: headers.filter(h => h.id !== headerId),
+        secureFields: headers.filter((h) => h.id !== headerId),
       }),
       this.updateSettings
     );
@@ -182,7 +182,7 @@ export class SecureFieldsEditor extends PureComponent<Props, State> {
                   title={this.props.title}
                   key={sf.id}
                   secureField={sf}
-                  onChange={h => {
+                  onChange={(h) => {
                     this.onSecureFieldChange(i, h);
                   }}
                   onBlur={this.updateSettings}
@@ -198,7 +198,7 @@ export class SecureFieldsEditor extends PureComponent<Props, State> {
             variant="secondary"
             icon="plus"
             type="button"
-            onClick={e => {
+            onClick={(e) => {
               this.onSecureFieldAdd();
             }}
           >

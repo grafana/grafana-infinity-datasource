@@ -48,15 +48,15 @@
     "jsonpath-plus": "^4.0.0",
     "lodash": "^4.17.19",
     "mathjs": "^7.2.0",
-    "react": "16.14.0",
-    "react-dom": "16.14.0",
+    "react": "16.12.0",
+    "react-dom": "16.12.0",
     "rxjs": "6.6.3",
     "xml2js": "^0.4.23"
   },
   "devDependencies": {
     "@deckdeckgo/highlight-code": "^2.6.0",
     "@fortawesome/fontawesome-free": "^5.15.3",
-    "@grafana/toolkit": "7.3.3",
+    "@grafana/toolkit": "8.0.3",
     "@mdx-js/mdx": "^1.6.22",
     "@mdx-js/react": "^1.6.22",
     "@popperjs/core": "^2.9.2",

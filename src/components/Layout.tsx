@@ -14,7 +14,7 @@ interface LayoutProps {
 
 deckDeckGoHighlightElement();
 
-export const Layout: React.FC<LayoutProps> = props => {
+export const Layout: React.FC<LayoutProps> = (props) => {
   const data = useStaticQuery(
     graphql`
       query {

@@ -8,7 +8,7 @@ interface CSVOptionsEditorProps {
   onRunQuery: (value: any) => void;
 }
 
-export const CSVOptionsEditor: React.FC<CSVOptionsEditorProps> = props => {
+export const CSVOptionsEditor: React.FC<CSVOptionsEditorProps> = (props) => {
   const [popupStatus, setPopupStatus] = useState(false);
   const togglePopup = () => {
     setPopupStatus(!popupStatus);
@@ -29,7 +29,7 @@ export const CSVOptionsEditor: React.FC<CSVOptionsEditorProps> = props => {
               type="text"
               value={props.query.csv_options?.delimiter}
               placeholder=","
-              onChange={e => {
+              onChange={(e) => {
                 props.onChange({
                   ...props.query,
                   csv_options: {
@@ -45,7 +45,7 @@ export const CSVOptionsEditor: React.FC<CSVOptionsEditorProps> = props => {
             <Checkbox
               css={{}}
               value={props.query.csv_options?.skip_empty_lines}
-              onChange={e => {
+              onChange={(e) => {
                 props.onChange({
                   ...props.query,
                   csv_options: {
@@ -61,7 +61,7 @@ export const CSVOptionsEditor: React.FC<CSVOptionsEditorProps> = props => {
             <Checkbox
               css={{}}
               value={props.query.csv_options?.skip_lines_with_error}
-              onChange={e => {
+              onChange={(e) => {
                 props.onChange({
                   ...props.query,
                   csv_options: {
@@ -77,7 +77,7 @@ export const CSVOptionsEditor: React.FC<CSVOptionsEditorProps> = props => {
             <Checkbox
               css={{}}
               value={props.query.csv_options?.relax_column_count}
-              onChange={e => {
+              onChange={(e) => {
                 props.onChange({
                   ...props.query,
                   csv_options: {
@@ -95,7 +95,7 @@ export const CSVOptionsEditor: React.FC<CSVOptionsEditorProps> = props => {
               type="text"
               value={props.query.csv_options?.columns}
               placeholder="Comma separated headers"
-              onChange={e => {
+              onChange={(e) => {
                 props.onChange({
                   ...props.query,
                   csv_options: {
@@ -113,7 +113,7 @@ export const CSVOptionsEditor: React.FC<CSVOptionsEditorProps> = props => {
               type="text"
               value={props.query.csv_options?.comment}
               placeholder="#"
-              onChange={e => {
+              onChange={(e) => {
                 props.onChange({
                   ...props.query,
                   csv_options: {

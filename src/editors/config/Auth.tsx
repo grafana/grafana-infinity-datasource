@@ -53,7 +53,7 @@ export const AuthEditor: React.FC<Props> = (props: Props) => {
             css={{}}
             className="gf-form"
             value={props.options.basicAuth || false}
-            onChange={e => onBasicAuthChange(e.currentTarget.checked)}
+            onChange={(e) => onBasicAuthChange(e.currentTarget.checked)}
           />
         </div>
       </div>
@@ -64,7 +64,7 @@ export const AuthEditor: React.FC<Props> = (props: Props) => {
             placeholder="username"
             labelWidth={8}
             value={props.options.basicAuthUser || ''}
-            onChange={e => onUserNameChange(e.currentTarget.value)}
+            onChange={(e) => onUserNameChange(e.currentTarget.value)}
           ></FormField>
           <SecretFormField
             labelWidth={12}

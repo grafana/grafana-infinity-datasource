@@ -4,13 +4,13 @@ import { Link } from 'gatsby';
 const FooterMenuitem: React.FC<{
   to: string;
   internal: boolean;
-}> = props => {
+}> = (props) => {
   return (
     <li className="my-2 footer-menu-item">
       {props.internal ? (
         <Link to={props.to}>{props.children}</Link>
       ) : (
-        <a href={props.to} target="_blank">
+        <a href={props.to} target="_blank" rel="noreferrer">
           {props.children}
         </a>
       )}

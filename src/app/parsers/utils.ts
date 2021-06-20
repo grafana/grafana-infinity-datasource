@@ -12,7 +12,7 @@ const guessColumnTypeFromField = (obj: any): ScrapColumnFormat => {
 
 export const getColumnsFromObjectArray = (result: any): ScrapColumn[] => {
   if (result) {
-    return Object.keys(result).map(key => {
+    return Object.keys(result).map((key) => {
       return { selector: key, text: key, type: guessColumnTypeFromField(result[key]) };
     });
   } else {

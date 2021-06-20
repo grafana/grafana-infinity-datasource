@@ -16,13 +16,11 @@ export class HTMLParser extends InfinityParser {
     return rootElements;
   }
   private constructTableData(rootElements: cheerio.Cheerio) {
-    forEach(rootElements, r => {
+    forEach(rootElements, (r) => {
       const row: GrafanaTableRow = [];
       const $ = load(r);
       this.target.columns.forEach((c: ScrapColumn) => {
-        let value: GrafanaTableRowItem = $(c.selector)
-          .text()
-          .trim();
+        let value: GrafanaTableRowItem = $(c.selector).text().trim();
         if (c.type === ScrapColumnFormat.Number) {
           value = value === '' ? null : +value;
         } else if (c.type === ScrapColumnFormat.Timestamp) {
@@ -39,9 +37,9 @@ export class HTMLParser extends InfinityParser {
   }
   private constructTimeSeriesData(rootElements: cheerio.Cheerio, endTime: Date | undefined) {
     this.NumbersColumns.forEach((metricColumn: ScrapColumn) => {
-      forEach(rootElements, r => {
+      forEach(rootElements, (r) => {
         const $$ = load(r);
-        let seriesName = this.StringColumns.map(c => $$(c.selector).text()).join(' ');
+        let seriesName = this.StringColumns.map((c) => $$(c.selector).text()).join(' ');
         if (this.NumbersColumns.length > 1) {
           seriesName += ` ${metricColumn.text}`;
         }
@@ -53,38 +51,15 @@ export class HTMLParser extends InfinityParser {
         if (this.TimeColumns.length >= 1) {
           const FirstTimeColumn = this.TimeColumns[0];
           if (FirstTimeColumn.type === ScrapColumnFormat.Timestamp) {
-            timestamp = new Date(
-              $$(FirstTimeColumn.selector)
-                .text()
-                .trim()
-            ).getTime();
+            timestamp = new Date($$(FirstTimeColumn.selector).text().trim()).getTime();
           } else if (FirstTimeColumn.type === ScrapColumnFormat.Timestamp_Epoch) {
-            timestamp = new Date(
-              parseInt(
-                $$(FirstTimeColumn.selector)
-                  .text()
-                  .trim(),
-                10
-              )
-            ).getTime();
+            timestamp = new Date(parseInt($$(FirstTimeColumn.selector).text().trim(), 10)).getTime();
           } else if (FirstTimeColumn.type === ScrapColumnFormat.Timestamp_Epoch_Seconds) {
-            timestamp = new Date(
-              parseInt(
-                $$(FirstTimeColumn.selector)
-                  .text()
-                  .trim(),
-                10
-              ) * 1000
-            ).getTime();
+            timestamp = new Date(parseInt($$(FirstTimeColumn.selector).text().trim(), 10) * 1000).getTime();
           }
         }
         if (seriesName) {
-          let metric = toNumber(
-            $$(metricColumn.selector)
-              .text()
-              .trim()
-              .replace(/\,/g, '')
-          );
+          let metric = toNumber($$(metricColumn.selector).text().trim().replace(/\,/g, ''));
           this.series.push({
             target: seriesName,
             datapoints: [[metric, timestamp]],

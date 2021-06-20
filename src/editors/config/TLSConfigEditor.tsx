@@ -8,7 +8,7 @@ interface TLSConfigEditorProps extends DataSourcePluginOptionsEditorProps<Infini
   hideTile?: boolean;
 }
 
-export const TLSConfigEditor: React.FC<TLSConfigEditorProps> = props => {
+export const TLSConfigEditor: React.FC<TLSConfigEditorProps> = (props) => {
   const theme = useTheme();
   const { FormField } = LegacyForms;
   const { options, onOptionsChange } = props;
@@ -76,7 +76,7 @@ export const TLSConfigEditor: React.FC<TLSConfigEditorProps> = props => {
               css={{}}
               className="gf-form"
               value={jsonData.tlsSkipVerify || false}
-              onChange={e => onTLSSettingsChange('tlsSkipVerify', e.currentTarget.checked)}
+              onChange={(e) => onTLSSettingsChange('tlsSkipVerify', e.currentTarget.checked)}
             />
           </div>
         </div>
@@ -89,7 +89,7 @@ export const TLSConfigEditor: React.FC<TLSConfigEditorProps> = props => {
               css={{}}
               className="gf-form"
               value={jsonData.tlsAuthWithCACert || false}
-              onChange={e => onTLSSettingsChange('tlsAuthWithCACert', e.currentTarget.checked)}
+              onChange={(e) => onTLSSettingsChange('tlsAuthWithCACert', e.currentTarget.checked)}
             />
           </div>
         </div>
@@ -102,7 +102,7 @@ export const TLSConfigEditor: React.FC<TLSConfigEditorProps> = props => {
               css={{}}
               className="gf-form"
               value={jsonData.tlsAuth || false}
-              onChange={e => onTLSSettingsChange('tlsAuth', e.currentTarget.checked)}
+              onChange={(e) => onTLSSettingsChange('tlsAuth', e.currentTarget.checked)}
             />
           </div>
         </div>
@@ -113,7 +113,7 @@ export const TLSConfigEditor: React.FC<TLSConfigEditorProps> = props => {
             label="CA Cert"
             labelWidth={8}
             rows={5}
-            onChange={e => onCertificateChange('tlsCACert', e.currentTarget.value)}
+            onChange={(e) => onCertificateChange('tlsCACert', e.currentTarget.value)}
             onReset={() => onCertificateReset('tlsCACert')}
           />
         )}
@@ -126,7 +126,7 @@ export const TLSConfigEditor: React.FC<TLSConfigEditorProps> = props => {
                 inputWidth={50}
                 placeholder="domain.example.com"
                 value={jsonData.serverName}
-                onChange={e => onServerNameChange(e.currentTarget.value)}
+                onChange={(e) => onServerNameChange(e.currentTarget.value)}
               />
             </div>
             <SecureTextArea
@@ -135,7 +135,7 @@ export const TLSConfigEditor: React.FC<TLSConfigEditorProps> = props => {
               label="Client Cert"
               labelWidth={8}
               rows={5}
-              onChange={e => onCertificateChange('tlsClientCert', e.currentTarget.value)}
+              onChange={(e) => onCertificateChange('tlsClientCert', e.currentTarget.value)}
               onReset={() => onCertificateReset('tlsClientCert')}
             />
             <SecureTextArea
@@ -144,7 +144,7 @@ export const TLSConfigEditor: React.FC<TLSConfigEditorProps> = props => {
               label="Client Key"
               labelWidth={8}
               rows={5}
-              onChange={e => onCertificateChange('tlsClientKey', e.currentTarget.value)}
+              onChange={(e) => onCertificateChange('tlsClientKey', e.currentTarget.value)}
               onReset={() => onCertificateReset('tlsClientKey')}
             />
           </>

@@ -8,7 +8,7 @@ interface JSONOptionsEditorProps {
   onRunQuery: (value: any) => void;
 }
 
-export const JSONOptionsEditor: React.FC<JSONOptionsEditorProps> = props => {
+export const JSONOptionsEditor: React.FC<JSONOptionsEditorProps> = (props) => {
   const { query, onChange } = props;
   const { json_options = {} } = query;
   const [popupStatus, setPopupStatus] = useState(false);
@@ -26,7 +26,7 @@ export const JSONOptionsEditor: React.FC<JSONOptionsEditorProps> = props => {
             <Checkbox
               css={{}}
               value={json_options.root_is_not_array}
-              onChange={e => {
+              onChange={(e) => {
                 onChange({
                   ...query,
                   json_options: {

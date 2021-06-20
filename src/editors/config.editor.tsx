@@ -34,21 +34,22 @@ export const InfinityConfigEditor: React.FC<Props> = ({ options, onOptionsChange
           className="btn btn-small btn-secondary"
           target="_blank"
           href="https://yesoreyeram.github.io/grafana-infinity-datasource"
+          rel="noreferrer"
         >
           Click here plugin documentation website
         </a>
       </InfoBox>
-      <Collapse label="URL" isOpen={urlOpen} collapsible={true} onToggle={e => setURLOpen(!urlOpen)}>
+      <Collapse label="URL" isOpen={urlOpen} collapsible={true} onToggle={(e) => setURLOpen(!urlOpen)}>
         <div style={{ padding: '0px 10px' }}>
           <URLEditor options={options} onOptionsChange={onOptionsChange} />
         </div>
       </Collapse>
-      <Collapse label="Authentication" isOpen={authOpen} collapsible={true} onToggle={e => setAuthOpen(!authOpen)}>
+      <Collapse label="Authentication" isOpen={authOpen} collapsible={true} onToggle={(e) => setAuthOpen(!authOpen)}>
         <div style={{ padding: '0px 10px' }}>
           <AuthEditor options={options} onOptionsChange={onOptionsChange} />
         </div>
       </Collapse>
-      <Collapse label="Headers" isOpen={headersOpen} collapsible={true} onToggle={e => setHeadersOpen(!headersOpen)}>
+      <Collapse label="Headers" isOpen={headersOpen} collapsible={true} onToggle={(e) => setHeadersOpen(!headersOpen)}>
         <div style={{ padding: '0px 10px' }}>
           <SecureFieldsEditor
             dataSourceConfig={options}
@@ -60,7 +61,12 @@ export const InfinityConfigEditor: React.FC<Props> = ({ options, onOptionsChange
           />
         </div>
       </Collapse>
-      <Collapse label="URL params" isOpen={queriesOpen} collapsible={true} onToggle={e => setQueriesOpen(!queriesOpen)}>
+      <Collapse
+        label="URL params"
+        isOpen={queriesOpen}
+        collapsible={true}
+        onToggle={(e) => setQueriesOpen(!queriesOpen)}
+      >
         <div style={{ padding: '0px 10px' }}>
           <SecureFieldsEditor
             dataSourceConfig={options}
@@ -72,7 +78,7 @@ export const InfinityConfigEditor: React.FC<Props> = ({ options, onOptionsChange
           />
         </div>
       </Collapse>
-      <Collapse label="TLS/SSL Settings" isOpen={tlsOpen} collapsible={true} onToggle={e => setTlsOpen(!tlsOpen)}>
+      <Collapse label="TLS/SSL Settings" isOpen={tlsOpen} collapsible={true} onToggle={(e) => setTlsOpen(!tlsOpen)}>
         <div style={{ padding: '1px 10px' }}>
           <TLSConfigEditor options={options} onOptionsChange={onOptionsChange} hideTile={true} />
         </div>
@@ -81,7 +87,7 @@ export const InfinityConfigEditor: React.FC<Props> = ({ options, onOptionsChange
         label="Global Queries"
         isOpen={globalsOpen}
         collapsible={true}
-        onToggle={e => setGlobalsOpen(!globalsOpen)}
+        onToggle={(e) => setGlobalsOpen(!globalsOpen)}
       >
         <div style={{ padding: '0px 10px' }}>
           <GlobalQueryEditor options={options} onOptionsChange={onOptionsChange} />

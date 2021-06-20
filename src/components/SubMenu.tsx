@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'gatsby';
 
-const SubMenuLink: React.FC<{ to: string; className?: string }> = props => {
+const SubMenuLink: React.FC<{ to: string; className?: string }> = (props) => {
   return (
     <Link className={`nav-link ${props.className}`} to={props.to}>
       {props.children}

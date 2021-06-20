@@ -11,7 +11,7 @@ interface ScrapperProps {
   onRunQuery: any;
 }
 
-export const URLEditor: React.FC<ScrapperProps> = props => {
+export const URLEditor: React.FC<ScrapperProps> = (props) => {
   const [data, setData] = useState(props.query.data);
   const onInputTextChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -38,7 +38,7 @@ export const URLEditor: React.FC<ScrapperProps> = props => {
               className="gf-form-input min-width-30"
               value={props.query.url}
               placeholder="https://jsonplaceholder.typicode.com/todos"
-              onChange={e => onInputTextChange(e, `url`, props)}
+              onChange={(e) => onInputTextChange(e, `url`, props)}
               onBlur={props.onRunQuery}
             ></input>
             {props.query.source === 'url' && (
@@ -55,11 +55,11 @@ export const URLEditor: React.FC<ScrapperProps> = props => {
               className="gf-form-input min-width-30"
               value={data}
               placeholder=""
-              onBlur={e => {
+              onBlur={(e) => {
                 onInputTextChange(e, `data`, props);
                 props.onRunQuery();
               }}
-              onChange={e => setData(e.target.value)}
+              onChange={(e) => setData(e.target.value)}
             ></textarea>
           </div>
         </div>
@@ -73,7 +73,7 @@ export const URLEditor: React.FC<ScrapperProps> = props => {
               className="gf-form-input min-width-30"
               value={props.query.root_selector}
               placeholder=""
-              onChange={e => {
+              onChange={(e) => {
                 onInputTextChange(e, `root_selector`, props);
                 props.onRunQuery();
               }}

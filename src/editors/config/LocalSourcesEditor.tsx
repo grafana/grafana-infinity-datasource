@@ -5,7 +5,7 @@ import { InfinityDataSourceJSONOptions } from './../../types';
 
 export type LocalSourcesEditorProps = DataSourcePluginOptionsEditorProps<InfinityDataSourceJSONOptions>;
 
-export const LocalSourcesEditor: React.FC<LocalSourcesEditorProps> = props => {
+export const LocalSourcesEditor: React.FC<LocalSourcesEditorProps> = (props) => {
   const theme = useTheme();
   const { options, onOptionsChange } = props;
   const switchContainerStyle: React.CSSProperties = {
@@ -82,7 +82,7 @@ export const LocalSourcesEditor: React.FC<LocalSourcesEditorProps> = props => {
             css={{}}
             className="gf-form"
             value={props.options.jsonData.local_sources_options?.enabled || false}
-            onChange={e => onLocalSourcesEnableChanged(e.currentTarget.checked)}
+            onChange={(e) => onLocalSourcesEnableChanged(e.currentTarget.checked)}
           />
         </div>
       </div>
@@ -98,7 +98,7 @@ export const LocalSourcesEditor: React.FC<LocalSourcesEditorProps> = props => {
                   <Input
                     css={{}}
                     value={path}
-                    onChange={e => {
+                    onChange={(e) => {
                       onPathChange(index, e.currentTarget.value);
                     }}
                     label={`Path ${index + 1}`}

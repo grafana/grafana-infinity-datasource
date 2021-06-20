@@ -102,7 +102,7 @@ export const URLOptionsEditor: React.FC<URLOptionsProps> = ({ query, onChange, o
               variant="secondary"
               title="Expand for advanced query options like method, body, etc"
               className="btn btn-secondary btn-medium width-2"
-              onClick={e => setPopupOpenStatus(true)}
+              onClick={(e) => setPopupOpenStatus(true)}
             >
               <i className="fa fa-expand"></i>
             </Button>
@@ -132,7 +132,7 @@ export const URLOptionsEditor: React.FC<URLOptionsProps> = ({ query, onChange, o
                               key={`${t.value}-${index}`}
                               label={t.label + ''}
                               active={t.value === activeTab}
-                              onChangeTab={e => {
+                              onChangeTab={(e) => {
                                 setActiveTab(t.value + '');
                               }}
                             />
@@ -160,7 +160,7 @@ export const URLOptionsEditor: React.FC<URLOptionsProps> = ({ query, onChange, o
                                 className="gf-form-input min-width-30"
                                 value={query.url}
                                 placeholder="https://jsonplaceholder.typicode.com/todos"
-                                onChange={e => onInputTextChange(e.target.value, `url`)}
+                                onChange={(e) => onInputTextChange(e.target.value, `url`)}
                                 onBlur={onRunQuery}
                               ></input>
                             </div>
@@ -168,10 +168,10 @@ export const URLOptionsEditor: React.FC<URLOptionsProps> = ({ query, onChange, o
                               <label className="gf-form-label query-keyword width-8">Method</label>
                               <Select
                                 className="width-8 min-width-8"
-                                value={URL_METHODS.find(e => e.value === (query.url_options.method || 'GET'))}
-                                defaultValue={URL_METHODS.find(e => e.value === 'GET')}
+                                value={URL_METHODS.find((e) => e.value === (query.url_options.method || 'GET'))}
+                                defaultValue={URL_METHODS.find((e) => e.value === 'GET')}
                                 options={URL_METHODS}
-                                onChange={e => onInputTextChange(e.value || 'GET', 'url_options.method')}
+                                onChange={(e) => onInputTextChange(e.value || 'GET', 'url_options.method')}
                               ></Select>
                             </div>
                             {query.url_options.method === 'POST' ? (
@@ -182,7 +182,7 @@ export const URLOptionsEditor: React.FC<URLOptionsProps> = ({ query, onChange, o
                                   className="gf-form-input min-width-30"
                                   value={query.url_options.data}
                                   placeholder={placeholderGraphQLQuery}
-                                  onChange={e => onInputTextChange(e.target.value, `url_options.data`)}
+                                  onChange={(e) => onInputTextChange(e.target.value, `url_options.data`)}
                                 ></textarea>
                               </div>
                             ) : (
@@ -193,7 +193,7 @@ export const URLOptionsEditor: React.FC<URLOptionsProps> = ({ query, onChange, o
                             <div
                               className="btn btn-success btn-medium"
                               style={{ marginTop: '5px' }}
-                              onClick={e => setPopupOpenStatus(false)}
+                              onClick={(e) => setPopupOpenStatus(false)}
                             >
                               OK
                             </div>
@@ -225,7 +225,7 @@ export const URLOptionsEditor: React.FC<URLOptionsProps> = ({ query, onChange, o
                                     <Input
                                       css={{}}
                                       value={param.key}
-                                      onChange={e => {
+                                      onChange={(e) => {
                                         onQueryParamItemChange(index, e.currentTarget.value, 'key');
                                       }}
                                     ></Input>
@@ -234,7 +234,7 @@ export const URLOptionsEditor: React.FC<URLOptionsProps> = ({ query, onChange, o
                                     <Input
                                       css={{}}
                                       value={param.value}
-                                      onChange={e => {
+                                      onChange={(e) => {
                                         onQueryParamItemChange(index, e.currentTarget.value, 'value');
                                       }}
                                     ></Input>
@@ -242,7 +242,7 @@ export const URLOptionsEditor: React.FC<URLOptionsProps> = ({ query, onChange, o
                                   <td>
                                     <button
                                       className="btn btn-secondary btn-small"
-                                      onClick={e => onQueryParamDelete(index)}
+                                      onClick={(e) => onQueryParamDelete(index)}
                                     >
                                       <i className="fa fa-trash"></i>
                                     </button>
@@ -277,7 +277,7 @@ export const URLOptionsEditor: React.FC<URLOptionsProps> = ({ query, onChange, o
                                     <Input
                                       css={{}}
                                       value={header.key}
-                                      onChange={e => {
+                                      onChange={(e) => {
                                         onQueryHeaderItemChange(index, e.currentTarget.value, 'key');
                                       }}
                                     ></Input>
@@ -286,7 +286,7 @@ export const URLOptionsEditor: React.FC<URLOptionsProps> = ({ query, onChange, o
                                     <Input
                                       css={{}}
                                       value={header.value}
-                                      onChange={e => {
+                                      onChange={(e) => {
                                         onQueryHeaderItemChange(index, e.currentTarget.value, 'value');
                                       }}
                                     ></Input>
@@ -294,7 +294,7 @@ export const URLOptionsEditor: React.FC<URLOptionsProps> = ({ query, onChange, o
                                   <td>
                                     <button
                                       className="btn btn-secondary btn-small"
-                                      onClick={e => onQueryHeaderDelete(index)}
+                                      onClick={(e) => onQueryHeaderDelete(index)}
                                     >
                                       <i className="fa fa-trash"></i>
                                     </button>

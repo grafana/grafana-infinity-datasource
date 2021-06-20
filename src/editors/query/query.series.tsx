@@ -24,7 +24,7 @@ export const SeriesEditor: React.FC<ScrapperProps> = ({ query, onChange }) => {
         <div className="gf-form">
           <label className="gf-form-label query-keyword width-8">Alias</label>
           <DataLinkInput
-            onChange={e => onInputTextChange(e, `alias`)}
+            onChange={(e) => onInputTextChange(e, `alias`)}
             suggestions={[{ label: 'Series Index', value: '__series.index', origin: VariableOrigin.Series }]}
             value={query.alias || ''}
             placeholder="Alias / Random Walk"
@@ -35,7 +35,7 @@ export const SeriesEditor: React.FC<ScrapperProps> = ({ query, onChange }) => {
             className="gf-form-input min-width-12"
             value={query.seriesCount}
             placeholder="1"
-            onChange={e => onInputTextChange(+e.target.value, `seriesCount`)}
+            onChange={(e) => onInputTextChange(+e.target.value, `seriesCount`)}
           ></input>
         </div>
       </div>
@@ -45,7 +45,7 @@ export const SeriesEditor: React.FC<ScrapperProps> = ({ query, onChange }) => {
             <>
               <label className="gf-form-label query-keyword width-8">Expression</label>
               <DataLinkInput
-                onChange={e => onInputTextChange(e, `expression`)}
+                onChange={(e) => onInputTextChange(e, `expression`)}
                 suggestions={[
                   { label: 'Series Index', value: '__series.index', origin: VariableOrigin.Series },
                   { label: 'Value Index', value: '__value.index', origin: VariableOrigin.Value },

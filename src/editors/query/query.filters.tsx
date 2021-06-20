@@ -10,11 +10,11 @@ interface TableFiltersProps {
   onRunQuery: any;
 }
 
-export const TableFilter: React.FC<TableFiltersProps> = props => {
+export const TableFilter: React.FC<TableFiltersProps> = (props) => {
   const [popupOpenStatus, setPopupOpenStatus] = useState(false);
   const { query, onChange, onRunQuery } = props;
   const getFields = () => {
-    return query.columns.map(col => {
+    return query.columns.map((col) => {
       return {
         label: col.text,
         value: col.text,
@@ -64,7 +64,7 @@ export const TableFilter: React.FC<TableFiltersProps> = props => {
         role="button"
         title={query.filters && query.filters.length > 0 ? query.filters.length + ' filters configured' : ''}
         className="btn btn-secondary btn-medium width-2"
-        onClick={e => setPopupOpenStatus(true)}
+        onClick={(e) => setPopupOpenStatus(true)}
         style={{ padding: '10px' }}
       >
         <i className="fa fa-filter fa-large btn btn-medium"></i>
@@ -73,27 +73,27 @@ export const TableFilter: React.FC<TableFiltersProps> = props => {
         {query.filters && query.filters.length > 0 ? (
           <>
             {query.filters.map((filter, index) => (
-              <div className="gf-form-inline">
+              <div className="gf-form-inline" key={index}>
                 <label className="gf-form-label width-6">Filter {index + 1}</label>
                 <Select
                   className="width-8"
                   options={getFields()}
                   defaultValue={getFields()[0]}
-                  value={getFields().find(f => f.value === filter.field) || getFields()[0]}
-                  onChange={e => onFilterFieldChange(index, e)}
+                  value={getFields().find((f) => f.value === filter.field) || getFields()[0]}
+                  onChange={(e) => onFilterFieldChange(index, e)}
                 ></Select>
                 <Select
                   className="width-8"
                   options={filterOperators}
                   defaultValue={filterOperators[0]}
-                  value={filterOperators.find(f => f.value === filter.operator) || filterOperators[0]}
-                  onChange={e => onFilterOperatorChange(index, e)}
+                  value={filterOperators.find((f) => f.value === filter.operator) || filterOperators[0]}
+                  onChange={(e) => onFilterOperatorChange(index, e)}
                 ></Select>
                 <input
                   type="text"
                   className="gf-form-input min-width-10 width-10"
                   value={filter.value[0]}
-                  onChange={e => onFilterValueChange(index, 0, e.target.value)}
+                  onChange={(e) => onFilterValueChange(index, 0, e.target.value)}
                   placeholder="Value"
                 ></input>
                 <span className="btn btn-success btn-small" style={{ margin: '5px' }} onClick={addFilter}>

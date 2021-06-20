@@ -76,7 +76,7 @@ export const GlobalQueryEditor: React.FC<Props> = (props: Props) => {
                       labelWidth={8}
                       disabled
                       value={q.name || ''}
-                      onChange={e => {
+                      onChange={(e) => {
                         set(options, `jsonData.global_queries[${index}].name`, e.target.value);
                         updateDatasourcePluginJsonDataOption(props, 'global_queries', options.jsonData.global_queries);
                       }}
@@ -87,7 +87,7 @@ export const GlobalQueryEditor: React.FC<Props> = (props: Props) => {
                       labelWidth={5}
                       disabled
                       value={q.id || ''}
-                      onChange={e => {
+                      onChange={(e) => {
                         set(options, `jsonData.global_queries[${index}].id`, e.target.value);
                         updateDatasourcePluginJsonDataOption(props, 'global_queries', options.jsonData.global_queries);
                       }}
@@ -154,7 +154,7 @@ const GlobalQuery: React.FC<{
             name="name"
             labelWidth={8}
             value={q.name || ''}
-            onChange={e => {
+            onChange={(e) => {
               set(options, `jsonData.global_queries[${index}].name`, e.target.value);
               updateDatasourcePluginJsonDataOption(props, 'global_queries', options.jsonData.global_queries);
             }}
@@ -164,7 +164,7 @@ const GlobalQuery: React.FC<{
             name="id"
             labelWidth={8}
             value={q.id || ''}
-            onChange={e => {
+            onChange={(e) => {
               set(options, `jsonData.global_queries[${index}].id`, e.target.value);
               updateDatasourcePluginJsonDataOption(props, 'global_queries', options.jsonData.global_queries);
             }}
