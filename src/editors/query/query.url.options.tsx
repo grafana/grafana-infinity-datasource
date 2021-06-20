@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { set } from 'lodash';
 import { css } from 'emotion';
-import { Select, Drawer, TabsBar, Tab, CustomScrollbar, TabContent, useTheme, Input } from '@grafana/ui';
+import { Select, Button, Drawer, TabsBar, Tab, CustomScrollbar, TabContent, useTheme, Input } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
 import { InfinityQuery, QueryParam } from '../../types';
 
@@ -96,13 +96,16 @@ export const URLOptionsEditor: React.FC<URLOptionsProps> = ({ query, onChange, o
           <></>
         ) : (
           <>
-            <button
+            <Button
+              size="sm"
+              style={{ marginTop: '5px' }}
+              variant="secondary"
               title="Expand for advanced query options like method, body, etc"
               className="btn btn-secondary btn-medium width-2"
               onClick={e => setPopupOpenStatus(true)}
             >
               <i className="fa fa-expand"></i>
-            </button>
+            </Button>
             {popupOpenStatus && (
               <>
                 <Drawer
@@ -217,7 +220,7 @@ export const URLOptionsEditor: React.FC<URLOptionsProps> = ({ query, onChange, o
                             )}
                             {query.url_options.params &&
                               query.url_options.params.map((param, index) => (
-                                <tr>
+                                <tr key={index}>
                                   <td>
                                     <Input
                                       css={{}}
@@ -269,7 +272,7 @@ export const URLOptionsEditor: React.FC<URLOptionsProps> = ({ query, onChange, o
                             )}
                             {query.url_options.headers &&
                               query.url_options.headers.map((header, index) => (
-                                <tr>
+                                <tr key={index}>
                                   <td>
                                     <Input
                                       css={{}}
