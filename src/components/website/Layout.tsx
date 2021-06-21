@@ -10,11 +10,12 @@ import { SubHeader } from './SubHeader';
 interface LayoutProps {
   showSubMenu: boolean;
   title: string;
+  children?: React.ReactNode;
 }
 
 deckDeckGoHighlightElement();
 
-export const Layout: React.FC<LayoutProps> = (props) => {
+export const Layout = (props: LayoutProps) => {
   const data = useStaticQuery(
     graphql`
       query {

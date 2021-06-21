@@ -5,7 +5,7 @@ import { InfinityDataSourceJSONOptions, InfinityDataSourceSecureJSONOptions } fr
 
 export type Props = DataSourcePluginOptionsEditorProps<InfinityDataSourceJSONOptions>;
 
-export const AuthEditor: React.FC<Props> = (props: Props) => {
+export const AuthEditor = (props: Props) => {
   const theme = useTheme();
   const { FormField, SecretFormField } = LegacyForms;
   const { options, onOptionsChange } = props;

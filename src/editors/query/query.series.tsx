@@ -10,7 +10,7 @@ interface ScrapperProps {
   onChange: (value: any) => void;
 }
 
-export const SeriesEditor: React.FC<ScrapperProps> = ({ query, onChange }) => {
+export const SeriesEditor = ({ query, onChange }: ScrapperProps) => {
   query = defaultsDeep(query, {
     alias: 'Random Walk',
   });

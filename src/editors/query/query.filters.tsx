@@ -10,7 +10,7 @@ interface TableFiltersProps {
   onRunQuery: any;
 }
 
-export const TableFilter: React.FC<TableFiltersProps> = (props) => {
+export const TableFilter = (props: TableFiltersProps) => {
   const [popupOpenStatus, setPopupOpenStatus] = useState(false);
   const { query, onChange, onRunQuery } = props;
   const getFields = () => {

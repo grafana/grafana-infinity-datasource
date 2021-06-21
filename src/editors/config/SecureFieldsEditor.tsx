@@ -13,14 +13,7 @@ interface SecureFieldEditorProps {
   onBlur: () => void;
 }
 
-const SecureFieldEditor: React.FC<SecureFieldEditorProps> = ({
-  title,
-  secureField,
-  onBlur,
-  onChange,
-  onRemove,
-  onReset,
-}) => {
+const SecureFieldEditor = ({ title, secureField, onBlur, onChange, onRemove, onReset }: SecureFieldEditorProps) => {
   const { FormField, SecretFormField } = LegacyForms;
   const layoutStyle: React.CSSProperties = {
     display: 'flex',

@@ -10,9 +10,10 @@ import { AuthEditor } from './config/Auth';
 // import { LocalSourcesEditor } from './config/LocalSourcesEditor';
 import { InfinityDataSourceJSONOptions } from '../types';
 
-export type Props = DataSourcePluginOptionsEditorProps<InfinityDataSourceJSONOptions>;
+export type ConfigEditorProps = DataSourcePluginOptionsEditorProps<InfinityDataSourceJSONOptions>;
 
-export const InfinityConfigEditor: React.FC<Props> = ({ options, onOptionsChange }) => {
+export const InfinityConfigEditor = (props: ConfigEditorProps) => {
+  const { options, onOptionsChange } = props;
   const [urlOpen, setURLOpen] = useState(false);
   const [tlsOpen, setTlsOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);

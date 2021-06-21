@@ -3,9 +3,10 @@ import { Link } from 'gatsby';
 
 interface ListLinkProps {
   to: string;
+  children?: React.ReactNode;
 }
 
-const ListLink: React.FC<ListLinkProps> = (props) => (
+const ListLink = (props: ListLinkProps) => (
   <li className={`nav-item`}>
     <Link className="nav-link" aria-current="page" to={props.to}>
       {props.children}

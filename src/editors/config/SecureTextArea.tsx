@@ -1,7 +1,7 @@
-import React, { ChangeEvent, MouseEvent, FC } from 'react';
+import React, { ChangeEvent, MouseEvent } from 'react';
 import { InlineFormLabel } from '@grafana/ui';
 
-interface Props {
+interface SecureTextAreaProps {
   label: string;
   labelWidth?: number;
   rows?: number;
@@ -12,7 +12,7 @@ interface Props {
   onBlur?: () => void;
 }
 
-export const SecureTextArea: FC<Props> = ({
+export const SecureTextArea = ({
   configured,
   label,
   labelWidth,
@@ -21,7 +21,7 @@ export const SecureTextArea: FC<Props> = ({
   onReset,
   onBlur,
   placeholder,
-}) => {
+}: SecureTextAreaProps) => {
   return (
     <div className="gf-form-inline">
       <InlineFormLabel width={labelWidth || 8}>{label}</InlineFormLabel>

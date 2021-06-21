@@ -28,7 +28,7 @@ const DefaultGlobalQuery: InfinityQuery = {
   format: InfinityQueryFormat.Table,
 };
 
-export const GlobalQueryEditor: React.FC<Props> = (props: Props) => {
+export const GlobalQueryEditor = (props: Props) => {
   const { options } = props;
   const { FormField } = LegacyForms;
 
@@ -115,14 +115,23 @@ export const GlobalQueryEditor: React.FC<Props> = (props: Props) => {
   );
 };
 
-const GlobalQuery: React.FC<{
+interface GlobalQueryProps {
   q: GlobalInfinityQuery;
   updateDatasourcePluginJsonDataOption: any;
   deleteGlobalQuery: (index: number) => void;
   props: Props;
   options: any;
   index: number;
-}> = ({ q, updateDatasourcePluginJsonDataOption, props, options, index, deleteGlobalQuery }) => {
+}
+
+const GlobalQuery = ({
+  q,
+  updateDatasourcePluginJsonDataOption,
+  props,
+  options,
+  index,
+  deleteGlobalQuery,
+}: GlobalQueryProps) => {
   const [popupState, setPopupState] = useState(false);
   const { FormField } = LegacyForms;
   return (

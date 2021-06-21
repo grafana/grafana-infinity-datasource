@@ -15,7 +15,7 @@ interface TypeChooserProps {
   onRunQuery: () => void;
 }
 
-export const TypeChooser: React.FC<TypeChooserProps> = (props) => {
+export const TypeChooser = (props: TypeChooserProps) => {
   const { query, mode } = props;
   return (
     <div className="gf-form-inline">

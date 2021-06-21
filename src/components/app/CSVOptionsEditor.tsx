@@ -8,7 +8,7 @@ interface CSVOptionsEditorProps {
   onRunQuery: (value: any) => void;
 }
 
-export const CSVOptionsEditor: React.FC<CSVOptionsEditorProps> = (props) => {
+export const CSVOptionsEditor = (props: CSVOptionsEditorProps) => {
   const [popupStatus, setPopupStatus] = useState(false);
   const togglePopup = () => {
     setPopupStatus(!popupStatus);

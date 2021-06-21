@@ -8,7 +8,7 @@ interface SeriesAdvancedOptionsProps {
   onChange: (value: any) => void;
 }
 
-export const SeriesAdvancedOptions: React.FC<SeriesAdvancedOptionsProps> = ({ query, onChange }) => {
+export const SeriesAdvancedOptions = ({ query, onChange }: SeriesAdvancedOptionsProps) => {
   query = defaultsDeep(query, {
     dataOverrides: [],
   });

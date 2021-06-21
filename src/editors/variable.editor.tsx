@@ -5,13 +5,13 @@ import { InfinityQueryEditor } from './query/infinityQuery';
 import { migrateLegacyQuery } from './../app/variablesQuery';
 import { VariableQuery, VariableQueryType, VariableQueryTypes, InfinityQuery, EditorMode } from '../types';
 
-interface Props {
+interface VariableEditorProps {
   query: VariableQuery;
   onChange: (query: VariableQuery, definition: string) => void;
   datasource: Datasource;
 }
 
-export const VariableEditor: React.FC<Props> = (props) => {
+export const VariableEditor = (props: VariableEditorProps) => {
   const [state, setState] = useState<VariableQuery>(migrateLegacyQuery(props.query));
   const saveQuery = () => {
     props.onChange(state, `${props.datasource.name}- (${state.queryType}) ${state.query}`);

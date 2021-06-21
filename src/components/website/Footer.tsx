@@ -1,10 +1,12 @@
 import React from 'react';
 import { Link } from 'gatsby';
 
-const FooterMenuitem: React.FC<{
+interface FooterMenuItemProps {
   to: string;
   internal: boolean;
-}> = (props) => {
+  children?: React.ReactNode;
+}
+const FooterMenuitem = (props: FooterMenuItemProps) => {
   return (
     <li className="my-2 footer-menu-item">
       {props.internal ? (
@@ -18,7 +20,7 @@ const FooterMenuitem: React.FC<{
   );
 };
 
-export const Footer: React.FC<any> = () => {
+export const Footer = () => {
   const currentYear = new Date().getFullYear();
   return (
     <footer id="footer" className="footer mt-auto py-5">

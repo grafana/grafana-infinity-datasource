@@ -5,7 +5,7 @@ import { InfinityDataSourceJSONOptions } from './../../types';
 
 export type LocalSourcesEditorProps = DataSourcePluginOptionsEditorProps<InfinityDataSourceJSONOptions>;
 
-export const LocalSourcesEditor: React.FC<LocalSourcesEditorProps> = (props) => {
+export const LocalSourcesEditor = (props: LocalSourcesEditorProps) => {
   const theme = useTheme();
   const { options, onOptionsChange } = props;
   const switchContainerStyle: React.CSSProperties = {

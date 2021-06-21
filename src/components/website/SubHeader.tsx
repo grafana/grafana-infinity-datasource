@@ -3,9 +3,10 @@ import { useStaticQuery, graphql } from 'gatsby';
 
 interface SubHeaderProps {
   title: string;
+  children?: React.ReactNode;
 }
 
-export const SubHeader: React.FC<SubHeaderProps> = (props) => {
+export const SubHeader = (props: SubHeaderProps) => {
   const data = useStaticQuery(
     graphql`
       query {

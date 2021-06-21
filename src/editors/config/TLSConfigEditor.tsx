@@ -8,7 +8,7 @@ interface TLSConfigEditorProps extends DataSourcePluginOptionsEditorProps<Infini
   hideTile?: boolean;
 }
 
-export const TLSConfigEditor: React.FC<TLSConfigEditorProps> = (props) => {
+export const TLSConfigEditor = (props: TLSConfigEditorProps) => {
   const theme = useTheme();
   const { FormField } = LegacyForms;
   const { options, onOptionsChange } = props;

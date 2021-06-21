@@ -14,14 +14,9 @@ export interface InfinityEditorProps {
   query: InfinityQuery;
 }
 
-export const InfinityQueryEditor: React.FC<InfinityEditorProps> = ({
-  query,
-  onChange,
-  mode,
-  instanceSettings,
-  onRunQuery,
-}) => {
-  query = defaultsDeep(query, DefaultInfinityQuery);
+export const InfinityQueryEditor = (props: InfinityEditorProps) => {
+  const { onChange, mode, instanceSettings, onRunQuery } = props;
+  const query = defaultsDeep(props.query, DefaultInfinityQuery);
   let canShowType = true;
   let canShowSeriesEditor = query.type === 'series';
   let canShowURLEditor = ['csv', 'html', 'json', 'graphql', 'xml'].includes(query.type);

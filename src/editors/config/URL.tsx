@@ -5,7 +5,7 @@ import { InfinityDataSourceJSONOptions } from '../../types';
 
 export type Props = DataSourcePluginOptionsEditorProps<InfinityDataSourceJSONOptions>;
 
-export const URLEditor: React.FC<Props> = (props: Props) => {
+export const URLEditor = (props: Props) => {
   const { FormField } = LegacyForms;
   const onURLChange = (url: string) => {
     props.onOptionsChange({
