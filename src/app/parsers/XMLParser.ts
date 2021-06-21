@@ -26,7 +26,7 @@ export class XMLParser extends InfinityParser {
     });
   }
   private constructTableData(XMLResponse: any[]) {
-    forEach(XMLResponse, r => {
+    forEach(XMLResponse, (r) => {
       const row: GrafanaTableRow = [];
       this.target.columns.forEach((c: ScrapColumn) => {
         let value = get(r, c.selector, '');
@@ -60,8 +60,8 @@ export class XMLParser extends InfinityParser {
   }
   private constructTimeSeriesData(XMLResponse: object, endTime: Date | undefined) {
     this.NumbersColumns.forEach((metricColumn: ScrapColumn) => {
-      forEach(XMLResponse, r => {
-        let seriesName = this.StringColumns.map(c => r[c.selector]).join(' ');
+      forEach(XMLResponse, (r) => {
+        let seriesName = this.StringColumns.map((c) => r[c.selector]).join(' ');
         if (this.NumbersColumns.length > 1) {
           seriesName += ` ${metricColumn.text}`;
         }

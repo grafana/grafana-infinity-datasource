@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'gatsby';
-import { Layout } from '../components/Layout';
+import { Layout } from '../components/website/Layout';
 
 export default function GettingStarted() {
   return (
@@ -31,13 +31,21 @@ export default function GettingStarted() {
                 <ul className="list-unstyled mt-2">
                   <li>
                     Install from{' '}
-                    <a href="https://grafana.com/grafana/plugins/yesoreyeram-infinity-datasource/" target="_blank">
+                    <a
+                      href="https://grafana.com/grafana/plugins/yesoreyeram-infinity-datasource/"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
                       grafana.com
                     </a>
                   </li>
                   <li>
                     Install from{' '}
-                    <a href="https://github.com/yesoreyeram/grafana-infinity-datasource/releases" target="_blank">
+                    <a
+                      href="https://github.com/yesoreyeram/grafana-infinity-datasource/releases"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
                       github
                     </a>
                   </li>

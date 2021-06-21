@@ -17,7 +17,7 @@ If your CSV doesn't have headers, you can specify them in the **CSV options** he
 
 ## CSV URL example
 
-CSV URL : https://thingspeak.com/channels/38629/feed.csv
+CSV URL : `https://thingspeak.com/channels/38629/feed.csv`
 
 In the below example, we are using CSV file from thingspeak traffic analysis. As you can see in the screenshot, you can visualize CSV as a table with just URL.
 
@@ -44,14 +44,13 @@ From the same data above, by adding columns and its type, we are able to convert
 
 ![image](https://user-images.githubusercontent.com/153843/108428886-2ab1df80-7237-11eb-8024-8aaab48a6c78.png#center)
 
-
 ## CSV without time fields
 
-URL : https://gist.githubusercontent.com/yesoreyeram/64a46b02f0bf87cb527d6270dd84ea47/raw/51f2a5e4fe7c3d010a3fe4ae4b6d07961b2ab047/population.csv
+URL : `https://gist.githubusercontent.com/yesoreyeram/64a46b02f0bf87cb527d6270dd84ea47/raw/51f2a5e4fe7c3d010a3fe4ae4b6d07961b2ab047/population.csv`
 
 ![image](https://user-images.githubusercontent.com/153843/108429819-639e8400-7238-11eb-8757-785e29a2394e.png#center)
 
-In the above example, we don't have any time field. We have a string field and a number field. In this case, by choosing format as timeseries we are simulating the point-in-time as timeseries data. With this option, you can use csv into visualizations like Bar Guage, Stats Panel, Gauge panel etc.
+In the above example, we don't have any time field. We have a string field and a number field. In this case, by choosing format as timeseries we are simulating the point-in-time as timeseries data. With this option, you can use csv into visualizations like Bar Gauge, Stats Panel, Gauge panel etc.
 
 Sample Data
 
@@ -80,11 +79,11 @@ If you don't specify any columns, then the infinity plugin will try to auto gene
 
 In the below example, we are going to convert the CSV URL `https://gist.githubusercontent.com/yesoreyeram/64a46b02f0bf87cb527d6270dd84ea47/raw/32ae9b1a4a0183dceb3596226b818c8f428193af/sample-with-quotes.csv` into a grafana datasource.
 
-CSV data should have columns as its first line and comma delimited. You need to also specify the column names manually for display purposes. 
+CSV data should have columns as its first line and comma delimited. You need to also specify the column names manually for display purposes.
 
 ![image](https://user-images.githubusercontent.com/153843/92382040-d8a35480-f103-11ea-8ff8-48c7ca211062.png#center)
 
-Ignore the root / rows as each line of CSV will be your rows. 
+Ignore the root / rows as each line of CSV will be your rows.
 
 ## CSV Inline
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Checkbox, Drawer } from '@grafana/ui';
-import { InfinityQuery } from './../../types';
+import { Checkbox, Drawer, Button } from '@grafana/ui';
+import { InfinityQuery } from '../../types';
 
 interface CSVOptionsEditorProps {
   query: InfinityQuery;
@@ -8,17 +8,79 @@ interface CSVOptionsEditorProps {
   onRunQuery: (value: any) => void;
 }
 
-export const CSVOptionsEditor: React.FC<CSVOptionsEditorProps> = props => {
+export const CSVOptionsEditor = (props: CSVOptionsEditorProps) => {
   const [popupStatus, setPopupStatus] = useState(false);
   const togglePopup = () => {
     setPopupStatus(!popupStatus);
   };
+  const onDelimiterChange = (delimiter: string) => {
+    props.onChange({
+      ...props.query,
+      csv_options: {
+        ...(props.query.csv_options || {}),
+        delimiter,
+      },
+    });
+  };
+  const onSkipEmptyLinesChange = (skip_empty_lines: boolean) => {
+    props.onChange({
+      ...props.query,
+      csv_options: {
+        ...(props.query.csv_options || {}),
+        skip_empty_lines,
+      },
+    });
+  };
+  const onSkipLinesWithErrorChange = (skip_lines_with_error: boolean) => {
+    props.onChange({
+      ...props.query,
+      csv_options: {
+        ...(props.query.csv_options || {}),
+        skip_lines_with_error,
+      },
+    });
+  };
+  const onRelaxColumnCountChange = (relax_column_count: boolean) => {
+    props.onChange({
+      ...props.query,
+      csv_options: {
+        ...(props.query.csv_options || {}),
+        relax_column_count,
+      },
+    });
+  };
+  const onColumnsChange = (columns: string) => {
+    props.onChange({
+      ...props.query,
+      csv_options: {
+        ...(props.query.csv_options || {}),
+        columns,
+      },
+    });
+  };
+  const onCommentChange = (comment: string) => {
+    props.onChange({
+      ...props.query,
+      csv_options: {
+        ...(props.query.csv_options || {}),
+        comment,
+      },
+    });
+  };
   return (
     <>
       <div style={{ padding: 'auto 15px;' }}>
-        <button className="btn btn-secondary" onClick={togglePopup}>
+        <Button
+          variant="secondary"
+          size="sm"
+          style={{ margin: '5px' }}
+          onClick={(e) => {
+            togglePopup();
+            e.preventDefault();
+          }}
+        >
           CSV options
-        </button>
+        </Button>
       </div>
       {popupStatus === true && (
         <Drawer title="CSV Options" onClose={togglePopup}>
@@ -29,15 +91,7 @@ export const CSVOptionsEditor: React.FC<CSVOptionsEditorProps> = props => {
               type="text"
               value={props.query.csv_options?.delimiter}
               placeholder=","
-              onChange={e => {
-                props.onChange({
-                  ...props.query,
-                  csv_options: {
-                    ...(props.query.csv_options || {}),
-                    delimiter: e.currentTarget.value,
-                  },
-                });
-              }}
+              onChange={(e) => onDelimiterChange(e.currentTarget.value)}
             ></input>
           </div>
           <div className="gf-form">
@@ -45,15 +99,7 @@ export const CSVOptionsEditor: React.FC<CSVOptionsEditorProps> = props => {
             <Checkbox
               css={{}}
               value={props.query.csv_options?.skip_empty_lines}
-              onChange={e => {
-                props.onChange({
-                  ...props.query,
-                  csv_options: {
-                    ...(props.query.csv_options || {}),
-                    skip_empty_lines: e.currentTarget.checked,
-                  },
-                });
-              }}
+              onChange={(e) => onSkipEmptyLinesChange(e.currentTarget.checked)}
             ></Checkbox>
           </div>
           <div className="gf-form">
@@ -61,15 +107,7 @@ export const CSVOptionsEditor: React.FC<CSVOptionsEditorProps> = props => {
             <Checkbox
               css={{}}
               value={props.query.csv_options?.skip_lines_with_error}
-              onChange={e => {
-                props.onChange({
-                  ...props.query,
-                  csv_options: {
-                    ...(props.query.csv_options || {}),
-                    skip_lines_with_error: e.currentTarget.checked,
-                  },
-                });
-              }}
+              onChange={(e) => onSkipLinesWithErrorChange(e.currentTarget.checked)}
             ></Checkbox>
           </div>
           <div className="gf-form">
@@ -77,15 +115,7 @@ export const CSVOptionsEditor: React.FC<CSVOptionsEditorProps> = props => {
             <Checkbox
               css={{}}
               value={props.query.csv_options?.relax_column_count}
-              onChange={e => {
-                props.onChange({
-                  ...props.query,
-                  csv_options: {
-                    ...(props.query.csv_options || {}),
-                    relax_column_count: e.currentTarget.checked,
-                  },
-                });
-              }}
+              onChange={(e) => onRelaxColumnCountChange(e.currentTarget.checked)}
             ></Checkbox>
           </div>
           <div className="gf-form">
@@ -95,15 +125,7 @@ export const CSVOptionsEditor: React.FC<CSVOptionsEditorProps> = props => {
               type="text"
               value={props.query.csv_options?.columns}
               placeholder="Comma separated headers"
-              onChange={e => {
-                props.onChange({
-                  ...props.query,
-                  csv_options: {
-                    ...(props.query.csv_options || {}),
-                    columns: e.currentTarget.value,
-                  },
-                });
-              }}
+              onChange={(e) => onColumnsChange(e.currentTarget.value)}
             ></input>
           </div>
           <div className="gf-form">
@@ -113,15 +135,7 @@ export const CSVOptionsEditor: React.FC<CSVOptionsEditorProps> = props => {
               type="text"
               value={props.query.csv_options?.comment}
               placeholder="#"
-              onChange={e => {
-                props.onChange({
-                  ...props.query,
-                  csv_options: {
-                    ...(props.query.csv_options || {}),
-                    comment: e.currentTarget.value,
-                  },
-                });
-              }}
+              onChange={(e) => onCommentChange(e.currentTarget.value)}
             ></input>
           </div>
         </Drawer>

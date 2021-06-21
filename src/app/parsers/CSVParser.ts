@@ -29,13 +29,13 @@ export class CSVParser extends InfinityParser {
     if (this.target.csv_options && this.target.csv_options.comment) {
       options.comment = this.target.csv_options.comment;
     }
-    const records = parse(CSVResponse, options);
+    const records = parse(CSVResponse.trim(), options);
     return records;
   }
   private constructTableData(records: any[]) {
     const columns = this.target.columns.length > 0 ? this.target.columns : getColumnsFromObjectArray(records[0]);
     this.AutoColumns = columns;
-    forEach(records, r => {
+    forEach(records, (r) => {
       const row: GrafanaTableRow = [];
       columns.forEach((c: ScrapColumn) => {
         let value = get(r, c.selector, '');
@@ -55,8 +55,8 @@ export class CSVParser extends InfinityParser {
   }
   private constructTimeSeriesData(records: any[], endTime: Date | undefined) {
     this.NumbersColumns.forEach((metricColumn: ScrapColumn) => {
-      forEach(records, r => {
-        let seriesName = this.StringColumns.map(c => r[c.selector]).join(' ');
+      forEach(records, (r) => {
+        let seriesName = this.StringColumns.map((c) => r[c.selector]).join(' ');
         if (this.NumbersColumns.length > 1) {
           seriesName += ` ${metricColumn.text}`;
         }

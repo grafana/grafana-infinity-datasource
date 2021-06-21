@@ -8,14 +8,14 @@ interface SeriesAdvancedOptionsProps {
   onChange: (value: any) => void;
 }
 
-export const SeriesAdvancedOptions: React.FC<SeriesAdvancedOptionsProps> = ({ query, onChange }) => {
+export const SeriesAdvancedOptions = ({ query, onChange }: SeriesAdvancedOptionsProps) => {
   query = defaultsDeep(query, {
     dataOverrides: [],
   });
 
   const [popupState, setPopupState] = useState(false);
 
-  const DATA_OVERRIDE_OPERATORS = ['=', '<', '<=', '>', '>=', '!='].map(o => {
+  const DATA_OVERRIDE_OPERATORS = ['=', '<', '<=', '>', '>=', '!='].map((o) => {
     return {
       label: o,
       value: o,
@@ -87,14 +87,14 @@ export const SeriesAdvancedOptions: React.FC<SeriesAdvancedOptionsProps> = ({ qu
                 <>
                   {query.dataOverrides.map((override: DataOverride, index: number) => {
                     return (
-                      <div className="gf-form-inline">
+                      <div className="gf-form-inline" key={index}>
                         <div className="gf-form">
                           <label className="gf-form-label width-6">Override {index + 1}</label>
                           <input
                             type="text"
                             className="gf-form-input min-width-10 width-10"
                             value={override.values[0]}
-                            onChange={e => onTextChange(e.target.value, `dataOverrides[${index}].values[0]`)}
+                            onChange={(e) => onTextChange(e.target.value, `dataOverrides[${index}].values[0]`)}
                             placeholder="Value 1"
                           ></input>
                           <Select
@@ -102,20 +102,20 @@ export const SeriesAdvancedOptions: React.FC<SeriesAdvancedOptionsProps> = ({ qu
                             value={DATA_OVERRIDE_OPERATORS.find((options: any) => options.value === override.operator)}
                             defaultValue={override.operator}
                             options={DATA_OVERRIDE_OPERATORS}
-                            onChange={e => onTextChange(e.value || '', `dataOverrides[${index}].operator`)}
+                            onChange={(e) => onTextChange(e.value || '', `dataOverrides[${index}].operator`)}
                           ></Select>
                           <input
                             type="text"
                             className="gf-form-input min-width-10 width-10"
                             value={override.values[1]}
-                            onChange={e => onTextChange(e.target.value, `dataOverrides[${index}].values[1]`)}
+                            onChange={(e) => onTextChange(e.target.value, `dataOverrides[${index}].values[1]`)}
                             placeholder="Value 2"
                           ></input>
                           <input
                             type="text"
                             className="gf-form-input min-width-8 width-8"
                             value={override.override}
-                            onChange={e => onTextChange(e.target.value, `dataOverrides[${index}].override`)}
+                            onChange={(e) => onTextChange(e.target.value, `dataOverrides[${index}].override`)}
                             placeholder="Override value"
                           ></input>
                           <span

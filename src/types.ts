@@ -253,6 +253,16 @@ export enum VariableQueryType {
   Legacy = 'legacy',
   Infinity = 'infinity',
 }
+export const VariableQueryTypes: Array<SelectableValue<VariableQueryType>> = [
+  {
+    label: 'Infinity',
+    value: VariableQueryType.Infinity,
+  },
+  {
+    label: 'Legacy',
+    value: VariableQueryType.Legacy,
+  },
+];
 export type VariableQuery = {
   queryType: VariableQueryType;
   query: string;

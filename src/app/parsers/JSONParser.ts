@@ -19,17 +19,21 @@ export class JSONParser extends InfinityParser {
     }
   }
   private findArrayData(input: any): object {
-    const arrayItems: any[] = Object.keys(input)
-      .filter((key: string) => {
-        return Array.isArray(input[key]);
-      })
-      .map(key => {
-        return input[key];
-      });
-    if (arrayItems.length > 0) {
-      return arrayItems[0];
+    if (input) {
+      const arrayItems: any[] = Object.keys(input)
+        .filter((key: string) => {
+          return Array.isArray(input[key]);
+        })
+        .map((key) => {
+          return input[key];
+        });
+      if (arrayItems.length > 0) {
+        return arrayItems[0];
+      }
+      return input;
+    } else {
+      return input;
     }
-    return input;
   }
   private formatInput(JSONResponse: object) {
     if (typeof JSONResponse === 'string') {
@@ -84,8 +88,8 @@ export class JSONParser extends InfinityParser {
   }
   private constructTimeSeriesData(JSONResponse: object, endTime: Date | undefined) {
     this.NumbersColumns.forEach((metricColumn: ScrapColumn) => {
-      forEach(JSONResponse, r => {
-        let seriesName = this.StringColumns.map(c => r[c.selector]).join(' ');
+      forEach(JSONResponse, (r) => {
+        let seriesName = this.StringColumns.map((c) => r[c.selector]).join(' ');
         if (this.NumbersColumns.length > 1) {
           seriesName += ` ${metricColumn.text}`;
         }

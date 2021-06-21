@@ -27,7 +27,7 @@ const getTemplateVariablesFromResult = (res: any): Array<SelectableValue<string>
         };
       });
     } else {
-      return flatten(res.rows || []).map(res => {
+      return flatten(res.rows || []).map((res) => {
         return {
           value: String(res),
           label: String(res),
@@ -93,7 +93,7 @@ export class InfinityVariableProvider implements VariableProvider {
               resolve([]);
             }
           })
-          .catch(ex => {
+          .catch((ex) => {
             resolve([]);
           });
       } else {
@@ -109,7 +109,7 @@ export class LegacyVariableProvider implements VariableProvider {
     this.queryString = getTemplateSrv().replace(query);
   }
   query(): Promise<Array<SelectableValue<string>>> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       if (this.queryString.startsWith('Collection(') && this.queryString.endsWith(')')) {
         resolve(CollectionVariable(this.queryString));
       } else if (this.queryString.startsWith('CollectionLookup(') && this.queryString.endsWith(')')) {

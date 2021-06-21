@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, graphql } from 'gatsby';
-import { Layout } from '../components/Layout';
-import { Features } from '../components/Features';
+import { Layout } from '../components/website/Layout';
+import { Features } from '../components/website/Features';
 
 export interface HomeProps {
   data: any;
@@ -93,16 +93,23 @@ export default function Home({ data }: HomeProps) {
             href="https://github.com/yesoreyeram/grafana-infinity-datasource/actions?query=workflow%3A%22Build+%26+Publish%22"
             target="_blank"
             className="mx-2"
+            rel="noreferrer"
           >
             <img src="https://github.com/yesoreyeram/grafana-infinity-datasource/workflows/Build%20&%20Publish/badge.svg" />
           </a>
-          <a href="https://github.com/yesoreyeram/grafana-infinity-datasource/issues" target="_blank" className="mx-2">
+          <a
+            href="https://github.com/yesoreyeram/grafana-infinity-datasource/issues"
+            target="_blank"
+            className="mx-2"
+            rel="noreferrer"
+          >
             <img src="https://img.shields.io/github/issues/yesoreyeram/grafana-infinity-datasource" />
           </a>
           <a
             href="https://github.com/yesoreyeram/grafana-infinity-datasource/blob/main/LICENSE"
             target="_blank"
             className="mx-2"
+            rel="noreferrer"
           >
             <img
               src="https://img.shields.io/github/license/yesoreyeram/grafana-infinity-datasource"

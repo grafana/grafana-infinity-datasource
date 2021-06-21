@@ -1,14 +1,14 @@
 import React from 'react';
 import { graphql, Link } from 'gatsby';
 import { Helmet } from 'react-helmet';
-import { Layout } from '../components/Layout';
+import { Layout } from '../components/website/Layout';
 
 export interface TemplateProps {
   data: any;
 }
 
 export const pageQuery = graphql`
-  query($id: String!) {
+  query ($id: String!) {
     site {
       siteMetadata {
         title

@@ -5,7 +5,7 @@ import { InfinityDataSourceJSONOptions } from '../../types';
 
 export type Props = DataSourcePluginOptionsEditorProps<InfinityDataSourceJSONOptions>;
 
-export const URLEditor: React.FC<Props> = (props: Props) => {
+export const URLEditor = (props: Props) => {
   const { FormField } = LegacyForms;
   const onURLChange = (url: string) => {
     props.onOptionsChange({
@@ -20,7 +20,7 @@ export const URLEditor: React.FC<Props> = (props: Props) => {
         labelWidth={11}
         tooltip="URL of the query. Leave blank if you want to handle it in the query editor."
         value={props.options.url}
-        onChange={e => onURLChange(e.currentTarget.value)}
+        onChange={(e) => onURLChange(e.currentTarget.value)}
       />
     </div>
   );

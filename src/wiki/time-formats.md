@@ -15,7 +15,7 @@ Timestamp fields should be one of the standard javascript date format as specifi
 
 For example, below lists various valid timestamp formats. Your time field can be one of this format.
 
-```
+```bash
 year,population
 2017,8
 2017-02,9
@@ -36,7 +36,7 @@ Thu Nov 23 2017 10:30:20 GMT+0000 (Greenwich Mean Time),10.1
 
 If your data is in unix epoch time formats (unix milliseconds format), You can select **Timestamp ( UNIX ms )** / **timestamp_epoch** as as type. Below snippet shows some examples
 
-```
+```bash
 Year,Population
 1262304000000,200
 1293840000000,201
