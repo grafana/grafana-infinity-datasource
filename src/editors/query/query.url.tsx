@@ -10,7 +10,7 @@ interface ScrapperProps {
   query: InfinityQuery;
   mode: EditorMode;
   onChange: (value: any) => void;
-  onRunQuery: any;
+  onRunQuery: () => void;
 }
 
 export const URLEditor = (props: ScrapperProps) => {

@@ -11,7 +11,7 @@ interface QueryColumnProps {
   onRunQuery: () => void;
 }
 export const QueryColumnsEditor = (props: QueryColumnProps) => {
-  const { query, mode, onChange, onRunQuery } = props;
+  const { query, mode, onChange } = props;
   const onColumnAdd = () => {
     const columns = cloneDeep(query.columns || []);
     const defaultColumn = {
@@ -25,7 +25,6 @@ export const QueryColumnsEditor = (props: QueryColumnProps) => {
     const columns = cloneDeep(query.columns || []);
     columns.splice(index, 1);
     onChange({ ...query, columns });
-    onRunQuery();
   };
   const LABEL_WIDTH = mode === EditorMode.Variable ? 10 : 8;
   return (

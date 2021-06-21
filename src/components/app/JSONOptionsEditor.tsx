@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Checkbox, Drawer } from '@grafana/ui';
+import { Checkbox, Drawer, Button } from '@grafana/ui';
 import { InfinityQuery } from '../../types';
 
 interface JSONOptionsEditorProps {
@@ -8,15 +8,15 @@ interface JSONOptionsEditorProps {
   onRunQuery: (value: any) => void;
 }
 
-export const JSONOptionsEditor: React.FC<JSONOptionsEditorProps> = (props) => {
+export const JSONOptionsEditor = (props: JSONOptionsEditorProps) => {
+  const [popupStatus, setPopupStatus] = useState(false);
   const { query, onChange } = props;
   const { json_options = {} } = query;
-  const [popupStatus, setPopupStatus] = useState(false);
   const onRootIsNotArrayChange = (root_is_not_array: boolean) => {
     onChange({
       ...query,
       json_options: {
-        ...json_options,
+        ...query.json_options,
         root_is_not_array,
       },
     });
@@ -24,9 +24,17 @@ export const JSONOptionsEditor: React.FC<JSONOptionsEditorProps> = (props) => {
   return (
     <>
       <div style={{ padding: 'auto 15px;' }}>
-        <button className="btn btn-secondary" onClick={() => setPopupStatus(!popupStatus)}>
+        <Button
+          variant="secondary"
+          size="sm"
+          style={{ margin: '5px' }}
+          onClick={(e) => {
+            setPopupStatus(!popupStatus);
+            e.preventDefault();
+          }}
+        >
           JSON options
-        </button>
+        </Button>
       </div>
       {popupStatus === true && (
         <Drawer title="Advanced JSON parsing options" onClose={() => setPopupStatus(!popupStatus)}>

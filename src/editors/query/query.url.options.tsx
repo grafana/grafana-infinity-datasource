@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { set } from 'lodash';
+import { cloneDeep } from 'lodash';
 import { css } from 'emotion';
 import { Select, Button, Drawer, TabsBar, Tab, CustomScrollbar, TabContent, useTheme, Input } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
@@ -7,67 +7,93 @@ import { InfinityQuery, QueryParam } from '../../types';
 
 interface URLOptionsProps {
   query: InfinityQuery;
-  onChange: (value: any) => void;
-  onRunQuery: (value: any) => void;
+  onChange: (value: InfinityQuery) => void;
+  onRunQuery: () => void;
 }
 
-export const URLOptionsEditor: React.FC<URLOptionsProps> = ({ query, onChange, onRunQuery }) => {
+export const URLOptionsEditor = ({ query, onChange, onRunQuery }: URLOptionsProps) => {
   const theme = useTheme();
   const [popupOpenStatus, setPopupOpenStatus] = useState(false);
   const [activeTab, setActiveTab] = useState('method');
-
+  const [body, setBody] = useState(query.url_options.data || '');
+  const defaultHeader = {
+    key: 'header-key',
+    value: 'header-value',
+  };
+  const defaultParam = {
+    key: 'key',
+    value: 'value',
+  };
   const URL_METHODS: SelectableValue[] = [
     { label: 'GET', value: 'GET' },
     { label: 'POST', value: 'POST' },
   ];
-
-  const onInputTextChange = (value: string, field: string) => {
-    set(query, field, value);
-    onChange(query);
-  };
-
   const onQueryParamsAdd = () => {
-    query.url_options.params = query.url_options.params || [];
-    query.url_options.params?.push({
-      key: 'key',
-      value: 'value',
+    const params = cloneDeep(query.url_options.params || []);
+    params.push(defaultParam);
+    onChange({
+      ...query,
+      url_options: {
+        ...query.url_options,
+        params,
+      },
     });
-    onChange(query);
   };
-
   const onQueryParamDelete = (index: number) => {
-    query.url_options.params = query.url_options.params || [];
-    query.url_options.params.splice(index, 1);
-    onChange(query);
-  };
-
-  const onQueryParamItemChange = (index: number, value: string, key: keyof QueryParam) => {
-    query.url_options.params = query.url_options.params || [];
-    query.url_options.params[index] = { ...query.url_options.params[index], [key]: value };
-    onChange(query);
-  };
-
-  const onQueryHeadersAdd = () => {
-    query.url_options.headers = query.url_options.headers || [];
-    query.url_options.headers?.push({
-      key: 'header-key',
-      value: 'header-value',
+    const params = cloneDeep(query.url_options.params || []);
+    params.splice(index, 1);
+    onChange({
+      ...query,
+      url_options: {
+        ...query.url_options,
+        params,
+      },
     });
-    onChange(query);
   };
-
+  const onQueryParamItemChange = (index: number, value: string, key: keyof QueryParam) => {
+    const params = cloneDeep(query.url_options.params || []);
+    params[index] = { ...params[index], [key]: value };
+    onChange({
+      ...query,
+      url_options: {
+        ...query.url_options,
+        params,
+      },
+    });
+  };
+  const onQueryHeadersAdd = () => {
+    const headers = cloneDeep(query.url_options.headers || []);
+    headers.push(defaultHeader);
+    onChange({
+      ...query,
+      url_options: {
+        ...query.url_options,
+        headers,
+      },
+    });
+  };
   const onQueryHeaderDelete = (index: number) => {
-    query.url_options.headers = query.url_options.headers || [];
-    query.url_options.headers.splice(index, 1);
-    onChange(query);
+    const headers = cloneDeep(query.url_options.headers || []);
+    headers.splice(index, 1);
+    onChange({
+      ...query,
+      url_options: {
+        ...query.url_options,
+        headers,
+      },
+    });
   };
-
   const onQueryHeaderItemChange = (index: number, value: string, key: keyof QueryParam) => {
-    query.url_options.headers = query.url_options.headers || [];
-    query.url_options.headers[index] = { ...query.url_options.headers[index], [key]: value };
-    onChange(query);
+    const headers = cloneDeep(query.url_options.headers || []);
+    headers[index] = { ...headers[index], [key]: value };
+    onChange({
+      ...query,
+      url_options: {
+        ...query.url_options,
+        headers,
+      },
+    });
   };
-
   const tabs: Array<SelectableValue<string>> = [
     {
       label: 'Method & Body',
@@ -89,6 +115,28 @@ export const URLOptionsEditor: React.FC<URLOptionsProps> = ({ query, onChange, o
     }
 }`;
 
+  const onMethodChange = (method: 'GET' | 'POST') => {
+    onChange({
+      ...query,
+      url_options: {
+        ...query.url_options,
+        method,
+      },
+    });
+    onRunQuery();
+  };
+
+  const onBodyChange = () => {
+    onChange({
+      ...query,
+      url_options: {
+        ...query.url_options,
+        data: body,
+      },
+    });
+    onRunQuery();
+  };
+
   return (
     <div className="gf-form-inline">
       <div className="gf-form">
@@ -100,7 +148,10 @@ export const URLOptionsEditor: React.FC<URLOptionsProps> = ({ query, onChange, o
               variant="secondary"
               title="Expand for advanced query options like method, body, etc"
               className="btn btn-secondary btn-medium width-2"
-              onClick={() => setPopupOpenStatus(!popupOpenStatus)}
+              onClick={(e) => {
+                setPopupOpenStatus(!popupOpenStatus);
+                e.preventDefault();
+              }}
             >
               <i className="fa fa-expand"></i>
             </Button>
@@ -152,24 +203,13 @@ export const URLOptionsEditor: React.FC<URLOptionsProps> = ({ query, onChange, o
                         <>
                           <div className="gf-form-inline">
                             <div className="gf-form">
-                              <label className="gf-form-label query-keyword width-8">URL</label>
-                              <input
-                                type="text"
-                                className="gf-form-input min-width-30"
-                                value={query.url}
-                                placeholder="https://jsonplaceholder.typicode.com/todos"
-                                onChange={(e) => onInputTextChange(e.target.value, `url`)}
-                                onBlur={onRunQuery}
-                              ></input>
-                            </div>
-                            <div className="gf-form">
                               <label className="gf-form-label query-keyword width-8">Method</label>
                               <Select
                                 className="width-8 min-width-8"
                                 value={URL_METHODS.find((e) => e.value === (query.url_options.method || 'GET'))}
                                 defaultValue={URL_METHODS.find((e) => e.value === 'GET')}
                                 options={URL_METHODS}
-                                onChange={(e) => onInputTextChange(e.value || 'GET', 'url_options.method')}
+                                onChange={(e) => onMethodChange(e.value)}
                               ></Select>
                             </div>
                             {query.url_options.method === 'POST' ? (
@@ -178,9 +218,10 @@ export const URLOptionsEditor: React.FC<URLOptionsProps> = ({ query, onChange, o
                                 <textarea
                                   rows={8}
                                   className="gf-form-input min-width-30"
-                                  value={query.url_options.data}
+                                  value={body}
                                   placeholder={placeholderGraphQLQuery}
-                                  onChange={(e) => onInputTextChange(e.target.value, `url_options.data`)}
+                                  onChange={(e) => setBody(e.currentTarget.value)}
+                                  onBlur={() => onBodyChange()}
                                 ></textarea>
                               </div>
                             ) : (

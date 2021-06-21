@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Checkbox, Drawer } from '@grafana/ui';
+import { Checkbox, Drawer, Button } from '@grafana/ui';
 import { InfinityQuery } from '../../types';
 
 interface CSVOptionsEditorProps {
@@ -70,9 +70,17 @@ export const CSVOptionsEditor: React.FC<CSVOptionsEditorProps> = (props) => {
   return (
     <>
       <div style={{ padding: 'auto 15px;' }}>
-        <button className="btn btn-secondary" onClick={togglePopup}>
+        <Button
+          variant="secondary"
+          size="sm"
+          style={{ margin: '5px' }}
+          onClick={(e) => {
+            togglePopup();
+            e.preventDefault();
+          }}
+        >
           CSV options
-        </button>
+        </Button>
       </div>
       {popupStatus === true && (
         <Drawer title="CSV Options" onClose={togglePopup}>
