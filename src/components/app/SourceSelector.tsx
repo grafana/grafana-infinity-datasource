@@ -1,6 +1,6 @@
 import React from 'react';
 import { Select } from '@grafana/ui';
-import { InfinityQuery, SCRAP_QUERY_SOURCES, InfinityQuerySources } from './../../../types';
+import { InfinityQuery, SCRAP_QUERY_SOURCES, InfinityQuerySources } from '../../types';
 interface SourceSelectorProps {
   query: InfinityQuery;
   onChange: (e: InfinityQuery) => void;

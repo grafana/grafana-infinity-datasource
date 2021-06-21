@@ -3,9 +3,9 @@ import { useStaticQuery, graphql } from 'gatsby';
 import { Helmet } from 'react-helmet';
 import { defineCustomElements as deckDeckGoHighlightElement } from '@deckdeckgo/highlight-code/dist/loader';
 import { SubMenu } from './SubMenu';
-import { Header } from './../components/Header';
-import { Footer } from './../components/Footer';
-import { SubHeader } from './../components/SubHeader';
+import { Header } from './Header';
+import { Footer } from './Footer';
+import { SubHeader } from './SubHeader';
 
 interface LayoutProps {
   showSubMenu: boolean;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, graphql } from 'gatsby';
-import { Layout } from '../components/Layout';
-import { Features } from '../components/Features';
+import { Layout } from '../components/website/Layout';
+import { Features } from '../components/website/Features';
 
 export interface HomeProps {
   data: any;

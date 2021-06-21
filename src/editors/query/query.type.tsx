@@ -1,11 +1,11 @@
 import React from 'react';
 import { InfinityQuery, InfinityQueryType, EditorMode } from '../../types';
-import { CSVOptionsEditor } from './components/CSVOptionsEditor';
-import { JSONOptionsEditor } from './components/JSONOptionsEditor';
-import { TypeSelector } from './components/TypeSelector';
-import { SourceSelector } from './components/SourceSelector';
-import { FormatSelector } from './components/FormatSelector';
-import { GlobalQuerySelector } from './components/GlobalQuerySelector';
+import { CSVOptionsEditor } from '../../components/app/CSVOptionsEditor';
+import { JSONOptionsEditor } from '../../components/app/JSONOptionsEditor';
+import { TypeSelector } from '../../components/app/TypeSelector';
+import { SourceSelector } from '../../components/app/SourceSelector';
+import { FormatSelector } from '../../components/app/FormatSelector';
+import { GlobalQuerySelector } from '../../components/app/GlobalQuerySelector';
 
 interface TypeChooserProps {
   mode: EditorMode;

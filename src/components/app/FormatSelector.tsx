@@ -1,7 +1,7 @@
 import React from 'react';
 import { Select } from '@grafana/ui';
-import { InfinityQuery, SCRAP_QUERY_RESULT_FORMATS, InfinityQueryFormat } from './../../../types';
-import { Components } from './../../../selectors';
+import { InfinityQuery, SCRAP_QUERY_RESULT_FORMATS, InfinityQueryFormat } from '../../types';
+import { Components } from '../../selectors';
 interface FormatSelectorProps {
   query: InfinityQuery;
   onChange: (e: InfinityQuery) => void;
@@ -18,7 +18,7 @@ export const FormatSelector = (props: FormatSelectorProps) => {
           className="min-width-8 width-8"
           value={query.format}
           options={SCRAP_QUERY_RESULT_FORMATS}
-          onChange={e => onChange({ ...query, format: e.value as InfinityQueryFormat })}
+          onChange={(e) => onChange({ ...query, format: e.value as InfinityQueryFormat })}
         ></Select>
       </div>
     </>

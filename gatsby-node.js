@@ -1,6 +1,6 @@
 exports.createSchemaCustomization = ({ actions }) => {
-    const { createTypes } = actions
-    const typeDefs = `
+  const { createTypes } = actions;
+  const typeDefs = `
       type MarkdownRemark implements Node {
         frontmatter: Frontmatter
       }
@@ -10,6 +10,6 @@ exports.createSchemaCustomization = ({ actions }) => {
         next_page_title: String
         next_page_slug: String
       }
-    `
-    createTypes(typeDefs)
-  }
+    `;
+  createTypes(typeDefs);
+};
