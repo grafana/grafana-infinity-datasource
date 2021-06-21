@@ -1,2 +1,0 @@
-(self.webpackChunkgrafana_infinity_datasource=self.webpackChunkgrafana_infinity_datasource||[]).push([[218],{3205:function(n,e,t){"use strict";t.r(e),t.d(e,{default:function(){return r}});var a=t(7294),u=t(9330);function r(){return a.createElement(u.A,{showSubMenu:!0,title:"Sorry.. Page not found."})}}}]);
-//# sourceMappingURL=component---src-pages-404-tsx-143553262a30ae34457b.js.map
