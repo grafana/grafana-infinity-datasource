@@ -144,6 +144,7 @@ jobs:
           echo
           echo '{ "id": "${{ env.GRAFANA_PLUGIN_ID }}", "type": "${{ env.GRAFANA_PLUGIN_TYPE }}", "url": "https://github.com/${{ github.repository }}", "versions": [ { "version": "${{ env.GRAFANA_PLUGIN_VERSION }}", "commit": "${{ github.sha }}", "url": "https://github.com/${{ github.repository }}", "download": { "any": { "url": "${{ steps.upload-plugin-asset.outputs.browser_download_url }}", "md5": "${{ env.GRAFANA_PLUGIN_CHECKSUM }}" } } } ] }' | jq .
   deploy:
+    needs: build
     runs-on: ubuntu-20.04
     strategy:
       matrix:
