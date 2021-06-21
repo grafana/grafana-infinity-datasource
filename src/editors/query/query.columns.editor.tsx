@@ -1,120 +1,72 @@
-import React, { ChangeEvent } from 'react';
-import { set } from 'lodash';
-import { Select } from '@grafana/ui';
-import { SelectableValue } from '@grafana/data';
-import {
-  ScrapColumn,
-  SCRAP_QUERY_RESULT_COLUMN_FORMATS,
-  InfinityQuery,
-  ScrapColumnFormat,
-  EditorMode,
-} from '../../types';
+import React from 'react';
+import { cloneDeep } from 'lodash';
+import { Button } from '@grafana/ui';
+import { ScrapColumn, InfinityQuery, ScrapColumnFormat, EditorMode } from '../../types';
+import { QueryColumnItem } from './../../components/app/QueryColumnItem';
 
 interface QueryColumnProps {
   query: InfinityQuery;
   mode: EditorMode;
   onChange: (value: any) => void;
+  onRunQuery: () => void;
 }
-
-export const QueryColumnsEditor: React.FC<QueryColumnProps> = ({ query, mode, onChange }: QueryColumnProps) => {
-  const defaultScrapResultFormat: SelectableValue<ScrapColumnFormat> = {
-    value: ScrapColumnFormat.String,
-    label: 'String',
-  };
-
+export const QueryColumnsEditor = (props: QueryColumnProps) => {
+  const { query, mode, onChange, onRunQuery } = props;
   const onColumnAdd = () => {
-    const columns = [...(query.columns || [])];
-    columns.push({
+    const columns = cloneDeep(query.columns || []);
+    const defaultColumn = {
       text: '',
       selector: '',
       type: ScrapColumnFormat.String,
-    });
-    onChange({ ...query, columns });
+    };
+    onChange({ ...query, columns: [...columns, defaultColumn] });
   };
   const onColumnRemove = (index: number) => {
-    const columns = [...query.columns];
+    const columns = cloneDeep(query.columns || []);
     columns.splice(index, 1);
     onChange({ ...query, columns });
+    onRunQuery();
   };
-  const onInputTextChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, field: string) => {
-    const value = event.target.value;
-    set(query, field, value);
-    onChange(query);
-  };
-  const onSelectChange = (selectableItem: SelectableValue, field: string) => {
-    set(query, field, selectableItem.value);
-    onChange(query);
-  };
-
   const LABEL_WIDTH = mode === EditorMode.Variable ? 10 : 8;
-
   return (
     <>
-      {(query.columns || []).length === 0 ? (
-        <div className="gf-form-inline">
-          <div className="gf-form">
-            <div className="gf-form gf-form--grow">
-              <label className={`gf-form-label query-keyword width-${LABEL_WIDTH}`} title="Columns">
-                Columns
-              </label>
-            </div>
-          </div>
-          <div className="gf-form">
-            <div className="gf-form gf-form--grow">
-              <span className="btn btn-secondary btn-small" style={{ marginTop: '5px' }} onClick={() => onColumnAdd()}>
-                Add Columns
-              </span>
-            </div>
-          </div>
-        </div>
-      ) : null}
       {query.columns.map((column: ScrapColumn, index: number) => {
         return (
-          <div className="gf-form-inline" key={index}>
+          <div className="gf-form-inline" key={JSON.stringify(column) + index}>
             <div className="gf-form">
-              <label className={`gf-form-label query-keyword width-${LABEL_WIDTH}`} title="Column">
-                Column {index + 1}
-              </label>
-              <label className="gf-form-label width-8">{query.type === 'csv' ? 'Column Name' : 'Selector'}</label>
-              <input
-                type="text"
-                className="gf-form-input min-width-8"
-                value={column.selector}
-                placeholder={query.type === 'csv' ? 'Column Name' : 'Selector'}
-                onChange={(e) => onInputTextChange(e, `columns[${index}].selector`)}
-              ></input>
-              <label className="gf-form-label width-2">as</label>
-              <input
-                type="text"
-                className="gf-form-input min-width-8"
-                value={column.text}
-                placeholder="Title"
-                onChange={(e) => onInputTextChange(e, `columns[${index}].text`)}
-              ></input>
-              <Select
-                className="min-width-12 width-12"
-                value={
-                  SCRAP_QUERY_RESULT_COLUMN_FORMATS.find((field: any) => field.value === column.type) ||
-                  defaultScrapResultFormat
-                }
-                options={SCRAP_QUERY_RESULT_COLUMN_FORMATS}
-                defaultValue={defaultScrapResultFormat}
-                onChange={(e) => onSelectChange(e, `columns[${index}].type`)}
-              ></Select>
-              <button className="btn btn-success btn-small" style={{ margin: '5px' }} onClick={() => onColumnAdd()}>
-                +
-              </button>
-              <button
+              <QueryColumnItem {...props} index={index} />
+              <Button
                 className="btn btn-danger btn-small"
+                icon="trash-alt"
+                variant="destructive"
+                size="sm"
                 style={{ margin: '5px' }}
                 onClick={() => onColumnRemove(index)}
-              >
-                x
-              </button>
+              />
             </div>
           </div>
         );
       })}
+      <div className="gf-form-inline">
+        <div className="gf-form">
+          <div className="gf-form gf-form--grow">
+            {(query.columns || []).length === 0 ? (
+              <label className={`gf-form-label query-keyword width-${LABEL_WIDTH}`} title="Columns">
+                Columns
+              </label>
+            ) : (
+              <div className={`width-${LABEL_WIDTH}`} style={{ marginRight: '5px' }}></div>
+            )}
+          </div>
+        </div>
+        <div className="gf-form">
+          <div className="gf-form gf-form--grow">
+            <span className="btn btn-secondary btn-small" style={{ marginTop: '5px' }} onClick={() => onColumnAdd()}>
+              Add Columns
+            </span>
+          </div>
+        </div>
+      </div>
     </>
   );
 };

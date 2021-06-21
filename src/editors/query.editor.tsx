@@ -5,6 +5,7 @@ import { Datasource } from '../datasource';
 import { InfinityQueryEditor } from './query/infinityQuery';
 import { getDefaultGlobalQueryID } from '../app/queryUtils';
 import { InfinityQuery, EditorMode, DefaultInfinityQuery } from '../types';
+import './../styles/app.scss';
 
 type EditorProps = QueryEditorProps<Datasource, InfinityQuery>;
 

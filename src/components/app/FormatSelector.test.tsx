@@ -10,8 +10,9 @@ const { Title: DropdownPlaceholderTitle } = Components.QueryEditor.Format.Dropdo
 describe('FormatSelector', () => {
   it('renders', () => {
     const onChange = jest.fn();
+    const onRunQuery = jest.fn();
     const query = { ...DefaultInfinityQuery };
-    const wrapper = render(<FormatSelector query={query} onChange={onChange} />);
+    const wrapper = render(<FormatSelector query={query} onChange={onChange} onRunQuery={onRunQuery} />);
     expect(wrapper).not.toBeNull();
     expect(wrapper.getByTitle(LabelTitle)).toBeInTheDocument();
     expect(wrapper.getByTitle(DropdownPlaceholderTitle)).toBeInTheDocument();
@@ -19,8 +20,9 @@ describe('FormatSelector', () => {
   });
   it('renders timeseries format', () => {
     const onChange = jest.fn();
+    const onRunQuery = jest.fn();
     const query = { ...DefaultInfinityQuery, format: InfinityQueryFormat.TimeSeries };
-    const wrapper = render(<FormatSelector query={query} onChange={onChange} />);
+    const wrapper = render(<FormatSelector query={query} onChange={onChange} onRunQuery={onRunQuery} />);
     expect(wrapper).not.toBeNull();
     expect(wrapper.getByTitle(LabelTitle)).toBeInTheDocument();
     expect(wrapper.getByTitle(DropdownPlaceholderTitle)).toBeInTheDocument();

@@ -27,7 +27,7 @@ export const InfinityQueryEditor: React.FC<InfinityEditorProps> = ({
   let canShowURLEditor = ['csv', 'html', 'json', 'graphql', 'xml'].includes(query.type);
   let canShowFilterEditor = !['global', 'series'].includes(query.type) && query.columns && query.columns.length > 0;
   return (
-    <div>
+    <div className="infinity-query-editor">
       {canShowType && <TypeChooser {...{ instanceSettings, mode, query, onChange, onRunQuery }} />}
       {canShowSeriesEditor && <SeriesEditor {...{ query, onChange }} />}
       {canShowURLEditor && <URLEditor {...{ mode, query, onChange, onRunQuery }} />}

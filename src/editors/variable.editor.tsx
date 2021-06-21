@@ -1,27 +1,15 @@
 import React, { useState } from 'react';
 import { TextArea, Select } from '@grafana/ui';
-import { SelectableValue } from '@grafana/data';
 import { Datasource } from '../datasource';
 import { InfinityQueryEditor } from './query/infinityQuery';
 import { migrateLegacyQuery } from './../app/variablesQuery';
-import { VariableQuery, VariableQueryType, InfinityQuery, EditorMode } from '../types';
+import { VariableQuery, VariableQueryType, VariableQueryTypes, InfinityQuery, EditorMode } from '../types';
 
 interface Props {
   query: VariableQuery;
   onChange: (query: VariableQuery, definition: string) => void;
   datasource: Datasource;
 }
-
-const VariableQueryTypes: Array<SelectableValue<VariableQueryType>> = [
-  {
-    label: 'Infinity',
-    value: VariableQueryType.Infinity,
-  },
-  {
-    label: 'Legacy',
-    value: VariableQueryType.Legacy,
-  },
-];
 
 export const VariableEditor: React.FC<Props> = (props) => {
   const [state, setState] = useState<VariableQuery>(migrateLegacyQuery(props.query));
@@ -43,14 +31,12 @@ export const VariableEditor: React.FC<Props> = (props) => {
   return (
     <>
       <div className="gf-form">
-        <span className="gf-form-label width-10">Query Type</span>
+        <label className="gf-form-label query-keyword width-10">Query Type</label>
         <Select
           options={VariableQueryTypes}
           value={VariableQueryTypes.find((v) => v.value === state.queryType)}
           defaultValue={VariableQueryTypes[0]}
-          onChange={(e) => {
-            onQueryTypeChange(e.value as VariableQueryType);
-          }}
+          onChange={(e) => onQueryTypeChange(e.value as VariableQueryType)}
         ></Select>
       </div>
       {state.queryType === 'infinity' && state.infinityQuery && (
@@ -70,7 +56,6 @@ export const VariableEditor: React.FC<Props> = (props) => {
             rows={1}
             className="gf-form-input"
             placeholder="Collection(India,in,United Kingdom,uk)"
-            required={true}
             value={state.query}
             onBlur={(e) => onQueryChange(e.currentTarget.value)}
             onChange={(e) => onQueryChange(e.currentTarget.value)}

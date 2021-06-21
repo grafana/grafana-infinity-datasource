@@ -69,6 +69,7 @@
     "@types/mathjs": "^6.0.5",
     "@types/react-helmet": "^6.1.1",
     "@types/xml2js": "^0.4.6",
+    "@typescript-eslint/typescript-estree": "^4.27.0",
     "babel": "^6.23.0",
     "babel-core": "^6.26.3",
     "babel-loader": "^8.2.2",

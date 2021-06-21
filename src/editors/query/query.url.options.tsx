@@ -92,9 +92,7 @@ export const URLOptionsEditor: React.FC<URLOptionsProps> = ({ query, onChange, o
   return (
     <div className="gf-form-inline">
       <div className="gf-form">
-        {query.type === 'series' ? (
-          <></>
-        ) : (
+        {query.type !== 'series' && (
           <>
             <Button
               size="sm"
@@ -102,7 +100,7 @@ export const URLOptionsEditor: React.FC<URLOptionsProps> = ({ query, onChange, o
               variant="secondary"
               title="Expand for advanced query options like method, body, etc"
               className="btn btn-secondary btn-medium width-2"
-              onClick={(e) => setPopupOpenStatus(true)}
+              onClick={() => setPopupOpenStatus(!popupOpenStatus)}
             >
               <i className="fa fa-expand"></i>
             </Button>
@@ -110,7 +108,7 @@ export const URLOptionsEditor: React.FC<URLOptionsProps> = ({ query, onChange, o
               <>
                 <Drawer
                   title={'URL Options'}
-                  onClose={() => setPopupOpenStatus(false)}
+                  onClose={() => setPopupOpenStatus(!popupOpenStatus)}
                   expandable
                   width="50%"
                   subtitle={

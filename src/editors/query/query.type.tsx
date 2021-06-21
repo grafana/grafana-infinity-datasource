@@ -15,25 +15,16 @@ interface TypeChooserProps {
   onRunQuery: () => void;
 }
 
-export const TypeChooser: React.FC<TypeChooserProps> = ({ query, onChange, onRunQuery, mode, instanceSettings }) => {
+export const TypeChooser: React.FC<TypeChooserProps> = (props) => {
+  const { query, mode } = props;
   return (
     <div className="gf-form-inline">
       <div className="gf-form">
-        <TypeSelector query={query} mode={mode} onChange={onChange} onRunQuery={onRunQuery} />
-        {query.type === InfinityQueryType.Global ? (
-          <GlobalQuerySelector query={query} onChange={onChange} instanceSettings={instanceSettings} />
-        ) : (
-          <SourceSelector query={query} onChange={onChange} />
-        )}
-        {query.type !== InfinityQueryType.Series && mode !== EditorMode.Variable && (
-          <FormatSelector query={query} onChange={onChange} />
-        )}
-        {query.type === InfinityQueryType.CSV && (
-          <CSVOptionsEditor query={query} onChange={onChange} onRunQuery={onRunQuery}></CSVOptionsEditor>
-        )}
-        {query.type === InfinityQueryType.JSON && (
-          <JSONOptionsEditor query={query} onChange={onChange} onRunQuery={onRunQuery}></JSONOptionsEditor>
-        )}
+        <TypeSelector {...props} />
+        {query.type === InfinityQueryType.Global ? <GlobalQuerySelector {...props} /> : <SourceSelector {...props} />}
+        {query.type !== InfinityQueryType.Series && mode !== EditorMode.Variable && <FormatSelector {...props} />}
+        {query.type === InfinityQueryType.CSV && <CSVOptionsEditor {...props} />}
+        {query.type === InfinityQueryType.JSON && <JSONOptionsEditor {...props} />}
       </div>
     </div>
   );
