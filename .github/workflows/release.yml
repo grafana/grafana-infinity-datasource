@@ -10,136 +10,169 @@ jobs:
       matrix:
         node-version: [12.x]
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: NodeJS Setup
-      uses: actions/setup-node@v1
-      with:
-        node-version: 12.x
-    - name: Get yarn cache directory path
-      id: yarn-cache-dir-path
-      run: echo "::set-output name=dir::$(yarn cache dir)"
-    - name: Cache yarn cache
-      uses: actions/cache@v2
-      id: cache-yarn-cache
-      with:
-        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-yarn-
-    - name: Cache node_modules
-      id: cache-node-modules
-      uses: actions/cache@v2
-      with:
-        path: node_modules
-        key: ${{ runner.os }}-${{ matrix.node-version }}-nodemodules-${{ hashFiles('**/yarn.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-${{ matrix.node-version }}-nodemodules-
-    - name: Install dependencies
-      run: yarn install --frozen-lockfile;
-      if: |
-        steps.cache-yarn-cache.outputs.cache-hit != 'true' ||
-        steps.cache-node-modules.outputs.cache-hit != 'true'
-    - name: Test
-      run: |
-        yarn test;
-    - name: Build
-      run: |
-        yarn build;
-    - name: Setup Go environment
-      uses: actions/setup-go@v2
-      with:
-        go-version: "1.16"
-    - name: Get go cache directory path
-      id: go-cache-paths
-      run: echo "::set-output name=go-mod::$(go env GOMODCACHE)"
-    - name: Go Mod Cache
-      uses: actions/cache@v2
-      with:
-        path: ${{ steps.go-cache-paths.outputs.go-mod }}
-        key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}
-    - name: Test backend
-      uses: magefile/mage-action@v1
-      with:
-        version: latest
-        args: coverage
-    - name: Build backend
-      uses: magefile/mage-action@v1
-      with:
-        version: latest
-        args: buildAll
-    - name: Sign plugin
-      run: yarn sign;
-      env:
-        GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
-    - name: Get plugin information
-      run: |
-        sudo apt-get install jq
-        export GRAFANA_PLUGIN_ID=$(cat dist/plugin.json | jq -r .id)
-        export GRAFANA_PLUGIN_VERSION=$(cat dist/plugin.json | jq -r .info.version)
-        export GRAFANA_PLUGIN_TYPE=$(cat dist/plugin.json | jq -r .type)
-        export GRAFANA_PLUGIN_ARTIFACT=${GRAFANA_PLUGIN_ID}-${GRAFANA_PLUGIN_VERSION}.zip
-        export GRAFANA_PLUGIN_ARTIFACT_CHECKSUM=${GRAFANA_PLUGIN_ARTIFACT}.md5
-        echo "GRAFANA_PLUGIN_ID=${GRAFANA_PLUGIN_ID}" >> $GITHUB_ENV
-        echo "GRAFANA_PLUGIN_VERSION=${GRAFANA_PLUGIN_VERSION}" >> $GITHUB_ENV
-        echo "GRAFANA_PLUGIN_TYPE=${GRAFANA_PLUGIN_TYPE}" >> $GITHUB_ENV
-        echo "GRAFANA_PLUGIN_ARTIFACT=${GRAFANA_PLUGIN_ARTIFACT}" >> $GITHUB_ENV
-        echo "GRAFANA_PLUGIN_ARTIFACT_CHECKSUM=${GRAFANA_PLUGIN_ARTIFACT_CHECKSUM}" >> $GITHUB_ENV
-    - name: Package plugin
-      run: |
-        mv dist $GRAFANA_PLUGIN_ID
-        zip $GRAFANA_PLUGIN_ARTIFACT $GRAFANA_PLUGIN_ID -r
-        md5sum $GRAFANA_PLUGIN_ARTIFACT > $GRAFANA_PLUGIN_ARTIFACT_CHECKSUM
-    - name: Create release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        draft: false
-        prerelease: false
-    - name: Add plugin to release
-      id: upload-plugin-asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./${{ env.GRAFANA_PLUGIN_ARTIFACT }}
-        asset_name: ${{ env.GRAFANA_PLUGIN_ARTIFACT }}
-        asset_content_type: application/zip
-    - name: Add checksum to release
-      id: upload-checksum-asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./${{ env.GRAFANA_PLUGIN_ARTIFACT_CHECKSUM }}
-        asset_name: ${{ env.GRAFANA_PLUGIN_ARTIFACT_CHECKSUM }}
-        asset_content_type: text/plain
-    - name: Get checksum
-      run: |
-        echo "GRAFANA_PLUGIN_CHECKSUM=$(cat ./${{ env.GRAFANA_PLUGIN_ARTIFACT_CHECKSUM }} | cut -d' ' -f1)" >> $GITHUB_ENV
-    - uses: actions/setup-go@master
-      with:
-        go-version: "1.13.3"
-    - name: Lint Plugin
-      run: |
-        git clone https://github.com/grafana/plugin-validator;
-        cd ./plugin-validator/cmd/plugincheck;
-        go install
-        cd ../../;
-        plugincheck ${{ steps.upload-plugin-asset.outputs.browser_download_url }};
-    - name: Test locally
-      run: |
-        echo To test the plugin locally, execute the following command.
-        echo
-        echo 'docker run -p 3000:3000 -e "GF_INSTALL_PLUGINS=${{ steps.upload-plugin-asset.outputs.browser_download_url }};yesoreyeram-infinity-datasource" grafana/grafana:latest'
-    - name: Publish to Grafana.com
-      run: |
-        echo Publish your plugin to grafana.com/plugins by opening a PR to https://github.com/grafana/grafana-plugin-repository with the following entry:
-        echo
-        echo '{ "id": "${{ env.GRAFANA_PLUGIN_ID }}", "type": "${{ env.GRAFANA_PLUGIN_TYPE }}", "url": "https://github.com/${{ github.repository }}", "versions": [ { "version": "${{ env.GRAFANA_PLUGIN_VERSION }}", "commit": "${{ github.sha }}", "url": "https://github.com/${{ github.repository }}", "download": { "any": { "url": "${{ steps.upload-plugin-asset.outputs.browser_download_url }}", "md5": "${{ env.GRAFANA_PLUGIN_CHECKSUM }}" } } } ] }' | jq .
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: NodeJS Setup
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Cache yarn cache
+        uses: actions/cache@v2
+        id: cache-yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Cache node_modules
+        id: cache-node-modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ matrix.node-version }}-nodemodules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ matrix.node-version }}-nodemodules-
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile;
+        if: |
+          steps.cache-yarn-cache.outputs.cache-hit != 'true' ||
+          steps.cache-node-modules.outputs.cache-hit != 'true'
+      - name: Test
+        run: |
+          yarn test;
+      - name: Build
+        run: |
+          yarn build;
+      - name: Setup Go environment
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.16'
+      - name: Get go cache directory path
+        id: go-cache-paths
+        run: echo "::set-output name=go-mod::$(go env GOMODCACHE)"
+      - name: Go Mod Cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.go-cache-paths.outputs.go-mod }}
+          key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}
+      - name: Test backend
+        uses: magefile/mage-action@v1
+        with:
+          version: latest
+          args: coverage
+      - name: Build backend
+        uses: magefile/mage-action@v1
+        with:
+          version: latest
+          args: buildAll
+      - name: Sign plugin
+        run: yarn sign;
+        env:
+          GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
+      - name: Get plugin information
+        run: |
+          sudo apt-get install jq
+          export GRAFANA_PLUGIN_ID=$(cat dist/plugin.json | jq -r .id)
+          export GRAFANA_PLUGIN_VERSION=$(cat dist/plugin.json | jq -r .info.version)
+          export GRAFANA_PLUGIN_TYPE=$(cat dist/plugin.json | jq -r .type)
+          export GRAFANA_PLUGIN_ARTIFACT=${GRAFANA_PLUGIN_ID}-${GRAFANA_PLUGIN_VERSION}.zip
+          export GRAFANA_PLUGIN_ARTIFACT_CHECKSUM=${GRAFANA_PLUGIN_ARTIFACT}.md5
+          echo "GRAFANA_PLUGIN_ID=${GRAFANA_PLUGIN_ID}" >> $GITHUB_ENV
+          echo "GRAFANA_PLUGIN_VERSION=${GRAFANA_PLUGIN_VERSION}" >> $GITHUB_ENV
+          echo "GRAFANA_PLUGIN_TYPE=${GRAFANA_PLUGIN_TYPE}" >> $GITHUB_ENV
+          echo "GRAFANA_PLUGIN_ARTIFACT=${GRAFANA_PLUGIN_ARTIFACT}" >> $GITHUB_ENV
+          echo "GRAFANA_PLUGIN_ARTIFACT_CHECKSUM=${GRAFANA_PLUGIN_ARTIFACT_CHECKSUM}" >> $GITHUB_ENV
+      - name: Package plugin
+        run: |
+          mv dist $GRAFANA_PLUGIN_ID
+          zip $GRAFANA_PLUGIN_ARTIFACT $GRAFANA_PLUGIN_ID -r
+          md5sum $GRAFANA_PLUGIN_ARTIFACT > $GRAFANA_PLUGIN_ARTIFACT_CHECKSUM
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+      - name: Add plugin to release
+        id: upload-plugin-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./${{ env.GRAFANA_PLUGIN_ARTIFACT }}
+          asset_name: ${{ env.GRAFANA_PLUGIN_ARTIFACT }}
+          asset_content_type: application/zip
+      - name: Add checksum to release
+        id: upload-checksum-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./${{ env.GRAFANA_PLUGIN_ARTIFACT_CHECKSUM }}
+          asset_name: ${{ env.GRAFANA_PLUGIN_ARTIFACT_CHECKSUM }}
+          asset_content_type: text/plain
+      - name: Get checksum
+        run: |
+          echo "GRAFANA_PLUGIN_CHECKSUM=$(cat ./${{ env.GRAFANA_PLUGIN_ARTIFACT_CHECKSUM }} | cut -d' ' -f1)" >> $GITHUB_ENV
+      - uses: actions/setup-go@master
+        with:
+          go-version: '1.16'
+      - name: Lint Plugin
+        run: |
+          git clone https://github.com/grafana/plugin-validator;
+          cd ./plugin-validator/cmd/plugincheck;
+          go install
+          cd ../../;
+          plugincheck ${{ steps.upload-plugin-asset.outputs.browser_download_url }};
+      - name: Test locally
+        run: |
+          echo To test the plugin locally, execute the following command.
+          echo
+          echo 'docker run -p 3000:3000 -e "GF_INSTALL_PLUGINS=${{ steps.upload-plugin-asset.outputs.browser_download_url }};yesoreyeram-infinity-datasource" grafana/grafana:latest'
+      - name: Publish to Grafana.com
+        run: |
+          echo Publish your plugin to grafana.com/plugins by opening a PR to https://github.com/grafana/grafana-plugin-repository with the following entry:
+          echo
+          echo '{ "id": "${{ env.GRAFANA_PLUGIN_ID }}", "type": "${{ env.GRAFANA_PLUGIN_TYPE }}", "url": "https://github.com/${{ github.repository }}", "versions": [ { "version": "${{ env.GRAFANA_PLUGIN_VERSION }}", "commit": "${{ github.sha }}", "url": "https://github.com/${{ github.repository }}", "download": { "any": { "url": "${{ steps.upload-plugin-asset.outputs.browser_download_url }}", "md5": "${{ env.GRAFANA_PLUGIN_CHECKSUM }}" } } } ] }' | jq .
+  deploy:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        node-version: [12.x]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS  }}
+      - name: Azure CLI script
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.25.0
+          inlineScript: |
+            az deployment sub create --name infinity-deploy --location eastus --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }} --template-file ./try/arm-templates/infra.json --parameters @try/arm-templates/infra.parameters.json --parameters resourceGroupName=grafana-infinity-datasource adminPublicKey="${{ secrets.SSH_PUBLIC_KEY  }}"
+      - name: execute commands on remote computer
+        uses: appleboy/ssh-action@master
+        with:
+          host: grafana-infinity-datasource.eastus.cloudapp.azure.com
+          port: 22
+          username: sriramajeyam
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            if [ ! -d "grafana-infinity-datasource" ] 
+            then
+              git clone https://github.com/yesoreyeram/grafana-infinity-datasource
+            fi
+            cd grafana-infinity-datasource
+            git pull
+            chmod +x ./try/scripts/install.sh 
+            ./try/scripts/install.sh

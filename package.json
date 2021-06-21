@@ -1,6 +1,6 @@
 {
   "name": "grafana-infinity-datasource",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "description": "JSON, CSV, XML, GraphQL & HTML datasource for Grafana. Do infinite things with Grafana.",
   "main": "dist/module.js",
   "scripts": {
@@ -56,7 +56,7 @@
   "devDependencies": {
     "@deckdeckgo/highlight-code": "^2.6.0",
     "@fortawesome/fontawesome-free": "^5.15.3",
-    "@grafana/toolkit": "8.0.3",
+    "@grafana/toolkit": "7.5.8",
     "@mdx-js/mdx": "^1.6.22",
     "@mdx-js/react": "^1.6.22",
     "@popperjs/core": "^2.9.2",
