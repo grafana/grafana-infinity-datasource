@@ -144,16 +144,17 @@ export const URLOptionsEditor = ({ query, onChange, onRunQuery }: URLOptionsProp
           <>
             <Button
               size="sm"
+              icon="shield"
+              name="More settings"
               style={{ marginTop: '5px' }}
               variant="secondary"
               title="Expand for advanced query options like method, body, etc"
-              className="btn btn-secondary btn-medium width-2"
               onClick={(e) => {
                 setPopupOpenStatus(!popupOpenStatus);
                 e.preventDefault();
               }}
             >
-              <i className="fa fa-expand"></i>
+              HTTP Method, Headers, Query params
             </Button>
             {popupOpenStatus && (
               <>

@@ -1,5 +1,4 @@
 import React from 'react';
-import { QueryColumnsEditor } from './query.columns.editor';
 import { URLOptionsEditor } from './query.url.options';
 import { URLField } from './../../components/app/URLField';
 import { DataField } from './../../components/app/DataField';
@@ -14,9 +13,11 @@ interface ScrapperProps {
 }
 
 export const URLEditor = (props: ScrapperProps) => {
+  const canShowURLField = ['url', 'local-fs'].includes(props.query.source);
+  const canShowRootSelector = ['html', 'json', 'xml', 'graphql'].indexOf(props.query.type) > -1;
   return (
     <>
-      {['url', 'local-fs'].includes(props.query.source) ? (
+      {canShowURLField ? (
         <div className="gf-form">
           <URLField {...props} />
           {props.query.source === 'url' && <URLOptionsEditor {...props} />}
@@ -26,12 +27,11 @@ export const URLEditor = (props: ScrapperProps) => {
           <DataField {...props} />
         </div>
       )}
-      {['html', 'json', 'xml', 'graphql'].indexOf(props.query.type) > -1 && (
+      {canShowRootSelector && (
         <div className="gf-form">
           <RootSelector {...props} />
         </div>
       )}
-      <QueryColumnsEditor {...props} />
     </>
   );
 };

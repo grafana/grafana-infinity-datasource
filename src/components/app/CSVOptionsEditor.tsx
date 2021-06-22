@@ -73,6 +73,7 @@ export const CSVOptionsEditor = (props: CSVOptionsEditorProps) => {
         <Button
           variant="secondary"
           size="sm"
+          icon="cog"
           style={{ margin: '5px' }}
           onClick={(e) => {
             togglePopup();

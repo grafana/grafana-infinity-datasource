@@ -6,6 +6,7 @@ import { TypeSelector } from '../../components/app/TypeSelector';
 import { SourceSelector } from '../../components/app/SourceSelector';
 import { FormatSelector } from '../../components/app/FormatSelector';
 import { GlobalQuerySelector } from '../../components/app/GlobalQuerySelector';
+import { Help } from '../../components/app/Help';
 
 interface TypeChooserProps {
   mode: EditorMode;
@@ -25,6 +26,7 @@ export const TypeChooser = (props: TypeChooserProps) => {
         {query.type !== InfinityQueryType.Series && mode !== EditorMode.Variable && <FormatSelector {...props} />}
         {query.type === InfinityQueryType.CSV && <CSVOptionsEditor {...props} />}
         {query.type === InfinityQueryType.JSON && <JSONOptionsEditor {...props} />}
+        <Help />
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import { TypeChooser } from './query.type';
 import { TableFilter } from './query.filters';
 import { URLEditor } from './query.url';
 import { SeriesEditor } from './query.series';
+import { QueryColumnsEditor } from './query.columns.editor';
 import { InfinityQuery, EditorMode, DefaultInfinityQuery } from '../../types';
 
 export interface InfinityEditorProps {
@@ -26,6 +27,7 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
       {canShowType && <TypeChooser {...{ instanceSettings, mode, query, onChange, onRunQuery }} />}
       {canShowSeriesEditor && <SeriesEditor {...{ query, onChange }} />}
       {canShowURLEditor && <URLEditor {...{ mode, query, onChange, onRunQuery }} />}
+      {canShowURLEditor && <QueryColumnsEditor {...{ mode, query, onChange, onRunQuery }} />}
       {canShowFilterEditor && <TableFilter {...{ query, onChange, onRunQuery }} />}
     </div>
   );

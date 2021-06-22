@@ -27,6 +27,7 @@ export const JSONOptionsEditor = (props: JSONOptionsEditorProps) => {
         <Button
           variant="secondary"
           size="sm"
+          icon="cog"
           style={{ margin: '5px' }}
           onClick={(e) => {
             setPopupStatus(!popupStatus);

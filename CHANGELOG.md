@@ -2,6 +2,10 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
+## [ 0.7.4]
+
+- Results return correct frame name. Now returning RefId as frame name.
+
 ## [ 0.7.3 ]
 
 - Variable editor bug fixes

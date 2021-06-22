@@ -20,6 +20,7 @@ export const QueryColumnItem = (props: QueryColumnItemProps) => {
     const columns = cloneDeep(query.columns || []);
     columns[index].selector = selector;
     onChange({ ...query, columns });
+    onRunQuery();
   };
   const onTextChange = () => {
     const columns = cloneDeep(query.columns || []);

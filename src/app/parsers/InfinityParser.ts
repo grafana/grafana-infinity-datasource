@@ -45,6 +45,7 @@ export class InfinityParser {
       columns = this.AutoColumns;
     }
     return {
+      name: this.target.refId,
       rows: this.rows.filter((row) => row.length > 0),
       columns,
     };
@@ -54,6 +55,7 @@ export class InfinityParser {
     return targets.map((t) => {
       return {
         target: t,
+        name: this.target.refId,
         datapoints: flatten(this.series.filter((s) => s.target === t).map((s) => s.datapoints)),
       };
     });
@@ -71,6 +73,7 @@ export class InfinityParser {
       return this.toTimeSeries();
     } else if (this.target.format === InfinityQueryFormat.DataFrame) {
       const frame = toDataFrame(this.toTable());
+      frame.name = this.target.refId;
       return frame;
     } else {
       return this.toTable();
