@@ -90,6 +90,7 @@ typings/
 
 # gatsby build output
 public/
+docs/
 
 # Serverless directories
 .serverless/
@@ -107,5 +108,3 @@ public/
 .DS_Store
 
 .notes
-
-try/instances/*/data/
