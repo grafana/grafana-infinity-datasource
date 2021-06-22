@@ -32,7 +32,7 @@ export const RANDOM_WORDS = [
   ...new Set(
     LOREM.replace(/\n/g, '')
       .split(' ')
-      .map(a => a.trim().toLowerCase())
+      .map((a) => a.trim().toLowerCase())
   ),
 ].filter(Boolean);
 
@@ -82,7 +82,7 @@ class RandomWalk {
   overrideDatapoints(overrides: DataOverride[], points: dataPoint[] = this.datapoints) {
     return points.map((dp, index) => {
       let value = dp[0];
-      let matchingCondition = overrides.find(ov => {
+      let matchingCondition = overrides.find((ov) => {
         let value1 = ov.values[0];
         value1 = value1.replace(/\${__index}/g, index.toString());
         value1 = value1.replace(/\${__value.index}/g, index.toString());

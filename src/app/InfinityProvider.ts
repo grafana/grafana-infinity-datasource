@@ -30,10 +30,10 @@ export class InfinityProvider {
       target.url = normalizeURL(target.url);
       this.datasource
         .postResource('proxy', target)
-        .then(res => {
+        .then((res) => {
           resolve(res);
         })
-        .catch(ex => {
+        .catch((ex) => {
           reject(ex);
         });
     });
@@ -44,10 +44,10 @@ export class InfinityProvider {
         resolve(this.formatResults(this.target.data));
       } else {
         this.fetchResults()
-          .then(res => {
+          .then((res) => {
             resolve(this.formatResults(res));
           })
-          .catch(ex => {
+          .catch((ex) => {
             reject(ex);
           });
       }

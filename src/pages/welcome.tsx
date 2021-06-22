@@ -1,6 +1,6 @@
 import React from 'react';
-import { Layout } from '../components/Layout';
-import { Features } from '../components/Features';
+import { Layout } from '../components/website/Layout';
+import { Features } from '../components/website/Features';
 
 export default function Welcome() {
   return (

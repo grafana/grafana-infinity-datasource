@@ -22,7 +22,7 @@ In the below example, we are going to see how to use xml response in grafana
 </users>
 ```
 
-In the above example XML, we want list the user's name and age. So use the below syntax 
+In the above example XML, we want list the user's name and age. So use the below syntax
 
 Rows/Root : `users.user` to select all the user objects inside user element
 
@@ -31,7 +31,6 @@ Rows/Root : `users.user` to select all the user objects inside user element
 Column1 Name : Use `name` as the selector for the property `name`
 
 Column2 Age  : Use `$.age` as the selector for the attribute `age`
-
 
 ### Example 2
 
@@ -45,7 +44,7 @@ Consider the below example
 </users>
 ```
 
-In the above example XML, we want list the user's name and age. So use the below syntax 
+In the above example XML, we want list the user's name and age. So use the below syntax
 
 Rows/Root : `users.user` to select all the user objects inside user element
 
@@ -54,7 +53,6 @@ Rows/Root : `users.user` to select all the user objects inside user element
 Column1 Name : Use `_` as the selector for the property `name`. Here `_` refers to the text inside the node
 
 Column2 Age  : Use `$.age` as the selector for the attribute `age`
-
 
 ### Example 3
 
@@ -68,7 +66,7 @@ Consider the below example
   </users>
 ```
 
-In the above example XML, we want list the user's name. So use the below syntax 
+In the above example XML, we want list the user's name. So use the below syntax
 
 Rows/Root : `users.user` to select all the user objects inside user element
 
@@ -82,6 +80,6 @@ You can also use the hosted XML via the URL. Example shown below demonstrates ho
 
 ![image](https://user-images.githubusercontent.com/153843/99293208-39ed4f80-283a-11eb-831e-ae14d297a2f3.png#center)
 
-Sample example visualized using bar guage panel and timeseries format.
+Sample example visualized using bar gauge panel and timeseries format.
 
 ![image](https://user-images.githubusercontent.com/153843/99294213-a9b00a00-283b-11eb-9b8b-26842c2bc69b.png#center)

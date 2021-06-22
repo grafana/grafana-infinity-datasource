@@ -1,16 +1,23 @@
 version: '3.7'
 
 services:
+  nginx:
+    container_name: nginx
+    image: nginx:1.19.10
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./certs:/etc/certs/
   grafana:
     image: grafana/grafana:8.0.3
     user: '$UID:$GID'
     container_name: grafana-infinity-datasource
-    ports:
-      - '80:3000'
     volumes:
       - ./data:/var/lib/grafana
       - ./config/provisioning/datasources:/etc/grafana/provisioning/datasources
       - ./config/config.ini:/etc/grafana/grafana.ini
     environment:
       - TERM=linux
-      - GF_INSTALL_PLUGINS=https://github.com/yesoreyeram/grafana-infinity-datasource/releases/download/v0.7.2/yesoreyeram-infinity-datasource-0.7.2.zip;yesoreyeram-infinity-datasource
+      - GF_INSTALL_PLUGINS=https://github.com/yesoreyeram/grafana-infinity-datasource/releases/download/v0.7.3/yesoreyeram-infinity-datasource-0.7.3.zip;yesoreyeram-infinity-datasource

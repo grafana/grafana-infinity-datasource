@@ -24,10 +24,10 @@ export class InfinityParser {
     this.series = [];
     this.target = target;
     this.AutoColumns = target.columns || [];
-    this.StringColumns = target.columns.filter(t => t.type === ScrapColumnFormat.String);
-    this.NumbersColumns = target.columns.filter(t => t.type === ScrapColumnFormat.Number);
+    this.StringColumns = target.columns.filter((t) => t.type === ScrapColumnFormat.String);
+    this.NumbersColumns = target.columns.filter((t) => t.type === ScrapColumnFormat.Number);
     this.TimeColumns = target.columns.filter(
-      t =>
+      (t) =>
         t.type === ScrapColumnFormat.Timestamp ||
         t.type === ScrapColumnFormat.Timestamp_Epoch ||
         t.type === ScrapColumnFormat.Timestamp_Epoch_Seconds
@@ -45,16 +45,16 @@ export class InfinityParser {
       columns = this.AutoColumns;
     }
     return {
-      rows: this.rows.filter(row => row.length > 0),
+      rows: this.rows.filter((row) => row.length > 0),
       columns,
     };
   }
   toTimeSeries() {
-    const targets = uniq(this.series.map(s => s.target));
-    return targets.map(t => {
+    const targets = uniq(this.series.map((s) => s.target));
+    return targets.map((t) => {
       return {
         target: t,
-        datapoints: flatten(this.series.filter(s => s.target === t).map(s => s.datapoints)),
+        datapoints: flatten(this.series.filter((s) => s.target === t).map((s) => s.datapoints)),
       };
     });
   }

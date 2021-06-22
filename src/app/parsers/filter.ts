@@ -31,10 +31,10 @@ export const filterResults = (
   columns: ScrapColumn[],
   filters: InfinityFilter[]
 ): GrafanaTableRow[] => {
-  return rows.filter(row => {
+  return rows.filter((row) => {
     const filterResults: boolean[] = [];
-    filters.forEach(filter => {
-      const columnIndex = columns.findIndex(col => col.text === filter.field);
+    filters.forEach((filter) => {
+      const columnIndex = columns.findIndex((col) => col.text === filter.field);
       switch (filter.operator) {
         case FilterOperator.Equals:
           filterResults.push(row[columnIndex] === filter.value[0]);
@@ -108,6 +108,6 @@ export const filterResults = (
           break;
       }
     });
-    return filterResults.every(v => v === true);
+    return filterResults.every((v) => v === true);
   });
 };
