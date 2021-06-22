@@ -107,3 +107,5 @@ public/
 .DS_Store
 
 .notes
+
+try/instances/*/data/
