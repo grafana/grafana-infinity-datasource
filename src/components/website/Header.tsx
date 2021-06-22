@@ -32,7 +32,7 @@ export const Header = (props: HeaderProps) => {
         aria-label="Main navigation"
       >
         <div className="container-fluid">
-          <Link className="text-white fw-bold px-2" to="/welcome" style={{ textDecoration: 'none' }}>
+          <Link className="text-white fw-bold px-2" to="/" style={{ textDecoration: 'none' }}>
             {props.title}
           </Link>
           <button
@@ -94,15 +94,15 @@ export const Header = (props: HeaderProps) => {
               </li>
             </ul>
             <ul className="navbar-nav d-flex mb-2 mb-lg-0">
-              <Link
-                className="nav-links rounded text-white fw-bolder"
-                to="/wiki/installation"
-                style={{
-                  padding: '5px 8px',
-                  textDecoration: 'none',
-                  background: 'linear-gradient(200deg, #FADE2A, #F05A28)',
-                }}
+              <a
+                className="nav-links special-menu highlight rounded text-white fw-bolder"
+                href="https://grafana.sriramajeyam.com"
+                target="_blank"
+                rel="noreferrer"
               >
+                Try online
+              </a>
+              <Link className="nav-links rounded text-white fw-bolder special-menu" to="/wiki/installation">
                 Install
               </Link>
             </ul>

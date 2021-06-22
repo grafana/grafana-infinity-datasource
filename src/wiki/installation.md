@@ -11,7 +11,7 @@ There are multiple ways to install this plugin into your grafana instance
 
 ### Install from grafana.com
 
-Download the latest zip file from [grafana.com plugins page](https://grafana.com/grafana/plugins/yesoreyeram-infinity-datasource/) using the instructions provided there.
+Install the plugin from [grafana.com plugins page](https://grafana.com/grafana/plugins/yesoreyeram-infinity-datasource/?tab=installation) using the instructions provided there.
 
 ### Install from github
 

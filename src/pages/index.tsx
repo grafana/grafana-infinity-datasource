@@ -78,13 +78,15 @@ export default function Home({ data }: HomeProps) {
             >
               Getting started
             </Link>
-            <Link
+            <a
               className="btn btn-primary text-black mx-4"
               style={{ backgroundImage: 'linear-gradient(#FADE2A,#F05A28)', color: 'black', border: 'none' }}
-              to="/welcome"
+              href="https://grafana.sriramajeyam.com"
+              target="_blank"
+              rel="noreferrer"
             >
-              Features
-            </Link>
+              Try online
+            </a>
           </div>
         </div>
         <Features />
