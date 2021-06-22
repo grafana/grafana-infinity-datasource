@@ -1,17 +1,17 @@
 ---
-slug: "/wiki/template-variables"
-title: "Template variables"
-previous_page_title: "HTML"
-previous_page_slug: "/wiki/html"
-next_page_title: "Time Formats"
-next_page_slug: "/wiki/time-formats"
+slug: '/wiki/template-variables'
+title: 'Template variables'
+previous_page_title: 'HTML'
+previous_page_slug: '/wiki/html'
+next_page_title: 'Time Formats'
+next_page_slug: '/wiki/time-formats'
 ---
 
 ## Standard variable mode ( Infinity Query )
 
 Like panels, you can have your own CSV/JSON in your variable. Variable queries are expected to return one or more columns. This will give you the ability to get your variables set from CSV/JSON/XML or any other external sources.
 
-![image](https://user-images.githubusercontent.com/153843/119243000-d6323f00-bb5a-11eb-822e-99f39b32968d.png)
+![image](https://user-images.githubusercontent.com/153843/119243000-d6323f00-bb5a-11eb-822e-99f39b32968d.png#center)
 
 > If two columns configured, first column value will be used as display text and second column will be used as value.(This will be useful when you want to have aliases for any non-user friendly IDs). If more than 2 columns returned, all the results will be flattened and returned as variable list.
 
@@ -19,18 +19,18 @@ Like panels, you can have your own CSV/JSON in your variable. Variable queries a
 
 List of key value pair wrapped with `Collection()`. Text/key followed by values separated by commas.
 
-For example, the query  `Collection(Prod,pd,Non Prod,np,Development,dev,SIT,sit)` produce 4 variables
+For example, the query `Collection(Prod,pd,Non Prod,np,Development,dev,SIT,sit)` produce 4 variables
 
 ```ts
 Collection(Prod,pd,Non Prod,np,Development,dev,SIT,sit)
 ```
 
 | Display Value | Value |
-|---------------|-------|
-| Prod | pd |
-| Non Prod | np |
-| Development | dev |
-| SIT | sit |
+| ------------- | ----- |
+| Prod          | pd    |
+| Non Prod      | np    |
+| Development   | dev   |
+| SIT           | sit   |
 
 Under the hood following 4 keys have corresponding values
 
@@ -41,7 +41,7 @@ Return values based on another value similar to VLOOKUP in excel. For example, `
 This will be useful when multiple variables need update based on single variable.
 
 ```ts
-CollectionLookup(pd,prod-server,np,nonprod-server,dev,dev-server,$Nested)
+CollectionLookup(pd, prod - server, np, nonprod - server, dev, dev - server, $Nested);
 ```
 
 ![image](https://user-images.githubusercontent.com/153843/95761926-ec168200-0ca4-11eb-8758-ff5885564180.png#center)

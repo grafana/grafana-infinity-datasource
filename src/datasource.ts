@@ -21,6 +21,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityDat
     super(iSettings);
     this.instanceSettings = iSettings;
   }
+  annotations = {};
   private overrideWithGlobalQuery(t: InfinityQuery): InfinityQuery {
     if (
       t.type === 'global' &&

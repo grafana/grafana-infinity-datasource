@@ -51,6 +51,7 @@ export const Header = (props: HeaderProps) => {
               <ListLink to="/wiki/xml">XML</ListLink>
               <ListLink to="/wiki/html">HTML</ListLink>
               <ListLink to="/wiki/template-variables">Variables</ListLink>
+              <ListLink to="/wiki/annotations">Annotations</ListLink>
             </ul>
             <ul className="navbar-nav d-flex mb-2 mb-lg-0">
               <li className="nav-item">

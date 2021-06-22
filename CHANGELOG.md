@@ -2,9 +2,11 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
-## [ 0.7.4]
+## [ 0.7.4 ]
 
+- Enabled support for annotations
 - Results return correct frame name. Now returning RefId as frame name.
+- Minimum required version of grafana is now 7.2.0
 
 ## [ 0.7.3 ]
 

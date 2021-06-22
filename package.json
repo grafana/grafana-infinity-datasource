@@ -40,9 +40,9 @@
   },
   "homepage": "https://github.com/yesoreyeram/grafana-infinity-datasource#readme",
   "dependencies": {
-    "@grafana/data": "7.1.5",
-    "@grafana/runtime": "7.1.5",
-    "@grafana/ui": "7.1.5",
+    "@grafana/data": "7.2.0",
+    "@grafana/runtime": "7.2.0",
+    "@grafana/ui": "7.2.0",
     "cheerio": "^1.0.0-rc.6",
     "csv-parse": "^4.12.0",
     "jsonpath-plus": "^4.0.0",
@@ -56,7 +56,7 @@
   "devDependencies": {
     "@deckdeckgo/highlight-code": "^2.6.0",
     "@fortawesome/fontawesome-free": "^5.15.3",
-    "@grafana/toolkit": "7.5.8",
+    "@grafana/toolkit": "8.0.3",
     "@mdx-js/mdx": "^1.6.22",
     "@mdx-js/react": "^1.6.22",
     "@popperjs/core": "^2.9.2",
