@@ -1,6 +1,6 @@
 # Grafana Infinity Datasource
 
-[![image](https://user-images.githubusercontent.com/153843/117774284-3a870180-b231-11eb-9833-cfc016f9f8de.png)](https://yesoreyeram.github.io/grafana-infinity-datasource)
+[![click here for documentation](https://user-images.githubusercontent.com/153843/122958390-b4ef8900-d37a-11eb-9bb9-d8e32965507f.png)](https://yesoreyeram.github.io/grafana-infinity-datasource)
 
 ## Documentation
 
