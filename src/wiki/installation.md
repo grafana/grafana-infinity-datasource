@@ -34,7 +34,7 @@ grafana-cli --pluginUrl <ZIP_FILE_URL> plugins install yesoreyeram-infinity-data
 Example:
 
 ```shell
-grafana-cli --pluginUrl https://github.com/yesoreyeram/grafana-infinity-datasource/releases/download/v0.7.3/yesoreyeram-infinity-datasource-0.7.3.zip plugins install yesoreyeram-infinity-datasource
+grafana-cli --pluginUrl https://github.com/yesoreyeram/grafana-infinity-datasource/releases/download/v0.7.4/yesoreyeram-infinity-datasource-0.7.4.zip plugins install yesoreyeram-infinity-datasource
 ```
 
 ### Install using helm chart
@@ -57,7 +57,7 @@ Example:
 
 ```yml
 plugins:
-  - https://github.com/yesoreyeram/grafana-infinity-datasource/releases/download/v0.7.3/yesoreyeram-infinity-datasource-0.7.3.zip;yesoreyeram-infinity-datasource
+  - https://github.com/yesoreyeram/grafana-infinity-datasource/releases/download/v0.7.4/yesoreyeram-infinity-datasource-0.7.4.zip;yesoreyeram-infinity-datasource
 ```
 
 ### Install using docker
@@ -65,11 +65,11 @@ plugins:
 With docker, you can install the plugin using the following command. This will download the latest published version of the plugin from grafana plugins directory.
 
 ```shell
-docker run -p 3000:3000 -e "GF_INSTALL_PLUGINS=yesoreyeram-infinity-datasource" grafana/grafana:7.5.8
+docker run -p 3000:3000 -e "GF_INSTALL_PLUGINS=yesoreyeram-infinity-datasource" grafana/grafana:8.0.3
 ```
 
 If you need to install a custom version of the plugin with docker, use the following command.
 
 ```shell
-docker run -p 3000:3000 -e "GF_INSTALL_PLUGINS=https://github.com/yesoreyeram/grafana-infinity-datasource/releases/download/v0.7.3/yesoreyeram-infinity-datasource-0.7.3.zip;yesoreyeram-infinity-datasource" grafana/grafana:7.5.8
+docker run -p 3000:3000 -e "GF_INSTALL_PLUGINS=https://github.com/yesoreyeram/grafana-infinity-datasource/releases/download/v0.7.4/yesoreyeram-infinity-datasource-0.7.4.zip;yesoreyeram-infinity-datasource" grafana/grafana:8.0.3
 ```
