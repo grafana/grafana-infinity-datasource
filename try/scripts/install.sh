@@ -23,11 +23,14 @@ sudo snap install --classic certbot
 sudo ln -s -f /snap/bin/certbot /usr/bin/certbot
 sudo docker-compose -f ./try/docker-compose.yml down
 sudo certbot certonly --standalone --non-interactive --agree-tos --email admin@grafana.online -d app.grafana.online
+sudo certbot certonly --standalone --non-interactive --agree-tos --email admin@grafana.online -d grafana.sriramajeyam.com
 sudo chown -R $(whoami) /etc/letsencrypt/live
 sudo chown -R $(whoami) /etc/letsencrypt/archive
-mkdir -p ~/grafana-infinity-datasource/try/certs
-sudo cp -r /etc/letsencrypt/live/app.grafana.online/* ~/grafana-infinity-datasource/try/certs
-sudo cp -r /etc/letsencrypt/archive/app.grafana.online/* ~/grafana-infinity-datasource/try/certs
+mkdir -p ~/grafana-infinity-datasource/try/instances/{app.grafana.online,grafana.sriramajeyam.com}/certs
+sudo cp -r /etc/letsencrypt/live/app.grafana.online/* ~/grafana-infinity-datasource/try/instances/app.grafana.online/certs
+sudo cp -r /etc/letsencrypt/archive/app.grafana.online/* ~/grafana-infinity-datasource/try/instances/app.grafana.online/certs
+sudo cp -r /etc/letsencrypt/live/grafana.sriramajeyam.com/* ~/grafana-infinity-datasource/try/instances/grafana.sriramajeyam.com/certs
+sudo cp -r /etc/letsencrypt/archive/grafana.sriramajeyam.com/* ~/grafana-infinity-datasource/try/instances/grafana.sriramajeyam.com/certs
 
 echo "starting grafana"
 cd ~/grafana-infinity-datasource
