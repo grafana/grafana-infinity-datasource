@@ -8,7 +8,13 @@ export class JSONParser extends InfinityParser {
   constructor(JSONResponse: object, target: InfinityQuery, endTime?: Date) {
     super(target);
     let jsonResponse = this.formatInput(JSONResponse);
-    if (!(Array.isArray(jsonResponse) || (this.target.json_options && this.target.json_options.root_is_not_array))) {
+    if (Array.isArray(jsonResponse) && (typeof jsonResponse[0] === 'string' || typeof jsonResponse[0] === 'number')) {
+      jsonResponse = jsonResponse.map((value) => {
+        return { value };
+      });
+    } else if (
+      !(Array.isArray(jsonResponse) || (this.target.json_options && this.target.json_options.root_is_not_array))
+    ) {
       jsonResponse = this.findArrayData(jsonResponse);
     }
     if (Array.isArray(jsonResponse) || (target.json_options && target.json_options.root_is_not_array)) {
@@ -22,7 +28,7 @@ export class JSONParser extends InfinityParser {
     if (input) {
       const arrayItems: any[] = Object.keys(input)
         .filter((key: string) => {
-          return Array.isArray(input[key]);
+          return Array.isArray(input[key]) && typeof input[key][0] !== 'string' && typeof input[key][0] !== 'number';
         })
         .map((key) => {
           return input[key];
@@ -30,7 +36,7 @@ export class JSONParser extends InfinityParser {
       if (arrayItems.length > 0) {
         return arrayItems[0];
       }
-      return input;
+      return [input];
     } else {
       return input;
     }
