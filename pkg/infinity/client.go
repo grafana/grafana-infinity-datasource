@@ -69,12 +69,15 @@ func replaceSecret(input string, settings InfinitySettings) string {
 	return input
 }
 
-func GetQueryURL(settings InfinitySettings, query Query) string {
-	urlString := fmt.Sprintf("%s%s", settings.URL, query.URL)
+func GetQueryURL(settings InfinitySettings, query Query) (string, error) {
+	urlString := query.URL
+	if !strings.HasPrefix(query.URL, settings.URL) {
+		urlString = settings.URL + urlString
+	}
 	urlString = replaceSecret(urlString, settings)
 	u, err := url.Parse(urlString)
 	if err != nil {
-		return urlString
+		return urlString, nil
 	}
 	q := u.Query()
 	for _, param := range query.URLOptions.Params {
@@ -82,11 +85,14 @@ func GetQueryURL(settings InfinitySettings, query Query) string {
 		q.Set(param.Key, value)
 	}
 	u.RawQuery = q.Encode()
-	return u.String()
+	return u.String(), nil
 }
 
 func getRequest(settings InfinitySettings, body io.Reader, query Query) (req *http.Request, err error) {
-	url := GetQueryURL(settings, query)
+	url, err := GetQueryURL(settings, query)
+	if err != nil {
+		return nil, err
+	}
 	switch query.URLOptions.Method {
 	case "POST":
 		req, err = http.NewRequest("POST", url, body)

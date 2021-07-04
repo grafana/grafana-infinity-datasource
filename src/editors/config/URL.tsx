@@ -16,9 +16,10 @@ export const URLEditor = (props: Props) => {
   return (
     <div className="gf-form">
       <FormField
-        label="URL"
+        label="Base URL"
         labelWidth={11}
-        tooltip="URL of the query. Leave blank if you want to handle it in the query editor."
+        tooltip="Base URL of the query. Leave blank if you want to handle it in the query editor."
+        placeholder="Leave blank and you can specify full URL in the query."
         value={props.options.url}
         onChange={(e) => onURLChange(e.currentTarget.value)}
       />

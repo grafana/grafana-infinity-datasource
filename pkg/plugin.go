@@ -37,7 +37,7 @@ type InfinityDatasource struct {
 func (ds *InfinityDatasource) CheckHealth(ctx context.Context, req *backend.CheckHealthRequest) (*backend.CheckHealthResult, error) {
 	return &backend.CheckHealthResult{
 		Status:  backend.HealthStatusOk,
-		Message: "Data source is working. No checks performed.",
+		Message: "Settings saved",
 	}, nil
 }
 

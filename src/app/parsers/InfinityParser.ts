@@ -10,6 +10,7 @@ import {
   InfinityQueryType,
 } from './../../types';
 import { toDataFrame } from '@grafana/data';
+import { normalizeColumns } from './utils';
 
 export class InfinityParser {
   target: InfinityQuery;
@@ -47,7 +48,7 @@ export class InfinityParser {
     return {
       name: this.target.refId,
       rows: this.rows.filter((row) => row.length > 0),
-      columns,
+      columns: normalizeColumns(columns),
     };
   }
   toTimeSeries() {

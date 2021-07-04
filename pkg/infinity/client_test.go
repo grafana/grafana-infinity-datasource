@@ -44,6 +44,15 @@ func Test_getQueryURL(t *testing.T) {
 		{
 			settings: infinity.InfinitySettings{
 				URL: "https://foo.com",
+			},
+			query: infinity.Query{
+				URL: "https://foo.com/hello?key=val",
+			},
+			want: "https://foo.com/hello?key=val",
+		},
+		{
+			settings: infinity.InfinitySettings{
+				URL: "https://foo.com",
 				SecureQueryFields: map[string]string{
 					"key_one": "val_one",
 					"key_two": "val_two",
@@ -57,7 +66,9 @@ func Test_getQueryURL(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equal(t, tt.want, infinity.GetQueryURL(tt.settings, tt.query))
+			u, err := infinity.GetQueryURL(tt.settings, tt.query)
+			assert.Equal(t, err, nil)
+			assert.Equal(t, tt.want, u)
 		})
 	}
 }

@@ -19,3 +19,9 @@ export const getColumnsFromObjectArray = (result: any): ScrapColumn[] => {
     return [];
   }
 };
+export const normalizeColumns = (columns: ScrapColumn[]): ScrapColumn[] => {
+  return [...columns].map((c) => {
+    c.text = c.text || c.selector;
+    return c;
+  });
+};
