@@ -17,6 +17,7 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 ## [ 0.7.3 ]
 
 - Variable editor bug fixes
+- Columnar format support
 
 ## [ 0.7.2 ]
 

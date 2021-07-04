@@ -2,12 +2,15 @@ import { forEach, get, toNumber, flatten } from 'lodash';
 import { JSONPath } from 'jsonpath-plus';
 import { InfinityParser } from './InfinityParser';
 import { InfinityQuery, ScrapColumn, GrafanaTableRow, ScrapColumnFormat } from './../../types';
-import { getColumnsFromObjectArray } from './utils';
+import { getColumnsFromObjectArray, columnarToTable } from './utils';
 
 export class JSONParser extends InfinityParser {
   constructor(JSONResponse: object, target: InfinityQuery, endTime?: Date) {
     super(target);
     let jsonResponse = this.formatInput(JSONResponse);
+    if (this.target.json_options?.columnar) {
+      jsonResponse = columnarToTable(jsonResponse, this.target.columns);
+    }
     if (Array.isArray(jsonResponse) && (typeof jsonResponse[0] === 'string' || typeof jsonResponse[0] === 'number')) {
       jsonResponse = jsonResponse.map((value) => {
         return { value };
