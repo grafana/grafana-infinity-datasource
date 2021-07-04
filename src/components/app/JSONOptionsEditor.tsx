@@ -21,6 +21,15 @@ export const JSONOptionsEditor = (props: JSONOptionsEditorProps) => {
       },
     });
   };
+  const onColumnarChange = (columnar: boolean) => {
+    onChange({
+      ...query,
+      json_options: {
+        ...query.json_options,
+        columnar,
+      },
+    });
+  };
   return (
     <>
       <div style={{ padding: 'auto 15px;' }}>
@@ -45,6 +54,14 @@ export const JSONOptionsEditor = (props: JSONOptionsEditorProps) => {
               css={{}}
               value={json_options.root_is_not_array}
               onChange={(e) => onRootIsNotArrayChange(e.currentTarget.checked)}
+            ></Checkbox>
+          </div>
+          <div className="gf-form">
+            <label className="gf-form-label query-keyword width-14">Is data in columnar format?</label>
+            <Checkbox
+              css={{}}
+              value={json_options.columnar}
+              onChange={(e) => onColumnarChange(e.currentTarget.checked)}
             ></Checkbox>
           </div>
         </Drawer>

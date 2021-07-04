@@ -134,6 +134,7 @@ export interface InfinityQuery extends DataQuery {
   };
   json_options?: {
     root_is_not_array?: boolean;
+    columnar?: boolean;
   };
   root_selector: string;
   global_query_id?: string;
