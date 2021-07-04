@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Checkbox, Drawer, Button } from '@grafana/ui';
+import { Checkbox, Drawer, Button, InlineFormLabel } from '@grafana/ui';
 import { InfinityQuery } from '../../types';
 
 interface CSVOptionsEditorProps {
@@ -84,9 +84,14 @@ export const CSVOptionsEditor = (props: CSVOptionsEditorProps) => {
         </Button>
       </div>
       {popupStatus === true && (
-        <Drawer title="CSV Options" onClose={togglePopup}>
+        <Drawer title="CSV Options" onClose={togglePopup} expandable={true}>
           <div className="gf-form">
-            <label className="gf-form-label query-keyword width-8">Delimiter</label>
+            <InlineFormLabel
+              className="gf-form-label query-keyword width-8"
+              tooltip="Defaults to comma. If your file is TSV then use '\t'"
+            >
+              Delimiter
+            </InlineFormLabel>
             <input
               className="gf-form-input width-4"
               type="text"
@@ -96,7 +101,7 @@ export const CSVOptionsEditor = (props: CSVOptionsEditorProps) => {
             ></input>
           </div>
           <div className="gf-form">
-            <label className="gf-form-label query-keyword width-8">Skip empty lines</label>
+            <InlineFormLabel className="gf-form-label query-keyword width-8">Skip empty lines</InlineFormLabel>
             <Checkbox
               css={{}}
               value={props.query.csv_options?.skip_empty_lines}
@@ -104,7 +109,7 @@ export const CSVOptionsEditor = (props: CSVOptionsEditorProps) => {
             ></Checkbox>
           </div>
           <div className="gf-form">
-            <label className="gf-form-label query-keyword width-8">Skip lines with error</label>
+            <InlineFormLabel className="gf-form-label query-keyword width-8">Skip lines with error</InlineFormLabel>
             <Checkbox
               css={{}}
               value={props.query.csv_options?.skip_lines_with_error}
@@ -112,7 +117,7 @@ export const CSVOptionsEditor = (props: CSVOptionsEditorProps) => {
             ></Checkbox>
           </div>
           <div className="gf-form">
-            <label className="gf-form-label query-keyword width-8">Relax column count</label>
+            <InlineFormLabel className="gf-form-label query-keyword width-8">Relax column count</InlineFormLabel>
             <Checkbox
               css={{}}
               value={props.query.csv_options?.relax_column_count}
@@ -120,7 +125,7 @@ export const CSVOptionsEditor = (props: CSVOptionsEditorProps) => {
             ></Checkbox>
           </div>
           <div className="gf-form">
-            <label className="gf-form-label query-keyword width-8">Headers</label>
+            <InlineFormLabel className="gf-form-label query-keyword width-8">Headers</InlineFormLabel>
             <input
               className="gf-form-input width-30"
               type="text"
@@ -130,7 +135,7 @@ export const CSVOptionsEditor = (props: CSVOptionsEditorProps) => {
             ></input>
           </div>
           <div className="gf-form">
-            <label className="gf-form-label query-keyword width-8">Comment</label>
+            <InlineFormLabel className="gf-form-label query-keyword width-8">Comment</InlineFormLabel>
             <input
               className="gf-form-input width-4"
               type="text"
