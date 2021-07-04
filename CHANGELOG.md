@@ -2,6 +2,11 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
+## [ 0.7.5 ]
+
+- Fixed a bug where data not loading where no column names provided
+- Support auto parse for more JSON types
+
 ## [ 0.7.4 ]
 
 - Enabled support for annotations
