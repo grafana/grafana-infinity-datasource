@@ -125,3 +125,28 @@ describe('Simple Object with number array, string array, object array', () => {
     expect(tableResults.columns[1].text).toBe('moo');
   });
 });
+describe('Nested object without array', () => {
+  const a = new JSONParser(
+    {
+      firstName: 'foo',
+      lastName: 'bar',
+      values: {
+        foo: 'foo1',
+        bar: 'bar1',
+        baz: 'baz1',
+        gaz: 'gaz1',
+      },
+    },
+    { ...defaultTarget, root_selector: 'values' }
+  );
+  it('default test', () => {
+    const tableResults = a.toTable();
+    expect(tableResults.columns.length).toBe(4);
+    expect(tableResults.columns[0].text).toBe('foo');
+    expect(tableResults.columns[1].text).toBe('bar');
+    expect(tableResults.rows.length).toBe(1);
+    expect(tableResults.rows[0].length).toBe(4);
+    expect(tableResults.rows[0][0]).toBe('foo1');
+    expect(tableResults.rows[0][1]).toBe('bar1');
+  });
+});

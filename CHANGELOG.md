@@ -2,6 +2,11 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
+## [ 0.7.6 ]
+
+- UnixTimeStamp variable added (alpha)
+- Changed try url to [heroku](https://yesoreyeram-grafana.herokuapp.com/explore)
+
 ## [ 0.7.5 ]
 
 - Fixed a bug where data not loading where no column names provided

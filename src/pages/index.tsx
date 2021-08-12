@@ -40,15 +40,15 @@ export default function Home({ data }: HomeProps) {
     <Layout showSubMenu={false} title="">
       <>
         <div
-          className="position-relative overflow-hidden text-center"
+          className="position-relative overflow-hidden text-center mainbg"
           style={{
             width: '100%',
             height: `${screenSize.height - 40}px`,
             backgroundSize: 'cover',
-            backgroundColor: '#021E40',
+            backgroundColor: '#723961',
             backgroundPositionX: '10%',
             backgroundPositionY: '10%',
-            backgroundImage: `url(${data.site.siteMetadata.wallpaper})`,
+            backgroundImage: `radial-gradient(95.47% 139.72% at 49.52% 97.49%,#723961 0%,#AB575C 80%,#0E0A20 100%)`,
           }}
         >
           <div
@@ -57,7 +57,7 @@ export default function Home({ data }: HomeProps) {
               marginTop: `${screenSize.height / 4}px`,
             }}
           >
-            <h1 className="display-4 fw-bolder text-white" id="banner-title">
+            <h1 className="display-4 fw-bolder" id="banner-title">
               Grafana Infinity Datasource
             </h1>
             <br />
@@ -65,7 +65,7 @@ export default function Home({ data }: HomeProps) {
               <span className="fw-bold">Do infinite things with Grafana.</span>
               <br />
               <br />
-              <span className="text-secondary">
+              <span style={{ color: '#ccc' }}>
                 Visualize data from JSON, CSV, XML, GraphQL, HTML &amp; REST APIs. Also turns any website into grafana
                 dashboard.
               </span>
@@ -81,7 +81,7 @@ export default function Home({ data }: HomeProps) {
             <a
               className="btn btn-primary text-black mx-4"
               style={{ backgroundImage: 'linear-gradient(#FADE2A,#F05A28)', color: 'black', border: 'none' }}
-              href="https://grafana.sriramajeyam.com"
+              href="https://yesoreyeram-grafana.herokuapp.com/explore"
               target="_blank"
               rel="noreferrer"
             >
@@ -126,12 +126,6 @@ export default function Home({ data }: HomeProps) {
               src="https://img.shields.io/badge/Maintained%3F-yes-green.svg"
               alt="Grafana Infinity datasource is maintained"
             />
-          </a>
-          <a
-            href="https://codeclimate.com/github/yesoreyeram/grafana-infinity-datasource/maintainability"
-            className="mx-2"
-          >
-            <img src="https://api.codeclimate.com/v1/badges/7e2ae1bce7310890065c/maintainability" />
           </a>
         </p>
       </>

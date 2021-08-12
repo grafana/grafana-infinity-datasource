@@ -61,3 +61,12 @@ Example : `Join($Environment,-hello-,$ServerName)` will produce a new string var
 Example : `Random(A,B,C)` will produce one of A/B/C. When creating a variable of this type, set it to refresh "on time range change", so it will produce random element when dashboard refreshes.
 
 More details available in [this github issue](https://github.com/yesoreyeram/grafana-infinity-datasource/issues/4).
+
+## UnixTimeStamp (alpha) - (Legacy variable)
+
+Return relative timestamp in unix timestamp.
+
+| Variable           | Output                          |
+| ------------------ | ------------------------------- |
+| `UnixTimeStamp()`  | Current browser timestamp in ms |
+| `UnixTimeStamp(s)` | Current browser timestamp in s  |
