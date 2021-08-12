@@ -293,7 +293,7 @@ export interface SecureField {
   value: string;
   configured: boolean;
 }
-export type VariableTokenLegacy = 'Collection' | 'CollectionLookup' | 'Random' | 'Join';
+export type VariableTokenLegacy = 'Collection' | 'CollectionLookup' | 'Random' | 'Join' | 'UnixTimeStamp';
 export type InfinityInstanceSettings = DataSourceInstanceSettings<InfinityDataSourceJSONOptions>;
 
 export const DefaultInfinityQuery: InfinityQuery = {

@@ -14,6 +14,7 @@ import { CollectionVariable } from './Collection';
 import { CollectionLookupVariable } from './CollectionLookup';
 import { JoinVariable } from './Join';
 import { RandomVariable } from './Random';
+import { UnixTimeStampVariable } from './UnixTimeStamp';
 import { Datasource } from './../../datasource';
 
 const getTemplateVariablesFromResult = (res: any): Array<SelectableValue<string>> => {
@@ -118,6 +119,8 @@ export class LegacyVariableProvider implements VariableProvider {
         resolve(JoinVariable(this.queryString));
       } else if (this.queryString.startsWith('Random(') && this.queryString.endsWith(')')) {
         resolve(RandomVariable(this.queryString));
+      } else if (this.queryString.startsWith('UnixTimeStamp(') && this.queryString.endsWith(')')) {
+        resolve(UnixTimeStampVariable(this.queryString));
       } else {
         resolve([]);
       }
