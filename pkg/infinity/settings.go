@@ -40,6 +40,9 @@ type InfinitySettingsJson struct {
 
 func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinitySettings, err error) {
 	settings.URL = config.URL
+	if config.URL == "__IGNORE_URL__" {
+		settings.URL = ""
+	}
 	settings.BasicAuthEnabled = config.BasicAuthEnabled
 	settings.UserName = config.BasicAuthUser
 	infJson := InfinitySettingsJson{}

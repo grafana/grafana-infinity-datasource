@@ -1,17 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 import { LegacyForms } from '@grafana/ui';
-import { InfinityDataSourceJSONOptions } from '../../types';
+import { InfinityDataSourceJSONOptions, IGNORE_URL } from '../../types';
 
 export type Props = DataSourcePluginOptionsEditorProps<InfinityDataSourceJSONOptions>;
 
 export const URLEditor = (props: Props) => {
   const { FormField } = LegacyForms;
-  const onURLChange = (url: string) => {
-    props.onOptionsChange({
-      ...props.options,
-      url,
-    });
+  const { options, onOptionsChange } = props;
+  const [url, setUrl] = useState(options.url || '');
+  const onURLChange = () => {
+    onOptionsChange({ ...options, url: url || IGNORE_URL });
   };
   return (
     <div className="gf-form">
@@ -20,9 +19,11 @@ export const URLEditor = (props: Props) => {
         labelWidth={11}
         tooltip="Base URL of the query. Leave blank if you want to handle it in the query editor."
         placeholder="Leave blank and you can specify full URL in the query."
-        value={props.options.url}
-        onChange={(e) => onURLChange(e.currentTarget.value)}
+        value={url === IGNORE_URL ? '' : url}
+        onChange={(e) => setUrl(e.currentTarget.value || '')}
+        onBlur={onURLChange}
       />
+      <div className="gf-form-label text-warning">Deprecated field. Use URL in the query editor instead.</div>
     </div>
   );
 };

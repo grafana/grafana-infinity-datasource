@@ -1,5 +1,5 @@
 import { DataQuery, SelectableValue, DataSourceJsonData, DataSourceInstanceSettings } from '@grafana/data';
-
+export const IGNORE_URL = '__IGNORE_URL__';
 export interface MetricFindValue {
   text: string;
   value: string | number;
