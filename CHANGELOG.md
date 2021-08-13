@@ -2,6 +2,12 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
+## [ 0.7.7 ]
+
+- Bug fixes and docs update
+- DEPRECATED : URL field in the datasource config is now deprecated. Use URL in the Query Editor.
+- DEPRECATED : Global queries are now deprecated in favour of Grafana's panel library
+
 ## [ 0.7.6 ]
 
 - UnixTimeStamp variable added (alpha)

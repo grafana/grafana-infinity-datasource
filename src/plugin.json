@@ -56,6 +56,14 @@
         "url": "https://yesoreyeram.github.io/grafana-infinity-datasource"
       },
       {
+        "name": "Demo",
+        "url": "https://yesoreyeram-grafana.herokuapp.com"
+      },
+      {
+        "name": "Try before installing",
+        "url": "https://yesoreyeram-grafana.herokuapp.com/explore"
+      },
+      {
         "name": "Github",
         "url": "https://github.com/yesoreyeram/grafana-infinity-datasource"
       },
