@@ -263,20 +263,42 @@ code {
 }
 
 .mainbg {
-  opacity: 0;
-  animation-name: mainbg-animation;
-  animation-iteration-count: 1;
-  animation-duration: 0.9s;
-  animation-delay: 0s;
-  animation-fill-mode: forwards;
+  background: linear-gradient(270deg, #b45d5b, #663360, #46275c, #181130);
+  background-size: 800% 800%;
+  -webkit-animation: mainbg-animation 4s ease infinite;
+  -moz-animation: mainbg-animation 4s ease infinite;
+  animation: mainbg-animation 4s ease infinite;
 }
-
-@keyframes mainbg-animation {
+@-webkit-keyframes mainbg-animation {
   0% {
-    opacity: 0;
-    animation-timing-function: cubic-bezier(0, 0, 0.5, 1);
+    background-position: 9% 0%;
+  }
+  50% {
+    background-position: 92% 100%;
   }
   100% {
-    opacity: 1;
+    background-position: 9% 0%;
+  }
+}
+@-moz-keyframes mainbg-animation {
+  0% {
+    background-position: 9% 0%;
+  }
+  50% {
+    background-position: 92% 100%;
+  }
+  100% {
+    background-position: 9% 0%;
+  }
+}
+@keyframes mainbg-animation {
+  0% {
+    background-position: 9% 0%;
+  }
+  50% {
+    background-position: 92% 100%;
+  }
+  100% {
+    background-position: 9% 0%;
   }
 }

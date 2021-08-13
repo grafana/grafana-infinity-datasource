@@ -44,11 +44,6 @@ export default function Home({ data }: HomeProps) {
           style={{
             width: '100%',
             height: `${screenSize.height - 40}px`,
-            backgroundSize: 'cover',
-            backgroundColor: '#723961',
-            backgroundPositionX: '10%',
-            backgroundPositionY: '10%',
-            backgroundImage: `radial-gradient(95.47% 139.72% at 49.52% 97.49%,#723961 0%,#AB575C 80%,#0E0A20 100%)`,
           }}
         >
           <div
