@@ -120,16 +120,6 @@ jobs:
       - name: Get checksum
         run: |
           echo "GRAFANA_PLUGIN_CHECKSUM=$(cat ./${{ env.GRAFANA_PLUGIN_ARTIFACT_CHECKSUM }} | cut -d' ' -f1)" >> $GITHUB_ENV
-      - uses: actions/setup-go@master
-        with:
-          go-version: '1.16'
-      - name: Lint Plugin
-        run: |
-          git clone https://github.com/grafana/plugin-validator;
-          cd ./plugin-validator/cmd/plugincheck;
-          go install
-          cd ../../;
-          plugincheck ${{ steps.upload-plugin-asset.outputs.browser_download_url }};
       - name: Test locally
         run: |
           echo To test the plugin locally, execute the following command.
