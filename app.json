@@ -4,5 +4,10 @@
   "repository": "https://github.com/yesoreyeram/grafana-infinity-datasource",
   "keywords": ["grafana", "infinity datasource", "grafana plugin", "json", "api"],
   "stack": "container",
-  "addons": ["heroku-postgresql:hobby-dev"]
+  "addons": ["heroku-postgresql:hobby-dev"],
+  "buildpacks": [
+    {
+      "url": "https://github.com/heroku/docker.git"
+    }
+  ]
 }
