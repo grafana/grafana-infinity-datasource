@@ -2,6 +2,10 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
+## [ 0.7.8 ]
+
+- Bug fixes, docs update
+
 ## [ 0.7.7 ]
 
 - Bug fixes and docs update
@@ -11,7 +15,7 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 ## [ 0.7.6 ]
 
 - UnixTimeStamp variable added (alpha)
-- Changed try url to [heroku](https://yesoreyeram-grafana.herokuapp.com/explore)
+- Changed try url to [heroku](https://grafana-infinity-datasource.herokuapp.com/explore)
 
 ## [ 0.7.5 ]
 

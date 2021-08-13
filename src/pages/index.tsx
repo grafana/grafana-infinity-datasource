@@ -76,7 +76,7 @@ export default function Home({ data }: HomeProps) {
             <a
               className="btn btn-primary text-black mx-4"
               style={{ backgroundImage: 'linear-gradient(#FADE2A,#F05A28)', color: 'black', border: 'none' }}
-              href="https://yesoreyeram-grafana.herokuapp.com/explore"
+              href="https://grafana-infinity-datasource.herokuapp.com"
               target="_blank"
               rel="noreferrer"
             >

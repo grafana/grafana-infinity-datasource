@@ -8,11 +8,11 @@ Visualize data from JSON, CSV, XML, GraphQL and HTML endpoints.
 
 Using the following links,You can try **Infinity datasource plugin** without installing grafana/plugin. You can change the URL, customize headers to get the results of your API
 
-### [Try before installing - JSON](https://yesoreyeram-grafana.herokuapp.com/d/try/try?orgId=1&editPanel=2)
+### [Try before installing - JSON](https://grafana-infinity-datasource.herokuapp.com/d/try/try?orgId=1&editPanel=2)
 
-### [Try before installing - CSV](https://yesoreyeram-grafana.herokuapp.com/d/try/try?orgId=1&editPanel=3)
+### [Try before installing - CSV](https://grafana-infinity-datasource.herokuapp.com/d/try/try?orgId=1&editPanel=3)
 
-### [Demo](https://yesoreyeram-grafana.herokuapp.com)
+### [Demo](https://grafana-infinity-datasource.herokuapp.com)
 
 ## Documentation
 

@@ -97,7 +97,7 @@ export const Header = (props: HeaderProps) => {
             <ul className="navbar-nav d-flex mb-2 mb-lg-0">
               <a
                 className="nav-links special-menu highlight rounded text-white fw-bolder"
-                href="https://yesoreyeram-grafana.herokuapp.com/explore"
+                href="https://grafana-infinity-datasource.herokuapp.com"
                 target="_blank"
                 rel="noreferrer"
               >

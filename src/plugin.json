@@ -57,11 +57,11 @@
       },
       {
         "name": "Demo",
-        "url": "https://yesoreyeram-grafana.herokuapp.com"
+        "url": "https://grafana-infinity-datasource.herokuapp.com"
       },
       {
         "name": "Try before installing",
-        "url": "https://yesoreyeram-grafana.herokuapp.com/explore"
+        "url": "https://grafana-infinity-datasource.herokuapp.com/explore"
       },
       {
         "name": "Github",
