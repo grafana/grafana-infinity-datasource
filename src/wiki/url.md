@@ -1,21 +1,19 @@
 ---
 slug: '/wiki/url'
 title: 'URL'
-previous_page_title: "Provisioning"
-previous_page_slug: "/wiki/provisioning"
-next_page_title: "Configuration"
-next_page_slug: "/wiki/configuration"
+previous_page_title: 'Provisioning'
+previous_page_slug: '/wiki/provisioning'
+next_page_title: 'Configuration'
+next_page_slug: '/wiki/configuration'
 ---
 
 ## URL
 
 You can enter any URL in the query URL field. URL should be a valid json / csv / graphql / xml / html endpoint.
 
-If your datasource settings have URL configured, that will be prefixed along with all of your queries.
-
-> If you specify the URL as `https://example.com/path` in your datasource config and `/my-endpoint?foo=bar` as your url in the query, then the final URL will be `https://example.com/path/my-endpoint?foo=bar`
-
 In the query editor, click the expand icon next the URL field to configure more query URL options like HTTP Method (GET/POST), additional headers and additional query strings.
+
+**Leave the URL in the datasource configuration blank.** URL in the datasource config is now deprecated. Use URL in the query editor instead.
 
 ## Variables in URL
 
@@ -46,3 +44,7 @@ For example, You want to use the url `https://example.com/hello?mykey=bar&someth
 ![image](https://user-images.githubusercontent.com/153843/116440219-295cee80-a848-11eb-9c2e-d33e363c49fa.png#center)
 
 > Secure keys feature is available only from 0.7 version of the plugin
+
+## Headers in the URL
+
+You can configure the headers required for the URL in the datasource config and also in the query headers. By default infinity datasource automatically sets two headers. Header `User-Agent : Grafana` will be set for all requests and `Content-Type : application/json`. You can override these headers in the datasource configuration page.
