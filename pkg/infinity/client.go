@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 )
 
 type Client struct {
@@ -55,6 +56,7 @@ func NewClient(settings InfinitySettings) (client *Client, err error) {
 	}
 	httpClient := &http.Client{
 		Transport: transport,
+		Timeout:   time.Second * time.Duration(settings.TimeoutInSeconds),
 	}
 	return &Client{
 		Settings:   settings,

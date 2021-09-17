@@ -2,6 +2,10 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
+## [ 0.7.9 ]
+
+- Ability to customize timeout
+
 ## [ 0.7.8 ]
 
 - Bug fixes, docs update
