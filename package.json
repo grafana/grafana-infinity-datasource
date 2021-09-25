@@ -1,0 +1,64 @@
+{
+  "name": "grafana-infinity-datasource",
+  "version": "0.8.0-dev1",
+  "description": "JSON, CSV, XML, GraphQL & HTML datasource for Grafana. Do infinite things with Grafana.",
+  "main": "dist/module.js",
+  "author": "Sriramajeyam Sugumaran",
+  "license": "Apache-2.0",
+  "homepage": "https://yesoreyeram.github.io/grafana-infinity-datasource",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yesoreyeram/grafana-infinity-datasource.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yesoreyeram/grafana-infinity-datasource/issues"
+  },
+  "scripts": {
+    "dev": "grafana-toolkit plugin:dev",
+    "watch": "grafana-toolkit plugin:dev --watch",
+    "start": "yarn watch",
+    "test": "grafana-toolkit plugin:test",
+    "e2e": "grafana-e2e run",
+    "e2e:open": "grafana-e2e open",
+    "e2e:update": "grafana-e2e run --update-screenshots",
+    "build": "grafana-toolkit plugin:build",
+    "ci-build": "grafana-toolkit plugin:ci-build"
+  },
+  "keywords": [
+    "api",
+    "csv",
+    "grafana infinity",
+    "grafana utils",
+    "grafana",
+    "graphql",
+    "html",
+    "inline",
+    "json",
+    "random walk",
+    "rest api",
+    "scraping",
+    "simple-json",
+    "url",
+    "web scraping",
+    "xml"
+  ],
+  "dependencies": {
+    "@grafana/data": "7.2.0",
+    "@grafana/runtime": "7.2.0",
+    "@grafana/ui": "7.2.0",
+    "rxjs": "6.3.3"
+  },
+  "devDependencies": {
+    "@grafana/e2e": "8.1.4",
+    "@grafana/e2e-selectors": "8.1.4",
+    "@grafana/toolkit": "8.1.4",
+    "@testing-library/dom": "^8.6.0",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^12.1.0",
+    "@testing-library/user-event": "^13.2.1",
+    "tslib": "^2.3.1"
+  },
+  "resolutions": {
+    "rxjs": "6.3.3"
+  }
+}

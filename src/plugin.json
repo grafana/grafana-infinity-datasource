@@ -1,0 +1,72 @@
+{
+  "$schema": "https://raw.githubusercontent.com/grafana/grafana/v7.2.0/docs/sources/developers/plugins/plugin.schema.json",
+  "name": "Infinity",
+  "id": "yesoreyeram-infinity-datasource",
+  "type": "datasource",
+  "metrics": true,
+  "backend": true,
+  "executable": "gpx_infinity",
+  "info": {
+    "version": "%VERSION%",
+    "updated": "%TODAY%",
+    "description": "JSON, CSV, XML, GraphQL, HTML and REST API datasource for Grafana. Do infinite things with Grafana. Visualize data from anywhere",
+    "author": {
+      "name": "Sriramajeyam Sugumaran",
+      "url": "https://www.google.com/search?q=Sriramajeyam+Sugumaran"
+    },
+    "logos": {
+      "small": "img/icon.svg",
+      "large": "img/icon.svg"
+    },
+    "keywords": [
+      "api",
+      "csv",
+      "grafana",
+      "graphql",
+      "html",
+      "inline",
+      "json",
+      "random walk",
+      "rest api",
+      "scraping",
+      "simple-json",
+      "url",
+      "xml"
+    ],
+    "links": [
+      {
+        "name": "Wiki",
+        "url": "https://yesoreyeram.github.io/grafana-infinity-datasource"
+      },
+      {
+        "name": "Demo",
+        "url": "https://grafana-infinity-datasource.herokuapp.com"
+      },
+      {
+        "name": "Try before installing",
+        "url": "https://grafana-infinity-datasource.herokuapp.com/explore"
+      },
+      {
+        "name": "Github",
+        "url": "https://github.com/yesoreyeram/grafana-infinity-datasource"
+      },
+      {
+        "name": "Need Help?",
+        "url": "https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/categories/q-a"
+      },
+      {
+        "name": "Report Bug",
+        "url": "https://github.com/yesoreyeram/grafana-infinity-datasource/issues/new/choose"
+      },
+      {
+        "name": "Examples",
+        "url": "https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/categories/show-and-tell"
+      }
+    ]
+  },
+  "dependencies": {
+    "grafanaDependency": ">=7.2.0",
+    "grafanaVersion": "7.2.0",
+    "plugins": []
+  }
+}
