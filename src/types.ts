@@ -165,11 +165,15 @@ export type InfinityGlobalQuery = {
 export type InfinityDataQuery = InfinityJSONQuery | InfinityGraphqlQuery | InfinityCSVQuery | InfinityXMLQuery | InfinityHTMLQuery;
 export type InfinityLegacyQuery = InfinityDataQuery | InfinitySeriesQuery | InfinityGlobalQuery;
 export type InfinityQuery = InfinityLegacyQuery & DataQuery;
-export type InfinityVariableQuery = {
-  queryType: 'legacy' | 'infinity';
+export type InfinityLegacyVariableQuery = {
+  queryType: 'legacy';
   query: string;
-  infinityQuery?: InfinityQuery;
 };
+export type InfinityDataVariableQuery = {
+  queryType: 'infinity';
+  infinityQuery: InfinityQuery;
+};
+export type InfinityVariableQuery = InfinityLegacyVariableQuery | InfinityDataVariableQuery;
 export type VariableTokenLegacy = 'Collection' | 'CollectionLookup' | 'Random' | 'Join' | 'UnixTimeStamp';
 //#endregion
 
