@@ -3,9 +3,11 @@ package infinity
 import (
 	"context"
 
+	"github.com/gorilla/mux"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/datasource"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/instancemgmt"
+	"github.com/grafana/grafana-plugin-sdk-go/backend/resource/httpadapter"
 )
 
 type InfinityDatasource struct {
@@ -21,17 +23,19 @@ func (ds *InfinityDatasource) getDatasourceInstance(ctx context.Context, pluginC
 }
 
 type InfintiyInstance struct {
-	settings InfinityConfig
+	client Client
 }
 
 func NewDatasource() datasource.ServeOpts {
 	instance := &InfinityDatasource{
 		im: datasource.NewInstanceManager(getInstance),
 	}
+	router := mux.NewRouter()
+	router.HandleFunc("/proxy", instance.proxyHandler)
 	return datasource.ServeOpts{
 		CheckHealthHandler:  instance,
 		QueryDataHandler:    instance,
-		CallResourceHandler: instance,
+		CallResourceHandler: httpadapter.New(router),
 	}
 }
 
@@ -44,7 +48,11 @@ func getInstance(s backend.DataSourceInstanceSettings) (instancemgmt.Instance, e
 	if err != nil {
 		return nil, err
 	}
+	client, err := NewClient(*settings)
+	if err != nil {
+		return nil, err
+	}
 	return &InfintiyInstance{
-		settings: *settings,
+		client: *client,
 	}, nil
 }
