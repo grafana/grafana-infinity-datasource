@@ -1,0 +1,46 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 2,
+    "passes": 2,
+    "pending": 0,
+    "failures": 0,
+    "start": "2021-09-26T20:37:17.355Z",
+    "end": "2021-09-26T20:37:24.571Z",
+    "duration": 7216
+  },
+  "tests": [
+    {
+      "title": "Smoke tests",
+      "fullTitle": "Smoke tests Smoke tests",
+      "duration": 5924,
+      "currentRetry": 0,
+      "err": {}
+    },
+    {
+      "title": "temporary",
+      "fullTitle": "Smoke tests temporary",
+      "duration": 9,
+      "currentRetry": 0,
+      "err": {}
+    }
+  ],
+  "pending": [],
+  "failures": [],
+  "passes": [
+    {
+      "title": "Smoke tests",
+      "fullTitle": "Smoke tests Smoke tests",
+      "duration": 5924,
+      "currentRetry": 0,
+      "err": {}
+    },
+    {
+      "title": "temporary",
+      "fullTitle": "Smoke tests temporary",
+      "duration": 9,
+      "currentRetry": 0,
+      "err": {}
+    }
+  ]
+}
