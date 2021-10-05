@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import defaultsDeep from 'lodash/defaultsDeep';
 import { DataSourcePluginOptionsEditorProps } from '@grafana/data';
-import { Collapse, InfoBox } from '@grafana/ui';
+import { Collapse, InfoBox, InlineFormLabel, Input } from '@grafana/ui';
 import { TLSConfigEditor } from './config/TLSConfigEditor';
 import { GlobalQueryEditor } from './config/GlobalQueryEditor';
 import { SecureFieldsEditor } from './config/SecureFieldsEditor';
@@ -24,6 +24,7 @@ export const InfinityConfigEditor = (props: ConfigEditorProps) => {
   options.jsonData = defaultsDeep(options.jsonData, {
     global_queries: [],
   });
+  const [timeoutInSeconds, setTimeoutInSeconds] = useState(options.jsonData.timeoutInSeconds || 60);
   return (
     <>
       <InfoBox>
@@ -79,7 +80,29 @@ export const InfinityConfigEditor = (props: ConfigEditorProps) => {
           />
         </div>
       </Collapse>
-      <Collapse label="TLS/SSL Settings" isOpen={tlsOpen} collapsible={true} onToggle={(e) => setTlsOpen(!tlsOpen)}>
+      <Collapse
+        label="TLS/SSL &amp; Network Settings"
+        isOpen={tlsOpen}
+        collapsible={true}
+        onToggle={(e) => setTlsOpen(!tlsOpen)}
+      >
+        <div style={{ padding: '1px 10px' }}>
+          <div className="gf-form">
+            <InlineFormLabel>Timeout in seconds</InlineFormLabel>
+            <Input
+              css={null}
+              value={timeoutInSeconds}
+              type="number"
+              placeholder="timeout in seconds"
+              min={0}
+              max={300}
+              onChange={(e) => setTimeoutInSeconds(e.currentTarget.valueAsNumber)}
+              onBlur={() => {
+                props.onOptionsChange({ ...options, jsonData: { ...options.jsonData, timeoutInSeconds } });
+              }}
+            ></Input>
+          </div>
+        </div>
         <div style={{ padding: '1px 10px' }}>
           <TLSConfigEditor options={options} onOptionsChange={onOptionsChange} hideTile={true} />
         </div>
