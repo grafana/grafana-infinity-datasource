@@ -52,6 +52,7 @@ func NewClient(settings InfinitySettings) (client *Client, err error) {
 		return nil, err
 	}
 	transport := &http.Transport{
+		Proxy:           http.ProxyFromEnvironment,
 		TLSClientConfig: tlsConfig,
 	}
 	httpClient := &http.Client{
