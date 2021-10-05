@@ -46,9 +46,40 @@ func TestLoadSettings(t *testing.T) {
 				},
 			},
 			wantSettings: infinity.InfinitySettings{
-				URL:      "https://foo.com",
-				UserName: "user",
-				Password: "password",
+				URL:              "https://foo.com",
+				UserName:         "user",
+				Password:         "password",
+				TimeoutInSeconds: 60,
+				CustomHeaders: map[string]string{
+					"header1": "headervalue1",
+				},
+				SecureQueryFields: map[string]string{
+					"foo": "bar",
+				},
+			},
+		},
+		{
+			name: "custom timeout settings should parse correctly",
+			config: backend.DataSourceInstanceSettings{
+				URL:           "https://foo.com",
+				BasicAuthUser: "user",
+				JSONData: []byte(`{ 
+					"datasource_mode"  : "advanced",
+					"secureQueryName1" : "foo",
+					"httpHeaderName1"  : "header1",
+					"timeoutInSeconds" : 30
+				}`),
+				DecryptedSecureJSONData: map[string]string{
+					"basicAuthPassword": "password",
+					"secureQueryValue1": "bar",
+					"httpHeaderValue1":  "headervalue1",
+				},
+			},
+			wantSettings: infinity.InfinitySettings{
+				URL:              "https://foo.com",
+				UserName:         "user",
+				Password:         "password",
+				TimeoutInSeconds: 30,
 				CustomHeaders: map[string]string{
 					"header1": "headervalue1",
 				},

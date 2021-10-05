@@ -22,6 +22,7 @@ type InfinitySettings struct {
 	SecureQueryFields  map[string]string
 	InsecureSkipVerify bool
 	ServerName         string
+	TimeoutInSeconds   int64
 	TLSClientAuth      bool
 	TLSAuthWithCACert  bool
 	TLSCACert          string
@@ -36,6 +37,7 @@ type InfinitySettingsJson struct {
 	TLSClientAuth      bool                `json:"tlsClientAuth,omitempty"`
 	TLSAuthWithCACert  bool                `json:"tlsAuthWithCACert,omitempty"`
 	LocalSources       LocalSourcesOptions `json:"local_sources_options,omitempty"`
+	TimeoutInSeconds   int64               `json:"timeoutInSeconds,omitempty"`
 }
 
 func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinitySettings, err error) {
@@ -55,6 +57,10 @@ func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinityS
 		settings.TLSClientAuth = infJson.TLSClientAuth
 		settings.TLSAuthWithCACert = infJson.TLSAuthWithCACert
 		settings.LocalSources = infJson.LocalSources
+		settings.TimeoutInSeconds = 60
+		if infJson.TimeoutInSeconds > 0 {
+			settings.TimeoutInSeconds = infJson.TimeoutInSeconds
+		}
 	}
 	if val, ok := config.DecryptedSecureJSONData["basicAuthPassword"]; ok {
 		settings.Password = val
