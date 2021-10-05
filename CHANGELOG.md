@@ -2,6 +2,10 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
+## [ 0.7.10 ]
+
+- proxy support for outgoing requests
+
 ## [ 0.7.9 ]
 
 - Ability to customize timeout
