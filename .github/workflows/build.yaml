@@ -62,15 +62,15 @@ jobs:
         if: |
           steps.cache-yarn-cache.outputs.cache-hit != 'true' ||
           steps.cache-node-modules.outputs.cache-hit != 'true'
-      - name: Build
+      - name: Build Frontend
         run: |
-          yarn build;
+          yarn ci-build;
       - name: Build Docs
         run: |
           cd website;
           yarn install --frozen-lockfile;
           yarn build;
-      - name: Deploy
+      - name: Deploy Docs to github pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
