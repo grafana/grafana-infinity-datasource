@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        node-version: [12.x]
+        node-version: [14.x]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -62,14 +62,16 @@ jobs:
         if: |
           steps.cache-yarn-cache.outputs.cache-hit != 'true' ||
           steps.cache-node-modules.outputs.cache-hit != 'true'
-      - name: Build
+      - name: Build Frontend
         run: |
-          yarn build;
+          yarn ci-build;
       - name: Build Docs
         run: |
-          yarn docs:build;
-      - name: Deploy
+          cd website;
+          yarn install --frozen-lockfile;
+          yarn build;
+      - name: Deploy Docs to github pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
+          publish_dir: ./website/public

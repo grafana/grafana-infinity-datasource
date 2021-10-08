@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { InfinityQuery, EditorMode } from '../../types';
+import { InfinityQuery, EditorMode } from '../types';
 interface DataFieldProps {
   query: InfinityQuery;
   onChange: (e: InfinityQuery) => void;

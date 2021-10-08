@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { InfinityQuery, EditorMode, InfinityQuerySources } from '../../types';
+import { InfinityQuery, EditorMode, InfinityQuerySources } from '../types';
+
 interface URLFieldProps {
   query: InfinityQuery;
   onChange: (e: InfinityQuery) => void;

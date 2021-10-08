@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Checkbox, Drawer, Button } from '@grafana/ui';
-import { InfinityQuery } from '../../types';
+import { InfinityQuery } from '../types';
 
 interface JSONOptionsEditorProps {
   query: InfinityQuery;

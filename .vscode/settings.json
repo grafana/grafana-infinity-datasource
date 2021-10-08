@@ -1,22 +1,23 @@
 {
   "deno.enable": false,
   "cSpell.words": [
-    "Magefile",
+    "frontmatter",
+    "gomodcache",
     "grafana",
     "jsonpath",
+    "magefile",
     "mkdir",
     "nodemodules",
-    "frontmatter",
-    "topnav",
     "offcanvas",
-    "youtube",
-    "scroller",
-    "subnav",
-    "unstyled",
-    "VLOOKUP",
     "outfile",
     "plugincheck",
+    "scroller",
     "stretchr",
-    "timeseries"
+    "subnav",
+    "timeseries",
+    "topnav",
+    "unstyled",
+    "vlookup",
+    "youtube"
   ]
 }
