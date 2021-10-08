@@ -58,13 +58,29 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ matrix.node-version }}-nodemodules-
       - name: Install dependencies
-        run: yarn install --frozen-lockfile;
+        run: CYPRESS_CACHE_FOLDER=./tmp/Cypress yarn install --frozen-lockfile;
         if: |
           steps.cache-yarn-cache.outputs.cache-hit != 'true' ||
           steps.cache-node-modules.outputs.cache-hit != 'true'
       - name: Build Frontend
         run: |
           yarn ci-build;
+      - name: Start the docker container for e2e
+        run: |
+          docker-compose pull
+          docker-compose up -d
+      - name: wait for grafana to start
+        uses: nev7n/wait_for_response@v1
+        with:
+          url: 'http://localhost:3000/'
+          responseCode: 200
+          timeout: 20000
+          interval: 500
+      - name: Run E2E
+        run: yarn e2e
+      - name: Stop the docker container
+        if: always()
+        run: docker-compose down
       - name: Build Docs
         run: |
           cd website;
