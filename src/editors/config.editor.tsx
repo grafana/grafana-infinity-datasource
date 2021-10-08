@@ -8,9 +8,9 @@ import { SecureFieldsEditor } from './config/SecureFieldsEditor';
 import { URLEditor } from './config/URL';
 import { AuthEditor } from './config/Auth';
 // import { LocalSourcesEditor } from './config/LocalSourcesEditor';
-import { InfinityDataSourceJSONOptions } from '../types';
+import { InfinityOptions } from '../types';
 
-export type ConfigEditorProps = DataSourcePluginOptionsEditorProps<InfinityDataSourceJSONOptions>;
+export type ConfigEditorProps = DataSourcePluginOptionsEditorProps<InfinityOptions>;
 
 export const InfinityConfigEditor = (props: ConfigEditorProps) => {
   const { options, onOptionsChange } = props;
@@ -29,15 +29,9 @@ export const InfinityConfigEditor = (props: ConfigEditorProps) => {
     <>
       <InfoBox>
         <p>
-          <b>Without any additional configuration, this datasource can work.</b> Optionally, configure any of the below
-          settings.
+          <b>Without any additional configuration, this datasource can work.</b> Optionally, configure any of the below settings.
         </p>
-        <a
-          className="btn btn-small btn-secondary"
-          target="_blank"
-          href="https://yesoreyeram.github.io/grafana-infinity-datasource"
-          rel="noreferrer"
-        >
+        <a className="btn btn-small btn-secondary" target="_blank" href="https://yesoreyeram.github.io/grafana-infinity-datasource" rel="noreferrer">
           Click here plugin documentation website
         </a>
       </InfoBox>
@@ -53,39 +47,15 @@ export const InfinityConfigEditor = (props: ConfigEditorProps) => {
       </Collapse>
       <Collapse label="Headers" isOpen={headersOpen} collapsible={true} onToggle={(e) => setHeadersOpen(!headersOpen)}>
         <div style={{ padding: '0px 10px' }}>
-          <SecureFieldsEditor
-            dataSourceConfig={options}
-            onChange={onOptionsChange}
-            title="Custom HTTP Header"
-            hideTile={true}
-            secureFieldName="httpHeaderName"
-            secureFieldValue="httpHeaderValue"
-          />
+          <SecureFieldsEditor dataSourceConfig={options} onChange={onOptionsChange} title="Custom HTTP Header" hideTile={true} secureFieldName="httpHeaderName" secureFieldValue="httpHeaderValue" />
         </div>
       </Collapse>
-      <Collapse
-        label="URL params"
-        isOpen={queriesOpen}
-        collapsible={true}
-        onToggle={(e) => setQueriesOpen(!queriesOpen)}
-      >
+      <Collapse label="URL params" isOpen={queriesOpen} collapsible={true} onToggle={(e) => setQueriesOpen(!queriesOpen)}>
         <div style={{ padding: '0px 10px' }}>
-          <SecureFieldsEditor
-            dataSourceConfig={options}
-            onChange={onOptionsChange}
-            title="URL Query Param"
-            hideTile={true}
-            secureFieldName="secureQueryName"
-            secureFieldValue="secureQueryValue"
-          />
+          <SecureFieldsEditor dataSourceConfig={options} onChange={onOptionsChange} title="URL Query Param" hideTile={true} secureFieldName="secureQueryName" secureFieldValue="secureQueryValue" />
         </div>
       </Collapse>
-      <Collapse
-        label="TLS/SSL &amp; Network Settings"
-        isOpen={tlsOpen}
-        collapsible={true}
-        onToggle={(e) => setTlsOpen(!tlsOpen)}
-      >
+      <Collapse label="TLS/SSL &amp; Network Settings" isOpen={tlsOpen} collapsible={true} onToggle={(e) => setTlsOpen(!tlsOpen)}>
         <div style={{ padding: '1px 10px' }}>
           <div className="gf-form">
             <InlineFormLabel>Timeout in seconds</InlineFormLabel>
@@ -107,12 +77,7 @@ export const InfinityConfigEditor = (props: ConfigEditorProps) => {
           <TLSConfigEditor options={options} onOptionsChange={onOptionsChange} hideTile={true} />
         </div>
       </Collapse>
-      <Collapse
-        label="Global Queries"
-        isOpen={globalsOpen}
-        collapsible={true}
-        onToggle={(e) => setGlobalsOpen(!globalsOpen)}
-      >
+      <Collapse label="Global Queries" isOpen={globalsOpen} collapsible={true} onToggle={(e) => setGlobalsOpen(!globalsOpen)}>
         <div style={{ padding: '0px 10px' }}>
           <GlobalQueryEditor options={options} onOptionsChange={onOptionsChange} />
         </div>

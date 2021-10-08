@@ -1,6 +1,6 @@
 import { getTemplateSrv } from '@grafana/runtime';
 import { CSVParser, JSONParser, XMLParser, HTMLParser } from './parsers';
-import { InfinityQuery, InfinityQuerySources, InfinityQueryType } from '../types';
+import { InfinityQuery } from '../types';
 import { Datasource } from './../datasource';
 import { normalizeURL } from './utils';
 
@@ -10,15 +10,15 @@ export class InfinityProvider {
     const query = this.target;
     query.root_selector = getTemplateSrv().replace(query.root_selector);
     switch (this.target.type) {
-      case InfinityQueryType.HTML:
+      case 'html':
         return new HTMLParser(res, query).getResults();
-      case InfinityQueryType.JSON:
-      case InfinityQueryType.GraphQL:
+      case 'json':
+      case 'graphql':
         return new JSONParser(res, query).getResults();
-      case InfinityQueryType.XML:
+      case 'xml':
         let xmlData = await new XMLParser(res, query);
         return xmlData.getResults();
-      case InfinityQueryType.CSV:
+      case 'csv':
         return new CSVParser(res, query).getResults();
       default:
         return undefined;
@@ -40,7 +40,7 @@ export class InfinityProvider {
   }
   query() {
     return new Promise((resolve, reject) => {
-      if (this.target.source === InfinityQuerySources.Inline) {
+      if (this.target.source === 'inline') {
         resolve(this.formatResults(this.target.data));
       } else {
         this.fetchResults()

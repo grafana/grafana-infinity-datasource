@@ -3,7 +3,7 @@ import { TextArea, Select } from '@grafana/ui';
 import { Datasource } from '../datasource';
 import { InfinityQueryEditor } from './query/infinityQuery';
 import { migrateLegacyQuery } from './../app/variablesQuery';
-import { VariableQuery, VariableQueryType, VariableQueryTypes, InfinityQuery, EditorMode } from '../types';
+import { VariableQuery, VariableQueryType, VariableQueryTypes, InfinityQuery } from '../types';
 
 interface VariableEditorProps {
   query: VariableQuery;
@@ -42,7 +42,7 @@ export const VariableEditor = (props: VariableEditorProps) => {
       {state.queryType === 'infinity' && state.infinityQuery && (
         <InfinityQueryEditor
           query={{ ...state.infinityQuery }}
-          mode={EditorMode.Variable}
+          mode={'variable'}
           onChange={onInfinityQueryUpdate}
           onRunQuery={() => {}}
           instanceSettings={props.datasource.instanceSettings}

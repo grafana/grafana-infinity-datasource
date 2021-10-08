@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormatSelector } from './FormatSelector';
 import { render, within } from '@testing-library/react';
-import { DefaultInfinityQuery, InfinityQueryFormat } from '../types';
+import { DefaultInfinityQuery, InfinityQuery } from '../types';
 import { Components } from '../selectors';
 
 const { Title: LabelTitle } = Components.QueryEditor.Format.Label;
@@ -11,7 +11,7 @@ describe('FormatSelector', () => {
   it('renders', () => {
     const onChange = jest.fn();
     const onRunQuery = jest.fn();
-    const query = { ...DefaultInfinityQuery };
+    const query: InfinityQuery = { ...DefaultInfinityQuery };
     const wrapper = render(<FormatSelector query={query} onChange={onChange} onRunQuery={onRunQuery} />);
     expect(wrapper).not.toBeNull();
     expect(wrapper.getByTitle(LabelTitle)).toBeInTheDocument();
@@ -21,7 +21,7 @@ describe('FormatSelector', () => {
   it('renders timeseries format', () => {
     const onChange = jest.fn();
     const onRunQuery = jest.fn();
-    const query = { ...DefaultInfinityQuery, format: InfinityQueryFormat.TimeSeries };
+    const query: InfinityQuery = { ...DefaultInfinityQuery, format: 'timeseries' };
     const wrapper = render(<FormatSelector query={query} onChange={onChange} onRunQuery={onRunQuery} />);
     expect(wrapper).not.toBeNull();
     expect(wrapper.getByTitle(LabelTitle)).toBeInTheDocument();

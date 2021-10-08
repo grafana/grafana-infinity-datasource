@@ -6,16 +6,9 @@ import { InfinityProvider } from './app/InfinityProvider';
 import { SeriesProvider } from './app/SeriesProvider';
 import { replaceVariables } from './app/queryUtils';
 import { LegacyVariableProvider, InfinityVariableProvider, migrateLegacyQuery } from './app/variablesQuery';
-import {
-  InfinityQuery,
-  GlobalInfinityQuery,
-  VariableQuery,
-  MetricFindValue,
-  InfinityInstanceSettings,
-  InfinityDataSourceJSONOptions,
-} from './types';
+import { InfinityQuery, GlobalInfinityQuery, VariableQuery, MetricFindValue, InfinityInstanceSettings, InfinityOptions } from './types';
 
-export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityDataSourceJSONOptions> {
+export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOptions> {
   instanceSettings: InfinityInstanceSettings;
   constructor(iSettings: InfinityInstanceSettings) {
     super(iSettings);
@@ -23,15 +16,8 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityDat
   }
   annotations = {};
   private overrideWithGlobalQuery(t: InfinityQuery): InfinityQuery {
-    if (
-      t.type === 'global' &&
-      t.global_query_id &&
-      this.instanceSettings.jsonData.global_queries &&
-      this.instanceSettings.jsonData.global_queries.length > 0
-    ) {
-      let matchingQuery = this.instanceSettings.jsonData.global_queries.find(
-        (q: GlobalInfinityQuery) => q.id === t.global_query_id
-      );
+    if (t.type === 'global' && t.global_query_id && this.instanceSettings.jsonData.global_queries && this.instanceSettings.jsonData.global_queries.length > 0) {
+      let matchingQuery = this.instanceSettings.jsonData.global_queries.find((q: GlobalInfinityQuery) => q.id === t.global_query_id);
       t = matchingQuery ? matchingQuery.query : t;
     }
     return t;
@@ -104,11 +90,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityDat
       switch (query.queryType) {
         case 'infinity':
           if (query.infinityQuery) {
-            const infinityVariableProvider = new InfinityVariableProvider(
-              query.infinityQuery,
-              this.instanceSettings,
-              this
-            );
+            const infinityVariableProvider = new InfinityVariableProvider(query.infinityQuery, this.instanceSettings, this);
             infinityVariableProvider.query().then((res) => {
               resolve(flatten(res));
             });

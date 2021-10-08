@@ -30,13 +30,7 @@ export const SeriesEditor = ({ query, onChange }: ScrapperProps) => {
             placeholder="Alias / Random Walk"
           />
           <label className="gf-form-label query-keyword width-6">Series Count</label>
-          <input
-            type="text"
-            className="gf-form-input min-width-12"
-            value={query.seriesCount}
-            placeholder="1"
-            onChange={(e) => onInputTextChange(+e.target.value, `seriesCount`)}
-          ></input>
+          <input type="text" className="gf-form-input min-width-12" value={query.seriesCount} placeholder="1" onChange={(e) => onInputTextChange(+e.target.value, `seriesCount`)}></input>
         </div>
       </div>
       <div className="gf-form-inline">

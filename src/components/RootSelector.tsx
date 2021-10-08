@@ -9,7 +9,7 @@ interface RootSelectorProps {
 export const RootSelector = (props: RootSelectorProps) => {
   const { query, onChange, onRunQuery } = props;
   const [root_selector, setRootSelector] = useState(query.root_selector);
-  const LABEL_WIDTH = props.mode === EditorMode.Variable ? 10 : 8;
+  const LABEL_WIDTH = props.mode === 'variable' ? 10 : 8;
   const onRootSelectorChange = () => {
     onChange({ ...query, root_selector });
     onRunQuery();

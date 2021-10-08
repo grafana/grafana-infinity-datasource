@@ -3,19 +3,13 @@ import { SelectableValue } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
 import { InfinityProvider } from './../InfinityProvider';
 import { IsValidInfinityQuery, replaceVariables } from '../queryUtils';
-import {
-  InfinityQuery,
-  InfinityInstanceSettings,
-  VariableQuery,
-  VariableQueryType,
-  DefaultInfinityQuery,
-} from './../../types';
 import { CollectionVariable } from './Collection';
 import { CollectionLookupVariable } from './CollectionLookup';
 import { JoinVariable } from './Join';
 import { RandomVariable } from './Random';
 import { UnixTimeStampVariable } from './UnixTimeStamp';
 import { Datasource } from './../../datasource';
+import { InfinityQuery, InfinityInstanceSettings, VariableQuery, DefaultInfinityQuery } from './../../types';
 
 const getTemplateVariablesFromResult = (res: any): Array<SelectableValue<string>> => {
   if (res.columns && res.columns.length > 0) {
@@ -45,7 +39,7 @@ export const migrateLegacyQuery = (query: VariableQuery | string): VariableQuery
   if (typeof query === 'string') {
     return {
       query: query,
-      queryType: VariableQueryType.Legacy,
+      queryType: 'legacy',
       infinityQuery: {
         ...DefaultInfinityQuery,
         refId: 'variable',
@@ -59,7 +53,7 @@ export const migrateLegacyQuery = (query: VariableQuery | string): VariableQuery
   } else {
     return {
       query: '',
-      queryType: VariableQueryType.Legacy,
+      queryType: 'legacy',
       infinityQuery: defaultsDeep(query.infinityQuery, DefaultInfinityQuery),
     };
   }
@@ -72,11 +66,7 @@ interface VariableProvider {
 export class InfinityVariableProvider implements VariableProvider {
   infinityQuery: InfinityQuery;
   instanceSettings: InfinityInstanceSettings;
-  constructor(
-    infinityQuery: InfinityQuery,
-    instanceSettings: InfinityInstanceSettings,
-    private datasource: Datasource
-  ) {
+  constructor(infinityQuery: InfinityQuery, instanceSettings: InfinityInstanceSettings, private datasource: Datasource) {
     this.infinityQuery = infinityQuery;
     this.instanceSettings = instanceSettings;
   }

@@ -1,9 +1,9 @@
 import React from 'react';
 import { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 import { Switch, InlineFormLabel, Input, Button, useTheme } from '@grafana/ui';
-import { InfinityDataSourceJSONOptions } from './../../types';
+import { InfinityOptions } from './../../types';
 
-export type LocalSourcesEditorProps = DataSourcePluginOptionsEditorProps<InfinityDataSourceJSONOptions>;
+export type LocalSourcesEditorProps = DataSourcePluginOptionsEditorProps<InfinityOptions>;
 
 export const LocalSourcesEditor = (props: LocalSourcesEditorProps) => {
   const theme = useTheme();
@@ -78,12 +78,7 @@ export const LocalSourcesEditor = (props: LocalSourcesEditorProps) => {
           Local sources enabled
         </InlineFormLabel>
         <div style={switchContainerStyle}>
-          <Switch
-            css={{}}
-            className="gf-form"
-            value={props.options.jsonData.local_sources_options?.enabled || false}
-            onChange={(e) => onLocalSourcesEnableChanged(e.currentTarget.checked)}
-          />
+          <Switch css={{}} className="gf-form" value={props.options.jsonData.local_sources_options?.enabled || false} onChange={(e) => onLocalSourcesEnableChanged(e.currentTarget.checked)} />
         </div>
       </div>
       {props.options.jsonData.local_sources_options?.enabled && (
@@ -104,13 +99,7 @@ export const LocalSourcesEditor = (props: LocalSourcesEditorProps) => {
                     label={`Path ${index + 1}`}
                     placeholder="/some-valid-path"
                   />
-                  <Button
-                    className="width-2"
-                    variant="destructive"
-                    icon="trash-alt"
-                    type="button"
-                    onClick={() => onPathDelete(index)}
-                  />
+                  <Button className="width-2" variant="destructive" icon="trash-alt" type="button" onClick={() => onPathDelete(index)} />
                 </div>
               </>
             );

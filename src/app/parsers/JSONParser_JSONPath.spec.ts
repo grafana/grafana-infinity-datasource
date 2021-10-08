@@ -1,5 +1,4 @@
 import { JSONParser } from './JSONParser';
-import { InfinityQuerySources, InfinityQueryFormat, InfinityQueryType, ScrapColumnFormat } from './../../types';
 
 const JSONResults = new JSONParser(
   {
@@ -25,10 +24,10 @@ const JSONResults = new JSONParser(
   },
   {
     refId: '',
-    type: InfinityQueryType.JSON,
-    source: InfinityQuerySources.Inline,
+    type: 'json',
+    source: 'inline',
     data: '',
-    format: InfinityQueryFormat.Table,
+    format: 'table',
     url: '',
     url_options: {
       method: 'GET',
@@ -37,7 +36,7 @@ const JSONResults = new JSONParser(
     columns: [
       {
         text: 'Name',
-        type: ScrapColumnFormat.String,
+        type: 'string',
         selector: 'name',
       },
     ],
@@ -76,10 +75,10 @@ const JSONResults1 = new JSONParser(
   },
   {
     refId: '',
-    type: InfinityQueryType.JSON,
-    source: InfinityQuerySources.Inline,
+    type: 'json',
+    source: 'inline',
     data: '',
-    format: InfinityQueryFormat.Table,
+    format: 'table',
     url: '',
     url_options: {
       method: 'GET',
@@ -88,12 +87,12 @@ const JSONResults1 = new JSONParser(
     columns: [
       {
         text: 'Name',
-        type: ScrapColumnFormat.String,
+        type: 'string',
         selector: 'name',
       },
       {
         text: 'Age',
-        type: ScrapColumnFormat.Number,
+        type: 'number',
         selector: 'age',
       },
     ],
@@ -132,10 +131,10 @@ const JSONResults2 = new JSONParser(
   },
   {
     refId: '',
-    type: InfinityQueryType.JSON,
-    source: InfinityQuerySources.Inline,
+    type: 'json',
+    source: 'inline',
     data: '',
-    format: InfinityQueryFormat.Table,
+    format: 'table',
     url: '',
     url_options: {
       method: 'GET',
@@ -144,12 +143,12 @@ const JSONResults2 = new JSONParser(
     columns: [
       {
         text: 'Name',
-        type: ScrapColumnFormat.String,
+        type: 'string',
         selector: 'name',
       },
       {
         text: 'Age',
-        type: ScrapColumnFormat.Number,
+        type: 'number',
         selector: 'age',
       },
     ],
@@ -188,10 +187,10 @@ const JSONResults3 = new JSONParser(
   },
   {
     refId: '',
-    type: InfinityQueryType.JSON,
-    source: InfinityQuerySources.Inline,
+    type: 'json',
+    source: 'inline',
     data: '',
-    format: InfinityQueryFormat.Table,
+    format: 'table',
     url: '',
     url_options: {
       method: 'GET',
@@ -200,17 +199,17 @@ const JSONResults3 = new JSONParser(
     columns: [
       {
         text: 'Name',
-        type: ScrapColumnFormat.String,
+        type: 'string',
         selector: 'name',
       },
       {
         text: 'Age',
-        type: ScrapColumnFormat.Number,
+        type: 'number',
         selector: 'age',
       },
       {
         text: 'Gender',
-        type: ScrapColumnFormat.String,
+        type: 'string',
         selector: 'gender',
       },
     ],

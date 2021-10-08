@@ -1,6 +1,6 @@
 import { sample } from 'lodash';
 import * as math from 'mathjs';
-import { InfinityQuery, dataPoint, DataOverride, InfinityQuerySources } from '../types';
+import { InfinityQuery, dataPoint, DataOverride } from '../types';
 
 const LOREM = `
 Lorem ipsum dolor sit amet consectetur adipiscing elit Vivamus nec condimentum ex non volutpat ante Aenean in velit nulla In hac habitasse platea dictumst Vestibulum congue sapien pretium neque condimentum rutrum Sed metus nunc condimentum ut velit non consectetur posuere nulla Phasellus feugiat porttitor odio id laoreet risus tincidunt ac Sed quis felis fermentum pulvinar justo vitae fringilla lacus Etiam molestie urna magna sit amet semper diam pharetra at Aliquam hendrerit enim a varius ullamcorper Nulla eu pulvinar mi
@@ -126,10 +126,7 @@ export class SeriesProvider {
   query(startTime: number, endTime: number) {
     return new Promise((resolve, reject) => {
       let result = [];
-      if (
-        this.target.source === InfinityQuerySources.RandomWalk ||
-        this.target.source === InfinityQuerySources.Expression
-      ) {
+      if (this.target.source === 'random-walk' || this.target.source === 'expression') {
         if (this.target.seriesCount && this.target.seriesCount > 1) {
           for (let i = 1; i <= this.target.seriesCount; i++) {
             let seriesName = this.target.alias || sample(RANDOM_WORDS) || 'Random Walk';
@@ -140,7 +137,7 @@ export class SeriesProvider {
             }
             let rw = new RandomWalk(startTime, endTime);
             let datapoints = rw.datapoints;
-            if (this.target.source === InfinityQuerySources.Expression) {
+            if (this.target.source === 'expression') {
               let expression = this.target.expression || `$i`;
               expression = expression.replace(/\${__series.index}/g, (i - 1).toString());
               datapoints = rw.mapWithExpression(expression);
@@ -153,7 +150,7 @@ export class SeriesProvider {
         } else {
           let rw = new RandomWalk(startTime, endTime);
           let datapoints = rw.datapoints;
-          if (this.target.source === InfinityQuerySources.Expression) {
+          if (this.target.source === 'expression') {
             let expression = this.target.expression || `$i`;
             expression = expression.replace(/\${__series.index}/g, '0');
             datapoints = rw.mapWithExpression(expression);

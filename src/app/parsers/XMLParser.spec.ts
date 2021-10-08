@@ -1,12 +1,11 @@
 import { XMLParser } from './XMLParser';
-import { InfinityQuerySources, InfinityQueryFormat, InfinityQueryType, ScrapColumnFormat } from './../../types';
 
 const XMLResults1 = new XMLParser('', {
   refId: '',
-  type: InfinityQueryType.XML,
-  source: InfinityQuerySources.Inline,
+  type: 'xml',
+  source: 'inline',
   data: '',
-  format: InfinityQueryFormat.Table,
+  format: 'table',
   url: '',
   url_options: {
     method: 'GET',
@@ -36,10 +35,10 @@ const XMLResults2 = new XMLParser(
 </users>`,
   {
     refId: '',
-    type: InfinityQueryType.XML,
-    source: InfinityQuerySources.Inline,
+    type: 'xml',
+    source: 'inline',
     data: '',
-    format: InfinityQueryFormat.Table,
+    format: 'table',
     url: '',
     url_options: {
       method: 'GET',
@@ -49,12 +48,12 @@ const XMLResults2 = new XMLParser(
       {
         selector: 'name',
         text: 'Name',
-        type: ScrapColumnFormat.String,
+        type: 'string',
       },
       {
         selector: '$.age',
         text: 'Name',
-        type: ScrapColumnFormat.String,
+        type: 'string',
       },
     ],
   }
@@ -77,10 +76,10 @@ const XMLResults3 = new XMLParser(
   </users>`,
   {
     refId: '',
-    type: InfinityQueryType.XML,
-    source: InfinityQuerySources.Inline,
+    type: 'xml',
+    source: 'inline',
     data: '',
-    format: InfinityQueryFormat.Table,
+    format: 'table',
     url: '',
     url_options: {
       method: 'GET',
@@ -90,7 +89,7 @@ const XMLResults3 = new XMLParser(
       {
         selector: '_',
         text: 'Name',
-        type: ScrapColumnFormat.String,
+        type: 'string',
       },
     ],
   }

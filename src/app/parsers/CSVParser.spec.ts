@@ -1,12 +1,11 @@
 import { CSVParser } from './CSVParser';
-import { InfinityQuerySources, InfinityQueryFormat, InfinityQueryType, ScrapColumnFormat } from './../../types';
 
 const CSVResults1 = new CSVParser(``, {
   refId: '',
-  type: InfinityQueryType.CSV,
-  source: InfinityQuerySources.Inline,
+  type: 'csv',
+  source: 'inline',
   data: '',
-  format: InfinityQueryFormat.Table,
+  format: 'table',
   url: '',
   url_options: {
     method: 'GET',
@@ -30,10 +29,10 @@ china,11
 `,
   {
     refId: '',
-    type: InfinityQueryType.CSV,
-    source: InfinityQuerySources.Inline,
+    type: 'csv',
+    source: 'inline',
     data: '',
-    format: InfinityQueryFormat.Table,
+    format: 'table',
     url: '',
     url_options: {
       method: 'GET',
@@ -42,12 +41,12 @@ china,11
     columns: [
       {
         text: 'Country',
-        type: ScrapColumnFormat.String,
+        type: 'string',
         selector: 'country',
       },
       {
         text: 'Population',
-        type: ScrapColumnFormat.Number,
+        type: 'number',
         selector: 'population',
       },
     ],
@@ -83,10 +82,10 @@ year,country,population
 `,
   {
     refId: '',
-    type: InfinityQueryType.CSV,
-    source: InfinityQuerySources.Inline,
+    type: 'csv',
+    source: 'inline',
     data: '',
-    format: InfinityQueryFormat.Table,
+    format: 'table',
     url: '',
     url_options: {
       method: 'GET',
@@ -95,17 +94,17 @@ year,country,population
     columns: [
       {
         text: 'Year',
-        type: ScrapColumnFormat.Timestamp,
+        type: 'timestamp',
         selector: 'year',
       },
       {
         text: 'Country',
-        type: ScrapColumnFormat.String,
+        type: 'string',
         selector: 'country',
       },
       {
         text: 'Population',
-        type: ScrapColumnFormat.Number,
+        type: 'number',
         selector: 'population',
       },
     ],
@@ -143,10 +142,10 @@ year,country,population
 `,
   {
     refId: '',
-    type: InfinityQueryType.CSV,
-    source: InfinityQuerySources.Inline,
+    type: 'csv',
+    source: 'inline',
     data: '',
-    format: InfinityQueryFormat.Table,
+    format: 'table',
     url: '',
     url_options: {
       method: 'GET',

@@ -1,7 +1,7 @@
 import { forEach, get, toNumber } from 'lodash';
 import { parseString } from 'xml2js';
 import { InfinityParser } from './InfinityParser';
-import { InfinityQuery, ScrapColumn, GrafanaTableRow, ScrapColumnFormat } from './../../types';
+import { InfinityQuery, InfinityColumn, GrafanaTableRow } from './../../types';
 
 export class XMLParser extends InfinityParser {
   constructor(XMLResponse: any | string, target: InfinityQuery, endTime?: Date) {
@@ -28,15 +28,15 @@ export class XMLParser extends InfinityParser {
   private constructTableData(XMLResponse: any[]) {
     forEach(XMLResponse, (r) => {
       const row: GrafanaTableRow = [];
-      this.target.columns.forEach((c: ScrapColumn) => {
+      this.target.columns.forEach((c: InfinityColumn) => {
         let value = get(r, c.selector, '');
-        if (c.type === ScrapColumnFormat.Timestamp) {
+        if (c.type === 'timestamp') {
           value = new Date(value + '');
-        } else if (c.type === ScrapColumnFormat.Timestamp_Epoch) {
+        } else if (c.type === 'timestamp_epoch') {
           value = new Date(parseInt(value, 10));
-        } else if (c.type === ScrapColumnFormat.Timestamp_Epoch_Seconds) {
+        } else if (c.type === 'timestamp_epoch_s') {
           value = new Date(parseInt(value, 10) * 1000);
-        } else if (c.type === ScrapColumnFormat.Number) {
+        } else if (c.type === 'number') {
           value = value === '' ? null : +value;
         }
         if (typeof r === 'string') {
@@ -59,7 +59,7 @@ export class XMLParser extends InfinityParser {
     });
   }
   private constructTimeSeriesData(XMLResponse: object, endTime: Date | undefined) {
-    this.NumbersColumns.forEach((metricColumn: ScrapColumn) => {
+    this.NumbersColumns.forEach((metricColumn: InfinityColumn) => {
       forEach(XMLResponse, (r) => {
         let seriesName = this.StringColumns.map((c) => r[c.selector]).join(' ');
         if (this.NumbersColumns.length > 1) {
@@ -72,11 +72,11 @@ export class XMLParser extends InfinityParser {
         let timestamp = endTime ? endTime.getTime() : new Date().getTime();
         if (this.TimeColumns.length >= 1) {
           const FirstTimeColumn = this.TimeColumns[0];
-          if (FirstTimeColumn.type === ScrapColumnFormat.Timestamp) {
+          if (FirstTimeColumn.type === 'timestamp') {
             timestamp = new Date(get(r, FirstTimeColumn.selector) + '').getTime();
-          } else if (FirstTimeColumn.type === ScrapColumnFormat.Timestamp_Epoch) {
+          } else if (FirstTimeColumn.type === 'timestamp_epoch') {
             timestamp = new Date(parseInt(get(r, FirstTimeColumn.selector), 10)).getTime();
-          } else if (FirstTimeColumn.type === ScrapColumnFormat.Timestamp_Epoch_Seconds) {
+          } else if (FirstTimeColumn.type === 'timestamp_epoch_s') {
             timestamp = new Date(parseInt(get(r, FirstTimeColumn.selector), 10) * 1000).getTime();
           }
         }
@@ -90,7 +90,7 @@ export class XMLParser extends InfinityParser {
   }
   private constructSingleTableData(XMLResponse: object) {
     const row: GrafanaTableRow = [];
-    this.target.columns.forEach((c: ScrapColumn) => {
+    this.target.columns.forEach((c: InfinityColumn) => {
       row.push(get(XMLResponse, c.selector, ''));
     });
     this.rows.push(row);

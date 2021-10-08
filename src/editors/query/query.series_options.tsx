@@ -51,13 +51,7 @@ export const SeriesAdvancedOptions = ({ query, onChange }: SeriesAdvancedOptions
         ) : (
           <>
             <label className="gf-form-label query-keyword width-8">Advanced Options</label>
-            <label
-              role="button"
-              onClick={() => setPopupState(!popupState)}
-              title="Advanced Options"
-              className="btn btn-secondary btn-small"
-              style={{ marginTop: '4px', padding: '10px' }}
-            >
+            <label role="button" onClick={() => setPopupState(!popupState)} title="Advanced Options" className="btn btn-secondary btn-small" style={{ marginTop: '4px', padding: '10px' }}>
               Advanced Options <i className="fa fa-expand fa-large btn btn-small"></i>
             </label>
             <Modal
@@ -118,18 +112,10 @@ export const SeriesAdvancedOptions = ({ query, onChange }: SeriesAdvancedOptions
                             onChange={(e) => onTextChange(e.target.value, `dataOverrides[${index}].override`)}
                             placeholder="Override value"
                           ></input>
-                          <span
-                            className="btn btn-success btn-small"
-                            style={{ margin: '5px' }}
-                            onClick={() => addDataOverride()}
-                          >
+                          <span className="btn btn-success btn-small" style={{ margin: '5px' }} onClick={() => addDataOverride()}>
                             +
                           </span>
-                          <span
-                            className="btn btn-danger btn-small"
-                            style={{ margin: '5px' }}
-                            onClick={() => removeDataOverride(index)}
-                          >
+                          <span className="btn btn-danger btn-small" style={{ margin: '5px' }} onClick={() => removeDataOverride(index)}>
                             X
                           </span>
                         </div>

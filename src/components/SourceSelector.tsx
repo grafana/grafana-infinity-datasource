@@ -17,12 +17,7 @@ export const SourceSelector = (props: SourceSelectorProps) => {
     <>
       <label className={`gf-form-label query-keyword width-4`}>{query.type === 'series' ? 'Scenario' : 'Source'}</label>
       <div className="select-wrapper">
-        <Select
-          className="width-8"
-          options={supportedSources}
-          value={query.source || InfinityQuerySources.URL}
-          onChange={(e) => onSourceChange(e.value as InfinityQuerySources)}
-        ></Select>
+        <Select className="width-8" options={supportedSources} value={query.source || 'url'} onChange={(e) => onSourceChange(e.value as InfinityQuerySources)}></Select>
       </div>
     </>
   );

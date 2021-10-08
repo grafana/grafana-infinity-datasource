@@ -230,11 +230,7 @@ export const URLOptionsEditor = ({ query, onChange, onRunQuery }: URLOptionsProp
                             )}
                           </div>
                           <div className="gf-form-inline">
-                            <div
-                              className="btn btn-success btn-medium"
-                              style={{ marginTop: '5px' }}
-                              onClick={(e) => setPopupOpenStatus(false)}
-                            >
+                            <div className="btn btn-success btn-medium" style={{ marginTop: '5px' }} onClick={(e) => setPopupOpenStatus(false)}>
                               OK
                             </div>
                             <br />
@@ -280,10 +276,7 @@ export const URLOptionsEditor = ({ query, onChange, onRunQuery }: URLOptionsProp
                                     ></Input>
                                   </td>
                                   <td>
-                                    <button
-                                      className="btn btn-secondary btn-small"
-                                      onClick={(e) => onQueryParamDelete(index)}
-                                    >
+                                    <button className="btn btn-secondary btn-small" onClick={(e) => onQueryParamDelete(index)}>
                                       <i className="fa fa-trash"></i>
                                     </button>
                                   </td>
@@ -332,10 +325,7 @@ export const URLOptionsEditor = ({ query, onChange, onRunQuery }: URLOptionsProp
                                     ></Input>
                                   </td>
                                   <td>
-                                    <button
-                                      className="btn btn-secondary btn-small"
-                                      onClick={(e) => onQueryHeaderDelete(index)}
-                                    >
+                                    <button className="btn btn-secondary btn-small" onClick={(e) => onQueryHeaderDelete(index)}>
                                       <i className="fa fa-trash"></i>
                                     </button>
                                   </td>

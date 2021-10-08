@@ -1,6 +1,6 @@
 import { getTemplateSrv } from '@grafana/runtime';
 import { ScopedVars } from '@grafana/data';
-import { InfinityQuery, InfinityQuerySources, InfinityQueryType, InfinityInstanceSettings } from '../types';
+import { InfinityQuery, InfinityInstanceSettings } from '../types';
 
 const replaceVariable = (input: string, scopedVars: ScopedVars): string => {
   return getTemplateSrv().replace(input || '', scopedVars, 'glob');
@@ -37,19 +37,9 @@ export const replaceVariables = (query: InfinityQuery, scopedVars: ScopedVars): 
 };
 
 export const IsValidInfinityQuery = (query: InfinityQuery): boolean => {
-  if (
-    query &&
-    query.type !== undefined &&
-    [InfinityQueryType.CSV, InfinityQueryType.JSON, InfinityQueryType.XML].includes(query.type) &&
-    query.source === InfinityQuerySources.URL
-  ) {
+  if (query && query.type !== undefined && ['csv', 'json', 'xml'].includes(query.type) && query.source === 'url') {
     return query.url !== undefined && query.url !== '';
-  } else if (
-    query &&
-    query.type !== undefined &&
-    [InfinityQueryType.CSV, InfinityQueryType.JSON, InfinityQueryType.XML].includes(query.type) &&
-    query.source === InfinityQuerySources.Inline
-  ) {
+  } else if (query && query.type !== undefined && ['csv', 'json', 'xml'].includes(query.type) && query.source === 'inline') {
     return query.data !== undefined && query.data !== '';
   } else {
     return query !== undefined && query.type !== undefined;

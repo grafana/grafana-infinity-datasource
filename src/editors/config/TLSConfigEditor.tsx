@@ -2,9 +2,9 @@ import React from 'react';
 import { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 import { InlineFormLabel, Switch, useTheme, LegacyForms } from '@grafana/ui';
 import { SecureTextArea } from './SecureTextArea';
-import { InfinityDataSourceJSONOptions, InfinityDataSourceSecureJSONOptions } from './../../types';
+import { InfinityOptions, InfinitySecureOptions } from './../../types';
 
-interface TLSConfigEditorProps extends DataSourcePluginOptionsEditorProps<InfinityDataSourceJSONOptions> {
+interface TLSConfigEditorProps extends DataSourcePluginOptionsEditorProps<InfinityOptions> {
   hideTile?: boolean;
 }
 
@@ -13,11 +13,8 @@ export const TLSConfigEditor = (props: TLSConfigEditorProps) => {
   const { FormField } = LegacyForms;
   const { options, onOptionsChange } = props;
   const { jsonData, secureJsonFields } = options;
-  const secureJsonData = (options.secureJsonData || {}) as InfinityDataSourceSecureJSONOptions;
-  const onTLSSettingsChange = (
-    key: keyof Pick<InfinityDataSourceJSONOptions, 'tlsSkipVerify' | 'tlsAuth' | 'tlsAuthWithCACert'>,
-    value: boolean
-  ) => {
+  const secureJsonData = (options.secureJsonData || {}) as InfinitySecureOptions;
+  const onTLSSettingsChange = (key: keyof Pick<InfinityOptions, 'tlsSkipVerify' | 'tlsAuth' | 'tlsAuthWithCACert'>, value: boolean) => {
     onOptionsChange({
       ...options,
       jsonData: {
@@ -35,7 +32,7 @@ export const TLSConfigEditor = (props: TLSConfigEditorProps) => {
       },
     });
   };
-  const onCertificateChange = (key: keyof Omit<InfinityDataSourceSecureJSONOptions, 'password'>, value: string) => {
+  const onCertificateChange = (key: keyof Omit<InfinitySecureOptions, 'password'>, value: string) => {
     onOptionsChange({
       ...options,
       secureJsonData: {
@@ -44,7 +41,7 @@ export const TLSConfigEditor = (props: TLSConfigEditorProps) => {
       },
     });
   };
-  const onCertificateReset = (key: keyof Omit<InfinityDataSourceSecureJSONOptions, 'password'>) => {
+  const onCertificateReset = (key: keyof Omit<InfinitySecureOptions, 'password'>) => {
     onOptionsChange({
       ...options,
       secureJsonFields: {
@@ -72,12 +69,7 @@ export const TLSConfigEditor = (props: TLSConfigEditorProps) => {
             Skip TLS Verify
           </InlineFormLabel>
           <div style={switchContainerStyle}>
-            <Switch
-              css={{}}
-              className="gf-form"
-              value={jsonData.tlsSkipVerify || false}
-              onChange={(e) => onTLSSettingsChange('tlsSkipVerify', e.currentTarget.checked)}
-            />
+            <Switch css={{}} className="gf-form" value={jsonData.tlsSkipVerify || false} onChange={(e) => onTLSSettingsChange('tlsSkipVerify', e.currentTarget.checked)} />
           </div>
         </div>
         <div className="gf-form">
@@ -85,12 +77,7 @@ export const TLSConfigEditor = (props: TLSConfigEditorProps) => {
             With CA Cert
           </InlineFormLabel>
           <div style={switchContainerStyle}>
-            <Switch
-              css={{}}
-              className="gf-form"
-              value={jsonData.tlsAuthWithCACert || false}
-              onChange={(e) => onTLSSettingsChange('tlsAuthWithCACert', e.currentTarget.checked)}
-            />
+            <Switch css={{}} className="gf-form" value={jsonData.tlsAuthWithCACert || false} onChange={(e) => onTLSSettingsChange('tlsAuthWithCACert', e.currentTarget.checked)} />
           </div>
         </div>
         <div className="gf-form">
@@ -98,12 +85,7 @@ export const TLSConfigEditor = (props: TLSConfigEditorProps) => {
             TLS Client Auth
           </InlineFormLabel>
           <div style={switchContainerStyle}>
-            <Switch
-              css={{}}
-              className="gf-form"
-              value={jsonData.tlsAuth || false}
-              onChange={(e) => onTLSSettingsChange('tlsAuth', e.currentTarget.checked)}
-            />
+            <Switch css={{}} className="gf-form" value={jsonData.tlsAuth || false} onChange={(e) => onTLSSettingsChange('tlsAuth', e.currentTarget.checked)} />
           </div>
         </div>
         {jsonData.tlsAuthWithCACert && (
@@ -120,14 +102,7 @@ export const TLSConfigEditor = (props: TLSConfigEditorProps) => {
         {jsonData.tlsAuth && (
           <>
             <div className="gf-form gf-form--grow">
-              <FormField
-                label="ServerName"
-                labelWidth={8}
-                inputWidth={50}
-                placeholder="domain.example.com"
-                value={jsonData.serverName}
-                onChange={(e) => onServerNameChange(e.currentTarget.value)}
-              />
+              <FormField label="ServerName" labelWidth={8} inputWidth={50} placeholder="domain.example.com" value={jsonData.serverName} onChange={(e) => onServerNameChange(e.currentTarget.value)} />
             </div>
             <SecureTextArea
               configured={!!secureJsonFields?.tlsClientCert}

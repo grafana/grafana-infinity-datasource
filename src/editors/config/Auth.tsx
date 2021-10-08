@@ -1,16 +1,16 @@
 import React from 'react';
 import { DataSourcePluginOptionsEditorProps, onUpdateDatasourceSecureJsonDataOption } from '@grafana/data';
 import { InlineFormLabel, Switch, useTheme, LegacyForms } from '@grafana/ui';
-import { InfinityDataSourceJSONOptions, InfinityDataSourceSecureJSONOptions } from '../../types';
+import { InfinityOptions, InfinitySecureOptions } from '../../types';
 
-export type Props = DataSourcePluginOptionsEditorProps<InfinityDataSourceJSONOptions>;
+export type Props = DataSourcePluginOptionsEditorProps<InfinityOptions>;
 
 export const AuthEditor = (props: Props) => {
   const theme = useTheme();
   const { FormField, SecretFormField } = LegacyForms;
   const { options, onOptionsChange } = props;
   const { secureJsonFields } = options;
-  const secureJsonData = (options.secureJsonData || {}) as InfinityDataSourceSecureJSONOptions;
+  const secureJsonData = (options.secureJsonData || {}) as InfinitySecureOptions;
   const onBasicAuthChange = (basicAuth: boolean) => {
     onOptionsChange({
       ...options,
@@ -49,23 +49,12 @@ export const AuthEditor = (props: Props) => {
           Basic Auth
         </InlineFormLabel>
         <div style={switchContainerStyle}>
-          <Switch
-            css={{}}
-            className="gf-form"
-            value={props.options.basicAuth || false}
-            onChange={(e) => onBasicAuthChange(e.currentTarget.checked)}
-          />
+          <Switch css={{}} className="gf-form" value={props.options.basicAuth || false} onChange={(e) => onBasicAuthChange(e.currentTarget.checked)} />
         </div>
       </div>
       {props.options.basicAuth && (
         <div className="gf-form">
-          <FormField
-            label="User Name"
-            placeholder="username"
-            labelWidth={8}
-            value={props.options.basicAuthUser || ''}
-            onChange={(e) => onUserNameChange(e.currentTarget.value)}
-          ></FormField>
+          <FormField label="User Name" placeholder="username" labelWidth={8} value={props.options.basicAuthUser || ''} onChange={(e) => onUserNameChange(e.currentTarget.value)}></FormField>
           <SecretFormField
             labelWidth={12}
             inputWidth={10}
