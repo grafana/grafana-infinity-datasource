@@ -2,7 +2,7 @@ import React from 'react';
 import { cloneDeep } from 'lodash';
 import { Button } from '@grafana/ui';
 import { ScrapColumn, InfinityQuery, ScrapColumnFormat, EditorMode } from '../../types';
-import { QueryColumnItem } from './../../components/app/QueryColumnItem';
+import { QueryColumnItem } from './../../components/QueryColumnItem';
 
 interface QueryColumnProps {
   query: InfinityQuery;

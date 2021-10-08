@@ -1,8 +1,8 @@
 import React from 'react';
 import { URLOptionsEditor } from './query.url.options';
-import { URLField } from './../../components/app/URLField';
-import { DataField } from './../../components/app/DataField';
-import { RootSelector } from './../../components/app/RootSelector';
+import { URLField } from './../../components/URLField';
+import { DataField } from './../../components/DataField';
+import { RootSelector } from './../../components/RootSelector';
 import { InfinityQuery, EditorMode } from '../../types';
 
 interface ScrapperProps {
