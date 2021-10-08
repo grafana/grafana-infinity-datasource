@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Modal, Select } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
 import { filterOperators } from '../../app/parsers/filter';
+import { isDataQuery } from './../../app/utils';
 import { InfinityQuery, InfinityFilter, FilterOperator } from '../../types';
 
 interface TableFiltersProps {
@@ -13,6 +14,9 @@ interface TableFiltersProps {
 export const TableFilter = (props: TableFiltersProps) => {
   const [popupOpenStatus, setPopupOpenStatus] = useState(false);
   const { query, onChange, onRunQuery } = props;
+  if (!isDataQuery(query)) {
+    return <></>;
+  }
   const getFields = () => {
     return query.columns.map((col) => {
       return {
@@ -57,9 +61,7 @@ export const TableFilter = (props: TableFiltersProps) => {
   };
   return (
     <div className="gf-form">
-      <label className="gf-form-label query-keyword width-8">
-        Results Filter {query.filters && query.filters.length > 0 ? `( ${query.filters.length} )` : ''}
-      </label>
+      <label className="gf-form-label query-keyword width-8">Results Filter {query.filters && query.filters.length > 0 ? `( ${query.filters.length} )` : ''}</label>
       <label
         role="button"
         title={query.filters && query.filters.length > 0 ? query.filters.length + ' filters configured' : ''}
@@ -89,13 +91,7 @@ export const TableFilter = (props: TableFiltersProps) => {
                   value={filterOperators.find((f) => f.value === filter.operator) || filterOperators[0]}
                   onChange={(e) => onFilterOperatorChange(index, e)}
                 ></Select>
-                <input
-                  type="text"
-                  className="gf-form-input min-width-10 width-10"
-                  value={filter.value[0]}
-                  onChange={(e) => onFilterValueChange(index, 0, e.target.value)}
-                  placeholder="Value"
-                ></input>
+                <input type="text" className="gf-form-input min-width-10 width-10" value={filter.value[0]} onChange={(e) => onFilterValueChange(index, 0, e.target.value)} placeholder="Value"></input>
                 <span className="btn btn-success btn-small" style={{ margin: '5px' }} onClick={addFilter}>
                   +
                 </span>
@@ -127,11 +123,7 @@ export const TableFilter = (props: TableFiltersProps) => {
         <span className="btn btn-success btn-medium" style={{ marginTop: '5px' }} onClick={closePopup}>
           OK
         </span>
-        <span
-          className="btn btn-primary btn-medium"
-          style={{ marginTop: '5px', marginRight: '10px' }}
-          onClick={addFilter}
-        >
+        <span className="btn btn-primary btn-medium" style={{ marginTop: '5px', marginRight: '10px' }} onClick={addFilter}>
           Add filter
         </span>
         <br />

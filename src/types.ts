@@ -1,5 +1,131 @@
 import { DataQuery, SelectableValue, DataSourceJsonData, DataSourceInstanceSettings } from '@grafana/data';
-export const IGNORE_URL = '__IGNORE_URL__';
+
+//#region Config
+export interface GlobalInfinityQuery {
+  name: string;
+  id: string;
+  query: InfinityQuery;
+}
+export interface InfinityOptions extends DataSourceJsonData {
+  tlsSkipVerify?: boolean;
+  tlsAuth?: boolean;
+  serverName?: string;
+  tlsAuthWithCACert?: boolean;
+  global_queries?: GlobalInfinityQuery[];
+  timeoutInSeconds?: number;
+  local_sources_options?: {
+    enabled: boolean;
+    allowed_paths?: string[];
+  };
+}
+
+export interface InfinitySecureOptions {
+  basicAuthPassword?: string;
+  tlsCACert?: string;
+  tlsClientCert?: string;
+  tlsClientKey?: string;
+}
+export interface SecureField {
+  id: string;
+  name: string;
+  value: string;
+  configured: boolean;
+}
+//#endregion
+
+//#region Query
+export type InfinityQueryType = 'json' | 'csv' | 'xml' | 'graphql' | 'html' | 'series' | 'global';
+export type InfinityQuerySources = 'url' | 'inline' | 'random-walk' | 'expression'; // | 'local-fs';
+export type InfinityColumnFormat = 'string' | 'number' | 'timestamp' | 'timestamp_epoch' | 'timestamp_epoch_s';
+export type InfinityQueryFormat = 'table' | 'timeseries' | 'dataframe';
+export type InfinityQueryBase<T extends InfinityQueryType> = { type: T } & DataQuery;
+export type InfinityQueryWithSource<S extends InfinityQuerySources> = { source: S } & DataQuery;
+export type InfinityQueryWithURLSource<T extends InfinityQueryType> = {
+  url: string;
+  url_options: {
+    method: 'GET' | 'POST';
+    data?: string;
+    params?: Array<{
+      key: string;
+      value: string;
+    }>;
+    headers?: Array<{
+      key: string;
+      value: string;
+    }>;
+  };
+} & InfinityQueryWithSource<'url'> &
+  InfinityQueryBase<T>;
+export type InfinityQueryWithInlineSource<T extends InfinityQueryType> = {
+  data: string;
+} & InfinityQueryWithSource<'inline'> &
+  InfinityQueryBase<T>;
+export type InfinityQueryWithRandomWalkSource = {} & InfinityQueryWithSource<'random-walk'>;
+export type InfinityQueryWithExpressionSource = {} & InfinityQueryWithSource<'expression'>;
+export type InfinityQueryWithDataSource<T extends InfinityQueryType> = {
+  root_selector: string;
+  columns: InfinityColumn[];
+  filters?: InfinityFilter[];
+  format: InfinityQueryFormat;
+} & (InfinityQueryWithURLSource<T> | InfinityQueryWithInlineSource<T>) &
+  InfinityQueryBase<T>;
+export type InfinityJSONQuery = {
+  json_options?: {
+    root_is_not_array?: boolean;
+    columnar?: boolean;
+  };
+} & InfinityQueryWithDataSource<'json'>;
+export type InfinityCSVQuery = {
+  csv_options?: {
+    delimiter?: string;
+    skip_empty_lines?: boolean;
+    skip_lines_with_error?: boolean;
+    relax_column_count?: boolean;
+    columns?: string;
+    comment?: string;
+  };
+} & InfinityQueryWithDataSource<'csv'>;
+export type InfinityXMLQuery = {} & InfinityQueryWithDataSource<'xml'>;
+export type InfinityGraphQLQuery = {
+  json_options?: {
+    root_is_not_array?: boolean;
+    columnar?: boolean;
+  };
+} & InfinityQueryWithDataSource<'graphql'>;
+export type InfinityHTMLQuery = {} & InfinityQueryWithDataSource<'html'>;
+export type InfinitySeriesQueryBase<S extends InfinityQuerySources> = { seriesCount: number; alias: string; dataOverrides: DataOverride[] } & InfinityQueryWithSource<S> & InfinityQueryBase<'series'>;
+export type InfinitySeriesQueryRandomWalk = {} & InfinitySeriesQueryBase<'random-walk'>;
+export type InfinitySeriesQueryExpression = { expression?: string } & InfinitySeriesQueryBase<'expression'>;
+export type InfinitySeriesQuery = InfinitySeriesQueryRandomWalk | InfinitySeriesQueryExpression;
+export type InfinityGlobalQuery = { global_query_id: string } & InfinityQueryBase<'global'>;
+export type InfinityDataQuery = InfinityJSONQuery | InfinityCSVQuery | InfinityXMLQuery | InfinityGraphQLQuery | InfinityHTMLQuery;
+export type InfinityDestinationQuery = InfinityDataQuery | InfinitySeriesQuery;
+export type InfinityLegacyQuery = InfinityDestinationQuery | InfinityGlobalQuery;
+export type InfinityQuery = InfinityLegacyQuery;
+//#endregion
+
+//#region Variable Query
+export type VariableTokenLegacy = 'Collection' | 'CollectionLookup' | 'Random' | 'Join' | 'UnixTimeStamp';
+export type VariableQueryType = 'legacy' | 'infinity';
+export const VariableQueryTypes: Array<SelectableValue<VariableQueryType>> = [
+  {
+    label: 'Infinity',
+    value: 'infinity',
+  },
+  {
+    label: 'Legacy',
+    value: 'legacy',
+  },
+];
+export type VariableQuery = {
+  queryType: VariableQueryType;
+  query: string;
+  infinityQuery?: InfinityQuery;
+};
+
+//#endregion
+
+//#region Grafana Types
 export interface MetricFindValue {
   text: string;
   value: string | number;
@@ -20,56 +146,26 @@ export type tableResult = {
   columns: GrafanaTableColumn[];
   rows: GrafanaTableRow;
 };
-export enum HealthCheckResultStatus {
-  Success = 'success',
-  Failure = 'error',
-}
 export type HealthCheckResult = {
   message: string;
-  status: HealthCheckResultStatus;
+  status: 'success' | 'error';
 };
 
 export type queryResult = timeSeriesResult | tableResult;
-export enum InfinityQueryType {
-  JSON = 'json',
-  HTML = 'html',
-  CSV = 'csv',
-  XML = 'xml',
-  GraphQL = 'graphql',
-  Series = 'series',
-  Global = 'global',
-}
-export enum InfinityQueryFormat {
-  Table = 'table',
-  TimeSeries = 'timeseries',
-  DataFrame = 'dataframe',
-}
-export enum InfinityQuerySources {
-  URL = 'url',
-  Inline = 'inline',
-  // LocalFile = 'local-fs',
-  RandomWalk = 'random-walk',
-  Expression = 'expression',
-}
-export enum ScrapColumnFormat {
-  String = 'string',
-  Number = 'number',
-  Timestamp = 'timestamp',
-  Timestamp_Epoch = 'timestamp_epoch',
-  Timestamp_Epoch_Seconds = 'timestamp_epoch_s',
-}
-export enum EditorMode {
-  Standard = 'standard',
-  Global = 'global',
-  Variable = 'variable',
-}
+//#endregion
+
+//region Editors
+export type EditorMode = 'standard' | 'global' | 'variable';
+//#endregion
+
+//#region Misc
 interface ScrapQuerySources extends SelectableValue<InfinityQuerySources> {
   supported_types: InfinityQueryType[];
 }
-export interface ScrapColumn {
+export interface InfinityColumn {
   selector: string;
   text: string;
-  type: ScrapColumnFormat;
+  type: InfinityColumnFormat;
 }
 export interface DataOverride {
   values: string[];
@@ -113,207 +209,51 @@ export interface QueryHeaders {
   key: string;
   value: string;
 }
-export interface InfinityQuery extends DataQuery {
-  type: InfinityQueryType;
-  source: InfinityQuerySources;
-  url: string;
-  url_options: {
-    method: 'GET' | 'POST';
-    data?: string;
-    params?: QueryParam[];
-    headers?: QueryHeaders[];
-  };
-  data: string;
-  csv_options?: {
-    delimiter?: string;
-    skip_empty_lines?: boolean;
-    skip_lines_with_error?: boolean;
-    relax_column_count?: boolean;
-    columns?: string;
-    comment?: string;
-  };
-  json_options?: {
-    root_is_not_array?: boolean;
-    columnar?: boolean;
-  };
-  root_selector: string;
-  global_query_id?: string;
-  columns: ScrapColumn[];
-  alias?: string;
-  seriesCount?: number;
-  expression?: string;
-  filters?: InfinityFilter[];
-  dataOverrides?: DataOverride[];
-  format: InfinityQueryFormat;
-}
-export interface GlobalInfinityQuery {
-  name: string;
-  id: string;
-  query: InfinityQuery;
-}
+
 export const SCRAP_QUERY_TYPES: Array<SelectableValue<InfinityQueryType>> = [
-  {
-    label: 'CSV',
-    value: InfinityQueryType.CSV,
-  },
-  {
-    label: 'JSON',
-    value: InfinityQueryType.JSON,
-  },
-  {
-    label: 'XML',
-    value: InfinityQueryType.XML,
-  },
-  {
-    label: 'HTML',
-    value: InfinityQueryType.HTML,
-  },
-  {
-    label: 'GraphQL',
-    value: InfinityQueryType.GraphQL,
-  },
-  {
-    label: 'Series',
-    value: InfinityQueryType.Series,
-  },
-  {
-    label: 'Global Query',
-    value: InfinityQueryType.Global,
-  },
+  { label: 'CSV', value: 'csv' },
+  { label: 'JSON', value: 'json' },
+  { label: 'XML', value: 'xml' },
+  { label: 'HTML', value: 'html' },
+  { label: 'GraphQL', value: 'graphql' },
+  { label: 'Series', value: 'series' },
+  { label: 'Global Query', value: 'global' },
 ];
 export const SCRAP_QUERY_RESULT_FORMATS: Array<SelectableValue<InfinityQueryFormat>> = [
-  {
-    label: 'Table',
-    value: InfinityQueryFormat.Table,
-  },
-  {
-    label: 'Time Series',
-    value: InfinityQueryFormat.TimeSeries,
-  },
-  {
-    label: 'Data Frame',
-    value: InfinityQueryFormat.DataFrame,
-  },
+  { label: 'Table', value: 'table' },
+  { label: 'Time Series', value: 'timeseries' },
+  { label: 'Data Frame', value: 'dataframe' },
 ];
 export const SCRAP_QUERY_SOURCES: ScrapQuerySources[] = [
-  {
-    label: 'URL',
-    value: InfinityQuerySources.URL,
-    supported_types: [
-      InfinityQueryType.CSV,
-      InfinityQueryType.JSON,
-      InfinityQueryType.HTML,
-      InfinityQueryType.XML,
-      InfinityQueryType.GraphQL,
-    ],
-  },
-  // {
-  //   label: 'Local File',
-  //   value: InfinityQuerySources.LocalFile,
-  //   supported_types: [InfinityQueryType.CSV, InfinityQueryType.JSON, InfinityQueryType.XML],
-  // },
-  {
-    label: 'Inline',
-    value: InfinityQuerySources.Inline,
-    supported_types: [InfinityQueryType.CSV, InfinityQueryType.JSON, InfinityQueryType.XML],
-  },
-  {
-    label: 'Random Walk',
-    value: InfinityQuerySources.RandomWalk,
-    supported_types: [InfinityQueryType.Series],
-  },
-  {
-    label: 'Expression',
-    value: InfinityQuerySources.Expression,
-    supported_types: [InfinityQueryType.Series],
-  },
+  { label: 'URL', value: 'url', supported_types: ['csv', 'json', 'html', 'xml', 'graphql'] },
+  { label: 'Inline', value: 'inline', supported_types: ['csv', 'json', 'xml'] },
+  { label: 'Random Walk', value: 'random-walk', supported_types: ['series'] },
+  { label: 'Expression', value: 'expression', supported_types: ['series'] },
+  // { label: 'Local File', value: 'local-fs', supported_types: ['csv', 'json', 'xml'] },
 ];
-export const SCRAP_QUERY_RESULT_COLUMN_FORMATS: Array<SelectableValue<ScrapColumnFormat>> = [
-  {
-    label: 'String',
-    value: ScrapColumnFormat.String,
-  },
-  {
-    label: 'Number',
-    value: ScrapColumnFormat.Number,
-  },
-  {
-    label: 'Timestamp',
-    value: ScrapColumnFormat.Timestamp,
-  },
-  {
-    label: 'Timestamp ( UNIX ms )',
-    value: ScrapColumnFormat.Timestamp_Epoch,
-  },
-  {
-    label: 'Timestamp ( UNIX s )',
-    value: ScrapColumnFormat.Timestamp_Epoch_Seconds,
-  },
+export const SCRAP_QUERY_RESULT_COLUMN_FORMATS: Array<SelectableValue<InfinityColumnFormat>> = [
+  { label: 'String', value: 'string' },
+  { label: 'Number', value: 'number' },
+  { label: 'Timestamp', value: 'timestamp' },
+  { label: 'Timestamp ( UNIX ms )', value: 'timestamp_epoch' },
+  { label: 'Timestamp ( UNIX s )', value: 'timestamp_epoch_s' },
 ];
-export enum VariableQueryType {
-  Legacy = 'legacy',
-  Infinity = 'infinity',
-}
-export const VariableQueryTypes: Array<SelectableValue<VariableQueryType>> = [
-  {
-    label: 'Infinity',
-    value: VariableQueryType.Infinity,
-  },
-  {
-    label: 'Legacy',
-    value: VariableQueryType.Legacy,
-  },
-];
-export type VariableQuery = {
-  queryType: VariableQueryType;
-  query: string;
-  infinityQuery?: InfinityQuery;
-};
 
-export interface InfinityDataSourceJSONOptions extends DataSourceJsonData {
-  tlsSkipVerify?: boolean;
-  tlsAuth?: boolean;
-  serverName?: string;
-  tlsAuthWithCACert?: boolean;
-  global_queries?: GlobalInfinityQuery[];
-  timeoutInSeconds?: number;
-  local_sources_options?: {
-    enabled: boolean;
-    allowed_paths?: string[];
-  };
-}
-export interface InfinityDataSourceSecureJSONOptions {
-  basicAuthPassword?: string;
-  tlsCACert?: string;
-  tlsClientCert?: string;
-  tlsClientKey?: string;
-}
-export interface SecureField {
-  id: string;
-  name: string;
-  value: string;
-  configured: boolean;
-}
-export type VariableTokenLegacy = 'Collection' | 'CollectionLookup' | 'Random' | 'Join' | 'UnixTimeStamp';
-export type InfinityInstanceSettings = DataSourceInstanceSettings<InfinityDataSourceJSONOptions>;
+export type InfinityInstanceSettings = DataSourceInstanceSettings<InfinityOptions>;
 
+//#endregion
+
+//#region Default and constants
+export const IGNORE_URL = '__IGNORE_URL__';
 export const DefaultInfinityQuery: InfinityQuery = {
   refId: '',
-  type: InfinityQueryType.JSON,
-  source: InfinityQuerySources.URL,
-  format: InfinityQueryFormat.Table,
-  data: '',
+  type: 'json',
+  source: 'url',
+  format: 'table',
   url: 'https://jsonplaceholder.typicode.com/users',
   url_options: { method: 'GET', data: '' },
-  csv_options: {
-    delimiter: ',',
-    skip_empty_lines: false,
-    skip_lines_with_error: false,
-    relax_column_count: false,
-    columns: '',
-    comment: '',
-  },
   root_selector: '',
   columns: [],
   filters: [],
 };
+//#endregion

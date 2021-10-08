@@ -1,6 +1,8 @@
 {
   "deno.enable": false,
   "cSpell.words": [
+    "dataframe",
+    "endswith",
     "frontmatter",
     "gomodcache",
     "grafana",
@@ -8,10 +10,14 @@
     "magefile",
     "mkdir",
     "nodemodules",
+    "notcontains",
+    "notequals",
+    "notin",
     "offcanvas",
     "outfile",
     "plugincheck",
     "scroller",
+    "starswith",
     "stretchr",
     "subnav",
     "timeseries",

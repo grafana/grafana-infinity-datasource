@@ -5,6 +5,8 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 ## [ 0.8.0 ] - unreleased
 
 - moved docs website, try into its own folder
+- E2E tests placeholder added
+- type updates
 - bug fixes
 
 ## [ 0.7.10 ]

@@ -39,29 +39,13 @@ describe('shiftTime', () => {
     expect(new Date(shiftTime(currentDate, '12d')).toDateString()).toBe(new Date('2021-Aug-12').toDateString());
     expect(new Date(shiftTime(currentDate, '40d')).toDateString()).toBe(new Date('2021-Sep-9').toDateString());
     expect(new Date(shiftTime(currentDate, '-40d')).toDateString()).toBe(new Date('2021-Jun-21').toDateString());
-    expect(new Date(shiftTime(currentDate, '-1h')).toISOString()).toBe(
-      new Date('2021-07-30T23:00:00.000Z').toISOString()
-    );
-    expect(new Date(shiftTime(currentDate, '1h')).toISOString()).toBe(
-      new Date('2021-07-31T01:00:00.000Z').toISOString()
-    );
-    expect(new Date(shiftTime(currentDate, '-1m')).toISOString()).toBe(
-      new Date('2021-07-30T23:59:00.000Z').toISOString()
-    );
-    expect(new Date(shiftTime(currentDate, '1m')).toISOString()).toBe(
-      new Date('2021-07-31T00:01:00.000Z').toISOString()
-    );
-    expect(new Date(shiftTime(currentDate, '-1s')).toISOString()).toBe(
-      new Date('2021-07-30T23:59:59.000Z').toISOString()
-    );
-    expect(new Date(shiftTime(currentDate, '1s')).toISOString()).toBe(
-      new Date('2021-07-31T00:00:01.000Z').toISOString()
-    );
-    expect(new Date(shiftTime(currentDate, '-1ms')).toISOString()).toBe(
-      new Date('2021-07-30T23:59:59.999Z').toISOString()
-    );
-    expect(new Date(shiftTime(currentDate, '1ms')).toISOString()).toBe(
-      new Date('2021-07-31T00:00:00.001Z').toISOString()
-    );
+    expect(new Date(shiftTime(currentDate, '-1h')).toISOString()).toBe(new Date('2021-07-30T23:00:00.000Z').toISOString());
+    expect(new Date(shiftTime(currentDate, '1h')).toISOString()).toBe(new Date('2021-07-31T01:00:00.000Z').toISOString());
+    expect(new Date(shiftTime(currentDate, '-1m')).toISOString()).toBe(new Date('2021-07-30T23:59:00.000Z').toISOString());
+    expect(new Date(shiftTime(currentDate, '1m')).toISOString()).toBe(new Date('2021-07-31T00:01:00.000Z').toISOString());
+    expect(new Date(shiftTime(currentDate, '-1s')).toISOString()).toBe(new Date('2021-07-30T23:59:59.000Z').toISOString());
+    expect(new Date(shiftTime(currentDate, '1s')).toISOString()).toBe(new Date('2021-07-31T00:00:01.000Z').toISOString());
+    expect(new Date(shiftTime(currentDate, '-1ms')).toISOString()).toBe(new Date('2021-07-30T23:59:59.999Z').toISOString());
+    expect(new Date(shiftTime(currentDate, '1ms')).toISOString()).toBe(new Date('2021-07-31T00:00:00.001Z').toISOString());
   });
 });

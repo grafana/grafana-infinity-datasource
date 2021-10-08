@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 import { LegacyForms } from '@grafana/ui';
-import { InfinityDataSourceJSONOptions, IGNORE_URL } from '../../types';
+import { InfinityOptions, IGNORE_URL } from '../../types';
 
-export type Props = DataSourcePluginOptionsEditorProps<InfinityDataSourceJSONOptions>;
+export type Props = DataSourcePluginOptionsEditorProps<InfinityOptions>;
 
 export const URLEditor = (props: Props) => {
   const { FormField } = LegacyForms;

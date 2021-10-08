@@ -43,13 +43,7 @@ const SecureFieldEditor = ({ title, secureField, onBlur, onChange, onRemove, onR
         onChange={(e) => onChange({ ...secureField, value: e.target.value })}
         onBlur={onBlur}
       ></SecretFormField>
-      <Button
-        type="button"
-        aria-label={`Remove ${title}`}
-        variant="secondary"
-        size="xs"
-        onClick={(_e) => onRemove(secureField.id)}
-      >
+      <Button type="button" aria-label={`Remove ${title}`} variant="secondary" size="xs" onClick={(_e) => onRemove(secureField.id)}>
         <IconButton name="trash-alt" />
       </Button>
     </div>
@@ -94,16 +88,8 @@ export class SecureFieldsEditor extends PureComponent<Props, State> {
 
   updateSettings = () => {
     const { secureFields } = this.state;
-    const newJsonData = Object.fromEntries(
-      Object.entries(this.props.dataSourceConfig.jsonData).filter(
-        ([key, val]) => !key.startsWith(this.props.secureFieldName)
-      )
-    );
-    const newSecureJsonData = Object.fromEntries(
-      Object.entries(this.props.dataSourceConfig.secureJsonData || {}).filter(
-        ([key, val]) => !key.startsWith(this.props.secureFieldValue)
-      )
-    );
+    const newJsonData = Object.fromEntries(Object.entries(this.props.dataSourceConfig.jsonData).filter(([key, val]) => !key.startsWith(this.props.secureFieldName)));
+    const newSecureJsonData = Object.fromEntries(Object.entries(this.props.dataSourceConfig.secureJsonData || {}).filter(([key, val]) => !key.startsWith(this.props.secureFieldValue)));
     for (const [index, header] of secureFields.entries()) {
       newJsonData[`${this.props.secureFieldName}${index + 1}`] = header.name;
       if (!header.configured) {

@@ -1,6 +1,5 @@
 import { PluginType } from '@grafana/data';
 import { Datasource } from './datasource';
-import { VariableQueryType } from './types';
 
 function TemplateSrvStub(this: any) {
   this.replace = (text: string) => {
@@ -51,7 +50,7 @@ describe('metricFindQuery - Random Variable', () => {
     new Datasource(DummyDatasource)
       .metricFindQuery({
         query: 'Random(A,B,C,D)',
-        queryType: VariableQueryType.Legacy,
+        queryType: 'legacy',
       })
       .then((res) => {
         expect(['A', 'B', 'C', 'D']).toContain(res[0].text);
@@ -68,7 +67,7 @@ describe('metricFindQuery - Join', () => {
     new Datasource(DummyDatasource)
       .metricFindQuery({
         query: 'Join(A,B,C,D)',
-        queryType: VariableQueryType.Legacy,
+        queryType: 'legacy',
       })
       .then((res) => {
         expect(res[0].text).toBe('ABCD');
@@ -85,7 +84,7 @@ describe('metricFindQuery - Collection', () => {
     new Datasource(DummyDatasource)
       .metricFindQuery({
         query: 'Collection(A,B,C,D)',
-        queryType: VariableQueryType.Legacy,
+        queryType: 'legacy',
       })
       .then((res) => {
         expect(res.length).toBe(2);
@@ -106,7 +105,7 @@ describe('metricFindQuery - CollectionLookup', () => {
     new Datasource(DummyDatasource)
       .metricFindQuery({
         query: 'CollectionLookup(pd,prod-server,np,nonprod-server,dev,dev-server,np)',
-        queryType: VariableQueryType.Legacy,
+        queryType: 'legacy',
       })
       .then((res) => {
         expect(res.length).toBe(1);
@@ -122,7 +121,7 @@ describe('metricFindQuery - CollectionLookup', () => {
     new Datasource(DummyDatasource)
       .metricFindQuery({
         query: 'CollectionLookup(A,a,B,b,C,c,D,d,C)',
-        queryType: VariableQueryType.Legacy,
+        queryType: 'legacy',
       })
       .then((res) => {
         expect(res.length).toBe(1);
@@ -138,7 +137,7 @@ describe('metricFindQuery - CollectionLookup', () => {
     new Datasource(DummyDatasource)
       .metricFindQuery({
         query: 'CollectionLookup(A,a,B,b,C,c,D,d,E)',
-        queryType: VariableQueryType.Legacy,
+        queryType: 'legacy',
       })
       .then((res) => {
         expect(res.length).toBe(0);

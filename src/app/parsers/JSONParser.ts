@@ -1,11 +1,11 @@
 import { forEach, get, toNumber, flatten } from 'lodash';
 import { JSONPath } from 'jsonpath-plus';
 import { InfinityParser } from './InfinityParser';
-import { InfinityQuery, ScrapColumn, GrafanaTableRow, ScrapColumnFormat } from './../../types';
+import { InfinityColumn, GrafanaTableRow, InfinityJSONQuery, InfinityGraphQLQuery } from './../../types';
 import { getColumnsFromObjectArray, columnarToTable } from './utils';
 
-export class JSONParser extends InfinityParser {
-  constructor(JSONResponse: object, target: InfinityQuery, endTime?: Date) {
+export class JSONParser extends InfinityParser<InfinityJSONQuery | InfinityGraphQLQuery> {
+  constructor(JSONResponse: object, target: InfinityJSONQuery | InfinityGraphQLQuery, endTime?: Date) {
     super(target);
     let jsonResponse = this.formatInput(JSONResponse);
     if (this.target.json_options?.columnar) {
@@ -15,9 +15,7 @@ export class JSONParser extends InfinityParser {
       jsonResponse = jsonResponse.map((value) => {
         return { value };
       });
-    } else if (
-      !(Array.isArray(jsonResponse) || (this.target.json_options && this.target.json_options.root_is_not_array))
-    ) {
+    } else if (!(Array.isArray(jsonResponse) || (this.target.json_options && this.target.json_options.root_is_not_array))) {
       jsonResponse = this.findArrayData(jsonResponse);
     }
     if (Array.isArray(jsonResponse) || (target.json_options && target.json_options.root_is_not_array)) {
@@ -68,20 +66,20 @@ export class JSONParser extends InfinityParser {
     this.AutoColumns = columns;
     forEach(JSONResponse, (r, rowKey) => {
       const row: GrafanaTableRow = [];
-      columns.forEach((c: ScrapColumn) => {
+      columns.forEach((c: InfinityColumn) => {
         let value = get(r, c.selector, '');
         if (c.selector === '$$key') {
           value = rowKey;
         } else if (c.selector === '$$value') {
           value = JSON.stringify(r);
         }
-        if (c.type === ScrapColumnFormat.Timestamp) {
+        if (c.type === 'timestamp') {
           value = new Date(value + '');
-        } else if (c.type === ScrapColumnFormat.Timestamp_Epoch) {
+        } else if (c.type === 'timestamp_epoch') {
           value = new Date(parseInt(value, 10));
-        } else if (c.type === ScrapColumnFormat.Timestamp_Epoch_Seconds) {
+        } else if (c.type === 'timestamp_epoch_s') {
           value = new Date(parseInt(value, 10) * 1000);
-        } else if (c.type === ScrapColumnFormat.Number) {
+        } else if (c.type === 'number') {
           value = value === '' ? null : +value;
         }
         if (['string', 'number', 'boolean'].includes(typeof value)) {
@@ -96,7 +94,7 @@ export class JSONParser extends InfinityParser {
     });
   }
   private constructTimeSeriesData(JSONResponse: object, endTime: Date | undefined) {
-    this.NumbersColumns.forEach((metricColumn: ScrapColumn) => {
+    this.NumbersColumns.forEach((metricColumn: InfinityColumn) => {
       forEach(JSONResponse, (r) => {
         let seriesName = this.StringColumns.map((c) => r[c.selector]).join(' ');
         if (this.NumbersColumns.length > 1) {
@@ -109,11 +107,11 @@ export class JSONParser extends InfinityParser {
         let timestamp = endTime ? endTime.getTime() : new Date().getTime();
         if (this.TimeColumns.length >= 1) {
           const FirstTimeColumn = this.TimeColumns[0];
-          if (FirstTimeColumn.type === ScrapColumnFormat.Timestamp) {
+          if (FirstTimeColumn.type === 'timestamp') {
             timestamp = new Date(get(r, FirstTimeColumn.selector) + '').getTime();
-          } else if (FirstTimeColumn.type === ScrapColumnFormat.Timestamp_Epoch) {
+          } else if (FirstTimeColumn.type === 'timestamp_epoch') {
             timestamp = new Date(parseInt(get(r, FirstTimeColumn.selector), 10)).getTime();
-          } else if (FirstTimeColumn.type === ScrapColumnFormat.Timestamp_Epoch_Seconds) {
+          } else if (FirstTimeColumn.type === 'timestamp_epoch_s') {
             timestamp = new Date(parseInt(get(r, FirstTimeColumn.selector), 10) * 1000).getTime();
           }
         }
@@ -127,7 +125,7 @@ export class JSONParser extends InfinityParser {
   }
   private constructSingleTableData(JSONResponse: object) {
     const row: GrafanaTableRow = [];
-    this.target.columns.forEach((c: ScrapColumn) => {
+    this.target.columns.forEach((c: InfinityColumn) => {
       row.push(get(JSONResponse, c.selector, ''));
     });
     this.rows.push(row);

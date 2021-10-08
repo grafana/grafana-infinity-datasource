@@ -1,47 +1,34 @@
 import { uniq, flatten } from 'lodash';
 import { filterResults } from './filter';
-import {
-  InfinityQuery,
-  ScrapColumn,
-  GrafanaTableRow,
-  timeSeriesResult,
-  ScrapColumnFormat,
-  InfinityQueryFormat,
-  InfinityQueryType,
-} from './../../types';
+import { InfinityQuery, InfinityColumn, GrafanaTableRow, timeSeriesResult } from './../../types';
 import { toDataFrame } from '@grafana/data';
 import { normalizeColumns } from './utils';
+import { isDataQuery } from './../utils';
 
-export class InfinityParser {
-  target: InfinityQuery;
+export class InfinityParser<T extends InfinityQuery> {
+  target: T;
   rows: GrafanaTableRow[];
   series: timeSeriesResult[];
-  AutoColumns: ScrapColumn[];
-  StringColumns: ScrapColumn[];
-  NumbersColumns: ScrapColumn[];
-  TimeColumns: ScrapColumn[];
-  constructor(target: InfinityQuery) {
+  AutoColumns: InfinityColumn[] = [];
+  StringColumns: InfinityColumn[] = [];
+  NumbersColumns: InfinityColumn[] = [];
+  TimeColumns: InfinityColumn[] = [];
+  constructor(target: T) {
     this.rows = [];
     this.series = [];
     this.target = target;
-    this.AutoColumns = target.columns || [];
-    this.StringColumns = target.columns.filter((t) => t.type === ScrapColumnFormat.String);
-    this.NumbersColumns = target.columns.filter((t) => t.type === ScrapColumnFormat.Number);
-    this.TimeColumns = target.columns.filter(
-      (t) =>
-        t.type === ScrapColumnFormat.Timestamp ||
-        t.type === ScrapColumnFormat.Timestamp_Epoch ||
-        t.type === ScrapColumnFormat.Timestamp_Epoch_Seconds
-    );
+    if (isDataQuery(target)) {
+      this.AutoColumns = target.columns || [];
+      this.StringColumns = target.columns.filter((t) => t.type === 'string');
+      this.NumbersColumns = target.columns.filter((t) => t.type === 'number');
+      this.TimeColumns = target.columns.filter((t) => t.type === 'timestamp' || t.type === 'timestamp_epoch' || t.type === 'timestamp_epoch_s');
+    }
   }
   private canAutoGenerateColumns(): boolean {
-    return (
-      [InfinityQueryType.CSV, InfinityQueryType.JSON, InfinityQueryType.GraphQL].includes(this.target.type) &&
-      this.target.columns.length === 0
-    );
+    return ['csv', 'json', 'graphql'].includes(this.target.type) && isDataQuery(this.target) && this.target.columns.length === 0;
   }
   toTable() {
-    let columns = this.target.columns;
+    let columns = isDataQuery(this.target) ? this.target.columns : [];
     if (this.canAutoGenerateColumns()) {
       columns = this.AutoColumns;
     }
@@ -62,17 +49,12 @@ export class InfinityParser {
     });
   }
   getResults() {
-    if (
-      this.target.filters &&
-      this.target.filters.length > 0 &&
-      this.target.columns &&
-      this.target.columns.length > 0
-    ) {
+    if (isDataQuery(this.target) && this.target.filters && this.target.filters.length > 0 && this.target.columns && this.target.columns.length > 0) {
       this.rows = filterResults(this.rows, this.target.columns, this.target.filters);
     }
-    if (this.target.format === InfinityQueryFormat.TimeSeries) {
+    if (isDataQuery(this.target) && this.target.format === 'timeseries') {
       return this.toTimeSeries();
-    } else if (this.target.format === InfinityQueryFormat.DataFrame) {
+    } else if (isDataQuery(this.target) && this.target.format === 'dataframe') {
       const frame = toDataFrame(this.toTable());
       frame.name = this.target.refId;
       return frame;

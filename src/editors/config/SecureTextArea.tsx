@@ -12,16 +12,7 @@ interface SecureTextAreaProps {
   onBlur?: () => void;
 }
 
-export const SecureTextArea = ({
-  configured,
-  label,
-  labelWidth,
-  rows,
-  onChange,
-  onReset,
-  onBlur,
-  placeholder,
-}: SecureTextAreaProps) => {
+export const SecureTextArea = ({ configured, label, labelWidth, rows, onChange, onReset, onBlur, placeholder }: SecureTextAreaProps) => {
   return (
     <div className="gf-form-inline">
       <InlineFormLabel width={labelWidth || 8}>{label}</InlineFormLabel>
@@ -34,13 +25,7 @@ export const SecureTextArea = ({
         </div>
       ) : (
         <div className="gf-form gf-form--grow">
-          <textarea
-            rows={rows || 5}
-            className="gf-form-input gf-form-textarea"
-            onChange={onChange}
-            onBlur={onBlur}
-            placeholder={placeholder}
-          />
+          <textarea rows={rows || 5} className="gf-form-input gf-form-textarea" onChange={onChange} onBlur={onBlur} placeholder={placeholder} />
         </div>
       )}
     </div>

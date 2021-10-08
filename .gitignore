@@ -108,3 +108,11 @@ docs/
 .DS_Store
 
 .notes
+
+# Grafana
+node_modules
+dist
+coverage
+cypress/report.json
+cypress/screenshots/actual
+cypress/videos/

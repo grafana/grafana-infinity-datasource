@@ -4,6 +4,7 @@ import { URLField } from './../../components/URLField';
 import { DataField } from './../../components/DataField';
 import { RootSelector } from './../../components/RootSelector';
 import { InfinityQuery, EditorMode } from '../../types';
+import { isDataQuery } from 'app/utils';
 
 interface ScrapperProps {
   query: InfinityQuery;
@@ -13,14 +14,15 @@ interface ScrapperProps {
 }
 
 export const URLEditor = (props: ScrapperProps) => {
-  const canShowURLField = ['url', 'local-fs'].includes(props.query.source);
+  const { query } = props;
+  const canShowURLField = isDataQuery(query) && query.source === 'url';
   const canShowRootSelector = ['html', 'json', 'xml', 'graphql'].indexOf(props.query.type) > -1;
   return (
     <>
       {canShowURLField ? (
         <div className="gf-form">
           <URLField {...props} />
-          {props.query.source === 'url' && <URLOptionsEditor {...props} />}
+          {isDataQuery(query) && query.source === 'url' && <URLOptionsEditor {...props} />}
         </div>
       ) : (
         <div className="gf-form">

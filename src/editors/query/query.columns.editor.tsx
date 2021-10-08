@@ -1,8 +1,9 @@
 import React from 'react';
 import { cloneDeep } from 'lodash';
 import { Button } from '@grafana/ui';
-import { ScrapColumn, InfinityQuery, ScrapColumnFormat, EditorMode } from '../../types';
+import { InfinityColumn, InfinityQuery, EditorMode } from '../../types';
 import { QueryColumnItem } from './../../components/QueryColumnItem';
+import { isDataQuery } from './../../app/utils';
 
 interface QueryColumnProps {
   query: InfinityQuery;
@@ -12,12 +13,15 @@ interface QueryColumnProps {
 }
 export const QueryColumnsEditor = (props: QueryColumnProps) => {
   const { query, mode, onChange } = props;
+  if (!isDataQuery(query)) {
+    return <></>;
+  }
   const onColumnAdd = () => {
     const columns = cloneDeep(query.columns || []);
     const defaultColumn = {
       text: '',
       selector: '',
-      type: ScrapColumnFormat.String,
+      type: 'string',
     };
     onChange({ ...query, columns: [...columns, defaultColumn] });
   };
@@ -26,22 +30,15 @@ export const QueryColumnsEditor = (props: QueryColumnProps) => {
     columns.splice(index, 1);
     onChange({ ...query, columns });
   };
-  const LABEL_WIDTH = mode === EditorMode.Variable ? 10 : 8;
+  const LABEL_WIDTH = mode === 'variable' ? 10 : 8;
   return (
     <>
-      {query.columns.map((column: ScrapColumn, index: number) => {
+      {query.columns.map((column: InfinityColumn, index: number) => {
         return (
           <div className="gf-form-inline" key={JSON.stringify(column) + index}>
             <div className="gf-form">
               <QueryColumnItem {...props} index={index} />
-              <Button
-                className="btn btn-danger btn-small"
-                icon="trash-alt"
-                variant="destructive"
-                size="sm"
-                style={{ margin: '5px' }}
-                onClick={() => onColumnRemove(index)}
-              />
+              <Button className="btn btn-danger btn-small" icon="trash-alt" variant="destructive" size="sm" style={{ margin: '5px' }} onClick={() => onColumnRemove(index)} />
             </div>
           </div>
         );

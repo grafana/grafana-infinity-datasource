@@ -1,6 +1,6 @@
 {
   "name": "grafana-infinity-datasource",
-  "version": "0.8.0-dev.1",
+  "version": "0.8.0-dev.3",
   "description": "JSON, CSV, XML, GraphQL & HTML datasource for Grafana. Do infinite things with Grafana.",
   "main": "dist/module.js",
   "scripts": {
@@ -8,6 +8,9 @@
     "watch": "grafana-toolkit plugin:dev --watch",
     "start": "yarn watch",
     "test": "grafana-toolkit plugin:test",
+    "e2e": "grafana-e2e run",
+    "e2e:open": "grafana-e2e open",
+    "e2e:update": "grafana-e2e run --update-screenshots",
     "build": "grafana-toolkit plugin:build",
     "ci-build": "grafana-toolkit plugin:ci-build",
     "sign": "grafana-toolkit plugin:sign"
@@ -42,7 +45,7 @@
     "@grafana/data": "7.2.0",
     "@grafana/runtime": "7.2.0",
     "@grafana/ui": "7.2.0",
-    "cheerio": "^1.0.0-rc.6",
+    "cheerio": "^1.0.0-rc.8",
     "csv-parse": "^4.12.0",
     "jsonpath-plus": "^4.0.0",
     "lodash": "^4.17.19",
@@ -53,7 +56,9 @@
     "xml2js": "^0.4.23"
   },
   "devDependencies": {
-    "@grafana/toolkit": "8.0.3",
+    "@grafana/e2e": "8.2.0",
+    "@grafana/e2e-selectors": "8.2.0",
+    "@grafana/toolkit": "8.2.0",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^13.1.9",
@@ -61,11 +66,12 @@
     "@types/lodash": "^4.14.149",
     "@types/mathjs": "^6.0.5",
     "@types/xml2js": "^0.4.6",
+    "cypress": "7.7.0",
     "jest-runner": "^27.0.4",
     "ts-jest": "^26.5.4",
     "ts-loader": "^8.0.18",
     "tslib": "^2.1.0",
-    "typescript": "^4.2.3"
+    "typescript": "4.4.3"
   },
   "resolutions": {
     "rxjs": "6.6.3"

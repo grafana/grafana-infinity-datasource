@@ -4,7 +4,7 @@ import { QueryEditorProps } from '@grafana/data';
 import { Datasource } from '../datasource';
 import { InfinityQueryEditor } from './query/infinityQuery';
 import { getDefaultGlobalQueryID } from '../app/queryUtils';
-import { InfinityQuery, EditorMode, DefaultInfinityQuery } from '../types';
+import { InfinityQuery, DefaultInfinityQuery } from '../types';
 import './../styles/app.scss';
 
 type EditorProps = QueryEditorProps<Datasource, InfinityQuery>;
@@ -15,13 +15,5 @@ export const QueryEditor = (props: EditorProps) => {
     ...DefaultInfinityQuery,
     global_query_id: getDefaultGlobalQueryID(datasource.instanceSettings),
   });
-  return (
-    <InfinityQueryEditor
-      onChange={onChange}
-      onRunQuery={onRunQuery}
-      query={query}
-      mode={EditorMode.Standard}
-      instanceSettings={datasource.instanceSettings}
-    />
-  );
+  return <InfinityQueryEditor onChange={onChange} onRunQuery={onRunQuery} query={query} mode={'standard'} instanceSettings={datasource.instanceSettings} />;
 };

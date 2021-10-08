@@ -1,10 +1,10 @@
 import { forEach, toNumber } from 'lodash';
 import { load } from 'cheerio';
 import { InfinityParser } from './InfinityParser';
-import { InfinityQuery, ScrapColumn, GrafanaTableRow, GrafanaTableRowItem, ScrapColumnFormat } from './../../types';
+import { InfinityColumn, GrafanaTableRow, GrafanaTableRowItem, InfinityHTMLQuery } from './../../types';
 
-export class HTMLParser extends InfinityParser {
-  constructor(HTMLResponse: string, target: InfinityQuery, endTime?: Date) {
+export class HTMLParser extends InfinityParser<InfinityHTMLQuery> {
+  constructor(HTMLResponse: string, target: InfinityHTMLQuery, endTime?: Date) {
     super(target);
     const rootElements = this.formatInput(HTMLResponse);
     this.constructTableData(rootElements);
@@ -19,15 +19,15 @@ export class HTMLParser extends InfinityParser {
     forEach(rootElements, (r) => {
       const row: GrafanaTableRow = [];
       const $ = load(r);
-      this.target.columns.forEach((c: ScrapColumn) => {
+      this.target.columns.forEach((c: InfinityColumn) => {
         let value: GrafanaTableRowItem = $(c.selector).text().trim();
-        if (c.type === ScrapColumnFormat.Number) {
+        if (c.type === 'number') {
           value = value === '' ? null : +value;
-        } else if (c.type === ScrapColumnFormat.Timestamp) {
+        } else if (c.type === 'timestamp') {
           value = new Date(value);
-        } else if (c.type === ScrapColumnFormat.Timestamp_Epoch) {
+        } else if (c.type === 'timestamp_epoch') {
           value = new Date(parseInt(value, 10));
-        } else if (c.type === ScrapColumnFormat.Timestamp_Epoch_Seconds) {
+        } else if (c.type === 'timestamp_epoch_s') {
           value = new Date(parseInt(value, 10) * 1000);
         }
         row.push(value);
@@ -36,7 +36,7 @@ export class HTMLParser extends InfinityParser {
     });
   }
   private constructTimeSeriesData(rootElements: cheerio.Cheerio, endTime: Date | undefined) {
-    this.NumbersColumns.forEach((metricColumn: ScrapColumn) => {
+    this.NumbersColumns.forEach((metricColumn: InfinityColumn) => {
       forEach(rootElements, (r) => {
         const $$ = load(r);
         let seriesName = this.StringColumns.map((c) => $$(c.selector).text()).join(' ');
@@ -50,11 +50,11 @@ export class HTMLParser extends InfinityParser {
         let timestamp = endTime ? endTime.getTime() : new Date().getTime();
         if (this.TimeColumns.length >= 1) {
           const FirstTimeColumn = this.TimeColumns[0];
-          if (FirstTimeColumn.type === ScrapColumnFormat.Timestamp) {
+          if (FirstTimeColumn.type === 'timestamp') {
             timestamp = new Date($$(FirstTimeColumn.selector).text().trim()).getTime();
-          } else if (FirstTimeColumn.type === ScrapColumnFormat.Timestamp_Epoch) {
+          } else if (FirstTimeColumn.type === 'timestamp_epoch') {
             timestamp = new Date(parseInt($$(FirstTimeColumn.selector).text().trim(), 10)).getTime();
-          } else if (FirstTimeColumn.type === ScrapColumnFormat.Timestamp_Epoch_Seconds) {
+          } else if (FirstTimeColumn.type === 'timestamp_epoch_s') {
             timestamp = new Date(parseInt($$(FirstTimeColumn.selector).text().trim(), 10) * 1000).getTime();
           }
         }

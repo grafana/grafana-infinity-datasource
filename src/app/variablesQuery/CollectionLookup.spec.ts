@@ -2,16 +2,8 @@ import { SelectableValue } from '@grafana/data';
 import { CollectionLookupVariable } from './CollectionLookup';
 
 const data: Array<[string, string, Array<SelectableValue<string>>]> = [
-  [
-    'it should return correct kv pairs and remove the variable keyword',
-    'CollectionLookup(prod,pd,nonprod,np,nonprod)',
-    [{ value: 'np', text: 'np' }],
-  ],
-  [
-    'it should return correct kv pairs when even number of args passed',
-    'prod,pd,nonprod,np,nonprod',
-    [{ value: 'np', text: 'np' }],
-  ],
+  ['it should return correct kv pairs and remove the variable keyword', 'CollectionLookup(prod,pd,nonprod,np,nonprod)', [{ value: 'np', text: 'np' }]],
+  ['it should return correct kv pairs when even number of args passed', 'prod,pd,nonprod,np,nonprod', [{ value: 'np', text: 'np' }]],
   [
     'it should return correct kv pairs when more than one arg matched',
     'prod,pd,nonprod,np,nonprod,foo,nonprod',

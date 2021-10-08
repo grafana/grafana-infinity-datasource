@@ -1,16 +1,12 @@
 import { JSONParser } from './JSONParser';
-import { InfinityQuerySources, InfinityQueryFormat, InfinityQueryType, InfinityQuery } from './../../types';
+import { InfinityQuery } from './../../types';
 
 const defaultTarget: InfinityQuery = {
   refId: '',
-  type: InfinityQueryType.JSON,
-  source: InfinityQuerySources.Inline,
+  type: 'json',
+  source: 'inline',
   data: '',
-  format: InfinityQueryFormat.Table,
-  url: '',
-  url_options: {
-    method: 'GET',
-  },
+  format: 'table',
   root_selector: '',
   columns: [],
 };
@@ -79,10 +75,7 @@ describe('Simple Object with number array', () => {
   });
 });
 describe('Simple Object with number array and string array', () => {
-  const a = new JSONParser(
-    { firstName: 'foo', lastName: 'bar', users: ['foo', 'bar'], users1: [1, 2, 3] },
-    defaultTarget
-  );
+  const a = new JSONParser({ firstName: 'foo', lastName: 'bar', users: ['foo', 'bar'], users1: [1, 2, 3] }, defaultTarget);
   it('default test', () => {
     const tableResults = a.toTable();
     expect(tableResults.rows.length).toBe(1);

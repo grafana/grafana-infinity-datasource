@@ -1,5 +1,5 @@
 import { SelectableValue } from '@grafana/data';
-import { GrafanaTableRow, ScrapColumn, InfinityFilter, FilterOperator } from './../../types';
+import { GrafanaTableRow, InfinityColumn, InfinityFilter, FilterOperator } from './../../types';
 
 export const filterOperators: Array<SelectableValue<FilterOperator>> = [
   { label: 'Equals', value: FilterOperator.Equals },
@@ -26,11 +26,7 @@ export const filterOperators: Array<SelectableValue<FilterOperator>> = [
   { label: '>=', value: FilterOperator.NumberGreaterThanOrEqualTo },
 ];
 
-export const filterResults = (
-  rows: GrafanaTableRow[],
-  columns: ScrapColumn[],
-  filters: InfinityFilter[]
-): GrafanaTableRow[] => {
+export const filterResults = (rows: GrafanaTableRow[], columns: InfinityColumn[], filters: InfinityFilter[]): GrafanaTableRow[] => {
   return rows.filter((row) => {
     const filterResults: boolean[] = [];
     filters.forEach((filter) => {

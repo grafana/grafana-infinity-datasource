@@ -1,5 +1,5 @@
 import React from 'react';
-import { InfinityQuery, InfinityQueryType, EditorMode } from '../../types';
+import { InfinityQuery, EditorMode } from '../../types';
 import { CSVOptionsEditor } from '../../components/CSVOptionsEditor';
 import { JSONOptionsEditor } from '../../components/JSONOptionsEditor';
 import { TypeSelector } from '../../components/TypeSelector';
@@ -7,6 +7,7 @@ import { SourceSelector } from '../../components/SourceSelector';
 import { FormatSelector } from '../../components/FormatSelector';
 import { GlobalQuerySelector } from '../../components/GlobalQuerySelector';
 import { Help } from '../../components/Help';
+import { QueryPreview } from '../../components/QueryPreview';
 
 interface TypeChooserProps {
   mode: EditorMode;
@@ -22,11 +23,12 @@ export const TypeChooser = (props: TypeChooserProps) => {
     <div className="gf-form-inline">
       <div className="gf-form">
         <TypeSelector {...props} />
-        {query.type === InfinityQueryType.Global ? <GlobalQuerySelector {...props} /> : <SourceSelector {...props} />}
-        {query.type !== InfinityQueryType.Series && mode !== EditorMode.Variable && <FormatSelector {...props} />}
-        {query.type === InfinityQueryType.CSV && <CSVOptionsEditor {...props} />}
-        {query.type === InfinityQueryType.JSON && <JSONOptionsEditor {...props} />}
+        {query.type === 'global' ? <GlobalQuerySelector {...props} /> : <SourceSelector {...props} />}
+        {query.type !== 'series' && mode !== 'variable' && <FormatSelector {...props} />}
+        {query.type === 'csv' && <CSVOptionsEditor {...props} />}
+        {query.type === 'json' && <JSONOptionsEditor {...props} />}
         <Help />
+        <QueryPreview query={JSON.stringify(query, null, 4)} />
       </div>
     </div>
   );

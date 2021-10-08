@@ -2,11 +2,11 @@ import React from 'react';
 import { DataLinkInput } from '@grafana/ui';
 import { VariableOrigin } from '@grafana/data';
 import { set, defaultsDeep } from 'lodash';
-import { InfinityQuery } from '../../types';
+import { InfinitySeriesQuery } from '../../types';
 import { SeriesAdvancedOptions } from './query.series_options';
 
 interface ScrapperProps {
-  query: InfinityQuery;
+  query: InfinitySeriesQuery;
   onChange: (value: any) => void;
 }
 
@@ -14,7 +14,7 @@ export const SeriesEditor = ({ query, onChange }: ScrapperProps) => {
   query = defaultsDeep(query, {
     alias: 'Random Walk',
   });
-  const onInputTextChange = (value: string | number, field: keyof InfinityQuery) => {
+  const onInputTextChange = <T extends InfinitySeriesQuery, K extends keyof T, V extends T[K]>(value: V, field: K | 'expression') => {
     set(query, field, value);
     onChange(query);
   };
@@ -30,13 +30,7 @@ export const SeriesEditor = ({ query, onChange }: ScrapperProps) => {
             placeholder="Alias / Random Walk"
           />
           <label className="gf-form-label query-keyword width-6">Series Count</label>
-          <input
-            type="text"
-            className="gf-form-input min-width-12"
-            value={query.seriesCount}
-            placeholder="1"
-            onChange={(e) => onInputTextChange(+e.target.value, `seriesCount`)}
-          ></input>
+          <input type="text" className="gf-form-input min-width-12" value={query.seriesCount} placeholder="1" onChange={(e) => onInputTextChange(+e.target.value, `seriesCount`)}></input>
         </div>
       </div>
       <div className="gf-form-inline">
