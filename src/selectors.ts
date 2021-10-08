@@ -1,4 +1,6 @@
 export const Components = {
+  Common: {},
+  ConfigEditor: {},
   QueryEditor: {
     Format: {
       Label: {
@@ -12,4 +14,6 @@ export const Components = {
       },
     },
   },
+  VariableEditor: {},
+  AnnotationsEditor: {},
 };
