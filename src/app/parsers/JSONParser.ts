@@ -1,11 +1,11 @@
 import { forEach, get, toNumber, flatten } from 'lodash';
 import { JSONPath } from 'jsonpath-plus';
 import { InfinityParser } from './InfinityParser';
-import { InfinityQuery, InfinityColumn, GrafanaTableRow } from './../../types';
+import { InfinityColumn, GrafanaTableRow, InfinityJSONQuery, InfinityGraphQLQuery } from './../../types';
 import { getColumnsFromObjectArray, columnarToTable } from './utils';
 
-export class JSONParser extends InfinityParser {
-  constructor(JSONResponse: object, target: InfinityQuery, endTime?: Date) {
+export class JSONParser extends InfinityParser<InfinityJSONQuery | InfinityGraphQLQuery> {
+  constructor(JSONResponse: object, target: InfinityJSONQuery | InfinityGraphQLQuery, endTime?: Date) {
     super(target);
     let jsonResponse = this.formatInput(JSONResponse);
     if (this.target.json_options?.columnar) {

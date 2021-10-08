@@ -21,7 +21,7 @@ describe('FormatSelector', () => {
   it('renders timeseries format', () => {
     const onChange = jest.fn();
     const onRunQuery = jest.fn();
-    const query: InfinityQuery = { ...DefaultInfinityQuery, format: 'timeseries' };
+    const query: InfinityQuery = { type: 'json', format: 'timeseries', source: 'inline', data: '{}', json_options: {}, root_selector: '', columns: [], filters: [], refId: '' };
     const wrapper = render(<FormatSelector query={query} onChange={onChange} onRunQuery={onRunQuery} />);
     expect(wrapper).not.toBeNull();
     expect(wrapper.getByTitle(LabelTitle)).toBeInTheDocument();

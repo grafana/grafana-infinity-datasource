@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Modal, Select } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
 import { filterOperators } from '../../app/parsers/filter';
+import { isDataQuery } from './../../app/utils';
 import { InfinityQuery, InfinityFilter, FilterOperator } from '../../types';
 
 interface TableFiltersProps {
@@ -13,6 +14,9 @@ interface TableFiltersProps {
 export const TableFilter = (props: TableFiltersProps) => {
   const [popupOpenStatus, setPopupOpenStatus] = useState(false);
   const { query, onChange, onRunQuery } = props;
+  if (!isDataQuery(query)) {
+    return <></>;
+  }
   const getFields = () => {
     return query.columns.map((col) => {
       return {

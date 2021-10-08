@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { defaultsDeep, set } from 'lodash';
 import { Modal, Select } from '@grafana/ui';
-import { InfinityQuery, DataOverride } from '../../types';
+import { InfinitySeriesQuery, DataOverride } from '../../types';
 
 interface SeriesAdvancedOptionsProps {
-  query: InfinityQuery;
+  query: InfinitySeriesQuery;
   onChange: (value: any) => void;
 }
 

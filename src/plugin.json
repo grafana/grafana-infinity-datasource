@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/grafana/grafana/main/docs/sources/developers/plugins/plugin.schema.json",
+  "$schema": "https://raw.githubusercontent.com/grafana/grafana/v7.5.1/docs/sources/developers/plugins/plugin.schema.json",
   "name": "Infinity",
   "id": "yesoreyeram-infinity-datasource",
   "type": "datasource",
@@ -19,19 +19,7 @@
       "small": "img/icon.svg",
       "large": "img/icon.svg"
     },
-    "keywords": [
-      "grafana",
-      "json",
-      "csv",
-      "xml",
-      "html",
-      "graphql",
-      "simple-json",
-      "url",
-      "inline",
-      "random walk",
-      "scraping"
-    ],
+    "keywords": ["grafana", "json", "csv", "xml", "html", "graphql", "simple-json", "url", "inline", "random walk", "scraping"],
     "screenshots": [
       {
         "name": "features",

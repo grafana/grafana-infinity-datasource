@@ -16,18 +16,25 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
   }
   annotations = {};
   private overrideWithGlobalQuery(t: InfinityQuery): InfinityQuery {
-    if (t.type === 'global' && t.global_query_id && this.instanceSettings.jsonData.global_queries && this.instanceSettings.jsonData.global_queries.length > 0) {
-      let matchingQuery = this.instanceSettings.jsonData.global_queries.find((q: GlobalInfinityQuery) => q.id === t.global_query_id);
-      t = matchingQuery ? matchingQuery.query : t;
+    if (t.type !== 'global') {
+      return t;
+    } else if (t.global_query_id && this.instanceSettings.jsonData.global_queries && this.instanceSettings.jsonData.global_queries.length > 0) {
+      const global_query_id = t.global_query_id;
+      let matchingQuery = this.instanceSettings.jsonData.global_queries.find((q: GlobalInfinityQuery) => q.id === global_query_id);
+      return matchingQuery && global_query_id ? matchingQuery.query : t;
     }
     return t;
   }
   private getResults(options: DataQueryRequest<InfinityQuery>): Promise<DataQueryResponse> {
+    const startTime = new Date(options.range.from.toDate()).getTime();
+    const endTime = new Date(options.range.to.toDate()).getTime();
     const promises: any[] = [];
     options.targets
       .filter((t: InfinityQuery) => t.hide !== true)
+      .map((t) => this.overrideWithGlobalQuery(t))
+      .filter((t) => t.type !== 'global')
+      .map((t) => replaceVariables(t, options.scopedVars))
       .forEach((t: InfinityQuery) => {
-        t = this.overrideWithGlobalQuery(t);
         promises.push(
           new Promise((resolve, reject) => {
             switch (t.type) {
@@ -36,20 +43,10 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
               case 'json':
               case 'xml':
               case 'graphql':
-                new InfinityProvider(replaceVariables(t, options.scopedVars), this)
-                  .query()
-                  .then((res) => resolve(res))
-                  .catch((ex) => {
-                    reject(ex);
-                  });
+                new InfinityProvider(t, this).query().then(resolve).catch(reject);
                 break;
               case 'series':
-                new SeriesProvider(replaceVariables(t, options.scopedVars))
-                  .query(new Date(options.range.from.toDate()).getTime(), new Date(options.range.to.toDate()).getTime())
-                  .then((res) => resolve(res))
-                  .catch((ex) => {
-                    reject(ex);
-                  });
+                new SeriesProvider(replaceVariables(t, options.scopedVars)).query(startTime, endTime).then(resolve).catch(reject);
                 break;
               case 'global':
                 reject('Query not found');

@@ -12,8 +12,6 @@ const DefaultGlobalQuery: InfinityQuery = {
   type: 'csv',
   source: 'inline',
   data: '',
-  url: '',
-  url_options: { method: 'GET' },
   root_selector: '',
   columns: [],
   filters: [],

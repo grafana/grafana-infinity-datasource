@@ -7,7 +7,6 @@ import { GlobalQueryEditor } from './config/GlobalQueryEditor';
 import { SecureFieldsEditor } from './config/SecureFieldsEditor';
 import { URLEditor } from './config/URL';
 import { AuthEditor } from './config/Auth';
-// import { LocalSourcesEditor } from './config/LocalSourcesEditor';
 import { InfinityOptions } from '../types';
 
 export type ConfigEditorProps = DataSourcePluginOptionsEditorProps<InfinityOptions>;
@@ -20,7 +19,6 @@ export const InfinityConfigEditor = (props: ConfigEditorProps) => {
   const [headersOpen, setHeadersOpen] = useState(false);
   const [queriesOpen, setQueriesOpen] = useState(false);
   const [globalsOpen, setGlobalsOpen] = useState(false);
-  // const [localSourcesOpen, setLocalSourcesOpen] = useState(false);
   options.jsonData = defaultsDeep(options.jsonData, {
     global_queries: [],
   });
@@ -82,16 +80,6 @@ export const InfinityConfigEditor = (props: ConfigEditorProps) => {
           <GlobalQueryEditor options={options} onOptionsChange={onOptionsChange} />
         </div>
       </Collapse>
-      {/* <Collapse
-        label="Local Sources"
-        isOpen={localSourcesOpen}
-        collapsible={true}
-        onToggle={e => setLocalSourcesOpen(!localSourcesOpen)}
-      >
-        <div style={{ padding: '0px 10px' }}>
-          <LocalSourcesEditor options={options} onOptionsChange={onOptionsChange} />
-        </div>
-      </Collapse> */}
     </>
   );
 };

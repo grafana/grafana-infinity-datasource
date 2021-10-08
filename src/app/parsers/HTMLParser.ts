@@ -1,10 +1,10 @@
 import { forEach, toNumber } from 'lodash';
 import { load } from 'cheerio';
 import { InfinityParser } from './InfinityParser';
-import { InfinityQuery, InfinityColumn, GrafanaTableRow, GrafanaTableRowItem } from './../../types';
+import { InfinityColumn, GrafanaTableRow, GrafanaTableRowItem, InfinityHTMLQuery } from './../../types';
 
-export class HTMLParser extends InfinityParser {
-  constructor(HTMLResponse: string, target: InfinityQuery, endTime?: Date) {
+export class HTMLParser extends InfinityParser<InfinityHTMLQuery> {
+  constructor(HTMLResponse: string, target: InfinityHTMLQuery, endTime?: Date) {
     super(target);
     const rootElements = this.formatInput(HTMLResponse);
     this.constructTableData(rootElements);

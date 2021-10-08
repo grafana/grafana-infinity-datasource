@@ -126,7 +126,7 @@ export class SeriesProvider {
   query(startTime: number, endTime: number) {
     return new Promise((resolve, reject) => {
       let result = [];
-      if (this.target.source === 'random-walk' || this.target.source === 'expression') {
+      if (this.target.type === 'series') {
         if (this.target.seriesCount && this.target.seriesCount > 1) {
           for (let i = 1; i <= this.target.seriesCount; i++) {
             let seriesName = this.target.alias || sample(RANDOM_WORDS) || 'Random Walk';

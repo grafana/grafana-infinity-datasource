@@ -1,3 +1,4 @@
+import { isDataQuery } from 'app/utils';
 import React, { useState } from 'react';
 import { InfinityQuery, EditorMode } from '../types';
 interface DataFieldProps {
@@ -8,7 +9,10 @@ interface DataFieldProps {
 }
 export const DataField = (props: DataFieldProps) => {
   const { query, onChange, onRunQuery } = props;
-  const [data, setData] = useState(query.data);
+  const [data, setData] = useState(isDataQuery(query) && query.source === 'inline' ? query.data || '' : '');
+  if (!(isDataQuery(query) && query.source === 'inline')) {
+    return <></>;
+  }
   const LABEL_WIDTH = props.mode === 'variable' ? 10 : 8;
   const onDataChange = () => {
     onChange({ ...query, data });

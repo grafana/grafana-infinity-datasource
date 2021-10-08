@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { cloneDeep } from 'lodash';
 import { Select } from '@grafana/ui';
-import { SCRAP_QUERY_RESULT_COLUMN_FORMATS, InfinityQuery, InfinityColumnFormat, EditorMode } from '../types';
+import { SCRAP_QUERY_RESULT_COLUMN_FORMATS, InfinityQuery, InfinityColumnFormat, EditorMode, InfinityColumn } from '../types';
+import { isDataQuery } from 'app/utils';
 
 interface QueryColumnItemProps {
   query: InfinityQuery;
@@ -13,9 +14,13 @@ interface QueryColumnItemProps {
 export const QueryColumnItem = (props: QueryColumnItemProps) => {
   const { query, index, onChange, onRunQuery, mode } = props;
   const LABEL_WIDTH = mode === 'variable' ? 10 : 8;
-  const column = query.columns[index];
+
+  const column = isDataQuery(query) ? query.columns[index] : ({ selector: '', text: '', type: 'string' } as InfinityColumn);
   const [selector, setSelector] = useState(column.selector || '');
   const [text, setText] = useState(column.text || '');
+  if (!isDataQuery(query)) {
+    return <></>;
+  }
   const onSelectorChange = () => {
     const columns = cloneDeep(query.columns || []);
     columns[index].selector = selector;

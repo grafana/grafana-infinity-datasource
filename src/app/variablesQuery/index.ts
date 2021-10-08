@@ -9,7 +9,7 @@ import { JoinVariable } from './Join';
 import { RandomVariable } from './Random';
 import { UnixTimeStampVariable } from './UnixTimeStamp';
 import { Datasource } from './../../datasource';
-import { InfinityQuery, InfinityInstanceSettings, VariableQuery, DefaultInfinityQuery } from './../../types';
+import { InfinityQuery, InfinityInstanceSettings, VariableQuery, DefaultInfinityQuery, InfinityDataQuery } from './../../types';
 
 const getTemplateVariablesFromResult = (res: any): Array<SelectableValue<string>> => {
   if (res.columns && res.columns.length > 0) {
@@ -73,7 +73,8 @@ export class InfinityVariableProvider implements VariableProvider {
   query(): Promise<Array<SelectableValue<string>>> {
     return new Promise((resolve, reject) => {
       if (IsValidInfinityQuery(this.infinityQuery)) {
-        let provider = new InfinityProvider(replaceVariables(this.infinityQuery, {}), this.datasource);
+        const replacedQuery = replaceVariables(this.infinityQuery, {});
+        let provider = new InfinityProvider(replacedQuery as InfinityDataQuery, this.datasource);
         provider
           .query()
           .then((res: any) => {

@@ -10,6 +10,9 @@ interface SourceSelectorProps {
 }
 export const GlobalQuerySelector = (props: SourceSelectorProps) => {
   const { query, onChange, onRunQuery, instanceSettings } = props;
+  if (query.type !== 'global') {
+    return <></>;
+  }
   const global_queries: SelectableValue[] = (instanceSettings?.jsonData?.global_queries || []).map((q: GlobalInfinityQuery) => {
     return {
       label: q.name,

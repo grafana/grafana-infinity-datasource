@@ -6,10 +6,6 @@ const CSVResults1 = new CSVParser(``, {
   source: 'inline',
   data: '',
   format: 'table',
-  url: '',
-  url_options: {
-    method: 'GET',
-  },
   root_selector: '',
   columns: [],
 });
@@ -33,10 +29,6 @@ china,11
     source: 'inline',
     data: '',
     format: 'table',
-    url: '',
-    url_options: {
-      method: 'GET',
-    },
     root_selector: '',
     columns: [
       {
@@ -86,10 +78,6 @@ year,country,population
     source: 'inline',
     data: '',
     format: 'table',
-    url: '',
-    url_options: {
-      method: 'GET',
-    },
     root_selector: '',
     columns: [
       {
@@ -146,10 +134,6 @@ year,country,population
     source: 'inline',
     data: '',
     format: 'table',
-    url: '',
-    url_options: {
-      method: 'GET',
-    },
     root_selector: '',
     columns: [],
   }

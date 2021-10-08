@@ -7,10 +7,6 @@ const defaultTarget: InfinityQuery = {
   source: 'inline',
   data: '',
   format: 'table',
-  url: '',
-  url_options: {
-    method: 'GET',
-  },
   root_selector: '',
   columns: [],
 };

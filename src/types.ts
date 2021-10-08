@@ -39,8 +39,8 @@ export type InfinityQuerySources = 'url' | 'inline' | 'random-walk' | 'expressio
 export type InfinityColumnFormat = 'string' | 'number' | 'timestamp' | 'timestamp_epoch' | 'timestamp_epoch_s';
 export type InfinityQueryFormat = 'table' | 'timeseries' | 'dataframe';
 export type InfinityQueryBase<T extends InfinityQueryType> = { type: T } & DataQuery;
-export type InfinityQueryWithSource<S extends InfinityQuerySources> = { source: S };
-export type InfinityQueryWithURLSource = {
+export type InfinityQueryWithSource<S extends InfinityQuerySources> = { source: S } & DataQuery;
+export type InfinityQueryWithURLSource<T extends InfinityQueryType> = {
   url: string;
   url_options: {
     method: 'GET' | 'POST';
@@ -54,67 +54,28 @@ export type InfinityQueryWithURLSource = {
       value: string;
     }>;
   };
-} & InfinityQueryWithSource<'url'>;
-export type InfinityQueryWithInlineSource = {
+} & InfinityQueryWithSource<'url'> &
+  InfinityQueryBase<T>;
+export type InfinityQueryWithInlineSource<T extends InfinityQueryType> = {
   data: string;
-} & InfinityQueryWithSource<'inline'>;
+} & InfinityQueryWithSource<'inline'> &
+  InfinityQueryBase<T>;
 export type InfinityQueryWithRandomWalkSource = {} & InfinityQueryWithSource<'random-walk'>;
 export type InfinityQueryWithExpressionSource = {} & InfinityQueryWithSource<'expression'>;
-export type InfinityQueryWithDataSource = {
+export type InfinityQueryWithDataSource<T extends InfinityQueryType> = {
   root_selector: string;
   columns: InfinityColumn[];
   filters?: InfinityFilter[];
   format: InfinityQueryFormat;
-} & (InfinityQueryWithURLSource | InfinityQueryWithInlineSource);
+} & (InfinityQueryWithURLSource<T> | InfinityQueryWithInlineSource<T>) &
+  InfinityQueryBase<T>;
 export type InfinityJSONQuery = {
-  json_options: {
+  json_options?: {
     root_is_not_array?: boolean;
     columnar?: boolean;
   };
-} & InfinityQueryWithDataSource &
-  InfinityQueryBase<'json'>;
+} & InfinityQueryWithDataSource<'json'>;
 export type InfinityCSVQuery = {
-  csv_options: {
-    delimiter?: string;
-    skip_empty_lines?: boolean;
-    skip_lines_with_error?: boolean;
-    relax_column_count?: boolean;
-    columns?: string;
-    comment?: string;
-  };
-} & InfinityQueryWithDataSource &
-  InfinityQueryBase<'csv'>;
-export type InfinityXMLQuery = {} & InfinityQueryWithDataSource & InfinityQueryBase<'xml'>;
-export type InfinityGraphQLQuery = {
-  json_options: {
-    root_is_not_array?: boolean;
-    columnar?: boolean;
-  };
-} & InfinityQueryWithDataSource &
-  InfinityQueryBase<'graphql'>;
-export type InfinityHTMLQuery = {} & InfinityQueryWithDataSource & InfinityQueryBase<'html'>;
-export type InfinitySeriesQueryRandomWalk = {} & InfinityQueryWithRandomWalkSource;
-export type InfinitySeriesQueryExpression = { expression?: string } & InfinityQueryWithExpressionSource;
-export type InfinitySeriesQuery = {
-  seriesCount: number;
-  alias: string;
-  dataOverrides: DataOverride[];
-} & (InfinitySeriesQueryRandomWalk | InfinitySeriesQueryExpression) &
-  InfinityQueryBase<'series'>;
-export type InfinityGlobalQuery = {} & InfinityQueryBase<'global'>;
-export type InfinityDataQuery = InfinityJSONQuery | InfinityCSVQuery | InfinityXMLQuery | InfinityGraphQLQuery | InfinityHTMLQuery;
-export type InfinityLegacyQuery = InfinityDataQuery | InfinitySeriesQuery | InfinityGlobalQuery;
-export type InfinityQueryLegacy = {
-  type: InfinityQueryType;
-  source: InfinityQuerySources;
-  url: string;
-  url_options: {
-    method: 'GET' | 'POST';
-    data?: string;
-    params?: QueryParam[];
-    headers?: QueryHeaders[];
-  };
-  data: string;
   csv_options?: {
     delimiter?: string;
     skip_empty_lines?: boolean;
@@ -123,21 +84,24 @@ export type InfinityQueryLegacy = {
     columns?: string;
     comment?: string;
   };
+} & InfinityQueryWithDataSource<'csv'>;
+export type InfinityXMLQuery = {} & InfinityQueryWithDataSource<'xml'>;
+export type InfinityGraphQLQuery = {
   json_options?: {
     root_is_not_array?: boolean;
     columnar?: boolean;
   };
-  root_selector: string;
-  global_query_id?: string;
-  columns: InfinityColumn[];
-  alias?: string;
-  seriesCount?: number;
-  expression?: string;
-  filters?: InfinityFilter[];
-  dataOverrides?: DataOverride[];
-  format: InfinityQueryFormat;
-} & DataQuery;
-export type InfinityQuery = InfinityQueryLegacy;
+} & InfinityQueryWithDataSource<'graphql'>;
+export type InfinityHTMLQuery = {} & InfinityQueryWithDataSource<'html'>;
+export type InfinitySeriesQueryBase<S extends InfinityQuerySources> = { seriesCount: number; alias: string; dataOverrides: DataOverride[] } & InfinityQueryWithSource<S> & InfinityQueryBase<'series'>;
+export type InfinitySeriesQueryRandomWalk = {} & InfinitySeriesQueryBase<'random-walk'>;
+export type InfinitySeriesQueryExpression = { expression?: string } & InfinitySeriesQueryBase<'expression'>;
+export type InfinitySeriesQuery = InfinitySeriesQueryRandomWalk | InfinitySeriesQueryExpression;
+export type InfinityGlobalQuery = { global_query_id: string } & InfinityQueryBase<'global'>;
+export type InfinityDataQuery = InfinityJSONQuery | InfinityCSVQuery | InfinityXMLQuery | InfinityGraphQLQuery | InfinityHTMLQuery;
+export type InfinityDestinationQuery = InfinityDataQuery | InfinitySeriesQuery;
+export type InfinityLegacyQuery = InfinityDestinationQuery | InfinityGlobalQuery;
+export type InfinityQuery = InfinityLegacyQuery;
 //#endregion
 
 //#region Variable Query
@@ -195,7 +159,6 @@ export type EditorMode = 'standard' | 'global' | 'variable';
 //#endregion
 
 //#region Misc
-
 interface ScrapQuerySources extends SelectableValue<InfinityQuerySources> {
   supported_types: InfinityQueryType[];
 }
@@ -287,17 +250,8 @@ export const DefaultInfinityQuery: InfinityQuery = {
   type: 'json',
   source: 'url',
   format: 'table',
-  data: '',
   url: 'https://jsonplaceholder.typicode.com/users',
   url_options: { method: 'GET', data: '' },
-  csv_options: {
-    delimiter: ',',
-    skip_empty_lines: false,
-    skip_lines_with_error: false,
-    relax_column_count: false,
-    columns: '',
-    comment: '',
-  },
   root_selector: '',
   columns: [],
   filters: [],

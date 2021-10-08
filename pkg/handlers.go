@@ -30,15 +30,6 @@ func (td *InfinityDatasource) proxyHandler(rw http.ResponseWriter, req *http.Req
 			fmt.Fprintf(rw, "%s", response)
 			return
 		}
-		// if query.Source == "local-fs" {
-		// 	response, err := client.client.GetLocalFileContent(query)
-		// 	if err != nil {
-		// 		http.Error(rw, err.Error(), http.StatusForbidden)
-		// 		return
-		// 	}
-		// 	fmt.Fprintf(rw, "%s", response)
-		// 	return
-		// }
 		http.Error(rw, "unknown query", http.StatusNotImplemented)
 		return
 	}

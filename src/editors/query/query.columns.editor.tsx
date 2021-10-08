@@ -3,6 +3,7 @@ import { cloneDeep } from 'lodash';
 import { Button } from '@grafana/ui';
 import { InfinityColumn, InfinityQuery, EditorMode } from '../../types';
 import { QueryColumnItem } from './../../components/QueryColumnItem';
+import { isDataQuery } from './../../app/utils';
 
 interface QueryColumnProps {
   query: InfinityQuery;
@@ -12,6 +13,9 @@ interface QueryColumnProps {
 }
 export const QueryColumnsEditor = (props: QueryColumnProps) => {
   const { query, mode, onChange } = props;
+  if (!isDataQuery(query)) {
+    return <></>;
+  }
   const onColumnAdd = () => {
     const columns = cloneDeep(query.columns || []);
     const defaultColumn = {

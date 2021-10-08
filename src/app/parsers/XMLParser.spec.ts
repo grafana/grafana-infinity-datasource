@@ -6,10 +6,6 @@ const XMLResults1 = new XMLParser('', {
   source: 'inline',
   data: '',
   format: 'table',
-  url: '',
-  url_options: {
-    method: 'GET',
-  },
   root_selector: '',
   columns: [],
 });
@@ -39,10 +35,6 @@ const XMLResults2 = new XMLParser(
     source: 'inline',
     data: '',
     format: 'table',
-    url: '',
-    url_options: {
-      method: 'GET',
-    },
     root_selector: 'users.user',
     columns: [
       {
@@ -80,10 +72,6 @@ const XMLResults3 = new XMLParser(
     source: 'inline',
     data: '',
     format: 'table',
-    url: '',
-    url_options: {
-      method: 'GET',
-    },
     root_selector: 'users.user',
     columns: [
       {

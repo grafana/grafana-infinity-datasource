@@ -8,9 +8,12 @@ interface SourceSelectorProps {
 }
 export const SourceSelector = (props: SourceSelectorProps) => {
   const { query, onChange, onRunQuery } = props;
+  if (query.type === 'global') {
+    return <></>;
+  }
   const supportedSources = SCRAP_QUERY_SOURCES.filter((source) => source.supported_types.includes(query.type));
   const onSourceChange = (source: InfinityQuerySources) => {
-    onChange({ ...query, source });
+    onChange({ ...query, source } as InfinityQuery);
     onRunQuery();
   };
   return (

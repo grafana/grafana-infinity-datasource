@@ -24,11 +24,7 @@ export const TypeSelector = (props: TypeSelectorProps) => {
     }
   };
   const onTypeChange = (type: InfinityQueryType) => {
-    onChange({
-      ...query,
-      type,
-      source: type === 'series' ? 'random-walk' : 'url',
-    });
+    onChange({ ...query, type, source: type === 'series' ? 'random-walk' : 'url' } as InfinityQuery);
     onRunQuery();
   };
   return (

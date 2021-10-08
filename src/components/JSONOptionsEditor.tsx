@@ -11,6 +11,9 @@ interface JSONOptionsEditorProps {
 export const JSONOptionsEditor = (props: JSONOptionsEditorProps) => {
   const [popupStatus, setPopupStatus] = useState(false);
   const { query, onChange } = props;
+  if (query.type !== 'json') {
+    return <></>;
+  }
   const { json_options = {} } = query;
   const onRootIsNotArrayChange = (root_is_not_array: boolean) => {
     onChange({

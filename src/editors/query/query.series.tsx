@@ -2,11 +2,11 @@ import React from 'react';
 import { DataLinkInput } from '@grafana/ui';
 import { VariableOrigin } from '@grafana/data';
 import { set, defaultsDeep } from 'lodash';
-import { InfinityQuery } from '../../types';
+import { InfinitySeriesQuery } from '../../types';
 import { SeriesAdvancedOptions } from './query.series_options';
 
 interface ScrapperProps {
-  query: InfinityQuery;
+  query: InfinitySeriesQuery;
   onChange: (value: any) => void;
 }
 
@@ -14,7 +14,7 @@ export const SeriesEditor = ({ query, onChange }: ScrapperProps) => {
   query = defaultsDeep(query, {
     alias: 'Random Walk',
   });
-  const onInputTextChange = (value: string | number, field: keyof InfinityQuery) => {
+  const onInputTextChange = <T extends InfinitySeriesQuery, K extends keyof T, V extends T[K]>(value: V, field: K | 'expression') => {
     set(query, field, value);
     onChange(query);
   };

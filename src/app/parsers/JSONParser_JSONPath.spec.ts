@@ -28,10 +28,6 @@ const JSONResults = new JSONParser(
     source: 'inline',
     data: '',
     format: 'table',
-    url: '',
-    url_options: {
-      method: 'GET',
-    },
     root_selector: '$.*',
     columns: [
       {
@@ -79,10 +75,6 @@ const JSONResults1 = new JSONParser(
     source: 'inline',
     data: '',
     format: 'table',
-    url: '',
-    url_options: {
-      method: 'GET',
-    },
     root_selector: '$.*',
     columns: [
       {
@@ -135,10 +127,6 @@ const JSONResults2 = new JSONParser(
     source: 'inline',
     data: '',
     format: 'table',
-    url: '',
-    url_options: {
-      method: 'GET',
-    },
     root_selector: '$.customers',
     columns: [
       {
@@ -191,10 +179,6 @@ const JSONResults3 = new JSONParser(
     source: 'inline',
     data: '',
     format: 'table',
-    url: '',
-    url_options: {
-      method: 'GET',
-    },
     root_selector: '$customers',
     columns: [
       {

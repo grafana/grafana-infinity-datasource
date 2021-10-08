@@ -1,6 +1,6 @@
 {
   "name": "grafana-infinity-datasource",
-  "version": "0.8.0-dev.1",
+  "version": "0.8.0-dev.2",
   "description": "JSON, CSV, XML, GraphQL & HTML datasource for Grafana. Do infinite things with Grafana.",
   "main": "dist/module.js",
   "scripts": {

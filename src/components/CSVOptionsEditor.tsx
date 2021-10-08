@@ -10,62 +10,77 @@ interface CSVOptionsEditorProps {
 
 export const CSVOptionsEditor = (props: CSVOptionsEditorProps) => {
   const [popupStatus, setPopupStatus] = useState(false);
+  if (props.query.type !== 'csv') {
+    return <></>;
+  }
   const togglePopup = () => {
     setPopupStatus(!popupStatus);
   };
   const onDelimiterChange = (delimiter: string) => {
-    props.onChange({
-      ...props.query,
-      csv_options: {
-        ...(props.query.csv_options || {}),
-        delimiter,
-      },
-    });
+    if (props.query.type === 'csv') {
+      props.onChange({
+        ...props.query,
+        csv_options: {
+          ...(props.query.csv_options || {}),
+          delimiter,
+        },
+      });
+    }
   };
   const onSkipEmptyLinesChange = (skip_empty_lines: boolean) => {
-    props.onChange({
-      ...props.query,
-      csv_options: {
-        ...(props.query.csv_options || {}),
-        skip_empty_lines,
-      },
-    });
+    if (props.query.type === 'csv') {
+      props.onChange({
+        ...props.query,
+        csv_options: {
+          ...(props.query.csv_options || {}),
+          skip_empty_lines,
+        },
+      });
+    }
   };
   const onSkipLinesWithErrorChange = (skip_lines_with_error: boolean) => {
-    props.onChange({
-      ...props.query,
-      csv_options: {
-        ...(props.query.csv_options || {}),
-        skip_lines_with_error,
-      },
-    });
+    if (props.query.type === 'csv') {
+      props.onChange({
+        ...props.query,
+        csv_options: {
+          ...(props.query.csv_options || {}),
+          skip_lines_with_error,
+        },
+      });
+    }
   };
   const onRelaxColumnCountChange = (relax_column_count: boolean) => {
-    props.onChange({
-      ...props.query,
-      csv_options: {
-        ...(props.query.csv_options || {}),
-        relax_column_count,
-      },
-    });
+    if (props.query.type === 'csv') {
+      props.onChange({
+        ...props.query,
+        csv_options: {
+          ...(props.query.csv_options || {}),
+          relax_column_count,
+        },
+      });
+    }
   };
   const onColumnsChange = (columns: string) => {
-    props.onChange({
-      ...props.query,
-      csv_options: {
-        ...(props.query.csv_options || {}),
-        columns,
-      },
-    });
+    if (props.query.type === 'csv') {
+      props.onChange({
+        ...props.query,
+        csv_options: {
+          ...(props.query.csv_options || {}),
+          columns,
+        },
+      });
+    }
   };
   const onCommentChange = (comment: string) => {
-    props.onChange({
-      ...props.query,
-      csv_options: {
-        ...(props.query.csv_options || {}),
-        comment,
-      },
-    });
+    if (props.query.type === 'csv') {
+      props.onChange({
+        ...props.query,
+        csv_options: {
+          ...(props.query.csv_options || {}),
+          comment,
+        },
+      });
+    }
   };
   return (
     <>

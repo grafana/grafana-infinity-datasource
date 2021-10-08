@@ -2,10 +2,10 @@ import { forEach, get, toNumber } from 'lodash';
 import parse from 'csv-parse/lib/sync';
 import { InfinityParser } from './InfinityParser';
 import { getColumnsFromObjectArray } from './utils';
-import { InfinityQuery, InfinityColumn, GrafanaTableRow } from './../../types';
+import { InfinityColumn, GrafanaTableRow, InfinityCSVQuery } from './../../types';
 
-export class CSVParser extends InfinityParser {
-  constructor(CSVResponse: string, target: InfinityQuery, endTime?: Date) {
+export class CSVParser extends InfinityParser<InfinityCSVQuery> {
+  constructor(CSVResponse: string, target: InfinityCSVQuery, endTime?: Date) {
     super(target);
     const records = this.formatInput(CSVResponse);
     if (Array.isArray(records)) {

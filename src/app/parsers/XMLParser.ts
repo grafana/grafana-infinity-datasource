@@ -1,10 +1,10 @@
 import { forEach, get, toNumber } from 'lodash';
 import { parseString } from 'xml2js';
 import { InfinityParser } from './InfinityParser';
-import { InfinityQuery, InfinityColumn, GrafanaTableRow } from './../../types';
+import { InfinityColumn, GrafanaTableRow, InfinityXMLQuery } from './../../types';
 
-export class XMLParser extends InfinityParser {
-  constructor(XMLResponse: any | string, target: InfinityQuery, endTime?: Date) {
+export class XMLParser extends InfinityParser<InfinityXMLQuery> {
+  constructor(XMLResponse: any | string, target: InfinityXMLQuery, endTime?: Date) {
     super(target);
     this.formatInput(XMLResponse).then((xmlResponse: any) => {
       if (this.target.root_selector) {
