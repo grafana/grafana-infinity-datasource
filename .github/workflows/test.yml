@@ -62,3 +62,10 @@ jobs:
         with:
           version: latest
           args: buildAll
+      - name: Start the docker container for e2e
+        run: docker-compose up -d
+      - name: Run E2E
+        run: yarn e2e
+      - name: Stop the docker container
+        if: always()
+        run: docker-compose down

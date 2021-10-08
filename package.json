@@ -8,6 +8,9 @@
     "watch": "grafana-toolkit plugin:dev --watch",
     "start": "yarn watch",
     "test": "grafana-toolkit plugin:test",
+    "e2e": "grafana-e2e run",
+    "e2e:open": "grafana-e2e open",
+    "e2e:update": "grafana-e2e run --update-screenshots",
     "build": "grafana-toolkit plugin:build",
     "ci-build": "grafana-toolkit plugin:ci-build",
     "sign": "grafana-toolkit plugin:sign"
@@ -53,7 +56,9 @@
     "xml2js": "^0.4.23"
   },
   "devDependencies": {
-    "@grafana/toolkit": "8.0.3",
+    "@grafana/e2e": "8.2.0",
+    "@grafana/e2e-selectors": "8.2.0",
+    "@grafana/toolkit": "8.2.0",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^13.1.9",
@@ -61,6 +66,7 @@
     "@types/lodash": "^4.14.149",
     "@types/mathjs": "^6.0.5",
     "@types/xml2js": "^0.4.6",
+    "cypress": "7.7.0",
     "jest-runner": "^27.0.4",
     "ts-jest": "^26.5.4",
     "ts-loader": "^8.0.18",
