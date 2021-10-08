@@ -19,4 +19,5 @@ Once you clone the repo locally in the grafana's plugin folder. Do the following
 - `mage -v` - This will help to build the backend part of the plugin. Do this once if you are contributing only the frontend. There is no significant code is in the backend. So no much changes expected
 - `yarn watch` - For continuously watching the front-end changes and build
 - `yarn test` - To make sure all the existing tests passed
-- `yarn docs:dev` - To build and see the changes of docs website
+- `cd website & yarn dev` - To build and see the changes of docs website
+- `cd website & yarn build` - To build the docs website

@@ -4,7 +4,7 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 
 ## [ 0.8.0 ] - unreleased
 
-- moved website into its own folder
+- moved docs website, try into its own folder
 - bug fixes
 
 ## [ 0.7.10 ]

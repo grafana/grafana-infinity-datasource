@@ -40,9 +40,9 @@ jobs:
         if: |
           steps.cache-yarn-cache.outputs.cache-hit != 'true' ||
           steps.cache-node-modules.outputs.cache-hit != 'true'
-      - name: Build
+      - name: Build Frontend
         run: |
-          yarn build;
+          yarn ci-build;
       - name: Setup Go environment
         uses: actions/setup-go@v2
         with:
