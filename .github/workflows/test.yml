@@ -33,7 +33,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ matrix.node-version }}-nodemodules-
       - name: Install dependencies
-        run: CYPRESS_CACHE_FOLDER=./tmp/Cypress yarn install --frozen-lockfile;
+        run: CYPRESS_CACHE_FOLDER=/home/runner/.cache/Cypress yarn install --frozen-lockfile;
         if: |
           steps.cache-yarn-cache.outputs.cache-hit != 'true' ||
           steps.cache-node-modules.outputs.cache-hit != 'true'
