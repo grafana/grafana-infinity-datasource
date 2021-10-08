@@ -1,7 +1,7 @@
 import React from 'react';
 import { Select } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
-import { InfinityQuery, SCRAP_QUERY_TYPES, EditorMode, InfinityQueryType, InfinityQuerySources } from '../../types';
+import { InfinityQuery, SCRAP_QUERY_TYPES, EditorMode, InfinityQueryType, InfinityQuerySources } from '../types';
 interface TypeSelectorProps {
   query: InfinityQuery;
   onChange: (e: InfinityQuery) => void;

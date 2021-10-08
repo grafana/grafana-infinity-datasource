@@ -1,7 +1,7 @@
 import React from 'react';
 import { graphql, Link } from 'gatsby';
 import { Helmet } from 'react-helmet';
-import { Layout } from '../components/website/Layout';
+import { Layout } from '../components/Layout';
 
 export interface TemplateProps {
   data: any;
