@@ -63,7 +63,16 @@ jobs:
           version: latest
           args: buildAll
       - name: Start the docker container for e2e
-        run: docker-compose up -d
+        run: |
+          docker-compose pull
+          docker-compose up -d
+      - name: wait for grafana to start
+        uses: nev7n/wait_for_response@v1
+        with:
+          url: 'http://localhost:3000/'
+          responseCode: 200
+          timeout: 20000
+          interval: 500
       - name: Run E2E
         run: yarn e2e
       - name: Stop the docker container
