@@ -16,7 +16,6 @@ export const pageQuery = graphql`
 `;
 
 export default function Home(props: { data: any }) {
-  console.log(props.data);
   return (
     <Layout showSubMenu={false} title="">
       <HeroSection />

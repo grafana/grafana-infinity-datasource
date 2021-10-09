@@ -31,16 +31,10 @@ export const HeroSection = () => {
           <span style={{ color: '#ccc' }}>Visualize data from JSON, CSV, XML, GraphQL, HTML &amp; REST APIs. Also turns any website into grafana dashboard.</span>
         </p>
         <br />
-        <Link className="btn btn-primary text-black" style={{ backgroundImage: 'linear-gradient(#FADE2A,#F05A28)', color: 'black', border: 'none' }} to="/getting-started">
+        <Link className="btn btn-primary" to="/getting-started">
           Getting started
         </Link>
-        <a
-          className="btn btn-primary text-black mx-4"
-          style={{ backgroundImage: 'linear-gradient(#FADE2A,#F05A28)', color: 'black', border: 'none' }}
-          href="https://grafana-infinity-datasource.herokuapp.com"
-          target="_blank"
-          rel="noreferrer"
-        >
+        <a className="btn btn-primary mx-4" href="https://grafana-infinity-datasource.herokuapp.com/d/try/try?orgId=1&editPanel=2" target="_blank" rel="noreferrer">
           Try online
         </a>
       </div>

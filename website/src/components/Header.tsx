@@ -70,10 +70,15 @@ export const Header = (props: HeaderProps) => {
               </li>
             </ul>
             <ul className="navbar-nav d-flex mb-2 mb-lg-0">
-              <a className="nav-links special-menu highlight rounded text-white fw-bolder" href="https://grafana-infinity-datasource.herokuapp.com" target="_blank" rel="noreferrer">
+              <a
+                className="nav-links special-menu rounded text-white btn-primary"
+                href="https://grafana-infinity-datasource.herokuapp.com/d/try/try?orgId=1&editPanel=2"
+                target="_blank"
+                rel="noreferrer"
+              >
                 Try online
               </a>
-              <Link className="nav-links rounded text-white fw-bolder special-menu" to="/wiki/installation">
+              <Link className="nav-links rounded text-white special-menu" to="/wiki/installation">
                 Install
               </Link>
             </ul>
