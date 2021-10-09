@@ -1,7 +1,7 @@
 name: Pull Requests
 on: [pull_request]
 jobs:
-  build-frontend:
+  build-test-frontend:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
@@ -49,7 +49,7 @@ jobs:
           name: artifacts-frontend
           if-no-files-found: error
           path: dist
-  build-backend:
+  build-test-backend:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
@@ -87,7 +87,7 @@ jobs:
           path: dist
   e2e:
     runs-on: ubuntu-20.04
-    needs: [build-frontend, build-backend]
+    needs: [build-test-frontend, build-test-backend]
     strategy:
       matrix:
         node-version: [14.x]
@@ -151,6 +151,13 @@ jobs:
           interval: 500
       - name: Run E2E
         run: yarn e2e
+      - name: Save E2E artifacts
+        uses: actions/upload-artifact@v2
+        if: ${{ failure() }}
+        with:
+          name: artifacts-e2e
+          if-no-files-found: error
+          path: cypress/videos
       - name: Stop the docker container
         if: always()
         run: docker-compose down
