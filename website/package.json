@@ -28,7 +28,8 @@
     "react-dom": "^17.0.1",
     "react-helmet": "^6.1.0",
     "showdown": "^1.9.1",
-    "tslib": "^2.3.1"
+    "tslib": "^2.3.1",
+    "typewriter-effect": "^2.18.2"
   },
   "devDependencies": {
     "node-sass": "^6.0.1"
