@@ -95,7 +95,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: list artifacts
-        id: yarn-cache-dir-path
+        id: yarn-cache-dir-path-before
         run: ls dist
       - name: Download Frontend artifacts
         uses: actions/download-artifact@v2
@@ -108,7 +108,7 @@ jobs:
           name: artifacts-backend
           path: dist
       - name: list artifacts
-        id: yarn-cache-dir-path
+        id: yarn-cache-dir-path-after
         run: ls dist
       - name: NodeJS Setup
         uses: actions/setup-node@v1
