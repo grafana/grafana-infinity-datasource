@@ -104,6 +104,8 @@ jobs:
         with:
           name: artifacts-backend
           path: dist
+      - name: Build Frontend
+        run: chmod 755 dist/gpx_*
       - name: NodeJS Setup
         uses: actions/setup-node@v1
         with:
