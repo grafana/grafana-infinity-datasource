@@ -104,9 +104,6 @@ jobs:
         with:
           name: artifacts-backend
           path: dist
-      - name: list artifacts
-        id: yarn-cache-dir-path-after
-        run: ls dist
       - name: NodeJS Setup
         uses: actions/setup-node@v1
         with:
@@ -142,13 +139,6 @@ jobs:
         run: |
           docker-compose pull
           docker-compose up -d
-      - name: wait for grafana to start
-        uses: nev7n/wait_for_response@v1
-        with:
-          url: 'http://localhost:3000/'
-          responseCode: 200
-          timeout: 20000
-          interval: 500
       - name: Run E2E
         run: yarn e2e
       - name: Save E2E artifacts
