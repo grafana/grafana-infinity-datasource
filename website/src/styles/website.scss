@@ -145,9 +145,8 @@ img[src*='#center'] {
 }
 
 /* subheader */
-#banner-title,
 #topnav .nav-link:hover {
-  background: linear-gradient(268deg, #fade2a, #f05a28);
+  background: linear-gradient(268deg, #00e5ea, #00e6ea98);
   background-clip: text;
   -webkit-background-clip: text;
   background-size: 600% 600%;
@@ -156,20 +155,16 @@ img[src*='#center'] {
   animation: SubHeader 4s ease infinite;
 }
 #banner-title {
+  background: linear-gradient(268deg, #00e5ea, #00e6eaa6);
+  background-clip: text;
+  -webkit-background-clip: text;
+  background-size: 600% 600%;
+  -webkit-animation: SubHeader 4s ease infinite;
+  -moz-animation: SubHeader 4s ease infinite;
+  animation: SubHeader 4s ease infinite;
   color: transparent;
 }
-#topnav .special-menu {
-  padding: 5px 8px;
-  margin-inline-start: 5px;
-  text-decoration: none;
-  background: linear-gradient(200deg, #fade2a, #f05a28);
-  &.highlight {
-    background-size: 600% 600%;
-    -webkit-animation: SubHeader 2s ease infinite;
-    -moz-animation: SubHeader 2s ease infinite;
-    animation: SubHeader 2s ease infinite;
-  }
-}
+
 @-webkit-keyframes SubHeader {
   0% {
     background-position: 0% 50%;
@@ -263,11 +258,7 @@ code {
 }
 
 .mainbg {
-  background: linear-gradient(270deg, #b45d5b, #663360, #46275c, #181130);
-  background-size: 800% 800%;
-  -webkit-animation: mainbg-animation 8s ease infinite;
-  -moz-animation: mainbg-animation 8s ease infinite;
-  animation: mainbg-animation 8s ease infinite;
+  background-color: #111217;
 }
 @-webkit-keyframes mainbg-animation {
   0% {
@@ -300,5 +291,33 @@ code {
   }
   100% {
     background-position: 9% 0%;
+  }
+}
+.btn-primary {
+  background-color: #3d71d9 !important;
+  color: white !important;
+}
+
+#topnav .special-menu {
+  padding: 5px 8px;
+  margin-inline-start: 5px;
+  text-decoration: none;
+  // background: linear-gradient(200deg, #fade2a, #f05a28);
+  background-color: #3d71d9 !important;
+  color: white !important;
+  &.highlight {
+    background-size: 600% 600%;
+    -webkit-animation: SubHeader 2s ease infinite;
+    -moz-animation: SubHeader 2s ease infinite;
+    animation: SubHeader 2s ease infinite;
+  }
+}
+
+.nav-item {
+  .fab,
+  .fas {
+    &:hover {
+      color: #00e5ea !important;
+    }
   }
 }
