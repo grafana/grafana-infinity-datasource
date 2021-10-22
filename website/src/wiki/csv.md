@@ -1,10 +1,10 @@
 ---
-slug: "/wiki/csv"
-title: "CSV"
-previous_page_title: "JSON"
-previous_page_slug: "/wiki/json"
-next_page_title: "GraphQL"
-next_page_slug: "/wiki/graphql"
+slug: '/wiki/csv'
+title: 'CSV'
+previous_page_title: 'JSON'
+previous_page_slug: '/wiki/json'
+next_page_title: 'GraphQL'
+next_page_slug: '/wiki/graphql'
 ---
 
 ![csv example](https://user-images.githubusercontent.com/153843/92571108-9e0ff800-f27a-11ea-9fe9-9f9dcbd7125a.png#center)
@@ -67,11 +67,11 @@ Germany,700
 
 Though your csv file have columns, specify them as columns manually and only that fields will be considered for display. Columns will appear in the same order you specify. Each column will have following properties
 
-| Column | Description |
-|--------|-------------|
-| Title  | Title of the column when using the table format |
-| Selector | Column name in CSV file. Case sensitive |
-| Format | Format of the column |
+| Column   | Description                                     |
+| -------- | ----------------------------------------------- |
+| Title    | Title of the column when using the table format |
+| Selector | Column name in CSV file. Case sensitive         |
+| Format   | Format of the column                            |
 
 If you don't specify any columns, then the infinity plugin will try to auto generate the columns and all the fields will be returned as string. (This auto generate columns feature only works with table format)
 
@@ -104,14 +104,14 @@ Below screenshot shows the example of csv inline datasource
 
 ## CSV Options
 
-| Option | Description |
-|--------|-------------|
-| Delimiter | If your csv file have any other delimiter than comma, then specify here. For tab delimited files, specify `\t` as delimiter |
-| Headers | If CSV file doesn't have headers, specify here as comma separated values here |
-| Skip empty lines | Check this if you want to skip the empty lines |
-| Skip lines with error | Check this if you want to skip the lines with error |
-| Relax column count | Check this if you want to relax the column count check |
-| Comment | If your csv lines have comments, enter the comments delimiter. Treat all the characters after this one as a comment. Example: setting `#` will treat everything in each line after `#` as comment |
+| Option                | Description                                                                                                                                                                                       |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Delimiter             | If your csv file have any other delimiter than comma, then specify here. For tab delimited files, specify `\t` as delimiter                                                                       |
+| Headers               | If CSV file doesn't have headers, specify here as comma separated values here                                                                                                                     |
+| Skip empty lines      | Check this if you want to skip the empty lines                                                                                                                                                    |
+| Skip lines with error | Check this if you want to skip the lines with error                                                                                                                                               |
+| Relax column count    | Check this if you want to relax the column count check                                                                                                                                            |
+| Comment               | If your csv lines have comments, enter the comments delimiter. Treat all the characters after this one as a comment. Example: setting `#` will treat everything in each line after `#` as comment |
 
 > All these CSV options are available from version 0.7
 
@@ -122,6 +122,8 @@ If your CSV doesn't have headers, specify them in the **CSV Options** Headers op
 ## Custom delimiters / TSV file
 
 You can use custom delimiter for your CSV file. You can set them in the **CSV options** delimiter section. Specify `\t` for TSV files.
+
+For TSV files, you can choose TSV as query type. This works the same way as above.
 
 ## CSV to timeseries
 

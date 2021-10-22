@@ -2,10 +2,10 @@ import { forEach, get, toNumber } from 'lodash';
 import parse from 'csv-parse/lib/sync';
 import { InfinityParser } from './InfinityParser';
 import { getColumnsFromObjectArray } from './utils';
-import { InfinityColumn, GrafanaTableRow, InfinityCSVQuery } from './../../types';
+import { InfinityColumn, GrafanaTableRow, InfinityCSVQuery, InfinityTSVQuery } from './../../types';
 
-export class CSVParser extends InfinityParser<InfinityCSVQuery> {
-  constructor(CSVResponse: string, target: InfinityCSVQuery, endTime?: Date) {
+export class CSVParser extends InfinityParser<InfinityCSVQuery | InfinityTSVQuery> {
+  constructor(CSVResponse: string, target: InfinityCSVQuery | InfinityTSVQuery, endTime?: Date) {
     super(target);
     const records = this.formatInput(CSVResponse);
     if (Array.isArray(records)) {
@@ -13,10 +13,19 @@ export class CSVParser extends InfinityParser<InfinityCSVQuery> {
       this.constructTimeSeriesData(records, endTime);
     }
   }
+  private getDelimiter(target: InfinityCSVQuery | InfinityTSVQuery) {
+    if (target.type === 'tsv') {
+      return `\t`;
+    }
+    if (target.csv_options && target.csv_options.delimiter) {
+      return target.csv_options.delimiter;
+    }
+    return ',';
+  }
   private formatInput(CSVResponse: string) {
     const options = {
       columns: this.target.csv_options && this.target.csv_options.columns ? this.target.csv_options.columns.split(',') : true,
-      delimiter: this.target.csv_options && this.target.csv_options.delimiter ? [this.target.csv_options.delimiter.replace('\\t', '\t')] : [','],
+      delimiter: [this.getDelimiter(this.target)],
       skip_empty_lines: this.target.csv_options?.skip_empty_lines || false,
       skip_lines_with_error: this.target.csv_options?.skip_lines_with_error || false,
       relax_column_count: this.target.csv_options?.relax_column_count || false,

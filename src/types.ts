@@ -34,7 +34,7 @@ export interface SecureField {
 //#endregion
 
 //#region Query
-export type InfinityQueryType = 'json' | 'csv' | 'xml' | 'graphql' | 'html' | 'series' | 'global';
+export type InfinityQueryType = 'json' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'series' | 'global';
 export type InfinityQuerySources = 'url' | 'inline' | 'random-walk' | 'expression'; // | 'local-fs';
 export type InfinityColumnFormat = 'string' | 'number' | 'timestamp' | 'timestamp_epoch' | 'timestamp_epoch_s';
 export type InfinityQueryFormat = 'table' | 'timeseries' | 'dataframe';
@@ -85,6 +85,15 @@ export type InfinityCSVQuery = {
     comment?: string;
   };
 } & InfinityQueryWithDataSource<'csv'>;
+export type InfinityTSVQuery = {
+  csv_options?: {
+    skip_empty_lines?: boolean;
+    skip_lines_with_error?: boolean;
+    relax_column_count?: boolean;
+    columns?: string;
+    comment?: string;
+  };
+} & InfinityQueryWithDataSource<'tsv'>;
 export type InfinityXMLQuery = {} & InfinityQueryWithDataSource<'xml'>;
 export type InfinityGraphQLQuery = {
   json_options?: {
@@ -98,7 +107,7 @@ export type InfinitySeriesQueryRandomWalk = {} & InfinitySeriesQueryBase<'random
 export type InfinitySeriesQueryExpression = { expression?: string } & InfinitySeriesQueryBase<'expression'>;
 export type InfinitySeriesQuery = InfinitySeriesQueryRandomWalk | InfinitySeriesQueryExpression;
 export type InfinityGlobalQuery = { global_query_id: string } & InfinityQueryBase<'global'>;
-export type InfinityDataQuery = InfinityJSONQuery | InfinityCSVQuery | InfinityXMLQuery | InfinityGraphQLQuery | InfinityHTMLQuery;
+export type InfinityDataQuery = InfinityJSONQuery | InfinityCSVQuery | InfinityTSVQuery | InfinityXMLQuery | InfinityGraphQLQuery | InfinityHTMLQuery;
 export type InfinityDestinationQuery = InfinityDataQuery | InfinitySeriesQuery;
 export type InfinityLegacyQuery = InfinityDestinationQuery | InfinityGlobalQuery;
 export type InfinityQuery = InfinityLegacyQuery;
@@ -212,10 +221,11 @@ export interface QueryHeaders {
 
 export const SCRAP_QUERY_TYPES: Array<SelectableValue<InfinityQueryType>> = [
   { label: 'CSV', value: 'csv' },
+  { label: 'TSV', value: 'tsv' },
   { label: 'JSON', value: 'json' },
+  { label: 'GraphQL', value: 'graphql' },
   { label: 'XML', value: 'xml' },
   { label: 'HTML', value: 'html' },
-  { label: 'GraphQL', value: 'graphql' },
   { label: 'Series', value: 'series' },
   { label: 'Global Query', value: 'global' },
 ];
@@ -225,8 +235,8 @@ export const SCRAP_QUERY_RESULT_FORMATS: Array<SelectableValue<InfinityQueryForm
   { label: 'Data Frame', value: 'dataframe' },
 ];
 export const SCRAP_QUERY_SOURCES: ScrapQuerySources[] = [
-  { label: 'URL', value: 'url', supported_types: ['csv', 'json', 'html', 'xml', 'graphql'] },
-  { label: 'Inline', value: 'inline', supported_types: ['csv', 'json', 'xml'] },
+  { label: 'URL', value: 'url', supported_types: ['csv', 'tsv', 'json', 'html', 'xml', 'graphql'] },
+  { label: 'Inline', value: 'inline', supported_types: ['csv', 'tsv', 'json', 'xml'] },
   { label: 'Random Walk', value: 'random-walk', supported_types: ['series'] },
   { label: 'Expression', value: 'expression', supported_types: ['series'] },
   // { label: 'Local File', value: 'local-fs', supported_types: ['csv', 'json', 'xml'] },

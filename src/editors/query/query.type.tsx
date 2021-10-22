@@ -25,7 +25,7 @@ export const TypeChooser = (props: TypeChooserProps) => {
         <TypeSelector {...props} />
         {query.type === 'global' ? <GlobalQuerySelector {...props} /> : <SourceSelector {...props} />}
         {query.type !== 'series' && mode !== 'variable' && <FormatSelector {...props} />}
-        {query.type === 'csv' && <CSVOptionsEditor {...props} />}
+        {(query.type === 'csv' || query.type === 'tsv') && <CSVOptionsEditor {...props} />}
         {query.type === 'json' && <JSONOptionsEditor {...props} />}
         <Help />
         <QueryPreview query={JSON.stringify(query, null, 4)} />

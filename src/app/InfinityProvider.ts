@@ -20,6 +20,8 @@ export class InfinityProvider {
         return xmlData.getResults();
       case 'csv':
         return new CSVParser(res, query).getResults();
+      case 'tsv':
+        return new CSVParser(res, query).getResults();
       default:
         return undefined;
     }

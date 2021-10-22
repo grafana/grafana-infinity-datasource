@@ -25,7 +25,7 @@ export class InfinityParser<T extends InfinityQuery> {
     }
   }
   private canAutoGenerateColumns(): boolean {
-    return ['csv', 'json', 'graphql'].includes(this.target.type) && isDataQuery(this.target) && this.target.columns.length === 0;
+    return ['csv', 'tsv', 'json', 'graphql'].includes(this.target.type) && isDataQuery(this.target) && this.target.columns.length === 0;
   }
   toTable() {
     let columns = isDataQuery(this.target) ? this.target.columns : [];

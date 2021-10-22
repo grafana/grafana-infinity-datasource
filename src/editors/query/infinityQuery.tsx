@@ -20,7 +20,7 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
   const query = defaultsDeep(props.query, DefaultInfinityQuery);
   let canShowType = true;
   let canShowSeriesEditor = query.type === 'series';
-  let canShowURLEditor = ['csv', 'html', 'json', 'graphql', 'xml'].includes(query.type);
+  let canShowURLEditor = ['csv', 'tsv', 'html', 'json', 'graphql', 'xml'].includes(query.type);
   let canShowFilterEditor = !['global', 'series'].includes(query.type) && query.columns && query.columns.length > 0;
   return (
     <div className="infinity-query-editor">

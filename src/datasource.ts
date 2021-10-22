@@ -39,6 +39,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
           new Promise((resolve, reject) => {
             switch (t.type) {
               case 'csv':
+              case 'tsv':
               case 'html':
               case 'json':
               case 'xml':
