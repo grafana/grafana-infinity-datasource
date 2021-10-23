@@ -7,7 +7,6 @@ import { SourceSelector } from '../../components/SourceSelector';
 import { FormatSelector } from '../../components/FormatSelector';
 import { GlobalQuerySelector } from '../../components/GlobalQuerySelector';
 import { Help } from '../../components/Help';
-import { QueryPreview } from '../../components/QueryPreview';
 
 interface TypeChooserProps {
   mode: EditorMode;
@@ -25,10 +24,9 @@ export const TypeChooser = (props: TypeChooserProps) => {
         <TypeSelector {...props} />
         {query.type === 'global' ? <GlobalQuerySelector {...props} /> : <SourceSelector {...props} />}
         {query.type !== 'series' && mode !== 'variable' && <FormatSelector {...props} />}
-        {query.type === 'csv' && <CSVOptionsEditor {...props} />}
+        {(query.type === 'csv' || query.type === 'tsv') && <CSVOptionsEditor {...props} />}
         {query.type === 'json' && <JSONOptionsEditor {...props} />}
         <Help />
-        <QueryPreview query={JSON.stringify(query, null, 4)} />
       </div>
     </div>
   );

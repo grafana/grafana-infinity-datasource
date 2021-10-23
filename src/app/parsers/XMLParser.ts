@@ -1,6 +1,7 @@
-import { forEach, get, toNumber } from 'lodash';
+import { forEach, get } from 'lodash';
 import { parseString } from 'xml2js';
 import { InfinityParser } from './InfinityParser';
+import { getValue } from './utils';
 import { InfinityColumn, GrafanaTableRow, InfinityXMLQuery } from './../../types';
 
 export class XMLParser extends InfinityParser<InfinityXMLQuery> {
@@ -30,15 +31,7 @@ export class XMLParser extends InfinityParser<InfinityXMLQuery> {
       const row: GrafanaTableRow = [];
       this.target.columns.forEach((c: InfinityColumn) => {
         let value = get(r, c.selector, '');
-        if (c.type === 'timestamp') {
-          value = new Date(value + '');
-        } else if (c.type === 'timestamp_epoch') {
-          value = new Date(parseInt(value, 10));
-        } else if (c.type === 'timestamp_epoch_s') {
-          value = new Date(parseInt(value, 10) * 1000);
-        } else if (c.type === 'number') {
-          value = value === '' ? null : +value;
-        }
+        value = getValue(value, c.type);
         if (typeof r === 'string') {
           row.push(r);
         } else {
@@ -72,15 +65,9 @@ export class XMLParser extends InfinityParser<InfinityXMLQuery> {
         let timestamp = endTime ? endTime.getTime() : new Date().getTime();
         if (this.TimeColumns.length >= 1) {
           const FirstTimeColumn = this.TimeColumns[0];
-          if (FirstTimeColumn.type === 'timestamp') {
-            timestamp = new Date(get(r, FirstTimeColumn.selector) + '').getTime();
-          } else if (FirstTimeColumn.type === 'timestamp_epoch') {
-            timestamp = new Date(parseInt(get(r, FirstTimeColumn.selector), 10)).getTime();
-          } else if (FirstTimeColumn.type === 'timestamp_epoch_s') {
-            timestamp = new Date(parseInt(get(r, FirstTimeColumn.selector), 10) * 1000).getTime();
-          }
+          timestamp = getValue(get(r, FirstTimeColumn.selector) + '', FirstTimeColumn.type) as number;
         }
-        let metric = toNumber(get(r, metricColumn.selector));
+        let metric = getValue(get(r, metricColumn.selector), 'number') as number;
         this.series.push({
           target: seriesName,
           datapoints: [[metric, timestamp]],

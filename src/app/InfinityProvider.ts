@@ -19,6 +19,7 @@ export class InfinityProvider {
         let xmlData = await new XMLParser(res, query);
         return xmlData.getResults();
       case 'csv':
+      case 'tsv':
         return new CSVParser(res, query).getResults();
       default:
         return undefined;

@@ -14,6 +14,7 @@ export const normalizeURL = (url: string): string => {
 export const isDataQuery = (query: InfinityQuery): query is InfinityQueryWithDataSource<'csv' | 'json' | 'xml' | 'html' | 'graphql'> => {
   switch (query.type) {
     case 'csv':
+    case 'tsv':
     case 'json':
     case 'xml':
     case 'graphql':

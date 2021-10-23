@@ -147,3 +147,31 @@ describe('CSVParser', () => {
     expect(CSVResults4.toTable().rows[1][1]).toBe('usa');
   });
 });
+describe('CSVParser', () => {
+  it('Parse numbers correctly', () => {
+    const parser = new CSVParser(
+      `
+key,value
+"normal number",123
+"string number","123"
+"number with decimal","123.45"
+"number with comma","123,456.78"
+`,
+      {
+        refId: '',
+        type: 'csv',
+        source: 'inline',
+        data: '',
+        format: 'table',
+        root_selector: '',
+        columns: [
+          { selector: 'key', type: 'string', text: 'key' },
+          { selector: 'value', type: 'number', text: 'value' },
+        ],
+      }
+    );
+    expect(parser.toTable().columns.length).toBe(2);
+    expect(parser.toTable().rows.length).toBe(4);
+    expect(parser.toTable().rows.map((r) => r[1])).toStrictEqual([123, 123, 123.45, 123456.78]);
+  });
+});

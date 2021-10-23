@@ -1,9 +1,9 @@
 import { uniq, flatten } from 'lodash';
-import { filterResults } from './filter';
-import { InfinityQuery, InfinityColumn, GrafanaTableRow, timeSeriesResult } from './../../types';
 import { toDataFrame } from '@grafana/data';
+import { filterResults } from './filter';
 import { normalizeColumns } from './utils';
 import { isDataQuery } from './../utils';
+import { InfinityQuery, InfinityColumn, GrafanaTableRow, timeSeriesResult } from './../../types';
 
 export class InfinityParser<T extends InfinityQuery> {
   target: T;
@@ -25,7 +25,7 @@ export class InfinityParser<T extends InfinityQuery> {
     }
   }
   private canAutoGenerateColumns(): boolean {
-    return ['csv', 'json', 'graphql'].includes(this.target.type) && isDataQuery(this.target) && this.target.columns.length === 0;
+    return ['csv', 'tsv', 'json', 'graphql'].includes(this.target.type) && isDataQuery(this.target) && this.target.columns.length === 0;
   }
   toTable() {
     let columns = isDataQuery(this.target) ? this.target.columns : [];

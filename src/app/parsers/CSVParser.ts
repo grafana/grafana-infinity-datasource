@@ -1,11 +1,11 @@
-import { forEach, get, toNumber } from 'lodash';
+import { forEach, get } from 'lodash';
 import parse from 'csv-parse/lib/sync';
 import { InfinityParser } from './InfinityParser';
-import { getColumnsFromObjectArray } from './utils';
-import { InfinityColumn, GrafanaTableRow, InfinityCSVQuery } from './../../types';
+import { getColumnsFromObjectArray, getValue } from './utils';
+import { InfinityColumn, GrafanaTableRow, InfinityCSVQuery, InfinityTSVQuery } from './../../types';
 
-export class CSVParser extends InfinityParser<InfinityCSVQuery> {
-  constructor(CSVResponse: string, target: InfinityCSVQuery, endTime?: Date) {
+export class CSVParser extends InfinityParser<InfinityCSVQuery | InfinityTSVQuery> {
+  constructor(CSVResponse: string, target: InfinityCSVQuery | InfinityTSVQuery, endTime?: Date) {
     super(target);
     const records = this.formatInput(CSVResponse);
     if (Array.isArray(records)) {
@@ -13,10 +13,19 @@ export class CSVParser extends InfinityParser<InfinityCSVQuery> {
       this.constructTimeSeriesData(records, endTime);
     }
   }
+  private getDelimiter(target: InfinityCSVQuery | InfinityTSVQuery) {
+    if (target.type === 'tsv') {
+      return `\t`;
+    }
+    if (target.csv_options && target.csv_options.delimiter) {
+      return (target.csv_options.delimiter || '').replace('\\t', '\t');
+    }
+    return ',';
+  }
   private formatInput(CSVResponse: string) {
     const options = {
       columns: this.target.csv_options && this.target.csv_options.columns ? this.target.csv_options.columns.split(',') : true,
-      delimiter: this.target.csv_options && this.target.csv_options.delimiter ? [this.target.csv_options.delimiter.replace('\\t', '\t')] : [','],
+      delimiter: [this.getDelimiter(this.target)],
       skip_empty_lines: this.target.csv_options?.skip_empty_lines || false,
       skip_lines_with_error: this.target.csv_options?.skip_lines_with_error || false,
       relax_column_count: this.target.csv_options?.relax_column_count || false,
@@ -35,16 +44,7 @@ export class CSVParser extends InfinityParser<InfinityCSVQuery> {
       const row: GrafanaTableRow = [];
       columns.forEach((c: InfinityColumn) => {
         let value = get(r, c.selector, '');
-        if (c.type === 'timestamp') {
-          value = new Date(value);
-        } else if (c.type === 'timestamp_epoch') {
-          value = new Date(parseInt(value, 10));
-        } else if (c.type === 'timestamp_epoch_s') {
-          value = new Date(parseInt(value, 10) * 1000);
-        } else if (c.type === 'number') {
-          value = value === '' ? null : +value;
-        }
-        row.push(value);
+        row.push(getValue(value, c.type));
       });
       this.rows.push(row);
     });
@@ -63,20 +63,10 @@ export class CSVParser extends InfinityParser<InfinityCSVQuery> {
         let timestamp = endTime ? endTime.getTime() : new Date().getTime();
         if (this.TimeColumns.length >= 1) {
           const FirstTimeColumn = this.TimeColumns[0];
-          if (FirstTimeColumn.type === 'timestamp') {
-            timestamp = new Date(get(r, FirstTimeColumn.selector)).getTime();
-          } else if (FirstTimeColumn.type === 'timestamp_epoch') {
-            timestamp = new Date(parseInt(get(r, FirstTimeColumn.selector), 10)).getTime();
-          } else if (FirstTimeColumn.type === 'timestamp_epoch_s') {
-            timestamp = new Date(parseInt(get(r, FirstTimeColumn.selector), 10) * 1000).getTime();
-          }
+          timestamp = getValue(get(r, FirstTimeColumn.selector), FirstTimeColumn.type, true) as number;
         }
-        let metric = get(r, metricColumn.selector);
-        if (metric === '') {
-          metric = null;
-        } else {
-          metric = toNumber(metric);
-        }
+        let metric = get(r, metricColumn.selector, true);
+        metric = getValue(metric, 'number');
         this.series.push({
           target: seriesName,
           datapoints: [[metric, timestamp]],

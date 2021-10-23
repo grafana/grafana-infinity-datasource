@@ -10,14 +10,14 @@ interface CSVOptionsEditorProps {
 
 export const CSVOptionsEditor = (props: CSVOptionsEditorProps) => {
   const [popupStatus, setPopupStatus] = useState(false);
-  if (props.query.type !== 'csv') {
+  if (!(props.query.type === 'csv' || props.query.type === 'tsv')) {
     return <></>;
   }
   const togglePopup = () => {
     setPopupStatus(!popupStatus);
   };
   const onDelimiterChange = (delimiter: string) => {
-    if (props.query.type === 'csv') {
+    if (props.query.type === 'csv' || props.query.type === 'tsv') {
       props.onChange({
         ...props.query,
         csv_options: {
@@ -28,7 +28,7 @@ export const CSVOptionsEditor = (props: CSVOptionsEditorProps) => {
     }
   };
   const onSkipEmptyLinesChange = (skip_empty_lines: boolean) => {
-    if (props.query.type === 'csv') {
+    if (props.query.type === 'csv' || props.query.type === 'tsv') {
       props.onChange({
         ...props.query,
         csv_options: {
@@ -39,7 +39,7 @@ export const CSVOptionsEditor = (props: CSVOptionsEditorProps) => {
     }
   };
   const onSkipLinesWithErrorChange = (skip_lines_with_error: boolean) => {
-    if (props.query.type === 'csv') {
+    if (props.query.type === 'csv' || props.query.type === 'tsv') {
       props.onChange({
         ...props.query,
         csv_options: {
@@ -50,7 +50,7 @@ export const CSVOptionsEditor = (props: CSVOptionsEditorProps) => {
     }
   };
   const onRelaxColumnCountChange = (relax_column_count: boolean) => {
-    if (props.query.type === 'csv') {
+    if (props.query.type === 'csv' || props.query.type === 'tsv') {
       props.onChange({
         ...props.query,
         csv_options: {
@@ -61,7 +61,7 @@ export const CSVOptionsEditor = (props: CSVOptionsEditorProps) => {
     }
   };
   const onColumnsChange = (columns: string) => {
-    if (props.query.type === 'csv') {
+    if (props.query.type === 'csv' || props.query.type === 'tsv') {
       props.onChange({
         ...props.query,
         csv_options: {
@@ -72,7 +72,7 @@ export const CSVOptionsEditor = (props: CSVOptionsEditorProps) => {
     }
   };
   const onCommentChange = (comment: string) => {
-    if (props.query.type === 'csv') {
+    if (props.query.type === 'csv' || props.query.type === 'tsv') {
       props.onChange({
         ...props.query,
         csv_options: {
@@ -95,17 +95,19 @@ export const CSVOptionsEditor = (props: CSVOptionsEditorProps) => {
             e.preventDefault();
           }}
         >
-          CSV options
+          {props.query.type.toUpperCase()} options
         </Button>
       </div>
       {popupStatus === true && (
-        <Drawer title="CSV Options" onClose={togglePopup} expandable={true}>
-          <div className="gf-form">
-            <InlineFormLabel className="gf-form-label query-keyword width-8" tooltip="Defaults to comma. If your file is TSV then use '\t'">
-              Delimiter
-            </InlineFormLabel>
-            <input className="gf-form-input width-4" type="text" value={props.query.csv_options?.delimiter} placeholder="," onChange={(e) => onDelimiterChange(e.currentTarget.value)}></input>
-          </div>
+        <Drawer title={props.query.type.toUpperCase() + ' Options'} onClose={togglePopup} expandable={true}>
+          {props.query.type === 'csv' && (
+            <div className="gf-form">
+              <InlineFormLabel className="gf-form-label query-keyword width-8" tooltip="Defaults to comma. If your file is TSV then use '\t'">
+                Delimiter
+              </InlineFormLabel>
+              <input className="gf-form-input width-4" type="text" value={props.query.csv_options?.delimiter} placeholder="," onChange={(e) => onDelimiterChange(e.currentTarget.value)}></input>
+            </div>
+          )}
           <div className="gf-form">
             <InlineFormLabel className="gf-form-label query-keyword width-8">Skip empty lines</InlineFormLabel>
             <Checkbox css={{}} value={props.query.csv_options?.skip_empty_lines} onChange={(e) => onSkipEmptyLinesChange(e.currentTarget.checked)}></Checkbox>
