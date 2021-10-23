@@ -1,8 +1,8 @@
-import { forEach, get, toNumber, flatten } from 'lodash';
+import { forEach, get, flatten } from 'lodash';
 import { JSONPath } from 'jsonpath-plus';
 import { InfinityParser } from './InfinityParser';
+import { getColumnsFromObjectArray, columnarToTable, getValue } from './utils';
 import { InfinityColumn, GrafanaTableRow, InfinityJSONQuery, InfinityGraphQLQuery } from './../../types';
-import { getColumnsFromObjectArray, columnarToTable } from './utils';
 
 export class JSONParser extends InfinityParser<InfinityJSONQuery | InfinityGraphQLQuery> {
   constructor(JSONResponse: object, target: InfinityJSONQuery | InfinityGraphQLQuery, endTime?: Date) {
@@ -73,15 +73,7 @@ export class JSONParser extends InfinityParser<InfinityJSONQuery | InfinityGraph
         } else if (c.selector === '$$value') {
           value = JSON.stringify(r);
         }
-        if (c.type === 'timestamp') {
-          value = new Date(value + '');
-        } else if (c.type === 'timestamp_epoch') {
-          value = new Date(parseInt(value, 10));
-        } else if (c.type === 'timestamp_epoch_s') {
-          value = new Date(parseInt(value, 10) * 1000);
-        } else if (c.type === 'number') {
-          value = value === '' ? null : +value;
-        }
+        value = getValue(value, c.type);
         if (['string', 'number', 'boolean'].includes(typeof value)) {
           row.push(value);
         } else if (value && typeof value.getMonth === 'function') {
@@ -107,15 +99,9 @@ export class JSONParser extends InfinityParser<InfinityJSONQuery | InfinityGraph
         let timestamp = endTime ? endTime.getTime() : new Date().getTime();
         if (this.TimeColumns.length >= 1) {
           const FirstTimeColumn = this.TimeColumns[0];
-          if (FirstTimeColumn.type === 'timestamp') {
-            timestamp = new Date(get(r, FirstTimeColumn.selector) + '').getTime();
-          } else if (FirstTimeColumn.type === 'timestamp_epoch') {
-            timestamp = new Date(parseInt(get(r, FirstTimeColumn.selector), 10)).getTime();
-          } else if (FirstTimeColumn.type === 'timestamp_epoch_s') {
-            timestamp = new Date(parseInt(get(r, FirstTimeColumn.selector), 10) * 1000).getTime();
-          }
+          timestamp = getValue(get(r, FirstTimeColumn.selector) + '', FirstTimeColumn.type, true) as number;
         }
-        let metric = toNumber(get(r, metricColumn.selector));
+        let metric = getValue(get(r, metricColumn.selector), 'number') as number;
         this.series.push({
           target: seriesName,
           datapoints: [[metric, timestamp]],

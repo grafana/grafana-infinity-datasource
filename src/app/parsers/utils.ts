@@ -1,4 +1,4 @@
-import { get, set } from 'lodash';
+import { get, set, toNumber } from 'lodash';
 import { InfinityColumn, InfinityColumnFormat } from './../../types';
 
 const guessColumnTypeFromField = (obj: any): InfinityColumnFormat => {
@@ -51,4 +51,39 @@ export const columnarToTable = (response: any, columns: InfinityColumn[] = []) =
     res.push(o);
   }
   return res;
+};
+
+export const getValue = (input: string | number | Date, type: InfinityColumnFormat, asTimestamp?: boolean) => {
+  switch (type) {
+    case 'string':
+      return input;
+    case 'number':
+      if (typeof input === 'number') {
+        return input;
+      } else if (typeof input === 'string') {
+        return toNumber((input + '').replace(/,/g, ''));
+      } else {
+        return null;
+      }
+    case 'timestamp':
+      return asTimestamp ? new Date(input + '').getTime() : new Date(input + '');
+    case 'timestamp_epoch':
+      if (typeof input === 'string') {
+        return asTimestamp ? new Date(parseInt(input, 10)).getTime() : new Date(parseInt(input, 10));
+      } else if (typeof input === 'number') {
+        return asTimestamp ? new Date(input).getTime() : new Date(input);
+      } else {
+        return null;
+      }
+    case 'timestamp_epoch_s':
+      if (typeof input === 'string') {
+        return asTimestamp ? new Date(parseInt(input, 10) * 1000).getTime() : new Date(parseInt(input, 10) * 1000);
+      } else if (typeof input === 'number') {
+        return asTimestamp ? new Date(input * 1000).getTime() : new Date(input * 1000);
+      } else {
+        return null;
+      }
+    default:
+      return input;
+  }
 };

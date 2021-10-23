@@ -1,6 +1,8 @@
-import { isDataQuery } from 'app/utils';
 import React, { useState } from 'react';
+import { InlineFormLabel, Icon } from '@grafana/ui';
+import { isDataQuery } from './../app/utils';
 import { InfinityQuery, EditorMode } from '../types';
+
 interface DataFieldProps {
   query: InfinityQuery;
   onChange: (e: InfinityQuery) => void;
@@ -20,8 +22,11 @@ export const DataField = (props: DataFieldProps) => {
   };
   return (
     <>
-      <label className={`gf-form-label query-keyword width-${LABEL_WIDTH}`}>Data</label>
-      <textarea rows={5} className="gf-form-input min-width-30" value={data} placeholder="" onBlur={onDataChange} onChange={(e) => setData(e.target.value)}></textarea>
+      <InlineFormLabel className={`query-keyword`} width={LABEL_WIDTH}>
+        Data
+      </InlineFormLabel>
+      <textarea rows={5} className="gf-form-input" style={{ width: '600px' }} value={data} placeholder="" onBlur={onDataChange} onChange={(e) => setData(e.target.value)}></textarea>
+      <Icon name="play" size="lg" style={{ color: 'greenyellow' }} />
     </>
   );
 };

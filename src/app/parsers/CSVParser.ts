@@ -1,7 +1,7 @@
-import { forEach, get, toNumber } from 'lodash';
+import { forEach, get } from 'lodash';
 import parse from 'csv-parse/lib/sync';
 import { InfinityParser } from './InfinityParser';
-import { getColumnsFromObjectArray } from './utils';
+import { getColumnsFromObjectArray, getValue } from './utils';
 import { InfinityColumn, GrafanaTableRow, InfinityCSVQuery, InfinityTSVQuery } from './../../types';
 
 export class CSVParser extends InfinityParser<InfinityCSVQuery | InfinityTSVQuery> {
@@ -18,7 +18,7 @@ export class CSVParser extends InfinityParser<InfinityCSVQuery | InfinityTSVQuer
       return `\t`;
     }
     if (target.csv_options && target.csv_options.delimiter) {
-      return target.csv_options.delimiter;
+      return (target.csv_options.delimiter || '').replace('\\t', '\t');
     }
     return ',';
   }
@@ -44,16 +44,7 @@ export class CSVParser extends InfinityParser<InfinityCSVQuery | InfinityTSVQuer
       const row: GrafanaTableRow = [];
       columns.forEach((c: InfinityColumn) => {
         let value = get(r, c.selector, '');
-        if (c.type === 'timestamp') {
-          value = new Date(value);
-        } else if (c.type === 'timestamp_epoch') {
-          value = new Date(parseInt(value, 10));
-        } else if (c.type === 'timestamp_epoch_s') {
-          value = new Date(parseInt(value, 10) * 1000);
-        } else if (c.type === 'number') {
-          value = value === '' ? null : +value;
-        }
-        row.push(value);
+        row.push(getValue(value, c.type));
       });
       this.rows.push(row);
     });
@@ -72,20 +63,10 @@ export class CSVParser extends InfinityParser<InfinityCSVQuery | InfinityTSVQuer
         let timestamp = endTime ? endTime.getTime() : new Date().getTime();
         if (this.TimeColumns.length >= 1) {
           const FirstTimeColumn = this.TimeColumns[0];
-          if (FirstTimeColumn.type === 'timestamp') {
-            timestamp = new Date(get(r, FirstTimeColumn.selector)).getTime();
-          } else if (FirstTimeColumn.type === 'timestamp_epoch') {
-            timestamp = new Date(parseInt(get(r, FirstTimeColumn.selector), 10)).getTime();
-          } else if (FirstTimeColumn.type === 'timestamp_epoch_s') {
-            timestamp = new Date(parseInt(get(r, FirstTimeColumn.selector), 10) * 1000).getTime();
-          }
+          timestamp = getValue(get(r, FirstTimeColumn.selector), FirstTimeColumn.type, true) as number;
         }
-        let metric = get(r, metricColumn.selector);
-        if (metric === '') {
-          metric = null;
-        } else {
-          metric = toNumber(metric);
-        }
+        let metric = get(r, metricColumn.selector, true);
+        metric = getValue(metric, 'number');
         this.series.push({
           target: seriesName,
           datapoints: [[metric, timestamp]],

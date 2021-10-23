@@ -1,9 +1,9 @@
 import { uniq, flatten } from 'lodash';
-import { filterResults } from './filter';
-import { InfinityQuery, InfinityColumn, GrafanaTableRow, timeSeriesResult } from './../../types';
 import { toDataFrame } from '@grafana/data';
+import { filterResults } from './filter';
 import { normalizeColumns } from './utils';
 import { isDataQuery } from './../utils';
+import { InfinityQuery, InfinityColumn, GrafanaTableRow, timeSeriesResult } from './../../types';
 
 export class InfinityParser<T extends InfinityQuery> {
   target: T;

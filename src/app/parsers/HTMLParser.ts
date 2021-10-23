@@ -1,6 +1,7 @@
-import { forEach, toNumber } from 'lodash';
+import { forEach } from 'lodash';
 import { load } from 'cheerio';
 import { InfinityParser } from './InfinityParser';
+import { getValue } from './utils';
 import { InfinityColumn, GrafanaTableRow, GrafanaTableRowItem, InfinityHTMLQuery } from './../../types';
 
 export class HTMLParser extends InfinityParser<InfinityHTMLQuery> {
@@ -21,15 +22,7 @@ export class HTMLParser extends InfinityParser<InfinityHTMLQuery> {
       const $ = load(r);
       this.target.columns.forEach((c: InfinityColumn) => {
         let value: GrafanaTableRowItem = $(c.selector).text().trim();
-        if (c.type === 'number') {
-          value = value === '' ? null : +value;
-        } else if (c.type === 'timestamp') {
-          value = new Date(value);
-        } else if (c.type === 'timestamp_epoch') {
-          value = new Date(parseInt(value, 10));
-        } else if (c.type === 'timestamp_epoch_s') {
-          value = new Date(parseInt(value, 10) * 1000);
-        }
+        value = getValue(value, c.type);
         row.push(value);
       });
       this.rows.push(row);
@@ -50,16 +43,10 @@ export class HTMLParser extends InfinityParser<InfinityHTMLQuery> {
         let timestamp = endTime ? endTime.getTime() : new Date().getTime();
         if (this.TimeColumns.length >= 1) {
           const FirstTimeColumn = this.TimeColumns[0];
-          if (FirstTimeColumn.type === 'timestamp') {
-            timestamp = new Date($$(FirstTimeColumn.selector).text().trim()).getTime();
-          } else if (FirstTimeColumn.type === 'timestamp_epoch') {
-            timestamp = new Date(parseInt($$(FirstTimeColumn.selector).text().trim(), 10)).getTime();
-          } else if (FirstTimeColumn.type === 'timestamp_epoch_s') {
-            timestamp = new Date(parseInt($$(FirstTimeColumn.selector).text().trim(), 10) * 1000).getTime();
-          }
+          timestamp = getValue($$(FirstTimeColumn.selector).text().trim(), FirstTimeColumn.type, true) as number;
         }
         if (seriesName) {
-          let metric = toNumber($$(metricColumn.selector).text().trim().replace(/\,/g, ''));
+          let metric = getValue($$(metricColumn.selector).text().trim().replace(/\,/g, ''), 'number') as number;
           this.series.push({
             target: seriesName,
             datapoints: [[metric, timestamp]],
