@@ -30,7 +30,10 @@ export const TypeWriter = () => {
               .typeString('beautiful series')
               .pauseFor(1000)
               .deleteChars(16)
-              .typeString('Infinity Datasource')
+              .typeString('node graph')
+              .pauseFor(1000)
+              .deleteChars(10)
+              .typeString('Infinity Datasource 🎉')
               .pauseFor(5000)
               .start();
           }}

@@ -1,5 +1,5 @@
 import { uniq, flatten } from 'lodash';
-import { toDataFrame } from '@grafana/data';
+import { FieldColorMode, toDataFrame } from '@grafana/data';
 import { filterResults } from './filter';
 import { normalizeColumns } from './utils';
 import { isDataQuery } from './../utils';
@@ -59,7 +59,50 @@ export class InfinityParser<T extends InfinityQuery> {
       frame.name = this.target.refId;
       return frame;
     } else {
-      return this.toTable();
+      if (isDataQuery(this.target) && this.target.format === 'node-graph-nodes') {
+        const frame = toDataFrame(this.toTable());
+        frame.name = this.target.refId;
+        frame.fields = frame.fields
+          .map((field) => {
+            if (field.name.startsWith('arc__')) {
+              let matching_color_field = frame.fields.find((f) => f.name.startsWith(field.name) && f.name.endsWith('_color'));
+              if (matching_color_field) {
+                field.config = {
+                  displayName: field.name.replace('arc__', ''),
+                  color: {
+                    mode: FieldColorMode?.Fixed || 'fixed',
+                    fixedColor: matching_color_field.values.get(0) || '',
+                  },
+                };
+              }
+            } else if (field.name.startsWith('detail__')) {
+              field.config = {
+                ...field.config,
+                displayName: field.values.get(0),
+              };
+            }
+            return field;
+          })
+          .filter((f) => {
+            return !(f.name.startsWith('arc__') && f.name.endsWith('_color'));
+          });
+        return frame;
+      } else if (isDataQuery(this.target) && this.target.format === 'node-graph-edges') {
+        const frame = toDataFrame(this.toTable());
+        frame.name = this.target.refId;
+        frame.fields = frame.fields.map((field) => {
+          if (field.name.startsWith('detail__')) {
+            field.config = {
+              ...field.config,
+              displayName: field.values.get(0),
+            };
+          }
+          return field;
+        });
+        return frame;
+      } else {
+        return this.toTable();
+      }
     }
   }
 }
