@@ -9,6 +9,7 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 - E2E tests placeholder added
 - type updates
 - bug fixes
+- "as-is" data format added for debugging
 
 ## [ 0.7.10 ]
 

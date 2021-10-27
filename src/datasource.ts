@@ -44,6 +44,10 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
               case 'json':
               case 'xml':
               case 'graphql':
+                if (t.format === 'as-is' && t.source === 'inline') {
+                  const data = JSON.parse(t.data || '[]');
+                  resolve(data);
+                }
                 new InfinityProvider(t, this).query().then(resolve).catch(reject);
                 break;
               case 'series':

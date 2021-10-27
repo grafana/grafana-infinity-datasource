@@ -37,7 +37,7 @@ export interface SecureField {
 export type InfinityQueryType = 'json' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'series' | 'global';
 export type InfinityQuerySources = 'url' | 'inline' | 'random-walk' | 'expression'; // | 'local-fs';
 export type InfinityColumnFormat = 'string' | 'number' | 'timestamp' | 'timestamp_epoch' | 'timestamp_epoch_s';
-export type InfinityQueryFormat = 'table' | 'timeseries' | 'dataframe';
+export type InfinityQueryFormat = 'table' | 'timeseries' | 'dataframe' | 'as-is';
 export type InfinityQueryBase<T extends InfinityQueryType> = { type: T } & DataQuery;
 export type InfinityQueryWithSource<S extends InfinityQuerySources> = { source: S } & DataQuery;
 export type InfinityQueryWithURLSource<T extends InfinityQueryType> = {
@@ -233,6 +233,7 @@ export const SCRAP_QUERY_RESULT_FORMATS: Array<SelectableValue<InfinityQueryForm
   { label: 'Table', value: 'table' },
   { label: 'Time Series', value: 'timeseries' },
   { label: 'Data Frame', value: 'dataframe' },
+  { label: 'As Is', value: 'as-is' },
 ];
 export const SCRAP_QUERY_SOURCES: ScrapQuerySources[] = [
   { label: 'URL', value: 'url', supported_types: ['csv', 'tsv', 'json', 'html', 'xml', 'graphql'] },

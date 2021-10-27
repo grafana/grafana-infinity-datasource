@@ -17,13 +17,20 @@ export const FormatSelector = (props: FormatSelectorProps) => {
     onChange({ ...query, format });
     onRunQuery();
   };
+  const getFormats = () => {
+    if (query.type === 'json' && query.source === 'inline') {
+      return SCRAP_QUERY_RESULT_FORMATS;
+    } else {
+      return SCRAP_QUERY_RESULT_FORMATS.filter((f) => f.value !== 'as-is');
+    }
+  };
   return (
     <>
       <label title={Components.QueryEditor.Format.Label.Title} className={`gf-form-label query-keyword width-4`}>
         {Components.QueryEditor.Format.Label.Text}
       </label>
       <div title={Components.QueryEditor.Format.Dropdown.PlaceHolder.Title} className="select-wrapper">
-        <Select className="min-width-8 width-8" value={query.format} options={SCRAP_QUERY_RESULT_FORMATS} onChange={(e) => onFormatChange(e.value as InfinityQueryFormat)}></Select>
+        <Select className="min-width-8 width-8" value={query.format} options={getFormats()} onChange={(e) => onFormatChange(e.value as InfinityQueryFormat)}></Select>
       </div>
     </>
   );
