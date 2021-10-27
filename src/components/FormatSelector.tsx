@@ -30,7 +30,7 @@ export const FormatSelector = (props: FormatSelectorProps) => {
         {Components.QueryEditor.Format.Label.Text}
       </label>
       <div title={Components.QueryEditor.Format.Dropdown.PlaceHolder.Title} className="select-wrapper">
-        <Select className="min-width-8 width-8" value={query.format} options={getFormats()} onChange={(e) => onFormatChange(e.value as InfinityQueryFormat)}></Select>
+        <Select className="min-width-12 width-12" value={query.format} options={getFormats()} onChange={(e) => onFormatChange(e.value as InfinityQueryFormat)}></Select>
       </div>
     </>
   );

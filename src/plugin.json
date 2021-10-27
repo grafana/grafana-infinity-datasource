@@ -19,7 +19,7 @@
       "small": "img/icon.svg",
       "large": "img/icon.svg"
     },
-    "keywords": ["grafana", "json", "csv", "xml", "html", "graphql", "simple-json", "url", "inline", "random walk", "scraping"],
+    "keywords": ["grafana", "json", "csv", "xml", "html", "graphql", "simple-json", "url", "inline", "random walk", "scraping", "node graph"],
     "screenshots": [
       {
         "name": "features",
