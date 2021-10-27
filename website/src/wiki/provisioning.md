@@ -42,11 +42,6 @@ If you need an advanced version of the datasource, use the following format.
     tlsAuthWithCACert: <<true or false>> -- false by default
     serverName: <<server name that matches in certificate for tlsAuthWithCACert>>
     timeoutInSeconds: <<60>> -- or whatever the timeout you want set. If not set defaults to 60.
-    local_sources_options:
-      enabled: <<true or false>> -- false by default
-      allowed_paths:
-        - /etc/path1
-        - /some/other/path
   secureJsonData:
     basicAuthPassword: <<YOUR PASSWORD. Example -- MY_Github_PAT_Token>>
     tlsCACert: <<Your TLS cert>>
@@ -54,4 +49,17 @@ If you need an advanced version of the datasource, use the following format.
     tlsClientKey: <<Your client key>>
   version: 1
   readOnly: true
+```
+
+### Custom headers
+
+If you want to provision custom header, you can use the following syntax
+
+```yaml
+jsonData:
+  httpHeaderName1: <<Header1 Key>>
+  httpHeaderName2: <<Header2 Key>>
+secureJsonData:
+  httpHeaderValue1: <<Header1 Value>>
+  httpHeaderValue2: <<Header2 Value>>
 ```
