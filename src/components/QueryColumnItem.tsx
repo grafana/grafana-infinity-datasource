@@ -55,6 +55,9 @@ export const QueryColumnItem = (props: QueryColumnItemProps) => {
       ></input>
       <label className="gf-form-label width-2">as</label>
       <input type="text" className="gf-form-input min-width-8" value={text} placeholder="Title" onChange={(e) => setText(e.currentTarget.value)} onBlur={onTextChange}></input>
+      <label className="gf-form-label" style={{ width: '92px' }}>
+        format as
+      </label>
       <Select className="min-width-12 width-12" value={column.type} options={SCRAP_QUERY_RESULT_COLUMN_FORMATS} onChange={(e) => onFormatChange(e.value as InfinityColumnFormat)}></Select>
     </>
   );

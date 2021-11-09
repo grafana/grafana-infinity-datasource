@@ -23,7 +23,8 @@ export const RootSelector = (props: RootSelectorProps) => {
       <label className={`gf-form-label query-keyword width-${LABEL_WIDTH}`}>Rows / Root</label>
       <input
         type="text"
-        className="gf-form-input min-width-30 width-30"
+        className="gf-form-input"
+        style={{ width: '594px' }}
         value={root_selector}
         placeholder=""
         onChange={(e) => setRootSelector(e.currentTarget.value)}

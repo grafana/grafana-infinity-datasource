@@ -22,7 +22,7 @@ export const URLEditor = (props: ScrapperProps) => {
       {canShowURLField ? (
         <div className="gf-form">
           <URLField {...props} />
-          {isDataQuery(query) && query.source === 'url' && <URLOptionsEditor {...props} />}
+          <div style={{ marginLeft: '5px' }}>{isDataQuery(query) && query.source === 'url' && <URLOptionsEditor {...props} />}</div>
         </div>
       ) : (
         <div className="gf-form">

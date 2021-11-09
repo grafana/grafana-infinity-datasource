@@ -99,7 +99,7 @@ describe('JSONParser', () => {
     expect(JSONResults3.toTable().rows.length).toBe(3);
     expect(JSONResults3.toTable().rows[0].length).toBe(2);
     expect(JSONResults3.toTable().rows[1][0]).toBe('bar');
-    expect(JSONResults3.toTable().rows[2][1]).toBe(30);
+    expect(JSONResults3.toTable().rows[2][1]).toBe('30');
     expect(JSONResults3.toTable().columns.length).toBe(2);
   });
 });

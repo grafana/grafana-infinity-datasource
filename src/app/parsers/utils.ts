@@ -52,15 +52,18 @@ export const columnarToTable = (response: any, columns: InfinityColumn[] = []) =
   return res;
 };
 
-export const getValue = (input: string | number | Date, type: InfinityColumnFormat, asTimestamp?: boolean) => {
+export const getValue = (input: string | number | Date | null, type: InfinityColumnFormat, asTimestamp?: boolean) => {
   switch (type) {
     case 'string':
+      if (typeof input === 'number') {
+        return input + '';
+      }
       return input;
     case 'number':
       if (typeof input === 'number') {
         return input;
       } else if (typeof input === 'string') {
-        return toNumber((input + '').replace(/,/g, ''));
+        return toNumber((input + '').replace(/[^0-9.]/g, ''));
       } else {
         return null;
       }

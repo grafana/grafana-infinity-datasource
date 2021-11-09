@@ -230,9 +230,9 @@ export const SCRAP_QUERY_TYPES: Array<SelectableValue<InfinityQueryType>> = [
   { label: 'Global Query', value: 'global' },
 ];
 export const SCRAP_QUERY_RESULT_FORMATS: Array<SelectableValue<InfinityQueryFormat>> = [
+  { label: 'Data Frame', value: 'dataframe' },
   { label: 'Table', value: 'table' },
   { label: 'Time Series', value: 'timeseries' },
-  { label: 'Data Frame', value: 'dataframe' },
   { label: 'Nodes - Node Graph', value: 'node-graph-nodes' },
   { label: 'Edges - Node Graph', value: 'node-graph-edges' },
   { label: 'As Is', value: 'as-is' },
@@ -242,7 +242,6 @@ export const SCRAP_QUERY_SOURCES: ScrapQuerySources[] = [
   { label: 'Inline', value: 'inline', supported_types: ['csv', 'tsv', 'json', 'xml'] },
   { label: 'Random Walk', value: 'random-walk', supported_types: ['series'] },
   { label: 'Expression', value: 'expression', supported_types: ['series'] },
-  // { label: 'Local File', value: 'local-fs', supported_types: ['csv', 'json', 'xml'] },
 ];
 export const SCRAP_QUERY_RESULT_COLUMN_FORMATS: Array<SelectableValue<InfinityColumnFormat>> = [
   { label: 'String', value: 'string' },

@@ -21,7 +21,7 @@ export class InfinityParser<T extends InfinityQuery> {
       this.AutoColumns = target.columns || [];
       this.StringColumns = target.columns.filter((t) => t.type === 'string');
       this.NumbersColumns = target.columns.filter((t) => t.type === 'number');
-      this.TimeColumns = target.columns.filter((t) => t.type === 'timestamp' || t.type === 'timestamp_epoch' || t.type === 'timestamp_epoch_s');
+      this.TimeColumns = target.columns.filter((t) => t.type.startsWith('timestamp'));
     }
   }
   private canAutoGenerateColumns(): boolean {
@@ -59,44 +59,42 @@ export class InfinityParser<T extends InfinityQuery> {
       frame.name = this.target.refId;
       frame.refId = this.target.refId;
       return frame;
-    } else {
-      if (isDataQuery(this.target) && this.target.format.startsWith('node-graph')) {
-        const frame = toDataFrame(this.toTable());
-        frame.name = this.target.refId;
-        frame.fields = frame.fields
-          .map((field) => {
-            if (field.name.startsWith('arc__')) {
-              let matching_color_field = frame.fields.find((f) => f.name.startsWith(field.name) && f.name.endsWith('_color'));
-              if (matching_color_field) {
-                field.config = {
-                  displayName: field.name.replace('arc__', ''),
-                  color: {
-                    mode: FieldColorMode?.Fixed || 'fixed',
-                    fixedColor: matching_color_field.values.get(0) || '',
-                  },
-                };
-              }
-            } else if (field.name.startsWith('detail__')) {
+    } else if (isDataQuery(this.target) && this.target.format.startsWith('node-graph')) {
+      const frame = toDataFrame(this.toTable());
+      frame.name = this.target.refId;
+      frame.fields = frame.fields
+        .map((field) => {
+          if (field.name.startsWith('arc__')) {
+            let matching_color_field = frame.fields.find((f) => f.name.startsWith(field.name) && f.name.endsWith('_color'));
+            if (matching_color_field) {
               field.config = {
-                ...field.config,
-                displayName: field.values.get(0),
+                displayName: field.name.replace('arc__', ''),
+                color: {
+                  mode: FieldColorMode?.Fixed || 'fixed',
+                  fixedColor: matching_color_field.values.get(0) || '',
+                },
               };
             }
-            return field;
-          })
-          .filter((f) => {
-            return !(f.name.startsWith('arc__') && f.name.endsWith('_color'));
-          });
-        if (this.target.format.startsWith('node-')) {
-          frame.meta = {
-            ...(frame.meta || {}),
-            preferredVisualisationType: 'nodeGraph' as PreferredVisualisationType,
-          };
-        }
-        return frame;
-      } else {
-        return this.toTable();
+          } else if (field.name.startsWith('detail__')) {
+            field.config = {
+              ...field.config,
+              displayName: field.values.get(0),
+            };
+          }
+          return field;
+        })
+        .filter((f) => {
+          return !(f.name.startsWith('arc__') && f.name.endsWith('_color'));
+        });
+      if (this.target.format.startsWith('node-')) {
+        frame.meta = {
+          ...(frame.meta || {}),
+          preferredVisualisationType: 'nodeGraph' as PreferredVisualisationType,
+        };
       }
+      return frame;
+    } else {
+      return this.toTable();
     }
   }
 }

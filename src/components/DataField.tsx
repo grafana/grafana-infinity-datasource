@@ -25,7 +25,7 @@ export const DataField = (props: DataFieldProps) => {
       <InlineFormLabel className={`query-keyword`} width={LABEL_WIDTH}>
         Data
       </InlineFormLabel>
-      <textarea rows={5} className="gf-form-input" style={{ width: '600px' }} value={data} placeholder="" onBlur={onDataChange} onChange={(e) => setData(e.target.value)}></textarea>
+      <textarea rows={5} className="gf-form-input" style={{ width: '594px' }} value={data} placeholder="" onBlur={onDataChange} onChange={(e) => setData(e.target.value)}></textarea>
       <Icon name="play" size="lg" style={{ color: 'greenyellow' }} />
     </>
   );

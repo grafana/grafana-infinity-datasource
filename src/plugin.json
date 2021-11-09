@@ -3,10 +3,11 @@
   "name": "Infinity",
   "id": "yesoreyeram-infinity-datasource",
   "type": "datasource",
-  "backend": true,
   "executable": "gpx_infinity",
+  "backend": true,
   "metrics": true,
   "annotations": true,
+  "alerting": false,
   "info": {
     "version": "%VERSION%",
     "updated": "%TODAY%",
@@ -19,7 +20,7 @@
       "small": "img/icon.svg",
       "large": "img/icon.svg"
     },
-    "keywords": ["grafana", "json", "csv", "xml", "html", "graphql", "simple-json", "url", "inline", "random walk", "scraping", "node graph"],
+    "keywords": ["grafana", "json", "csv", "xml", "html", "graphql", "simple-json", "url", "inline", "random walk", "scraping", "node graph", "rest api", "soap"],
     "screenshots": [
       {
         "name": "features",

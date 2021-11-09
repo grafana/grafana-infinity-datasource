@@ -156,7 +156,7 @@ export const URLOptionsEditor = ({ query, onChange, onRunQuery }: URLOptionsProp
             e.preventDefault();
           }}
         >
-          HTTP Method, Headers, Query params
+          HTTP method, Query param, Headers
         </Button>
         {popupOpenStatus && (
           <>

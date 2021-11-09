@@ -31,7 +31,11 @@ export class XMLParser extends InfinityParser<InfinityXMLQuery> {
       const row: GrafanaTableRow = [];
       this.target.columns.forEach((c: InfinityColumn) => {
         let value = get(r, c.selector, '');
-        value = getValue(value, c.type);
+        if (value && Array.isArray(value)) {
+          value = getValue(value.join(','), c.type);
+        } else {
+          value = getValue(value, c.type);
+        }
         if (typeof r === 'string') {
           row.push(r);
         } else {

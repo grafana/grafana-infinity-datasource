@@ -24,9 +24,10 @@ export const URLField = (props: URLFieldProps) => {
       <label className={`gf-form-label query-keyword width-${LABEL_WIDTH}`}>{query.source === 'url' ? 'URL' : 'File full path'}</label>
       <input
         type="text"
-        className="gf-form-input min-width-30 width-30"
+        className="gf-form-input"
         value={url}
         placeholder="https://jsonplaceholder.typicode.com/todos"
+        style={{ width: '594px' }}
         onChange={(e) => setURL(e.currentTarget.value)}
         onBlur={onURLChange}
       ></input>

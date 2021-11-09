@@ -120,7 +120,7 @@ export const TableFilter = (props: TableFiltersProps) => {
             </div>
           </>
         )}
-        <span className="btn btn-success btn-medium" style={{ marginTop: '5px' }} onClick={closePopup}>
+        <span className="btn btn-success btn-medium" style={{ marginTop: '5px', marginRight: '10px' }} onClick={closePopup}>
           OK
         </span>
         <span className="btn btn-primary btn-medium" style={{ marginTop: '5px', marginRight: '10px' }} onClick={addFilter}>
