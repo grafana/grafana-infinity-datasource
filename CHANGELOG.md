@@ -12,6 +12,7 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 - "as-is" data format added for debugging
 - comma in the numbers are now ignored and considered as number
 - bug fix: [#191](https://github.com/yesoreyeram/grafana-infinity-datasource/issues/191)
+- bug fix: [#146](https://github.com/yesoreyeram/grafana-infinity-datasource/issues/146)
 
 ## [ 0.7.10 ]
 
