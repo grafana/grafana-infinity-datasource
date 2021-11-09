@@ -9,9 +9,10 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 - moved docs website, try into their own folder
 - E2E tests for config editor (placeholder) added
 - typescript updates
-- bug fixes
 - "as-is" data format added for debugging
 - comma in the numbers are now ignored and considered as number
+- bug fix: [#191](https://github.com/yesoreyeram/grafana-infinity-datasource/issues/191)
+- bug fix: [#146](https://github.com/yesoreyeram/grafana-infinity-datasource/issues/146)
 
 ## [ 0.7.10 ]
 

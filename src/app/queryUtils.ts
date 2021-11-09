@@ -43,7 +43,7 @@ export const replaceVariables = (query: InfinityQuery, scopedVars: ScopedVars): 
 };
 
 export const IsValidInfinityQuery = (query: InfinityQuery): boolean => {
-  if (query && (query.type === 'csv' || query.type === 'tsv' || query.type === 'json' || query.type === 'xml')) {
+  if (query && (query.type === 'csv' || query.type === 'tsv' || query.type === 'graphql' || query.type === 'json' || query.type === 'xml')) {
     if (query.source === 'url') {
       return query.url !== undefined && query.url !== '';
     } else {

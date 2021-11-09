@@ -17,15 +17,15 @@ export const VariableEditor = (props: VariableEditorProps) => {
     props.onChange(state, `${props.datasource.name}- (${state.queryType}) ${state.query}`);
   };
   const onInfinityQueryUpdate = (infinityQuery: InfinityQuery) => {
-    setState({ ...state, infinityQuery });
+    setState({ queryType: state.queryType, query: state.query, infinityQuery });
     saveQuery();
   };
   const onQueryTypeChange = (queryType: VariableQueryType) => {
-    setState({ ...state, queryType });
+    setState({ query: state.query, infinityQuery: state.infinityQuery, queryType });
     saveQuery();
   };
   const onQueryChange = (query: string) => {
-    setState({ ...state, query });
+    setState({ queryType: state.queryType, infinityQuery: state.infinityQuery, query });
     saveQuery();
   };
   return (

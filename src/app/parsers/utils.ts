@@ -21,10 +21,9 @@ export const getColumnsFromObjectArray = (result: any): InfinityColumn[] => {
   }
 };
 
-export const normalizeColumns = (columns: InfinityColumn[]): InfinityColumn[] => {
+export const normalizeColumns = (columns: InfinityColumn[] = []): InfinityColumn[] => {
   return [...columns].map((c) => {
-    c.text = c.text || c.selector;
-    return c;
+    return { ...c, text: c.text || c.selector };
   });
 };
 
