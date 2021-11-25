@@ -1,7 +1,8 @@
 ---
-slug: "/showcase/github"
-title: "Github Stats"
+slug: '/showcase/github'
+title: 'Github Stats'
 ---
+
 ## Github Stats
 
 ![image](https://user-images.githubusercontent.com/153843/93846498-1d9abf80-fc9c-11ea-90ed-4c569b088d99.png)
@@ -19,11 +20,11 @@ Query Used:
 
 ```graphql
 {
-  repository(owner:"$GithubUser", name:"$GithubRepo") {
-    issues(last:20) {
+  repository(owner: "$GithubUser", name: "$GithubRepo") {
+    issues(last: 20) {
       edges {
         node {
-          author{
+          author {
             login
           }
           state
@@ -41,7 +42,6 @@ Query Used:
 Select **Advanced** mode and use your github username and PAT token as password
 
 ![image](https://user-images.githubusercontent.com/153843/93736929-b1578780-fbd9-11ea-9413-5585ff79d3a8.png)
-
 
 ## Github Organization Summary example
 
@@ -61,18 +61,17 @@ corresponding query used is given below
         openissues: issues(states: OPEN) {
           totalCount
         }
-        openpr:pullRequests(states:OPEN) {
+        openpr: pullRequests(states: OPEN) {
           totalCount
         }
       }
     }
   }
 }
-
 ```
 
 Note:
 
-* Queries are not paginated
-* Github rate limits apply
-* If you need paginated and full set of results, use grafana [github stats plugin](https://grafana.com/grafana/plugins/grafana-github-datasource)
+- Queries are not paginated
+- Github rate limits apply
+- If you need paginated and full set of results, use grafana [github stats plugin](https://grafana.com/grafana/plugins/grafana-github-datasource)
