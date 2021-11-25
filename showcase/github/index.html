@@ -17,11 +17,11 @@
 <p>Query Used:</p>
 <deckgo-highlight-code language="graphql" terminal="carbon" theme="vscode"  >
           <code slot="code">{
-  repository(owner:&quot;$GithubUser&quot;, name:&quot;$GithubRepo&quot;) {
-    issues(last:20) {
+  repository(owner: &quot;$GithubUser&quot;, name: &quot;$GithubRepo&quot;) {
+    issues(last: 20) {
       edges {
         node {
-          author{
+          author {
             login
           }
           state
@@ -51,14 +51,13 @@
         openissues: issues(states: OPEN) {
           totalCount
         }
-        openpr:pullRequests(states:OPEN) {
+        openpr: pullRequests(states: OPEN) {
           totalCount
         }
       }
     }
   }
-}
-</code>
+}</code>
         </deckgo-highlight-code>
 <p>Note:</p>
 <ul>
