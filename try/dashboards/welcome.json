@@ -20,7 +20,6 @@
   },
   "editable": false,
   "fiscalYearStartMonth": 0,
-  "gnetId": null,
   "graphTooltip": 0,
   "id": 1,
   "links": [],
@@ -30,17 +29,17 @@
       "datasource": null,
       "description": "",
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 24,
         "x": 0,
         "y": 0
       },
       "id": 8,
       "options": {
-        "content": "<div style=\"width:100;text-align:center;background:linear-gradient(#F05A28, #FBCA0A);color:black;\">\n<br/>\n<br/>\n<h1>Grafana Infinity Datasource</h1> \n<br/>\n<br/>\n</div>",
+        "content": "<div style=\"background: url('/public/img/g8_login_dark.svg');text-align:center;\">\n<br/>\n<br/>\n<h1 style=\"font-weight:bolder;font-size:40px;letter-spacing:8px;\">Grafana Infinity Datasource</h1> \n<br/>\n<br/>\n</div>",
         "mode": "html"
       },
-      "pluginVersion": "8.2.0",
+      "pluginVersion": "8.3.1",
       "targets": [
         {
           "columns": [],
@@ -71,7 +70,6 @@
       "type": "text"
     },
     {
-      "datasource": null,
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -104,13 +102,18 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 4
+        "y": 5
       },
       "id": 4,
       "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
         "showHeader": true
       },
-      "pluginVersion": "8.2.0",
+      "pluginVersion": "8.3.1",
       "targets": [
         {
           "columns": [],
@@ -141,7 +144,6 @@
       "type": "table"
     },
     {
-      "datasource": null,
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -174,13 +176,18 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 4
+        "y": 5
       },
       "id": 6,
       "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
         "showHeader": true
       },
-      "pluginVersion": "8.2.0",
+      "pluginVersion": "8.3.1",
       "targets": [
         {
           "columns": [],
@@ -211,7 +218,7 @@
       "type": "table"
     }
   ],
-  "schemaVersion": 31,
+  "schemaVersion": 33,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -227,5 +234,6 @@
   "timezone": "",
   "title": "Welcome",
   "uid": "welcome",
-  "version": 3
+  "version": 1,
+  "weekStart": ""
 }
