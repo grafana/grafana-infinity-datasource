@@ -1,6 +1,7 @@
 import React from 'react';
 import { cloneDeep } from 'lodash';
 import { Button } from '@grafana/ui';
+import { RootSelector } from './../../components/RootSelector';
 import { InfinityColumn, InfinityQuery, EditorMode } from '../../types';
 import { QueryColumnItem } from './../../components/QueryColumnItem';
 import { isDataQuery } from './../../app/utils';
@@ -16,6 +17,7 @@ export const QueryColumnsEditor = (props: QueryColumnProps) => {
   if (!isDataQuery(query)) {
     return <></>;
   }
+  const canShowRootSelector = ['html', 'json', 'xml', 'graphql'].indexOf(props.query.type) > -1;
   const onColumnAdd = () => {
     const columns = cloneDeep(query.columns || []);
     const defaultColumn = {
@@ -33,6 +35,11 @@ export const QueryColumnsEditor = (props: QueryColumnProps) => {
   const LABEL_WIDTH = mode === 'variable' ? 10 : 8;
   return (
     <>
+      {canShowRootSelector && (
+        <div className="gf-form">
+          <RootSelector {...props} />
+        </div>
+      )}
       {query.columns.map((column: InfinityColumn, index: number) => {
         return (
           <div className="gf-form-inline" key={JSON.stringify(column) + index}>

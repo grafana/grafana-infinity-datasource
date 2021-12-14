@@ -1,9 +1,9 @@
 import { uniq, flatten } from 'lodash';
-import { FieldColorMode, PreferredVisualisationType, toDataFrame } from '@grafana/data';
+import { DataFrame, FieldColorMode, PreferredVisualisationType, toDataFrame } from '@grafana/data';
 import { filterResults } from './filter';
 import { normalizeColumns } from './utils';
 import { isDataQuery } from './../utils';
-import { InfinityQuery, InfinityColumn, GrafanaTableRow, timeSeriesResult } from './../../types';
+import { InfinityQuery, InfinityColumn, GrafanaTableRow, timeSeriesResult, tableResult } from './../../types';
 
 export class InfinityParser<T extends InfinityQuery> {
   target: T;
@@ -38,7 +38,7 @@ export class InfinityParser<T extends InfinityQuery> {
       columns: normalizeColumns(columns),
     };
   }
-  toTimeSeries() {
+  toTimeSeries(): timeSeriesResult[] {
     const targets = uniq(this.series.map((s) => s.target));
     return targets.map((t) => {
       return {
@@ -48,7 +48,7 @@ export class InfinityParser<T extends InfinityQuery> {
       };
     });
   }
-  getResults() {
+  getResults(): DataFrame | timeSeriesResult[] | tableResult {
     if (isDataQuery(this.target) && this.target.filters && this.target.filters.length > 0 && this.target.columns && this.target.columns.length > 0) {
       this.rows = filterResults(this.rows, this.target.columns, this.target.filters);
     }

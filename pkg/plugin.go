@@ -58,6 +58,9 @@ func (ds *InfinityDatasource) query(ctx context.Context, query backend.DataQuery
 		return response
 	}
 	frame := data.NewFrame("response")
+	frame.Meta = &data.FrameMeta{
+		ExecutedQueryString: "If you are looking to inspect the response from the server, use browser developer tools, network tab. You will see a call to `proxy` route which is the actual call made.",
+	}
 	response.Frames = append(response.Frames, frame)
 	return response
 }

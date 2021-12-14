@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import flatten from 'lodash/flatten';
-import { DataQueryResponse, DataQueryRequest, LoadingState } from '@grafana/data';
+import { DataQueryResponse, DataQueryRequest, LoadingState, DataFrame } from '@grafana/data';
 import { DataSourceWithBackend } from '@grafana/runtime';
 import { InfinityProvider } from './app/InfinityProvider';
 import { SeriesProvider } from './app/SeriesProvider';
@@ -73,17 +73,26 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
   }
   query(options: DataQueryRequest<InfinityQuery>): Observable<DataQueryResponse> {
     return new Observable<DataQueryResponse>((subscriber) => {
-      this.getResults(options)
+      super
+        .query(options)
+        .toPromise()
+        .then(() => this.getResults(options))
         .then((result) => {
+          result.data = result.data.map((d: DataFrame) => {
+            d.meta = {
+              ...d.meta,
+              executedQueryString:
+                'If you are looking to inspect the response from the server, use browser developer tools, network tab. You will see a call to `proxy` route which is the actual call made.',
+            };
+            return d;
+          });
           subscriber.next({ ...result, state: LoadingState.Done });
         })
         .catch((error) => {
           subscriber.next({ data: [], error, state: LoadingState.Error });
           subscriber.error(error);
         })
-        .finally(() => {
-          subscriber.complete();
-        });
+        .finally(() => subscriber.complete());
     });
   }
   metricFindQuery(originalQuery: VariableQuery): Promise<MetricFindValue[]> {

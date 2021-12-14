@@ -35,7 +35,7 @@ export interface SecureField {
 
 //#region Query
 export type InfinityQueryType = 'json' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'series' | 'global';
-export type InfinityQuerySources = 'url' | 'inline' | 'random-walk' | 'expression'; // | 'local-fs';
+export type InfinityQuerySources = 'url' | 'inline' | 'random-walk' | 'expression';
 export type InfinityColumnFormat = 'string' | 'number' | 'timestamp' | 'timestamp_epoch' | 'timestamp_epoch_s';
 export type InfinityQueryFormat = 'table' | 'timeseries' | 'dataframe' | 'as-is' | 'node-graph-nodes' | 'node-graph-edges';
 export type InfinityQueryBase<T extends InfinityQueryType> = { type: T } & DataQuery;

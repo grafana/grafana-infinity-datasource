@@ -338,6 +338,9 @@ export const URLOptionsEditor = ({ query, onChange, onRunQuery }: URLOptionsProp
                       <button className="btn btn-success" onClick={onQueryHeadersAdd}>
                         Add Custom Header
                       </button>
+                      <div style={{ padding: '20px 10px', marginTop: '20px', border: '1px solid gray' }}>
+                        <h4>Note : If you have any secrets to be added as header, use the datasource config instead.</h4>
+                      </div>
                     </>
                   )}
                 </TabContent>
