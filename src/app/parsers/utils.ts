@@ -62,7 +62,7 @@ export const getValue = (input: string | number | Date | null, type: InfinityCol
     case 'number':
       if (typeof input === 'number') {
         return input;
-      } else if (typeof input === 'string') {
+      } else if (typeof input === 'string' && input) {
         return toNumber((input + '').replace(/[^0-9.]/g, ''));
       } else {
         return null;

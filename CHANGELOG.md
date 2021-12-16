@@ -6,13 +6,13 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 
 - custom query type for tsv files
 - support for Node Graph
-- moved docs website, try into their own folder
+- moved docs website, try into their own folders
 - E2E tests for config editor (placeholder) added
 - typescript updates
 - "as-is" data format added for debugging
 - comma in the numbers are now ignored and considered as number
-- bug fix: [#191](https://github.com/yesoreyeram/grafana-infinity-datasource/issues/191)
-- bug fix: [#146](https://github.com/yesoreyeram/grafana-infinity-datasource/issues/146)
+- variable editor bug fixes. Previously, unable to add columns in variable editor
+- fixes [#191](https://github.com/yesoreyeram/grafana-infinity-datasource/issues/191), [#146](https://github.com/yesoreyeram/grafana-infinity-datasource/issues/146), [#210](https://github.com/yesoreyeram/grafana-infinity-datasource/issues/210)
 
 ## [ 0.7.10 ]
 

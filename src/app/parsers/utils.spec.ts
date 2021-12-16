@@ -6,12 +6,15 @@ describe('utils', () => {
     expect(getValue('hello 123', 'string')).toStrictEqual('hello 123');
     expect(getValue(123, 'string')).toStrictEqual('123');
     expect(getValue(0, 'string')).toStrictEqual('0');
+    expect(getValue(null, 'string')).toStrictEqual(null);
 
     expect(getValue(123.45, 'number')).toStrictEqual(123.45);
     expect(getValue('123', 'number')).toStrictEqual(123);
     expect(getValue('123.45', 'number')).toStrictEqual(123.45);
     expect(getValue('1,234.5', 'number')).toStrictEqual(1234.5);
     expect(getValue('1,234.5abcdef:;!@#$$%^&*()ABCDEF', 'number')).toStrictEqual(1234.5);
+    expect(getValue(' 01,234.5 ', 'number')).toStrictEqual(1234.5);
+    expect(getValue('', 'number')).toStrictEqual(null);
     expect(getValue(null, 'number')).toStrictEqual(null);
     expect(getValue('192.168.0.0', 'number')).toStrictEqual(NaN);
 
