@@ -7,9 +7,9 @@ export const ThemeSwitcher = () => {
   }, []);
   return (
     <a onClick={() => {}}>
-      <button style={{ background: 'transparent', border: 'none', padding: 0, margin: 0 }}>
+      <button>
         <i
-          className="fas fa-palette text-secondary"
+          className="fas fa-palette"
           onClick={() => {
             let isLightTheme = document.getElementsByTagName('html')[0].classList.contains('light-theme');
             document.getElementsByTagName('html')[0].classList.toggle('light-theme');

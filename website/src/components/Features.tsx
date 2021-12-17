@@ -3,7 +3,7 @@ import { Link, navigate } from 'gatsby';
 
 export const Features = () => {
   return (
-    <div className="container my-4" id="features-section">
+    <div className="container my-4" id="features-section" style={{ zIndex: 200 }}>
       <div className="row">
         <div className="col-sm-6 col-lg-6 mb-4">
           <div className="card p-3 text-center">

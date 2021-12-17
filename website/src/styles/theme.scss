@@ -25,8 +25,14 @@ html.dark-theme {
       #brand {
         color: white !important;
       }
+      .special-menu,
       a:hover {
         color: $cyanA9 !important;
+      }
+      .nav-item {
+        button {
+          background: transparent;
+        }
       }
     }
     #subnav {
@@ -77,7 +83,7 @@ html.dark-theme {
     .mainbg {
       background: $gray12 !important;
       #banner-title {
-        color: $cyanA9 !important;
+        color: $gray1 !important;
       }
       h3.typewriter,
       h3.typewriter span {
@@ -85,6 +91,18 @@ html.dark-theme {
       }
       p {
         color: $gray1;
+      }
+      .btn-primary,
+      .btn-primary.a,
+      .special-menu,
+      .special-menu.a {
+        background-color: $cyanA9 !important;
+        color: white !important;
+        border: none;
+      }
+      &::before {
+        // image credit : https://unsplash.com/photos/8xnaQKWjDrM
+        background-image: url(https://images.unsplash.com/photo-1607723619497-98a79f01ba90?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2882&q=80);
       }
     }
     .blog-post {
@@ -139,7 +157,7 @@ html.light-theme {
       .btn-primary.a,
       .special-menu,
       .special-menu.a {
-        background-color: #3d71d9 !important;
+        background-color: $cyanA9 !important;
         color: white !important;
       }
     }
@@ -191,7 +209,7 @@ html.light-theme {
     .mainbg {
       background: $gray3 !important;
       #banner-title {
-        color: $cyanA9 !important;
+        color: $gray12 !important;
       }
       h3.typewriter,
       h3.typewriter span {
@@ -199,6 +217,11 @@ html.light-theme {
       }
       p {
         color: $gray12;
+      }
+      &::before {
+        // image credit : https://unsplash.com/photos/qK39tusA9uE
+        background-image: url(https://images.unsplash.com/photo-1633415565491-7f17373f2e7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80);
+        filter: grayscale(0.2) blur(10px);
       }
     }
     .blog-post {

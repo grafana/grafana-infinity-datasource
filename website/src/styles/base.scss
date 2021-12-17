@@ -91,8 +91,8 @@ body::-webkit-scrollbar-thumb {
   h2 {
     display: inline-block;
     padding-bottom: 10px;
-    margin-bottom: 10px;
-    border-bottom: 10px solid;
+    margin: 20px 0px;
+    border-bottom: 2px solid;
   }
   img {
     width: 100%;
@@ -128,10 +128,15 @@ img[src*='#center'] {
 }
 
 /* subheader */
-#topnav .nav-link:hover {
-  background-clip: text;
-  -webkit-background-clip: text;
-  background-size: 600% 600%;
+#topnav {
+  #brand {
+    text-decoration: none;
+  }
+  .nav-link:hover {
+    background-clip: text;
+    -webkit-background-clip: text;
+    background-size: 600% 600%;
+  }
 }
 #banner-title {
   background-clip: text;
@@ -174,16 +179,28 @@ img[src*='#center'] {
 }
 
 .nav-item {
-  .fab,
-  .fas {
-    &:hover {
-      color: #00e5ea !important;
-    }
-  }
   button {
     margin: 0;
     padding: 0;
-    background: transparent;
     border: none;
   }
+}
+.mainbg {
+  position: relative;
+  > div {
+    position: relative;
+    z-index: 2;
+  }
+}
+.mainbg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background-repeat: no-repeat;
+  background-size: cover;
+  filter: grayscale(0.8) blur(2px);
 }
