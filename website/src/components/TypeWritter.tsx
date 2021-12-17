@@ -3,7 +3,7 @@ import Typewriter from 'typewriter-effect';
 export const TypeWriter = () => {
   return (
     <>
-      <h3 style={{ color: 'whitesmoke' }}>
+      <h3 className="typewriter">
         <Typewriter
           options={{
             autoStart: true,

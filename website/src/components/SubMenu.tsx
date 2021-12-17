@@ -17,7 +17,7 @@ const SubMenuLink = (props: SubMenuLinkProps) => {
 export const SubMenu = () => {
   return (
     <>
-      <div className="nav-scroller shadow-sm" style={{ backgroundColor: '#021936' }}>
+      <div className="nav-scroller shadow-sm">
         <nav id="subnav" className="nav nav-underline d-flex" aria-label="Secondary navigation">
           <span className="ml-4"></span>
           <SubMenuLink to="/wiki/json">JSON</SubMenuLink>
