@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -15,7 +16,6 @@ import (
 )
 
 func newDatasource() datasource.ServeOpts {
-
 	handler := &InfinityDatasource{
 		im: datasource.NewInstanceManager(newDataSourceInstance),
 	}
@@ -45,13 +45,13 @@ func (ds *InfinityDatasource) CheckHealth(ctx context.Context, req *backend.Chec
 func (ds *InfinityDatasource) QueryData(ctx context.Context, req *backend.QueryDataRequest) (*backend.QueryDataResponse, error) {
 	response := backend.NewQueryDataResponse()
 	for _, q := range req.Queries {
-		res := ds.query(ctx, q)
+		res := QueryData(ctx, q)
 		response.Responses[q.RefID] = res
 	}
 	return response, nil
 }
 
-func (ds *InfinityDatasource) query(ctx context.Context, query backend.DataQuery) (response backend.DataResponse) {
+func QueryData(ctx context.Context, query backend.DataQuery) (response backend.DataResponse) {
 	var qm infinity.Query
 	response.Error = json.Unmarshal(query.JSON, &qm)
 	if response.Error != nil {
@@ -65,35 +65,30 @@ func (ds *InfinityDatasource) query(ctx context.Context, query backend.DataQuery
 	return response
 }
 
-type instanceSettings struct {
-	client *infinity.Client
-}
-
-func (is *instanceSettings) Dispose() {}
-
-func newDataSourceInstance(setting backend.DataSourceInstanceSettings) (instancemgmt.Instance, error) {
-	settings, err := infinity.LoadSettings(setting)
+func (td *InfinityDatasource) proxyHandler(rw http.ResponseWriter, req *http.Request) {
+	client, err := getInstanceFromRequest(td.im, req)
 	if err != nil {
-		return nil, err
+		http.Error(rw, err.Error(), http.StatusInternalServerError)
+		return
 	}
-	client, err := infinity.NewClient(settings)
-	if err != nil {
-		return nil, err
+	if req.Method == http.MethodPost {
+		var query infinity.Query
+		err = json.NewDecoder(req.Body).Decode(&query)
+		if err != nil {
+			http.Error(rw, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		if query.Source == "url" {
+			response, err := client.client.GetResults(query)
+			if err != nil {
+				http.Error(rw, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			fmt.Fprintf(rw, "%s", response)
+			return
+		}
+		http.Error(rw, "unknown query", http.StatusNotImplemented)
+		return
 	}
-	return &instanceSettings{
-		client: client,
-	}, nil
-}
-
-func getInstance(im instancemgmt.InstanceManager, ctx backend.PluginContext) (*instanceSettings, error) {
-	instance, err := im.Get(ctx)
-	if err != nil {
-		return nil, err
-	}
-	return instance.(*instanceSettings), nil
-}
-
-func getInstanceFromRequest(im instancemgmt.InstanceManager, req *http.Request) (*instanceSettings, error) {
-	ctx := httpadapter.PluginConfigFromContext(req.Context())
-	return getInstance(im, ctx)
+	http.Error(rw, "500 - Something bad happened! Invalid query.", http.StatusInternalServerError)
 }
