@@ -11,7 +11,7 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 - typescript updates
 - "as-is" data format added for debugging
 - comma in the numbers are now ignored and considered as number
-- variable editor bug fixes. Previously, unable to add columns in variable editor
+- variable editor, global query editor bug fixes. Previously, unable to add columns in variable editor
 - fixes [#191](https://github.com/yesoreyeram/grafana-infinity-datasource/issues/191), [#146](https://github.com/yesoreyeram/grafana-infinity-datasource/issues/146), [#210](https://github.com/yesoreyeram/grafana-infinity-datasource/issues/210)
 
 ## [ 0.7.10 ]
