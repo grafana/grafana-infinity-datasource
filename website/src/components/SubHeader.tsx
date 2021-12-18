@@ -19,16 +19,7 @@ export const SubHeader = (props: SubHeaderProps) => {
     `
   );
   return (
-    <section
-      className="subheader py-5 text-center"
-      style={{
-        backgroundColor: '#021E40',
-        color: 'white',
-        backgroundPositionX: '80%',
-        backgroundPositionY: '20%',
-        backgroundImage: `url(${data.site.siteMetadata.wallpaper})`,
-      }}
-    >
+    <section id="subheader" className="subheader py-5 text-center">
       <h1>{props.title}</h1>
     </section>
   );

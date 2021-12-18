@@ -27,9 +27,7 @@ export const HeroSection = () => {
         <br />
         <TypeWriter />
         <br />
-        <p className="fw-normal text-white">
-          <span style={{ color: '#ccc' }}>Visualize data from JSON, CSV, XML, GraphQL, HTML &amp; REST APIs. Also turns any website into grafana dashboard.</span>
-        </p>
+        <p className="fw-normal">Visualize data from JSON, CSV, XML, GraphQL, HTML &amp; REST APIs. Also turns any website into grafana dashboard.</p>
         <br />
         <Link className="btn btn-primary" to="/getting-started">
           Getting started
