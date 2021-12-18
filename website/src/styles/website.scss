@@ -1,20 +1,20 @@
-$gray1: hsl(0 0% 99%);
-$gray2: hsl(0 0% 97.3%);
-$gray3: hsl(0 0% 95.1%);
-$gray4: hsl(0 0% 93%);
-$gray11: hsl(0 0% 43.5%);
-$gray12: hsl(0 0% 9%);
-$cyanA2: hsl(185 99.9% 42.3% / 0.051);
-$cyanA3: hsl(186 97.8% 42.2% / 0.095);
-$cyanA8: hsl(189 99.9% 37.6% / 0.761);
-$cyanA9: hsl(190 100% 37.8% / 0.98);
-$cyanA10: hsl(191 99.9% 34.6% / 0.969);
-$cyanA11: hsl(192 100% 27.6% / 0.953);
+$gray1: #fcfcfc;
+$gray2: #f8f8f8;
+$gray3: #f3f3f3;
+$gray4: #ededed;
+$gray11: #6f6f6f;
+$gray12: #171717;
+$cyanA2: #00c6d80d;
+$cyanA3: #02c0d518;
+$cyanA8: #00a3c0c2;
+$cyanA9: #00a1c1fa;
+$cyanA10: #0090b0f7;
+$cyanA11: #00718df3;
 
 html {
-  --brandBG: #021e40;
-  --scrollbarBG: #cfd8dc;
-  --thumbBG: #90a4ae;
+  --brandBG: $cyanA2;
+  --scrollbarBG: $gray2;
+  --thumbBG: $gray11;
 }
 
 $BrandBG: var(--brandBG);
