@@ -7,13 +7,13 @@ import { SeriesEditor } from './query.series';
 import { TableFilter } from './query.filters';
 import { InfinityQuery, EditorMode, DefaultInfinityQuery } from '../../types';
 
-export interface InfinityEditorProps {
+export type InfinityEditorProps = {
   query: InfinityQuery;
   onChange: (query: InfinityQuery) => void;
   onRunQuery: () => void;
   instanceSettings: any;
   mode: EditorMode;
-}
+};
 
 export const InfinityQueryEditor = (props: InfinityEditorProps) => {
   const { onChange, mode, instanceSettings, onRunQuery } = props;

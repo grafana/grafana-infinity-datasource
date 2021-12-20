@@ -1,19 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { cloneDeep } from 'lodash';
 import { Button } from '@grafana/ui';
-import { RootSelector } from './../../components/RootSelector';
-import { InfinityColumn, InfinityQuery, EditorMode } from '../../types';
 import { QueryColumnItem } from './../../components/QueryColumnItem';
 import { isDataQuery } from './../../app/utils';
+import { InfinityColumn, InfinityQuery, EditorMode } from '../../types';
 
-interface QueryColumnProps {
-  query: InfinityQuery;
-  mode: EditorMode;
-  onChange: (value: any) => void;
-  onRunQuery: () => void;
-}
-export const QueryColumnsEditor = (props: QueryColumnProps) => {
-  const { query, mode, onChange } = props;
+export const QueryColumnsEditor = (props: { query: InfinityQuery; mode: EditorMode; onChange: (value: any) => void; onRunQuery: () => void }) => {
+  const { query, mode, onChange, onRunQuery } = props;
+  const LABEL_WIDTH = mode === 'variable' ? 10 : 8;
+  const [root_selector, setRootSelector] = useState(isDataQuery(query) ? query.root_selector || '' : '');
   if (!isDataQuery(query)) {
     return <></>;
   }
@@ -32,12 +27,24 @@ export const QueryColumnsEditor = (props: QueryColumnProps) => {
     columns.splice(index, 1);
     onChange({ ...query, columns });
   };
-  const LABEL_WIDTH = mode === 'variable' ? 10 : 8;
+  const onRootSelectorChange = () => {
+    onChange({ ...query, root_selector });
+    onRunQuery();
+  };
   return (
     <>
       {canShowRootSelector && (
         <div className="gf-form">
-          <RootSelector {...props} />
+          <label className={`gf-form-label query-keyword width-${LABEL_WIDTH}`}>Rows / Root</label>
+          <input
+            type="text"
+            className="gf-form-input"
+            style={{ width: '594px' }}
+            value={root_selector}
+            placeholder=""
+            onChange={(e) => setRootSelector(e.currentTarget.value)}
+            onBlur={onRootSelectorChange}
+          ></input>
         </div>
       )}
       {query.columns.map((column: InfinityColumn, index: number) => {

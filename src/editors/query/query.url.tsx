@@ -4,14 +4,7 @@ import { URLOptionsEditor } from './query.url.options';
 import { InfinityQuery, EditorMode } from '../../types';
 import { isDataQuery } from 'app/utils';
 
-interface ScrapperProps {
-  query: InfinityQuery;
-  mode: EditorMode;
-  onChange: (value: any) => void;
-  onRunQuery: () => void;
-}
-
-export const URLEditor = (props: ScrapperProps) => {
+export const URLEditor = (props: { query: InfinityQuery; mode: EditorMode; onChange: (value: any) => void; onRunQuery: () => void }) => {
   const { query, onChange, onRunQuery } = props;
   const canShowURLField = isDataQuery(query) && query.source === 'url';
   const LABEL_WIDTH = props.mode === 'variable' ? 10 : 8;

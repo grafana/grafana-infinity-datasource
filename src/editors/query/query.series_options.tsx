@@ -3,12 +3,7 @@ import { defaultsDeep, set } from 'lodash';
 import { Modal, Select } from '@grafana/ui';
 import { InfinitySeriesQuery, DataOverride } from '../../types';
 
-interface SeriesAdvancedOptionsProps {
-  query: InfinitySeriesQuery;
-  onChange: (value: any) => void;
-}
-
-export const SeriesAdvancedOptions = ({ query, onChange }: SeriesAdvancedOptionsProps) => {
+export const SeriesAdvancedOptions = ({ query, onChange }: { query: InfinitySeriesQuery; onChange: (value: any) => void }) => {
   query = defaultsDeep(query, {
     dataOverrides: [],
   });

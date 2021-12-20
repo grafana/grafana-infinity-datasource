@@ -4,16 +4,21 @@ import { DataSourceSettings } from '@grafana/data';
 import { Button, LegacyForms, IconButton } from '@grafana/ui';
 import { SecureField } from '../../types';
 
-interface SecureFieldEditorProps {
+const SecureFieldEditor = ({
+  title,
+  secureField,
+  onBlur,
+  onChange,
+  onRemove,
+  onReset,
+}: {
   title: string;
   secureField: SecureField;
   onReset: (id: string) => void;
   onRemove: (id: string) => void;
   onChange: (value: SecureField) => void;
   onBlur: () => void;
-}
-
-const SecureFieldEditor = ({ title, secureField, onBlur, onChange, onRemove, onReset }: SecureFieldEditorProps) => {
+}) => {
   const { FormField, SecretFormField } = LegacyForms;
   const layoutStyle: React.CSSProperties = {
     display: 'flex',

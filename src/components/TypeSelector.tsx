@@ -1,14 +1,9 @@
 import React from 'react';
-import { Select } from '@grafana/ui';
+import { Select, InlineFormLabel } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
 import { InfinityQuery, SCRAP_QUERY_TYPES, EditorMode, InfinityQueryType } from '../types';
-interface TypeSelectorProps {
-  query: InfinityQuery;
-  onChange: (e: InfinityQuery) => void;
-  mode: EditorMode;
-  onRunQuery: () => void;
-}
-export const TypeSelector = (props: TypeSelectorProps) => {
+
+export const TypeSelector = (props: { query: InfinityQuery; onChange: (e: InfinityQuery) => void; onRunQuery: () => void; mode: EditorMode }) => {
   const { query, mode, onChange, onRunQuery } = props;
   const LABEL_WIDTH = mode === 'variable' ? 10 : 8;
   const getTypes = (): Array<SelectableValue<InfinityQueryType>> => {
@@ -24,14 +19,17 @@ export const TypeSelector = (props: TypeSelectorProps) => {
     }
   };
   const onTypeChange = (type: InfinityQueryType) => {
-    onChange({ ...query, type, source: type === 'series' ? 'random-walk' : 'url' } as InfinityQuery);
+    const source = type === 'series' ? 'random-walk' : 'url';
+    onChange({ ...query, type, source } as InfinityQuery);
     onRunQuery();
   };
   return (
     <>
-      <label className={`gf-form-label query-keyword width-${LABEL_WIDTH}`}>Type</label>
+      <InlineFormLabel width={LABEL_WIDTH} className={`query-keyword`}>
+        Type
+      </InlineFormLabel>
       <div className="select-wrapper">
-        <Select className="min-width-8 width-8" options={getTypes()} onChange={(e) => onTypeChange(e.value as InfinityQueryType)} value={query.type || 'json'}></Select>
+        <Select width={16} options={getTypes()} onChange={(e) => onTypeChange(e.value as InfinityQueryType)} value={query.type || 'json'}></Select>
       </div>
     </>
   );

@@ -8,15 +8,7 @@ import { FormatSelector } from '../../components/FormatSelector';
 import { GlobalQuerySelector } from '../../components/GlobalQuerySelector';
 import { Help } from '../../components/Help';
 
-interface TypeChooserProps {
-  mode: EditorMode;
-  instanceSettings: any;
-  query: InfinityQuery;
-  onChange: (value: any) => void;
-  onRunQuery: () => void;
-}
-
-export const TypeChooser = (props: TypeChooserProps) => {
+export const TypeChooser = (props: { mode: EditorMode; instanceSettings: any; query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void }) => {
   const { query, mode } = props;
   return (
     <div className="gf-form-inline">

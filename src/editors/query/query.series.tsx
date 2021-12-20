@@ -5,12 +5,7 @@ import { set, defaultsDeep } from 'lodash';
 import { InfinitySeriesQuery } from '../../types';
 import { SeriesAdvancedOptions } from './query.series_options';
 
-interface ScrapperProps {
-  query: InfinitySeriesQuery;
-  onChange: (value: any) => void;
-}
-
-export const SeriesEditor = ({ query, onChange }: ScrapperProps) => {
+export const SeriesEditor = ({ query, onChange }: { query: InfinitySeriesQuery; onChange: (value: any) => void }) => {
   query = defaultsDeep(query, {
     alias: 'Random Walk',
   });

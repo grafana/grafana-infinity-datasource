@@ -1,6 +1,6 @@
 import React from 'react';
 import { Select } from '@grafana/ui';
-import { InfinityQuery, SCRAP_QUERY_RESULT_FORMATS, InfinityQueryFormat } from '../types';
+import { InfinityQuery, INFINITY_RESULT_FORMATS, InfinityQueryFormat } from '../types';
 import { Components } from '../selectors';
 import { isDataQuery } from 'app/utils';
 interface FormatSelectorProps {
@@ -19,9 +19,9 @@ export const FormatSelector = (props: FormatSelectorProps) => {
   };
   const getFormats = () => {
     if (query.type === 'json' && query.source === 'inline') {
-      return SCRAP_QUERY_RESULT_FORMATS;
+      return INFINITY_RESULT_FORMATS;
     } else {
-      return SCRAP_QUERY_RESULT_FORMATS.filter((f) => f.value !== 'as-is');
+      return INFINITY_RESULT_FORMATS.filter((f) => f.value !== 'as-is');
     }
   };
   return (

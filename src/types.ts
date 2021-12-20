@@ -31,6 +31,7 @@ export interface SecureField {
   value: string;
   configured: boolean;
 }
+export type InfinityInstanceSettings = DataSourceInstanceSettings<InfinityOptions>;
 //#endregion
 
 //#region Query
@@ -69,31 +70,21 @@ export type InfinityQueryWithDataSource<T extends InfinityQueryType> = {
   format: InfinityQueryFormat;
 } & (InfinityQueryWithURLSource<T> | InfinityQueryWithInlineSource<T>) &
   InfinityQueryBase<T>;
-export type InfinityJSONQuery = {
-  json_options?: {
-    root_is_not_array?: boolean;
-    columnar?: boolean;
-  };
-} & InfinityQueryWithDataSource<'json'>;
-export type InfinityCSVQuery = {
-  csv_options?: {
-    delimiter?: string;
-    skip_empty_lines?: boolean;
-    skip_lines_with_error?: boolean;
-    relax_column_count?: boolean;
-    columns?: string;
-    comment?: string;
-  };
-} & InfinityQueryWithDataSource<'csv'>;
-export type InfinityTSVQuery = {
-  csv_options?: {
-    skip_empty_lines?: boolean;
-    skip_lines_with_error?: boolean;
-    relax_column_count?: boolean;
-    columns?: string;
-    comment?: string;
-  };
-} & InfinityQueryWithDataSource<'tsv'>;
+export type InfinityJSONQueryOptions = {
+  root_is_not_array?: boolean;
+  columnar?: boolean;
+};
+export type InfinityJSONQuery = { json_options?: InfinityJSONQueryOptions } & InfinityQueryWithDataSource<'json'>;
+export type InfinityCSVQueryOptions = {
+  delimiter?: string;
+  skip_empty_lines?: boolean;
+  skip_lines_with_error?: boolean;
+  relax_column_count?: boolean;
+  columns?: string;
+  comment?: string;
+};
+export type InfinityCSVQuery = { csv_options?: InfinityCSVQueryOptions } & InfinityQueryWithDataSource<'csv'>;
+export type InfinityTSVQuery = { csv_options?: Exclude<InfinityCSVQueryOptions, 'delimiter'> } & InfinityQueryWithDataSource<'tsv'>;
 export type InfinityXMLQuery = {} & InfinityQueryWithDataSource<'xml'>;
 export type InfinityGraphQLQuery = {
   json_options?: {
@@ -210,15 +201,8 @@ export interface InfinityFilter {
   operator: FilterOperator;
   value: string[];
 }
-export interface QueryParam {
-  key: string;
-  value: string;
-}
-export interface QueryHeaders {
-  key: string;
-  value: string;
-}
-
+export type QueryParam = { key: string; value: string };
+export type QueryHeaders = { key: string; value: string };
 export const SCRAP_QUERY_TYPES: Array<SelectableValue<InfinityQueryType>> = [
   { label: 'CSV', value: 'csv' },
   { label: 'TSV', value: 'tsv' },
@@ -229,7 +213,7 @@ export const SCRAP_QUERY_TYPES: Array<SelectableValue<InfinityQueryType>> = [
   { label: 'Series', value: 'series' },
   { label: 'Global Query', value: 'global' },
 ];
-export const SCRAP_QUERY_RESULT_FORMATS: Array<SelectableValue<InfinityQueryFormat>> = [
+export const INFINITY_RESULT_FORMATS: Array<SelectableValue<InfinityQueryFormat>> = [
   { label: 'Data Frame', value: 'dataframe' },
   { label: 'Table', value: 'table' },
   { label: 'Time Series', value: 'timeseries' },
@@ -237,21 +221,19 @@ export const SCRAP_QUERY_RESULT_FORMATS: Array<SelectableValue<InfinityQueryForm
   { label: 'Edges - Node Graph', value: 'node-graph-edges' },
   { label: 'As Is', value: 'as-is' },
 ];
-export const SCRAP_QUERY_SOURCES: ScrapQuerySources[] = [
+export const INFINITY_SOURCES: ScrapQuerySources[] = [
   { label: 'URL', value: 'url', supported_types: ['csv', 'tsv', 'json', 'html', 'xml', 'graphql'] },
   { label: 'Inline', value: 'inline', supported_types: ['csv', 'tsv', 'json', 'xml'] },
   { label: 'Random Walk', value: 'random-walk', supported_types: ['series'] },
   { label: 'Expression', value: 'expression', supported_types: ['series'] },
 ];
-export const SCRAP_QUERY_RESULT_COLUMN_FORMATS: Array<SelectableValue<InfinityColumnFormat>> = [
+export const INFINITY_COLUMN_FORMATS: Array<SelectableValue<InfinityColumnFormat>> = [
   { label: 'String', value: 'string' },
   { label: 'Number', value: 'number' },
   { label: 'Timestamp', value: 'timestamp' },
   { label: 'Timestamp ( UNIX ms )', value: 'timestamp_epoch' },
   { label: 'Timestamp ( UNIX s )', value: 'timestamp_epoch_s' },
 ];
-
-export type InfinityInstanceSettings = DataSourceInstanceSettings<InfinityOptions>;
 
 //#endregion
 

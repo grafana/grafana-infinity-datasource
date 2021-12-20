@@ -1,26 +1,24 @@
 import React from 'react';
-import { Select } from '@grafana/ui';
-import { InfinityQuery, SCRAP_QUERY_SOURCES, InfinityQuerySources } from '../types';
-interface SourceSelectorProps {
-  query: InfinityQuery;
-  onChange: (e: InfinityQuery) => void;
-  onRunQuery: () => void;
-}
-export const SourceSelector = (props: SourceSelectorProps) => {
+import { Select, InlineFormLabel } from '@grafana/ui';
+import { InfinityQuery, INFINITY_SOURCES, InfinityQuerySources } from '../types';
+
+export const SourceSelector = (props: { query: InfinityQuery; onChange: (e: InfinityQuery) => void; onRunQuery: () => void }) => {
   const { query, onChange, onRunQuery } = props;
   if (query.type === 'global') {
     return <></>;
   }
-  const supportedSources = SCRAP_QUERY_SOURCES.filter((source) => source.supported_types.includes(query.type));
+  const supportedSources = INFINITY_SOURCES.filter((source) => source.supported_types.includes(query.type));
   const onSourceChange = (source: InfinityQuerySources) => {
     onChange({ ...query, source } as InfinityQuery);
     onRunQuery();
   };
   return (
     <>
-      <label className={`gf-form-label query-keyword width-4`}>{query.type === 'series' ? 'Scenario' : 'Source'}</label>
+      <InlineFormLabel className={`query-keyword`} width={4}>
+        {query.type === 'series' ? 'Scenario' : 'Source'}
+      </InlineFormLabel>
       <div className="select-wrapper">
-        <Select className="width-8" options={supportedSources} value={query.source || 'url'} onChange={(e) => onSourceChange(e.value as InfinityQuerySources)}></Select>
+        <Select width={16} options={supportedSources} value={query.source || 'url'} onChange={(e) => onSourceChange(e.value as InfinityQuerySources)}></Select>
       </div>
     </>
   );

@@ -6,13 +6,7 @@ import { SelectableValue } from '@grafana/data';
 import { InfinityQuery, QueryParam } from '../../types';
 import { isDataQuery } from 'app/utils';
 
-interface URLOptionsProps {
-  query: InfinityQuery;
-  onChange: (value: InfinityQuery) => void;
-  onRunQuery: () => void;
-}
-
-export const URLOptionsEditor = ({ query, onChange, onRunQuery }: URLOptionsProps) => {
+export const URLOptionsEditor = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void }) => {
   const theme = useTheme();
   const [popupOpenStatus, setPopupOpenStatus] = useState(false);
   const [activeTab, setActiveTab] = useState('method');

@@ -5,13 +5,7 @@ import { filterOperators } from '../../app/parsers/filter';
 import { isDataQuery } from './../../app/utils';
 import { InfinityQuery, InfinityFilter, FilterOperator } from '../../types';
 
-interface TableFiltersProps {
-  query: InfinityQuery;
-  onChange: (value: any) => void;
-  onRunQuery: any;
-}
-
-export const TableFilter = (props: TableFiltersProps) => {
+export const TableFilter = (props: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: any }) => {
   const [popupOpenStatus, setPopupOpenStatus] = useState(false);
   const { query, onChange, onRunQuery } = props;
   if (!isDataQuery(query)) {
