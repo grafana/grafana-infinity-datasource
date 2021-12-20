@@ -7,7 +7,7 @@ next_page_title: 'Configuration'
 next_page_slug: '/wiki/configuration'
 ---
 
-> DEPRECATED. From v0.7.8, This feature is deprecated in favour of Grafana panel library. From v0.8 this feature may be removed.
+> DEPRECATED. From v0.7.8, This feature is deprecated in favour of Grafana panel library.
 
 Working with same queries in multiple dashboards might be hard some times. To change a query, you need to update all the dashboards. So Infinity datasource gives an option to register queries globally and then allows to reuse the queries across dashboards.
 
