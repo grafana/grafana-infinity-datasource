@@ -15,7 +15,7 @@ export const TypeChooser = (props: { mode: EditorMode; instanceSettings: any; qu
       <div className="gf-form">
         <TypeSelector {...props} />
         {query.type === 'global' ? <GlobalQuerySelector {...props} /> : <SourceSelector {...props} />}
-        {query.type !== 'series' && mode !== 'variable' && <FormatSelector {...props} />}
+        {query.type !== 'series' && query.type !== 'uql' && mode !== 'variable' && <FormatSelector {...props} />}
         {(query.type === 'csv' || query.type === 'tsv') && <CSVOptionsEditor {...props} />}
         {query.type === 'json' && <JSONOptionsEditor {...props} />}
         <Help />

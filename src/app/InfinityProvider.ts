@@ -49,12 +49,8 @@ export class InfinityProvider {
         resolve(this.formatResults(this.target.data));
       } else {
         this.fetchResults()
-          .then((res) => {
-            resolve(this.formatResults(res));
-          })
-          .catch((ex) => {
-            reject(ex);
-          });
+          .then((res) => resolve(this.formatResults(res)))
+          .catch(reject);
       }
     });
   }

@@ -35,7 +35,7 @@ export type InfinityInstanceSettings = DataSourceInstanceSettings<InfinityOption
 //#endregion
 
 //#region Query
-export type InfinityQueryType = 'json' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'series' | 'global';
+export type InfinityQueryType = 'json' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'series' | 'global' | 'uql';
 export type InfinityQuerySources = 'url' | 'inline' | 'random-walk' | 'expression';
 export type InfinityColumnFormat = 'string' | 'number' | 'timestamp' | 'timestamp_epoch' | 'timestamp_epoch_s';
 export type InfinityQueryFormat = 'table' | 'timeseries' | 'dataframe' | 'as-is' | 'node-graph-nodes' | 'node-graph-edges';
@@ -101,7 +101,9 @@ export type InfinityGlobalQuery = { global_query_id: string } & InfinityQueryBas
 export type InfinityDataQuery = InfinityJSONQuery | InfinityCSVQuery | InfinityTSVQuery | InfinityXMLQuery | InfinityGraphQLQuery | InfinityHTMLQuery;
 export type InfinityDestinationQuery = InfinityDataQuery | InfinitySeriesQuery;
 export type InfinityLegacyQuery = InfinityDestinationQuery | InfinityGlobalQuery;
-export type InfinityQuery = InfinityLegacyQuery;
+export type InfinityUQLQuerySource = InfinityQueryWithURLSource<'uql'> | InfinityQueryWithInlineSource<'uql'>;
+export type InfinityUQLQuery = { uql: string } & InfinityUQLQuerySource & InfinityQueryBase<'uql'>;
+export type InfinityQuery = InfinityLegacyQuery | InfinityUQLQuery;
 //#endregion
 
 //#region Variable Query
@@ -204,6 +206,7 @@ export interface InfinityFilter {
 export type QueryParam = { key: string; value: string };
 export type QueryHeaders = { key: string; value: string };
 export const SCRAP_QUERY_TYPES: Array<SelectableValue<InfinityQueryType>> = [
+  { label: 'UQL', value: 'uql' },
   { label: 'CSV', value: 'csv' },
   { label: 'TSV', value: 'tsv' },
   { label: 'JSON', value: 'json' },
@@ -222,8 +225,8 @@ export const INFINITY_RESULT_FORMATS: Array<SelectableValue<InfinityQueryFormat>
   { label: 'As Is', value: 'as-is' },
 ];
 export const INFINITY_SOURCES: ScrapQuerySources[] = [
-  { label: 'URL', value: 'url', supported_types: ['csv', 'tsv', 'json', 'html', 'xml', 'graphql'] },
-  { label: 'Inline', value: 'inline', supported_types: ['csv', 'tsv', 'json', 'xml'] },
+  { label: 'URL', value: 'url', supported_types: ['csv', 'tsv', 'json', 'html', 'xml', 'graphql', 'uql'] },
+  { label: 'Inline', value: 'inline', supported_types: ['csv', 'tsv', 'json', 'xml', 'uql'] },
   { label: 'Random Walk', value: 'random-walk', supported_types: ['series'] },
   { label: 'Expression', value: 'expression', supported_types: ['series'] },
 ];
