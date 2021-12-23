@@ -54,7 +54,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
               case 'uql':
                 new UQLProvider(t, this)
                   .query()
-                  .then((res) => applyUQL(t.uql, res))
+                  .then((res) => applyUQL(t.uql, res, t.format, t.refId))
                   .then(resolve)
                   .catch(reject);
                 break;

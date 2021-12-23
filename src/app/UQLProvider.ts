@@ -3,7 +3,7 @@ import { isArray } from 'lodash';
 import { DataFrame, FieldType, MutableDataFrame, toDataFrame } from '@grafana/data';
 import { Datasource } from './../datasource';
 import { normalizeURL } from './utils';
-import { InfinityUQLQuery } from '../types';
+import { InfinityQueryFormat, InfinityUQLQuery } from '../types';
 
 export class UQLProvider {
   constructor(private target: InfinityUQLQuery, private datasource: Datasource) {}
@@ -13,6 +13,8 @@ export class UQLProvider {
         const target = this.target;
         target.url = normalizeURL(target.url);
         this.datasource.postResource('proxy', target).then(resolve).catch(reject);
+      } else if (this.target.source === 'inline') {
+        resolve(this.target.data);
       } else {
         reject('invalid query type');
       }
@@ -20,20 +22,16 @@ export class UQLProvider {
   }
   query() {
     return new Promise((resolve, reject) => {
-      if (this.target.source === 'inline') {
-        resolve(this.target.data);
-      } else {
-        this.fetchResults().then(resolve).catch(reject);
-      }
+      this.fetchResults().then(resolve).catch(reject);
     });
   }
 }
 
-const sendAsDataFrame = (res: unknown): Promise<DataFrame> => {
+const sendAsDataFrame = (res: unknown, format: InfinityQueryFormat = 'table', refId: string): Promise<DataFrame> => {
   return new Promise((resolve, reject) => {
     if (typeof res === 'number') {
       let result = new MutableDataFrame({
-        name: 'result',
+        name: refId || 'result',
         length: 1,
         fields: [
           {
@@ -58,11 +56,15 @@ const sendAsDataFrame = (res: unknown): Promise<DataFrame> => {
       });
       resolve(result);
     } else if (typeof res === 'object' && isArray(res)) {
-      resolve(toDataFrame(res));
+      if (format === 'timeseries') {
+        resolve(toDataFrame(res)); // TODO: convert to multi frame results
+      } else {
+        resolve(toDataFrame(res));
+      }
     } else {
       resolve(
         new MutableDataFrame({
-          name: 'result',
+          name: refId || 'result',
           length: 1,
           fields: [
             {
@@ -77,14 +79,17 @@ const sendAsDataFrame = (res: unknown): Promise<DataFrame> => {
   });
 };
 
-export const applyUQL = (query: string, data: unknown): Promise<DataFrame> => {
+export const applyUQL = (query: string, data: unknown, format: InfinityQueryFormat, refId: string): Promise<DataFrame> => {
   if (!query) {
-    return sendAsDataFrame(data);
+    return sendAsDataFrame(data, format, refId);
   }
   return new Promise((resolve, reject) => {
+    if ((query + '').trim() === '') {
+      resolve(sendAsDataFrame(data, format, refId));
+    }
     let input = data;
     uql(query, { data: input })
-      .then((r) => resolve(sendAsDataFrame(r)))
+      .then((r) => resolve(sendAsDataFrame(r, format, refId)))
       .catch((ex) => {
         console.error(ex);
         reject('error applying uql query');

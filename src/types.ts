@@ -102,7 +102,7 @@ export type InfinityDataQuery = InfinityJSONQuery | InfinityCSVQuery | InfinityT
 export type InfinityDestinationQuery = InfinityDataQuery | InfinitySeriesQuery;
 export type InfinityLegacyQuery = InfinityDestinationQuery | InfinityGlobalQuery;
 export type InfinityUQLQuerySource = InfinityQueryWithURLSource<'uql'> | InfinityQueryWithInlineSource<'uql'>;
-export type InfinityUQLQuery = { uql: string } & InfinityUQLQuerySource & InfinityQueryBase<'uql'>;
+export type InfinityUQLQuery = { uql: string; format: InfinityQueryFormat } & InfinityUQLQuerySource & InfinityQueryBase<'uql'>;
 export type InfinityQuery = InfinityLegacyQuery | InfinityUQLQuery;
 //#endregion
 
