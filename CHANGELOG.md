@@ -5,9 +5,10 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 ## [ 0.8.0 ] - unreleased
 
 - custom query type for tsv files
-- support for Node Graph
-- moved docs website, try into their own folders
-- E2E tests for config editor (placeholder) added
+- support for UQL queries
+- secure query params passed to all requests by default
+- support for Node Graph panel
+- basic E2E tests for config editor added
 - typescript updates
 - "as-is" data format added for debugging
 - comma in the numbers are now ignored and considered as number

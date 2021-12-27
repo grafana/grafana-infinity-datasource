@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { cloneDeep } from 'lodash';
 import { Select } from '@grafana/ui';
-import { SCRAP_QUERY_RESULT_COLUMN_FORMATS, InfinityQuery, InfinityColumnFormat, EditorMode, InfinityColumn } from '../types';
+import { INFINITY_COLUMN_FORMATS, InfinityQuery, InfinityColumnFormat, EditorMode, InfinityColumn } from '../types';
 import { isDataQuery } from 'app/utils';
 
 interface QueryColumnItemProps {
@@ -58,7 +58,7 @@ export const QueryColumnItem = (props: QueryColumnItemProps) => {
       <label className="gf-form-label" style={{ width: '92px' }}>
         format as
       </label>
-      <Select className="min-width-12 width-12" value={column.type} options={SCRAP_QUERY_RESULT_COLUMN_FORMATS} onChange={(e) => onFormatChange(e.value as InfinityColumnFormat)}></Select>
+      <Select className="min-width-12 width-12" value={column.type} options={INFINITY_COLUMN_FORMATS} onChange={(e) => onFormatChange(e.value as InfinityColumnFormat)}></Select>
     </>
   );
 };

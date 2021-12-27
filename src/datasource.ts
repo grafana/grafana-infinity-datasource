@@ -3,6 +3,7 @@ import flatten from 'lodash/flatten';
 import { DataQueryResponse, DataQueryRequest, LoadingState, DataFrame } from '@grafana/data';
 import { DataSourceWithBackend } from '@grafana/runtime';
 import { InfinityProvider } from './app/InfinityProvider';
+import { UQLProvider, applyUQL } from './app/UQLProvider';
 import { SeriesProvider } from './app/SeriesProvider';
 import { replaceVariables } from './app/queryUtils';
 import { LegacyVariableProvider, InfinityVariableProvider, migrateLegacyQuery } from './app/variablesQuery';
@@ -49,6 +50,13 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
                   resolve(data);
                 }
                 new InfinityProvider(t, this).query().then(resolve).catch(reject);
+                break;
+              case 'uql':
+                new UQLProvider(t, this)
+                  .query()
+                  .then((res) => applyUQL(t.uql, res, t.format, t.refId))
+                  .then(resolve)
+                  .catch(reject);
                 break;
               case 'series':
                 new SeriesProvider(replaceVariables(t, options.scopedVars)).query(startTime, endTime).then(resolve).catch(reject);

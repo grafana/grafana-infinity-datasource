@@ -7,9 +7,7 @@ import { getDefaultGlobalQueryID } from '../app/queryUtils';
 import { InfinityQuery, DefaultInfinityQuery } from '../types';
 import './../styles/app.scss';
 
-type EditorProps = QueryEditorProps<Datasource, InfinityQuery>;
-
-export const QueryEditor = (props: EditorProps) => {
+export const QueryEditor = (props: QueryEditorProps<Datasource, InfinityQuery>) => {
   const { datasource, onChange, onRunQuery } = props;
   const query = defaultsDeep(props.query, {
     ...DefaultInfinityQuery,

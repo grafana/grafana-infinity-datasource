@@ -2,13 +2,8 @@ import React from 'react';
 import { Select } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
 import { InfinityQuery, GlobalInfinityQuery } from '../types';
-interface SourceSelectorProps {
-  query: InfinityQuery;
-  instanceSettings: any;
-  onChange: (e: InfinityQuery) => void;
-  onRunQuery: () => void;
-}
-export const GlobalQuerySelector = (props: SourceSelectorProps) => {
+
+export const GlobalQuerySelector = (props: { query: InfinityQuery; instanceSettings: any; onChange: (e: InfinityQuery) => void; onRunQuery: () => void }) => {
   const { query, onChange, onRunQuery, instanceSettings } = props;
   if (query.type !== 'global') {
     return <></>;

@@ -87,6 +87,9 @@ func GetQueryURL(settings InfinitySettings, query Query) (string, error) {
 		value := replaceSecret(param.Value, settings)
 		q.Set(param.Key, value)
 	}
+	for key, value := range settings.SecureQueryFields {
+		q.Set(key, value)
+	}
 	u.RawQuery = q.Encode()
 	return u.String(), nil
 }

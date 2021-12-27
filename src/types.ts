@@ -13,10 +13,6 @@ export interface InfinityOptions extends DataSourceJsonData {
   tlsAuthWithCACert?: boolean;
   global_queries?: GlobalInfinityQuery[];
   timeoutInSeconds?: number;
-  local_sources_options?: {
-    enabled: boolean;
-    allowed_paths?: string[];
-  };
 }
 
 export interface InfinitySecureOptions {
@@ -31,10 +27,11 @@ export interface SecureField {
   value: string;
   configured: boolean;
 }
+export type InfinityInstanceSettings = DataSourceInstanceSettings<InfinityOptions>;
 //#endregion
 
 //#region Query
-export type InfinityQueryType = 'json' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'series' | 'global';
+export type InfinityQueryType = 'json' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'series' | 'global' | 'uql';
 export type InfinityQuerySources = 'url' | 'inline' | 'random-walk' | 'expression';
 export type InfinityColumnFormat = 'string' | 'number' | 'timestamp' | 'timestamp_epoch' | 'timestamp_epoch_s';
 export type InfinityQueryFormat = 'table' | 'timeseries' | 'dataframe' | 'as-is' | 'node-graph-nodes' | 'node-graph-edges';
@@ -69,31 +66,21 @@ export type InfinityQueryWithDataSource<T extends InfinityQueryType> = {
   format: InfinityQueryFormat;
 } & (InfinityQueryWithURLSource<T> | InfinityQueryWithInlineSource<T>) &
   InfinityQueryBase<T>;
-export type InfinityJSONQuery = {
-  json_options?: {
-    root_is_not_array?: boolean;
-    columnar?: boolean;
-  };
-} & InfinityQueryWithDataSource<'json'>;
-export type InfinityCSVQuery = {
-  csv_options?: {
-    delimiter?: string;
-    skip_empty_lines?: boolean;
-    skip_lines_with_error?: boolean;
-    relax_column_count?: boolean;
-    columns?: string;
-    comment?: string;
-  };
-} & InfinityQueryWithDataSource<'csv'>;
-export type InfinityTSVQuery = {
-  csv_options?: {
-    skip_empty_lines?: boolean;
-    skip_lines_with_error?: boolean;
-    relax_column_count?: boolean;
-    columns?: string;
-    comment?: string;
-  };
-} & InfinityQueryWithDataSource<'tsv'>;
+export type InfinityJSONQueryOptions = {
+  root_is_not_array?: boolean;
+  columnar?: boolean;
+};
+export type InfinityJSONQuery = { json_options?: InfinityJSONQueryOptions } & InfinityQueryWithDataSource<'json'>;
+export type InfinityCSVQueryOptions = {
+  delimiter?: string;
+  skip_empty_lines?: boolean;
+  skip_lines_with_error?: boolean;
+  relax_column_count?: boolean;
+  columns?: string;
+  comment?: string;
+};
+export type InfinityCSVQuery = { csv_options?: InfinityCSVQueryOptions } & InfinityQueryWithDataSource<'csv'>;
+export type InfinityTSVQuery = { csv_options?: Exclude<InfinityCSVQueryOptions, 'delimiter'> } & InfinityQueryWithDataSource<'tsv'>;
 export type InfinityXMLQuery = {} & InfinityQueryWithDataSource<'xml'>;
 export type InfinityGraphQLQuery = {
   json_options?: {
@@ -110,7 +97,9 @@ export type InfinityGlobalQuery = { global_query_id: string } & InfinityQueryBas
 export type InfinityDataQuery = InfinityJSONQuery | InfinityCSVQuery | InfinityTSVQuery | InfinityXMLQuery | InfinityGraphQLQuery | InfinityHTMLQuery;
 export type InfinityDestinationQuery = InfinityDataQuery | InfinitySeriesQuery;
 export type InfinityLegacyQuery = InfinityDestinationQuery | InfinityGlobalQuery;
-export type InfinityQuery = InfinityLegacyQuery;
+export type InfinityUQLQuerySource = InfinityQueryWithURLSource<'uql'> | InfinityQueryWithInlineSource<'uql'>;
+export type InfinityUQLQuery = { uql: string; format: InfinityQueryFormat } & InfinityUQLQuerySource & InfinityQueryBase<'uql'>;
+export type InfinityQuery = InfinityLegacyQuery | InfinityUQLQuery;
 //#endregion
 
 //#region Variable Query
@@ -210,16 +199,10 @@ export interface InfinityFilter {
   operator: FilterOperator;
   value: string[];
 }
-export interface QueryParam {
-  key: string;
-  value: string;
-}
-export interface QueryHeaders {
-  key: string;
-  value: string;
-}
-
+export type QueryParam = { key: string; value: string };
+export type QueryHeaders = { key: string; value: string };
 export const SCRAP_QUERY_TYPES: Array<SelectableValue<InfinityQueryType>> = [
+  { label: 'UQL', value: 'uql' },
   { label: 'CSV', value: 'csv' },
   { label: 'TSV', value: 'tsv' },
   { label: 'JSON', value: 'json' },
@@ -229,7 +212,7 @@ export const SCRAP_QUERY_TYPES: Array<SelectableValue<InfinityQueryType>> = [
   { label: 'Series', value: 'series' },
   { label: 'Global Query', value: 'global' },
 ];
-export const SCRAP_QUERY_RESULT_FORMATS: Array<SelectableValue<InfinityQueryFormat>> = [
+export const INFINITY_RESULT_FORMATS: Array<SelectableValue<InfinityQueryFormat>> = [
   { label: 'Data Frame', value: 'dataframe' },
   { label: 'Table', value: 'table' },
   { label: 'Time Series', value: 'timeseries' },
@@ -237,21 +220,19 @@ export const SCRAP_QUERY_RESULT_FORMATS: Array<SelectableValue<InfinityQueryForm
   { label: 'Edges - Node Graph', value: 'node-graph-edges' },
   { label: 'As Is', value: 'as-is' },
 ];
-export const SCRAP_QUERY_SOURCES: ScrapQuerySources[] = [
-  { label: 'URL', value: 'url', supported_types: ['csv', 'tsv', 'json', 'html', 'xml', 'graphql'] },
-  { label: 'Inline', value: 'inline', supported_types: ['csv', 'tsv', 'json', 'xml'] },
+export const INFINITY_SOURCES: ScrapQuerySources[] = [
+  { label: 'URL', value: 'url', supported_types: ['csv', 'tsv', 'json', 'html', 'xml', 'graphql', 'uql'] },
+  { label: 'Inline', value: 'inline', supported_types: ['csv', 'tsv', 'json', 'xml', 'uql'] },
   { label: 'Random Walk', value: 'random-walk', supported_types: ['series'] },
   { label: 'Expression', value: 'expression', supported_types: ['series'] },
 ];
-export const SCRAP_QUERY_RESULT_COLUMN_FORMATS: Array<SelectableValue<InfinityColumnFormat>> = [
+export const INFINITY_COLUMN_FORMATS: Array<SelectableValue<InfinityColumnFormat>> = [
   { label: 'String', value: 'string' },
   { label: 'Number', value: 'number' },
   { label: 'Timestamp', value: 'timestamp' },
   { label: 'Timestamp ( UNIX ms )', value: 'timestamp_epoch' },
   { label: 'Timestamp ( UNIX s )', value: 'timestamp_epoch_s' },
 ];
-
-export type InfinityInstanceSettings = DataSourceInstanceSettings<InfinityOptions>;
 
 //#endregion
 

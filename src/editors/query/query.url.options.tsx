@@ -3,21 +3,15 @@ import { cloneDeep } from 'lodash';
 import { css } from 'emotion';
 import { Select, Button, Drawer, TabsBar, Tab, CustomScrollbar, TabContent, useTheme, Input } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
+import { isDataQuery } from './../../app/utils';
 import { InfinityQuery, QueryParam } from '../../types';
-import { isDataQuery } from 'app/utils';
 
-interface URLOptionsProps {
-  query: InfinityQuery;
-  onChange: (value: InfinityQuery) => void;
-  onRunQuery: () => void;
-}
-
-export const URLOptionsEditor = ({ query, onChange, onRunQuery }: URLOptionsProps) => {
+export const URLOptionsEditor = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void }) => {
   const theme = useTheme();
   const [popupOpenStatus, setPopupOpenStatus] = useState(false);
   const [activeTab, setActiveTab] = useState('method');
-  const [body, setBody] = useState(isDataQuery(query) && query.source === 'url' ? query.url_options.data : '');
-  if (!(isDataQuery(query) && query.source === 'url')) {
+  const [body, setBody] = useState((isDataQuery(query) || query.type === 'uql') && query.source === 'url' ? query.url_options.data : '');
+  if (!((isDataQuery(query) || query.type === 'uql') && query.source === 'url')) {
     return <></>;
   }
   const defaultHeader = {
@@ -289,6 +283,9 @@ export const URLOptionsEditor = ({ query, onChange, onRunQuery }: URLOptionsProp
                       <button className="btn btn-success" onClick={onQueryParamsAdd}>
                         Add Query Param
                       </button>
+                      <div style={{ padding: '20px 10px', marginTop: '20px', border: '1px solid gray' }}>
+                        <h4>Note : If you have any secrets to be added as param, use the datasource config instead.</h4>
+                      </div>
                     </>
                   )}
                   {activeTab === 'headers' && (

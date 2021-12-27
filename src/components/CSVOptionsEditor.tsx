@@ -1,90 +1,23 @@
 import React, { useState } from 'react';
-import { Checkbox, Drawer, Button, InlineFormLabel } from '@grafana/ui';
-import { InfinityQuery } from '../types';
+import { Checkbox, Drawer, Button, InlineFormLabel, Input } from '@grafana/ui';
+import { InfinityQuery, InfinityCSVQueryOptions } from '../types';
 
-interface CSVOptionsEditorProps {
-  query: InfinityQuery;
-  onChange: (value: any) => void;
-  onRunQuery: (value: any) => void;
-}
-
-export const CSVOptionsEditor = (props: CSVOptionsEditorProps) => {
+export const CSVOptionsEditor = (props: { query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void }) => {
   const [popupStatus, setPopupStatus] = useState(false);
-  if (!(props.query.type === 'csv' || props.query.type === 'tsv')) {
+  const LABEL_WIDTH = 8;
+  const { query, onChange, onRunQuery } = props;
+  if (!(query.type === 'csv' || query.type === 'tsv')) {
     return <></>;
   }
-  const togglePopup = () => {
-    setPopupStatus(!popupStatus);
-  };
-  const onDelimiterChange = (delimiter: string) => {
-    if (props.query.type === 'csv' || props.query.type === 'tsv') {
-      props.onChange({
-        ...props.query,
-        csv_options: {
-          ...(props.query.csv_options || {}),
-          delimiter,
-        },
-      });
-    }
-  };
-  const onSkipEmptyLinesChange = (skip_empty_lines: boolean) => {
-    if (props.query.type === 'csv' || props.query.type === 'tsv') {
-      props.onChange({
-        ...props.query,
-        csv_options: {
-          ...(props.query.csv_options || {}),
-          skip_empty_lines,
-        },
-      });
-    }
-  };
-  const onSkipLinesWithErrorChange = (skip_lines_with_error: boolean) => {
-    if (props.query.type === 'csv' || props.query.type === 'tsv') {
-      props.onChange({
-        ...props.query,
-        csv_options: {
-          ...(props.query.csv_options || {}),
-          skip_lines_with_error,
-        },
-      });
-    }
-  };
-  const onRelaxColumnCountChange = (relax_column_count: boolean) => {
-    if (props.query.type === 'csv' || props.query.type === 'tsv') {
-      props.onChange({
-        ...props.query,
-        csv_options: {
-          ...(props.query.csv_options || {}),
-          relax_column_count,
-        },
-      });
-    }
-  };
-  const onColumnsChange = (columns: string) => {
-    if (props.query.type === 'csv' || props.query.type === 'tsv') {
-      props.onChange({
-        ...props.query,
-        csv_options: {
-          ...(props.query.csv_options || {}),
-          columns,
-        },
-      });
-    }
-  };
-  const onCommentChange = (comment: string) => {
-    if (props.query.type === 'csv' || props.query.type === 'tsv') {
-      props.onChange({
-        ...props.query,
-        csv_options: {
-          ...(props.query.csv_options || {}),
-          comment,
-        },
-      });
+  const togglePopup = () => setPopupStatus(!popupStatus);
+  const onCSVOptionsChange = <T extends keyof InfinityCSVQueryOptions, V extends InfinityCSVQueryOptions[T]>(key: T, value: V) => {
+    if (query.type === 'csv' || query.type === 'tsv') {
+      onChange({ ...query, csv_options: { ...(query.csv_options || {}), [key]: value } });
     }
   };
   return (
     <>
-      <div style={{ padding: 'auto 15px;' }}>
+      <div style={{ padding: 'auto 15px' }}>
         <Button
           variant="secondary"
           size="sm"
@@ -95,44 +28,71 @@ export const CSVOptionsEditor = (props: CSVOptionsEditorProps) => {
             e.preventDefault();
           }}
         >
-          {props.query.type.toUpperCase()} options
+          {query.type.toUpperCase()} options
         </Button>
       </div>
       {popupStatus === true && (
-        <Drawer title={props.query.type.toUpperCase() + ' Options'} onClose={togglePopup} expandable={true}>
-          {props.query.type === 'csv' && (
+        <Drawer
+          title={query.type.toUpperCase() + ' options'}
+          onClose={() => {
+            togglePopup();
+            onRunQuery();
+          }}
+          expandable={true}
+        >
+          {query.type === 'csv' && (
             <div className="gf-form">
-              <InlineFormLabel className="gf-form-label query-keyword width-8" tooltip="Defaults to comma. If your file is TSV then use '\t'">
+              <InlineFormLabel className="query-keyword" width={LABEL_WIDTH} tooltip="Defaults to comma. If your file is TSV then use '\t'">
                 Delimiter
               </InlineFormLabel>
-              <input className="gf-form-input width-4" type="text" value={props.query.csv_options?.delimiter} placeholder="," onChange={(e) => onDelimiterChange(e.currentTarget.value)}></input>
+              <Input css={{}} width={4} value={query.csv_options?.delimiter} placeholder="," onChange={(e) => onCSVOptionsChange('delimiter', e.currentTarget.value)}></Input>
             </div>
           )}
           <div className="gf-form">
-            <InlineFormLabel className="gf-form-label query-keyword width-8">Skip empty lines</InlineFormLabel>
-            <Checkbox css={{}} value={props.query.csv_options?.skip_empty_lines} onChange={(e) => onSkipEmptyLinesChange(e.currentTarget.checked)}></Checkbox>
+            <InlineFormLabel className="query-keyword" width={LABEL_WIDTH}>
+              Skip empty lines
+            </InlineFormLabel>
+            <div style={{ margin: '5px' }}>
+              <Checkbox
+                data-testid="skip_empty_lines"
+                css={{}}
+                value={query.csv_options?.skip_empty_lines}
+                onChange={(e) => onCSVOptionsChange('skip_empty_lines', e.currentTarget.checked)}
+              ></Checkbox>
+            </div>
           </div>
           <div className="gf-form">
-            <InlineFormLabel className="gf-form-label query-keyword width-8">Skip lines with error</InlineFormLabel>
-            <Checkbox css={{}} value={props.query.csv_options?.skip_lines_with_error} onChange={(e) => onSkipLinesWithErrorChange(e.currentTarget.checked)}></Checkbox>
+            <InlineFormLabel className="query-keyword" width={LABEL_WIDTH}>
+              Skip lines with error
+            </InlineFormLabel>
+            <div style={{ margin: '5px' }}>
+              <Checkbox
+                data-testid="skip_lines_with_error"
+                css={{}}
+                value={query.csv_options?.skip_lines_with_error}
+                onChange={(e) => onCSVOptionsChange('skip_lines_with_error', e.currentTarget.checked)}
+              ></Checkbox>
+            </div>
           </div>
           <div className="gf-form">
-            <InlineFormLabel className="gf-form-label query-keyword width-8">Relax column count</InlineFormLabel>
-            <Checkbox css={{}} value={props.query.csv_options?.relax_column_count} onChange={(e) => onRelaxColumnCountChange(e.currentTarget.checked)}></Checkbox>
+            <InlineFormLabel className="query-keyword" width={LABEL_WIDTH}>
+              Relax column count
+            </InlineFormLabel>
+            <div style={{ margin: '5px' }}>
+              <Checkbox css={{}} value={query.csv_options?.relax_column_count} onChange={(e) => onCSVOptionsChange('relax_column_count', e.currentTarget.checked)}></Checkbox>
+            </div>
           </div>
           <div className="gf-form">
-            <InlineFormLabel className="gf-form-label query-keyword width-8">Headers</InlineFormLabel>
-            <input
-              className="gf-form-input width-30"
-              type="text"
-              value={props.query.csv_options?.columns}
-              placeholder="Comma separated headers"
-              onChange={(e) => onColumnsChange(e.currentTarget.value)}
-            ></input>
+            <InlineFormLabel className="query-keyword" width={LABEL_WIDTH}>
+              Headers
+            </InlineFormLabel>
+            <Input css={{}} width={30} value={query.csv_options?.columns} placeholder="Comma separated headers" onChange={(e) => onCSVOptionsChange('columns', e.currentTarget.value)}></Input>
           </div>
           <div className="gf-form">
-            <InlineFormLabel className="gf-form-label query-keyword width-8">Comment</InlineFormLabel>
-            <input className="gf-form-input width-4" type="text" value={props.query.csv_options?.comment} placeholder="#" onChange={(e) => onCommentChange(e.currentTarget.value)}></input>
+            <InlineFormLabel className="query-keyword" width={LABEL_WIDTH}>
+              Comment
+            </InlineFormLabel>
+            <Input css={{}} width={4} value={query.csv_options?.comment} placeholder="#" onChange={(e) => onCSVOptionsChange('comment', e.currentTarget.value)}></Input>
           </div>
         </Drawer>
       )}

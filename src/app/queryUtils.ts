@@ -9,7 +9,7 @@ const replaceVariable = (input: string, scopedVars: ScopedVars): string => {
 
 export const replaceVariables = (query: InfinityQuery, scopedVars: ScopedVars): InfinityQuery => {
   const newQuery: InfinityQuery = { ...query };
-  if (isDataQuery(newQuery)) {
+  if (isDataQuery(newQuery) || newQuery.type === 'uql') {
     if (newQuery.source === 'url') {
       newQuery.url = replaceVariable(newQuery.url || '', scopedVars);
       newQuery.url_options = {
@@ -32,12 +32,17 @@ export const replaceVariables = (query: InfinityQuery, scopedVars: ScopedVars): 
     if (newQuery.source === 'inline') {
       newQuery.data = replaceVariable(newQuery.data, scopedVars);
     }
-    newQuery.filters = (newQuery.filters || []).map((filter) => {
-      filter.value = filter.value.map((val) => {
-        return getTemplateSrv().replace(val || '', scopedVars, 'glob');
+    if (isDataQuery(newQuery)) {
+      newQuery.filters = (newQuery.filters || []).map((filter) => {
+        filter.value = filter.value.map((val) => {
+          return getTemplateSrv().replace(val || '', scopedVars, 'glob');
+        });
+        return filter;
       });
-      return filter;
-    });
+    }
+    if (newQuery.type === 'uql') {
+      newQuery.uql = replaceVariable(newQuery.uql, scopedVars);
+    }
   }
   return newQuery;
 };

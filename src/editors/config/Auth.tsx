@@ -3,9 +3,7 @@ import { DataSourcePluginOptionsEditorProps, onUpdateDatasourceSecureJsonDataOpt
 import { InlineFormLabel, Switch, useTheme, LegacyForms } from '@grafana/ui';
 import { InfinityOptions, InfinitySecureOptions } from '../../types';
 
-export type Props = DataSourcePluginOptionsEditorProps<InfinityOptions>;
-
-export const AuthEditor = (props: Props) => {
+export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
   const theme = useTheme();
   const { FormField, SecretFormField } = LegacyForms;
   const { options, onOptionsChange } = props;

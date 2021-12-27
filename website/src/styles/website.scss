@@ -434,8 +434,10 @@ html.light-theme {
       h2 {
         border-bottom-color: $cyanA9 !important;
       }
-      blockquote {
-        background-color: $gray12 !important;
+      blockquote,
+      blockquote p {
+        background-color: whitesmoke !important;
+        color: black !important;
       }
       img {
         filter: drop-shadow(0 0 0.1rem $cyanA9);

@@ -9,9 +9,7 @@ import { URLEditor } from './config/URL';
 import { AuthEditor } from './config/Auth';
 import { InfinityOptions } from '../types';
 
-export type ConfigEditorProps = DataSourcePluginOptionsEditorProps<InfinityOptions>;
-
-export const InfinityConfigEditor = (props: ConfigEditorProps) => {
+export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
   const { options, onOptionsChange } = props;
   const [urlOpen, setURLOpen] = useState(false);
   const [tlsOpen, setTlsOpen] = useState(false);

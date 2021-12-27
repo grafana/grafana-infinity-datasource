@@ -3,9 +3,7 @@ import { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 import { LegacyForms } from '@grafana/ui';
 import { InfinityOptions, IGNORE_URL } from '../../types';
 
-export type Props = DataSourcePluginOptionsEditorProps<InfinityOptions>;
-
-export const URLEditor = (props: Props) => {
+export const URLEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
   const { FormField } = LegacyForms;
   const { options, onOptionsChange } = props;
   const [url, setUrl] = useState(options.url || '');

@@ -1,19 +1,10 @@
 import React from 'react';
-import { Button } from '@grafana/ui';
+import { LinkButton } from '@grafana/ui';
 
 export const Help = () => {
   return (
-    <Button
-      variant="secondary"
-      size="sm"
-      icon="question-circle"
-      style={{ margin: '5px' }}
-      onClick={(e) => {
-        e.preventDefault();
-        window.open('https://yesoreyeram.github.io/grafana-infinity-datasource', '_blank');
-      }}
-    >
+    <LinkButton variant="secondary" size="sm" icon="question-circle" style={{ margin: '5px' }} href="https://yesoreyeram.github.io/grafana-infinity-datasource" target="_blank" rel="noreferrer">
       Open online help
-    </Button>
+    </LinkButton>
   );
 };
