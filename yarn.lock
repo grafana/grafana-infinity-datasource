@@ -14520,10 +14520,10 @@ upper-case@^1.1.1:
   resolved "https://registry.yarnpkg.com/upper-case/-/upper-case-1.1.3.tgz#f6b4501c2ec4cdd26ba78be7222961de77621598"
   integrity sha1-9rRQHC7EzdJrp4vnIilh3ndiFZg=
 
-uql@0.0.4-dev.2:
-  version "0.0.4-dev.2"
-  resolved "https://registry.yarnpkg.com/uql/-/uql-0.0.4-dev.2.tgz#d398f57891f7e14c8a0197002cd6e3642d40b069"
-  integrity sha512-DkxNCIa8TmFBjuLn63FmPjWRK+Hu7DDgpyCt3MTj8OnrrTM63jeCTefG0z73QE56QwaafTzkV2atNMd8CsbfZA==
+uql@0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/uql/-/uql-0.0.4.tgz#9ac4102205b7fe74795b3e24c854990012654936"
+  integrity sha512-q+tZYOPPW09TOso7cNt3idFWZGXJ0HU5yua1gDmb2VTa2rsyN4+3K3EUjwkSaZK0FDptlEaU09R4B5AsxzfBvw==
   dependencies:
     csv-parse "4.12.0"
     fast-xml-parser "^4.0.0-beta.8"

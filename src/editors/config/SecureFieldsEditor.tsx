@@ -130,7 +130,7 @@ export class SecureFieldsEditor extends PureComponent<Props, State> {
   onSecureFieldReset = (headerId: string) => {
     this.setState(({ secureFields: headers }) => {
       return {
-        secureFields: headers.map((h, i) => {
+        secureFields: headers.map((h) => {
           if (h.id !== headerId) {
             return h;
           }
@@ -166,9 +166,7 @@ export class SecureFieldsEditor extends PureComponent<Props, State> {
                   title={this.props.title}
                   key={sf.id}
                   secureField={sf}
-                  onChange={(h) => {
-                    this.onSecureFieldChange(i, h);
-                  }}
+                  onChange={(h) => this.onSecureFieldChange(i, h)}
                   onBlur={this.updateSettings}
                   onRemove={this.onSecureFieldRemove}
                   onReset={this.onSecureFieldReset}
@@ -178,14 +176,7 @@ export class SecureFieldsEditor extends PureComponent<Props, State> {
           </div>
         </div>
         <div className="gf-form">
-          <Button
-            variant="secondary"
-            icon="plus"
-            type="button"
-            onClick={(e) => {
-              this.onSecureFieldAdd();
-            }}
-          >
+          <Button variant="secondary" icon="plus" type="button" onClick={() => this.onSecureFieldAdd()}>
             Add {this.props.title}
           </Button>
         </div>

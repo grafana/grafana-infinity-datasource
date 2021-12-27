@@ -13,10 +13,6 @@ export interface InfinityOptions extends DataSourceJsonData {
   tlsAuthWithCACert?: boolean;
   global_queries?: GlobalInfinityQuery[];
   timeoutInSeconds?: number;
-  local_sources_options?: {
-    enabled: boolean;
-    allowed_paths?: string[];
-  };
 }
 
 export interface InfinitySecureOptions {

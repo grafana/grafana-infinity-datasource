@@ -283,6 +283,9 @@ export const URLOptionsEditor = ({ query, onChange, onRunQuery }: { query: Infin
                       <button className="btn btn-success" onClick={onQueryParamsAdd}>
                         Add Query Param
                       </button>
+                      <div style={{ padding: '20px 10px', marginTop: '20px', border: '1px solid gray' }}>
+                        <h4>Note : If you have any secrets to be added as param, use the datasource config instead.</h4>
+                      </div>
                     </>
                   )}
                   {activeTab === 'headers' && (

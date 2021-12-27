@@ -1,4 +1,4 @@
-import { isArray, uniq } from 'lodash';
+import { DataFrame, Field, FieldType, Labels, MutableDataFrame, ArrayVector } from '@grafana/data';
 import { InfinityCSVQuery, InfinityGraphQLQuery, InfinityHTMLQuery, InfinityJSONQuery, InfinityQuery, InfinityQueryWithDataSource, InfinityXMLQuery } from './../types';
 export const normalizeURL = (url: string): string => {
   if (url.startsWith('https://github.com')) {
@@ -31,82 +31,242 @@ export const isXMLQuery = (query: InfinityQuery): query is InfinityXMLQuery => q
 export const isGraphQLQuery = (query: InfinityQuery): query is InfinityGraphQLQuery => query.type === 'graphql';
 export const isHTMLQuery = (query: InfinityQuery): query is InfinityHTMLQuery => query.type === 'html';
 
-export const getUniqueFieldNames = (input: unknown): string[] => {
-  if (typeof input === 'string') {
-    return [input];
-  } else if (typeof input === 'number') {
-    return [input + ''];
-  } else if (typeof input === 'boolean') {
-    return [input + ''];
-  } else if (typeof input === 'object') {
-    if (isArray(input)) {
-      let keys: string[] = [];
-      input.forEach((i) => {
-        Object.keys(i).forEach((k) => keys.push(k));
-      });
-      return uniq(keys);
-    } else {
-      return Object.keys(input || {});
-    }
-  } else {
-    return [];
+export function toTimeSeriesLong(data: DataFrame[]): DataFrame[] {
+  if (!Array.isArray(data) || data.length === 0) {
+    return data;
   }
-};
-export const getFieldsByGroupName = (input: any): Partial<Record<'date_fields' | 'numeric_fields' | 'string_fields', string[]>> => {
-  let out: Record<'date_fields' | 'numeric_fields' | 'string_fields', string[]> = {
-    date_fields: [],
-    numeric_fields: [],
-    string_fields: [],
-  };
-  if (typeof input === 'string' || typeof input === 'number' || typeof input === 'boolean') {
-    return {};
-  } else if (typeof input === 'object' && input) {
-    if (isArray(input)) {
-      let keys = getUniqueFieldNames(input);
-      keys.forEach((key) => {
-        let matchingField = input.find((i) => i[key] !== null && i[key] !== undefined);
-        let matchingType = typeof matchingField[key];
-        switch (matchingType) {
-          case 'number':
-            out.numeric_fields.push(key);
+
+  const result: DataFrame[] = [];
+  for (const frame of data) {
+    let timeField: Field | undefined;
+    const uniqueValueNames: string[] = [];
+    const uniqueValueNamesToType: Record<string, FieldType> = {};
+    const uniqueLabelKeys: Record<string, boolean> = {};
+    const labelKeyToWideIndices: Record<string, number[]> = {};
+    const uniqueFactorNamesToWideIndex: Record<string, number> = {};
+
+    for (let fieldIndex = 0; fieldIndex < frame.fields.length; fieldIndex++) {
+      const field = frame.fields[fieldIndex];
+
+      switch (field.type) {
+        case FieldType.string:
+        case FieldType.boolean:
+          if (field.name in uniqueFactorNamesToWideIndex) {
+            // TODO error?
+          } else {
+            uniqueFactorNamesToWideIndex[field.name] = fieldIndex;
+            uniqueLabelKeys[field.name] = true;
+          }
+          break;
+        case FieldType.time:
+          if (!timeField) {
+            timeField = field;
             break;
-          case 'object':
-            if (matchingField[key]?.getDate) {
-              out.date_fields.push(key);
-            } else {
-              out.string_fields.push(key);
+          }
+        default:
+          if (field.name in uniqueValueNamesToType) {
+            const type = uniqueValueNamesToType[field.name];
+
+            if (field.type !== type) {
+              // TODO error?
+              continue;
             }
-            break;
-          case 'string':
-          default:
-            if (matchingField.getDate) {
-              out.date_fields.push(key);
-            } else {
-              out.string_fields.push(key);
+          } else {
+            uniqueValueNamesToType[field.name] = field.type;
+            uniqueValueNames.push(field.name);
+          }
+
+          const tKey = JSON.stringify(field.labels);
+          const wideIndices = labelKeyToWideIndices[tKey];
+
+          if (wideIndices !== undefined) {
+            wideIndices.push(fieldIndex);
+          } else {
+            labelKeyToWideIndices[tKey] = [fieldIndex];
+          }
+
+          if (field.labels != null) {
+            for (const labelKey in field.labels) {
+              uniqueLabelKeys[labelKey] = true;
             }
-            break;
+          }
+      }
+    }
+
+    if (!timeField) {
+      continue;
+    }
+
+    type TimeWideRowIndex = {
+      time: any;
+      wideRowIndex: number;
+    };
+    const sortedTimeRowIndices: TimeWideRowIndex[] = [];
+    const sortedUniqueLabelKeys: string[] = [];
+    const uniqueFactorNames: string[] = [];
+    const uniqueFactorNamesWithWideIndices: string[] = [];
+
+    for (let wideRowIndex = 0; wideRowIndex < frame.length; wideRowIndex++) {
+      sortedTimeRowIndices.push({ time: timeField.values.get(wideRowIndex), wideRowIndex: wideRowIndex });
+    }
+
+    for (const labelKeys in labelKeyToWideIndices) {
+      sortedUniqueLabelKeys.push(labelKeys);
+    }
+    for (const labelKey in uniqueLabelKeys) {
+      uniqueFactorNames.push(labelKey);
+    }
+    for (const name in uniqueFactorNamesToWideIndex) {
+      uniqueFactorNamesWithWideIndices.push(name);
+    }
+
+    sortedTimeRowIndices.sort((a, b) => a.time - b.time);
+    sortedUniqueLabelKeys.sort();
+    uniqueFactorNames.sort();
+    uniqueValueNames.sort();
+
+    const longFrame = new MutableDataFrame({
+      ...frame,
+      meta: { ...frame.meta },
+      fields: [{ name: timeField.name, type: timeField.type }],
+    });
+
+    for (const name of uniqueValueNames) {
+      longFrame.addField({ name: name, type: uniqueValueNamesToType[name] });
+    }
+
+    for (const name of uniqueFactorNames) {
+      longFrame.addField({ name: name, type: FieldType.string });
+    }
+
+    for (const timeWideRowIndex of sortedTimeRowIndices) {
+      const { time, wideRowIndex } = timeWideRowIndex;
+
+      for (const labelKeys of sortedUniqueLabelKeys) {
+        const rowValues: Record<string, any> = {};
+
+        for (const name of uniqueFactorNamesWithWideIndices) {
+          rowValues[name] = frame.fields[uniqueFactorNamesToWideIndex[name]].values.get(wideRowIndex);
         }
-      });
-    } else {
-      Object.keys(input).forEach((k) => {
-        switch (typeof input[k]) {
-          case 'number':
-            out.numeric_fields.push(k);
-            break;
-          case 'object':
-            if (input[k].getTime) {
-              out.date_fields.push(k);
-            } else {
-              out.string_fields.push(k);
+
+        let index = 0;
+
+        for (const wideFieldIndex of labelKeyToWideIndices[labelKeys]) {
+          const wideField = frame.fields[wideFieldIndex];
+
+          if (index++ === 0 && wideField.labels != null) {
+            for (const labelKey in wideField.labels) {
+              rowValues[labelKey] = wideField.labels[labelKey];
             }
-            break;
-          case 'string':
-          default:
-            out.string_fields.push(k);
-            break;
+          }
+
+          rowValues[wideField.name] = wideField.values.get(wideRowIndex);
         }
-      });
+
+        rowValues[timeField.name] = time;
+        longFrame.add(rowValues);
+      }
+    }
+
+    result.push(longFrame);
+  }
+
+  return result;
+}
+export function toTimeSeriesMany(data: DataFrame[]): DataFrame[] {
+  if (!Array.isArray(data) || data.length === 0) {
+    return data;
+  }
+
+  const result: DataFrame[] = [];
+  for (const frame of toTimeSeriesLong(data)) {
+    const timeField = frame.fields[0];
+    if (!timeField || timeField.type !== FieldType.time) {
+      continue;
+    }
+    const valueFields: Field[] = [];
+    const labelFields: Field[] = [];
+    for (const field of frame.fields) {
+      switch (field.type) {
+        case FieldType.number:
+        case FieldType.boolean:
+          valueFields.push(field);
+          break;
+        case FieldType.string:
+          labelFields.push(field);
+          break;
+      }
+    }
+
+    for (const field of valueFields) {
+      if (labelFields.length) {
+        // new frame for each label key
+        type frameBuilder = {
+          time: number[];
+          value: number[];
+          key: string;
+          labels: Labels;
+        };
+        const builders = new Map<string, frameBuilder>();
+        for (let i = 0; i < frame.length; i++) {
+          const time = timeField.values.get(i);
+          const value = field.values.get(i);
+          if (value === undefined || time == null) {
+            continue; // skip values left over from join
+          }
+
+          const key = labelFields.map((f) => f.values.get(i)).join('/');
+          let builder = builders.get(key);
+          if (!builder) {
+            builder = {
+              key,
+              time: [],
+              value: [],
+              labels: {},
+            };
+            for (const label of labelFields) {
+              builder.labels[label.name] = label.values.get(i);
+            }
+            builders.set(key, builder);
+          }
+          builder.time.push(time);
+          builder.value.push(value);
+        }
+
+        // Add a frame for each distinct value
+        for (const b of builders.values()) {
+          result.push({
+            name: frame.name,
+            refId: frame.refId,
+            meta: {
+              ...frame.meta,
+            },
+            fields: [
+              {
+                ...timeField,
+                values: new ArrayVector(b.time),
+              },
+              {
+                ...field,
+                values: new ArrayVector(b.value),
+                labels: b.labels,
+              },
+            ],
+            length: b.time.length,
+          });
+        }
+      } else {
+        result.push({
+          name: frame.name,
+          refId: frame.refId,
+          meta: {
+            ...frame.meta,
+          },
+          fields: [timeField, field],
+          length: frame.length,
+        });
+      }
     }
   }
-  return out;
-};
+  return result;
+}

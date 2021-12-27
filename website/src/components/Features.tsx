@@ -5,7 +5,15 @@ export const Features = () => {
   return (
     <div className="container my-4" id="features-section" style={{ zIndex: 200 }}>
       <div className="row">
-        <div className="col-sm-6 col-lg-6 mb-4">
+        <div className="col-sm-6 col-lg-4 mb-4">
+          <div className="card p-3 text-center">
+            <Link className="display-6" to="/wiki/uql" style={{ textDecoration: 'none' }}>
+              UQL
+            </Link>
+            <p>Transform results in a powerful way</p>
+          </div>
+        </div>
+        <div className="col-sm-6 col-lg-4 mb-4">
           <div className="card p-3 text-center">
             <Link className="display-6" to="/wiki/json" style={{ textDecoration: 'none' }}>
               JSON
@@ -13,7 +21,7 @@ export const Features = () => {
             <p>Visualize data from any JSON APIs or URLs</p>
           </div>
         </div>
-        <div className="col-sm-6 col-lg-6 mb-4" onClick={() => navigate('/wiki/csv')}>
+        <div className="col-sm-6 col-lg-4 mb-4" onClick={() => navigate('/wiki/csv')}>
           <div className="card p-3 text-center">
             <Link className="display-6" to="/wiki/json" style={{ textDecoration: 'none' }}>
               CSV

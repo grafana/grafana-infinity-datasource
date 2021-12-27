@@ -2,7 +2,7 @@ import { uql } from 'uql';
 import { isArray } from 'lodash';
 import { DataFrame, FieldType, MutableDataFrame, toDataFrame } from '@grafana/data';
 import { Datasource } from './../datasource';
-import { normalizeURL } from './utils';
+import { normalizeURL, toTimeSeriesMany } from './utils';
 import { InfinityQueryFormat, InfinityUQLQuery } from '../types';
 
 export class UQLProvider {
@@ -27,7 +27,7 @@ export class UQLProvider {
   }
 }
 
-const sendAsDataFrame = (res: unknown, format: InfinityQueryFormat = 'table', refId: string): Promise<DataFrame> => {
+const sendAsDataFrame = (res: unknown, format: InfinityQueryFormat = 'table', refId: string): Promise<DataFrame | DataFrame[]> => {
   return new Promise((resolve, reject) => {
     if (typeof res === 'number') {
       let result = new MutableDataFrame({
@@ -57,7 +57,7 @@ const sendAsDataFrame = (res: unknown, format: InfinityQueryFormat = 'table', re
       resolve(result);
     } else if (typeof res === 'object' && isArray(res)) {
       if (format === 'timeseries') {
-        resolve(toDataFrame(res)); // TODO: convert to multi frame results
+        resolve(toTimeSeriesMany([toDataFrame(res)]));
       } else {
         resolve(toDataFrame(res));
       }
@@ -79,7 +79,7 @@ const sendAsDataFrame = (res: unknown, format: InfinityQueryFormat = 'table', re
   });
 };
 
-export const applyUQL = (query: string, data: unknown, format: InfinityQueryFormat, refId: string): Promise<DataFrame> => {
+export const applyUQL = (query: string, data: unknown, format: InfinityQueryFormat, refId: string): Promise<DataFrame | DataFrame[]> => {
   if (!query) {
     return sendAsDataFrame(data, format, refId);
   }
