@@ -11,7 +11,7 @@
   "info": {
     "version": "%VERSION%",
     "updated": "%TODAY%",
-    "description": "JSON, CSV, XML, GraphQL, HTML and REST API datasource for Grafana. Do infinite things with Grafana. Visualize data from anywhere",
+    "description": "JSON, CSV, XML, GraphQL, HTML and REST API datasource for Grafana. Do infinite things with Grafana. Transform data with UQL. Visualize data from anywhere",
     "author": {
       "name": "Sriramajeyam Sugumaran",
       "url": "https://www.google.com/search?q=Sriramajeyam+Sugumaran"
@@ -20,7 +20,7 @@
       "small": "img/icon.svg",
       "large": "img/icon.svg"
     },
-    "keywords": ["grafana", "json", "csv", "xml", "html", "graphql", "simple-json", "url", "inline", "random walk", "scraping", "node graph", "rest api", "soap"],
+    "keywords": ["grafana", "json", "csv", "xml", "html", "graphql", "uql", "transformations", "simple-json", "url", "inline", "random walk", "scraping", "node graph", "rest api", "soap"],
     "screenshots": [
       {
         "name": "features",
