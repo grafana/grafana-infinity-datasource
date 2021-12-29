@@ -21,12 +21,11 @@
   "editable": false,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 1,
+  "id": 4,
   "links": [],
   "liveNow": false,
   "panels": [
     {
-      "datasource": null,
       "description": "",
       "gridPos": {
         "h": 5,
@@ -36,10 +35,10 @@
       },
       "id": 8,
       "options": {
-        "content": "<div style=\"background: url('/public/img/g8_login_dark.svg');text-align:center;\">\n<br/>\n<br/>\n<h1 style=\"font-weight:bolder;font-size:40px;letter-spacing:8px;\">Grafana Infinity Datasource</h1> \n<br/>\n<br/>\n</div>",
-        "mode": "html"
+        "content": "\n<div class=\"style-a1s2d3f4\">\n<br/>\n<br/>\n<h1 style=\"font-weight:light;font-size:40px;color:black;letter-spacing:4px\">Grafana Infinity Datasource</h1> \n<br/>\n<br/>\n</div>",
+        "mode": "markdown"
       },
-      "pluginVersion": "8.3.1",
+      "pluginVersion": "8.3.3",
       "targets": [
         {
           "columns": [],
@@ -99,8 +98,8 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 12,
+        "h": 6,
+        "w": 24,
         "x": 0,
         "y": 5
       },
@@ -113,7 +112,7 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.1",
+      "pluginVersion": "8.3.3",
       "targets": [
         {
           "columns": [],
@@ -173,10 +172,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 5
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 11
       },
       "id": 6,
       "options": {
@@ -187,7 +186,7 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.1",
+      "pluginVersion": "8.3.3",
       "targets": [
         {
           "columns": [],
@@ -216,9 +215,83 @@
       ],
       "title": "CSV",
       "type": "table"
+    },
+    {
+      "description": "",
+      "gridPos": {
+        "h": 5,
+        "w": 24,
+        "x": 0,
+        "y": 18
+      },
+      "id": 9,
+      "options": {
+        "activeTheme": "Grafana",
+        "disableThemePicker": true,
+        "themes": [
+          {
+            "name": "Grafana",
+            "styles": [
+              {
+                "type": "basetheme",
+                "props": {
+                  "theme": "default"
+                }
+              },
+              {
+                "type": "bgimage",
+                "props": {
+                  "url": ""
+                }
+              },
+              {
+                "type": "url",
+                "props": {
+                  "url": ""
+                }
+              },
+              {
+                "type": "style",
+                "props": {
+                  "text": ".style-a1s2d3f4 {\n    background: linear-gradient(270deg, #FC6753, #FB9D59);\n    background-size: 400% 400%;\n    text-align: center;\n    -webkit-animation: AnimationName 30s ease infinite;\n    -moz-animation: AnimationName 30s ease infinite;\n    animation: AnimationName 30s ease infinite;\n}\n\n@-webkit-keyframes AnimationName {\n    0%{background-position:0% 50%}\n    50%{background-position:100% 50%}\n    100%{background-position:0% 50%}\n}\n@-moz-keyframes AnimationName {\n    0%{background-position:0% 50%}\n    50%{background-position:100% 50%}\n    100%{background-position:0% 50%}\n}\n@keyframes AnimationName {\n    0%{background-position:0% 50%}\n    50%{background-position:100% 50%}\n    100%{background-position:0% 50%}\n}"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "pluginVersion": "0.2.1",
+      "targets": [
+        {
+          "columns": [],
+          "csv_options": {
+            "columns": "",
+            "comment": "",
+            "delimiter": ",",
+            "relax_column_count": false,
+            "skip_empty_lines": false,
+            "skip_lines_with_error": false
+          },
+          "data": "",
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "refId": "A",
+          "root_selector": "",
+          "source": "url",
+          "type": "json",
+          "url": "https://jsonplaceholder.typicode.com/users",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "yesoreyeram-boomtheme-panel"
     }
   ],
-  "schemaVersion": 33,
+  "schemaVersion": 34,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -234,6 +307,6 @@
   "timezone": "",
   "title": "Welcome",
   "uid": "welcome",
-  "version": 1,
+  "version": 2,
   "weekStart": ""
 }

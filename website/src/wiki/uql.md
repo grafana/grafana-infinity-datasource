@@ -90,6 +90,14 @@ following are some of the available functions
 | unixtime_nanoseconds_todatetime  | unixtime_nanoseconds_todatetime("dob")  | converts unix epoch ns timestamp to datetime          | 0.8.0          |
 | unixtime_milliseconds_todatetime | unixtime_milliseconds_todatetime("dob") | converts unix epoch ms timestamp to datetime          | 0.8.0          |
 | unixtime_microseconds_todatetime | unixtime_microseconds_todatetime("dob") | converts unix epoch microsecond timestamp to datetime | 0.8.0          |
+| format_datetime                  | format_datetime("dob",'DD/MM/YYYY')     | converts datetime to a specific format                | 0.8.0          |
+| add_datetime                     | add_datetime("dob",'-1d')               | adds duration to a datetime field                     | 0.8.0          |
+| startofminute                    | startofminute("dob")                    | rounds the datetime field to the starting minute      | 0.8.0          |
+| startofhour                      | startofhour("dob")                      | rounds the datetime field to the starting hour        | 0.8.0          |
+| startofday                       | startofday("dob")                       | rounds the datetime field to the starting day         | 0.8.0          |
+| startofmonth                     | startofmonth("dob")                     | rounds the datetime field to the starting month       | 0.8.0          |
+| startofweek                      | startofweek("dob")                      | rounds the datetime field to the starting week        | 0.8.0          |
+| startofyear                      | startofyear("dob")                      | rounds the datetime field to the starting year        | 0.8.0          |
 | sum                              | sum("col1","col2")                      | sum of two or more columns                            | 0.8.0          |
 | diff                             | diff("col1","col2")                     | difference between two columns                        | 0.8.0          |
 | mul                              | mul("col1","col2")                      | multiplication of two columns                         | 0.8.0          |
@@ -173,6 +181,15 @@ count gives the number of results.
 ```sql
 parse-json
 | count
+```
+
+### limit
+
+`limit` command restricts the number of results returned. For example, below query returns only 10 results
+
+```sql
+parse-json
+| limit 10
 ```
 
 ### scope

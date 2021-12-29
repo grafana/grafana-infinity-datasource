@@ -5674,7 +5674,7 @@ date-format@^0.0.0:
   resolved "https://registry.yarnpkg.com/date-format/-/date-format-0.0.0.tgz#09206863ab070eb459acea5542cbd856b11966b3"
   integrity sha1-CSBoY6sHDrRZrOpVQsvYVrEZZrM=
 
-dayjs@^1.10.4:
+dayjs@^1.10.4, dayjs@^1.10.7:
   version "1.10.7"
   resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.10.7.tgz#2cf5f91add28116748440866a0a1d26f3a6ce468"
   integrity sha512-P6twpd70BcPK34K26uJ1KT3wlhpuOAPoMwJzpsIWUxHZ7wpmbdZL/hQqBDfz7hGurYSa5PhzdhDHtt319hL3ig==
@@ -14520,12 +14520,13 @@ upper-case@^1.1.1:
   resolved "https://registry.yarnpkg.com/upper-case/-/upper-case-1.1.3.tgz#f6b4501c2ec4cdd26ba78be7222961de77621598"
   integrity sha1-9rRQHC7EzdJrp4vnIilh3ndiFZg=
 
-uql@0.0.4:
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/uql/-/uql-0.0.4.tgz#9ac4102205b7fe74795b3e24c854990012654936"
-  integrity sha512-q+tZYOPPW09TOso7cNt3idFWZGXJ0HU5yua1gDmb2VTa2rsyN4+3K3EUjwkSaZK0FDptlEaU09R4B5AsxzfBvw==
+uql@0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/uql/-/uql-0.0.5.tgz#fc1e6f63751371816181513829d86b356c21082a"
+  integrity sha512-UGw/H2U+kDPX2ZgsLXVMwqP4OfaHqG/23BBjKx0awJYuuZr4fl5jb7O6J/jTIwbv/iaPMKdOraKyVjAHXJokKg==
   dependencies:
     csv-parse "4.12.0"
+    dayjs "^1.10.7"
     fast-xml-parser "^4.0.0-beta.8"
     lodash "^4.17.21"
     moo "^0.5.1"

@@ -1,10 +1,10 @@
 ---
-slug: "/wiki/json"
-title: "JSON"
-previous_page_title: "Home"
-previous_page_slug: "/welcome"
-next_page_title: "CSV"
-next_page_slug: "/wiki/csv"
+slug: '/wiki/json'
+title: 'JSON'
+previous_page_title: 'UQL'
+previous_page_slug: '/uql'
+next_page_title: 'CSV'
+next_page_slug: '/wiki/csv'
 ---
 
 ![Sample JSON Query in Infinity datasource](https://user-images.githubusercontent.com/153843/108427049-7dd66300-7234-11eb-8d27-cec50945a66c.png#center)
@@ -39,7 +39,7 @@ URL : `https://gist.githubusercontent.com/yesoreyeram/2433ce69862f452b9d0460c947
 
 ![image](https://user-images.githubusercontent.com/153843/108415716-cdf9f900-7225-11eb-8e0d-5d767104a080.png#center)
 
-In the above example, we are visualizing a json data without time field. Our JSON  has only two fields aka `country` and `population`.  So we asked the plugin to add a dummy time field to the data so that we can visualize them in any of the grafana's stock panel. If you closely look at the image above, you can see we specified 'format' as **timeseries**.  
+In the above example, we are visualizing a json data without time field. Our JSON has only two fields aka `country` and `population`. So we asked the plugin to add a dummy time field to the data so that we can visualize them in any of the grafana's stock panel. If you closely look at the image above, you can see we specified 'format' as **timeseries**.
 
 For reference, JSON data from the URL is given below
 
@@ -81,14 +81,11 @@ Example:
 ```json
 {
   "customers": [
-        { "name": "mary",    "age": 22,  "gender": "female" },
-        { "name": "joseph",  "age": 41,  "gender": "male" }
+    { "name": "mary", "age": 22, "gender": "female" },
+    { "name": "joseph", "age": 41, "gender": "male" }
   ],
-  "premium_customers": [
-       {  "name": "john doe", "age": 21, "gender": "male" }
-  ]
+  "premium_customers": [{ "name": "john doe", "age": 21, "gender": "male" }]
 }
-
 ```
 
 In the above json, if `$.premium_customers` is the root selector then only "john doe" will return. If `$.*` is the root selector all the three rows will be returned.

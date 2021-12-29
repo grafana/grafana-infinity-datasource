@@ -20,7 +20,28 @@
       "small": "img/icon.svg",
       "large": "img/icon.svg"
     },
-    "keywords": ["grafana", "json", "csv", "xml", "html", "graphql", "uql", "transformations", "simple-json", "url", "inline", "random walk", "scraping", "node graph", "rest api", "soap"],
+    "keywords": [
+      "grafana",
+      "json",
+      "csv",
+      "xml",
+      "html",
+      "graphql",
+      "uql",
+      "transformations",
+      "simple-json",
+      "url",
+      "inline",
+      "random walk",
+      "scraping",
+      "node graph",
+      "rest api",
+      "soap",
+      "atom",
+      "rss",
+      "feed",
+      "rss feed"
+    ],
     "screenshots": [
       {
         "name": "features",
