@@ -127,6 +127,54 @@ Most of the times, fields are referred within double quotes and string values ar
 <td>0.8.0</td>
 </tr>
 <tr>
+<td>format_datetime</td>
+<td>format_datetime("dob",'DD/MM/YYYY')</td>
+<td>converts datetime to a specific format</td>
+<td>0.8.0</td>
+</tr>
+<tr>
+<td>add_datetime</td>
+<td>add_datetime("dob",'-1d')</td>
+<td>adds duration to a datetime field</td>
+<td>0.8.0</td>
+</tr>
+<tr>
+<td>startofminute</td>
+<td>startofminute("dob")</td>
+<td>rounds the datetime field to the starting minute</td>
+<td>0.8.0</td>
+</tr>
+<tr>
+<td>startofhour</td>
+<td>startofhour("dob")</td>
+<td>rounds the datetime field to the starting hour</td>
+<td>0.8.0</td>
+</tr>
+<tr>
+<td>startofday</td>
+<td>startofday("dob")</td>
+<td>rounds the datetime field to the starting day</td>
+<td>0.8.0</td>
+</tr>
+<tr>
+<td>startofmonth</td>
+<td>startofmonth("dob")</td>
+<td>rounds the datetime field to the starting month</td>
+<td>0.8.0</td>
+</tr>
+<tr>
+<td>startofweek</td>
+<td>startofweek("dob")</td>
+<td>rounds the datetime field to the starting week</td>
+<td>0.8.0</td>
+</tr>
+<tr>
+<td>startofyear</td>
+<td>startofyear("dob")</td>
+<td>rounds the datetime field to the starting year</td>
+<td>0.8.0</td>
+</tr>
+<tr>
 <td>sum</td>
 <td>sum("col1","col2")</td>
 <td>sum of two or more columns</td>
@@ -243,6 +291,12 @@ USA,2,100</code>
 <deckgo-highlight-code language="sql" terminal="carbon" theme="vscode"  >
           <code slot="code">parse-json
 | count</code>
+        </deckgo-highlight-code>
+<h3>limit</h3>
+<p><code>limit</code> command restricts the number of results returned. For example, below query returns only 10 results</p>
+<deckgo-highlight-code language="sql" terminal="carbon" theme="vscode"  >
+          <code slot="code">parse-json
+| limit 10</code>
         </deckgo-highlight-code>
 <h3>scope</h3>
 <p><code>scope</code> commands sets the context of the output data. It is useful when the results are insides nested json object.</p>
