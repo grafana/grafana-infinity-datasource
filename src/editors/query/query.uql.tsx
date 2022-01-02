@@ -36,9 +36,6 @@ export const UQLEditor = (props: { mode: EditorMode; query: InfinityQuery; onCha
         />
         <Icon name="play" size="lg" style={{ color: 'greenyellow' }} onClick={() => {}} />
       </div>
-      <div className="gf-form" style={{ color: 'yellowgreen' }}>
-        Warning: UQL is in beta. Don&apos;t use it in production.
-      </div>
     </>
   ) : (
     <></>

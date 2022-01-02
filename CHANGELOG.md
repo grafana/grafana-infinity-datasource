@@ -2,7 +2,7 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
-## [ 0.8.0 ] - unreleased
+## [ 0.8.0 ]
 
 - custom query type for tsv files
 - support for UQL queries

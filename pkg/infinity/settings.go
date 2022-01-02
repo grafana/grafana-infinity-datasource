@@ -8,11 +8,6 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 )
 
-type LocalSourcesOptions struct {
-	Enabled      bool     `json:"enabled"`
-	AllowedPaths []string `json:"allowed_paths"`
-}
-
 type InfinitySettings struct {
 	URL                string
 	BasicAuthEnabled   bool
@@ -28,16 +23,14 @@ type InfinitySettings struct {
 	TLSCACert          string
 	TLSClientCert      string
 	TLSClientKey       string
-	LocalSources       LocalSourcesOptions
 }
 
 type InfinitySettingsJson struct {
-	InsecureSkipVerify bool                `json:"tlsSkipVerify,omitempty"`
-	ServerName         string              `json:"serverName,omitempty"`
-	TLSClientAuth      bool                `json:"tlsClientAuth,omitempty"`
-	TLSAuthWithCACert  bool                `json:"tlsAuthWithCACert,omitempty"`
-	LocalSources       LocalSourcesOptions `json:"local_sources_options,omitempty"`
-	TimeoutInSeconds   int64               `json:"timeoutInSeconds,omitempty"`
+	InsecureSkipVerify bool   `json:"tlsSkipVerify,omitempty"`
+	ServerName         string `json:"serverName,omitempty"`
+	TLSClientAuth      bool   `json:"tlsClientAuth,omitempty"`
+	TLSAuthWithCACert  bool   `json:"tlsAuthWithCACert,omitempty"`
+	TimeoutInSeconds   int64  `json:"timeoutInSeconds,omitempty"`
 }
 
 func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinitySettings, err error) {
@@ -56,7 +49,6 @@ func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinityS
 		settings.ServerName = infJson.ServerName
 		settings.TLSClientAuth = infJson.TLSClientAuth
 		settings.TLSAuthWithCACert = infJson.TLSAuthWithCACert
-		settings.LocalSources = infJson.LocalSources
 		settings.TimeoutInSeconds = 60
 		if infJson.TimeoutInSeconds > 0 {
 			settings.TimeoutInSeconds = infJson.TimeoutInSeconds
