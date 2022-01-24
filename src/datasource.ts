@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import flatten from 'lodash/flatten';
-import { DataQueryResponse, DataQueryRequest, LoadingState, DataFrame } from '@grafana/data';
+import { DataQueryResponse, DataQueryRequest, LoadingState, TimeRange, ScopedVars } from '@grafana/data';
 import { DataSourceWithBackend } from '@grafana/runtime';
 import { InfinityProvider } from './app/InfinityProvider';
 import { UQLProvider, applyUQL } from './app/UQLProvider';
@@ -26,51 +26,61 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
     }
     return t;
   }
+  private getUpdatedOptions = (options: DataQueryRequest<InfinityQuery>): DataQueryRequest<InfinityQuery> => {
+    return {
+      ...options,
+      targets: options.targets
+        .filter((t: InfinityQuery) => t.hide !== true)
+        .map((t) => this.overrideWithGlobalQuery(t))
+        .filter((t) => t.type !== 'global')
+        .map((t) => replaceVariables(t, options.scopedVars)),
+    };
+  };
+  private resolveData = (options: DataQueryRequest<InfinityQuery>, t: InfinityQuery, range: TimeRange, scopedVars: ScopedVars): Promise<any> => {
+    const startTime = new Date(range.from.toDate()).getTime();
+    const endTime = new Date(range.to.toDate()).getTime();
+    return new Promise((resolve, reject) => {
+      switch (t.type) {
+        case 'csv':
+        case 'tsv':
+        case 'html':
+        case 'json':
+        case 'xml':
+        case 'graphql':
+          if (t.format === 'as-is' && t.source === 'inline') {
+            const data = JSON.parse(t.data || '[]');
+            resolve(data);
+          }
+          if (t.source === 'inline') {
+            new InfinityProvider(t, this).formatResults(t.data).then(resolve).catch(reject);
+            break;
+          }
+          new InfinityProvider(t, this).query().then(resolve).catch(reject);
+          break;
+        case 'uql':
+          new UQLProvider(t, this)
+            .query()
+            .then((res) => applyUQL(t.uql, res, t.format, t.refId))
+            .then(resolve)
+            .catch(reject);
+          break;
+        case 'series':
+          new SeriesProvider(replaceVariables(t, scopedVars)).query(startTime, endTime).then(resolve).catch(reject);
+          break;
+        case 'global':
+          reject('Query not found');
+          break;
+        default:
+          reject('Unknown Query Type');
+          break;
+      }
+    });
+  };
   private getResults(options: DataQueryRequest<InfinityQuery>): Promise<DataQueryResponse> {
-    const startTime = new Date(options.range.from.toDate()).getTime();
-    const endTime = new Date(options.range.to.toDate()).getTime();
     const promises: any[] = [];
-    options.targets
-      .filter((t: InfinityQuery) => t.hide !== true)
-      .map((t) => this.overrideWithGlobalQuery(t))
-      .filter((t) => t.type !== 'global')
-      .map((t) => replaceVariables(t, options.scopedVars))
-      .forEach((t: InfinityQuery) => {
-        promises.push(
-          new Promise((resolve, reject) => {
-            switch (t.type) {
-              case 'csv':
-              case 'tsv':
-              case 'html':
-              case 'json':
-              case 'xml':
-              case 'graphql':
-                if (t.format === 'as-is' && t.source === 'inline') {
-                  const data = JSON.parse(t.data || '[]');
-                  resolve(data);
-                }
-                new InfinityProvider(t, this).query().then(resolve).catch(reject);
-                break;
-              case 'uql':
-                new UQLProvider(t, this)
-                  .query()
-                  .then((res) => applyUQL(t.uql, res, t.format, t.refId))
-                  .then(resolve)
-                  .catch(reject);
-                break;
-              case 'series':
-                new SeriesProvider(replaceVariables(t, options.scopedVars)).query(startTime, endTime).then(resolve).catch(reject);
-                break;
-              case 'global':
-                reject('Query not found');
-                break;
-              default:
-                reject('Unknown Query Type');
-                break;
-            }
-          })
-        );
-      });
+    this.getUpdatedOptions(options).targets.forEach((t: InfinityQuery) => {
+      promises.push(this.resolveData(options, t, options.range, options.scopedVars));
+    });
     return Promise.all(promises)
       .then((results) => {
         return { data: flatten(results) };
@@ -81,19 +91,9 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
   }
   query(options: DataQueryRequest<InfinityQuery>): Observable<DataQueryResponse> {
     return new Observable<DataQueryResponse>((subscriber) => {
-      super
-        .query(options)
-        .toPromise()
-        .then(() => this.getResults(options))
+      let request = this.getUpdatedOptions(options);
+      this.getResults(request)
         .then((result) => {
-          result.data = result.data.map((d: DataFrame) => {
-            d.meta = {
-              ...d.meta,
-              executedQueryString:
-                'If you are looking to inspect the response from the server, use browser developer tools, network tab. You will see a call to `proxy` route which is the actual call made.',
-            };
-            return d;
-          });
           subscriber.next({ ...result, state: LoadingState.Done });
         })
         .catch((error) => {

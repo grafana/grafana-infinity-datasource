@@ -36,6 +36,7 @@ export const Header = (props: HeaderProps) => {
           </button>
           <div className="navbar-collapse offcanvas-collapse">
             <ul className="navbar-nav d-flex mb-2 mb-lg-0 me-auto">
+              <ListLink to="/blog">Blog</ListLink>
               <ListLink to="/wiki/uql">UQL</ListLink>
               <ListLink to="/wiki/json">JSON</ListLink>
               <ListLink to="/wiki/csv">CSV</ListLink>

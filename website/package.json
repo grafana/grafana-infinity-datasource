@@ -5,6 +5,7 @@
     "clean": "gatsby clean",
     "build": "gatsby build --prefix-paths",
     "dev": "gatsby develop",
+    "watch": "yarn dev",
     "serve": "gatsby serve --prefix-paths"
   },
   "dependencies": {
@@ -16,6 +17,7 @@
     "@stitches/react": "^1.2.6",
     "bootstrap": "^5.0.0",
     "gatsby": "^4.4.0",
+    "gatsby-plugin-feed": "^4.4.0",
     "gatsby-plugin-mdx": "^2.5.0",
     "gatsby-plugin-postcss": "^4.4.0",
     "gatsby-plugin-react-helmet": "^4.4.0",

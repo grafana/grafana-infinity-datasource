@@ -44,22 +44,34 @@ func (ds *InfinityDatasource) CheckHealth(ctx context.Context, req *backend.Chec
 // QueryData handles multiple queries and returns multiple responses.
 func (ds *InfinityDatasource) QueryData(ctx context.Context, req *backend.QueryDataRequest) (*backend.QueryDataResponse, error) {
 	response := backend.NewQueryDataResponse()
+	client, err := getInstance(ds.im, req.PluginContext)
+	if err != nil {
+		return response, err
+	}
 	for _, q := range req.Queries {
-		res := QueryData(ctx, q)
+		res := QueryData(ctx, q, *client.client)
 		response.Responses[q.RefID] = res
 	}
 	return response, nil
 }
 
-func QueryData(ctx context.Context, query backend.DataQuery) (response backend.DataResponse) {
-	var qm infinity.Query
-	response.Error = json.Unmarshal(query.JSON, &qm)
+func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient infinity.Client) (response backend.DataResponse) {
+	var query infinity.Query
+	response.Error = json.Unmarshal(backendQuery.JSON, &query)
 	if response.Error != nil {
 		return response
 	}
 	frame := data.NewFrame("response")
 	frame.Meta = &data.FrameMeta{
 		ExecutedQueryString: "If you are looking to inspect the response from the server, use browser developer tools, network tab. You will see a call to `proxy` route which is the actual call made.",
+	}
+	if query.Source == "url" {
+		response, err := infClient.GetResults(query)
+		frame.Meta.ExecutedQueryString = query.URL
+		frame.Meta.Custom = map[string]interface{}{
+			"response": response,
+			"error":    err,
+		}
 	}
 	response.Frames = append(response.Frames, frame)
 	return response

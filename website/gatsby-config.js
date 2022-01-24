@@ -1,15 +1,12 @@
-const fs = require("fs")
-const showdown = require("showdown")
+const fs = require('fs');
+const showdown = require('showdown');
 
-const showdownConverter = new showdown.Converter()
-const CHANGELOG = fs.readFileSync("../CHANGELOG.md")
-const LICENSE = fs.readFileSync("../LICENSE")
+const showdownConverter = new showdown.Converter();
+const CHANGELOG = fs.readFileSync('../CHANGELOG.md');
+const LICENSE = fs.readFileSync('../LICENSE');
 
 module.exports = {
-  pathPrefix:
-    process.env.GATSBY_PREFIX_PATHS === "IGNORE"
-      ? false
-      : `/grafana-infinity-datasource`,
+  pathPrefix: process.env.GATSBY_PREFIX_PATHS === 'IGNORE' ? false : `/grafana-infinity-datasource`,
   siteMetadata: {
     title: `Grafana Infinity Datasource`,
     description: `Do infinite things with Grafana. Turn any website into beautiful grafana dashboards. Supports HTML, CSV, JSON, XML & GraphQL documents.`,
@@ -22,6 +19,61 @@ module.exports = {
   plugins: [
     `gatsby-plugin-react-helmet`,
     `gatsby-plugin-sass`,
+    {
+      resolve: `gatsby-plugin-feed`,
+      options: {
+        query: `
+          {
+            site {
+              siteMetadata {
+                title
+                description
+                website
+                site_url: website
+              }
+            }
+          }
+        `,
+        feeds: [
+          {
+            serialize: ({ query: { site, allMarkdownRemark } }) => {
+              return allMarkdownRemark.edges.map((edge) => {
+                return Object.assign({}, edge.node.frontmatter, {
+                  description: edge.node.excerpt,
+                  date: new Date(edge.node.frontmatter.date || ''),
+                  updated: new Date(edge.node.frontmatter.date || ''),
+                  url: site.siteMetadata.website + edge.node.frontmatter.slug,
+                  guid: site.siteMetadata.website + edge.node.frontmatter.slug,
+                  custom_elements: [{ 'content:encoded': edge.node.html }],
+                });
+              });
+            },
+            query: `
+              {
+                allMarkdownRemark(
+                  sort: { order: DESC, fields: [frontmatter___date] }
+                  filter: {frontmatter: {slug: {regex: "/blog.*/"}}}
+                ) {
+                  edges {
+                    node {
+                      excerpt
+                      html
+                      frontmatter {
+                        title
+                        slug
+                        date
+                      }
+                    }
+                  }
+                }
+              }
+            `,
+            output: '/rss.xml',
+            title: "Your Site's RSS Feed",
+          },
+        ],
+      },
+    },
     `gatsby-plugin-sharp`,
     {
       resolve: `gatsby-transformer-remark`,
@@ -30,8 +82,8 @@ module.exports = {
           {
             resolve: `gatsby-remark-highlight-code`,
             options: {
-              terminal: "carbon",
-              theme: "vscode",
+              terminal: 'carbon',
+              theme: 'vscode',
             },
           },
         ],
@@ -53,4 +105,4 @@ module.exports = {
     },
     `gatsby-plugin-mdx`,
   ],
-}
+};

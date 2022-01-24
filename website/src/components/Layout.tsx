@@ -43,6 +43,7 @@ export const Layout = (props: LayoutProps) => {
         <meta property="twitter:title" content={data.site.siteMetadata.title} />
         <meta property="twitter:description" content={data.site.siteMetadata.description} />
         <meta property="twitter:image" content={data.site.siteMetadata.socialImage} />
+        <link rel="alternate" type="application/rss+xml" title={`RSS feed for ${data.site.siteMetadata.website}`} href="/rss.xml" />
         <title>{data.site.siteMetadata.title}</title>
       </Helmet>
       <div>

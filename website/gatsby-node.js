@@ -5,6 +5,7 @@ exports.createSchemaCustomization = ({ actions }) => {
         frontmatter: Frontmatter
       }
       type Frontmatter {
+        date: String
         previous_page_title: String
         previous_page_slug: String
         next_page_title: String
