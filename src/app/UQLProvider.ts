@@ -1,31 +1,8 @@
 import { uql } from 'uql';
 import { isArray } from 'lodash';
 import { DataFrame, FieldType, MutableDataFrame, toDataFrame } from '@grafana/data';
-import { Datasource } from './../datasource';
-import { normalizeURL, toTimeSeriesMany } from './utils';
-import { InfinityQueryFormat, InfinityUQLQuery } from '../types';
-
-export class UQLProvider {
-  constructor(private target: InfinityUQLQuery, private datasource: Datasource) {}
-  private fetchResults() {
-    return new Promise((resolve, reject) => {
-      if (this.target.source === 'url') {
-        const target = this.target;
-        target.url = normalizeURL(target.url);
-        this.datasource.postResource('proxy', target).then(resolve).catch(reject);
-      } else if (this.target.source === 'inline') {
-        resolve(this.target.data);
-      } else {
-        reject('invalid query type');
-      }
-    });
-  }
-  query() {
-    return new Promise((resolve, reject) => {
-      this.fetchResults().then(resolve).catch(reject);
-    });
-  }
-}
+import { toTimeSeriesMany } from './utils';
+import { InfinityQueryFormat } from '../types';
 
 const sendAsDataFrame = (res: unknown, format: InfinityQueryFormat = 'table', refId: string): Promise<DataFrame | DataFrame[]> => {
   return new Promise((resolve, reject) => {

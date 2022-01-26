@@ -133,6 +133,22 @@ func (client *Client) req(url string, body *strings.Reader, settings InfinitySet
 		return nil, errors.New(res.Status)
 	}
 	bodyBytes, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+	if query.Type == "json" || query.Type == "graphql" {
+		var out interface{}
+		err := json.Unmarshal(bodyBytes, &out)
+		return out, err
+	}
+	if query.Type == "uql" {
+		contentType := res.Header.Get("Content-type")
+		if strings.Contains(strings.ToLower(contentType), "application/json") {
+			var out interface{}
+			err := json.Unmarshal(bodyBytes, &out)
+			return out, err
+		}
+	}
 	return string(bodyBytes), err
 }
 

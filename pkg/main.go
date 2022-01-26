@@ -20,6 +20,21 @@ func main() {
 	}
 }
 
+func newDatasource() datasource.ServeOpts {
+	host := &PluginHost{
+		im: datasource.NewInstanceManager(newDataSourceInstance),
+	}
+	return datasource.ServeOpts{
+		QueryDataHandler:    host,
+		CheckHealthHandler:  host,
+		CallResourceHandler: httpadapter.New(host.getRouter()),
+	}
+}
+
+type PluginHost struct {
+	im instancemgmt.InstanceManager
+}
+
 type instanceSettings struct {
 	client *infinity.Client
 }

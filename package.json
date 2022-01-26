@@ -62,9 +62,9 @@
     "xml2js": "^0.4.23"
   },
   "devDependencies": {
-    "@grafana/e2e": "8.3.2",
-    "@grafana/e2e-selectors": "8.3.2",
-    "@grafana/toolkit": "8.2.0",
+    "@grafana/e2e": "8.3.4",
+    "@grafana/e2e-selectors": "8.3.4",
+    "@grafana/toolkit": "8.3.4",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^13.1.9",

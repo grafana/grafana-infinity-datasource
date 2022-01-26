@@ -3,7 +3,7 @@ import flatten from 'lodash/flatten';
 import { DataQueryResponse, DataQueryRequest, LoadingState, TimeRange, ScopedVars } from '@grafana/data';
 import { DataSourceWithBackend } from '@grafana/runtime';
 import { InfinityProvider } from './app/InfinityProvider';
-import { UQLProvider, applyUQL } from './app/UQLProvider';
+import { applyUQL } from './app/UQLProvider';
 import { SeriesProvider } from './app/SeriesProvider';
 import { replaceVariables } from './app/queryUtils';
 import { LegacyVariableProvider, InfinityVariableProvider, migrateLegacyQuery } from './app/variablesQuery';
@@ -36,7 +36,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
         .map((t) => replaceVariables(t, options.scopedVars)),
     };
   };
-  private resolveData = (options: DataQueryRequest<InfinityQuery>, t: InfinityQuery, range: TimeRange, scopedVars: ScopedVars): Promise<any> => {
+  private resolveData = (t: InfinityQuery, range: TimeRange, scopedVars: ScopedVars, data: string): Promise<any> => {
     const startTime = new Date(range.from.toDate()).getTime();
     const endTime = new Date(range.to.toDate()).getTime();
     return new Promise((resolve, reject) => {
@@ -52,17 +52,13 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
             resolve(data);
           }
           if (t.source === 'inline') {
-            new InfinityProvider(t, this).formatResults(t.data).then(resolve).catch(reject);
+            new InfinityProvider(t, this).formatResults(data).then(resolve).catch(reject);
             break;
           }
-          new InfinityProvider(t, this).query().then(resolve).catch(reject);
+          new InfinityProvider(t, this).formatResults(data).then(resolve).catch(reject);
           break;
         case 'uql':
-          new UQLProvider(t, this)
-            .query()
-            .then((res) => applyUQL(t.uql, res, t.format, t.refId))
-            .then(resolve)
-            .catch(reject);
+          applyUQL(t.uql, data, t.format, t.refId).then(resolve).catch(reject);
           break;
         case 'series':
           new SeriesProvider(replaceVariables(t, scopedVars)).query(startTime, endTime).then(resolve).catch(reject);
@@ -76,11 +72,18 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
       }
     });
   };
-  private getResults(options: DataQueryRequest<InfinityQuery>): Promise<DataQueryResponse> {
+  private getResults(options: DataQueryRequest<InfinityQuery>, result: DataQueryResponse): Promise<DataQueryResponse> {
+    if (result && result.error) {
+      return Promise.reject(JSON.stringify(result.error || { msg: 'error getting result', error: result.error }));
+    }
     const promises: any[] = [];
-    this.getUpdatedOptions(options).targets.forEach((t: InfinityQuery) => {
-      promises.push(this.resolveData(options, t, options.range, options.scopedVars));
-    });
+    if (result && result.data) {
+      result.data.map((d) => {
+        const target = d.meta?.custom?.query;
+        const data = d.meta?.custom?.data;
+        promises.push(this.resolveData(target, options.range, options.scopedVars, data));
+      });
+    }
     return Promise.all(promises)
       .then((results) => {
         return { data: flatten(results) };
@@ -92,10 +95,11 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
   query(options: DataQueryRequest<InfinityQuery>): Observable<DataQueryResponse> {
     return new Observable<DataQueryResponse>((subscriber) => {
       let request = this.getUpdatedOptions(options);
-      this.getResults(request)
-        .then((result) => {
-          subscriber.next({ ...result, state: LoadingState.Done });
-        })
+      super
+        .query(request)
+        .toPromise()
+        .then((result) => this.getResults(request, result))
+        .then((result) => subscriber.next({ ...result, state: LoadingState.Done }))
         .catch((error) => {
           subscriber.next({ data: [], error, state: LoadingState.Error });
           subscriber.error(error);
