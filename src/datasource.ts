@@ -17,12 +17,10 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
   }
   annotations = {};
   private overrideWithGlobalQuery(t: InfinityQuery): InfinityQuery {
-    if (t.type !== 'global') {
-      return t;
-    } else if (t.global_query_id && this.instanceSettings.jsonData.global_queries && this.instanceSettings.jsonData.global_queries.length > 0) {
+    if (t.type === 'global' && t.global_query_id && this.instanceSettings.jsonData.global_queries && this.instanceSettings.jsonData.global_queries.length > 0) {
       const global_query_id = t.global_query_id;
       let matchingQuery = this.instanceSettings.jsonData.global_queries.find((q: GlobalInfinityQuery) => q.id === global_query_id);
-      return matchingQuery && global_query_id ? matchingQuery.query : t;
+      return matchingQuery && global_query_id ? { ...matchingQuery.query, refId: t.refId } : t;
     }
     return t;
   }
