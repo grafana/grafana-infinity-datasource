@@ -94,7 +94,7 @@ func GetQueryURL(settings InfinitySettings, query Query) (string, error) {
 	return u.String(), nil
 }
 
-func getRequest(settings InfinitySettings, body io.Reader, query Query) (req *http.Request, err error) {
+func getRequest(settings InfinitySettings, body io.Reader, query Query, requestHeaders map[string]string) (req *http.Request, err error) {
 	url, err := GetQueryURL(settings, query)
 	if err != nil {
 		return nil, err
@@ -108,7 +108,6 @@ func getRequest(settings InfinitySettings, body io.Reader, query Query) (req *ht
 	if settings.BasicAuthEnabled && (settings.UserName != "" || settings.Password != "") {
 		req.Header.Add("Authorization", "Basic "+base64.StdEncoding.EncodeToString([]byte(settings.UserName+":"+settings.Password)))
 	}
-	req.Header.Set("User-Agent", "Grafana")
 	if query.Type == "json" || query.Type == "graphql" {
 		req.Header.Set("Content-Type", "application/json")
 	}
@@ -122,8 +121,8 @@ func getRequest(settings InfinitySettings, body io.Reader, query Query) (req *ht
 	return req, err
 }
 
-func (client *Client) req(url string, body *strings.Reader, settings InfinitySettings, isJSON bool, query Query) (obj interface{}, err error) {
-	req, _ := getRequest(settings, body, query)
+func (client *Client) req(url string, body *strings.Reader, settings InfinitySettings, isJSON bool, query Query, requestHeaders map[string]string) (obj interface{}, err error) {
+	req, _ := getRequest(settings, body, query, requestHeaders)
 	res, err := client.HttpClient.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error getting response from %s", url)
@@ -152,7 +151,7 @@ func (client *Client) req(url string, body *strings.Reader, settings InfinitySet
 	return string(bodyBytes), err
 }
 
-func (client *Client) GetResults(query Query) (o interface{}, err error) {
+func (client *Client) GetResults(query Query, requestHeaders map[string]string) (o interface{}, err error) {
 	isJSON := false
 	if query.Type == "json" || query.Type == "graphql" {
 		isJSON = true
@@ -167,8 +166,8 @@ func (client *Client) GetResults(query Query) (o interface{}, err error) {
 			jsonValue, _ := json.Marshal(jsonData)
 			body = strings.NewReader(string(jsonValue))
 		}
-		return client.req(query.URL, body, client.Settings, isJSON, query)
+		return client.req(query.URL, body, client.Settings, isJSON, query, requestHeaders)
 	default:
-		return client.req(query.URL, nil, client.Settings, isJSON, query)
+		return client.req(query.URL, nil, client.Settings, isJSON, query, requestHeaders)
 	}
 }

@@ -166,7 +166,7 @@ func TestInfinityClient_GetResults(t *testing.T) {
 				Settings:   tt.settings,
 				HttpClient: &http.Client{},
 			}
-			gotO, err := client.GetResults(tt.query)
+			gotO, err := client.GetResults(tt.query, map[string]string{})
 			if (err != nil) != tt.wantErr {
 				t.Errorf("GetResults() error = %v, wantErr %v", err, tt.wantErr)
 				return

@@ -1,19 +1,34 @@
 import React from 'react';
-import { DataSourcePluginOptionsEditorProps, onUpdateDatasourceSecureJsonDataOption } from '@grafana/data';
-import { InlineFormLabel, Switch, useTheme, LegacyForms } from '@grafana/ui';
+import { DataSourcePluginOptionsEditorProps, onUpdateDatasourceSecureJsonDataOption, SelectableValue } from '@grafana/data';
+import { InlineFormLabel, RadioButtonGroup, LegacyForms } from '@grafana/ui';
 import { InfinityOptions, InfinitySecureOptions } from '../../types';
 
+type AuthType = 'none' | 'basicAuth' | 'oauthPassThru';
+
+const authTypes: Array<SelectableValue<AuthType>> = [
+  { value: 'none', label: 'None' },
+  { value: 'basicAuth', label: 'Basic Authentication' },
+  // { value: 'oauthPassThru', label: 'Forward OAuth' },
+];
+
 export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
-  const theme = useTheme();
   const { FormField, SecretFormField } = LegacyForms;
   const { options, onOptionsChange } = props;
   const { secureJsonFields } = options;
   const secureJsonData = (options.secureJsonData || {}) as InfinitySecureOptions;
-  const onBasicAuthChange = (basicAuth: boolean) => {
-    onOptionsChange({
-      ...options,
-      basicAuth,
-    });
+  const authType: AuthType = props.options.basicAuth ? 'basicAuth' : props.options.jsonData.oauthPassThru ? 'oauthPassThru' : 'none';
+  const onAuthTypeChange = (a: AuthType) => {
+    switch (a) {
+      case 'none':
+        onOptionsChange({ ...options, basicAuth: false, jsonData: { ...options.jsonData, oauthPassThru: false } });
+        break;
+      case 'basicAuth':
+        onOptionsChange({ ...options, basicAuth: true, jsonData: { ...options.jsonData, oauthPassThru: false } });
+        break;
+      case 'oauthPassThru':
+        onOptionsChange({ ...options, basicAuth: false, jsonData: { ...options.jsonData, oauthPassThru: true } });
+        break;
+    }
   };
   const onUserNameChange = (basicAuthUser: string) => {
     onOptionsChange({
@@ -34,23 +49,13 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
       },
     });
   };
-  const switchContainerStyle: React.CSSProperties = {
-    padding: `0 ${theme.spacing.sm}`,
-    height: `${theme.spacing.formInputHeight}px`,
-    display: 'flex',
-    alignItems: 'center',
-  };
   return (
     <>
       <div className="gf-form">
-        <InlineFormLabel width={8} tooltip="Basic Auth Enabled">
-          Basic Auth
-        </InlineFormLabel>
-        <div style={switchContainerStyle}>
-          <Switch css={{}} className="gf-form" value={props.options.basicAuth || false} onChange={(e) => onBasicAuthChange(e.currentTarget.checked)} />
-        </div>
+        <InlineFormLabel width={8}>Auth Type</InlineFormLabel>
+        <RadioButtonGroup<AuthType> options={authTypes} value={authType} onChange={(e) => onAuthTypeChange(e!)}></RadioButtonGroup>
       </div>
-      {props.options.basicAuth && (
+      {authType === 'basicAuth' && (
         <div className="gf-form">
           <FormField label="User Name" placeholder="username" labelWidth={8} value={props.options.basicAuthUser || ''} onChange={(e) => onUserNameChange(e.currentTarget.value)}></FormField>
           <SecretFormField

@@ -17,26 +17,30 @@ func (ds *PluginHost) QueryData(ctx context.Context, req *backend.QueryDataReque
 		return response, err
 	}
 	for _, q := range req.Queries {
-		res := QueryData(ctx, q, *client.client)
+		res := QueryData(ctx, q, *client.client, req.Headers)
 		response.Responses[q.RefID] = res
 	}
 	return response, nil
 }
 
-func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient infinity.Client) (response backend.DataResponse) {
+func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient infinity.Client, requestHeaders map[string]string) (response backend.DataResponse) {
 	var query infinity.Query
 	response.Error = json.Unmarshal(backendQuery.JSON, &query)
 	if response.Error != nil {
 		return response
 	}
-	frame := data.NewFrame("response")
+	frameName := query.RefID
+	if frameName == "" {
+		frameName = "response"
+	}
+	frame := data.NewFrame(frameName)
 	frame.Meta = &data.FrameMeta{
-		ExecutedQueryString: "If you are looking to inspect the response from the server, use browser developer tools, network tab. You will see a call to `proxy` route which is the actual call made.",
+		ExecutedQueryString: "This feature is not available for this type of query yet",
 	}
 	customMeta := map[string]interface{}{}
 	customMeta["query"] = query
 	if query.Source == "url" {
-		response, err := infClient.GetResults(query)
+		response, err := infClient.GetResults(query, requestHeaders)
 		frame.Meta.ExecutedQueryString = query.URL
 		customMeta["data"] = response
 		if err != nil {

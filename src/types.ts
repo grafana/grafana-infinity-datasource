@@ -13,6 +13,7 @@ export interface InfinityOptions extends DataSourceJsonData {
   tlsAuthWithCACert?: boolean;
   global_queries?: GlobalInfinityQuery[];
   timeoutInSeconds?: number;
+  oauthPassThru?: boolean;
 }
 
 export interface InfinitySecureOptions {

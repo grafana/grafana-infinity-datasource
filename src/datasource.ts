@@ -1,13 +1,13 @@
 import { Observable } from 'rxjs';
 import flatten from 'lodash/flatten';
-import { DataQueryResponse, DataQueryRequest, LoadingState, TimeRange, ScopedVars } from '@grafana/data';
+import { DataQueryResponse, DataQueryRequest, LoadingState, TimeRange, ScopedVars, toDataFrame } from '@grafana/data';
 import { DataSourceWithBackend } from '@grafana/runtime';
 import { InfinityProvider } from './app/InfinityProvider';
 import { applyUQL } from './app/UQLProvider';
 import { SeriesProvider } from './app/SeriesProvider';
-import { replaceVariables } from './app/queryUtils';
-import { LegacyVariableProvider, InfinityVariableProvider, migrateLegacyQuery } from './app/variablesQuery';
-import { InfinityQuery, GlobalInfinityQuery, VariableQuery, MetricFindValue, InfinityInstanceSettings, InfinityOptions } from './types';
+import { replaceVariables, getUpdatedDataRequest } from './app/queryUtils';
+import { LegacyVariableProvider, getTemplateVariablesFromResult, migrateLegacyQuery } from './app/variablesQuery';
+import { InfinityQuery, VariableQuery, MetricFindValue, InfinityInstanceSettings, InfinityOptions } from './types';
 
 export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOptions> {
   instanceSettings: InfinityInstanceSettings;
@@ -16,27 +16,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
     this.instanceSettings = iSettings;
   }
   annotations = {};
-  private overrideWithGlobalQuery(t: InfinityQuery): InfinityQuery {
-    if (t.type === 'global' && t.global_query_id && this.instanceSettings.jsonData.global_queries && this.instanceSettings.jsonData.global_queries.length > 0) {
-      const global_query_id = t.global_query_id;
-      let matchingQuery = this.instanceSettings.jsonData.global_queries.find((q: GlobalInfinityQuery) => q.id === global_query_id);
-      return matchingQuery && global_query_id ? { ...matchingQuery.query, refId: t.refId } : t;
-    }
-    return t;
-  }
-  private getUpdatedOptions = (options: DataQueryRequest<InfinityQuery>): DataQueryRequest<InfinityQuery> => {
-    return {
-      ...options,
-      targets: options.targets
-        .filter((t: InfinityQuery) => t.hide !== true)
-        .map((t) => this.overrideWithGlobalQuery(t))
-        .filter((t) => t.type !== 'global')
-        .map((t) => replaceVariables(t, options.scopedVars)),
-    };
-  };
   private resolveData = (t: InfinityQuery, range: TimeRange, scopedVars: ScopedVars, data: string): Promise<any> => {
-    const startTime = new Date(range.from.toDate()).getTime();
-    const endTime = new Date(range.to.toDate()).getTime();
     return new Promise((resolve, reject) => {
       switch (t.type) {
         case 'csv':
@@ -59,6 +39,8 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
           applyUQL(t.uql, data, t.format, t.refId).then(resolve).catch(reject);
           break;
         case 'series':
+          const startTime = new Date(range.from.toDate()).getTime();
+          const endTime = new Date(range.to.toDate()).getTime();
           new SeriesProvider(replaceVariables(t, scopedVars)).query(startTime, endTime).then(resolve).catch(reject);
           break;
         case 'global':
@@ -77,9 +59,17 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
     const promises: any[] = [];
     if (result && result.data) {
       result.data.map((d) => {
-        const target = d.meta?.custom?.query;
+        const target: InfinityQuery = d.meta?.custom?.query;
         const data = d.meta?.custom?.data;
-        promises.push(this.resolveData(target, options.range, options.scopedVars, data));
+        promises.push(
+          this.resolveData(target, options.range, options.scopedVars, data).then((r) => {
+            if ((target.type === 'csv' || target.type === 'json' || target.type === 'xml' || target.type === 'graphql' || target.type === 'uql') && target.format !== 'timeseries') {
+              const df = toDataFrame(r);
+              return { ...df, meta: d.meta, refId: target.refId };
+            }
+            return r;
+          })
+        );
       });
     }
     return Promise.all(promises)
@@ -92,7 +82,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
   }
   query(options: DataQueryRequest<InfinityQuery>): Observable<DataQueryResponse> {
     return new Observable<DataQueryResponse>((subscriber) => {
-      let request = this.getUpdatedOptions(options);
+      let request = getUpdatedDataRequest(options, this.instanceSettings);
       super
         .query(request)
         .toPromise()
@@ -111,10 +101,29 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
       switch (query.queryType) {
         case 'infinity':
           if (query.infinityQuery) {
-            const infinityVariableProvider = new InfinityVariableProvider(query.infinityQuery, this.instanceSettings, this);
-            infinityVariableProvider.query().then((res) => {
-              resolve(flatten(res));
-            });
+            const request = { targets: [replaceVariables(query.infinityQuery, {})] } as DataQueryRequest<InfinityQuery>;
+            super
+              .query(request)
+              .toPromise()
+              .then((res) => {
+                this.getResults(request, res)
+                  .then((r) => {
+                    if (r && r.data && r.data) {
+                      resolve(getTemplateVariablesFromResult(r.data[0]) as MetricFindValue[]);
+                    } else {
+                      console.error(`no result found for ${JSON.stringify(query.infinityQuery)}`);
+                      resolve([]);
+                    }
+                  })
+                  .catch((ex) => {
+                    console.error(ex);
+                    resolve([]);
+                  });
+              })
+              .catch((ex) => {
+                console.error(ex);
+                resolve([]);
+              });
           } else {
             resolve([]);
           }
