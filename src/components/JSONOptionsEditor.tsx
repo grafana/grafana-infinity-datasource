@@ -14,7 +14,7 @@ export const JSONOptionsEditor = (props: { query: InfinityQuery; onChange: (valu
   };
   return (
     <>
-      <div style={{ padding: 'auto 15px;' }}>
+      <div style={{ padding: 'auto 15px' }}>
         <Button
           variant="secondary"
           size="sm"
