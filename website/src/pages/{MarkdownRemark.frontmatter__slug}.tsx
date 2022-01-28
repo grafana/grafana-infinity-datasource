@@ -2,6 +2,7 @@ import React from 'react';
 import { graphql, Link } from 'gatsby';
 import { Helmet } from 'react-helmet';
 import { Layout } from '../components/Layout';
+import { InspiringStory } from '../components/InspiringStory';
 
 export interface TemplateProps {
   data: any;
@@ -44,7 +45,21 @@ export default function Template({ data }: TemplateProps) {
       <div className="blog-post-container">
         <div className="blog-post">
           <div className="container py-4">
+            {frontmatter.slug && frontmatter.slug.startsWith('/blog/') && (
+              <div style={{ marginBottom: '20px' }}>
+                <a href="/" className="link">
+                  <i className="fa fa-home" style={{ marginRight: '10px' }}></i>
+                </a>
+                &nbsp;&gt;&nbsp;&nbsp;
+                <Link to="/blog" className="link" style={{ color: 'red ', textDecoration: 'none', fontWeight: 'bolder' }}>
+                  Blog
+                </Link>
+                &nbsp;&gt;&nbsp;&nbsp;
+                {frontmatter.title}
+              </div>
+            )}
             <div className="blog-post-content" dangerouslySetInnerHTML={{ __html: html }} />
+            <InspiringStory />
           </div>
         </div>
       </div>

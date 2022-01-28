@@ -36,7 +36,6 @@ export const Header = (props: HeaderProps) => {
           </button>
           <div className="navbar-collapse offcanvas-collapse">
             <ul className="navbar-nav d-flex mb-2 mb-lg-0 me-auto">
-              <ListLink to="/blog">Blog</ListLink>
               <ListLink to="/wiki/uql">UQL</ListLink>
               <ListLink to="/wiki/json">JSON</ListLink>
               <ListLink to="/wiki/csv">CSV</ListLink>
@@ -86,6 +85,9 @@ export const Header = (props: HeaderProps) => {
               </li>
             </ul>
             <ul className="navbar-nav d-flex mb-2 mb-lg-0">
+              <Link className="nav-links rounded special-menu fw-bolder" to="/blog">
+                Blog
+              </Link>
               <a className="nav-links rounded special-menu" href="https://grafana-infinity-datasource.herokuapp.com/d/try/try?orgId=1&editPanel=2" target="_blank" rel="noreferrer">
                 Try online
               </a>

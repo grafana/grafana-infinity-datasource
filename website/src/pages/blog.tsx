@@ -47,11 +47,13 @@ export default function Template({ data }: TemplateProps) {
           <div className="container py-4">
             <h2>Recent blog posts</h2>
             <div className="blog-post-content">
-              <ul>
+              <ul style={{ margin: '0px', listStyle: 'none', padding: '0px' }}>
                 {data.allMarkdownRemark.edges.map((p) => {
                   return (
-                    <li>
-                      <Link to={p.node.frontmatter.slug}>{p.node.frontmatter.title}</Link>
+                    <li style={{ marginBlock: '10px', listStyle: 'none', paddingBlock: '5px' }}>
+                      <Link className="link" to={p.node.frontmatter.slug}>
+                        <b>{p.node.frontmatter.title}</b> - <span style={{ color: 'grey' }}>{p.node.frontmatter.date}</span>
+                      </Link>
                     </li>
                   );
                 })}

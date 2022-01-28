@@ -1,20 +1,22 @@
 ---
-slug: '/showcase/github'
-title: 'Github Stats'
+slug: '/blog/github'
+title: 'Github'
+date: '2022-01-28'
 ---
 
 ## Github Stats
 
-![image](https://user-images.githubusercontent.com/153843/93846498-1d9abf80-fc9c-11ea-90ed-4c569b088d99.png)
+![image](https://user-images.githubusercontent.com/153843/93846498-1d9abf80-fc9c-11ea-90ed-4c569b088d99.png#center)
 
 We can leverage [Github graphql API](https://docs.github.com/en/graphql) to query the github stats using this infinity plugin graphql api.
 
 Sample Query given in the below example. You can customize your query to bring the stats you needed.
 
-### Query Editor
+## Query Editor
 
-![image](https://user-images.githubusercontent.com/153843/93736996-d3510a00-fbd9-11ea-8c05-065758d66e82.png)
-![image](https://user-images.githubusercontent.com/153843/93737011-e1068f80-fbd9-11ea-8c82-ea516f83cf3d.png)
+![image](https://user-images.githubusercontent.com/153843/93736996-d3510a00-fbd9-11ea-8c05-065758d66e82.png#center)
+
+![image](https://user-images.githubusercontent.com/153843/93737011-e1068f80-fbd9-11ea-8c82-ea516f83cf3d.png#center)
 
 Query Used:
 
@@ -37,15 +39,15 @@ Query Used:
 }
 ```
 
-### Datasource Configuration
+## Datasource Configuration
 
-Select **Advanced** mode and use your github username and PAT token as password
+Select **Basic user authentication** mode and use your github username and PAT token as password
 
-![image](https://user-images.githubusercontent.com/153843/93736929-b1578780-fbd9-11ea-9413-5585ff79d3a8.png)
+![image](https://user-images.githubusercontent.com/153843/93736929-b1578780-fbd9-11ea-9413-5585ff79d3a8.png#center)
 
 ## Github Organization Summary example
 
-![image](https://user-images.githubusercontent.com/153843/93846498-1d9abf80-fc9c-11ea-90ed-4c569b088d99.png)
+![image](https://user-images.githubusercontent.com/153843/93846498-1d9abf80-fc9c-11ea-90ed-4c569b088d99.png#center)
 
 corresponding query used is given below
 

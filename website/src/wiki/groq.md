@@ -13,7 +13,7 @@ next_page_slug: '/wiki/json'
 
 > GROQ is still in ALPHA.
 
-### Using GROQ with infinity
+## Using GROQ with infinity
 
 Following example shows how to make use of GROQ inside grafana infinity datasource.
 
