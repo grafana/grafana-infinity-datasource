@@ -25,6 +25,7 @@ export const SubMenu = () => {
           <SubMenuLink to="/wiki/csv">CSV</SubMenuLink>
           <SubMenuLink to="/wiki/graphql">GraphQL</SubMenuLink>
           <SubMenuLink to="/wiki/xml">XML</SubMenuLink>
+          <SubMenuLink to="/wiki/groq">GROQ</SubMenuLink>
           <SubMenuLink to="/wiki/html">HTML</SubMenuLink>
           <SubMenuLink to="/wiki/url">URL</SubMenuLink>
           <SubMenuLink to="/wiki/time-formats">Time Formats</SubMenuLink>

@@ -121,37 +121,39 @@ func getRequest(settings InfinitySettings, body io.Reader, query Query, requestH
 	return req, err
 }
 
-func (client *Client) req(url string, body *strings.Reader, settings InfinitySettings, isJSON bool, query Query, requestHeaders map[string]string) (obj interface{}, err error) {
+func (client *Client) req(url string, body *strings.Reader, settings InfinitySettings, isJSON bool, query Query, requestHeaders map[string]string) (obj interface{}, statusCode int, duration time.Duration, err error) {
 	req, _ := getRequest(settings, body, query, requestHeaders)
+	startTime := time.Now()
 	res, err := client.HttpClient.Do(req)
+	duration = time.Since(startTime)
 	if err != nil {
-		return nil, fmt.Errorf("error getting response from %s", url)
+		return nil, res.StatusCode, duration, fmt.Errorf("error getting response from %s", url)
 	}
 	defer res.Body.Close()
 	if res.StatusCode >= http.StatusBadRequest {
-		return nil, errors.New(res.Status)
+		return nil, res.StatusCode, duration, errors.New(res.Status)
 	}
 	bodyBytes, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		return nil, err
+		return nil, res.StatusCode, duration, err
 	}
 	if query.Type == "json" || query.Type == "graphql" {
 		var out interface{}
 		err := json.Unmarshal(bodyBytes, &out)
-		return out, err
+		return out, res.StatusCode, duration, err
 	}
-	if query.Type == "uql" {
+	if query.Type == "uql" || query.Type == "groq" {
 		contentType := res.Header.Get("Content-type")
 		if strings.Contains(strings.ToLower(contentType), "application/json") {
 			var out interface{}
 			err := json.Unmarshal(bodyBytes, &out)
-			return out, err
+			return out, res.StatusCode, duration, err
 		}
 	}
-	return string(bodyBytes), err
+	return string(bodyBytes), res.StatusCode, duration, err
 }
 
-func (client *Client) GetResults(query Query, requestHeaders map[string]string) (o interface{}, err error) {
+func (client *Client) GetResults(query Query, requestHeaders map[string]string) (o interface{}, statusCode int, duration time.Duration, err error) {
 	isJSON := false
 	if query.Type == "json" || query.Type == "graphql" {
 		isJSON = true

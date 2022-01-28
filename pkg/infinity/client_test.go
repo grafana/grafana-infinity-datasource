@@ -166,12 +166,14 @@ func TestInfinityClient_GetResults(t *testing.T) {
 				Settings:   tt.settings,
 				HttpClient: &http.Client{},
 			}
-			gotO, err := client.GetResults(tt.query, map[string]string{})
+			gotO, statusCode, duration, err := client.GetResults(tt.query, map[string]string{})
 			if (err != nil) != tt.wantErr {
 				t.Errorf("GetResults() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			assert.Equal(t, tt.wantO, gotO)
+			assert.NotNil(t, statusCode)
+			assert.NotNil(t, duration)
 		})
 	}
 }

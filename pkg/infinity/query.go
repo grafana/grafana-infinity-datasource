@@ -2,7 +2,7 @@ package infinity
 
 type Query struct {
 	RefID      string `json:"refId"`
-	Type       string `json:"type"`   // 'json' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'series' | 'global' | 'uql'
+	Type       string `json:"type"`   // 'json' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'series' | 'global' | 'uql' | 'groq'
 	Format     string `json:"format"` // 'table' | 'timeseries' | 'dataframe' | 'as-is' | 'node-graph-nodes' | 'node-graph-edges'
 	Source     string `json:"source"` // 'url' | 'inline' | 'random-walk' | 'expression'
 	URL        string `json:"url"`
@@ -20,6 +20,7 @@ type Query struct {
 	} `json:"url_options"`
 	Data       string `json:"data"`
 	UQL        string `json:"uql"`
+	GROQ       string `json:"groq"`
 	CSVOptions struct {
 		Delimiter          string `json:"delimiter"`
 		SkipEmptyLines     bool   `json:"skip_empty_lines"`

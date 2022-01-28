@@ -3,11 +3,20 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"time"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/infinity"
 )
+
+type CustomMeta struct {
+	Query                  infinity.Query `json:"query"`
+	Data                   interface{}    `json:"data"`
+	ResponseCodeFromServer int            `json:"responseCodeFromServer"`
+	Duration               time.Duration  `json:"duration"`
+	Error                  string         `json:"error"`
+}
 
 // QueryData handles multiple queries and returns multiple responses.
 func (ds *PluginHost) QueryData(ctx context.Context, req *backend.QueryDataRequest) (*backend.QueryDataResponse, error) {
@@ -37,18 +46,24 @@ func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient in
 	frame.Meta = &data.FrameMeta{
 		ExecutedQueryString: "This feature is not available for this type of query yet",
 	}
-	customMeta := map[string]interface{}{}
-	customMeta["query"] = query
+	customMeta := &CustomMeta{
+		Query:                  query,
+		Data:                   nil,
+		ResponseCodeFromServer: 0,
+		Error:                  "",
+	}
 	if query.Source == "url" {
-		response, err := infClient.GetResults(query, requestHeaders)
+		response, statusCode, duration, err := infClient.GetResults(query, requestHeaders)
 		frame.Meta.ExecutedQueryString = query.URL
-		customMeta["data"] = response
+		customMeta.Data = response
+		customMeta.ResponseCodeFromServer = statusCode
+		customMeta.Duration = duration
 		if err != nil {
-			customMeta["error"] = err
+			customMeta.Error = err.Error()
 		}
 	}
 	if query.Source == "inline" {
-		customMeta["data"] = query.Data
+		customMeta.Data = query.Data
 	}
 	frame.Meta.Custom = customMeta
 	response.Frames = append(response.Frames, frame)

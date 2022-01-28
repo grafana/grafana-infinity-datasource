@@ -32,7 +32,7 @@ export type InfinityInstanceSettings = DataSourceInstanceSettings<InfinityOption
 //#endregion
 
 //#region Query
-export type InfinityQueryType = 'json' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'series' | 'global' | 'uql';
+export type InfinityQueryType = 'json' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'series' | 'global' | 'uql' | 'groq';
 export type InfinityQuerySources = 'url' | 'inline' | 'random-walk' | 'expression';
 export type InfinityColumnFormat = 'string' | 'number' | 'timestamp' | 'timestamp_epoch' | 'timestamp_epoch_s';
 export type InfinityQueryFormat = 'table' | 'timeseries' | 'dataframe' | 'as-is' | 'node-graph-nodes' | 'node-graph-edges';
@@ -100,7 +100,9 @@ export type InfinityDestinationQuery = InfinityDataQuery | InfinitySeriesQuery;
 export type InfinityLegacyQuery = InfinityDestinationQuery | InfinityGlobalQuery;
 export type InfinityUQLQuerySource = InfinityQueryWithURLSource<'uql'> | InfinityQueryWithInlineSource<'uql'>;
 export type InfinityUQLQuery = { uql: string; format: InfinityQueryFormat } & InfinityUQLQuerySource & InfinityQueryBase<'uql'>;
-export type InfinityQuery = InfinityLegacyQuery | InfinityUQLQuery;
+export type InfinityGROQQuerySource = InfinityQueryWithURLSource<'groq'> | InfinityQueryWithInlineSource<'groq'>;
+export type InfinityGROQQuery = { groq: string; format: InfinityQueryFormat } & InfinityGROQQuerySource & InfinityQueryBase<'groq'>;
+export type InfinityQuery = InfinityLegacyQuery | InfinityUQLQuery | InfinityGROQQuery;
 //#endregion
 
 //#region Variable Query
@@ -212,6 +214,7 @@ export const SCRAP_QUERY_TYPES: Array<SelectableValue<InfinityQueryType>> = [
   { label: 'HTML', value: 'html' },
   { label: 'Series', value: 'series' },
   { label: 'Global Query', value: 'global' },
+  { label: 'GROQ', value: 'groq' },
 ];
 export const INFINITY_RESULT_FORMATS: Array<SelectableValue<InfinityQueryFormat>> = [
   { label: 'Data Frame', value: 'dataframe' },
@@ -222,8 +225,8 @@ export const INFINITY_RESULT_FORMATS: Array<SelectableValue<InfinityQueryFormat>
   { label: 'As Is', value: 'as-is' },
 ];
 export const INFINITY_SOURCES: ScrapQuerySources[] = [
-  { label: 'URL', value: 'url', supported_types: ['csv', 'tsv', 'json', 'html', 'xml', 'graphql', 'uql'] },
-  { label: 'Inline', value: 'inline', supported_types: ['csv', 'tsv', 'json', 'xml', 'uql'] },
+  { label: 'URL', value: 'url', supported_types: ['csv', 'tsv', 'json', 'html', 'xml', 'graphql', 'uql', 'groq'] },
+  { label: 'Inline', value: 'inline', supported_types: ['csv', 'tsv', 'json', 'xml', 'uql', 'groq'] },
   { label: 'Random Walk', value: 'random-walk', supported_types: ['series'] },
   { label: 'Expression', value: 'expression', supported_types: ['series'] },
 ];

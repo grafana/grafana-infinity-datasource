@@ -38,7 +38,7 @@ func GetProxyHandler(client *instanceSettings) http.HandlerFunc {
 				return
 			}
 			if query.Source == "url" {
-				response, err := client.client.GetResults(query, map[string]string{})
+				response, _, _, err := client.client.GetResults(query, map[string]string{})
 				if err != nil {
 					http.Error(rw, err.Error(), http.StatusInternalServerError)
 					return

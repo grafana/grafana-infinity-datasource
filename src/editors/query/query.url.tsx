@@ -7,10 +7,10 @@ import { InfinityQuery, EditorMode } from '../../types';
 export const URLEditor = (props: { query: InfinityQuery; mode: EditorMode; onChange: (value: any) => void; onRunQuery: () => void }) => {
   const { query, onChange, onRunQuery } = props;
   const LABEL_WIDTH = props.mode === 'variable' ? 10 : 8;
-  const canShowURLField = (isDataQuery(query) || query.type === 'uql') && query.source === 'url';
-  const [data, setData] = useState((isDataQuery(query) || query.type === 'uql') && query.source === 'inline' ? query.data || '' : '');
-  const [url, setURL] = useState((isDataQuery(query) || query.type === 'uql') && query.source === 'url' ? query.url || '' : '');
-  if (!(isDataQuery(query) || query.type === 'uql')) {
+  const canShowURLField = (isDataQuery(query) || query.type === 'uql' || query.type === 'groq') && query.source === 'url';
+  const [data, setData] = useState((isDataQuery(query) || query.type === 'uql' || query.type === 'groq') && query.source === 'inline' ? query.data || '' : '');
+  const [url, setURL] = useState((isDataQuery(query) || query.type === 'uql' || query.type === 'groq') && query.source === 'url' ? query.url || '' : '');
+  if (!(isDataQuery(query) || query.type === 'uql' || query.type === 'groq')) {
     return <></>;
   }
   const onDataChange = () => {

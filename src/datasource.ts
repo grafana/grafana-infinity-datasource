@@ -1,9 +1,10 @@
 import { Observable } from 'rxjs';
 import flatten from 'lodash/flatten';
-import { DataQueryResponse, DataQueryRequest, LoadingState, TimeRange, ScopedVars, toDataFrame } from '@grafana/data';
+import { DataQueryResponse, DataQueryRequest, LoadingState, TimeRange, ScopedVars, toDataFrame, DataFrame } from '@grafana/data';
 import { DataSourceWithBackend } from '@grafana/runtime';
 import { InfinityProvider } from './app/InfinityProvider';
 import { applyUQL } from './app/UQLProvider';
+import { applyGroq } from './app/GROQProvider';
 import { SeriesProvider } from './app/SeriesProvider';
 import { replaceVariables, getUpdatedDataRequest } from './app/queryUtils';
 import { LegacyVariableProvider, getTemplateVariablesFromResult, migrateLegacyQuery } from './app/variablesQuery';
@@ -38,6 +39,9 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
         case 'uql':
           applyUQL(t.uql, data, t.format, t.refId).then(resolve).catch(reject);
           break;
+        case 'groq':
+          applyGroq(t.groq, data, t.format, t.refId).then(resolve).catch(reject);
+          break;
         case 'series':
           const startTime = new Date(range.from.toDate()).getTime();
           const endTime = new Date(range.to.toDate()).getTime();
@@ -56,16 +60,32 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
     if (result && result.error) {
       return Promise.reject(JSON.stringify(result.error || { msg: 'error getting result', error: result.error }));
     }
-    const promises: any[] = [];
+    const promises: Array<Promise<DataFrame>> = [];
     if (result && result.data) {
       result.data.map((d) => {
         const target: InfinityQuery = d.meta?.custom?.query;
         const data = d.meta?.custom?.data;
+        const responseCodeFromServer = d.meta?.custom?.responseCodeFromServer;
+        const error = d.meta?.custom?.error;
         promises.push(
           this.resolveData(target, options.range, options.scopedVars, data).then((r) => {
-            if ((target.type === 'csv' || target.type === 'json' || target.type === 'xml' || target.type === 'graphql' || target.type === 'uql') && target.format !== 'timeseries') {
+            if (
+              (target.type === 'csv' || target.type === 'json' || target.type === 'xml' || target.type === 'graphql' || target.type === 'uql' || target.type === 'groq') &&
+              target.format !== 'timeseries'
+            ) {
               const df = toDataFrame(r);
-              return { ...df, meta: d.meta, refId: target.refId };
+              let frame = { ...df, meta: d.meta, refId: target.refId };
+              if (error || (responseCodeFromServer && responseCodeFromServer >= 400)) {
+                frame.meta.notices = [
+                  {
+                    severity: 'error',
+                    text: `Response code from server : ${responseCodeFromServer}. Error Message : ${error || '-'}`,
+                  },
+                ];
+              } else if (responseCodeFromServer && responseCodeFromServer > 300) {
+                frame.meta.notices = [{ severity: 'warning', text: `Response Code From Server : ${responseCodeFromServer}` }];
+              }
+              return frame;
             }
             return r;
           })

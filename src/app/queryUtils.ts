@@ -18,7 +18,7 @@ export const overrideWithGlobalQuery = (t: InfinityQuery, instanceSettings: Data
 
 export const replaceVariables = (query: InfinityQuery, scopedVars: ScopedVars): InfinityQuery => {
   const newQuery: InfinityQuery = { ...query };
-  if (isDataQuery(newQuery) || newQuery.type === 'uql') {
+  if (isDataQuery(newQuery) || newQuery.type === 'uql' || newQuery.type === 'groq') {
     if (newQuery.source === 'url') {
       newQuery.url = replaceVariable(newQuery.url || '', scopedVars);
       newQuery.url_options = {
@@ -51,6 +51,9 @@ export const replaceVariables = (query: InfinityQuery, scopedVars: ScopedVars): 
     }
     if (newQuery.type === 'uql') {
       newQuery.uql = replaceVariable(newQuery.uql, scopedVars);
+    }
+    if (newQuery.type === 'groq') {
+      newQuery.groq = replaceVariable(newQuery.groq, scopedVars);
     }
   }
   return newQuery;

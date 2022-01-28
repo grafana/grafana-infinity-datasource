@@ -4,7 +4,7 @@ import { DataFrame, FieldType, MutableDataFrame, toDataFrame } from '@grafana/da
 import { toTimeSeriesMany } from './utils';
 import { InfinityQueryFormat } from '../types';
 
-const sendAsDataFrame = (res: unknown, format: InfinityQueryFormat = 'table', refId: string): Promise<DataFrame | DataFrame[]> => {
+export const sendAsDataFrame = (res: unknown, format: InfinityQueryFormat = 'table', refId: string): Promise<DataFrame | DataFrame[]> => {
   return new Promise((resolve, reject) => {
     if (typeof res === 'number') {
       let result = new MutableDataFrame({
@@ -36,7 +36,8 @@ const sendAsDataFrame = (res: unknown, format: InfinityQueryFormat = 'table', re
       if (format === 'timeseries') {
         resolve(toTimeSeriesMany([toDataFrame(res)]));
       } else {
-        resolve(toDataFrame(res));
+        let frame = toDataFrame(res);
+        resolve({ ...frame, name: frame.name || refId });
       }
     } else {
       resolve(

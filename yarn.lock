@@ -7595,6 +7595,11 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.8.tgz#e412b8d33f5e006593cbd3cee6df9f2cebbe802a"
   integrity sha512-qkIilPUYcNhJpd33n0GBXTB1MMPp14TxEsEs0pTrsSVucApsYzW5V+Q8Qxhik6KU3evy+qkAAowTByymK0avdg==
 
+groq-js@^0.3.0-beta.2:
+  version "0.3.0-beta.2"
+  resolved "https://registry.yarnpkg.com/groq-js/-/groq-js-0.3.0-beta.2.tgz#96ec7e2d59d19d29d0eb0f68b1fc15c6d15ada3d"
+  integrity sha512-U2S7yL3njmmHc4jyEWTJvQEJTxoKJN+TZfQEVrgpniDZdYg9P/U+Tg4OhnjSg1IhkcxnSVxlnVpAA3jQyztypg==
+
 growl@1.10.5:
   version "1.10.5"
   resolved "https://registry.yarnpkg.com/growl/-/growl-1.10.5.tgz#f2735dc2283674fa67478b10181059355c369e5e"

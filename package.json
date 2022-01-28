@@ -1,6 +1,6 @@
 {
   "name": "grafana-infinity-datasource",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "JSON, CSV, XML, GraphQL & HTML datasource for Grafana. Do infinite things with Grafana.",
   "main": "dist/module.js",
   "scripts": {
@@ -32,6 +32,7 @@
     "html",
     "xml",
     "uql",
+    "groq",
     "url",
     "scraping",
     "web scraping",
@@ -52,6 +53,7 @@
     "@grafana/ui": "7.2.0",
     "cheerio": "^1.0.0-rc.10",
     "csv-parse": "^4.12.0",
+    "groq-js": "^0.3.0-beta.2",
     "jsonpath-plus": "^6.0.1",
     "lodash": "^4.17.21",
     "mathjs": "^10.0.0",
