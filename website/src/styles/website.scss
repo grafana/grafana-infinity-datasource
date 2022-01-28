@@ -321,6 +321,10 @@ html.dark-theme {
       img {
         filter: drop-shadow(0 0 0.1rem $cyanA9);
       }
+      .link {
+        text-decoration: none;
+        color: white !important;
+      }
     }
     .accordion {
       .accordion-button {
@@ -441,6 +445,10 @@ html.light-theme {
       }
       img {
         filter: drop-shadow(0 0 0.1rem $cyanA9);
+      }
+      .link {
+        text-decoration: none;
+        color: black !important;
       }
     }
     .accordion {

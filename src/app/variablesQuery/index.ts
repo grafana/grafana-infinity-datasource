@@ -1,17 +1,14 @@
 import { flatten, defaultsDeep } from 'lodash';
-import { SelectableValue } from '@grafana/data';
+import { SelectableValue, MetricFindValue } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
-import { InfinityProvider } from './../InfinityProvider';
-import { IsValidInfinityQuery, replaceVariables } from '../queryUtils';
 import { CollectionVariable } from './Collection';
 import { CollectionLookupVariable } from './CollectionLookup';
 import { JoinVariable } from './Join';
 import { RandomVariable } from './Random';
 import { UnixTimeStampVariable } from './UnixTimeStamp';
-import { Datasource } from './../../datasource';
-import { InfinityQuery, InfinityInstanceSettings, VariableQuery, DefaultInfinityQuery, InfinityDataQuery } from './../../types';
+import { VariableQuery, DefaultInfinityQuery } from './../../types';
 
-const getTemplateVariablesFromResult = (res: any): Array<SelectableValue<string>> => {
+export const getTemplateVariablesFromResult = (res: any): MetricFindValue[] => {
   if (res.columns && res.columns.length > 0) {
     if (res.columns.length === 2) {
       return res.rows.map((row: string[]) => {
@@ -61,38 +58,6 @@ export const migrateLegacyQuery = (query: VariableQuery | string): VariableQuery
 
 interface VariableProvider {
   query: () => Promise<Array<SelectableValue<string>>>;
-}
-
-export class InfinityVariableProvider implements VariableProvider {
-  infinityQuery: InfinityQuery;
-  instanceSettings: InfinityInstanceSettings;
-  constructor(infinityQuery: InfinityQuery, instanceSettings: InfinityInstanceSettings, private datasource: Datasource) {
-    this.infinityQuery = infinityQuery;
-    this.instanceSettings = instanceSettings;
-  }
-  query(): Promise<Array<SelectableValue<string>>> {
-    return new Promise((resolve, reject) => {
-      if (IsValidInfinityQuery(this.infinityQuery)) {
-        const replacedQuery = replaceVariables(this.infinityQuery, {});
-        let provider = new InfinityProvider(replacedQuery as InfinityDataQuery, this.datasource);
-        provider
-          .query()
-          .then((res: any) => {
-            if (res && res.rows) {
-              let results = getTemplateVariablesFromResult(res);
-              resolve(results);
-            } else {
-              resolve([]);
-            }
-          })
-          .catch((ex) => {
-            resolve([]);
-          });
-      } else {
-        resolve([]);
-      }
-    });
-  }
 }
 
 export class LegacyVariableProvider implements VariableProvider {

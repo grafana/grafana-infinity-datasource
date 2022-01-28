@@ -96,7 +96,10 @@ export const Footer = () => {
           <div className="col-12 col-md">
             <h4 className="mb-4 fw-light">Examples</h4>
             <ul className="list-unstyled">
-              <FooterMenuitem to="/showcase/github" internal={true}>
+              <FooterMenuitem to="/blog" internal={true}>
+                Blog
+              </FooterMenuitem>
+              <FooterMenuitem to="/blog/github" internal={true}>
                 Github
               </FooterMenuitem>
               <FooterMenuitem to="https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/38" internal={false}>

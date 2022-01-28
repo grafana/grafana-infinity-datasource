@@ -35,6 +35,9 @@ export const HeroSection = () => {
         <a className="btn btn-primary mx-4" href="https://grafana-infinity-datasource.herokuapp.com/d/try/try?orgId=1&editPanel=2" target="_blank" rel="noreferrer">
           Try online
         </a>
+        <Link className="btn btn-secondary" to="/blog">
+          Blog
+        </Link>
       </div>
     </div>
   );

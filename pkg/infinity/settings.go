@@ -9,28 +9,30 @@ import (
 )
 
 type InfinitySettings struct {
-	URL                string
-	BasicAuthEnabled   bool
-	UserName           string
-	Password           string
-	CustomHeaders      map[string]string
-	SecureQueryFields  map[string]string
-	InsecureSkipVerify bool
-	ServerName         string
-	TimeoutInSeconds   int64
-	TLSClientAuth      bool
-	TLSAuthWithCACert  bool
-	TLSCACert          string
-	TLSClientCert      string
-	TLSClientKey       string
+	URL                  string
+	BasicAuthEnabled     bool
+	UserName             string
+	Password             string
+	ForwardOauthIdentity bool
+	CustomHeaders        map[string]string
+	SecureQueryFields    map[string]string
+	InsecureSkipVerify   bool
+	ServerName           string
+	TimeoutInSeconds     int64
+	TLSClientAuth        bool
+	TLSAuthWithCACert    bool
+	TLSCACert            string
+	TLSClientCert        string
+	TLSClientKey         string
 }
 
 type InfinitySettingsJson struct {
-	InsecureSkipVerify bool   `json:"tlsSkipVerify,omitempty"`
-	ServerName         string `json:"serverName,omitempty"`
-	TLSClientAuth      bool   `json:"tlsClientAuth,omitempty"`
-	TLSAuthWithCACert  bool   `json:"tlsAuthWithCACert,omitempty"`
-	TimeoutInSeconds   int64  `json:"timeoutInSeconds,omitempty"`
+	ForwardOauthIdentity bool   `json:"oauthPassThru,omitempty"`
+	InsecureSkipVerify   bool   `json:"tlsSkipVerify,omitempty"`
+	ServerName           string `json:"serverName,omitempty"`
+	TLSClientAuth        bool   `json:"tlsClientAuth,omitempty"`
+	TLSAuthWithCACert    bool   `json:"tlsAuthWithCACert,omitempty"`
+	TimeoutInSeconds     int64  `json:"timeoutInSeconds,omitempty"`
 }
 
 func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinitySettings, err error) {
@@ -45,6 +47,7 @@ func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinityS
 		if err := json.Unmarshal(config.JSONData, &infJson); err != nil {
 			return settings, err
 		}
+		settings.ForwardOauthIdentity = infJson.ForwardOauthIdentity
 		settings.InsecureSkipVerify = infJson.InsecureSkipVerify
 		settings.ServerName = infJson.ServerName
 		settings.TLSClientAuth = infJson.TLSClientAuth

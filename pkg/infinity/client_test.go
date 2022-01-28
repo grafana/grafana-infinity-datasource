@@ -135,7 +135,7 @@ func TestInfinityClient_GetResults(t *testing.T) {
 				URL:  "/foo/bar",
 				Type: "json",
 			},
-			wantO: "{\n  \"authenticated\": true, \n  \"user\": \"foo\"\n}\n",
+			wantO: map[string]interface{}(map[string]interface{}{"authenticated": true, "user": "foo"}),
 		},
 		{
 			name: "should throw error when incorrect auth specified",
@@ -157,7 +157,7 @@ func TestInfinityClient_GetResults(t *testing.T) {
 				URL:  fmt.Sprintf("%s%s", mockJSONDomain, mockJSONURL),
 				Type: "json",
 			},
-			wantO: "[\n  {\n    \"name\": \"foo\",\n    \"age\": 20\n  },\n  {\n    \"name\": \"bar\",\n    \"age\": 25\n  }\n]",
+			wantO: []interface{}([]interface{}{map[string]interface{}{"age": 20.0, "name": "foo"}, map[string]interface{}{"age": 25.0, "name": "bar"}}),
 		},
 	}
 	for _, tt := range tests {
@@ -166,12 +166,14 @@ func TestInfinityClient_GetResults(t *testing.T) {
 				Settings:   tt.settings,
 				HttpClient: &http.Client{},
 			}
-			gotO, err := client.GetResults(tt.query)
+			gotO, statusCode, duration, err := client.GetResults(tt.query, map[string]string{})
 			if (err != nil) != tt.wantErr {
 				t.Errorf("GetResults() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			assert.Equal(t, tt.wantO, gotO)
+			assert.NotNil(t, statusCode)
+			assert.NotNil(t, duration)
 		})
 	}
 }

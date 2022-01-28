@@ -6,7 +6,7 @@ import { normalizeURL } from './utils';
 
 export class InfinityProvider {
   constructor(private target: InfinityDataQuery, private datasource: Datasource) {}
-  private async formatResults(res: any) {
+  async formatResults(res: any) {
     const query = this.target;
     query.root_selector = getTemplateSrv().replace(query.root_selector);
     switch (query.type) {
@@ -42,6 +42,9 @@ export class InfinityProvider {
         reject('invalid query type');
       }
     });
+  }
+  queryWithData(data: any) {
+    return this.formatResults(data);
   }
   query() {
     return new Promise((resolve, reject) => {

@@ -15,3 +15,9 @@ contact_links:
   - name: Docs
     url: https://yesoreyeram.github.io/grafana-infinity-datasource
     about: Docs
+  - name: Bug in UQL?
+    url: https://github.com/yesoreyeram/uql
+    about: If you find any bugs in UQL query, create a ticket there.
+  - name: Bug in GROQ?
+    url: https://github.com/sanity-io/groq-js/issues
+    about: If you find any bugs in GROQ query, create a ticket there.

@@ -4,6 +4,7 @@ import { Layout } from '../components/Layout';
 import { HeroSection } from '../components/Hero';
 import { Badges } from '../components/Badges';
 import { Features } from '../components/Features';
+import { InspiringStory } from '../components/InspiringStory';
 
 export const pageQuery = graphql`
   query {
@@ -20,6 +21,9 @@ export default function Home(props: { data: any }) {
     <Layout showSubMenu={false} title="">
       <HeroSection />
       <Features />
+      <div className="container">
+        <InspiringStory />
+      </div>
       <Badges />
     </Layout>
   );

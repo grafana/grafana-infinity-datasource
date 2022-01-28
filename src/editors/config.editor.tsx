@@ -23,22 +23,14 @@ export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<I
   const [timeoutInSeconds, setTimeoutInSeconds] = useState(options.jsonData.timeoutInSeconds || 60);
   return (
     <>
-      <InfoBox>
-        <p>
-          <b>Without any additional configuration, this datasource can work.</b> Optionally, configure any of the below settings.
-        </p>
-        <a className="btn btn-small btn-secondary" target="_blank" href="https://yesoreyeram.github.io/grafana-infinity-datasource" rel="noreferrer">
-          Click here plugin documentation website
-        </a>
-      </InfoBox>
-      <Collapse label="URL" isOpen={urlOpen} collapsible={true} onToggle={(e) => setURLOpen(!urlOpen)}>
-        <div style={{ padding: '0px 10px' }}>
-          <URLEditor options={options} onOptionsChange={onOptionsChange} />
-        </div>
-      </Collapse>
       <Collapse label="Authentication" isOpen={authOpen} collapsible={true} onToggle={(e) => setAuthOpen(!authOpen)}>
         <div style={{ padding: '0px 10px' }}>
           <AuthEditor options={options} onOptionsChange={onOptionsChange} />
+        </div>
+      </Collapse>
+      <Collapse label="URL" isOpen={urlOpen} collapsible={true} onToggle={(e) => setURLOpen(!urlOpen)}>
+        <div style={{ padding: '0px 10px' }}>
+          <URLEditor options={options} onOptionsChange={onOptionsChange} />
         </div>
       </Collapse>
       <Collapse label="Headers" isOpen={headersOpen} collapsible={true} onToggle={(e) => setHeadersOpen(!headersOpen)}>
@@ -78,6 +70,14 @@ export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<I
           <GlobalQueryEditor options={options} onOptionsChange={onOptionsChange} />
         </div>
       </Collapse>
+      <InfoBox style={{ marginBlock: '30px' }}>
+        <p>
+          <b>Without any additional configuration, this datasource can work.</b> Optionally, configure any of the above settings.
+        </p>
+        <a className="btn btn-small btn-secondary" target="_blank" href="https://yesoreyeram.github.io/grafana-infinity-datasource" rel="noreferrer">
+          Click here plugin documentation website
+        </a>
+      </InfoBox>
     </>
   );
 };
