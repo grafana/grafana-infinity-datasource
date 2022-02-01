@@ -8,7 +8,7 @@ type AuthType = 'none' | 'basicAuth' | 'oauthPassThru';
 const authTypes: Array<SelectableValue<AuthType>> = [
   { value: 'none', label: 'None' },
   { value: 'basicAuth', label: 'Basic Authentication' },
-  // { value: 'oauthPassThru', label: 'Forward OAuth' },
+  { value: 'oauthPassThru', label: 'Forward OAuth' },
 ];
 
 export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {

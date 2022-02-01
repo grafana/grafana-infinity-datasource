@@ -108,6 +108,9 @@ func getRequest(settings InfinitySettings, body io.Reader, query Query, requestH
 	if settings.BasicAuthEnabled && (settings.UserName != "" || settings.Password != "") {
 		req.Header.Add("Authorization", "Basic "+base64.StdEncoding.EncodeToString([]byte(settings.UserName+":"+settings.Password)))
 	}
+	if settings.ForwardOauthIdentity {
+		req.Header.Add("Authorization", requestHeaders["Authorization"])
+	}
 	if query.Type == "json" || query.Type == "graphql" {
 		req.Header.Set("Content-Type", "application/json")
 	}
