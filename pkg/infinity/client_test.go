@@ -88,11 +88,12 @@ func Test_getQueryURL(t *testing.T) {
 
 func TestInfinityClient_GetResults(t *testing.T) {
 	tests := []struct {
-		name     string
-		settings infinity.InfinitySettings
-		query    infinity.Query
-		wantO    interface{}
-		wantErr  bool
+		name           string
+		settings       infinity.InfinitySettings
+		requestHeaders map[string]string
+		query          infinity.Query
+		wantO          interface{}
+		wantErr        bool
 	}{
 		{
 			name:     "should return csv when no mode specified",
@@ -151,6 +152,21 @@ func TestInfinityClient_GetResults(t *testing.T) {
 			wantErr: true,
 		},
 		{
+			name: "should respect oauthPassThru",
+			settings: infinity.InfinitySettings{
+				URL:                  "https://httpbin.org",
+				ForwardOauthIdentity: true,
+			},
+			query: infinity.Query{
+				URL:  "/bearer",
+				Type: "json",
+			},
+			requestHeaders: map[string]string{
+				"Authorization": "Bearer 123",
+			},
+			wantO: map[string]interface{}(map[string]interface{}{"authenticated": true, "token": "123"}),
+		},
+		{
 			name:     "should return correct json",
 			settings: infinity.InfinitySettings{},
 			query: infinity.Query{
@@ -166,7 +182,7 @@ func TestInfinityClient_GetResults(t *testing.T) {
 				Settings:   tt.settings,
 				HttpClient: &http.Client{},
 			}
-			gotO, statusCode, duration, err := client.GetResults(tt.query, map[string]string{})
+			gotO, statusCode, duration, err := client.GetResults(tt.query, tt.requestHeaders)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("GetResults() error = %v, wantErr %v", err, tt.wantErr)
 				return
