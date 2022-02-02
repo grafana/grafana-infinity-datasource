@@ -1,4 +1,4 @@
-import { DataFrame, Field, FieldType, Labels, MutableDataFrame, ArrayVector } from '@grafana/data';
+import { DataFrame, Field, FieldType, Labels, MutableDataFrame, ArrayVector, TableData } from '@grafana/data';
 import { InfinityCSVQuery, InfinityGraphQLQuery, InfinityHTMLQuery, InfinityJSONQuery, InfinityQuery, InfinityQueryWithDataSource, InfinityXMLQuery } from './../types';
 export const normalizeURL = (url: string): string => {
   if (url.startsWith('https://github.com')) {
@@ -270,3 +270,6 @@ export function toTimeSeriesMany(data: DataFrame[]): DataFrame[] {
   }
   return result;
 }
+
+export const isTableData = (res: any): res is TableData => res && res.columns;
+export const isDataFrame = (res: any): res is DataFrame => res && res.fields;

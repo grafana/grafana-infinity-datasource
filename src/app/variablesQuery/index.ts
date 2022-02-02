@@ -1,15 +1,24 @@
 import { flatten, defaultsDeep } from 'lodash';
-import { SelectableValue, MetricFindValue } from '@grafana/data';
+import { SelectableValue } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
 import { CollectionVariable } from './Collection';
 import { CollectionLookupVariable } from './CollectionLookup';
 import { JoinVariable } from './Join';
 import { RandomVariable } from './Random';
 import { UnixTimeStampVariable } from './UnixTimeStamp';
-import { VariableQuery, DefaultInfinityQuery } from './../../types';
+import { isTableData, isDataFrame } from './../utils';
+import { VariableQuery, DefaultInfinityQuery, MetricFindValue } from './../../types';
 
 export const getTemplateVariablesFromResult = (res: any): MetricFindValue[] => {
-  if (res.columns && res.columns.length > 0) {
+  if (isDataFrame(res) && res.fields.length > 0) {
+    let out: MetricFindValue[] = [];
+    for (let index = 0; index < res.length; index++) {
+      let text = res.fields[0].values.get(index);
+      let value = res.fields.length === 2 ? res.fields[1].values.get(index) : text;
+      out.push({ value, text });
+    }
+    return out;
+  } else if (isTableData(res) && res.columns.length > 0) {
     if (res.columns.length === 2) {
       return res.rows.map((row: string[]) => {
         return {
