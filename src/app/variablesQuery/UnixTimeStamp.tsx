@@ -77,8 +77,8 @@ export const UnixTimeStampVariable = (query: string): Array<SelectableValue<stri
   }
   return [
     {
-      value: query,
-      text: value,
+      value: value.toString(),
+      text: query,
     },
   ];
 };
