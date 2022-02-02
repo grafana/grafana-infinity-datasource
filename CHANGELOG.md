@@ -5,7 +5,8 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 ## [ 0.8.1 ]
 
 - GROQ Query support
-- Query inspector now shows data in meta data. (frame->schema->meta->custom)
+- Forward OAuth identity support
+- Query inspector now shows actual data in response meta data. (frame->schema->meta->custom)
 
 ## [ 0.8.0 ]
 

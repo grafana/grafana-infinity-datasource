@@ -31,3 +31,11 @@ More details about the URL and related settings can be found in [url](/wiki/url)
 If you want your datasource to connect via proxy, set the environment appropriate environment variables. HTTP_PROXY, HTTPS_PROXY and NO_PROXY. HTTPS_PROXY takes precedence over HTTP_PROXY for https requests.
 
 > proxy support is available from v0.7.10
+
+## Authentication
+
+Infinity datasource supports following authentication methods
+
+- Basic authentication ( username and password )
+- API Key authentications ( HTTP Header based authentication )
+- OAuth passthrough ( Forward OAuth identity from grafana )

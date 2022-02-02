@@ -37,6 +37,7 @@ If you need an advanced version of the datasource, use the following format.
   basicAuth: true
   basicAuthUser: <<YOUR USER NAME. Example -- github_id>>
   jsonData:
+    oauthPassThru: <<true or false>> -- false by default. Set to true if you want to pass the auth token from grafana
     tlsSkipVerify: <<true or false>> -- false by default
     tlsAuth: <<true or false>> -- false by default
     tlsAuthWithCACert: <<true or false>> -- false by default
@@ -59,7 +60,11 @@ If you want to provision custom header, you can use the following syntax
 jsonData:
   httpHeaderName1: <<Header1 Key>>
   httpHeaderName2: <<Header2 Key>>
+  httpHeaderName3: X-API-Token
+  httpHeaderName4: <<Header4 Key>>
 secureJsonData:
   httpHeaderValue1: <<Header1 Value>>
   httpHeaderValue2: <<Header2 Value>>
+  httpHeaderValue2: xxxx-1234-xxxx-yyyy-1234
+  httpHeaderValue4: <<Header4 Value>>
 ```
