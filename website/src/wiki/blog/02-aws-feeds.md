@@ -26,7 +26,7 @@ In your dashboard, Once you create a annotation you will perform the following s
 - Create `pubDate` column and mark this as 'DateTime'
 - Finally select `guid[0]._` as string. This is your link. So you can alias this to link
 
-![image](https://user-images.githubusercontent.com/153843/151575928-4fc9f188-7f9a-43c5-a92a-6069fe434e6a.png)
+![image](https://user-images.githubusercontent.com/153843/151575928-4fc9f188-7f9a-43c5-a92a-6069fe434e6a.png#center)
 
 Reference feed item is given below
 

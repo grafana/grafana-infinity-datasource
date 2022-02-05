@@ -42,9 +42,9 @@ export default function Template({ data }: TemplateProps) {
           {frontmatter.title} - {data.site.siteMetadata.title}
         </title>
       </Helmet>
-      <div className="blog-post-container">
+      <div className="container mx-auto px-12">
         <div className="blog-post">
-          <div className="container py-4">
+          <div className="py-8">
             {frontmatter.slug && frontmatter.slug.startsWith('/blog/') && (
               <div style={{ marginBottom: '20px' }}>
                 <a href="/" className="link">

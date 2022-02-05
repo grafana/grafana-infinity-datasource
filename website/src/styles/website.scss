@@ -2,6 +2,59 @@
 @tailwind components;
 @tailwind utilities;
 
+.blog-post {
+  line-height: 2rem;
+  h2 {
+    @apply text-3xl text-teal-500 my-4;
+  }
+  h3 {
+    @apply text-2xl text-teal-500 my-4;
+  }
+  img[src*='#center'] {
+    display: block;
+    margin: auto;
+    width: 80%;
+    max-width: 900px;
+    margin: 10px auto;
+    @apply my-4 rounded rounded-lg border-teal-900 border-2 hover:border-teal-200;
+  }
+  table {
+    width: 80%;
+    max-width: 900px;
+    border: 1px solid;
+    margin: 20px auto;
+    th {
+      border: 1px solid;
+    }
+    td {
+      border: 1px solid;
+      @apply px-2 py-1;
+    }
+  }
+  blockquote {
+    @apply my-4 border-l-2 border-dotted px-8 bg-slate-900 py-2;
+  }
+  code {
+    font-family: Consolas, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New;
+    @apply text-teal-100 bg-slate-900 p-1;
+  }
+  ul {
+    margin-left: 20px;
+    margin-block: 10px;
+    li {
+      list-style: disc;
+      padding: 5px;
+    }
+  }
+  .deckgo-highlight-code-carbon {
+    display: block;
+    width: 80%;
+    max-width: 900px;
+    margin: 10px auto;
+    @apply my-8;
+  }
+}
+
 // $gray1: #fcfcfc;
 // $gray2: #f8f8f8;
 // $gray3: #f3f3f3;
