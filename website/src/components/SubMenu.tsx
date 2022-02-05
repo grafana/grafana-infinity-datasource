@@ -8,7 +8,7 @@ interface SubMenuLinkProps {
 }
 const SubMenuLink = (props: SubMenuLinkProps) => {
   return (
-    <Link className={`nav-link ${props.className}`} to={props.to}>
+    <Link className="mr-2 px-2 py-1 rounded font-light text-sm hover:bg-white hover:text-black" to={props.to}>
       {props.children}
     </Link>
   );
@@ -16,27 +16,22 @@ const SubMenuLink = (props: SubMenuLinkProps) => {
 
 export const SubMenu = () => {
   return (
-    <>
-      <div className="nav-scroller shadow-sm">
-        <nav id="subnav" className="nav nav-underline d-flex" aria-label="Secondary navigation">
-          <span className="ml-4"></span>
-          <SubMenuLink to="/wiki/uql">UQL</SubMenuLink>
-          <SubMenuLink to="/wiki/json">JSON</SubMenuLink>
-          <SubMenuLink to="/wiki/csv">CSV</SubMenuLink>
-          <SubMenuLink to="/wiki/graphql">GraphQL</SubMenuLink>
-          <SubMenuLink to="/wiki/xml">XML</SubMenuLink>
-          <SubMenuLink to="/wiki/groq">GROQ</SubMenuLink>
-          <SubMenuLink to="/wiki/html">HTML</SubMenuLink>
-          <SubMenuLink to="/wiki/url">URL</SubMenuLink>
-          <SubMenuLink to="/wiki/time-formats">Time Formats</SubMenuLink>
-          <SubMenuLink to="/wiki/template-variables">Template Variables</SubMenuLink>
-          <SubMenuLink to="/wiki/annotations">Annotations</SubMenuLink>
-          <SubMenuLink to="/wiki/node-graph">Node Graph</SubMenuLink>
-          <SubMenuLink to="/wiki/global-queries">Global Queries</SubMenuLink>
-          <SubMenuLink to="/wiki/configuration">Configuration</SubMenuLink>
-          <SubMenuLink to="/wiki/provisioning">Provisioning</SubMenuLink>
-        </nav>
-      </div>
-    </>
+    <nav aria-label="Secondary navigation" className="pl-3 bg-teal-900 py-2">
+      <SubMenuLink to="/wiki/uql">UQL</SubMenuLink>
+      <SubMenuLink to="/wiki/json">JSON</SubMenuLink>
+      <SubMenuLink to="/wiki/csv">CSV</SubMenuLink>
+      <SubMenuLink to="/wiki/graphql">GraphQL</SubMenuLink>
+      <SubMenuLink to="/wiki/xml">XML</SubMenuLink>
+      <SubMenuLink to="/wiki/groq">GROQ</SubMenuLink>
+      <SubMenuLink to="/wiki/html">HTML</SubMenuLink>
+      <SubMenuLink to="/wiki/url">URL</SubMenuLink>
+      <SubMenuLink to="/wiki/time-formats">Time Formats</SubMenuLink>
+      <SubMenuLink to="/wiki/template-variables">Template Variables</SubMenuLink>
+      <SubMenuLink to="/wiki/annotations">Annotations</SubMenuLink>
+      <SubMenuLink to="/wiki/node-graph">Node Graph</SubMenuLink>
+      <SubMenuLink to="/wiki/global-queries">Global Queries</SubMenuLink>
+      <SubMenuLink to="/wiki/configuration">Configuration</SubMenuLink>
+      <SubMenuLink to="/wiki/provisioning">Provisioning</SubMenuLink>
+    </nav>
   );
 };
