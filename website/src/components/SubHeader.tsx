@@ -19,8 +19,8 @@ export const SubHeader = (props: SubHeaderProps) => {
     `
   );
   return (
-    <section id="subheader" className="subheader py-5 text-center">
-      <h1>{props.title}</h1>
+    <section className="text-center py-12 bg-teal-700">
+      <h1 className="font-normal text-4xl">{props.title}</h1>
     </section>
   );
 };
