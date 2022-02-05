@@ -14,8 +14,10 @@
     "@mdx-js/mdx": "^1.6.22",
     "@mdx-js/react": "^1.6.22",
     "@popperjs/core": "^2.9.2",
+    "@radix-ui/react-dialog": "^0.1.5",
     "@stitches/react": "^1.2.6",
     "bootstrap": "^5.0.0",
+    "fuse.js": "^6.5.3",
     "gatsby": "^4.4.0",
     "gatsby-plugin-feed": "^4.4.0",
     "gatsby-plugin-mdx": "^2.5.0",
@@ -33,6 +35,7 @@
     "react-helmet": "^6.1.0",
     "react-slideshow-image": "^3.6.0",
     "showdown": "^1.9.1",
+    "tinykeys": "^1.4.0",
     "tslib": "^2.3.1",
     "typewriter-effect": "^2.18.2"
   },

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'gatsby';
+import { SearchBox } from './SearchBox';
 import { ThemeSwitcher } from './ThemeSwitcher';
 
 interface ListLinkProps {
@@ -46,6 +47,11 @@ export const Header = (props: HeaderProps) => {
               <ListLink to="/wiki/annotations">Annotations</ListLink>
             </ul>
             <ul className="navbar-nav d-flex mb-2 mb-lg-0">
+              <li className="nav-item">
+                <span className="nav-link">
+                  <SearchBox />
+                </span>
+              </li>
               <li className="nav-item">
                 <span className="nav-link">
                   <ThemeSwitcher />
