@@ -76,8 +76,8 @@ export const SearchBox = () => {
         </span>
       )}
       <a onClick={() => setSearchPopupStatus(!searchPopupStatus)}>
-        <i className={`fas fa-search`} onClick={() => {}}></i>
-        <span className="px-2 small-screen-only">Search</span>
+        <i className="fas fa-search" onClick={() => {}}></i>
+        <span className="lg:hidden ml-2">Search</span>
       </a>
     </>
   );

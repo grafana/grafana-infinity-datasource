@@ -6,7 +6,7 @@ export const ThemeSwitcher = () => {
     document.getElementsByTagName('html')[0].setAttribute('style', 'color-scheme : dark;');
   }, []);
   return (
-    <a onClick={() => {}}>
+    <span>
       <i
         className={`fas fa-moon`}
         onClick={() => {
@@ -16,7 +16,7 @@ export const ThemeSwitcher = () => {
           document.getElementsByTagName('html')[0].setAttribute('style', `color-scheme : ${isLightTheme ? 'dark' : 'light'};`);
         }}
       ></i>
-      <span className="px-2 small-screen-only">Switch Theme</span>
-    </a>
+      <span className="lg:hidden ml-2">Switch Theme</span>
+    </span>
   );
 };
