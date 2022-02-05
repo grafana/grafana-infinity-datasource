@@ -23,7 +23,7 @@ const ListLink = (props: ListLinkProps) => (
         </span>
       )
     ) : (
-      <Link className="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-teal-500 mr-4" aria-current="page" to={props.to}>
+      <Link className="block mt-4 lg:inline-block lg:mt-0 text-white mr-4 hover:border-transparent hover:bg-white p-1 rounded hover:text-black" aria-current="page" to={props.to}>
         {props.children}
       </Link>
     )}

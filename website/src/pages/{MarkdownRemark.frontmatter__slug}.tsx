@@ -2,11 +2,6 @@ import React from 'react';
 import { graphql, Link } from 'gatsby';
 import { Helmet } from 'react-helmet';
 import { Layout } from '../components/Layout';
-import { InspiringStory } from '../components/InspiringStory';
-
-export interface TemplateProps {
-  data: any;
-}
 
 export const pageQuery = graphql`
   query ($id: String!) {
@@ -32,7 +27,7 @@ export const pageQuery = graphql`
   }
 `;
 
-export default function Template({ data }: TemplateProps) {
+export default function Template({ data }: { data: any }) {
   const { markdownRemark } = data;
   const { frontmatter, html } = markdownRemark;
   return (
@@ -50,31 +45,40 @@ export default function Template({ data }: TemplateProps) {
                 <a href="/" className="link">
                   <i className="fa fa-home" style={{ marginRight: '10px' }}></i>
                 </a>
-                &nbsp;&gt;&nbsp;&nbsp;
-                <Link to="/blog" className="link" style={{ color: 'red ', textDecoration: 'none', fontWeight: 'bolder' }}>
+                <i className="fa fa-arrow-right px-2"></i>
+                <Link to="/blog" className="link" style={{ textDecoration: 'none', fontWeight: 'bolder' }}>
                   Blog
                 </Link>
-                &nbsp;&gt;&nbsp;&nbsp;
+                <i className="fa fa-arrow-right px-2"></i>
                 {frontmatter.title}
               </div>
             )}
             <div className="blog-post-content" dangerouslySetInnerHTML={{ __html: html }} />
-            <InspiringStory />
           </div>
         </div>
       </div>
       {(frontmatter.previous_page_title || frontmatter.next_page_title) && (
-        <div id="prev-next-nav">
-          <div className="container py-2">
-            <div className="row">
+        <div className="bg-teal-800">
+          <div className="container mx-auto">
+            <div className="flex">
               {frontmatter.previous_page_title && (
-                <div className="col-6 text-end item rounded p-2">
-                  <Link to={frontmatter.previous_page_slug}>&lt;&nbsp;&nbsp;{frontmatter.previous_page_title}</Link>
+                <div className="flex-none w-1/2 text-right p-4 hover:text-teal-100">
+                  <b className="font-light">Previous page</b>
+                  <br />
+                  <Link className="font-bold text-3xl" to={frontmatter.previous_page_slug}>
+                    <i className="fas fa-arrow-left mx-4"></i>
+                    {frontmatter.previous_page_title}
+                  </Link>
                 </div>
               )}
               {frontmatter.next_page_title && (
-                <div className="col-6 text-start item rounded p-2">
-                  <Link to={frontmatter.next_page_slug}>{frontmatter.next_page_title}&nbsp;&nbsp;&gt;</Link>
+                <div className="flex-none w-1/2 text-left p-4 hover:text-teal-100">
+                  <b className="font-light">Next page</b>
+                  <br />
+                  <Link className="font-bold text-3xl" to={frontmatter.next_page_slug}>
+                    {frontmatter.next_page_title}
+                    <i className="fas fa-arrow-right mx-4"></i>
+                  </Link>
                 </div>
               )}
             </div>

@@ -42,24 +42,20 @@ export const pageQuery = graphql`
 export default function Template({ data }: TemplateProps) {
   return (
     <Layout showSubMenu={true} title="Blog">
-      <div className="blog-post-container">
-        <div className="blog-post">
-          <div className="container py-4">
-            <h2>Recent blog posts</h2>
-            <div className="blog-post-content">
-              <ul style={{ margin: '0px', listStyle: 'none', padding: '0px' }}>
-                {data.allMarkdownRemark.edges.map((p) => {
-                  return (
-                    <li style={{ marginBlock: '10px', listStyle: 'none', paddingBlock: '5px' }}>
-                      <Link className="link" to={p.node.frontmatter.slug}>
-                        <b>{p.node.frontmatter.title}</b> - <span style={{ color: 'grey' }}>{p.node.frontmatter.date}</span>
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          </div>
+      <div className="container mx-auto p-8">
+        <h2 className="text-teal-100 text-xl font-bolder my-8">Recent blog posts</h2>
+        <div>
+          <ul style={{ margin: '0px', listStyle: 'none', padding: '0px' }}>
+            {data.allMarkdownRemark.edges.map((p) => {
+              return (
+                <li style={{ marginBlock: '10px', listStyle: 'none', paddingBlock: '5px' }}>
+                  <Link className="link" to={p.node.frontmatter.slug}>
+                    <b>{p.node.frontmatter.title}</b> - <span style={{ color: 'grey' }}>{p.node.frontmatter.date}</span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
         </div>
       </div>
     </Layout>
