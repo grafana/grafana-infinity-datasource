@@ -1,14 +1,13 @@
 import React from 'react';
 import { Link } from 'gatsby';
 
-interface FooterMenuItemProps {
-  to: string;
-  internal: boolean;
-  children?: React.ReactNode;
-}
-const FooterMenuitem = (props: FooterMenuItemProps) => {
+const FooterSectionHeading = (props: { children?: React.ReactNode }) => {
+  return <h4 className="font-bold text-l my-4 text-teal-300">{props.children}</h4>;
+};
+
+const FooterMenuitem = (props: { to: string; internal: boolean; children?: React.ReactNode }) => {
   return (
-    <li className="my-2 footer-menu-item">
+    <li className="my-2">
       {props.internal ? (
         <Link to={props.to}>{props.children}</Link>
       ) : (
@@ -23,11 +22,11 @@ const FooterMenuitem = (props: FooterMenuItemProps) => {
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
   return (
-    <footer id="footer" className="footer mt-auto py-5">
-      <div className="container">
-        <div className="row">
-          <div className="col-12 col-md">
-            <h4 className="mb-4 fw-light">Setup</h4>
+    <footer className="bg-slate-900 py-4">
+      <div className="container mx-auto">
+        <div className="flex py-4">
+          <div className="flex-none w-1/5">
+            <FooterSectionHeading>Setup</FooterSectionHeading>
             <ul className="list-unstyled">
               <FooterMenuitem to="/wiki/installation" internal={true}>
                 Installation
@@ -46,11 +45,11 @@ export const Footer = () => {
               </FooterMenuitem>
             </ul>
           </div>
-          <div className="col-12 col-md">
-            <h4 className="mb-4 fw-light">
+          <div className="flex-none w-1/5">
+            <FooterSectionHeading>
               <Link to="/welcome">Features</Link>
-            </h4>
-            <ul className="list-unstyled">
+            </FooterSectionHeading>
+            <ul>
               <FooterMenuitem to="/wiki/csv" internal={true}>
                 CSV
               </FooterMenuitem>
@@ -71,11 +70,11 @@ export const Footer = () => {
               </FooterMenuitem>
             </ul>
           </div>
-          <div className="col-12 col-md">
-            <h4 className="mb-4 fw-light">
+          <div className="flex-none w-1/5">
+            <FooterSectionHeading>
               <Link to="/community">Community</Link>
-            </h4>
-            <ul className="list-unstyled">
+            </FooterSectionHeading>
+            <ul>
               <FooterMenuitem to="https://github.com/yesoreyeram/grafana-infinity-datasource" internal={false}>
                 Contributing
               </FooterMenuitem>
@@ -93,9 +92,9 @@ export const Footer = () => {
               </FooterMenuitem>
             </ul>
           </div>
-          <div className="col-12 col-md">
-            <h4 className="mb-4 fw-light">Examples</h4>
-            <ul className="list-unstyled">
+          <div className="flex-none w-1/5">
+            <FooterSectionHeading>Examples</FooterSectionHeading>
+            <ul>
               <FooterMenuitem to="/blog" internal={true}>
                 Blog
               </FooterMenuitem>
@@ -110,9 +109,9 @@ export const Footer = () => {
               </FooterMenuitem>
             </ul>
           </div>
-          <div className="col-12 col-md">
-            <h4 className="mb-4 fw-light">More from Author</h4>
-            <ul className="list-unstyled">
+          <div className="flex-none w-1/5">
+            <FooterSectionHeading>More from Author</FooterSectionHeading>
+            <ul>
               <FooterMenuitem to="https://github.com/yesoreyeram/grafana-infinity-panel" internal={false}>
                 Infinity Panel
               </FooterMenuitem>
@@ -137,8 +136,8 @@ export const Footer = () => {
             </ul>
           </div>
         </div>
-        <div className="row text-center mt-4">
-          <span className="muted ">Copyright © 2020-{currentYear} - Sriramajeyam Sugumaran</span>
+        <div className="text-center text-slate-100 p-4">
+          <span>Copyright © 2020-{currentYear} - Sriramajeyam Sugumaran</span>
         </div>
       </div>
     </footer>
