@@ -1,12 +1,9 @@
 import React from 'react';
-import { Link, navigate } from 'gatsby';
+import { Link } from 'gatsby';
 
 export const Feature = (props: { title: string; to: string; description: string }) => {
   return (
-    <Link
-      to={props.to}
-      className="bg-teal-900 text-teal-100 p-10 m-3 rounded-tl-3xl rounded-br-3xl hover:rounded-tl-none hover:rounded-br-none hover:rounded-tr-3xl hover:rounded-bl-3xl hover:bg-teal-100 hover:text-teal-900 transition-all duration-1000 text-center"
-    >
+    <Link to={props.to} className="p-10 m-3 text-center">
       <span className="font-bolder text-3xl">{props.title}</span>
       <p>{props.description}</p>
     </Link>

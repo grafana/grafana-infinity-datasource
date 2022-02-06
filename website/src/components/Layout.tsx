@@ -2,8 +2,8 @@ import React from 'react';
 import { useStaticQuery, graphql } from 'gatsby';
 import { Helmet } from 'react-helmet';
 import { defineCustomElements as deckDeckGoHighlightElement } from '@deckdeckgo/highlight-code/dist/loader';
-import { SubMenu } from './SubMenu';
-import { Header } from './Header';
+import { SubMenu } from './menu/SubMenu';
+import { Header } from './menu/Header';
 import { Footer } from './Footer';
 import { SubHeader } from './SubHeader';
 

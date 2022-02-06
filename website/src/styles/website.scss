@@ -5,10 +5,10 @@
 .blog-post {
   line-height: 2rem;
   h2 {
-    @apply text-3xl text-teal-500 my-4;
+    @apply text-3xl my-4;
   }
   h3 {
-    @apply text-2xl text-teal-500 my-4;
+    @apply text-2xl my-4;
   }
   img[src*='#center'] {
     display: block;
@@ -16,7 +16,7 @@
     width: 80%;
     max-width: 900px;
     margin: 10px auto;
-    @apply my-4 rounded rounded-lg border-teal-900 border-2 hover:border-teal-200;
+    @apply my-4 rounded rounded-lg border-2;
   }
   table {
     width: 80%;
@@ -32,11 +32,11 @@
     }
   }
   blockquote {
-    @apply my-4 border-l-2 border-dotted px-8 bg-slate-900 py-2;
+    @apply my-4 border-l-2 border-dotted px-8 py-2;
   }
   code {
     font-family: Consolas, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New;
-    @apply text-teal-100 bg-slate-900 p-1;
+    @apply p-1;
   }
   ul {
     margin-left: 20px;
@@ -53,8 +53,4 @@
     margin: 10px auto;
     @apply my-8 text-lg;
   }
-}
-.home {
-  background: linear-gradient(100deg, rgba(0, 75, 4, 0.24) 3.65%, rgba(0, 136, 91, 0) 40.32%), linear-gradient(200deg, rgba(21, 209, 131, 0.16) 0%, rgba(25, 209, 117, 0) 36.63%),
-    linear-gradient(100deg, rgba(19, 255, 184, 0) 29.79%, rgba(19, 255, 165, 0.01) 85.72%), rgba(52, 71, 54, 0.06);
 }

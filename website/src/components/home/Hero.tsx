@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'gatsby';
-import { TypeWriter } from './TypeWritter';
+import { TypeWriter } from './TypeWriter';
 
 export const HeroSection = () => {
   const [hasRan, setHasRan] = useState(false);
@@ -22,24 +22,24 @@ export const HeroSection = () => {
     <div
       style={{
         width: '100%',
-        height: `${screenSize.height - 300}px`,
+        height: `${screenSize.height - 40}px`,
       }}
       className="flex flex-col place-content-center px-10 hero"
     >
       <div className="px-10">
         <h1 className="font-bold text-6xl mb-10">Grafana Infinity data source</h1>
-        <div className="font-normal my-6 text-2xl text-teal-300">
+        <div className="font-normal my-6 text-2xl">
           <TypeWriter />
         </div>
         <p className="font-lighter my-10">Visualize data from JSON, CSV, XML, GraphQL, HTML &amp; REST APIs. Also turns any website into grafana dashboard.</p>
         <div className="mt-10">
-          <Link className="bg-teal-900 p-3 mr-6" to="/getting-started">
+          <Link className="p-3 mr-6" to="/getting-started">
             Getting started
           </Link>
-          <a className="bg-teal-900 p-3 mr-6" href="https://grafana-infinity-datasource.herokuapp.com/d/try/try?orgId=1&editPanel=2" target="_blank" rel="noreferrer">
+          <a className="p-3 mr-6" href="https://grafana-infinity-datasource.herokuapp.com/d/try/try?orgId=1&editPanel=2" target="_blank" rel="noreferrer">
             Try online
           </a>
-          <Link className="bg-teal-900 p-3 mr-6" to="/blog">
+          <Link className="p-3 mr-6" to="/blog">
             Blog
           </Link>
         </div>

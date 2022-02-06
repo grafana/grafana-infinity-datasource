@@ -2,10 +2,6 @@ import React from 'react';
 import { graphql } from 'gatsby';
 import { Layout } from '../components/Layout';
 
-export interface TemplateProps {
-  data: any;
-}
-
 export const pageQuery = graphql`
   query {
     site {
@@ -16,15 +12,11 @@ export const pageQuery = graphql`
   }
 `;
 
-export default function Template({ data }: TemplateProps) {
+export default function Template({ data }: { data: any }) {
   return (
     <Layout showSubMenu={true} title="LICENSE">
-      <div className="blog-post-container">
-        <div className="blog-post">
-          <div className="container py-4 px-4">
-            <pre style={{ width: '60%', margin: '0px auto' }}>{data.site.siteMetadata.license}</pre>
-          </div>
-        </div>
+      <div className="container mx-auto py-4">
+        <pre style={{ marginLeft: '25%' }}>{data.site.siteMetadata.license}</pre>
       </div>
     </Layout>
   );

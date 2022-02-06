@@ -1,21 +1,10 @@
 import React from 'react';
-import { graphql } from 'gatsby';
 import { Layout } from '../components/Layout';
-import { HeroSection } from '../components/Hero';
-import { Features } from '../components/Features';
-import { InspiringStory } from '../components/InspiringStory';
+import { HeroSection } from '../components/home/Hero';
+import { Features } from '../components/home/Features';
+import { InspiringStory } from '../components/home/InspiringStory';
 
-export const pageQuery = graphql`
-  query {
-    site {
-      siteMetadata {
-        wallpaper
-      }
-    }
-  }
-`;
-
-export default function Home(props: { data: any }) {
+export default function Home() {
   return (
     <Layout showSubMenu={false} title="">
       <div className="home">

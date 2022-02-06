@@ -4,6 +4,8 @@ import Fuse from 'fuse.js';
 import * as Dialog from '@radix-ui/react-dialog';
 import tinykeys from 'tinykeys';
 
+const TOTAL_RESULTS_TO_RENDER = 4;
+
 export const SearchBox = () => {
   const [searchPopupStatus, setSearchPopupStatus] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -21,7 +23,7 @@ export const SearchBox = () => {
           <Dialog.Dialog open={searchPopupStatus}>
             <Dialog.Overlay
               style={{
-                backgroundColor: 'rgba(0,0,0,0.5)',
+                backgroundColor: 'rgba(0,0,0,0.8)',
                 position: 'fixed',
                 inset: 0,
                 top: '-76px',
@@ -51,6 +53,7 @@ export const SearchBox = () => {
                 maxHeight: '420px',
                 overflow: 'hidden',
                 padding: 25,
+                zIndex: 9999,
               }}
             >
               <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -58,27 +61,27 @@ export const SearchBox = () => {
                   <i className="fas fa-window-close"></i>
                 </Dialog.Close>
               </div>
-              <h4>Search Infinity Docs</h4>
+              <h4 className="font-thin text-3xl">Search Infinity Docs</h4>
               <br />
               <input
                 type="text"
                 style={{ fontSize: '24px', width: '100%', background: 'transparent', color: 'black' }}
+                className="p-4"
                 autoFocus
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.currentTarget.value)}
                 placeholder="Enter your search term here"
               ></input>
               <br />
-              <br />
               <SearchResults searchTerm={searchTerm}></SearchResults>
             </Dialog.Content>
           </Dialog.Dialog>
         </span>
       )}
-      <a onClick={() => setSearchPopupStatus(!searchPopupStatus)}>
+      <button onClick={() => setSearchPopupStatus(!searchPopupStatus)} title="Search docs">
         <i className="fas fa-search" onClick={() => {}}></i>
         <span className="lg:hidden ml-2">Search</span>
-      </a>
+      </button>
     </>
   );
 };
@@ -96,10 +99,10 @@ const SearchResults = (props: { searchTerm: string }) => {
     <>
       {results && results.length > 0 ? (
         <>
-          {results.slice(0, 4).map((r, i) => (
+          {results.slice(0, TOTAL_RESULTS_TO_RENDER).map((r, i) => (
             <nav key={i}>
               <Link to={r.item.slug} style={{ paddingBlock: '30px' }}>
-                <li style={{ marginBlock: '10px', padding: '10px', border: '1px solid gray' }}>
+                <li className="my-10 px-3 list-none">
                   <span style={{ color: 'black' }}>{r.item.title}</span>
                 </li>
               </Link>

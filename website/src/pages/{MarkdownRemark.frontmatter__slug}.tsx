@@ -43,7 +43,7 @@ export default function Template({ data }: { data: any }) {
             {frontmatter.slug && frontmatter.slug.startsWith('/blog/') && (
               <div style={{ marginBottom: '20px' }}>
                 <a href="/" className="link">
-                  <i className="fa fa-home" style={{ marginRight: '10px' }}></i>
+                  <i className="fa fa-home"></i>
                 </a>
                 <i className="fa fa-arrow-right px-2"></i>
                 <Link to="/blog" className="link" style={{ textDecoration: 'none', fontWeight: 'bolder' }}>
@@ -58,11 +58,11 @@ export default function Template({ data }: { data: any }) {
         </div>
       </div>
       {(frontmatter.previous_page_title || frontmatter.next_page_title) && (
-        <div className="bg-teal-800">
+        <div>
           <div className="container mx-auto">
             <div className="flex">
               {frontmatter.previous_page_title && (
-                <div className="flex-none w-1/2 text-right p-4 hover:text-teal-100">
+                <div className="flex-none w-1/2 text-right p-4">
                   <b className="font-light">Previous page</b>
                   <br />
                   <Link className="font-bold text-3xl" to={frontmatter.previous_page_slug}>
@@ -72,7 +72,7 @@ export default function Template({ data }: { data: any }) {
                 </div>
               )}
               {frontmatter.next_page_title && (
-                <div className="flex-none w-1/2 text-left p-4 hover:text-teal-100">
+                <div className="flex-none w-1/2 text-left p-4">
                   <b className="font-light">Next page</b>
                   <br />
                   <Link className="font-bold text-3xl" to={frontmatter.next_page_slug}>

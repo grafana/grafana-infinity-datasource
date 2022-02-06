@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'gatsby';
 
 const FooterSectionHeading = (props: { children?: React.ReactNode }) => {
-  return <h4 className="font-bold text-l my-4 text-teal-300">{props.children}</h4>;
+  return <h4 className="font-bold text-l my-4">{props.children}</h4>;
 };
 
 const FooterMenuitem = (props: { to: string; internal: boolean; children?: React.ReactNode }) => {
@@ -22,7 +22,7 @@ const FooterMenuitem = (props: { to: string; internal: boolean; children?: React
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
   return (
-    <footer className="bg-slate-900 py-4">
+    <footer className="py-4">
       <div className="container mx-auto">
         <div className="flex py-4">
           <div className="flex-none w-1/5">
@@ -136,7 +136,7 @@ export const Footer = () => {
             </ul>
           </div>
         </div>
-        <div className="text-center text-slate-100 p-4">
+        <div className="text-center p-4">
           <span>Copyright © 2020-{currentYear} - Sriramajeyam Sugumaran</span>
         </div>
       </div>

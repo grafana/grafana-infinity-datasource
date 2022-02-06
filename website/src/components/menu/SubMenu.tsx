@@ -8,7 +8,7 @@ interface SubMenuLinkProps {
 }
 const SubMenuLink = (props: SubMenuLinkProps) => {
   return (
-    <Link className="mr-2 px-2 py-1 rounded font-light text-sm hover:bg-white hover:text-black" to={props.to}>
+    <Link className="mr-2 px-2 py-1 rounded font-light text-sm" to={props.to}>
       {props.children}
     </Link>
   );
@@ -16,7 +16,7 @@ const SubMenuLink = (props: SubMenuLinkProps) => {
 
 export const SubMenu = () => {
   return (
-    <nav aria-label="Secondary navigation" className="pl-3 bg-teal-900 py-2">
+    <nav aria-label="Secondary navigation" className="pl-3 py-2">
       <SubMenuLink to="/wiki/uql">UQL</SubMenuLink>
       <SubMenuLink to="/wiki/json">JSON</SubMenuLink>
       <SubMenuLink to="/wiki/csv">CSV</SubMenuLink>

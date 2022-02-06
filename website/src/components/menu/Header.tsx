@@ -1,54 +1,19 @@
 import React from 'react';
 import { Link } from 'gatsby';
-import { SearchBox } from './SearchBox';
-import { ThemeSwitcher } from './ThemeSwitcher';
+import { SearchBox } from '../common/SearchBox';
+import { ThemeSwitcher } from '../common/ThemeSwitcher';
 
-interface ListLinkProps {
-  to?: string;
-  children?: React.ReactNode;
-  right?: boolean;
-  special?: boolean;
-}
-
-const ListLink = (props: ListLinkProps) => (
-  <>
-    {props.right ? (
-      props.special ? (
-        <span className={`block lg:inline-block text-sm px-2 py-2 ml-2 leading-none rounded text-teal-500 border-white hover:border-transparent hover:text-black hover:bg-white mt-4 lg:mt-0`}>
-          {props.children}
-        </span>
-      ) : (
-        <span className={`block lg:inline-block text-sm px-2 py-2 ml-2 leading-none rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0`}>
-          {props.children}
-        </span>
-      )
-    ) : (
-      <Link className="block mt-4 lg:inline-block lg:mt-0 text-white mr-4 hover:border-transparent hover:bg-white p-1 rounded hover:text-black" aria-current="page" to={props.to}>
-        {props.children}
-      </Link>
-    )}
-  </>
-);
-
-interface HeaderProps {
-  title: string;
-}
-
-export const Header = (props: HeaderProps) => {
-  const onToggle = () => {
-    const doc = document.querySelector('.offcanvas-collapse');
-    doc?.classList.toggle('open');
-  };
+export const Header = (props: { title: string }) => {
   return (
     <>
-      <nav className="flex items-center justify-between flex-wrap bg-black p-3">
-        <div className="flex items-center flex-shrink-0 text-white mr-6">
+      <nav className="flex items-center justify-between flex-wrap p-3">
+        <div className="flex items-center flex-shrink-0 mr-6">
           <Link to="/">
-            <span className="font-semibold text-xl tracking-tight">{props.title}</span>
+            <span className="font-bolder text-xl tracking-tight">{props.title}</span>
           </Link>
         </div>
         <div className="block lg:hidden">
-          <button className="flex items-center px-3 py-2 border rounded text-white border-text-teal-500 hover:text-white hover:border-white">
+          <button className="flex items-center px-3 py-2 border rounded">
             <svg className="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
               <title>Menu</title>
               <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
@@ -114,3 +79,19 @@ export const Header = (props: HeaderProps) => {
     </>
   );
 };
+
+const ListLink = (props: { to?: string; children?: React.ReactNode; right?: boolean; special?: boolean }) => (
+  <>
+    {props.right ? (
+      props.special ? (
+        <span className={`block lg:inline-block text-sm px-2 py-2 ml-2 leading-none rounded mt-4 lg:mt-0`}>{props.children}</span>
+      ) : (
+        <span className={`block lg:inline-block text-sm px-2 py-2 ml-2 leading-none rounded mt-4 lg:mt-0`}>{props.children}</span>
+      )
+    ) : (
+      <Link className="block lg:inline-block text-sm px-2 py-2 ml-2 leading-none rounded mt-4 lg:mt-0" aria-current="page" to={props.to}>
+        {props.children}
+      </Link>
+    )}
+  </>
+);
