@@ -1,6 +1,4 @@
-import React, { useEffect } from 'react';
-
-const DEFAULT_THEME = 'light';
+import React from 'react';
 
 export const toggleTheme = () => {
   const isLightTheme = () => document.getElementsByTagName('html')[0].classList.contains('light-theme');
@@ -10,10 +8,6 @@ export const toggleTheme = () => {
 };
 
 export const ThemeSwitcher = () => {
-  useEffect(() => {
-    document.getElementsByTagName('html')[0].classList.add(`${DEFAULT_THEME}-theme`);
-    document.getElementsByTagName('html')[0].setAttribute('style', `color-scheme : ${DEFAULT_THEME};`);
-  }, []);
   return (
     <button onClick={toggleTheme} title="Switch theme">
       <i className="fas fa-sun" />

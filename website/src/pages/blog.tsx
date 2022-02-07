@@ -42,19 +42,18 @@ export default function Template({
   return (
     <Layout showSubMenu={true} title="Blog">
       <div className="container mx-auto p-8">
-        <h2 className="text-xl font-bolder my-8">Recent blog posts</h2>
+        <h2 className="text-3xl font-bolder my-8">Recent blog posts</h2>
         <div>
-          <ul style={{ margin: '0px', listStyle: 'none', padding: '0px' }}>
-            {data.allMarkdownRemark.edges.map((p) => {
-              return (
-                <li style={{ marginBlock: '10px', listStyle: 'none', paddingBlock: '5px' }}>
-                  <Link className="link" to={p.node.frontmatter.slug}>
-                    <b>{p.node.frontmatter.title}</b> - <span>{p.node.frontmatter.date}</span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+          {data.allMarkdownRemark.edges.map((p, index) => {
+            return (
+              <div key={index} className="my-4 border p-4">
+                <Link to={p.node.frontmatter.slug}>
+                  <h3 className="text-xl font-bolder">{p.node.frontmatter.title}</h3>
+                  <span>{p.node.frontmatter.date}</span>
+                </Link>
+              </div>
+            );
+          })}
         </div>
       </div>
     </Layout>

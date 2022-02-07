@@ -46,9 +46,7 @@ export const Footer = () => {
             </ul>
           </div>
           <div className="flex-none w-1/5">
-            <FooterSectionHeading>
-              <Link to="/welcome">Features</Link>
-            </FooterSectionHeading>
+            <FooterSectionHeading>Features</FooterSectionHeading>
             <ul>
               <FooterMenuitem to="/wiki/csv" internal={true}>
                 CSV

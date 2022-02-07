@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .blog-post {
-  line-height: 2rem;
+  line-height: 1.7rem;
   h2 {
     @apply text-3xl my-4;
   }
@@ -16,7 +16,7 @@
     width: 80%;
     max-width: 900px;
     margin: 10px auto;
-    @apply my-4 rounded rounded-lg border-2;
+    @apply my-4 rounded rounded-lg border border-dotted;
   }
   table {
     width: 80%;

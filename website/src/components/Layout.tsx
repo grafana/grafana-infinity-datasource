@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useStaticQuery, graphql } from 'gatsby';
 import { Helmet } from 'react-helmet';
 import { defineCustomElements as deckDeckGoHighlightElement } from '@deckdeckgo/highlight-code/dist/loader';
@@ -16,6 +16,11 @@ interface LayoutProps {
 deckDeckGoHighlightElement();
 
 export const Layout = (props: LayoutProps) => {
+  const DEFAULT_THEME = 'light';
+  useEffect(() => {
+    document.getElementsByTagName('html')[0].classList.add(`${DEFAULT_THEME}-theme`);
+    document.getElementsByTagName('html')[0].setAttribute('style', `color-scheme : ${DEFAULT_THEME};`);
+  }, []);
   const data = useStaticQuery(
     graphql`
       query {
@@ -53,8 +58,8 @@ export const Layout = (props: LayoutProps) => {
         <main>
           <div>{props.children}</div>
         </main>
+        <Footer />
       </div>
-      <Footer />
     </>
   );
 };

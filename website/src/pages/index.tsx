@@ -7,7 +7,7 @@ import { InspiringStory } from '../components/home/InspiringStory';
 export default function Home() {
   return (
     <Layout showSubMenu={false} title="">
-      <div className="home">
+      <div>
         <HeroSection />
         <Features />
         <InspiringStory />
