@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import defaultsDeep from 'lodash/defaultsDeep';
 import { DataSourcePluginOptionsEditorProps } from '@grafana/data';
-import { Collapse, InfoBox, InlineFormLabel, Input } from '@grafana/ui';
+import { Collapse, LinkButton, InlineFormLabel, Input } from '@grafana/ui';
 import { TLSConfigEditor } from './config/TLSConfigEditor';
 import { GlobalQueryEditor } from './config/GlobalQueryEditor';
 import { SecureFieldsEditor } from './config/SecureFieldsEditor';
@@ -70,14 +70,26 @@ export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<I
           <GlobalQueryEditor options={options} onOptionsChange={onOptionsChange} />
         </div>
       </Collapse>
-      <InfoBox style={{ marginBlock: '30px' }}>
-        <p>
-          <b>Without any additional configuration, this datasource can work.</b> Optionally, configure any of the above settings.
+      <Collapse label="Help" isOpen={true} collapsible={true}>
+        <p style={{ marginInline: '30px', marginBlock: '15px' }}>
+          <p>
+            <b>Without any additional configuration, this datasource can work.</b> Optionally, configure any of the above settings if you needed.
+          </p>
+          <LinkButton variant="secondary" size="md" target="_blank" href="https://yesoreyeram.github.io/grafana-infinity-datasource" rel="noreferrer">
+            Click here plugin documentation website
+          </LinkButton>
+          <LinkButton
+            variant="secondary"
+            size="md"
+            target="_blank"
+            href={`/api/datasources/${props.options.id}/resources/graphql?query=%7B%0A%20%20query(type%3A%20"json"%2C%20url%3A%20"https%3A%2F%2Fjsonplaceholder.typicode.com%2Fusers")%0A%7D%0A`}
+            rel="noreferrer"
+            style={{ marginInline: '5px' }}
+          >
+            Click here for experimental GraphQL endpoint (WIP)
+          </LinkButton>
         </p>
-        <a className="btn btn-small btn-secondary" target="_blank" href="https://yesoreyeram.github.io/grafana-infinity-datasource" rel="noreferrer">
-          Click here plugin documentation website
-        </a>
-      </InfoBox>
+      </Collapse>
     </>
   );
 };

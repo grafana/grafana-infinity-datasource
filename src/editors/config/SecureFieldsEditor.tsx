@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import uniqueId from 'lodash/uniqueId';
 import { DataSourceSettings } from '@grafana/data';
 import { Button, LegacyForms, IconButton } from '@grafana/ui';
-import { SecureField } from '../../types';
+import { InfinityOptions, SecureField } from '../../types';
 
 const SecureFieldEditor = ({
   title,
@@ -61,7 +61,7 @@ interface Props {
   secureFieldName: string;
   secureFieldValue: string;
   dataSourceConfig: DataSourceSettings<any, any>;
-  onChange: (config: DataSourceSettings) => void;
+  onChange: (config: DataSourceSettings<InfinityOptions>) => void;
 }
 
 interface State {

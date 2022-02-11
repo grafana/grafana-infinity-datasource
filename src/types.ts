@@ -6,7 +6,17 @@ export interface GlobalInfinityQuery {
   id: string;
   query: InfinityQuery;
 }
+export type AuthType = 'none' | 'basicAuth' | 'oauthPassThru' | 'oauth2';
+export type OAuth2Type = 'client_credentials' | 'others';
+export type OAuth2Props = {
+  oauth2_type?: OAuth2Type;
+  client_id?: string;
+  token_url?: string;
+  scopes?: string[];
+};
 export interface InfinityOptions extends DataSourceJsonData {
+  auth_method?: AuthType;
+  oauth2?: OAuth2Props;
   tlsSkipVerify?: boolean;
   tlsAuth?: boolean;
   serverName?: string;
@@ -21,6 +31,7 @@ export interface InfinitySecureOptions {
   tlsCACert?: string;
   tlsClientCert?: string;
   tlsClientKey?: string;
+  oauth2ClientSecret?: string;
 }
 export interface SecureField {
   id: string;

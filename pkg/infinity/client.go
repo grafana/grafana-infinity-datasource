@@ -1,6 +1,7 @@
 package infinity
 
 import (
+	"context"
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/base64"
@@ -13,6 +14,9 @@ import (
 	"net/url"
 	"strings"
 	"time"
+
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/clientcredentials"
 )
 
 type Client struct {
@@ -58,6 +62,18 @@ func NewClient(settings InfinitySettings) (client *Client, err error) {
 	httpClient := &http.Client{
 		Transport: transport,
 		Timeout:   time.Second * time.Duration(settings.TimeoutInSeconds),
+	}
+	if settings.AuthenticationMethod == "oauth2" {
+		if settings.OAuth2Settings.OAuth2Type == "client_credentials" {
+			oauthConfig := clientcredentials.Config{
+				ClientID:     settings.OAuth2Settings.ClientID,
+				ClientSecret: settings.OAuth2Settings.ClientSecret,
+				TokenURL:     settings.OAuth2Settings.TokenURL,
+				Scopes:       settings.OAuth2Settings.Scopes,
+			}
+			ctx := context.WithValue(context.Background(), oauth2.HTTPClient, httpClient)
+			httpClient = oauthConfig.Client(ctx)
+		}
 	}
 	return &Client{
 		Settings:   settings,
