@@ -7,10 +7,13 @@ export interface GlobalInfinityQuery {
   query: InfinityQuery;
 }
 export type AuthType = 'none' | 'basicAuth' | 'oauthPassThru' | 'oauth2';
-export type OAuth2Type = 'client_credentials' | 'others';
+export type OAuth2Type = 'client_credentials' | 'jwt' | 'others';
 export type OAuth2Props = {
   oauth2_type?: OAuth2Type;
   client_id?: string;
+  email?: string;
+  private_key_id?: string;
+  subject?: string;
   token_url?: string;
   scopes?: string[];
 };
@@ -32,6 +35,7 @@ export interface InfinitySecureOptions {
   tlsClientCert?: string;
   tlsClientKey?: string;
   oauth2ClientSecret?: string;
+  oauth2JWTPrivateKey?: string;
 }
 export interface SecureField {
   id: string;

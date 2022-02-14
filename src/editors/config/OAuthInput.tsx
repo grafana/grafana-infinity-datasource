@@ -6,6 +6,7 @@ import { InfinityOptions, InfinitySecureOptions, OAuth2Props, OAuth2Type } from 
 
 const oAuthTypes: Array<SelectableValue<OAuth2Type>> = [
   { value: 'client_credentials', label: 'Client Credentials' },
+  { value: 'jwt', label: 'JWT' },
   { value: 'others', label: 'Others' },
 ];
 
@@ -23,6 +24,13 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
       ...options,
       secureJsonFields: { ...options.secureJsonFields, oauth2ClientSecret: false },
       secureJsonData: { ...options.secureJsonData, oauth2ClientSecret: '' },
+    });
+  };
+  const onResetJWTPrivateKey = () => {
+    onOptionsChange({
+      ...options,
+      secureJsonFields: { ...options.secureJsonFields, oauth2JWTPrivateKey: false },
+      secureJsonData: { ...options.secureJsonData, oauth2JWTPrivateKey: '' },
     });
   };
   return (
@@ -75,6 +83,67 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
               labelWidth={10}
               secureFieldName="oauth2EndPointParamsName"
               secureFieldValue="oauth2EndPointParamsValue"
+            />
+          </div>
+        </>
+      )}
+      {oauth2.oauth2_type === 'jwt' && (
+        <>
+          <div className="gf-form">
+            <InlineFormLabel width={10} tooltip="Email is the OAuth client identifier used when communicating with the configured OAuth provider.">
+              Email
+            </InlineFormLabel>
+            <Input css={null} onChange={(v) => onOAuth2PropsChange('email', v.currentTarget.value)} value={oauth2.email} width={30} placeholder={'email'} />
+          </div>
+          <div className="gf-form">
+            <InlineFormLabel width={10} tooltip="PrivateKeyID contains an optional hint indicating which key is being used">
+              Private Key Identifier
+            </InlineFormLabel>
+            <Input
+              css={null}
+              onChange={(v) => onOAuth2PropsChange('private_key_id', v.currentTarget.value)}
+              value={oauth2.private_key_id}
+              width={30}
+              placeholder={'(optional) private key identifier'}
+            />
+          </div>
+          <div className="gf-form">
+            <LegacyForms.SecretFormField
+              labelWidth={10}
+              inputWidth={15}
+              required
+              value={secureJsonData.oauth2JWTPrivateKey || ''}
+              tooltip="PrivateKey contains the contents of an RSA private key or the contents of a PEM file that contains a private key. The provided private key is used to sign JWT payloads"
+              isConfigured={(secureJsonFields && secureJsonFields.oauth2JWTPrivateKey) as boolean}
+              onReset={onResetJWTPrivateKey}
+              onChange={onUpdateDatasourceSecureJsonDataOption(props, 'oauth2JWTPrivateKey')}
+              label="Private Key"
+              aria-label="Private Key"
+              placeholder="Private Key"
+            />
+          </div>
+          <div className="gf-form">
+            <InlineFormLabel width={10} tooltip="TokenURL is the endpoint required to complete the 2-legged JWT flow.">
+              Token URL
+            </InlineFormLabel>
+            <Input css={null} onChange={(v) => onOAuth2PropsChange('token_url', v.currentTarget.value)} value={oauth2.token_url} width={30} placeholder={'Token URL'} />
+          </div>
+          <div className="gf-form">
+            <InlineFormLabel width={10} tooltip="Subject is the optional user to impersonate.">
+              Subject
+            </InlineFormLabel>
+            <Input css={null} onChange={(v) => onOAuth2PropsChange('subject', v.currentTarget.value)} value={oauth2.subject} width={30} placeholder={'(optional) Subject'} />
+          </div>
+          <div className="gf-form">
+            <InlineFormLabel width={10} tooltip="Scopes optionally specifies a list of requested permission scopes. Enter comma separated values">
+              Scopes
+            </InlineFormLabel>
+            <Input
+              css={null}
+              onChange={(v) => onOAuth2PropsChange('scopes', (v.currentTarget.value || '').split(','))}
+              value={(oauth2.scopes || []).join(',')}
+              width={30}
+              placeholder={'Comma separated values of scopes'}
             />
           </div>
         </>

@@ -12,8 +12,12 @@ type OAuth2Settings struct {
 	OAuth2Type     string   `json:"oauth2_type,omitempty"`
 	ClientID       string   `json:"client_id,omitempty"`
 	TokenURL       string   `json:"token_url,omitempty"`
+	Email          string   `json:"email,omitempty"`
+	PrivateKeyID   string   `json:"private_key_id,omitempty"`
+	Subject        string   `json:"subject,omitempty"`
 	Scopes         []string `json:"scopes,omitempty"`
 	ClientSecret   string
+	PrivateKey     string
 	EndpointParams map[string]string
 }
 
@@ -81,6 +85,9 @@ func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinityS
 	if val, ok := config.DecryptedSecureJSONData["oauth2ClientSecret"]; ok {
 		settings.OAuth2Settings.ClientSecret = val
 	}
+	if val, ok := config.DecryptedSecureJSONData["oauth2JWTPrivateKey"]; ok {
+		settings.OAuth2Settings.PrivateKey = val
+	}
 	if val, ok := config.DecryptedSecureJSONData["tlsCACert"]; ok {
 		settings.TLSCACert = val
 	}
@@ -92,7 +99,9 @@ func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinityS
 	}
 	settings.CustomHeaders = GetSecrets(config, "httpHeaderName", "httpHeaderValue")
 	settings.SecureQueryFields = GetSecrets(config, "secureQueryName", "secureQueryValue")
-	settings.OAuth2Settings.EndpointParams = GetSecrets(config, "oauth2EndPointParamsName", "oauth2EndPointParamsValue")
+	if settings.AuthenticationMethod == "oauth2" && settings.OAuth2Settings.OAuth2Type == "jwt" {
+		settings.OAuth2Settings.EndpointParams = GetSecrets(config, "oauth2EndPointParamsName", "oauth2EndPointParamsValue")
+	}
 	return
 }
 

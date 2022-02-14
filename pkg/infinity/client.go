@@ -17,6 +17,7 @@ import (
 
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
+	"golang.org/x/oauth2/jwt"
 )
 
 type Client struct {
@@ -84,6 +85,23 @@ func NewClient(settings InfinitySettings) (client *Client, err error) {
 			}
 			ctx := context.WithValue(context.Background(), oauth2.HTTPClient, httpClient)
 			httpClient = oauthConfig.Client(ctx)
+		}
+		if settings.OAuth2Settings.OAuth2Type == "jwt" {
+			jwtConfig := jwt.Config{
+				Email:        settings.OAuth2Settings.Email,
+				TokenURL:     settings.OAuth2Settings.TokenURL,
+				PrivateKey:   []byte(strings.ReplaceAll(settings.OAuth2Settings.PrivateKey, "\\n", "\n")),
+				PrivateKeyID: settings.OAuth2Settings.PrivateKeyID,
+				Subject:      settings.OAuth2Settings.Subject,
+				Scopes:       []string{},
+			}
+			for _, scope := range settings.OAuth2Settings.Scopes {
+				if scope != "" {
+					jwtConfig.Scopes = append(jwtConfig.Scopes, scope)
+				}
+			}
+			ctx := context.WithValue(context.Background(), oauth2.HTTPClient, httpClient)
+			httpClient = jwtConfig.Client(ctx)
 		}
 	}
 	return &Client{
