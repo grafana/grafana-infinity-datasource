@@ -1,6 +1,7 @@
 import React from 'react';
 import { DataSourcePluginOptionsEditorProps, SelectableValue, onUpdateDatasourceSecureJsonDataOption } from '@grafana/data';
 import { InlineFormLabel, RadioButtonGroup, Input, LegacyForms, LinkButton } from '@grafana/ui';
+import { SecureFieldsEditor } from './SecureFieldsEditor';
 import { InfinityOptions, InfinitySecureOptions, OAuth2Props, OAuth2Type } from '../../types';
 
 const oAuthTypes: Array<SelectableValue<OAuth2Type>> = [
@@ -62,6 +63,18 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
               value={(oauth2.scopes || []).join(',')}
               width={30}
               placeholder={'Comma separated values of scopes'}
+            />
+          </div>
+          <div className="gf-form">
+            <SecureFieldsEditor
+              dataSourceConfig={options}
+              onChange={onOptionsChange}
+              title="Endpoint params"
+              hideTile={true}
+              label="Endpoint param"
+              labelWidth={10}
+              secureFieldName="oauth2EndPointParamsName"
+              secureFieldValue="oauth2EndPointParamsValue"
             />
           </div>
         </>

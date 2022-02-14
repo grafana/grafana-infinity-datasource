@@ -66,10 +66,21 @@ func NewClient(settings InfinitySettings) (client *Client, err error) {
 	if settings.AuthenticationMethod == "oauth2" {
 		if settings.OAuth2Settings.OAuth2Type == "client_credentials" {
 			oauthConfig := clientcredentials.Config{
-				ClientID:     settings.OAuth2Settings.ClientID,
-				ClientSecret: settings.OAuth2Settings.ClientSecret,
-				TokenURL:     settings.OAuth2Settings.TokenURL,
-				Scopes:       settings.OAuth2Settings.Scopes,
+				ClientID:       settings.OAuth2Settings.ClientID,
+				ClientSecret:   settings.OAuth2Settings.ClientSecret,
+				TokenURL:       settings.OAuth2Settings.TokenURL,
+				Scopes:         []string{},
+				EndpointParams: url.Values{},
+			}
+			for _, scope := range settings.OAuth2Settings.Scopes {
+				if scope != "" {
+					oauthConfig.Scopes = append(oauthConfig.Scopes, scope)
+				}
+			}
+			for k, v := range settings.OAuth2Settings.EndpointParams {
+				if k != "" && v != "" {
+					oauthConfig.EndpointParams.Set(k, v)
+				}
 			}
 			ctx := context.WithValue(context.Background(), oauth2.HTTPClient, httpClient)
 			httpClient = oauthConfig.Client(ctx)

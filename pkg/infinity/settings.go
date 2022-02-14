@@ -9,11 +9,12 @@ import (
 )
 
 type OAuth2Settings struct {
-	OAuth2Type   string   `json:"oauth2_type,omitempty"`
-	ClientID     string   `json:"client_id,omitempty"`
-	TokenURL     string   `json:"token_url,omitempty"`
-	Scopes       []string `json:"scopes,omitempty"`
-	ClientSecret string
+	OAuth2Type     string   `json:"oauth2_type,omitempty"`
+	ClientID       string   `json:"client_id,omitempty"`
+	TokenURL       string   `json:"token_url,omitempty"`
+	Scopes         []string `json:"scopes,omitempty"`
+	ClientSecret   string
+	EndpointParams map[string]string
 }
 
 type InfinitySettings struct {
@@ -91,6 +92,7 @@ func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinityS
 	}
 	settings.CustomHeaders = GetSecrets(config, "httpHeaderName", "httpHeaderValue")
 	settings.SecureQueryFields = GetSecrets(config, "secureQueryName", "secureQueryValue")
+	settings.OAuth2Settings.EndpointParams = GetSecrets(config, "oauth2EndPointParamsName", "oauth2EndPointParamsValue")
 	return
 }
 
