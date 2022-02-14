@@ -70,8 +70,8 @@ export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<I
           <GlobalQueryEditor options={options} onOptionsChange={onOptionsChange} />
         </div>
       </Collapse>
-      <Collapse label="Help" isOpen={true} collapsible={true}>
-        <p style={{ marginInline: '30px', marginBlock: '15px' }}>
+      <Collapse label="More" isOpen={true} collapsible={true}>
+        <p style={{ marginInline: '30px', marginBlock: '15px', textAlign: 'center' }}>
           <p>
             <b>Without any additional configuration, this datasource can work.</b> Optionally, configure any of the above settings if you needed.
           </p>

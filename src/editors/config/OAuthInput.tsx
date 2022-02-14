@@ -67,9 +67,11 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
         </>
       )}
       {oauth2.oauth2_type === 'others' && (
-        <div style={{ margin: '15px' }}>
+        <div style={{ margin: '15px', marginInline: '45px', textAlign: 'center' }}>
           <p>
-            Looking for more OAuth types support?&nbsp;
+            Looking for more OAuth support?
+            <br />
+            <br />
             <LinkButton href="https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/260" target="_blank" rel="noreferrer" variant="secondary" size="md">
               Click here to know more
             </LinkButton>
