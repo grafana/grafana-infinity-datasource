@@ -62,11 +62,11 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
       {authType === 'basicAuth' && (
         <>
           <div className="gf-form">
-            <FormField label="User Name" placeholder="username" labelWidth={8} value={props.options.basicAuthUser || ''} onChange={(e) => onUserNameChange(e.currentTarget.value)}></FormField>
+            <FormField label="User Name" placeholder="username" labelWidth={10} value={props.options.basicAuthUser || ''} onChange={(e) => onUserNameChange(e.currentTarget.value)}></FormField>
           </div>
           <div className="gf-form">
             <SecretFormField
-              labelWidth={8}
+              labelWidth={10}
               inputWidth={12}
               required
               value={secureJsonData.basicAuthPassword || ''}

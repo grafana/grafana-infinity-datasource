@@ -4,7 +4,7 @@ import { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 import { Collapse, LinkButton, InlineFormLabel, Input } from '@grafana/ui';
 import { TLSConfigEditor } from './config/TLSConfigEditor';
 import { GlobalQueryEditor } from './config/GlobalQueryEditor';
-import { SecureFieldsEditor } from './config/SecureFieldsEditor';
+import { SecureFieldsEditor } from '../components/config/SecureFieldsEditor';
 import { URLEditor } from './config/URL';
 import { AuthEditor } from './config/Auth';
 import { InfinityOptions } from '../types';

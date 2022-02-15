@@ -1,7 +1,7 @@
 import React from 'react';
 import { DataSourcePluginOptionsEditorProps, SelectableValue, onUpdateDatasourceSecureJsonDataOption } from '@grafana/data';
 import { InlineFormLabel, RadioButtonGroup, Input, LegacyForms, LinkButton } from '@grafana/ui';
-import { SecureFieldsEditor } from './SecureFieldsEditor';
+import { SecureFieldsEditor } from '../../components/config/SecureFieldsEditor';
 import { InfinityOptions, InfinitySecureOptions, OAuth2Props, OAuth2Type } from '../../types';
 
 const oAuthTypes: Array<SelectableValue<OAuth2Type>> = [

@@ -1,7 +1,7 @@
 import React from 'react';
 import { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 import { InlineFormLabel, Switch, useTheme, LegacyForms } from '@grafana/ui';
-import { SecureTextArea } from './SecureTextArea';
+import { SecureTextArea } from '../../components/config/SecureTextArea';
 import { InfinityOptions, InfinitySecureOptions } from './../../types';
 
 interface TLSConfigEditorProps extends DataSourcePluginOptionsEditorProps<InfinityOptions> {
