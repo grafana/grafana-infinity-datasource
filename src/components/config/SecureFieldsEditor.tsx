@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import uniqueId from 'lodash/uniqueId';
 import { DataSourceSettings } from '@grafana/data';
 import { Button, LegacyForms, IconButton } from '@grafana/ui';
-import { SecureField } from '../../types';
+import { InfinityOptions, SecureField } from '../../types';
 
 const SecureFieldEditor = ({
   title,
@@ -11,6 +11,8 @@ const SecureFieldEditor = ({
   onChange,
   onRemove,
   onReset,
+  label,
+  labelWidth,
 }: {
   title: string;
   secureField: SecureField;
@@ -18,6 +20,8 @@ const SecureFieldEditor = ({
   onRemove: (id: string) => void;
   onChange: (value: SecureField) => void;
   onBlur: () => void;
+  labelWidth?: number;
+  label?: string;
 }) => {
   const { FormField, SecretFormField } = LegacyForms;
   const layoutStyle: React.CSSProperties = {
@@ -28,10 +32,10 @@ const SecureFieldEditor = ({
   return (
     <div style={layoutStyle}>
       <FormField
-        label="Key"
+        label={label || 'Key'}
+        labelWidth={labelWidth || 8}
         name="name"
         placeholder="key"
-        labelWidth={8}
         value={secureField.name || ''}
         onChange={(e) => onChange({ ...secureField, name: e.target.value })}
         onBlur={onBlur}
@@ -61,7 +65,9 @@ interface Props {
   secureFieldName: string;
   secureFieldValue: string;
   dataSourceConfig: DataSourceSettings<any, any>;
-  onChange: (config: DataSourceSettings) => void;
+  onChange: (config: DataSourceSettings<InfinityOptions>) => void;
+  label?: string;
+  labelWidth?: number;
 }
 
 interface State {
@@ -170,6 +176,8 @@ export class SecureFieldsEditor extends PureComponent<Props, State> {
                   onBlur={this.updateSettings}
                   onRemove={this.onSecureFieldRemove}
                   onReset={this.onSecureFieldReset}
+                  label={this.props.label}
+                  labelWidth={this.props.labelWidth}
                 />
               ))}
             </div>

@@ -107,8 +107,6 @@ export const GlobalQueryEditor = (props: DataSourcePluginOptionsEditorProps<Infi
       <Button variant="secondary" icon="plus" type="button" onClick={addGlobalQuery}>
         Add Global Query
       </Button>
-      <br />
-      <br />
     </>
   );
 };

@@ -8,7 +8,22 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 )
 
+type OAuth2Settings struct {
+	OAuth2Type     string   `json:"oauth2_type,omitempty"`
+	ClientID       string   `json:"client_id,omitempty"`
+	TokenURL       string   `json:"token_url,omitempty"`
+	Email          string   `json:"email,omitempty"`
+	PrivateKeyID   string   `json:"private_key_id,omitempty"`
+	Subject        string   `json:"subject,omitempty"`
+	Scopes         []string `json:"scopes,omitempty"`
+	ClientSecret   string
+	PrivateKey     string
+	EndpointParams map[string]string
+}
+
 type InfinitySettings struct {
+	AuthenticationMethod string
+	OAuth2Settings       OAuth2Settings
 	URL                  string
 	BasicAuthEnabled     bool
 	UserName             string
@@ -27,12 +42,14 @@ type InfinitySettings struct {
 }
 
 type InfinitySettingsJson struct {
-	ForwardOauthIdentity bool   `json:"oauthPassThru,omitempty"`
-	InsecureSkipVerify   bool   `json:"tlsSkipVerify,omitempty"`
-	ServerName           string `json:"serverName,omitempty"`
-	TLSClientAuth        bool   `json:"tlsClientAuth,omitempty"`
-	TLSAuthWithCACert    bool   `json:"tlsAuthWithCACert,omitempty"`
-	TimeoutInSeconds     int64  `json:"timeoutInSeconds,omitempty"`
+	AuthenticationMethod string         `json:"auth_method,omitempty"`
+	OAuth2Settings       OAuth2Settings `json:"oauth2,omitempty"`
+	ForwardOauthIdentity bool           `json:"oauthPassThru,omitempty"`
+	InsecureSkipVerify   bool           `json:"tlsSkipVerify,omitempty"`
+	ServerName           string         `json:"serverName,omitempty"`
+	TLSClientAuth        bool           `json:"tlsClientAuth,omitempty"`
+	TLSAuthWithCACert    bool           `json:"tlsAuthWithCACert,omitempty"`
+	TimeoutInSeconds     int64          `json:"timeoutInSeconds,omitempty"`
 }
 
 func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinitySettings, err error) {
@@ -47,6 +64,11 @@ func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinityS
 		if err := json.Unmarshal(config.JSONData, &infJson); err != nil {
 			return settings, err
 		}
+		settings.AuthenticationMethod = infJson.AuthenticationMethod
+		settings.OAuth2Settings = infJson.OAuth2Settings
+		if settings.AuthenticationMethod == "oauth2" && settings.OAuth2Settings.OAuth2Type == "" {
+			settings.OAuth2Settings.OAuth2Type = "client_credentials"
+		}
 		settings.ForwardOauthIdentity = infJson.ForwardOauthIdentity
 		settings.InsecureSkipVerify = infJson.InsecureSkipVerify
 		settings.ServerName = infJson.ServerName
@@ -60,6 +82,12 @@ func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinityS
 	if val, ok := config.DecryptedSecureJSONData["basicAuthPassword"]; ok {
 		settings.Password = val
 	}
+	if val, ok := config.DecryptedSecureJSONData["oauth2ClientSecret"]; ok {
+		settings.OAuth2Settings.ClientSecret = val
+	}
+	if val, ok := config.DecryptedSecureJSONData["oauth2JWTPrivateKey"]; ok {
+		settings.OAuth2Settings.PrivateKey = val
+	}
 	if val, ok := config.DecryptedSecureJSONData["tlsCACert"]; ok {
 		settings.TLSCACert = val
 	}
@@ -71,6 +99,9 @@ func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinityS
 	}
 	settings.CustomHeaders = GetSecrets(config, "httpHeaderName", "httpHeaderValue")
 	settings.SecureQueryFields = GetSecrets(config, "secureQueryName", "secureQueryValue")
+	if settings.AuthenticationMethod == "oauth2" && settings.OAuth2Settings.OAuth2Type == "jwt" {
+		settings.OAuth2Settings.EndpointParams = GetSecrets(config, "oauth2EndPointParamsName", "oauth2EndPointParamsValue")
+	}
 	return
 }
 

@@ -1,14 +1,14 @@
 import React from 'react';
 import { DataSourcePluginOptionsEditorProps, onUpdateDatasourceSecureJsonDataOption, SelectableValue } from '@grafana/data';
 import { InlineFormLabel, RadioButtonGroup, LegacyForms } from '@grafana/ui';
-import { InfinityOptions, InfinitySecureOptions } from '../../types';
-
-type AuthType = 'none' | 'basicAuth' | 'oauthPassThru';
+import { OAuthInputsEditor } from './OAuthInput';
+import { InfinityOptions, InfinitySecureOptions, AuthType } from '../../types';
 
 const authTypes: Array<SelectableValue<AuthType>> = [
   { value: 'none', label: 'None' },
   { value: 'basicAuth', label: 'Basic Authentication' },
   { value: 'oauthPassThru', label: 'Forward OAuth' },
+  { value: 'oauth2', label: 'OAuth2' },
 ];
 
 export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
@@ -16,17 +16,21 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
   const { options, onOptionsChange } = props;
   const { secureJsonFields } = options;
   const secureJsonData = (options.secureJsonData || {}) as InfinitySecureOptions;
-  const authType: AuthType = props.options.basicAuth ? 'basicAuth' : props.options.jsonData.oauthPassThru ? 'oauthPassThru' : 'none';
-  const onAuthTypeChange = (a: AuthType) => {
-    switch (a) {
+  const authType = props.options.basicAuth ? 'basicAuth' : props.options.jsonData.oauthPassThru ? 'oauthPassThru' : props.options.jsonData.auth_method || 'none';
+  const onAuthTypeChange = (authMethod: AuthType) => {
+    switch (authMethod) {
       case 'none':
-        onOptionsChange({ ...options, basicAuth: false, jsonData: { ...options.jsonData, oauthPassThru: false } });
+        onOptionsChange({ ...options, basicAuth: false, jsonData: { ...options.jsonData, oauthPassThru: false, auth_method: 'none' } });
         break;
       case 'basicAuth':
-        onOptionsChange({ ...options, basicAuth: true, jsonData: { ...options.jsonData, oauthPassThru: false } });
+        onOptionsChange({ ...options, basicAuth: true, jsonData: { ...options.jsonData, oauthPassThru: false, auth_method: 'basicAuth' } });
         break;
       case 'oauthPassThru':
-        onOptionsChange({ ...options, basicAuth: false, jsonData: { ...options.jsonData, oauthPassThru: true } });
+        onOptionsChange({ ...options, basicAuth: false, jsonData: { ...options.jsonData, oauthPassThru: true, auth_method: 'oauthPassThru' } });
+        break;
+      case 'oauthPassThru':
+      default:
+        onOptionsChange({ ...options, basicAuth: false, jsonData: { ...options.jsonData, oauthPassThru: false, auth_method: authMethod } });
         break;
     }
   };
@@ -52,27 +56,32 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
   return (
     <>
       <div className="gf-form">
-        <InlineFormLabel width={8}>Auth Type</InlineFormLabel>
+        <InlineFormLabel width={10}>Auth Type</InlineFormLabel>
         <RadioButtonGroup<AuthType> options={authTypes} value={authType} onChange={(e) => onAuthTypeChange(e!)}></RadioButtonGroup>
       </div>
       {authType === 'basicAuth' && (
-        <div className="gf-form">
-          <FormField label="User Name" placeholder="username" labelWidth={8} value={props.options.basicAuthUser || ''} onChange={(e) => onUserNameChange(e.currentTarget.value)}></FormField>
-          <SecretFormField
-            labelWidth={12}
-            inputWidth={10}
-            required
-            value={secureJsonData.basicAuthPassword || ''}
-            isConfigured={(secureJsonFields && secureJsonFields.basicAuthPassword) as boolean}
-            onReset={onResetPassword}
-            onChange={onUpdateDatasourceSecureJsonDataOption(props, 'basicAuthPassword')}
-            label="Password"
-            aria-label="password"
-            placeholder="password"
-            tooltip="password"
-          />
-        </div>
+        <>
+          <div className="gf-form">
+            <FormField label="User Name" placeholder="username" labelWidth={10} value={props.options.basicAuthUser || ''} onChange={(e) => onUserNameChange(e.currentTarget.value)}></FormField>
+          </div>
+          <div className="gf-form">
+            <SecretFormField
+              labelWidth={10}
+              inputWidth={12}
+              required
+              value={secureJsonData.basicAuthPassword || ''}
+              isConfigured={(secureJsonFields && secureJsonFields.basicAuthPassword) as boolean}
+              onReset={onResetPassword}
+              onChange={onUpdateDatasourceSecureJsonDataOption(props, 'basicAuthPassword')}
+              label="Password"
+              aria-label="password"
+              placeholder="password"
+              tooltip="password"
+            />
+          </div>
+        </>
       )}
+      {authType === 'oauth2' && <OAuthInputsEditor {...props} />}
     </>
   );
 };

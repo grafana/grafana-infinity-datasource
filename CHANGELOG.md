@@ -4,9 +4,11 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 
 ## [ 0.8.1 ]
 
-- GROQ Query support
 - Forward OAuth identity support
 - Query inspector now shows actual data in response meta data. (frame->schema->meta->custom)
+- GROQ Query support - alpha
+- OAuth2 Client credentials authentication support - alpha
+- OAuth2 JWT authentication support - alpha
 
 ## [ 0.8.0 ]
 

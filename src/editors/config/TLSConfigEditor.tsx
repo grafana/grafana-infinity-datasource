@@ -1,7 +1,7 @@
 import React from 'react';
 import { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 import { InlineFormLabel, Switch, useTheme, LegacyForms } from '@grafana/ui';
-import { SecureTextArea } from './SecureTextArea';
+import { SecureTextArea } from '../../components/config/SecureTextArea';
 import { InfinityOptions, InfinitySecureOptions } from './../../types';
 
 interface TLSConfigEditorProps extends DataSourcePluginOptionsEditorProps<InfinityOptions> {
@@ -65,7 +65,7 @@ export const TLSConfigEditor = (props: TLSConfigEditorProps) => {
       {!props.hideTile && <h3>TLS / SSL Settings</h3>}
       <div className="gf-form-group">
         <div className="gf-form">
-          <InlineFormLabel width={8} tooltip="Skip TLS Verify">
+          <InlineFormLabel width={10} tooltip="Skip TLS Verify">
             Skip TLS Verify
           </InlineFormLabel>
           <div style={switchContainerStyle}>
@@ -73,7 +73,7 @@ export const TLSConfigEditor = (props: TLSConfigEditorProps) => {
           </div>
         </div>
         <div className="gf-form">
-          <InlineFormLabel width={8} tooltip="Needed for verifying self-signed TLS Certs">
+          <InlineFormLabel width={10} tooltip="Needed for verifying self-signed TLS Certs">
             With CA Cert
           </InlineFormLabel>
           <div style={switchContainerStyle}>
@@ -81,7 +81,7 @@ export const TLSConfigEditor = (props: TLSConfigEditorProps) => {
           </div>
         </div>
         <div className="gf-form">
-          <InlineFormLabel width={8} tooltip="TLS Client Auth">
+          <InlineFormLabel width={10} tooltip="TLS Client Auth">
             TLS Client Auth
           </InlineFormLabel>
           <div style={switchContainerStyle}>
@@ -93,7 +93,7 @@ export const TLSConfigEditor = (props: TLSConfigEditorProps) => {
             configured={!!secureJsonFields?.tlsCACert}
             placeholder="Begins with -----BEGIN CERTIFICATE-----"
             label="CA Cert"
-            labelWidth={8}
+            labelWidth={10}
             rows={5}
             onChange={(e) => onCertificateChange('tlsCACert', e.currentTarget.value)}
             onReset={() => onCertificateReset('tlsCACert')}
@@ -102,13 +102,13 @@ export const TLSConfigEditor = (props: TLSConfigEditorProps) => {
         {jsonData.tlsAuth && (
           <>
             <div className="gf-form gf-form--grow">
-              <FormField label="ServerName" labelWidth={8} inputWidth={50} placeholder="domain.example.com" value={jsonData.serverName} onChange={(e) => onServerNameChange(e.currentTarget.value)} />
+              <FormField label="ServerName" labelWidth={10} inputWidth={50} placeholder="domain.example.com" value={jsonData.serverName} onChange={(e) => onServerNameChange(e.currentTarget.value)} />
             </div>
             <SecureTextArea
               configured={!!secureJsonFields?.tlsClientCert}
               placeholder="Begins with -----BEGIN CERTIFICATE-----"
               label="Client Cert"
-              labelWidth={8}
+              labelWidth={10}
               rows={5}
               onChange={(e) => onCertificateChange('tlsClientCert', e.currentTarget.value)}
               onReset={() => onCertificateReset('tlsClientCert')}
@@ -117,7 +117,7 @@ export const TLSConfigEditor = (props: TLSConfigEditorProps) => {
               configured={!!secureJsonFields?.tlsClientKey}
               placeholder="Begins with -----BEGIN RSA PRIVATE KEY-----"
               label="Client Key"
-              labelWidth={8}
+              labelWidth={10}
               rows={5}
               onChange={(e) => onCertificateChange('tlsClientKey', e.currentTarget.value)}
               onReset={() => onCertificateReset('tlsClientKey')}
