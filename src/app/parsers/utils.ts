@@ -1,4 +1,4 @@
-import { get, set, toNumber } from 'lodash';
+import { get, isArray, set, toNumber } from 'lodash';
 import { InfinityColumn, InfinityColumnFormat } from './../../types';
 
 const guessColumnTypeFromField = (obj: any): InfinityColumnFormat => {
@@ -64,6 +64,9 @@ export const getValue = (input: string | number | Date | null, type: InfinityCol
         return input;
       } else if (typeof input === 'string' && input) {
         return toNumber((input + '').replace(/[^0-9.]/g, ''));
+      } else if (typeof input === 'object' && isArray(input)) {
+        const num = (input[0] + '').replace(/[^0-9.]/g, '');
+        return toNumber(num);
       } else {
         return null;
       }
