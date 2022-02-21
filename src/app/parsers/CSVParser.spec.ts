@@ -175,3 +175,39 @@ key,value
     expect(parser.toTable().rows.map((r) => r[1])).toStrictEqual([123, 123, 123.45, 123456.78]);
   });
 });
+describe('geo map', () => {
+  let data = `"lat","long","desc","branches"
+"51.5072","0.1276","London","2"
+"35.6897","139.6922","Tokyo","3"
+"18.9667","72.8333","Mumbai","10"`;
+  it('table', () => {
+    let input = new CSVParser(data, {
+      refId: 'A',
+      type: 'csv',
+      source: 'inline',
+      data,
+      root_selector: '',
+      format: 'table',
+      columns: [
+        { selector: 'lat', type: 'number', text: '' },
+        { selector: 'long', type: 'number', text: '' },
+        { selector: 'desc', type: 'string', text: '' },
+        { selector: 'branches', type: 'number', text: '' },
+      ],
+    });
+    expect(input.toTable()).toStrictEqual({
+      name: 'A',
+      columns: [
+        { selector: 'lat', type: 'number', text: 'lat' },
+        { selector: 'long', type: 'number', text: 'long' },
+        { selector: 'desc', type: 'string', text: 'desc' },
+        { selector: 'branches', type: 'number', text: 'branches' },
+      ],
+      rows: [
+        [51.5072, 0.1276, 'London', 2],
+        [35.6897, 139.6922, 'Tokyo', 3],
+        [18.9667, 72.8333, 'Mumbai', 10],
+      ],
+    });
+  });
+});
