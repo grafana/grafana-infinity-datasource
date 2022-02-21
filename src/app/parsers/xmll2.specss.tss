@@ -1,0 +1,58 @@
+// import { XMLParser } from './XMLParser';
+// describe('timeseries', () => {
+//   const data = `<SOAP:Envelope xmlns:SOAP="http://schemas.xmlsoap.org/soap/envelope/">
+//     <SOAP:Header>
+//         <header xmlns="xmlapi_1.0">
+//             <requestID>XML_API_client@5</requestID>
+//             <requestTime>Feb 4, 2022 3:23:09 PM</requestTime>
+//             <responseTime>Feb 4, 2022 3:23:09 PM</responseTime>
+//         </header>
+//     </SOAP:Header>
+//     <SOAP:Body>
+//         <findResponse xmlns="xmlapi_1.0">
+//             <result>
+//                 <subscrprofile.SubscriberProfileStatsLogRecord>
+//                     <subscrProfileName>Data_sub_profile</subscrProfileName>
+//                     <subscrProfileCurrent>7139</subscrProfileCurrent>
+//                     <timeCaptured>1643969122174</timeCaptured>
+//                     <children-Set></children-Set>
+//                 </subscrprofile.SubscriberProfileStatsLogRecord>
+//                 <subscrprofile.SubscriberProfileStatsLogRecord>
+//                     <subscrProfileName>Data_sub_profile</subscrProfileName>
+//                     <subscrProfileCurrent>7130</subscrProfileCurrent>
+//                     <timeCaptured>1643965522063</timeCaptured>
+//                     <children-Set></children-Set>
+//                 </subscrprofile.SubscriberProfileStatsLogRecord>
+//                 <subscrprofile.SubscriberProfileStatsLogRecord>
+//                     <subscrProfileName>Data_sub_profile</subscrProfileName>
+//                     <subscrProfileCurrent>7137</subscrProfileCurrent>
+//                     <timeCaptured>1643972701491</timeCaptured>
+//                     <children-Set></children-Set>
+//                 </subscrprofile.SubscriberProfileStatsLogRecord>
+//                 <subscrprofile.SubscriberProfileStatsLogRecord>
+//                     <subscrProfileName>Data_sub_profile</subscrProfileName>
+//                     <subscrProfileCurrent>7122</subscrProfileCurrent>
+//                     <timeCaptured>1643961927116</timeCaptured>
+//                     <children-Set></children-Set>
+//                 </subscrprofile.SubscriberProfileStatsLogRecord>
+//             </result>
+//         </findResponse>
+//     </SOAP:Body>
+//   </SOAP:Envelope>`;
+//   it('timeseries', () => {
+//     let xmlparser = new XMLParser(data, {
+//       refId: 'A',
+//       type: 'xml',
+//       source: 'inline',
+//       data,
+//       root_selector: "SOAP:Envelope.SOAP:Body[0].findResponse[0].result[0].['subscrprofile.SubscriberProfileStatsLogRecord']",
+//       columns: [
+//         { selector: 'subscrProfileName', type: 'string', text: 'subscrProfileName' },
+//         { selector: 'subscrProfileCurrent', type: 'number', text: 'subscrProfileCurrent' },
+//         { selector: 'timeCaptured', type: 'timestamp_epoch', text: 'timeCaptured' },
+//       ],
+//       format: 'timeseries',
+//     });
+//     expect(xmlparser.toTable()).toStrictEqual({});
+//   });
+// });
