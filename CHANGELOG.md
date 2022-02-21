@@ -2,6 +2,10 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
+## [ 0.8.2 ]
+
+- Bug fix #254
+
 ## [ 0.8.1 ]
 
 - Forward OAuth identity support
