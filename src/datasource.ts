@@ -85,6 +85,9 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
               } else if (responseCodeFromServer && responseCodeFromServer > 300) {
                 frame.meta.notices = [{ severity: 'warning', text: `Response Code From Server : ${responseCodeFromServer}` }];
               }
+              if (target.format === 'node-graph-edges' || target.format === 'node-graph-nodes') {
+                frame.meta.preferredVisualisationType = 'nodeGraph';
+              }
               return frame;
             }
             return r;
