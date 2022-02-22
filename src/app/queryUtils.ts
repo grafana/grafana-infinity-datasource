@@ -1,6 +1,6 @@
 import { getTemplateSrv } from '@grafana/runtime';
 import { ScopedVars, DataSourceInstanceSettings, DataQueryRequest } from '@grafana/data';
-import { isDataQuery } from './utils';
+import { isDataQuery, normalizeURL } from './utils';
 import { InfinityQuery, InfinityInstanceSettings, InfinityOptions, GlobalInfinityQuery } from '../types';
 
 const replaceVariable = (input: string, scopedVars: ScopedVars): string => {
@@ -83,6 +83,7 @@ export const getUpdatedDataRequest = (options: DataQueryRequest<InfinityQuery>, 
       .filter((t: InfinityQuery) => t.hide !== true)
       .map((t) => overrideWithGlobalQuery(t, instanceSettings))
       .filter((t) => t.type !== 'global')
-      .map((t) => replaceVariables(t, options.scopedVars)),
+      .map((t) => replaceVariables(t, options.scopedVars))
+      .map((t) => ({ ...t, url: isDataQuery(t) && t.source === 'url' ? normalizeURL(t.url) : '' })),
   };
 };
