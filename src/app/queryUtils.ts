@@ -84,6 +84,11 @@ export const getUpdatedDataRequest = (options: DataQueryRequest<InfinityQuery>, 
       .map((t) => overrideWithGlobalQuery(t, instanceSettings))
       .filter((t) => t.type !== 'global')
       .map((t) => replaceVariables(t, options.scopedVars))
-      .map((t) => ({ ...t, url: isDataQuery(t) && t.source === 'url' ? normalizeURL(t.url) : '' })),
+      .map((t) => {
+        if ((isDataQuery(t) || t.type === 'uql' || t.type === 'groq') && t.source === 'url') {
+          t.url = normalizeURL(t.url);
+        }
+        return t;
+      }),
   };
 };

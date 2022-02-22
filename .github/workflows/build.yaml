@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - main
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
 jobs:
   build:
     runs-on: ubuntu-20.04
@@ -64,6 +67,9 @@ jobs:
         if: |
           steps.cache-yarn-cache.outputs.cache-hit != 'true' ||
           steps.cache-node-modules.outputs.cache-hit != 'true'
+      - name: Audit for vulnerabilities
+        run: |
+          yarn audit-ci;
       - name: Build Frontend
         run: |
           yarn ci-build;

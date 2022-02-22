@@ -2,6 +2,11 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
+## [ 0.8.3 ]
+
+- UQL update ( now support summarize by multiple fields, first, last summarizations )
+- Bug fix #256
+
 ## [ 0.8.2 ]
 
 - Bug fix #254

@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import flatten from 'lodash/flatten';
+import { flatten } from 'lodash';
 import { DataQueryResponse, DataQueryRequest, LoadingState, TimeRange, ScopedVars, toDataFrame, DataFrame } from '@grafana/data';
 import { DataSourceWithBackend } from '@grafana/runtime';
 import { InfinityProvider } from './app/InfinityProvider';

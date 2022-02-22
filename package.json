@@ -1,6 +1,6 @@
 {
   "name": "grafana-infinity-datasource",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "JSON, CSV, XML, GraphQL & HTML datasource for Grafana. Do infinite things with Grafana.",
   "main": "dist/module.js",
   "scripts": {
@@ -13,6 +13,7 @@
     "e2e:update": "grafana-e2e run --update-screenshots",
     "build": "grafana-toolkit plugin:build",
     "ci-build": "grafana-toolkit plugin:ci-build",
+    "audit-ci": "audit-ci --critical",
     "sign": "grafana-toolkit plugin:sign"
   },
   "repository": {
@@ -60,7 +61,7 @@
     "react": "16.12.0",
     "react-dom": "16.12.0",
     "rxjs": "6.6.3",
-    "uql": "0.0.5",
+    "uql": "^0.0.6",
     "xml2js": "^0.4.23"
   },
   "devDependencies": {
@@ -74,6 +75,7 @@
     "@types/lodash": "^4.14.149",
     "@types/mathjs": "^6.0.5",
     "@types/xml2js": "^0.4.6",
+    "audit-ci": "^5.1.2",
     "cypress": "7.7.0",
     "jest-runner": "^27.0.4",
     "ts-jest": "^26.5.4",
