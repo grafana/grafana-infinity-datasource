@@ -1,117 +1,91 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'gatsby';
+import React, { useState, useEffect, Fragment } from 'react';
+import { navigate } from 'gatsby';
 import Fuse from 'fuse.js';
-import * as Dialog from '@radix-ui/react-dialog';
+import { Dialog, Combobox, Transition } from '@headlessui/react';
 import tinykeys from 'tinykeys';
-
-const TOTAL_RESULTS_TO_RENDER = 4;
 
 export const SearchBox = () => {
   const [searchPopupStatus, setSearchPopupStatus] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [results, setResults] = useState<any[]>([]);
   useEffect(() => {
     let unsubscribe = tinykeys(window, {
-      '$mod+KeyK': () => setSearchPopupStatus(true),
-      'Control+K': () => setSearchPopupStatus(true),
+      '$mod+KeyK': () => setSearchPopupStatus(!searchPopupStatus),
+      'Control+K': () => setSearchPopupStatus(!searchPopupStatus),
     });
     return () => unsubscribe();
   });
+  const fuse = new Fuse(sitemap, {
+    keys: ['title', 'description', 'tags'],
+  });
+  useEffect(() => setResults(fuse.search(searchTerm)), [searchTerm]);
   return (
     <>
-      {searchPopupStatus && (
-        <span>
-          <Dialog.Dialog open={searchPopupStatus}>
-            <Dialog.Overlay
-              style={{
-                backgroundColor: 'rgba(0,0,0,0.8)',
-                position: 'fixed',
-                inset: 0,
-                top: '-76px',
-              }}
-            ></Dialog.Overlay>
-            <Dialog.Content
-              onEscapeKeyDown={() => {
+      <Transition.Root show={searchPopupStatus} as={Fragment} afterLeave={() => setSearchTerm('')}>
+        <Dialog open={searchPopupStatus} onClose={setSearchPopupStatus} className="fixed inset-0 p-4 pt-[25vh] overflow-y-auto">
+          <Transition.Child enter="duration-300 ease-out" enterFrom="opacity-0" enterTo="opacity-100" leave="duration-200 ease-in" leaveFrom="opacity-100" leaveTo="opacity-0">
+            <Dialog.Overlay className="fixed inset-0 bg-gray-500/75" />
+          </Transition.Child>
+          <Transition.Child
+            enter="duration-300 ease-out"
+            enterFrom="opacity-0 scale-95"
+            enterTo="opacity-100 scale-100"
+            leave="duration-200 ease-in"
+            leaveFrom="opacity-100 scale-100"
+            leaveTo="opacity-0 scale-95"
+          >
+            <Combobox
+              as="div"
+              className="overflow-hidden relative mx-auto max-w-xl rounded-xl bg-white shadow-2xl ring-1 ring-black/5 divide-y divide-gray-100"
+              onChange={(value: any) => {
                 setSearchPopupStatus(false);
-                setSearchTerm('');
+                navigate(value.item.slug);
               }}
-              onPointerDownOutside={() => {
-                setSearchPopupStatus(false);
-                setSearchTerm('');
-              }}
-              style={{
-                backgroundColor: 'white',
-                color: 'black',
-                borderRadius: 6,
-                boxShadow: 'hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px',
-                position: 'fixed',
-                top: '300px',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                width: '90vw',
-                maxWidth: '800px',
-                minHeight: '420px',
-                maxHeight: '420px',
-                overflow: 'hidden',
-                padding: 25,
-                zIndex: 9999,
-              }}
+              value={searchTerm}
             >
-              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <Dialog.Close onClick={() => setSearchPopupStatus(false)} style={{ color: 'black' }}>
-                  <i className="fas fa-window-close"></i>
-                </Dialog.Close>
+              <div className="flex items-center px-4">
+                <i className="fas fa-search h-6 w-6 my-2 py-1 text-gray-500"></i>
+                <Combobox.Input
+                  className="w-full bg-transparent border-0 focus:ring-0 p-2 text-sm text-gray-800 placeholder-gray-400 h-12"
+                  placeholder="Enter your search term here"
+                  onKeyUp={(e) => {
+                    if (e.key === 'Enter' && results.length > 0) {
+                      setSearchPopupStatus(false);
+                      navigate(results[0].item.slug);
+                    }
+                  }}
+                  onChange={(e) => setSearchTerm(e.currentTarget.value)}
+                  value={searchTerm}
+                />
               </div>
-              <h4 className="font-thin text-3xl">Search Infinity Docs</h4>
-              <br />
-              <input
-                type="text"
-                style={{ fontSize: '24px', width: '100%', background: 'transparent', color: 'black' }}
-                className="p-4"
-                autoFocus
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.currentTarget.value)}
-                placeholder="Enter your search term here"
-              ></input>
-              <br />
-              <SearchResults searchTerm={searchTerm}></SearchResults>
-            </Dialog.Content>
-          </Dialog.Dialog>
-        </span>
-      )}
+              {results.length ? (
+                <Combobox.Options static={true} className="py-4 text-sm max-h-96 overflow-y-auto">
+                  {results.map((r) => {
+                    return (
+                      <Combobox.Option value={r} key={r.item.slug}>
+                        {({ active }) => {
+                          return (
+                            <div className={`px-4 py-2 space-x-1 ${active ? 'bg-gray-100' : ''}`}>
+                              <span className="font-medium text-gray-900">{r.item.title}</span>
+                            </div>
+                          );
+                        }}
+                      </Combobox.Option>
+                    );
+                  })}
+                </Combobox.Options>
+              ) : (
+                <></>
+              )}
+              {searchTerm && results.length < 1 ? <div className="p-4 text-center text-gray-400 text-sm">No results found</div> : <></>}
+            </Combobox>
+          </Transition.Child>
+        </Dialog>
+      </Transition.Root>
       <button onClick={() => setSearchPopupStatus(!searchPopupStatus)} title="Search docs">
         <i className="fas fa-search" onClick={() => {}}></i>
         <span className="lg:hidden ml-2">Search</span>
       </button>
-    </>
-  );
-};
-
-const SearchResults = (props: { searchTerm: string }) => {
-  const fuse = new Fuse(sitemap, {
-    keys: ['title', 'description', 'tags'],
-  });
-  const [results, setResults] = useState<any[]>([]);
-  useEffect(() => {
-    const results = fuse.search(props.searchTerm);
-    setResults(results);
-  }, [props.searchTerm]);
-  return (
-    <>
-      {results && results.length > 0 ? (
-        <>
-          {results.slice(0, TOTAL_RESULTS_TO_RENDER).map((r, i) => (
-            <nav key={i}>
-              <Link to={r.item.slug} style={{ paddingBlock: '30px' }}>
-                <li className="my-10 px-3 list-none">
-                  <span style={{ color: 'black' }}>{r.item.title}</span>
-                </li>
-              </Link>
-            </nav>
-          ))}
-        </>
-      ) : (
-        <></>
-      )}
     </>
   );
 };
@@ -230,5 +204,11 @@ const sitemap: any[] = [
     slug: '/license',
     description: 'license',
     tags: ['license', 'apache'],
+  },
+  {
+    title: 'Home',
+    slug: '/',
+    description: 'Infinity datasource documentation homepage',
+    tags: ['json', 'api', 'rest', 'welcome', 'hello', 'intro'],
   },
 ];
