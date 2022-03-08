@@ -199,6 +199,9 @@ func getRequest(settings InfinitySettings, body io.Reader, query Query, requestH
 func (client *Client) req(url string, body *strings.Reader, settings InfinitySettings, isJSON bool, query Query, requestHeaders map[string]string) (obj interface{}, statusCode int, duration time.Duration, err error) {
 	req, _ := getRequest(settings, body, query, requestHeaders)
 	startTime := time.Now()
+	if !CanAllowURL(req.URL.String(), settings.AllowedHosts) {
+		return nil, http.StatusUnauthorized, 0, errors.New("requested URL is not allowed. To allow this URL, update the datasource config URL -> Allowed Hosts section")
+	}
 	res, err := client.HttpClient.Do(req)
 	duration = time.Since(startTime)
 	if err != nil {
@@ -247,4 +250,17 @@ func (client *Client) GetResults(query Query, requestHeaders map[string]string) 
 	default:
 		return client.req(query.URL, nil, client.Settings, isJSON, query, requestHeaders)
 	}
+}
+
+func CanAllowURL(url string, allowedHosts []string) bool {
+	allow := false
+	if len(allowedHosts) == 0 {
+		return true
+	}
+	for _, host := range allowedHosts {
+		if strings.HasPrefix(url, host) {
+			return true
+		}
+	}
+	return allow
 }

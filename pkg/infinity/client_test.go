@@ -252,6 +252,47 @@ func TestInfinityClient_GetResults(t *testing.T) {
 	}
 }
 
+func TestCanAllowURL(t *testing.T) {
+	tests := []struct {
+		name         string
+		url          string
+		allowedHosts []string
+		want         bool
+	}{
+		{
+			url:  "https://foo.com",
+			want: true,
+		},
+		{
+			url:          "https://foo.com",
+			allowedHosts: []string{"https://foo.com"},
+			want:         true,
+		},
+		{
+			url:          "https://bar.com",
+			allowedHosts: []string{"https://foo.com"},
+			want:         false,
+		},
+		{
+			name:         "should match only case sensitive URL",
+			url:          "https://FOO.com",
+			allowedHosts: []string{"https://foo.com"},
+			want:         false,
+		},
+		{
+			url:          "https://bar.com/",
+			allowedHosts: []string{"https://foo.com/", "https://bar.com/", "https://baz.com/"},
+			want:         true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := infinity.CanAllowURL(tt.url, tt.allowedHosts)
+			assert.Equal(t, tt.want, got)
+		})
+	}
+}
+
 func Test_getTLSConfigFromSettings(t *testing.T) {
 	t.Run("default settings should return default client", func(t *testing.T) {
 		got, err := infinity.GetTLSConfigFromSettings(infinity.InfinitySettings{})

@@ -35,8 +35,14 @@ In some cases, you may need to pass the secure API keys as part of your URL. Har
 
 ![image](https://user-images.githubusercontent.com/153843/116439894-f3b80580-a847-11eb-9788-8c60bce00866.png#center)
 
-> Secure keys feature is available only from 0.7 version of the plugin. Prior to 0.8.0, you many need to explicitly refer the query string value in the query URL using `${__qs.KEY_NAME}` style reference.
+You can also use Api key authentication for this purpose.
 
 ## Headers in the URL
 
 You can configure the headers required for the URL in the datasource config and also in the query headers. By default infinity datasource automatically sets two headers. Header `User-Agent : Grafana` will be set for all requests and `Content-Type : application/json`. You can override these headers in the datasource configuration page.
+
+## Allowed Hosts
+
+Leaving blank will allow all the hosts. This is by default.
+
+If your datasource needs to allow only certain hosts, Configure the allowed host names in the config. There can be multiple hosts allowed. Host names are case sensitive and needs to be full host name. Example : `https://en.wikipedia.org/`

@@ -30,6 +30,7 @@ export interface InfinityOptions extends DataSourceJsonData {
   global_queries?: GlobalInfinityQuery[];
   timeoutInSeconds?: number;
   oauthPassThru?: boolean;
+  allowedHosts?: string[];
 }
 
 export interface InfinitySecureOptions {
