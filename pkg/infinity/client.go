@@ -110,40 +110,55 @@ func NewClient(settings InfinitySettings) (client *Client, err error) {
 	}, err
 }
 
-func replaceSecret(input string, settings InfinitySettings) string {
+func replaceSect(input string, settings InfinitySettings, includeSect bool) string {
 	for key, value := range settings.SecureQueryFields {
-		input = strings.ReplaceAll(input, fmt.Sprintf("${__qs.%s}", key), value)
+		if includeSect {
+			input = strings.ReplaceAll(input, fmt.Sprintf("${__qs.%s}", key), value)
+		}
+		if !includeSect {
+			input = strings.ReplaceAll(input, fmt.Sprintf("${__qs.%s}", key), "xxxxxxxx")
+		}
 	}
 	return input
 }
 
-func GetQueryURL(settings InfinitySettings, query Query) (string, error) {
+func GetQueryURL(settings InfinitySettings, query Query, includeSect bool) (string, error) {
 	urlString := query.URL
 	if !strings.HasPrefix(query.URL, settings.URL) {
 		urlString = settings.URL + urlString
 	}
-	urlString = replaceSecret(urlString, settings)
+	urlString = replaceSect(urlString, settings, includeSect)
 	u, err := url.Parse(urlString)
 	if err != nil {
-		return urlString, nil
+		return urlString, err
 	}
 	q := u.Query()
 	for _, param := range query.URLOptions.Params {
-		value := replaceSecret(param.Value, settings)
+		value := replaceSect(param.Value, settings, includeSect)
 		q.Set(param.Key, value)
 	}
 	for key, value := range settings.SecureQueryFields {
-		q.Set(key, value)
+		if includeSect {
+			q.Set(key, value)
+		}
+		if !includeSect {
+			q.Set(key, "xxxxxxxx")
+		}
 	}
 	if settings.AuthenticationMethod == "apiKey" && settings.ApiKeyType == "query" {
-		q.Set(settings.ApiKeyKey, settings.ApiKeyValue)
+		if includeSect {
+			q.Set(settings.ApiKeyKey, settings.ApiKeyValue)
+		}
+		if !includeSect {
+			q.Set(settings.ApiKeyKey, "xxxxxxxx")
+		}
 	}
 	u.RawQuery = q.Encode()
 	return u.String(), nil
 }
 
 func getRequest(settings InfinitySettings, body io.Reader, query Query, requestHeaders map[string]string) (req *http.Request, err error) {
-	url, err := GetQueryURL(settings, query)
+	url, err := GetQueryURL(settings, query, true)
 	if err != nil {
 		return nil, err
 	}
@@ -172,7 +187,7 @@ func getRequest(settings InfinitySettings, body io.Reader, query Query, requestH
 		req.Header.Set("Content-Type", "application/json")
 	}
 	for _, header := range query.URLOptions.Headers {
-		value := replaceSecret(header.Value, settings)
+		value := replaceSect(header.Value, settings, true)
 		req.Header.Set(header.Key, value)
 	}
 	for key, value := range settings.CustomHeaders {

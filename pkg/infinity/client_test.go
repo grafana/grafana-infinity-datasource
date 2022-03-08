@@ -13,10 +13,11 @@ import (
 
 func Test_getQueryURL(t *testing.T) {
 	tests := []struct {
-		name     string
-		settings infinity.InfinitySettings
-		query    infinity.Query
-		want     string
+		name          string
+		settings      infinity.InfinitySettings
+		query         infinity.Query
+		excludeSecret bool
+		want          string
 	}{
 		{
 			settings: infinity.InfinitySettings{},
@@ -40,6 +41,16 @@ func Test_getQueryURL(t *testing.T) {
 				URL: "/hello?key=val",
 			},
 			want: "https://foo.com/hello?key=val",
+		},
+		{
+			name: "should always respect the URL in the settings",
+			settings: infinity.InfinitySettings{
+				URL: "https://one.com",
+			},
+			query: infinity.Query{
+				URL: "https://two.com/hello?key=val",
+			},
+			want: "https://one.comhttps://two.com/hello?key=val",
 		},
 		{
 			settings: infinity.InfinitySettings{
@@ -76,10 +87,57 @@ func Test_getQueryURL(t *testing.T) {
 			},
 			want: "https://foo.com/hello?foo=bar&key=val&key_one=val_one&key_two=val_two",
 		},
+		{
+			settings: infinity.InfinitySettings{
+				URL: "https://foo.com/${__qs.key_three}",
+				SecureQueryFields: map[string]string{
+					"key_one":   "val_one",
+					"key_two":   "val_two",
+					"key_three": "val_three",
+				},
+				AuthenticationMethod: "apiKey",
+				ApiKeyKey:            "hello",
+				ApiKeyValue:          "world",
+				ApiKeyType:           "query",
+			},
+			query: infinity.Query{
+				URL: "/hello?key=val&foo=bar&key_one=foo",
+				URLOptions: infinity.URLOptions{
+					Params: []infinity.URLOptionKeyValuePair{
+						{Key: "mee", Value: "too"},
+					},
+				},
+			},
+			want: "https://foo.com/val_three/hello?foo=bar&hello=world&key=val&key_one=val_one&key_three=val_three&key_two=val_two&mee=too",
+		},
+		{
+			settings: infinity.InfinitySettings{
+				URL: "https://foo.com/${__qs.key_three}",
+				SecureQueryFields: map[string]string{
+					"key_one":   "val_one",
+					"key_two":   "val_two",
+					"key_three": "val_three",
+				},
+				AuthenticationMethod: "apiKey",
+				ApiKeyKey:            "hello",
+				ApiKeyValue:          "world",
+				ApiKeyType:           "query",
+			},
+			query: infinity.Query{
+				URL: "/hello?key=val&foo=bar&key_one=foo",
+				URLOptions: infinity.URLOptions{
+					Params: []infinity.URLOptionKeyValuePair{
+						{Key: "mee", Value: "too"},
+					},
+				},
+			},
+			excludeSecret: true,
+			want:          "https://foo.com/xxxxxxxx/hello?foo=bar&hello=xxxxxxxx&key=val&key_one=xxxxxxxx&key_three=xxxxxxxx&key_two=xxxxxxxx&mee=too",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			u, err := infinity.GetQueryURL(tt.settings, tt.query)
+			u, err := infinity.GetQueryURL(tt.settings, tt.query, !tt.excludeSecret)
 			assert.Equal(t, err, nil)
 			assert.Equal(t, tt.want, u)
 		})

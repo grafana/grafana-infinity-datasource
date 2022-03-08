@@ -54,7 +54,7 @@ func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient in
 	}
 	if query.Source == "url" {
 		response, statusCode, duration, err := infClient.GetResults(query, requestHeaders)
-		frame.Meta.ExecutedQueryString = query.URL
+		frame.Meta.ExecutedQueryString, _ = infinity.GetQueryURL(infClient.Settings, query, false)
 		customMeta.Data = response
 		customMeta.ResponseCodeFromServer = statusCode
 		customMeta.Duration = duration
