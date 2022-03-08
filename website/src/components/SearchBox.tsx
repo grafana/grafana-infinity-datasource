@@ -157,6 +157,12 @@ const sitemap: any[] = [
     tags: ['datasource', 'configuration', 'provisioning', 'authentication', 'authorization', 'headers', 'proxy', 'oauth', 'forward oauth identity', 'setup', 'setting'],
   },
   {
+    title: 'Authentication',
+    slug: '/wiki/authentication',
+    description: 'Various authentication methods',
+    tags: ['authentication', 'auth', 'username', 'password', 'secure', 'security', 'oauth', 'oauth2', 'api token', 'api key', 'bearer token', 'forward oauth identity'],
+  },
+  {
     title: 'Global Queries',
     slug: '/wiki/global-queries',
     description: 'Grafana datasource configuration with global queries',
@@ -165,7 +171,7 @@ const sitemap: any[] = [
   {
     title: 'Installation',
     slug: '/wiki/installation',
-    description: 'Grafana datasource installation',
+    description: 'Grafana infinity datasource installation',
     tags: ['datasource', 'installation', 'grafana.com', 'grafana-cli', 'docker', 'docker-compose', 'helm', 'download'],
   },
   {

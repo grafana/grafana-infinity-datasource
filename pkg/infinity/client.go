@@ -135,6 +135,9 @@ func GetQueryURL(settings InfinitySettings, query Query) (string, error) {
 	for key, value := range settings.SecureQueryFields {
 		q.Set(key, value)
 	}
+	if settings.AuthenticationMethod == "apiKey" && settings.ApiKeyType == "query" {
+		q.Set(settings.ApiKeyKey, settings.ApiKeyValue)
+	}
 	u.RawQuery = q.Encode()
 	return u.String(), nil
 }
@@ -152,6 +155,12 @@ func getRequest(settings InfinitySettings, body io.Reader, query Query, requestH
 	}
 	if settings.BasicAuthEnabled && (settings.UserName != "" || settings.Password != "") {
 		req.Header.Add("Authorization", "Basic "+base64.StdEncoding.EncodeToString([]byte(settings.UserName+":"+settings.Password)))
+	}
+	if settings.AuthenticationMethod == "bearerToken" {
+		req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", settings.BearerToken))
+	}
+	if settings.AuthenticationMethod == "apiKey" && settings.ApiKeyType == "header" {
+		req.Header.Add(settings.ApiKeyKey, settings.ApiKeyValue)
 	}
 	if settings.ForwardOauthIdentity {
 		req.Header.Add("Authorization", requestHeaders["Authorization"])

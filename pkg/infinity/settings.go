@@ -24,6 +24,10 @@ type OAuth2Settings struct {
 type InfinitySettings struct {
 	AuthenticationMethod string
 	OAuth2Settings       OAuth2Settings
+	BearerToken          string
+	ApiKeyKey            string
+	ApiKeyType           string
+	ApiKeyValue          string
 	URL                  string
 	BasicAuthEnabled     bool
 	UserName             string
@@ -43,6 +47,8 @@ type InfinitySettings struct {
 
 type InfinitySettingsJson struct {
 	AuthenticationMethod string         `json:"auth_method,omitempty"`
+	APIKeyKey            string         `json:"apiKeyKey,omitempty"`
+	APIKeyType           string         `json:"apiKeyType,omitempty"`
 	OAuth2Settings       OAuth2Settings `json:"oauth2,omitempty"`
 	ForwardOauthIdentity bool           `json:"oauthPassThru,omitempty"`
 	InsecureSkipVerify   bool           `json:"tlsSkipVerify,omitempty"`
@@ -68,6 +74,16 @@ func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinityS
 		settings.OAuth2Settings = infJson.OAuth2Settings
 		if settings.AuthenticationMethod == "oauth2" && settings.OAuth2Settings.OAuth2Type == "" {
 			settings.OAuth2Settings.OAuth2Type = "client_credentials"
+		}
+		if settings.AuthenticationMethod == "apiKey" {
+			settings.ApiKeyKey = infJson.APIKeyKey
+			settings.ApiKeyType = infJson.APIKeyType
+			if settings.ApiKeyType == "" {
+				settings.ApiKeyType = "header"
+			}
+			if val, ok := config.DecryptedSecureJSONData["apiKeyValue"]; ok {
+				settings.ApiKeyValue = val
+			}
 		}
 		settings.ForwardOauthIdentity = infJson.ForwardOauthIdentity
 		settings.InsecureSkipVerify = infJson.InsecureSkipVerify
@@ -101,6 +117,11 @@ func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinityS
 	settings.SecureQueryFields = GetSecrets(config, "secureQueryName", "secureQueryValue")
 	if settings.AuthenticationMethod == "oauth2" && settings.OAuth2Settings.OAuth2Type == "jwt" {
 		settings.OAuth2Settings.EndpointParams = GetSecrets(config, "oauth2EndPointParamsName", "oauth2EndPointParamsValue")
+	}
+	if settings.AuthenticationMethod == "bearerToken" {
+		if val, ok := config.DecryptedSecureJSONData["bearerToken"]; ok {
+			settings.BearerToken = val
+		}
 	}
 	return
 }
