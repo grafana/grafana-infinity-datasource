@@ -38,7 +38,7 @@ My full url now becomes `https://thingspeak.com/channels/38629/feed.json?start=$
 
 ## Long time range
 
-Typically for up to 2 hour you can get all the metrics without any aggregation. If you are looking for more long time range, you may need to pass aggregation filter to your url. Here in the below example, I am looking for data worth of recent 180days. So i am pulling the aggrgated data using the url `https://thingspeak.com/channels/38629/feed.json?start=${__from:date:YYYY-MM-DD HH:NN:SS}&end=${__to:date:YYYY-MM-DD HH:NN:SS}&average=1440` the key to look at here is **average=1440** where it specify to take average of each 1440 minutes/1day. You can specify more grangular time aggragation. As per the document, 10, 15, 20, 30, 60, 240, 720, 1440 are the valid timerange in minutes. Also instead average you can use sum/timescale/median functions.
+Typically for up to 2 hour you can get all the metrics without any aggregation. If you are looking for more long time range, you may need to pass aggregation filter to your url. Here in the below example, I am looking for data worth of recent 180days. So i am pulling the aggregated data using the url `https://thingspeak.com/channels/38629/feed.json?start=${__from:date:YYYY-MM-DD HH:NN:SS}&end=${__to:date:YYYY-MM-DD HH:NN:SS}&average=1440` the key to look at here is **average=1440** where it specify to take average of each 1440 minutes/1day. You can specify more granular time aggregation. As per the document, 10, 15, 20, 30, 60, 240, 720, 1440 are the valid time range in minutes. Also instead average you can use sum/timescale/median functions.
 
 ![image](https://user-images.githubusercontent.com/153843/108484741-0cc69800-7294-11eb-956b-8dfb74123301.png#center)
 

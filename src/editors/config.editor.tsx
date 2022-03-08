@@ -82,7 +82,9 @@ export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<I
             variant="secondary"
             size="md"
             target="_blank"
-            href={`/api/datasources/${props.options.id}/resources/graphql?query=%7B%0A%20%20query(type%3A%20"json"%2C%20url%3A%20"https%3A%2F%2Fjsonplaceholder.typicode.com%2Fusers")%0A%7D%0A`}
+            href={
+              `/api/datasources/${props.options.id}/resources/graphql?query=%7B%0A%20%20query(type%3A%20"json"%2C%20url%3A%20"https%3A%2F%2F` + `jsonplaceholder.typicode.com%2F` + `users")%0A%7D%0A`
+            }
             rel="noreferrer"
             style={{ marginInline: '5px' }}
           >

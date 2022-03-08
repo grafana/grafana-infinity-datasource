@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'gatsby';
-import { TypeWriter } from './TypeWritter';
+import { TypeWriter } from './TypeWriter';
 
 export const HeroSection = () => {
   const [hasRan, setHasRan] = useState(false);

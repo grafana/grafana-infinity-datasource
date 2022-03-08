@@ -70,6 +70,9 @@ jobs:
       - name: Audit for vulnerabilities
         run: |
           yarn audit-ci;
+      - name: Spellcheck
+        run: |
+          yarn spellcheck;
       - name: Build Frontend
         run: |
           yarn ci-build;
