@@ -8,6 +8,26 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 )
 
+const (
+	AuthenticationMethodNone         = "none"
+	AuthenticationMethodBasic        = "basicAuth"
+	AuthenticationMethodApiKey       = "apiKey"
+	AuthenticationMethodBearerToken  = "bearerToken"
+	AuthenticationMethodForwardOauth = "oauthPassThru"
+	AuthenticationMethodOAuth        = "oauth2"
+)
+
+const (
+	AuthOAuthTypeClientCredentials = "client_credentials"
+	AuthOAuthJWT                   = "jwt"
+	AuthOAuthOthers                = "others"
+)
+
+const (
+	ApiKeyTypeHeader = "header"
+	ApiKeyTypeQuery  = "query"
+)
+
 type OAuth2Settings struct {
 	OAuth2Type     string   `json:"oauth2_type,omitempty"`
 	ClientID       string   `json:"client_id,omitempty"`
