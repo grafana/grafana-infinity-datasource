@@ -18,6 +18,7 @@ import (
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
 	"golang.org/x/oauth2/jwt"
+	"moul.io/http2curl"
 )
 
 type Client struct {
@@ -157,8 +158,8 @@ func GetQueryURL(settings InfinitySettings, query Query, includeSect bool) (stri
 	return u.String(), nil
 }
 
-func getRequest(settings InfinitySettings, body io.Reader, query Query, requestHeaders map[string]string) (req *http.Request, err error) {
-	url, err := GetQueryURL(settings, query, true)
+func GetRequest(settings InfinitySettings, body io.Reader, query Query, requestHeaders map[string]string, includeSect bool) (req *http.Request, err error) {
+	url, err := GetQueryURL(settings, query, includeSect)
 	if err != nil {
 		return nil, err
 	}
@@ -169,35 +170,60 @@ func getRequest(settings InfinitySettings, body io.Reader, query Query, requestH
 		req, err = http.NewRequest("GET", url, nil)
 	}
 	if settings.BasicAuthEnabled && (settings.UserName != "" || settings.Password != "") {
-		req.Header.Add("Authorization", "Basic "+base64.StdEncoding.EncodeToString([]byte(settings.UserName+":"+settings.Password)))
+		basicAuthHeader := fmt.Sprintf("Basic %s", "xxxxxxxx")
+		if includeSect {
+			basicAuthHeader = "Basic " + base64.StdEncoding.EncodeToString([]byte(settings.UserName+":"+settings.Password))
+		}
+		req.Header.Add("Authorization", basicAuthHeader)
 	}
 	if settings.AuthenticationMethod == "bearerToken" {
-		req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", settings.BearerToken))
+		bearerAuthHeader := fmt.Sprintf("Bearer %s", "xxxxxxxx")
+		if includeSect {
+			bearerAuthHeader = fmt.Sprintf("Bearer %s", settings.BearerToken)
+		}
+		req.Header.Add("Authorization", bearerAuthHeader)
 	}
 	if settings.AuthenticationMethod == "apiKey" && settings.ApiKeyType == "header" {
-		req.Header.Add(settings.ApiKeyKey, settings.ApiKeyValue)
+		apiKeyHeader := "xxxxxxxx"
+		if includeSect {
+			apiKeyHeader = settings.ApiKeyValue
+		}
+		req.Header.Add(settings.ApiKeyKey, apiKeyHeader)
 	}
 	if settings.ForwardOauthIdentity {
-		req.Header.Add("Authorization", requestHeaders["Authorization"])
+		authHeader := "xxxxxxxx"
+		token := "xxxxxxxx"
+		if includeSect {
+			authHeader = requestHeaders["Authorization"]
+			token = requestHeaders["X-ID-Token"]
+		}
+		req.Header.Add("Authorization", authHeader)
 		if requestHeaders["X-ID-Token"] != "" {
-			req.Header.Add("X-ID-Token", requestHeaders["X-ID-Token"])
+			req.Header.Add("X-ID-Token", token)
 		}
 	}
 	if query.Type == "json" || query.Type == "graphql" {
 		req.Header.Set("Content-Type", "application/json")
 	}
 	for _, header := range query.URLOptions.Headers {
-		value := replaceSect(header.Value, settings, true)
+		value := "xxxxxxxx"
+		if includeSect {
+			value = replaceSect(header.Value, settings, includeSect)
+		}
 		req.Header.Set(header.Key, value)
 	}
 	for key, value := range settings.CustomHeaders {
-		req.Header.Set(key, value)
+		val := "xxxxxxxx"
+		if includeSect {
+			val = value
+		}
+		req.Header.Set(key, val)
 	}
 	return req, err
 }
 
 func (client *Client) req(url string, body *strings.Reader, settings InfinitySettings, isJSON bool, query Query, requestHeaders map[string]string) (obj interface{}, statusCode int, duration time.Duration, err error) {
-	req, _ := getRequest(settings, body, query, requestHeaders)
+	req, _ := GetRequest(settings, body, query, requestHeaders, true)
 	startTime := time.Now()
 	if !CanAllowURL(req.URL.String(), settings.AllowedHosts) {
 		return nil, http.StatusUnauthorized, 0, errors.New("requested URL is not allowed. To allow this URL, update the datasource config URL -> Allowed Hosts section")
@@ -238,14 +264,7 @@ func (client *Client) GetResults(query Query, requestHeaders map[string]string) 
 	}
 	switch query.URLOptions.Method {
 	case "POST":
-		body := strings.NewReader(query.URLOptions.Data)
-		if query.Type == "graphql" {
-			jsonData := map[string]string{
-				"query": query.URLOptions.Data,
-			}
-			jsonValue, _ := json.Marshal(jsonData)
-			body = strings.NewReader(string(jsonValue))
-		}
+		body := GetQueryBody(query)
 		return client.req(query.URL, body, client.Settings, isJSON, query, requestHeaders)
 	default:
 		return client.req(query.URL, nil, client.Settings, isJSON, query, requestHeaders)
@@ -263,4 +282,32 @@ func CanAllowURL(url string, allowedHosts []string) bool {
 		}
 	}
 	return allow
+}
+
+func GetQueryBody(query Query) *strings.Reader {
+	body := strings.NewReader(query.URLOptions.Data)
+	if query.Type == "graphql" {
+		jsonData := map[string]string{
+			"query": query.URLOptions.Data,
+		}
+		jsonValue, _ := json.Marshal(jsonData)
+		body = strings.NewReader(string(jsonValue))
+	}
+	return body
+}
+
+func (client *Client) GetExecutedURL(query Query) string {
+	req, err := GetRequest(client.Settings, GetQueryBody(query), query, map[string]string{}, false)
+	if err != nil {
+		return fmt.Sprintf("error retrieving full url. %s", query.URL)
+	}
+	command, err := http2curl.GetCurlCommand(req)
+	if err != nil {
+		return fmt.Sprintf("error retrieving full url. %s", query.URL)
+	}
+	return fmt.Sprintf(`## URL
+%s
+
+## Curl Command
+%s`, req.URL.String(), command.String())
 }

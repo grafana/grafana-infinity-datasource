@@ -293,6 +293,59 @@ func TestCanAllowURL(t *testing.T) {
 	}
 }
 
+func TestClient_GetExecutedURL(t *testing.T) {
+	tests := []struct {
+		name     string
+		settings infinity.InfinitySettings
+		url      string
+		command  string
+		query    infinity.Query
+	}{
+		{
+			query:   infinity.Query{URL: "https://foo.com"},
+			url:     "https://foo.com",
+			command: "curl -X 'GET' 'https://foo.com'",
+		},
+		{
+			settings: infinity.InfinitySettings{UserName: "hello", Password: "world", BasicAuthEnabled: true},
+			query:    infinity.Query{URL: "https://foo.com"},
+			url:      "https://foo.com",
+			command:  "curl -X 'GET' -H 'Authorization: Basic xxxxxxxx' 'https://foo.com'",
+		},
+		{
+			settings: infinity.InfinitySettings{AuthenticationMethod: "bearerToken", BearerToken: "world2"},
+			query:    infinity.Query{URL: "https://foo.com"},
+			url:      "https://foo.com",
+			command:  "curl -X 'GET' -H 'Authorization: Bearer xxxxxxxx' 'https://foo.com'",
+		},
+		{
+			settings: infinity.InfinitySettings{AuthenticationMethod: "apiKey", ApiKeyType: "header", ApiKeyKey: "hello", ApiKeyValue: "world"},
+			query:    infinity.Query{URL: "https://foo.com"},
+			url:      "https://foo.com",
+			command:  "curl -X 'GET' -H 'Hello: xxxxxxxx' 'https://foo.com'",
+		},
+		{
+			settings: infinity.InfinitySettings{ForwardOauthIdentity: true},
+			query:    infinity.Query{URL: "https://foo.com"},
+			url:      "https://foo.com",
+			command:  "curl -X 'GET' -H 'Authorization: xxxxxxxx' 'https://foo.com'",
+		},
+		{
+			settings: infinity.InfinitySettings{CustomHeaders: map[string]string{"good": "bye"}, SecureQueryFields: map[string]string{"me": "too"}},
+			query:    infinity.Query{URL: "https://foo.com?something=${__qs.me}", Type: "json", URLOptions: infinity.URLOptions{Method: "POST", Data: "my request body with ${__qs.me} value", Headers: []infinity.URLOptionKeyValuePair{{Key: "hello", Value: "world"}}}},
+			url:      "https://foo.com?me=xxxxxxxx&something=xxxxxxxx",
+			command:  "curl -X 'POST' -d 'my request body with ${__qs.me} value' -H 'Content-Type: application/json' -H 'Good: xxxxxxxx' -H 'Hello: xxxxxxxx' 'https://foo.com?me=xxxxxxxx&something=xxxxxxxx'",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			client := &infinity.Client{Settings: tt.settings}
+			got := client.GetExecutedURL(tt.query)
+			assert.Equal(t, fmt.Sprintf("## URL\n%s\n\n## Curl Command\n%s", tt.url, tt.command), got)
+		})
+	}
+}
+
 func Test_getTLSConfigFromSettings(t *testing.T) {
 	t.Run("default settings should return default client", func(t *testing.T) {
 		got, err := infinity.GetTLSConfigFromSettings(infinity.InfinitySettings{})

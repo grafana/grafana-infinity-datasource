@@ -31,6 +31,7 @@ module.exports = {
     'jsonpath',
     'kusto',
     'magefile',
+    'moul',
     'mainbg',
     'mkdir',
     'newyork',
