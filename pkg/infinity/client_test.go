@@ -11,81 +11,6 @@ import (
 	infinity "github.com/yesoreyeram/grafana-infinity-datasource/pkg/infinity"
 )
 
-func Test_getQueryURL(t *testing.T) {
-	tests := []struct {
-		name     string
-		settings infinity.InfinitySettings
-		query    infinity.Query
-		want     string
-	}{
-		{
-			settings: infinity.InfinitySettings{},
-			query: infinity.Query{
-				URL: "0.0.0.0",
-			},
-			want: "0.0.0.0",
-		},
-		{
-			settings: infinity.InfinitySettings{},
-			query: infinity.Query{
-				URL: "https://foo.com?key=val",
-			},
-			want: "https://foo.com?key=val",
-		},
-		{
-			settings: infinity.InfinitySettings{
-				URL: "https://foo.com",
-			},
-			query: infinity.Query{
-				URL: "/hello?key=val",
-			},
-			want: "https://foo.com/hello?key=val",
-		},
-		{
-			settings: infinity.InfinitySettings{
-				URL: "https://foo.com",
-			},
-			query: infinity.Query{
-				URL: "https://foo.com/hello?key=val",
-			},
-			want: "https://foo.com/hello?key=val",
-		},
-		{
-			settings: infinity.InfinitySettings{
-				URL: "https://foo.com",
-				SecureQueryFields: map[string]string{
-					"key_one": "val_one",
-					"key_two": "val_two",
-				},
-			},
-			query: infinity.Query{
-				URL: "/hello?key=val&key_one=${__qs.key_one}&key_two=${__qs.key_two}&foo=bar",
-			},
-			want: "https://foo.com/hello?foo=bar&key=val&key_one=val_one&key_two=val_two",
-		},
-		{
-			settings: infinity.InfinitySettings{
-				URL: "https://foo.com",
-				SecureQueryFields: map[string]string{
-					"key_one": "val_one",
-					"key_two": "val_two",
-				},
-			},
-			query: infinity.Query{
-				URL: "/hello?key=val&foo=bar&key_one=foo",
-			},
-			want: "https://foo.com/hello?foo=bar&key=val&key_one=val_one&key_two=val_two",
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			u, err := infinity.GetQueryURL(tt.settings, tt.query)
-			assert.Equal(t, err, nil)
-			assert.Equal(t, tt.want, u)
-		})
-	}
-}
-
 func TestInfinityClient_GetResults(t *testing.T) {
 	tests := []struct {
 		name           string
@@ -190,6 +115,47 @@ func TestInfinityClient_GetResults(t *testing.T) {
 			assert.Equal(t, tt.wantO, gotO)
 			assert.NotNil(t, statusCode)
 			assert.NotNil(t, duration)
+		})
+	}
+}
+
+func TestCanAllowURL(t *testing.T) {
+	tests := []struct {
+		name         string
+		url          string
+		allowedHosts []string
+		want         bool
+	}{
+		{
+			url:  "https://foo.com",
+			want: true,
+		},
+		{
+			url:          "https://foo.com",
+			allowedHosts: []string{"https://foo.com"},
+			want:         true,
+		},
+		{
+			url:          "https://bar.com",
+			allowedHosts: []string{"https://foo.com"},
+			want:         false,
+		},
+		{
+			name:         "should match only case sensitive URL",
+			url:          "https://FOO.com",
+			allowedHosts: []string{"https://foo.com"},
+			want:         false,
+		},
+		{
+			url:          "https://bar.com/",
+			allowedHosts: []string{"https://foo.com/", "https://bar.com/", "https://baz.com/"},
+			want:         true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := infinity.CanAllowURL(tt.url, tt.allowedHosts)
+			assert.Equal(t, tt.want, got)
 		})
 	}
 }

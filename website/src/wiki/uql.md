@@ -174,6 +174,10 @@ USA,2,100
 
 `parse-xml` is used to specify that the results are in xml format
 
+### parse-yaml
+
+`parse-yaml` is used to specify that the results are in xml format
+
 ### count
 
 count gives the number of results.

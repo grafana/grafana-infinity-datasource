@@ -131,4 +131,28 @@ canada,200`,
     expect((result as DataFrame).fields[0].values.toArray()[0]).toStrictEqual('Informational message: [RESOLVED] Internet connectivity');
     expect((result as DataFrame).fields[2].values.toArray()[0]).toStrictEqual(new Date('Fri, 24 Dec 2021 10:41:17 PST'));
   });
+  it('yaml', async () => {
+    const result = await applyUQL(
+      `parse-yaml`,
+      `---
+-
+    city: chennai
+    country: india
+    gdp: 12.3
+    population: 123
+-
+    city: london
+    country: uk
+    gdp: 23
+    population: 1432
+`,
+      'table',
+      'A'
+    );
+    expect(result.length).toStrictEqual(2);
+    expect((result as DataFrame).fields.length).toStrictEqual(4);
+    expect((result as DataFrame).fields[0].values.length).toStrictEqual(2);
+    expect((result as DataFrame).fields[0].values.toArray()).toStrictEqual(['chennai', 'london']);
+    expect((result as DataFrame).fields[2].values.toArray()).toStrictEqual([12.3, 23]);
+  });
 });

@@ -3,8 +3,8 @@ slug: '/wiki/configuration'
 title: 'Configuration'
 previous_page_title: 'Installation'
 previous_page_slug: '/wiki/installation'
-next_page_title: 'Provisioning'
-next_page_slug: '/wiki/provisioning'
+next_page_title: 'Authentication'
+next_page_slug: '/wiki/authentication'
 ---
 
 Once the plugin installed, you need to create an instance of the datasource. To create an instance follow the steps
@@ -31,11 +31,3 @@ More details about the URL and related settings can be found in [url](/wiki/url)
 If you want your datasource to connect via proxy, set the environment appropriate environment variables. HTTP_PROXY, HTTPS_PROXY and NO_PROXY. HTTPS_PROXY takes precedence over HTTP_PROXY for https requests.
 
 > proxy support is available from v0.7.10
-
-## Authentication
-
-Infinity datasource supports following authentication methods
-
-- Basic authentication ( username and password )
-- API Key authentications ( HTTP Header based authentication )
-- OAuth passthrough ( Forward OAuth identity from grafana )

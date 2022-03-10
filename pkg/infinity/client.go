@@ -1,23 +1,15 @@
 package infinity
 
 import (
-	"context"
 	"crypto/tls"
 	"crypto/x509"
-	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"net/http"
-	"net/url"
 	"strings"
 	"time"
-
-	"golang.org/x/oauth2"
-	"golang.org/x/oauth2/clientcredentials"
-	"golang.org/x/oauth2/jwt"
 )
 
 type Client struct {
@@ -64,117 +56,32 @@ func NewClient(settings InfinitySettings) (client *Client, err error) {
 		Transport: transport,
 		Timeout:   time.Second * time.Duration(settings.TimeoutInSeconds),
 	}
-	if settings.AuthenticationMethod == "oauth2" {
-		if settings.OAuth2Settings.OAuth2Type == "client_credentials" {
-			oauthConfig := clientcredentials.Config{
-				ClientID:       settings.OAuth2Settings.ClientID,
-				ClientSecret:   settings.OAuth2Settings.ClientSecret,
-				TokenURL:       settings.OAuth2Settings.TokenURL,
-				Scopes:         []string{},
-				EndpointParams: url.Values{},
-			}
-			for _, scope := range settings.OAuth2Settings.Scopes {
-				if scope != "" {
-					oauthConfig.Scopes = append(oauthConfig.Scopes, scope)
-				}
-			}
-			for k, v := range settings.OAuth2Settings.EndpointParams {
-				if k != "" && v != "" {
-					oauthConfig.EndpointParams.Set(k, v)
-				}
-			}
-			ctx := context.WithValue(context.Background(), oauth2.HTTPClient, httpClient)
-			httpClient = oauthConfig.Client(ctx)
-		}
-		if settings.OAuth2Settings.OAuth2Type == "jwt" {
-			jwtConfig := jwt.Config{
-				Email:        settings.OAuth2Settings.Email,
-				TokenURL:     settings.OAuth2Settings.TokenURL,
-				PrivateKey:   []byte(strings.ReplaceAll(settings.OAuth2Settings.PrivateKey, "\\n", "\n")),
-				PrivateKeyID: settings.OAuth2Settings.PrivateKeyID,
-				Subject:      settings.OAuth2Settings.Subject,
-				Scopes:       []string{},
-			}
-			for _, scope := range settings.OAuth2Settings.Scopes {
-				if scope != "" {
-					jwtConfig.Scopes = append(jwtConfig.Scopes, scope)
-				}
-			}
-			ctx := context.WithValue(context.Background(), oauth2.HTTPClient, httpClient)
-			httpClient = jwtConfig.Client(ctx)
-		}
-	}
+	httpClient = ApplyOAuthClientCredentials(httpClient, settings)
+	httpClient = ApplyOAuthJWT(httpClient, settings)
 	return &Client{
 		Settings:   settings,
 		HttpClient: httpClient,
 	}, err
 }
 
-func replaceSecret(input string, settings InfinitySettings) string {
+func replaceSect(input string, settings InfinitySettings, includeSect bool) string {
 	for key, value := range settings.SecureQueryFields {
-		input = strings.ReplaceAll(input, fmt.Sprintf("${__qs.%s}", key), value)
+		if includeSect {
+			input = strings.ReplaceAll(input, fmt.Sprintf("${__qs.%s}", key), value)
+		}
+		if !includeSect {
+			input = strings.ReplaceAll(input, fmt.Sprintf("${__qs.%s}", key), dummyHeader)
+		}
 	}
 	return input
 }
 
-func GetQueryURL(settings InfinitySettings, query Query) (string, error) {
-	urlString := query.URL
-	if !strings.HasPrefix(query.URL, settings.URL) {
-		urlString = settings.URL + urlString
-	}
-	urlString = replaceSecret(urlString, settings)
-	u, err := url.Parse(urlString)
-	if err != nil {
-		return urlString, nil
-	}
-	q := u.Query()
-	for _, param := range query.URLOptions.Params {
-		value := replaceSecret(param.Value, settings)
-		q.Set(param.Key, value)
-	}
-	for key, value := range settings.SecureQueryFields {
-		q.Set(key, value)
-	}
-	u.RawQuery = q.Encode()
-	return u.String(), nil
-}
-
-func getRequest(settings InfinitySettings, body io.Reader, query Query, requestHeaders map[string]string) (req *http.Request, err error) {
-	url, err := GetQueryURL(settings, query)
-	if err != nil {
-		return nil, err
-	}
-	switch query.URLOptions.Method {
-	case "POST":
-		req, err = http.NewRequest("POST", url, body)
-	default:
-		req, err = http.NewRequest("GET", url, nil)
-	}
-	if settings.BasicAuthEnabled && (settings.UserName != "" || settings.Password != "") {
-		req.Header.Add("Authorization", "Basic "+base64.StdEncoding.EncodeToString([]byte(settings.UserName+":"+settings.Password)))
-	}
-	if settings.ForwardOauthIdentity {
-		req.Header.Add("Authorization", requestHeaders["Authorization"])
-		if requestHeaders["X-ID-Token"] != "" {
-			req.Header.Add("X-ID-Token", requestHeaders["X-ID-Token"])
-		}
-	}
-	if query.Type == "json" || query.Type == "graphql" {
-		req.Header.Set("Content-Type", "application/json")
-	}
-	for _, header := range query.URLOptions.Headers {
-		value := replaceSecret(header.Value, settings)
-		req.Header.Set(header.Key, value)
-	}
-	for key, value := range settings.CustomHeaders {
-		req.Header.Set(key, value)
-	}
-	return req, err
-}
-
 func (client *Client) req(url string, body *strings.Reader, settings InfinitySettings, isJSON bool, query Query, requestHeaders map[string]string) (obj interface{}, statusCode int, duration time.Duration, err error) {
-	req, _ := getRequest(settings, body, query, requestHeaders)
+	req, _ := GetRequest(settings, body, query, requestHeaders, true)
 	startTime := time.Now()
+	if !CanAllowURL(req.URL.String(), settings.AllowedHosts) {
+		return nil, http.StatusUnauthorized, 0, errors.New("requested URL is not allowed. To allow this URL, update the datasource config URL -> Allowed Hosts section")
+	}
 	res, err := client.HttpClient.Do(req)
 	duration = time.Since(startTime)
 	if err != nil {
@@ -188,14 +95,14 @@ func (client *Client) req(url string, body *strings.Reader, settings InfinitySet
 	if err != nil {
 		return nil, res.StatusCode, duration, err
 	}
-	if query.Type == "json" || query.Type == "graphql" {
+	if query.Type == QueryTypeJSON || query.Type == QueryTypeGraphQL {
 		var out interface{}
 		err := json.Unmarshal(bodyBytes, &out)
 		return out, res.StatusCode, duration, err
 	}
-	if query.Type == "uql" || query.Type == "groq" {
-		contentType := res.Header.Get("Content-type")
-		if strings.Contains(strings.ToLower(contentType), "application/json") {
+	if query.Type == QueryTypeUQL || query.Type == QueryTypeGROQ {
+		contentType := res.Header.Get(contentTypeHeaderKey)
+		if strings.Contains(strings.ToLower(contentType), contentTypeJSON) {
 			var out interface{}
 			err := json.Unmarshal(bodyBytes, &out)
 			return out, res.StatusCode, duration, err
@@ -206,21 +113,39 @@ func (client *Client) req(url string, body *strings.Reader, settings InfinitySet
 
 func (client *Client) GetResults(query Query, requestHeaders map[string]string) (o interface{}, statusCode int, duration time.Duration, err error) {
 	isJSON := false
-	if query.Type == "json" || query.Type == "graphql" {
+	if query.Type == QueryTypeJSON || query.Type == QueryTypeGraphQL {
 		isJSON = true
 	}
-	switch query.URLOptions.Method {
-	case "POST":
-		body := strings.NewReader(query.URLOptions.Data)
-		if query.Type == "graphql" {
-			jsonData := map[string]string{
-				"query": query.URLOptions.Data,
-			}
-			jsonValue, _ := json.Marshal(jsonData)
-			body = strings.NewReader(string(jsonValue))
-		}
+	switch strings.ToUpper(query.URLOptions.Method) {
+	case http.MethodPost:
+		body := GetQueryBody(query)
 		return client.req(query.URL, body, client.Settings, isJSON, query, requestHeaders)
 	default:
 		return client.req(query.URL, nil, client.Settings, isJSON, query, requestHeaders)
 	}
+}
+
+func CanAllowURL(url string, allowedHosts []string) bool {
+	allow := false
+	if len(allowedHosts) == 0 {
+		return true
+	}
+	for _, host := range allowedHosts {
+		if strings.HasPrefix(url, host) {
+			return true
+		}
+	}
+	return allow
+}
+
+func GetQueryBody(query Query) *strings.Reader {
+	body := strings.NewReader(query.URLOptions.Data)
+	if query.Type == QueryTypeGraphQL {
+		jsonData := map[string]string{
+			"query": query.URLOptions.Data,
+		}
+		jsonValue, _ := json.Marshal(jsonData)
+		body = strings.NewReader(string(jsonValue))
+	}
+	return body
 }

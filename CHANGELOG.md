@@ -2,6 +2,12 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
+## [ 0.8.4]
+
+- Dedicated Auth types added for Api key authentication and bearer token authentication
+- Ability to configure allowed hosts for URL
+- YAML query type support added via UQL. (experimental)
+
 ## [ 0.8.3 ]
 
 - UQL update ( now support summarize by multiple fields, first, last summarizations )

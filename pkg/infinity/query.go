@@ -1,26 +1,37 @@
 package infinity
 
+const (
+	QueryTypeJSON    = "json"
+	QueryTypeCSV     = "csv"
+	QueryTypeTSV     = "tsv"
+	QueryTypeXML     = "xml"
+	QueryTypeGraphQL = "graphql"
+	QueryTypeHTML    = "html"
+	QueryTypeUQL     = "uql"
+	QueryTypeGROQ    = "groq"
+)
+
+type URLOptionKeyValuePair struct {
+	Key   string `json:"key"`
+	Value string `json:"value"`
+}
+type URLOptions struct {
+	Data    string                  `json:"data"`
+	Method  string                  `json:"method"` // 'GET' | 'POST'
+	Params  []URLOptionKeyValuePair `json:"params"`
+	Headers []URLOptionKeyValuePair `json:"headers"`
+}
+
 type Query struct {
-	RefID      string `json:"refId"`
-	Type       string `json:"type"`   // 'json' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'series' | 'global' | 'uql' | 'groq'
-	Format     string `json:"format"` // 'table' | 'timeseries' | 'dataframe' | 'as-is' | 'node-graph-nodes' | 'node-graph-edges'
-	Source     string `json:"source"` // 'url' | 'inline' | 'random-walk' | 'expression'
-	URL        string `json:"url"`
-	URLOptions struct {
-		Data   string `json:"data"`
-		Method string `json:"method"` // 'GET' | 'POST'
-		Params []struct {
-			Key   string `json:"key"`
-			Value string `json:"value"`
-		} `json:"params"`
-		Headers []struct {
-			Key   string `json:"key"`
-			Value string `json:"value"`
-		} `json:"headers"`
-	} `json:"url_options"`
-	Data       string `json:"data"`
-	UQL        string `json:"uql"`
-	GROQ       string `json:"groq"`
+	RefID      string     `json:"refId"`
+	Type       string     `json:"type"`   // 'json' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'uql' | 'groq' | 'series' | 'global'
+	Format     string     `json:"format"` // 'table' | 'timeseries' | 'dataframe' | 'as-is' | 'node-graph-nodes' | 'node-graph-edges'
+	Source     string     `json:"source"` // 'url' | 'inline' | 'random-walk' | 'expression'
+	URL        string     `json:"url"`
+	URLOptions URLOptions `json:"url_options"`
+	Data       string     `json:"data"`
+	UQL        string     `json:"uql"`
+	GROQ       string     `json:"groq"`
 	CSVOptions struct {
 		Delimiter          string `json:"delimiter"`
 		SkipEmptyLines     bool   `json:"skip_empty_lines"`

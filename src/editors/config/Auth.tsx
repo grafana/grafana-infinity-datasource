@@ -2,11 +2,13 @@ import React from 'react';
 import { DataSourcePluginOptionsEditorProps, onUpdateDatasourceSecureJsonDataOption, SelectableValue } from '@grafana/data';
 import { InlineFormLabel, RadioButtonGroup, LegacyForms } from '@grafana/ui';
 import { OAuthInputsEditor } from './OAuthInput';
-import { InfinityOptions, InfinitySecureOptions, AuthType } from '../../types';
+import { InfinityOptions, InfinitySecureOptions, AuthType, APIKeyType } from '../../types';
 
 const authTypes: Array<SelectableValue<AuthType>> = [
-  { value: 'none', label: 'None' },
+  { value: 'none', label: 'No Auth' },
   { value: 'basicAuth', label: 'Basic Authentication' },
+  { value: 'apiKey', label: 'API Key' },
+  { value: 'bearerToken', label: 'Bearer Token' },
   { value: 'oauthPassThru', label: 'Forward OAuth' },
   { value: 'oauth2', label: 'OAuth2' },
 ];
@@ -28,6 +30,8 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
       case 'oauthPassThru':
         onOptionsChange({ ...options, basicAuth: false, jsonData: { ...options.jsonData, oauthPassThru: true, auth_method: 'oauthPassThru' } });
         break;
+      case 'apiKey':
+      case 'bearerToken':
       case 'oauthPassThru':
       default:
         onOptionsChange({ ...options, basicAuth: false, jsonData: { ...options.jsonData, oauthPassThru: false, auth_method: authMethod } });
@@ -40,24 +44,21 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
       basicAuthUser,
     });
   };
-  const onResetPassword = () => {
+  const onAPIKeyKeyChange = (apiKeyKey: string) => {
+    onOptionsChange({ ...options, jsonData: { ...options.jsonData, apiKeyKey } });
+  };
+  const onResetSecret = (key: keyof InfinitySecureOptions) => {
     onOptionsChange({
       ...options,
-      secureJsonFields: {
-        ...options.secureJsonFields,
-        basicAuthPassword: false,
-      },
-      secureJsonData: {
-        ...options.secureJsonData,
-        basicAuthPassword: '',
-      },
+      secureJsonFields: { ...options.secureJsonFields, [key]: false },
+      secureJsonData: { ...options.secureJsonData, [key]: '' },
     });
   };
   return (
     <>
       <div className="gf-form">
         <InlineFormLabel width={10}>Auth Type</InlineFormLabel>
-        <RadioButtonGroup<AuthType> options={authTypes} value={authType} onChange={(e) => onAuthTypeChange(e!)}></RadioButtonGroup>
+        <RadioButtonGroup<AuthType> options={authTypes} value={authType} onChange={(e = 'none') => onAuthTypeChange(e!)}></RadioButtonGroup>
       </div>
       {authType === 'basicAuth' && (
         <>
@@ -71,12 +72,71 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
               required
               value={secureJsonData.basicAuthPassword || ''}
               isConfigured={(secureJsonFields && secureJsonFields.basicAuthPassword) as boolean}
-              onReset={onResetPassword}
+              onReset={() => onResetSecret('basicAuthPassword')}
               onChange={onUpdateDatasourceSecureJsonDataOption(props, 'basicAuthPassword')}
               label="Password"
               aria-label="password"
               placeholder="password"
               tooltip="password"
+            />
+          </div>
+        </>
+      )}
+      {authType === 'bearerToken' && (
+        <>
+          <div className="gf-form">
+            <SecretFormField
+              labelWidth={10}
+              inputWidth={12}
+              required
+              value={secureJsonData.bearerToken || ''}
+              isConfigured={(secureJsonFields && secureJsonFields.bearerToken) as boolean}
+              onReset={() => onResetSecret('bearerToken')}
+              onChange={onUpdateDatasourceSecureJsonDataOption(props, 'bearerToken')}
+              label="Bearer token"
+              aria-label="bearer token"
+              placeholder="bearer token"
+              tooltip="bearer token"
+            />
+          </div>
+        </>
+      )}
+      {authType === 'apiKey' && (
+        <>
+          <div className="gf-form">
+            <FormField
+              label="Key"
+              placeholder="api key key"
+              tooltip="api key key"
+              labelWidth={10}
+              value={props.options.jsonData.apiKeyKey || ''}
+              onChange={(e) => onAPIKeyKeyChange(e.currentTarget.value)}
+            ></FormField>
+          </div>
+          <div className="gf-form">
+            <SecretFormField
+              labelWidth={10}
+              inputWidth={12}
+              required
+              value={secureJsonData.apiKeyValue || ''}
+              isConfigured={(secureJsonFields && secureJsonFields.apiKeyValue) as boolean}
+              onReset={() => onResetSecret('apiKeyValue')}
+              onChange={onUpdateDatasourceSecureJsonDataOption(props, 'apiKeyValue')}
+              label="Value"
+              aria-label="api key value"
+              placeholder="api key value"
+              tooltip="api key value"
+            />
+          </div>
+          <div className="gf-form">
+            <InlineFormLabel tooltip="Add api key to header/query params.">Add to</InlineFormLabel>
+            <RadioButtonGroup<APIKeyType>
+              options={[
+                { value: 'header', label: 'Header' },
+                { value: 'query', label: 'Query Param' },
+              ]}
+              value={options.jsonData.apiKeyType || 'header'}
+              onChange={(apiKeyType = 'header') => onOptionsChange({ ...options, jsonData: { ...options.jsonData, apiKeyType } })}
             />
           </div>
         </>

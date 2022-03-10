@@ -32,8 +32,8 @@ export const SubMenu = () => {
           <SubMenuLink to="/wiki/template-variables">Template Variables</SubMenuLink>
           <SubMenuLink to="/wiki/annotations">Annotations</SubMenuLink>
           <SubMenuLink to="/wiki/node-graph">Node Graph</SubMenuLink>
-          <SubMenuLink to="/wiki/global-queries">Global Queries</SubMenuLink>
           <SubMenuLink to="/wiki/configuration">Configuration</SubMenuLink>
+          <SubMenuLink to="/wiki/authentication">Authentication</SubMenuLink>
           <SubMenuLink to="/wiki/provisioning">Provisioning</SubMenuLink>
         </nav>
       </div>
