@@ -74,7 +74,7 @@ type InfinitySettingsJson struct {
 	ForwardOauthIdentity bool           `json:"oauthPassThru,omitempty"`
 	InsecureSkipVerify   bool           `json:"tlsSkipVerify,omitempty"`
 	ServerName           string         `json:"serverName,omitempty"`
-	TLSClientAuth        bool           `json:"tlsClientAuth,omitempty"`
+	TLSClientAuth        bool           `json:"tlsAuth,omitempty"`
 	TLSAuthWithCACert    bool           `json:"tlsAuthWithCACert,omitempty"`
 	TimeoutInSeconds     int64          `json:"timeoutInSeconds,omitempty"`
 	AllowedHosts         []string       `json:"allowedHosts,omitempty"`
@@ -97,15 +97,13 @@ func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinityS
 		if settings.AuthenticationMethod == "oauth2" && settings.OAuth2Settings.OAuth2Type == "" {
 			settings.OAuth2Settings.OAuth2Type = "client_credentials"
 		}
-		if settings.AuthenticationMethod == "apiKey" {
-			settings.ApiKeyKey = infJson.APIKeyKey
-			settings.ApiKeyType = infJson.APIKeyType
-			if settings.ApiKeyType == "" {
-				settings.ApiKeyType = "header"
-			}
-			if val, ok := config.DecryptedSecureJSONData["apiKeyValue"]; ok {
-				settings.ApiKeyValue = val
-			}
+		settings.ApiKeyKey = infJson.APIKeyKey
+		settings.ApiKeyType = infJson.APIKeyType
+		if settings.ApiKeyType == "" {
+			settings.ApiKeyType = "header"
+		}
+		if val, ok := config.DecryptedSecureJSONData["apiKeyValue"]; ok {
+			settings.ApiKeyValue = val
 		}
 		settings.ForwardOauthIdentity = infJson.ForwardOauthIdentity
 		settings.InsecureSkipVerify = infJson.InsecureSkipVerify
@@ -138,16 +136,12 @@ func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinityS
 	if val, ok := config.DecryptedSecureJSONData["tlsClientKey"]; ok {
 		settings.TLSClientKey = val
 	}
+	if val, ok := config.DecryptedSecureJSONData["bearerToken"]; ok {
+		settings.BearerToken = val
+	}
 	settings.CustomHeaders = GetSecrets(config, "httpHeaderName", "httpHeaderValue")
 	settings.SecureQueryFields = GetSecrets(config, "secureQueryName", "secureQueryValue")
-	if settings.AuthenticationMethod == "oauth2" && settings.OAuth2Settings.OAuth2Type == "jwt" {
-		settings.OAuth2Settings.EndpointParams = GetSecrets(config, "oauth2EndPointParamsName", "oauth2EndPointParamsValue")
-	}
-	if settings.AuthenticationMethod == "bearerToken" {
-		if val, ok := config.DecryptedSecureJSONData["bearerToken"]; ok {
-			settings.BearerToken = val
-		}
-	}
+	settings.OAuth2Settings.EndpointParams = GetSecrets(config, "oauth2EndPointParamsName", "oauth2EndPointParamsValue")
 	return
 }
 

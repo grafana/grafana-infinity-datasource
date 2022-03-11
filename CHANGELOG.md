@@ -2,6 +2,11 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
+## [ 0.8.5 ]
+
+- Fixed a bug where custom endpoint params were ignored when using OAuth2 client credentials
+- Fixed a bug where TLS certs are not loaded correctly
+
 ## [ 0.8.4]
 
 - Dedicated Auth types added for Api key authentication and bearer token authentication
