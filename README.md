@@ -23,3 +23,8 @@ Using the following links,You can try **Infinity datasource plugin** without ins
 ### [Try before installing - UQL](https://grafana-infinity-datasource.herokuapp.com/d/uql/uql?orgId=1)
 
 ### [Demo Grafana](https://grafana-infinity-datasource.herokuapp.com)
+
+## Known limitations
+
+- Doesn't support alerting
+- Doesn't support recorded queries

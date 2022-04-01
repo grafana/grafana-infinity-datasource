@@ -2,6 +2,13 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
+## [ 0.8.6 ]
+
+- UQL: Now support comments. Any new line starts with `#` will be treated as comment
+- UQL: New command `mv-expand`
+- UQL: New functions `parse_url`, `parse_urlquery`
+- UQL: Fixed a bug where new line throws error when queries created from windows machines
+
 ## [ 0.8.5 ]
 
 - Fixed a bug where custom endpoint params were ignored when using OAuth2 client credentials

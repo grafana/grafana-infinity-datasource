@@ -2,6 +2,7 @@ module.exports = {
   language: 'en',
   ignorePaths: ['node_modules/**', 'website/node_modules/**', 'website/public/**', 'try/dashboards/**', '*SeriesProvider.ts', 'coverage/**', 'dist/**'],
   words: [
+    'urlquery',
     'endregion',
     'datapoints',
     'datasource',
@@ -74,6 +75,7 @@ module.exports = {
     'deckdeckgo',
     'noref',
     'tinykeys',
+    'sourashtra',
     'sriramajeyam',
     'sugumaran',
     'yesoreyeram',

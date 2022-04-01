@@ -36,8 +36,36 @@ export const sendAsDataFrame = (res: unknown, format: InfinityQueryFormat = 'tab
       if (format === 'timeseries') {
         resolve(toTimeSeriesMany([toDataFrame(res)]));
       } else {
-        let frame = toDataFrame(res);
-        resolve({ ...frame, name: frame.name || refId });
+        if (res[0] && typeof res[0] === 'string') {
+          resolve(
+            new MutableDataFrame({
+              name: refId || '',
+              fields: [
+                {
+                  name: 'result',
+                  type: FieldType.string,
+                  values: res,
+                },
+              ],
+            })
+          );
+        } else if (res[0] && typeof res[0] === 'number') {
+          resolve(
+            new MutableDataFrame({
+              name: refId || '',
+              fields: [
+                {
+                  name: 'result',
+                  type: FieldType.number,
+                  values: res,
+                },
+              ],
+            })
+          );
+        } else {
+          let frame = toDataFrame(res);
+          resolve({ ...frame, name: frame.name || refId });
+        }
       }
     } else {
       resolve(

@@ -78,30 +78,33 @@ parse-json
 
 following are some of the available functions
 
-| function keyword                 | syntax                                  | description                                           | available from |
-| -------------------------------- | --------------------------------------- | ----------------------------------------------------- | -------------- |
-| trim                             | trim("name")                            | trims the string                                      | 0.8.0          |
-| trim_start                       | trim_start("name")                      | removes the space before                              | 0.8.0          |
-| trim_end                         | trim_end("name")                        | removes the space after                               | 0.8.0          |
-| tonumber                         | tonumber("age")                         | converts a string into number                         | 0.8.0          |
-| tostring                         | tostring("age")                         | converts a number into string                         | 0.8.0          |
-| todatetime                       | todatetime("age")                       | converts a datetime string into datetime              | 0.8.0          |
-| unixtime_seconds_todatetime      | unixtime_seconds_todatetime("dob")      | converts unix epoch s timestamp to datetime           | 0.8.0          |
-| unixtime_nanoseconds_todatetime  | unixtime_nanoseconds_todatetime("dob")  | converts unix epoch ns timestamp to datetime          | 0.8.0          |
-| unixtime_milliseconds_todatetime | unixtime_milliseconds_todatetime("dob") | converts unix epoch ms timestamp to datetime          | 0.8.0          |
-| unixtime_microseconds_todatetime | unixtime_microseconds_todatetime("dob") | converts unix epoch microsecond timestamp to datetime | 0.8.0          |
-| format_datetime                  | format_datetime("dob",'DD/MM/YYYY')     | converts datetime to a specific format                | 0.8.0          |
-| add_datetime                     | add_datetime("dob",'-1d')               | adds duration to a datetime field                     | 0.8.0          |
-| startofminute                    | startofminute("dob")                    | rounds the datetime field to the starting minute      | 0.8.0          |
-| startofhour                      | startofhour("dob")                      | rounds the datetime field to the starting hour        | 0.8.0          |
-| startofday                       | startofday("dob")                       | rounds the datetime field to the starting day         | 0.8.0          |
-| startofmonth                     | startofmonth("dob")                     | rounds the datetime field to the starting month       | 0.8.0          |
-| startofweek                      | startofweek("dob")                      | rounds the datetime field to the starting week        | 0.8.0          |
-| startofyear                      | startofyear("dob")                      | rounds the datetime field to the starting year        | 0.8.0          |
-| sum                              | sum("col1","col2")                      | sum of two or more columns                            | 0.8.0          |
-| diff                             | diff("col1","col2")                     | difference between two columns                        | 0.8.0          |
-| mul                              | mul("col1","col2")                      | multiplication of two columns                         | 0.8.0          |
-| strcat                           | strcat("col1","col2")                   | concatenates two or more columns                      | 0.8.0          |
+| function keyword                 | syntax                                  | description                                                                                          | available from |
+| -------------------------------- | --------------------------------------- | ---------------------------------------------------------------------------------------------------- | -------------- |
+| trim                             | trim("name")                            | trims the string                                                                                     | 0.8.0          |
+| trim_start                       | trim_start("name")                      | removes the space before                                                                             | 0.8.0          |
+| trim_end                         | trim_end("name")                        | removes the space after                                                                              | 0.8.0          |
+| tonumber                         | tonumber("age")                         | converts a string into number                                                                        | 0.8.0          |
+| tostring                         | tostring("age")                         | converts a number into string                                                                        | 0.8.0          |
+| todatetime                       | todatetime("age")                       | converts a datetime string into datetime                                                             | 0.8.0          |
+| unixtime_seconds_todatetime      | unixtime_seconds_todatetime("dob")      | converts unix epoch s timestamp to datetime                                                          | 0.8.0          |
+| unixtime_nanoseconds_todatetime  | unixtime_nanoseconds_todatetime("dob")  | converts unix epoch ns timestamp to datetime                                                         | 0.8.0          |
+| unixtime_milliseconds_todatetime | unixtime_milliseconds_todatetime("dob") | converts unix epoch ms timestamp to datetime                                                         | 0.8.0          |
+| unixtime_microseconds_todatetime | unixtime_microseconds_todatetime("dob") | converts unix epoch microsecond timestamp to datetime                                                | 0.8.0          |
+| format_datetime                  | format_datetime("dob",'DD/MM/YYYY')     | converts datetime to a specific format                                                               | 0.8.0          |
+| add_datetime                     | add_datetime("dob",'-1d')               | adds duration to a datetime field                                                                    | 0.8.0          |
+| startofminute                    | startofminute("dob")                    | rounds the datetime field to the starting minute                                                     | 0.8.0          |
+| startofhour                      | startofhour("dob")                      | rounds the datetime field to the starting hour                                                       | 0.8.0          |
+| startofday                       | startofday("dob")                       | rounds the datetime field to the starting day                                                        | 0.8.0          |
+| startofmonth                     | startofmonth("dob")                     | rounds the datetime field to the starting month                                                      | 0.8.0          |
+| startofweek                      | startofweek("dob")                      | rounds the datetime field to the starting week                                                       | 0.8.0          |
+| startofyear                      | startofyear("dob")                      | rounds the datetime field to the starting year                                                       | 0.8.0          |
+| sum                              | sum("col1","col2")                      | sum of two or more columns                                                                           | 0.8.0          |
+| diff                             | diff("col1","col2")                     | difference between two columns                                                                       | 0.8.0          |
+| mul                              | mul("col1","col2")                      | multiplication of two columns                                                                        | 0.8.0          |
+| strcat                           | strcat("col1","col2")                   | concatenates two or more columns                                                                     | 0.8.0          |
+| parse_url                        | parse_url("col1")                       | parses the col1 as URL                                                                               | 0.8.6          |
+|                                  | parse_url("col1",'pathname')            | returns the `pathname` of the URL. Options are `host`,`hash`,`origin`,`href`,`protocol` and `search` | 0.8.6          |
+|                                  | parse_url("col1",'search','key1')       | returns the query string value for `key1`. 2nd arg is always `search`                                | 0.8.6          |
 
 For example, the data `[ { "a": 12, "b" : 20 }, { "a" : 6, "b": 32} ]` and the following uql query
 
@@ -216,3 +219,30 @@ and the following uql query just results the "users" and ignores the other root 
 parse-json
 | scope "users"
 ```
+
+### mv-expand
+
+`mv-expand` expands multi-value properties into their own records. For example, the command `mv-expand "user"="users"` over following data
+
+```json
+[
+  { "group": "A", "users": ["user a1", "user a2"] },
+  { "group": "B", "users": ["user b1"] }
+]
+```
+
+will produce results like
+
+```json
+[
+  { "group": "A", "user": "user a1" },
+  { "group": "A", "user": "user a2" },
+  { "group": "B", "user": "user b1" }
+]
+```
+
+`mv-expand` should also work for non string arrays.
+
+### comments
+
+Any new line that starts with `#` will be treated as comment.

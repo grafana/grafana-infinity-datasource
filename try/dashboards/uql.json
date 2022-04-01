@@ -1549,6 +1549,588 @@
       ],
       "title": "Basic YAML",
       "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 60
+      },
+      "id": 32,
+      "panels": [],
+      "title": "mv-expand",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "Infinity"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "group"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 55
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 13,
+        "x": 0,
+        "y": 61
+      },
+      "id": 37,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "8.3.4",
+      "targets": [
+        {
+          "columns": [],
+          "data": "[\n  {\n    \"group\": \"A\",\n    \"users\": [\n      { \"username\": \"a1\", \"age\": 2 },\n      { \"username\": \"a2\", \"age\": 3 }\n    ]\n  },\n  {\n    \"group\": \"B\",\n    \"users\": [\n      { \"username\": \"b1\", \"age\": 2 },\n      { \"username\": \"b1\", \"age\": null },\n      { \"username\": \"b2\", \"age\": 3 }\n    ]\n  }\n]\n",
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "Infinity"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "refId": "A",
+          "root_selector": "",
+          "source": "inline",
+          "type": "uql",
+          "uql": "parse-json",
+          "url": "https://jsonplaceholder.typicode.com/users",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "original data",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "Infinity"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "group"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 78
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 11,
+        "x": 13,
+        "y": 61
+      },
+      "id": 34,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "8.3.4",
+      "targets": [
+        {
+          "columns": [],
+          "data": "[\n  {\n    \"group\": \"A\",\n    \"users\": [\n      { \"username\": \"a1\", \"age\": 2 },\n      { \"username\": \"a2\", \"age\": 3 }\n    ]\n  },\n  {\n    \"group\": \"B\",\n    \"users\": [\n      { \"username\": \"b1\", \"age\": 2 },\n      { \"username\": \"b1\", \"age\": null },\n      { \"username\": \"b2\", \"age\": 3 }\n    ]\n  }\n]\n",
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "Infinity"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "refId": "A",
+          "root_selector": "",
+          "source": "inline",
+          "type": "uql",
+          "uql": "parse-json\n| mv-expand \"user\"=\"users\"",
+          "url": "https://jsonplaceholder.typicode.com/users",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "mv-expand",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "Infinity"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 69
+      },
+      "id": 35,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "8.3.4",
+      "targets": [
+        {
+          "columns": [],
+          "data": "[\n  {\n    \"group\": \"A\",\n    \"users\": [\n      { \"username\": \"a1\", \"age\": 2 },\n      { \"username\": \"a2\", \"age\": 3 }\n    ]\n  },\n  {\n    \"group\": \"B\",\n    \"users\": [\n      { \"username\": \"b1\", \"age\": 2 },\n      { \"username\": \"b1\", \"age\": null },\n      { \"username\": \"b2\", \"age\": 3 }\n    ]\n  }\n]\n",
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "Infinity"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "refId": "A",
+          "root_selector": "",
+          "source": "inline",
+          "type": "uql",
+          "uql": "parse-json\n| mv-expand \"user\"=\"users\"\n| project \"group\", \"username\"=\"user.username\", \"age\"=\"user.age\"",
+          "url": "https://jsonplaceholder.typicode.com/users",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "mv-expand with project",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "Infinity"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "group"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 90
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 69
+      },
+      "id": 36,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "8.3.4",
+      "targets": [
+        {
+          "columns": [],
+          "data": "[\n  {\n    \"group\": \"A\",\n    \"users\": [\n      { \"username\": \"a1\", \"age\": 2 },\n      { \"username\": \"a2\", \"age\": 3 }\n    ]\n  },\n  {\n    \"group\": \"B\",\n    \"users\": [\n      { \"username\": \"b1\", \"age\": 2 },\n      { \"username\": \"b1\", \"age\": null },\n      { \"username\": \"b2\", \"age\": 3 }\n    ]\n  }\n]\n",
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "Infinity"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "refId": "A",
+          "root_selector": "",
+          "source": "inline",
+          "type": "uql",
+          "uql": "parse-json\n| mv-expand \"user\"=\"users\"\n| project \"group\", \"username\"=\"user.username\", \"age\"=\"user.age\"\n| summarize \"total members\"=count(),\"average age\"=mean(\"age\") by \"group\"",
+          "url": "https://jsonplaceholder.typicode.com/users",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "mv-expand with project, summarize",
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 77
+      },
+      "id": 39,
+      "panels": [],
+      "title": "parse_url",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "Infinity"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "title"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 168
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "site"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 347
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "parse_url"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 121
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 78
+      },
+      "id": 41,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "8.3.4",
+      "targets": [
+        {
+          "columns": [],
+          "data": "[\n    { \"title\":\"learn react\", \"site\":\"https://reactjs.org/docs/getting-started.html#learn-react\" },\n    { \"title\":\"add react in one minute\", \"site\": \"https://reactjs.org/docs/add-react-to-a-website.html#add-react-in-one-minute\"} ,\n{ \"title\":\"vue arbitary bindings\", \"site\":\"https://vuejs.org/guide/essentials/template-syntax.html#attribute-bindings\"}\n]",
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "Infinity"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "refId": "A",
+          "root_selector": "",
+          "source": "inline",
+          "type": "uql",
+          "uql": "parse-json\n| project \"title\",\"site\",\"host\"=parse_url(\"site\",'host'),\"hash\"=parse_url(\"site\",'hash'),\"protocol\"=parse_url(\"site\",'protocol')",
+          "url": "https://jsonplaceholder.typicode.com/users",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "URLs",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "Infinity"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "title"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 168
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "site"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 347
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "parse_url"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 121
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 84
+      },
+      "id": 42,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "8.3.4",
+      "targets": [
+        {
+          "columns": [],
+          "data": "[\n  { \"title\": \"one\", \"site\": \"https://foo.com?k1=v1&k2=v2\" },\n  { \"title\": \"two\", \"site\": \"https://foo.com?k1=v1&k2=v2&k3=v3\" },\n  { \"title\": \"three\", \"site\": \"https://foo.com?k3=v3\" }\n]\n",
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "Infinity"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "refId": "A",
+          "root_selector": "",
+          "source": "inline",
+          "type": "uql",
+          "uql": "parse-json\n| project \"title\",\"site\",\"k1\"=parse_url(\"site\",'search','k1'),\"k2\"=parse_url(\"site\",'search','k2'),\"k3\"=parse_url(\"site\",'search','k3')",
+          "url": "",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "URL params",
+      "type": "table"
     }
   ],
   "schemaVersion": 34,
@@ -1565,6 +2147,6 @@
   "timezone": "",
   "title": "UQL",
   "uid": "uql",
-  "version": 11,
+  "version": 12,
   "weekStart": ""
 }
