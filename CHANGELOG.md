@@ -8,6 +8,7 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 - UQL: New command `mv-expand`
 - UQL: New functions `parse_url`, `parse_urlquery`
 - UQL: Fixed a bug where new line throws error when queries created from windows machines
+- UQL: keyword suggestions for UQL Query editor
 
 ## [ 0.8.5 ]
 

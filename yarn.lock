@@ -16277,10 +16277,10 @@ upper-case@^1.1.1:
   resolved "https://registry.yarnpkg.com/upper-case/-/upper-case-1.1.3.tgz#f6b4501c2ec4cdd26ba78be7222961de77621598"
   integrity sha1-9rRQHC7EzdJrp4vnIilh3ndiFZg=
 
-uql@0.0.11:
-  version "0.0.11"
-  resolved "https://registry.yarnpkg.com/uql/-/uql-0.0.11.tgz#92a7c1600c758494f02d691516fcff9a8ee74028"
-  integrity sha512-5fTplLO4amgv6XelhQsc0JLgIt5Z3+EMXeg+xQG/XSTWY+CxaP1DIZsfhGNFVsph1/2hXBQY5DMfSri4FqbgIA==
+uql@0.0.12:
+  version "0.0.12"
+  resolved "https://registry.yarnpkg.com/uql/-/uql-0.0.12.tgz#ab5ccdcf8f12224f8249e640247982f6478c0865"
+  integrity sha512-b+ydu3BQQLFjGxEXPYXOocc1/VqXTqTMg0SE/RE2PJjSUSs/385UXq2N5k5gB4BWh8vGupjThwbOwnKHouxcBg==
   dependencies:
     csv-parse "4.12.0"
     dayjs "^1.10.7"

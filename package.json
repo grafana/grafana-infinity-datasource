@@ -8,12 +8,13 @@
     "watch": "grafana-toolkit plugin:dev --watch",
     "start": "yarn watch",
     "spellcheck": "cspell -c cspell.config.js \"**/*.{ts,tsx,js,go,md,mdx,yml,yaml,json,scss,css}\"",
-    "test": "grafana-toolkit plugin:test",
-    "e2e": "grafana-e2e run",
-    "e2e:open": "grafana-e2e open",
-    "e2e:update": "grafana-e2e run --update-screenshots",
-    "build": "grafana-toolkit plugin:build",
-    "ci-build": "grafana-toolkit plugin:ci-build",
+    "lint": "yarn spellcheck",
+    "test": "yarn lint && grafana-toolkit plugin:test",
+    "e2e": "yarn lint && grafana-e2e run",
+    "e2e:open": "yarn lint && grafana-e2e open",
+    "e2e:update": "yarn lint && grafana-e2e run --update-screenshots",
+    "build": "yarn lint && grafana-toolkit plugin:build",
+    "ci-build": "yarn lint && grafana-toolkit plugin:ci-build",
     "audit-ci": "audit-ci --critical",
     "sign": "grafana-toolkit plugin:sign"
   },
@@ -62,7 +63,7 @@
     "react": "16.12.0",
     "react-dom": "16.12.0",
     "rxjs": "6.6.3",
-    "uql": "0.0.11",
+    "uql": "0.0.12",
     "xml2js": "^0.4.23"
   },
   "devDependencies": {

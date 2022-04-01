@@ -7,7 +7,7 @@ import { SeriesEditor } from './query.series';
 import { TableFilter } from './query.filters';
 import { UQLEditor } from './query.uql';
 import { GROQEditor } from './query.groq';
-import { InfinityQuery, EditorMode, DefaultInfinityQuery } from '../../types';
+import { InfinityQuery, EditorMode, DefaultInfinityQuery, InfinityQueryType } from '../../types';
 
 export type InfinityEditorProps = {
   query: InfinityQuery;
@@ -32,6 +32,23 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
       {canShowFilterEditor && <TableFilter {...{ query, onChange, onRunQuery }} />}
       {query.type === 'uql' && <UQLEditor {...{ query, onChange, onRunQuery, mode }} />}
       {query.type === 'groq' && <GROQEditor {...{ query, onChange, onRunQuery, mode }} />}
+      <UQLPromotion queryType={query.type} />
     </div>
+  );
+};
+
+const UQLPromotion = ({ queryType }: { queryType: InfinityQueryType }) => {
+  return queryType === 'xml' || queryType === 'csv' || queryType === 'tsv' ? (
+    <div>
+      <p style={{ paddingBlock: '10px', color: 'yellowgreen' }}>
+        💡 You can also use{' '}
+        <a href="https://yesoreyeram.github.io/grafana-infinity-datasource/wiki/uql" target="_blank" rel="noreferrer">
+          UQL
+        </a>{' '}
+        query type instead of <b style={{}}>{queryType.toUpperCase()}</b> and get better flexibility and built-in transformations with <b>same data</b> you already have. Give a try!!
+      </p>
+    </div>
+  ) : (
+    <></>
   );
 };
