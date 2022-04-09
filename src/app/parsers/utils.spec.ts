@@ -10,6 +10,8 @@ describe('utils', () => {
 
     expect(getValue(123.45, 'number')).toStrictEqual(123.45);
     expect(getValue('123', 'number')).toStrictEqual(123);
+    expect(getValue('-123', 'number')).toStrictEqual(-123);
+    expect(getValue('-123.405', 'number')).toStrictEqual(-123.405);
     expect(getValue('123.45', 'number')).toStrictEqual(123.45);
     expect(getValue('1,234.5', 'number')).toStrictEqual(1234.5);
     expect(getValue('1,234.5abcdef:;!@#$$%^&*()ABCDEF', 'number')).toStrictEqual(1234.5);

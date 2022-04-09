@@ -63,9 +63,9 @@ export const getValue = (input: string | number | Date | null, type: InfinityCol
       if (typeof input === 'number') {
         return input;
       } else if (typeof input === 'string' && input) {
-        return toNumber((input + '').replace(/[^0-9.]/g, ''));
+        return toNumber((input + '').replace(/[^0-9.-]/g, ''));
       } else if (typeof input === 'object' && isArray(input)) {
-        const num = (input[0] + '').replace(/[^0-9.]/g, '');
+        const num = (input[0] + '').replace(/[^0-9.-]/g, '');
         return toNumber(num);
       } else {
         return null;
