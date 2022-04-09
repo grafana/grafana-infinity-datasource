@@ -43,9 +43,6 @@ export class InfinityProvider {
       }
     });
   }
-  queryWithData(data: any) {
-    return this.formatResults(data);
-  }
   query() {
     return new Promise((resolve, reject) => {
       if (this.target.source === 'inline') {

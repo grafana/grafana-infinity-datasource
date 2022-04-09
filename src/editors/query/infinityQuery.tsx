@@ -38,7 +38,7 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
 };
 
 const UQLPromotion = ({ queryType }: { queryType: InfinityQueryType }) => {
-  return queryType === 'xml' || queryType === 'csv' || queryType === 'tsv' ? (
+  return queryType === 'xml' || queryType === 'csv' ? (
     <div>
       <p style={{ paddingBlock: '10px', color: 'yellowgreen' }}>
         💡 You can also use{' '}

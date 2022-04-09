@@ -5,7 +5,6 @@ import { Datasource } from '../datasource';
 import { InfinityQueryEditor } from './query/infinityQuery';
 import { getDefaultGlobalQueryID } from '../app/queryUtils';
 import { InfinityQuery, DefaultInfinityQuery } from '../types';
-import './../styles/app.scss';
 
 export const QueryEditor = (props: QueryEditorProps<Datasource, InfinityQuery>) => {
   const { datasource, onChange, onRunQuery } = props;

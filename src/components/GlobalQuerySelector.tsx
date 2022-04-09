@@ -22,7 +22,7 @@ export const GlobalQuerySelector = (props: { query: InfinityQuery; instanceSetti
     <>
       <label className={`gf-form-label query-keyword width-4`}>Source</label>
       {global_queries.length > 0 ? (
-        <div className="select-wrapper">
+        <div style={{ marginRight: '5px' }}>
           <Select options={global_queries} value={query.global_query_id} onChange={(e) => onGlobalQueryIDChange(e.value)}></Select>
         </div>
       ) : (

@@ -6,17 +6,74 @@ import { InfinityProvider } from './app/InfinityProvider';
 import { applyUQL } from './app/UQLProvider';
 import { applyGroq } from './app/GROQProvider';
 import { SeriesProvider } from './app/SeriesProvider';
-import { replaceVariables, getUpdatedDataRequest } from './app/queryUtils';
+import { getUpdatedDataRequest } from './app/queryUtils';
 import { LegacyVariableProvider, getTemplateVariablesFromResult, migrateLegacyQuery } from './app/variablesQuery';
+import { interpolateQuery } from './interpolate';
 import { InfinityQuery, VariableQuery, MetricFindValue, InfinityInstanceSettings, InfinityOptions } from './types';
 
 export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOptions> {
-  instanceSettings: InfinityInstanceSettings;
-  constructor(iSettings: InfinityInstanceSettings) {
-    super(iSettings);
-    this.instanceSettings = iSettings;
+  constructor(public instanceSettings: InfinityInstanceSettings) {
+    super(instanceSettings);
+    this.annotations = {};
   }
-  annotations = {};
+  query(options: DataQueryRequest<InfinityQuery>): Observable<DataQueryResponse> {
+    return new Observable<DataQueryResponse>((subscriber) => {
+      let request = getUpdatedDataRequest(options, this.instanceSettings);
+      super
+        .query(request)
+        .toPromise()
+        .then((result) => this.getResults(request, result))
+        .then((result) => subscriber.next({ ...result, state: LoadingState.Done }))
+        .catch((error) => {
+          subscriber.next({ data: [], error, state: LoadingState.Error });
+          subscriber.error(error);
+        })
+        .finally(() => subscriber.complete());
+    });
+  }
+  metricFindQuery(originalQuery: VariableQuery): Promise<MetricFindValue[]> {
+    return new Promise((resolve) => {
+      let query = migrateLegacyQuery(originalQuery);
+      switch (query.queryType) {
+        case 'infinity':
+          if (query.infinityQuery) {
+            const request = { targets: [interpolateQuery(query.infinityQuery, {})] } as DataQueryRequest<InfinityQuery>;
+            super
+              .query(request)
+              .toPromise()
+              .then((res) => {
+                this.getResults(request, res)
+                  .then((r) => {
+                    if (r && r.data && r.data) {
+                      resolve(getTemplateVariablesFromResult(r.data[0]) as MetricFindValue[]);
+                    } else {
+                      console.error(`no result found for ${JSON.stringify(query.infinityQuery)}`);
+                      resolve([]);
+                    }
+                  })
+                  .catch((ex) => {
+                    console.error(ex);
+                    resolve([]);
+                  });
+              })
+              .catch((ex) => {
+                console.error(ex);
+                resolve([]);
+              });
+          } else {
+            resolve([]);
+          }
+          break;
+        case 'legacy':
+        default:
+          const legacyVariableProvider = new LegacyVariableProvider(query.query);
+          legacyVariableProvider.query().then((res) => {
+            resolve(flatten(res));
+          });
+          break;
+      }
+    });
+  }
   private resolveData = (t: InfinityQuery, range: TimeRange, scopedVars: ScopedVars, data: string): Promise<any> => {
     return new Promise((resolve, reject) => {
       switch (t.type) {
@@ -30,10 +87,6 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
             const data = JSON.parse(t.data || '[]');
             resolve(data);
           }
-          if (t.source === 'inline') {
-            new InfinityProvider(t, this).formatResults(data).then(resolve).catch(reject);
-            break;
-          }
           new InfinityProvider(t, this).formatResults(data).then(resolve).catch(reject);
           break;
         case 'uql':
@@ -45,7 +98,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
         case 'series':
           const startTime = new Date(range.from.toDate()).getTime();
           const endTime = new Date(range.to.toDate()).getTime();
-          new SeriesProvider(replaceVariables(t, scopedVars)).query(startTime, endTime).then(resolve).catch(reject);
+          new SeriesProvider(interpolateQuery(t, scopedVars)).query(startTime, endTime).then(resolve).catch(reject);
           break;
         case 'global':
           reject('Query not found');
@@ -102,63 +155,5 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
       .catch((ex) => {
         throw ex;
       });
-  }
-  query(options: DataQueryRequest<InfinityQuery>): Observable<DataQueryResponse> {
-    return new Observable<DataQueryResponse>((subscriber) => {
-      let request = getUpdatedDataRequest(options, this.instanceSettings);
-      super
-        .query(request)
-        .toPromise()
-        .then((result) => this.getResults(request, result))
-        .then((result) => subscriber.next({ ...result, state: LoadingState.Done }))
-        .catch((error) => {
-          subscriber.next({ data: [], error, state: LoadingState.Error });
-          subscriber.error(error);
-        })
-        .finally(() => subscriber.complete());
-    });
-  }
-  metricFindQuery(originalQuery: VariableQuery): Promise<MetricFindValue[]> {
-    return new Promise((resolve) => {
-      let query = migrateLegacyQuery(originalQuery);
-      switch (query.queryType) {
-        case 'infinity':
-          if (query.infinityQuery) {
-            const request = { targets: [replaceVariables(query.infinityQuery, {})] } as DataQueryRequest<InfinityQuery>;
-            super
-              .query(request)
-              .toPromise()
-              .then((res) => {
-                this.getResults(request, res)
-                  .then((r) => {
-                    if (r && r.data && r.data) {
-                      resolve(getTemplateVariablesFromResult(r.data[0]) as MetricFindValue[]);
-                    } else {
-                      console.error(`no result found for ${JSON.stringify(query.infinityQuery)}`);
-                      resolve([]);
-                    }
-                  })
-                  .catch((ex) => {
-                    console.error(ex);
-                    resolve([]);
-                  });
-              })
-              .catch((ex) => {
-                console.error(ex);
-                resolve([]);
-              });
-          } else {
-            resolve([]);
-          }
-          break;
-        case 'legacy':
-        default:
-          const legacyVariableProvider = new LegacyVariableProvider(query.query);
-          legacyVariableProvider.query().then((res) => {
-            resolve(flatten(res));
-          });
-          break;
-      }
-    });
   }
 }

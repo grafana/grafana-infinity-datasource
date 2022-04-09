@@ -17,7 +17,7 @@ export const SourceSelector = (props: { query: InfinityQuery; onChange: (e: Infi
       <InlineFormLabel className={`query-keyword`} width={4}>
         {query.type === 'series' ? 'Scenario' : 'Source'}
       </InlineFormLabel>
-      <div className="select-wrapper">
+      <div style={{ marginRight: '5px' }}>
         <Select width={16} options={supportedSources} value={query.source || 'url'} onChange={(e) => onSourceChange(e.value as InfinityQuerySources)}></Select>
       </div>
     </>

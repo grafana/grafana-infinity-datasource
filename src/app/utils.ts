@@ -1,5 +1,14 @@
 import { DataFrame, Field, FieldType, Labels, MutableDataFrame, ArrayVector, TableData } from '@grafana/data';
 import { InfinityCSVQuery, InfinityGraphQLQuery, InfinityHTMLQuery, InfinityJSONQuery, InfinityQuery, InfinityQueryWithDataSource, InfinityXMLQuery } from './../types';
+
+export const isTableData = (res: any): res is TableData => res && res.columns;
+export const isDataFrame = (res: any): res is DataFrame => res && res.fields;
+export const isCSVQuery = (query: InfinityQuery): query is InfinityCSVQuery => query.type === 'csv';
+export const isJSONQuery = (query: InfinityQuery): query is InfinityJSONQuery => query.type === 'json';
+export const isXMLQuery = (query: InfinityQuery): query is InfinityXMLQuery => query.type === 'xml';
+export const isGraphQLQuery = (query: InfinityQuery): query is InfinityGraphQLQuery => query.type === 'graphql';
+export const isHTMLQuery = (query: InfinityQuery): query is InfinityHTMLQuery => query.type === 'html';
+
 export const normalizeURL = (url: string): string => {
   if (url.startsWith('https://github.com')) {
     return url
@@ -25,17 +34,10 @@ export const isDataQuery = (query: InfinityQuery): query is InfinityQueryWithDat
       return false;
   }
 };
-export const isCSVQuery = (query: InfinityQuery): query is InfinityCSVQuery => query.type === 'csv';
-export const isJSONQuery = (query: InfinityQuery): query is InfinityJSONQuery => query.type === 'json';
-export const isXMLQuery = (query: InfinityQuery): query is InfinityXMLQuery => query.type === 'xml';
-export const isGraphQLQuery = (query: InfinityQuery): query is InfinityGraphQLQuery => query.type === 'graphql';
-export const isHTMLQuery = (query: InfinityQuery): query is InfinityHTMLQuery => query.type === 'html';
-
-export function toTimeSeriesLong(data: DataFrame[]): DataFrame[] {
+export const toTimeSeriesLong = (data: DataFrame[]): DataFrame[] => {
   if (!Array.isArray(data) || data.length === 0) {
     return data;
   }
-
   const result: DataFrame[] = [];
   for (const frame of data) {
     let timeField: Field | undefined;
@@ -172,12 +174,11 @@ export function toTimeSeriesLong(data: DataFrame[]): DataFrame[] {
   }
 
   return result;
-}
-export function toTimeSeriesMany(data: DataFrame[]): DataFrame[] {
+};
+export const toTimeSeriesMany = (data: DataFrame[]): DataFrame[] => {
   if (!Array.isArray(data) || data.length === 0) {
     return data;
   }
-
   const result: DataFrame[] = [];
   for (const frame of toTimeSeriesLong(data)) {
     const timeField = frame.fields[0];
@@ -269,7 +270,4 @@ export function toTimeSeriesMany(data: DataFrame[]): DataFrame[] {
     }
   }
   return result;
-}
-
-export const isTableData = (res: any): res is TableData => res && res.columns;
-export const isDataFrame = (res: any): res is DataFrame => res && res.fields;
+};

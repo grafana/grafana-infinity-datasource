@@ -28,7 +28,7 @@ export const TypeSelector = (props: { query: InfinityQuery; onChange: (e: Infini
       <InlineFormLabel width={LABEL_WIDTH} className={`query-keyword`}>
         Type
       </InlineFormLabel>
-      <div className="select-wrapper">
+      <div style={{ marginRight: '5px' }}>
         <Select width={16} options={getTypes()} onChange={(e) => onTypeChange(e.value as InfinityQueryType)} value={query.type || 'json'}></Select>
       </div>
     </>

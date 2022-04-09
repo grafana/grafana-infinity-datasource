@@ -1,11 +1,7 @@
-import { getTemplateSrv } from '@grafana/runtime';
-import { ScopedVars, DataSourceInstanceSettings, DataQueryRequest } from '@grafana/data';
+import { DataSourceInstanceSettings, DataQueryRequest } from '@grafana/data';
 import { isDataQuery, normalizeURL } from './utils';
+import { interpolateQuery } from './../interpolate';
 import { InfinityQuery, InfinityInstanceSettings, InfinityOptions, GlobalInfinityQuery } from '../types';
-
-const replaceVariable = (input: string, scopedVars: ScopedVars): string => {
-  return getTemplateSrv().replace(input || '', scopedVars, 'glob');
-};
 
 export const overrideWithGlobalQuery = (t: InfinityQuery, instanceSettings: DataSourceInstanceSettings<InfinityOptions>): InfinityQuery => {
   if (t.type === 'global' && t.global_query_id && instanceSettings.jsonData.global_queries && instanceSettings.jsonData.global_queries.length > 0) {
@@ -14,49 +10,6 @@ export const overrideWithGlobalQuery = (t: InfinityQuery, instanceSettings: Data
     return matchingQuery && global_query_id ? { ...matchingQuery.query, refId: t.refId } : t;
   }
   return t;
-};
-
-export const replaceVariables = (query: InfinityQuery, scopedVars: ScopedVars): InfinityQuery => {
-  const newQuery: InfinityQuery = { ...query };
-  if (isDataQuery(newQuery) || newQuery.type === 'uql' || newQuery.type === 'groq') {
-    if (newQuery.source === 'url') {
-      newQuery.url = replaceVariable(newQuery.url || '', scopedVars);
-      newQuery.url_options = {
-        ...newQuery.url_options,
-        data: replaceVariable(newQuery.url_options?.data || '', scopedVars),
-        params: newQuery.url_options?.params?.map((param) => {
-          return {
-            ...param,
-            value: getTemplateSrv().replace(param?.value || '', scopedVars, 'glob'),
-          };
-        }),
-        headers: newQuery.url_options?.headers?.map((header) => {
-          return {
-            ...header,
-            value: getTemplateSrv().replace(header?.value || '', scopedVars, 'glob'),
-          };
-        }),
-      };
-    }
-    if (newQuery.source === 'inline') {
-      newQuery.data = replaceVariable(newQuery.data, scopedVars);
-    }
-    if (isDataQuery(newQuery)) {
-      newQuery.filters = (newQuery.filters || []).map((filter) => {
-        filter.value = filter.value.map((val) => {
-          return getTemplateSrv().replace(val || '', scopedVars, 'glob');
-        });
-        return filter;
-      });
-    }
-    if (newQuery.type === 'uql') {
-      newQuery.uql = replaceVariable(newQuery.uql, scopedVars);
-    }
-    if (newQuery.type === 'groq') {
-      newQuery.groq = replaceVariable(newQuery.groq, scopedVars);
-    }
-  }
-  return newQuery;
 };
 
 export const IsValidInfinityQuery = (query: InfinityQuery): boolean => {
@@ -83,7 +36,7 @@ export const getUpdatedDataRequest = (options: DataQueryRequest<InfinityQuery>, 
       .filter((t: InfinityQuery) => t.hide !== true)
       .map((t) => overrideWithGlobalQuery(t, instanceSettings))
       .filter((t) => t.type !== 'global')
-      .map((t) => replaceVariables(t, options.scopedVars))
+      .map((t) => interpolateQuery(t, options.scopedVars))
       .map((t) => {
         if ((isDataQuery(t) || t.type === 'uql' || t.type === 'groq') && t.source === 'url') {
           t.url = normalizeURL(t.url);
