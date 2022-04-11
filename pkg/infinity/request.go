@@ -44,7 +44,7 @@ func GetQueryURL(settings InfinitySettings, query Query, includeSect bool) (stri
 	q := u.Query()
 	for _, param := range query.URLOptions.Params {
 		value := replaceSect(param.Value, settings, includeSect)
-		q.Set(param.Key, value)
+		q.Add(param.Key, value)
 	}
 	for key, value := range settings.SecureQueryFields {
 		val := dummyHeader

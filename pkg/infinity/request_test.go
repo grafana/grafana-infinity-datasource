@@ -40,6 +40,22 @@ func Test_getQueryURL(t *testing.T) {
 			want: "https://foo.com/hello?key=val",
 		},
 		{
+			name: "should merge all the query parameters",
+			settings: infinity.InfinitySettings{
+				URL: "https://foo.com",
+			},
+			query: infinity.Query{
+				URL: "/hello?key=val10&foo=bar",
+				URLOptions: infinity.URLOptions{
+					Params: []infinity.URLOptionKeyValuePair{
+						{Key: "key", Value: "val11"},
+						{Key: "key2", Value: "value2"},
+					},
+				},
+			},
+			want: "https://foo.com/hello?foo=bar&key=val10&key=val11&key2=value2",
+		},
+		{
 			name: "should always respect the URL in the settings",
 			settings: infinity.InfinitySettings{
 				URL: "https://one.com",
