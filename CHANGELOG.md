@@ -2,12 +2,21 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
+## [ 0.8.7 ]
+
+- UQL: New command `distinct`
+- UQL: New function `kv` which provide kv pair array from object. (useful when the results are key value format)
+- UQL: New mathematical functions (`floor`/`ceil`/`round`/`sign`/`pow`/`sin`/`cos`/`tan`/`log`/`log2`/`log10`)
+- Bug fix: Fixed a bug where error from the API causing segment violation error (#299)
+- Bug fix: Fixed a bug where UQL editor throw error sometimes when using grafana versions higher than 8.3.4
+- Bug fix: Fixed a bug where negative numbers in string were converted to positive numbers (#297)
+
 ## [ 0.8.6 ]
 
 - UQL: Now support comments. Any new line starts with `#` will be treated as comment
 - UQL: New command `mv-expand`
 - UQL: New functions `parse_url`, `parse_urlquery`
-- UQL: Fixed a bug where new line throws error when queries created from windows machines
+- UQL: Fixed a bug where new line in UQL throws error when queries created from windows systems
 - UQL: keyword suggestions for UQL Query editor
 
 ## [ 0.8.5 ]

@@ -64,7 +64,19 @@ export const sendAsDataFrame = (res: unknown, format: InfinityQueryFormat = 'tab
           );
         } else {
           let frame = toDataFrame(res);
-          resolve({ ...frame, name: frame.name || refId });
+          let newFrame: DataFrame = new MutableDataFrame({
+            ...frame,
+            fields: frame.fields.map((field) => {
+              if (field.type === 'other') {
+                return {
+                  ...field,
+                  values: field.values.toArray().map((v) => JSON.stringify(v)),
+                };
+              }
+              return field;
+            }),
+          });
+          resolve({ ...newFrame, name: frame.name || frame.refId || refId });
         }
       }
     } else {
@@ -95,7 +107,9 @@ export const applyUQL = (query: string, data: unknown, format: InfinityQueryForm
     }
     let input = data;
     uql(query, { data: input })
-      .then((r) => resolve(sendAsDataFrame(r, format, refId)))
+      .then((r) => {
+        resolve(sendAsDataFrame(r, format, refId));
+      })
       .catch((ex) => {
         console.error(ex);
         reject('error applying uql query');

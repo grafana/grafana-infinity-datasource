@@ -84,7 +84,7 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.5",
       "targets": [
         {
           "columns": [],
@@ -156,7 +156,7 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.5",
       "targets": [
         {
           "columns": [],
@@ -228,7 +228,7 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.5",
       "targets": [
         {
           "columns": [],
@@ -301,7 +301,7 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.5",
       "targets": [
         {
           "columns": [],
@@ -387,7 +387,7 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.5",
       "targets": [
         {
           "columns": [],
@@ -459,7 +459,7 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.5",
       "targets": [
         {
           "columns": [],
@@ -532,7 +532,7 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.5",
       "targets": [
         {
           "columns": [],
@@ -628,7 +628,8 @@
           "placement": "bottom"
         },
         "tooltip": {
-          "mode": "single"
+          "mode": "single",
+          "sort": "none"
         }
       },
       "pluginVersion": "8.3.2",
@@ -728,7 +729,8 @@
           "placement": "bottom"
         },
         "tooltip": {
-          "mode": "single"
+          "mode": "single",
+          "sort": "none"
         }
       },
       "pluginVersion": "8.3.2",
@@ -828,7 +830,8 @@
           "placement": "bottom"
         },
         "tooltip": {
-          "mode": "single"
+          "mode": "single",
+          "sort": "none"
         }
       },
       "pluginVersion": "8.3.2",
@@ -928,7 +931,8 @@
           "placement": "bottom"
         },
         "tooltip": {
-          "mode": "single"
+          "mode": "single",
+          "sort": "none"
         }
       },
       "pluginVersion": "8.3.2",
@@ -1028,7 +1032,8 @@
           "placement": "bottom"
         },
         "tooltip": {
-          "mode": "single"
+          "mode": "single",
+          "sort": "none"
         }
       },
       "pluginVersion": "8.3.2",
@@ -1128,7 +1133,8 @@
           "placement": "bottom"
         },
         "tooltip": {
-          "mode": "single"
+          "mode": "single",
+          "sort": "none"
         }
       },
       "pluginVersion": "8.3.2",
@@ -1218,7 +1224,7 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.5",
       "targets": [
         {
           "columns": [],
@@ -1291,7 +1297,7 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.5",
       "targets": [
         {
           "columns": [],
@@ -1364,7 +1370,7 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.5",
       "targets": [
         {
           "columns": [],
@@ -1437,7 +1443,7 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.5",
       "targets": [
         {
           "columns": [],
@@ -1523,7 +1529,7 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.5",
       "targets": [
         {
           "columns": [],
@@ -1623,7 +1629,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.5",
       "targets": [
         {
           "columns": [],
@@ -1710,7 +1716,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.5",
       "targets": [
         {
           "columns": [],
@@ -1783,7 +1789,7 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.5",
       "targets": [
         {
           "columns": [],
@@ -1870,7 +1876,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.5",
       "targets": [
         {
           "columns": [],
@@ -1994,7 +2000,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.5",
       "targets": [
         {
           "columns": [],
@@ -2105,7 +2111,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.5",
       "targets": [
         {
           "columns": [],
@@ -2131,9 +2137,124 @@
       ],
       "title": "URL params",
       "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 90
+      },
+      "id": 44,
+      "panels": [],
+      "title": "KV",
+      "type": "row"
+    },
+    {
+      "gridPos": {
+        "h": 14,
+        "w": 12,
+        "x": 0,
+        "y": 91
+      },
+      "id": 48,
+      "options": {
+        "content": "## Input\n```json\n{\n  \"server1\": {\n    \"name\": \"server-1\",\n    \"ip\": \"0.0.0.1\",\n    \"disks\": [{ \"drive\": \"C\", \"size\": 1024 },{ \"drive\": \"D\", \"size\": 2048 }]\n  },\n  \"server2\": {\n    \"name\": \"server-2\",\n    \"ip\": \"0.0.0.2\",\n    \"disks\": [{ \"drive\": \"C\", \"size\": 2048 },{ \"drive\": \"D\", \"size\": 3096 }]\n  }\n}\n\n```\n\n## Query\n\n```kusto\nparse-json\n| project kv() \n| project \"name\"=\"value.name\", \"ip\"=\"value.ip\", \"disks\"=\"value.disks\"\n| mv-expand \"disk\"=\"disks\" \n| project \"name\", \"ip\", \"driveName\"=\"disk.drive\", \"driveSize\"=\"disk.size\"\n| project-away \"disk\"\n```",
+        "mode": "markdown"
+      },
+      "pluginVersion": "8.4.5",
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "Infinity"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "region"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 133
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 12,
+        "x": 12,
+        "y": 91
+      },
+      "id": 46,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "8.4.5",
+      "targets": [
+        {
+          "columns": [],
+          "data": "{\n  \"server1\": {\n    \"name\": \"server-1\",\n    \"ip\": \"0.0.0.1\",\n    \"disks\": [{ \"drive\": \"C\", \"size\": 1024 },{ \"drive\": \"D\", \"size\": 2048 }]\n  },\n  \"server2\": {\n    \"name\": \"server-2\",\n    \"ip\": \"0.0.0.2\",\n    \"disks\": [{ \"drive\": \"C\", \"size\": 2048 },{ \"drive\": \"D\", \"size\": 3096 }]\n  }\n}\n",
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "Infinity"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "refId": "A",
+          "root_selector": "",
+          "source": "inline",
+          "type": "uql",
+          "uql": "parse-json\n| project kv() \n| project \"name\"=\"value.name\", \"ip\"=\"value.ip\", \"disks\"=\"value.disks\"\n| mv-expand \"disk\"=\"disks\" \n| project \"name\", \"ip\", \"driveName\"=\"disk.drive\", \"driveSize\"=\"disk.size\"\n| project-away \"disk\"",
+          "url": "",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "project kv() with mv-expand",
+      "type": "table"
     }
   ],
-  "schemaVersion": 34,
+  "schemaVersion": 35,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -2147,6 +2268,6 @@
   "timezone": "",
   "title": "UQL",
   "uid": "uql",
-  "version": 12,
+  "version": 15,
   "weekStart": ""
 }

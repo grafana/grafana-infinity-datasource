@@ -49,6 +49,24 @@ parse-json
 | project "id", "name.firstName", "date of birth"="dob"
 ```
 
+### project kv()
+
+`project kv()` command is used to convert the given object into key-value pairs.
+
+Example: For the data `{ "a": {"name":"a1"}, "b": {"name":"b1"}, "c": {"name":"c1"} }` and the query `parse-json | project kv()` will yield the following table
+
+| key | value         |
+| --- | ------------- |
+| a   | {"name":"a1"} |
+| b   | {"name":"b1"} |
+| c   | {"name":"c1"} |
+
+this command can be also used with arguments
+
+Example: For the data `{ "data": { "a": {"name":"a1"}, "b": {"name":"b1"}, "c": {"name":"c1"} } }` and the query `parse-json | project kv("data")` will yield the same results
+
+> project kv() command is available only from 0.8.7 of the plugin
+
 ### project-away
 
 `project-away` command is exactly opposite as `project`. It just drops specific columns from the data. It doesn't support alias or dot notation selector.
@@ -102,6 +120,17 @@ following are some of the available functions
 | diff                             | diff("col1","col2")                     | difference between two columns                                                                       | 0.8.0          |
 | mul                              | mul("col1","col2")                      | multiplication of two columns                                                                        | 0.8.0          |
 | strcat                           | strcat("col1","col2")                   | concatenates two or more columns                                                                     | 0.8.0          |
+| floor                            | floor("col1")                           | calculates the floor value of given numeric field                                                    | 0.8.7          |
+| ceil                             | ceil("col1")                            | calculates the ceil value of given numeric field                                                     | 0.8.7          |
+| round                            | round("col1")                           | calculates the round value of given numeric field                                                    | 0.8.7          |
+| sign                             | sign("col1")                            | calculates the sign value of given numeric field                                                     | 0.8.7          |
+| pow                              | pow("col1",3)                           | calculates the pow value of given numeric field                                                      | 0.8.7          |
+| sin                              | sin("col1")                             | calculates the sin value of given numeric field                                                      | 0.8.7          |
+| cos                              | cos("col1")                             | calculates the cos value of given numeric field                                                      | 0.8.7          |
+| tan                              | tan("col1")                             | calculates the tan value of given numeric field                                                      | 0.8.7          |
+| log                              | log("col1")                             | calculates the log value of given numeric field                                                      | 0.8.7          |
+| log2                             | log2("col1")                            | calculates the log2 value of given numeric field                                                     | 0.8.7          |
+| log10                            | log10("col1")                           | calculates the log10 value of given numeric field                                                    | 0.8.7          |
 | parse_url                        | parse_url("col1")                       | parses the col1 as URL                                                                               | 0.8.6          |
 |                                  | parse_url("col1",'pathname')            | returns the `pathname` of the URL. Options are `host`,`hash`,`origin`,`href`,`protocol` and `search` | 0.8.6          |
 |                                  | parse_url("col1",'search','key1')       | returns the query string value for `key1`. 2nd arg is always `search`                                | 0.8.6          |
