@@ -37,6 +37,36 @@ Most of the times, fields are referred within double quotes and string values ar
           <code slot="code">parse-json
 | project &quot;id&quot;, &quot;name.firstName&quot;, &quot;date of birth&quot;=&quot;dob&quot;</code>
         </deckgo-highlight-code>
+<h3>project kv()</h3>
+<p><code>project kv()</code> command is used to convert the given object into key-value pairs.</p>
+<p>Example: For the data <code>{ "a": {"name":"a1"}, "b": {"name":"b1"}, "c": {"name":"c1"} }</code> and the query <code>parse-json | project kv()</code> will yield the following table</p>
+<table>
+<thead>
+<tr>
+<th>key</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a</td>
+<td>{"name":"a1"}</td>
+</tr>
+<tr>
+<td>b</td>
+<td>{"name":"b1"}</td>
+</tr>
+<tr>
+<td>c</td>
+<td>{"name":"c1"}</td>
+</tr>
+</tbody>
+</table>
+<p>this command can be also used with arguments</p>
+<p>Example: For the data <code>{ "data": { "a": {"name":"a1"}, "b": {"name":"b1"}, "c": {"name":"c1"} } }</code> and the query <code>parse-json | project kv("data")</code> will yield the same results</p>
+<blockquote>
+<p>project kv() command is available only from 0.8.7 of the plugin</p>
+</blockquote>
 <h3>project-away</h3>
 <p><code>project-away</code> command is exactly opposite as <code>project</code>. It just drops specific columns from the data. It doesn't support alias or dot notation selector.</p>
 <deckgo-highlight-code language="sql" terminal="carbon" theme="vscode"  >
@@ -197,6 +227,72 @@ Most of the times, fields are referred within double quotes and string values ar
 <td>strcat("col1","col2")</td>
 <td>concatenates two or more columns</td>
 <td>0.8.0</td>
+</tr>
+<tr>
+<td>floor</td>
+<td>floor("col1")</td>
+<td>calculates the floor value of given numeric field</td>
+<td>0.8.7</td>
+</tr>
+<tr>
+<td>ceil</td>
+<td>ceil("col1")</td>
+<td>calculates the ceil value of given numeric field</td>
+<td>0.8.7</td>
+</tr>
+<tr>
+<td>round</td>
+<td>round("col1")</td>
+<td>calculates the round value of given numeric field</td>
+<td>0.8.7</td>
+</tr>
+<tr>
+<td>sign</td>
+<td>sign("col1")</td>
+<td>calculates the sign value of given numeric field</td>
+<td>0.8.7</td>
+</tr>
+<tr>
+<td>pow</td>
+<td>pow("col1",3)</td>
+<td>calculates the pow value of given numeric field</td>
+<td>0.8.7</td>
+</tr>
+<tr>
+<td>sin</td>
+<td>sin("col1")</td>
+<td>calculates the sin value of given numeric field</td>
+<td>0.8.7</td>
+</tr>
+<tr>
+<td>cos</td>
+<td>cos("col1")</td>
+<td>calculates the cos value of given numeric field</td>
+<td>0.8.7</td>
+</tr>
+<tr>
+<td>tan</td>
+<td>tan("col1")</td>
+<td>calculates the tan value of given numeric field</td>
+<td>0.8.7</td>
+</tr>
+<tr>
+<td>log</td>
+<td>log("col1")</td>
+<td>calculates the log value of given numeric field</td>
+<td>0.8.7</td>
+</tr>
+<tr>
+<td>log2</td>
+<td>log2("col1")</td>
+<td>calculates the log2 value of given numeric field</td>
+<td>0.8.7</td>
+</tr>
+<tr>
+<td>log10</td>
+<td>log10("col1")</td>
+<td>calculates the log10 value of given numeric field</td>
+<td>0.8.7</td>
 </tr>
 <tr>
 <td>parse_url</td>
