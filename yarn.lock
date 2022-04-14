@@ -2335,13 +2335,13 @@
     rxjs "6.6.2"
     xss "1.0.6"
 
-"@grafana/data@8.4.3":
-  version "8.4.3"
-  resolved "https://registry.yarnpkg.com/@grafana/data/-/data-8.4.3.tgz#897aa572fb628c8763e1acee59ca52fd3955b04e"
-  integrity sha512-1rUKpYzP8Z4gvYBQg89F4kJx77aBmsmo49VK1BVCCl7F78xWY5umQJkaSdYInAMUs3RjhXl1ib20US+eA8ldnw==
+"@grafana/data@8.4.6":
+  version "8.4.6"
+  resolved "https://registry.yarnpkg.com/@grafana/data/-/data-8.4.6.tgz#af2ce7c202a654d0fb8eb80a09dfbb39de9c168b"
+  integrity sha512-BCOBhhxLpdQIYHHTdXy/YSqE08/lxxRNTwke5cQ9D5a+TlStXqWB/dT4Umt2n7TDkB01QP9+/t2DQGwoH1iKzw==
   dependencies:
     "@braintree/sanitize-url" "5.0.2"
-    "@grafana/schema" "8.4.3"
+    "@grafana/schema" "8.4.6"
     "@types/d3-interpolate" "^1.4.0"
     d3-interpolate "1.4.0"
     date-fns "2.28.0"
@@ -2371,24 +2371,24 @@
     typescript "3.9.3"
     yaml "^1.8.3"
 
-"@grafana/e2e-selectors@8.4.3":
-  version "8.4.3"
-  resolved "https://registry.yarnpkg.com/@grafana/e2e-selectors/-/e2e-selectors-8.4.3.tgz#f407b75bb496fbf1529e5caf0f50de4dd0eabbbe"
-  integrity sha512-dZAKmsow717d+LEK+OzRApmsyVO6cJtVmADypTRmQPvtq6n2DGXvqTBQECvTiaXNInfXelO2biSe0EFkP8+f0g==
+"@grafana/e2e-selectors@8.4.6":
+  version "8.4.6"
+  resolved "https://registry.yarnpkg.com/@grafana/e2e-selectors/-/e2e-selectors-8.4.6.tgz#4794d61ac736663b20119c04484e63458ce10b5d"
+  integrity sha512-EIxeQ09+4v+l++vjiSbMTIR3tX+N4fs/jj6TYzpfEdvOdVyzZRmKQP2zgaiV8JvQ45ILEPXkUpYw61CjEnI3Zw==
   dependencies:
     "@grafana/tsconfig" "^1.0.0-rc1"
     tslib "2.3.1"
     typescript "4.4.4"
 
-"@grafana/e2e@8.4.3":
-  version "8.4.3"
-  resolved "https://registry.yarnpkg.com/@grafana/e2e/-/e2e-8.4.3.tgz#bb5a5ce487e52784e5a44fffeff7c7758cf04e0a"
-  integrity sha512-XV1RP1VswtGoHpdHTCFe51Tfjjyys3qia1XxftOSXuO6JWRTaFnNFBLHr0ybv/2B4EHISymKimXIGq0Vaw94pw==
+"@grafana/e2e@8.4.6":
+  version "8.4.6"
+  resolved "https://registry.yarnpkg.com/@grafana/e2e/-/e2e-8.4.6.tgz#d3c03b25bc33ad30072163fc81c325a31fbaa487"
+  integrity sha512-2N+JFyJTjyqauS7eUKPpMWRX3Hu7KEP0ZC70HeKYlal/SkXK2kciKSarRz3eLlxvCDz7/1gRiUHOjdhglTquhg==
   dependencies:
     "@babel/core" "7.16.7"
     "@babel/preset-env" "7.16.7"
     "@cypress/webpack-preprocessor" "5.11.0"
-    "@grafana/e2e-selectors" "8.4.3"
+    "@grafana/e2e-selectors" "8.4.6"
     "@grafana/tsconfig" "^1.0.0-rc1"
     "@mochajs/json-file-reporter" "^1.2.0"
     babel-loader "8.2.3"
@@ -2436,10 +2436,10 @@
     systemjs "0.20.19"
     systemjs-plugin-css "0.1.37"
 
-"@grafana/schema@8.4.3":
-  version "8.4.3"
-  resolved "https://registry.yarnpkg.com/@grafana/schema/-/schema-8.4.3.tgz#fe6a7ad32e01db51561e67f9a8b36d9a2bf98829"
-  integrity sha512-YwZiWPkOdVeRg70v0kQAN0FJTiKs+arckt9CtNd4bHjtHQYnnEBYqVqXvIUODYAkaNicPZkOy96YQYVTkHotDg==
+"@grafana/schema@8.4.6":
+  version "8.4.6"
+  resolved "https://registry.yarnpkg.com/@grafana/schema/-/schema-8.4.6.tgz#a80371e10ddad4410d67c453674cb52cb26beb03"
+  integrity sha512-slFMwC9140Fo24tWqQi6k8ngzGUNPaY8lMxS42XTLMDF6H3nxNCSREZKjJ0HAqMDx3TvHIXL7BMkLBMmrF+jGg==
   dependencies:
     tslib "2.3.1"
 
@@ -2487,17 +2487,17 @@
     tiny-invariant "^1.0.1"
     tiny-warning "^0.0.3"
 
-"@grafana/toolkit@8.4.3":
-  version "8.4.3"
-  resolved "https://registry.yarnpkg.com/@grafana/toolkit/-/toolkit-8.4.3.tgz#e7f8fdcbf23e14494c79b5537ca26de0ce3c6309"
-  integrity sha512-YcvF/HUlTflmdGr9OGCJemq9p0ec1pFL3QNwE0SsrCOmy1Ss9HQVrDzT/+4yKD5dgpGM3a0WZUXrkq/XpxkOgg==
+"@grafana/toolkit@8.4.6":
+  version "8.4.6"
+  resolved "https://registry.yarnpkg.com/@grafana/toolkit/-/toolkit-8.4.6.tgz#e3638d0d170aec69fc943685e176c31ae0344ffe"
+  integrity sha512-X+LjLydwleo2k0/r/18wRglDJoSKxVMYmwz2jheVjkRh17np+UYmrlaUxIo7bpehroRj8t3N5g01/MpfcgKwzw==
   dependencies:
     "@babel/core" "7.13.14"
     "@babel/preset-env" "7.13.12"
-    "@grafana/data" "8.4.3"
+    "@grafana/data" "8.4.6"
     "@grafana/eslint-config" "2.5.2"
     "@grafana/tsconfig" "^1.0.0-rc1"
-    "@grafana/ui" "8.4.3"
+    "@grafana/ui" "8.4.6"
     "@jest/core" "26.6.3"
     "@rushstack/eslint-patch" "1.0.6"
     "@types/command-exists" "^1.2.0"
@@ -2623,17 +2623,17 @@
     slate "0.47.8"
     tinycolor2 "1.4.1"
 
-"@grafana/ui@8.4.3":
-  version "8.4.3"
-  resolved "https://registry.yarnpkg.com/@grafana/ui/-/ui-8.4.3.tgz#d4af08fc8ac8b435c4faf1fd1f829c679c12890b"
-  integrity sha512-2uV5l39XSqvDQ1VXFY7thjixU7O4OwIIn3yF+0/ILMDlWoJrPnUdBtDU2EfWNt0Tbpzs7m3SXjk3e0NPxzeU9g==
+"@grafana/ui@8.4.6":
+  version "8.4.6"
+  resolved "https://registry.yarnpkg.com/@grafana/ui/-/ui-8.4.6.tgz#cac2c72939058a850e076cb0f14413e04bb9c0f5"
+  integrity sha512-ncjK+LPiXuyRskOOWoT9k5VPmjCTco3S93pb50IbMwQP1oa2cBM+APSiIXa5o9svpGH9rnyloBaFrN+4CFeRxg==
   dependencies:
     "@emotion/css" "11.7.1"
     "@emotion/react" "11.7.1"
     "@grafana/aws-sdk" "0.0.31"
-    "@grafana/data" "8.4.3"
-    "@grafana/e2e-selectors" "8.4.3"
-    "@grafana/schema" "8.4.3"
+    "@grafana/data" "8.4.6"
+    "@grafana/e2e-selectors" "8.4.6"
+    "@grafana/schema" "8.4.6"
     "@grafana/slate-react" "0.22.10-grafana"
     "@monaco-editor/react" "4.3.1"
     "@popperjs/core" "2.11.2"
