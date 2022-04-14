@@ -8,7 +8,7 @@
     "watch": "grafana-toolkit plugin:dev --watch",
     "start": "yarn watch",
     "spellcheck": "cspell -c cspell.config.js \"**/*.{ts,tsx,js,go,md,mdx,yml,yaml,json,scss,css}\"",
-    "lint": "yarn spellcheck",
+    "lint": "yarn spellcheck && yarn audit-ci",
     "test": "yarn lint && grafana-toolkit plugin:test",
     "e2e": "yarn lint && grafana-e2e run",
     "e2e:open": "yarn lint && grafana-e2e open",
@@ -87,6 +87,7 @@
     "typescript": "4.4.3"
   },
   "resolutions": {
-    "rxjs": "6.6.3"
+    "rxjs": "6.6.3",
+    "minimist": "1.2.6"
   }
 }
