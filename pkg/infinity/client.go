@@ -84,10 +84,16 @@ func (client *Client) req(url string, body *strings.Reader, settings InfinitySet
 	}
 	res, err := client.HttpClient.Do(req)
 	duration = time.Since(startTime)
+	if err != nil && res == nil {
+		return nil, http.StatusInternalServerError, duration, fmt.Errorf("error getting response from %s", url)
+	}
 	if err != nil {
 		return nil, res.StatusCode, duration, fmt.Errorf("error getting response from %s", url)
 	}
 	defer res.Body.Close()
+	if res == nil {
+		return nil, http.StatusInternalServerError, duration, fmt.Errorf("error getting response from %s", url)
+	}
 	if res.StatusCode >= http.StatusBadRequest {
 		return nil, res.StatusCode, duration, errors.New(res.Status)
 	}
