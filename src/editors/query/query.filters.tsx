@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Modal, Select } from '@grafana/ui';
+import { Modal } from '@grafana/ui';
+import { Select } from './../../components/extended/ui';
 import { SelectableValue } from '@grafana/data';
 import { filterOperators } from '../../app/parsers/filter';
 import { isDataQuery } from './../../app/utils';
@@ -77,6 +78,7 @@ export const TableFilter = (props: { query: InfinityQuery; onChange: (value: any
                   defaultValue={getFields()[0]}
                   value={getFields().find((f) => f.value === filter.field) || getFields()[0]}
                   onChange={(e) => onFilterFieldChange(index, e)}
+                  menuShouldPortal={true}
                 ></Select>
                 <Select
                   className="width-8"
@@ -84,6 +86,7 @@ export const TableFilter = (props: { query: InfinityQuery; onChange: (value: any
                   defaultValue={filterOperators[0]}
                   value={filterOperators.find((f) => f.value === filter.operator) || filterOperators[0]}
                   onChange={(e) => onFilterOperatorChange(index, e)}
+                  menuShouldPortal={true}
                 ></Select>
                 <input type="text" className="gf-form-input min-width-10 width-10" value={filter.value[0]} onChange={(e) => onFilterValueChange(index, 0, e.target.value)} placeholder="Value"></input>
                 <span className="btn btn-success btn-small" style={{ margin: '5px' }} onClick={addFilter}>

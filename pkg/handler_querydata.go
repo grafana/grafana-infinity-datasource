@@ -23,6 +23,7 @@ func (ds *PluginHost) QueryData(ctx context.Context, req *backend.QueryDataReque
 	response := backend.NewQueryDataResponse()
 	client, err := getInstance(ds.im, req.PluginContext)
 	if err != nil {
+		backend.Logger.Error("error getting infinity instance", "error", err.Error())
 		return response, err
 	}
 	for _, q := range req.Queries {
@@ -36,6 +37,7 @@ func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient in
 	var query infinity.Query
 	response.Error = json.Unmarshal(backendQuery.JSON, &query)
 	if response.Error != nil {
+		backend.Logger.Error("error un-marshaling the query", "error", response.Error.Error())
 		return response
 	}
 	frameName := query.RefID
@@ -59,6 +61,7 @@ func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient in
 		customMeta.ResponseCodeFromServer = statusCode
 		customMeta.Duration = duration
 		if err != nil {
+			backend.Logger.Error("error getting response for query", "error", err.Error())
 			customMeta.Error = err.Error()
 		}
 	}

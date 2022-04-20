@@ -1,5 +1,6 @@
 import React from 'react';
-import { Select, InlineFormLabel } from '@grafana/ui';
+import { InlineFormLabel } from '@grafana/ui';
+import { Select } from './extended/ui';
 import { InfinityQuery, INFINITY_SOURCES, InfinityQuerySources } from '../types';
 
 export const SourceSelector = (props: { query: InfinityQuery; onChange: (e: InfinityQuery) => void; onRunQuery: () => void }) => {
@@ -18,7 +19,7 @@ export const SourceSelector = (props: { query: InfinityQuery; onChange: (e: Infi
         {query.type === 'series' ? 'Scenario' : 'Source'}
       </InlineFormLabel>
       <div style={{ marginRight: '5px' }}>
-        <Select width={16} options={supportedSources} value={query.source || 'url'} onChange={(e) => onSourceChange(e.value as InfinityQuerySources)}></Select>
+        <Select width={16} options={supportedSources} value={query.source || 'url'} onChange={(e) => onSourceChange(e.value as InfinityQuerySources)} menuShouldPortal={true}></Select>
       </div>
     </>
   );

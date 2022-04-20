@@ -17,6 +17,11 @@ describe('UQLProvider', () => {
     const expected = { name: 'A', length: 1, fields: [{ name: 'result', type: FieldType.string, values: ['sriramajeyam'] }] };
     expect(result).toStrictEqual(new MutableDataFrame(expected));
   });
+  it('jsonata', async () => {
+    const result = await applyUQL(`parse-json | jsonata "example.value"`, `{"example": [{ "value": 4 }, { "value": 7 }, { "value": 13 }]}`, 'table', 'A');
+    const expected = { name: 'A', length: 1, fields: [{ name: 'result', type: FieldType.number, values: [4, 7, 13] }] };
+    expect(result).toStrictEqual(new MutableDataFrame(expected));
+  });
   it('basic array with project', async () => {
     const result = await applyUQL(
       `parse-json 

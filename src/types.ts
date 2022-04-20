@@ -227,9 +227,9 @@ export type QueryParam = { key: string; value: string };
 export type QueryHeaders = { key: string; value: string };
 export const SCRAP_QUERY_TYPES: Array<SelectableValue<InfinityQueryType>> = [
   { label: 'UQL', value: 'uql' },
+  { label: 'JSON', value: 'json' },
   { label: 'CSV', value: 'csv' },
   { label: 'TSV', value: 'tsv' },
-  { label: 'JSON', value: 'json' },
   { label: 'GraphQL', value: 'graphql' },
   { label: 'XML', value: 'xml' },
   { label: 'HTML', value: 'html' },

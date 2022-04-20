@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { defaultsDeep, set } from 'lodash';
-import { Modal, Select } from '@grafana/ui';
+import { Modal } from '@grafana/ui';
+import { Select } from './../../components/extended/ui';
 import { InfinitySeriesQuery, DataOverride } from '../../types';
 
 export const SeriesAdvancedOptions = ({ query, onChange }: { query: InfinitySeriesQuery; onChange: (value: any) => void }) => {
@@ -91,7 +92,8 @@ export const SeriesAdvancedOptions = ({ query, onChange }: { query: InfinitySeri
                             value={DATA_OVERRIDE_OPERATORS.find((options: any) => options.value === override.operator)}
                             defaultValue={override.operator}
                             options={DATA_OVERRIDE_OPERATORS}
-                            onChange={(e) => onTextChange(e.value || '', `dataOverrides[${index}].operator`)}
+                            onChange={(e) => onTextChange((e.value || '') as string, `dataOverrides[${index}].operator`)}
+                            menuShouldPortal={true}
                           ></Select>
                           <input
                             type="text"

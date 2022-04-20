@@ -10,6 +10,8 @@ import (
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/grafana/grafana-plugin-sdk-go/backend"
 )
 
 type Client struct {
@@ -80,39 +82,39 @@ func (client *Client) req(url string, body *strings.Reader, settings InfinitySet
 	req, _ := GetRequest(settings, body, query, requestHeaders, true)
 	startTime := time.Now()
 	if !CanAllowURL(req.URL.String(), settings.AllowedHosts) {
+		backend.Logger.Error("url is not in the allowed list. make sure to match the base URL with the settings", "url", req.URL.String())
 		return nil, http.StatusUnauthorized, 0, errors.New("requested URL is not allowed. To allow this URL, update the datasource config URL -> Allowed Hosts section")
 	}
 	res, err := client.HttpClient.Do(req)
 	duration = time.Since(startTime)
-	if err != nil && res == nil {
-		return nil, http.StatusInternalServerError, duration, fmt.Errorf("error getting response from %s", url)
-	}
-	if err != nil {
+	defer res.Body.Close()
+	if err != nil && res != nil {
+		backend.Logger.Error("error getting response from server", "url", url, "method", req.Method, "error", err.Error(), "status code", res.StatusCode)
 		return nil, res.StatusCode, duration, fmt.Errorf("error getting response from %s", url)
 	}
-	defer res.Body.Close()
-	if res == nil {
-		return nil, http.StatusInternalServerError, duration, fmt.Errorf("error getting response from %s", url)
+	if err != nil && res == nil {
+		backend.Logger.Error("error getting response from server. no response received", "url", url, "error", err.Error())
+		return nil, http.StatusInternalServerError, duration, fmt.Errorf("error getting response from url %s. no response received. Error: %s", url, err.Error())
+	}
+	if err == nil && res == nil {
+		backend.Logger.Error("invalid response from server and also no error", "url", url, "method", req.Method)
+		return nil, http.StatusInternalServerError, duration, fmt.Errorf("invalid response received for the URL %s", url)
 	}
 	if res.StatusCode >= http.StatusBadRequest {
 		return nil, res.StatusCode, duration, errors.New(res.Status)
 	}
 	bodyBytes, err := ioutil.ReadAll(res.Body)
 	if err != nil {
+		backend.Logger.Error("error reading response body", "url", url, "error", err.Error())
 		return nil, res.StatusCode, duration, err
 	}
-	if query.Type == QueryTypeJSON || query.Type == QueryTypeGraphQL {
+	if CanParseAsJSON(query.Type, res.Header) {
 		var out interface{}
 		err := json.Unmarshal(bodyBytes, &out)
-		return out, res.StatusCode, duration, err
-	}
-	if query.Type == QueryTypeUQL || query.Type == QueryTypeGROQ {
-		contentType := res.Header.Get(contentTypeHeaderKey)
-		if strings.Contains(strings.ToLower(contentType), contentTypeJSON) {
-			var out interface{}
-			err := json.Unmarshal(bodyBytes, &out)
-			return out, res.StatusCode, duration, err
+		if err != nil {
+			backend.Logger.Error("error un-marshaling JSON response", "url", url, "error", err.Error())
 		}
+		return out, res.StatusCode, duration, err
 	}
 	return string(bodyBytes), res.StatusCode, duration, err
 }
@@ -129,6 +131,19 @@ func (client *Client) GetResults(query Query, requestHeaders map[string]string) 
 	default:
 		return client.req(query.URL, nil, client.Settings, isJSON, query, requestHeaders)
 	}
+}
+
+func CanParseAsJSON(queryType string, responseHeaders http.Header) bool {
+	if queryType == QueryTypeJSON || queryType == QueryTypeGraphQL {
+		return true
+	}
+	if queryType == QueryTypeUQL || queryType == QueryTypeGROQ {
+		contentType := responseHeaders.Get(contentTypeHeaderKey)
+		if strings.Contains(strings.ToLower(contentType), contentTypeJSON) {
+			return true
+		}
+	}
+	return false
 }
 
 func CanAllowURL(url string, allowedHosts []string) bool {

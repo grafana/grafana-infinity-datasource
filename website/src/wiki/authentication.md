@@ -19,7 +19,7 @@ Infinity datasource supports following authentication methods
 - OAuth2 client credentials
 - OAuth2 JWT authentication
 
-### No Authentication
+## No Authentication
 
 If your APIs doesn't require any authentication, select **No Authentication** method.
 

@@ -3,6 +3,13 @@ import { InlineFormLabel, CodeEditor, CodeEditorSuggestionItem, Icon, CodeEditor
 import { InfinityQuery, EditorMode } from '../../types';
 declare const monaco: any;
 
+const UQLTips: string[] = [
+  '💡 While editing UQL, you can press ctrl+s/cmd+s to run the query',
+  '💡 You can use `project kv()` command to transform key value pair/object into array',
+  '💡 You can use `mv-expand "colum_name"` command to expand the nested array',
+  '💡 You can prefix each line with # to mark that as a comment',
+];
+
 export const UQLEditor = (props: { mode: EditorMode; query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void }) => {
   const { query, mode, onChange, onRunQuery } = props;
   const LABEL_WIDTH = mode === 'variable' ? 10 : 8;
@@ -25,19 +32,31 @@ export const UQLEditor = (props: { mode: EditorMode; query: InfinityQuery; onCha
         <InlineFormLabel className="query-keyword" width={LABEL_WIDTH}>
           UQL
         </InlineFormLabel>
-        <CodeEditor
-          language="uql"
-          width="594px"
-          height="140px"
-          value={query.uql}
-          showMiniMap={false}
-          showLineNumbers={false}
-          getSuggestions={getUQLSuggestions}
-          onSave={onUQLChange}
-          onBlur={onUQLChange}
-          onEditorDidMount={handleMount}
-        />
-        <Icon name="play" size="lg" style={{ color: 'greenyellow' }} onClick={() => {}} />
+        <div>
+          <CodeEditor
+            language="sql"
+            width="594px"
+            height="140px"
+            value={query.uql}
+            showMiniMap={false}
+            showLineNumbers={false}
+            getSuggestions={getUQLSuggestions}
+            onSave={onUQLChange}
+            onBlur={onUQLChange}
+            onEditorDidMount={handleMount}
+          />
+          <p style={{ paddingBlock: '5px', color: 'yellowgreen' }}>{UQLTips[Math.floor(Math.random() * UQLTips.length)]}</p>
+        </div>
+        <div title="Alternatively, you can also press ctrl+s ">
+          <Icon
+            name="play"
+            size="lg"
+            style={{ color: 'greenyellow' }}
+            onClick={() => {
+              onRunQuery();
+            }}
+          />
+        </div>
       </div>
     </>
   ) : (
@@ -46,11 +65,24 @@ export const UQLEditor = (props: { mode: EditorMode; query: InfinityQuery; onCha
 };
 
 async function registerUQL(editor: any) {
-  editor.updateOptions({ fixedOverflowWidgets: true });
-  monaco.languages.register({ id: 'uql' });
+  try {
+    editor.updateOptions({ fixedOverflowWidgets: true });
+    const allLangs = monaco.languages.getLanguages();
+    const { language: uqlLang } = await allLangs.find(({ id }: any) => id === 'sql').loader();
+    if (!uqlLang.hasOwnProperty('keywords')) {
+      uqlLang.keywords = [];
+    }
+    uqlLang.keywords.unshift.apply(uqlLang.keywords, UQLKeyWords);
+    if (!uqlLang.hasOwnProperty('builtinFunctions')) {
+      uqlLang.builtinFunctions = [];
+    }
+    uqlLang.builtinFunctions.unshift.apply(uqlLang.builtinFunctions, UQLFunctions);
+  } catch (ex) {
+    console.log('error while loading monaco editor', ex);
+  }
 }
 
-const UQLKeyWords = ['parse-json', 'parse-csv', 'parse-xml', 'parse-yaml', 'project', 'project-away', 'extend', 'scope', 'summarize', 'mv-expand', 'order by'];
+const UQLKeyWords = ['parse-json', 'parse-csv', 'parse-xml', 'parse-yaml', 'project', 'project-away', 'project kv()', 'jsonata', 'extend', 'scope', 'summarize', 'mv-expand', 'order by'];
 const UQLFunctions = [
   'count',
   'sum',
@@ -67,6 +99,7 @@ const UQLFunctions = [
   'dcount',
   'distinct',
   'random',
+  'kv',
   'toupper',
   'tolower',
   'strlen',

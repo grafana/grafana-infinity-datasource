@@ -1,5 +1,5 @@
 import React from 'react';
-import { Select } from '@grafana/ui';
+import { Select } from './extended/ui';
 import { InfinityQuery, INFINITY_RESULT_FORMATS, InfinityQueryFormat } from '../types';
 import { Components } from '../selectors';
 import { isDataQuery } from 'app/utils';
@@ -32,7 +32,7 @@ export const FormatSelector = (props: FormatSelectorProps) => {
         {Components.QueryEditor.Format.Label.Text}
       </label>
       <div title={Components.QueryEditor.Format.Dropdown.PlaceHolder.Title} style={{ marginRight: '5px' }}>
-        <Select className="min-width-12 width-12" value={query.format} options={getFormats()} onChange={(e) => onFormatChange(e.value as InfinityQueryFormat)}></Select>
+        <Select className="min-width-12 width-12" value={query.format} options={getFormats()} onChange={(e) => onFormatChange(e.value as InfinityQueryFormat)} menuShouldPortal={true}></Select>
       </div>
     </>
   );

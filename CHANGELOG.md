@@ -2,6 +2,12 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
+## [ 0.8.8 ]
+
+- UQL: New command `jsonata` which helps to perform JSONata query over json, xml, csv APIs
+- Chore: More logging added in backend for failure scenarios
+- Chore: Provisioning helper added to the datasource config page which provides datasource yaml for provisioning
+
 ## [ 0.8.7 ]
 
 - UQL: New command `distinct`
@@ -21,40 +27,40 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 
 ## [ 0.8.5 ]
 
-- Fixed a bug where custom endpoint params were ignored when using OAuth2 client credentials
-- Fixed a bug where TLS certs are not loaded correctly
+- Auth: Fixed a bug where custom endpoint params were ignored when using OAuth2 client credentials
+- Auth: Fixed a bug where TLS certs are not loaded correctly
 
 ## [ 0.8.4]
 
-- Dedicated Auth types added for Api key authentication and bearer token authentication
-- Ability to configure allowed hosts for URL
-- YAML query type support added via UQL. (experimental)
+- Auth: Dedicated Auth types added for Api key authentication and bearer token authentication
+- Security: Ability to configure allowed hosts for URL
+- YAML: YAML query type support added via UQL. (experimental)
 
 ## [ 0.8.3 ]
 
-- UQL update ( now support summarize by multiple fields, first, last summarizations )
-- Bug fix #256
+- UQL: UQL update ( now support summarize by multiple fields, first, last summarizations )
+- XML: Fixed a bug where numbers shown as null when using timeseries format. fix #254
 
 ## [ 0.8.2 ]
 
-- Bug fix #254
+- XML: Fixed a bug where numbers shown as null when using timeseries format. fix #254
 
 ## [ 0.8.1 ]
 
-- Forward OAuth identity support
-- Query inspector now shows actual data in response meta data. (frame->schema->meta->custom)
-- GROQ Query support - alpha
-- OAuth2 Client credentials authentication support - alpha
-- OAuth2 JWT authentication support - alpha
+- Auth: Forward OAuth identity support
+- Auth: OAuth2 Client credentials authentication support - alpha
+- Auth: OAuth2 JWT authentication support - alpha
+- Chore: Query inspector now shows actual data in response meta data. (frame->schema->meta->custom)
+- GROQ: GROQ Query support - alpha
 
 ## [ 0.8.0 ]
 
-- custom query type for tsv files
-- support for UQL queries
-- secure query params passed to all requests by default
-- support for Node Graph panel
-- basic E2E tests for config editor added
-- typescript updates
+- TSV: custom query type for tsv files
+- UQL: support for UQL queries
+- Chore: secure query params passed to all requests by default
+- NodeGraph: support for Node Graph panel
+- Chore: basic E2E tests for config editor added
+- Chore: typescript updates
 - "as-is" data format added for debugging
 - comma in the numbers are now ignored and considered as number
 - variable editor, global query editor bug fixes. Previously, unable to add columns in variable editor

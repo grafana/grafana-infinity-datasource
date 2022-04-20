@@ -85,6 +85,21 @@ parse-json
 | order by "full name" asc
 ```
 
+### JSONata
+
+`jsonata` command accepts a JSONata query and apply over the previous input
+
+```sql
+parse-json
+| scope "library"
+| jsonata "library.loans@$L.books@$B[$L.isbn=$B.isbn].customers[$L.customer=id].{ 'customer': name, 'book': $B.title, 'due': $L.return}"
+| count
+```
+
+Like any other command, `jsonata` command can be combined/piped with multiple commands
+
+> JSONata support is available from 0.8.8 version
+
 ### extend
 
 `extend` command is similar to `project`. but instead of selecting the columns, it just adds/replace columns in existing data. `extends` expects an alias and a function.

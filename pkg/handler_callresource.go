@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
@@ -14,8 +13,8 @@ import (
 
 func (host *PluginHost) getRouter() *mux.Router {
 	router := mux.NewRouter()
-	router.Handle("/graphql", host.getGraphQLHandler())                                          // NOT IN USE YET
-	router.HandleFunc("/proxy", host.withDatasourceHandlerFunc(GetProxyHandler)).Methods("POST") // DEPRECATED
+	router.Handle("/graphql", host.getGraphQLHandler()) // NOT IN USE YET
+	router.HandleFunc("/ping", host.withDatasourceHandlerFunc(GetPingHandler)).Methods("GET")
 	router.NotFoundHandler = http.HandlerFunc(host.withDatasourceHandlerFunc(defaultHandler))
 	return router
 }
@@ -107,28 +106,10 @@ func (host *PluginHost) getGraphQLHandler() http.Handler {
 	})
 }
 
-func GetProxyHandler(client *instanceSettings) http.HandlerFunc {
+func GetPingHandler(client *instanceSettings) http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
-		if r.Method == http.MethodPost {
-			var query infinity.Query
-			err := json.NewDecoder(r.Body).Decode(&query)
-			if err != nil {
-				http.Error(rw, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			if query.Source == "url" {
-				response, _, _, err := client.client.GetResults(query, map[string]string{})
-				if err != nil {
-					http.Error(rw, err.Error(), http.StatusInternalServerError)
-					return
-				}
-				fmt.Fprintf(rw, "%s", response)
-				return
-			}
-			http.Error(rw, "unknown query", http.StatusNotImplemented)
-			return
-		}
-		http.Error(rw, "500 - Something bad happened! Invalid query.", http.StatusInternalServerError)
+		fmt.Fprintf(rw, "%s", "pong")
+		return
 	}
 }
 

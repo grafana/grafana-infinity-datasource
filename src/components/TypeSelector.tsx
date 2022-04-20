@@ -1,5 +1,6 @@
 import React from 'react';
-import { Select, InlineFormLabel } from '@grafana/ui';
+import { InlineFormLabel } from '@grafana/ui';
+import { Select } from './extended/ui';
 import { SelectableValue } from '@grafana/data';
 import { InfinityQuery, SCRAP_QUERY_TYPES, EditorMode, InfinityQueryType } from '../types';
 
@@ -29,7 +30,7 @@ export const TypeSelector = (props: { query: InfinityQuery; onChange: (e: Infini
         Type
       </InlineFormLabel>
       <div style={{ marginRight: '5px' }}>
-        <Select width={16} options={getTypes()} onChange={(e) => onTypeChange(e.value as InfinityQueryType)} value={query.type || 'json'}></Select>
+        <Select width={16} options={getTypes()} onChange={(e) => onTypeChange(e.value as InfinityQueryType)} value={query.type || 'json'} menuShouldPortal={true}></Select>
       </div>
     </>
   );

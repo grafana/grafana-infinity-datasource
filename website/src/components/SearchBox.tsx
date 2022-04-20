@@ -142,7 +142,7 @@ const sitemap: any[] = [
     title: 'UQL',
     slug: '/wiki/uql',
     description: 'UQL',
-    tags: ['uql', 'query', 'unstructured query language', 'sql'],
+    tags: ['uql', 'query', 'unstructured query language', 'sql', 'jsonata', 'kusto', 'mv-expand'],
   },
   {
     title: 'GROQ',

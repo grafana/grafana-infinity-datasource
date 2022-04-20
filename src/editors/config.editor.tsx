@@ -7,6 +7,7 @@ import { GlobalQueryEditor } from './config/GlobalQueryEditor';
 import { SecureFieldsEditor } from '../components/config/SecureFieldsEditor';
 import { URLEditor } from './config/URL';
 import { AuthEditor } from './config/Auth';
+import { ProvisioningScript } from './config/Provisioning';
 import { InfinityOptions } from '../types';
 
 export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
@@ -75,21 +76,13 @@ export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<I
           <p>
             <b>Without any additional configuration, this datasource can work.</b> Optionally, configure any of the above settings if you needed.
           </p>
-          <LinkButton variant="secondary" size="md" target="_blank" href="https://yesoreyeram.github.io/grafana-infinity-datasource" rel="noreferrer">
+          <LinkButton variant="secondary" size="md" target="_blank" href="https://yesoreyeram.github.io/grafana-infinity-datasource" rel="noreferrer" style={{ marginInlineEnd: '5px' }}>
             Click here plugin documentation website
           </LinkButton>
-          <LinkButton
-            variant="secondary"
-            size="md"
-            target="_blank"
-            href={
-              `/api/datasources/${props.options.id}/resources/graphql?query=%7B%0A%20%20query(type%3A%20"json"%2C%20url%3A%20"https%3A%2F%2F` + `jsonplaceholder.typicode.com%2F` + `users")%0A%7D%0A`
-            }
-            rel="noreferrer"
-            style={{ marginInline: '5px' }}
-          >
-            Click here for experimental GraphQL endpoint (WIP)
+          <LinkButton variant="secondary" size="md" target="_blank" href="https://github.com/yesoreyeram/grafana-infinity-datasource" rel="noreferrer" style={{ marginInlineEnd: '5px' }}>
+            Give us a star in Github
           </LinkButton>
+          <ProvisioningScript options={options} />
         </p>
       </Collapse>
     </>
