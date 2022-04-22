@@ -49,24 +49,6 @@ parse-json
 | project "id", "name.firstName", "date of birth"="dob"
 ```
 
-### project kv()
-
-`project kv()` command is used to convert the given object into key-value pairs.
-
-Example: For the data `{ "a": {"name":"a1"}, "b": {"name":"b1"}, "c": {"name":"c1"} }` and the query `parse-json | project kv()` will yield the following table
-
-| key | value         |
-| --- | ------------- |
-| a   | {"name":"a1"} |
-| b   | {"name":"b1"} |
-| c   | {"name":"c1"} |
-
-this command can be also used with arguments
-
-Example: For the data `{ "data": { "a": {"name":"a1"}, "b": {"name":"b1"}, "c": {"name":"c1"} } }` and the query `parse-json | project kv("data")` will yield the same results
-
-> project kv() command is available only from 0.8.7 of the plugin
-
 ### project-away
 
 `project-away` command is exactly opposite as `project`. It just drops specific columns from the data. It doesn't support alias or dot notation selector.
@@ -84,21 +66,6 @@ parse-json
 parse-json
 | order by "full name" asc
 ```
-
-### JSONata
-
-`jsonata` command accepts a JSONata query and apply over the previous input
-
-```sql
-parse-json
-| scope "library"
-| jsonata "library.loans@$L.books@$B[$L.isbn=$B.isbn].customers[$L.customer=id].{ 'customer': name, 'book': $B.title, 'due': $L.return}"
-| count
-```
-
-Like any other command, `jsonata` command can be combined/piped with multiple commands
-
-> JSONata support is available from 0.8.8 version
 
 ### extend
 
@@ -211,15 +178,15 @@ USA,2,100
 
 ### parse-json
 
-`parse-json` is the first command that parses the output as json. This is optional in case if you use JSON/GraphQL URL.
+`parse-json` is the command to instruct the UQL to parse the response as JSON
 
 ### parse-csv
 
-`parse-csv` is used to specify that the results are in csv format
+`parse-csv` is the command to instruct the UQL to parse the response as CSV
 
 ### parse-xml
 
-`parse-xml` is used to specify that the results are in xml format
+`parse-xml` is the command to instruct the UQL to parse the response as XML
 
 ### parse-yaml
 
@@ -286,6 +253,39 @@ will produce results like
 ```
 
 `mv-expand` should also work for non string arrays.
+
+### project kv()
+
+`project kv()` command is used to convert the given object into key-value pairs.
+
+Example: For the data `{ "a": {"name":"a1"}, "b": {"name":"b1"}, "c": {"name":"c1"} }` and the query `parse-json | project kv()` will yield the following table
+
+| key | value         |
+| --- | ------------- |
+| a   | {"name":"a1"} |
+| b   | {"name":"b1"} |
+| c   | {"name":"c1"} |
+
+this command can be also used with arguments
+
+Example: For the data `{ "data": { "a": {"name":"a1"}, "b": {"name":"b1"}, "c": {"name":"c1"} } }` and the query `parse-json | project kv("data")` will yield the same results
+
+> project kv() command is available only from 0.8.7 of the plugin
+
+### JSONata
+
+`jsonata` command accepts a JSONata query and apply over the previous input
+
+```sql
+parse-json
+| scope "library"
+| jsonata "library.loans@$L.books@$B[$L.isbn=$B.isbn].customers[$L.customer=id].{ 'customer': name, 'book': $B.title, 'due': $L.return}"
+| count
+```
+
+Like any other command, `jsonata` command can be combined/piped with multiple commands. You can use JSONata for filtering the data as well.
+
+> JSONata support is available from 0.8.8 version
 
 ### comments
 

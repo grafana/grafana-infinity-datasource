@@ -35,8 +35,14 @@ export const Footer = () => {
               <FooterMenuitem to="/wiki/configuration" internal={true}>
                 Configuration
               </FooterMenuitem>
+              <FooterMenuitem to="/wiki/authentication" internal={true}>
+                Authentication
+              </FooterMenuitem>
               <FooterMenuitem to="/wiki/provisioning" internal={true}>
                 Provisioning
+              </FooterMenuitem>
+              <FooterMenuitem to="/wiki/limitations" internal={true}>
+                Limitations
               </FooterMenuitem>
               <FooterMenuitem to="/changelog" internal={true}>
                 Change Log

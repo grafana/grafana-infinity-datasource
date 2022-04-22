@@ -16,6 +16,16 @@ const ListLink = (props: ListLinkProps) => (
   </li>
 );
 
+const DropDownLink = (props: { to: string; children?: React.ReactNode }) => (
+  <li>
+    <li>
+      <Link className="dropdown-item" to={props.to}>
+        {props.children}
+      </Link>
+    </li>
+  </li>
+);
+
 interface HeaderProps {
   title: string;
 }
@@ -43,8 +53,19 @@ export const Header = (props: HeaderProps) => {
               <ListLink to="/wiki/graphql">GraphQL</ListLink>
               <ListLink to="/wiki/xml">XML</ListLink>
               <ListLink to="/wiki/html">HTML</ListLink>
-              <ListLink to="/wiki/template-variables">Variables</ListLink>
-              <ListLink to="/wiki/annotations">Annotations</ListLink>
+              <li className="nav-item dropdown">
+                <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  More
+                </a>
+                <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <DropDownLink to="/wiki/installation">Installation</DropDownLink>
+                  <DropDownLink to="/wiki/configuration">Configuration</DropDownLink>
+                  <DropDownLink to="/wiki/authentication">Authentication</DropDownLink>
+                  <DropDownLink to="/wiki/template-variables">Variables</DropDownLink>
+                  <DropDownLink to="/wiki/annotations">Annotations</DropDownLink>
+                  <DropDownLink to="/wiki/limitations">Limitations</DropDownLink>
+                </ul>
+              </li>
             </ul>
             <ul className="navbar-nav d-flex mb-2 mb-lg-0">
               <li className="nav-item">

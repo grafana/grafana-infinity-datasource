@@ -142,13 +142,13 @@ const sitemap: any[] = [
     title: 'UQL',
     slug: '/wiki/uql',
     description: 'UQL',
-    tags: ['uql', 'query', 'unstructured query language', 'sql', 'jsonata', 'kusto', 'mv-expand'],
+    tags: ['uql', 'query', 'unstructured query language', 'sql', 'jsonata', 'kusto', 'mv-expand', 'project', 'summarize', 'group by', 'aggregate', 'jsonata'],
   },
   {
     title: 'GROQ',
     slug: '/wiki/groq',
     description: 'Groq Query language',
-    tags: ['groq', 'query', 'sanity'],
+    tags: ['groq', 'query', 'sanity', 'filter'],
   },
   {
     title: 'Configuration',
@@ -175,6 +175,12 @@ const sitemap: any[] = [
     tags: ['datasource', 'installation', 'grafana.com', 'grafana-cli', 'docker', 'docker-compose', 'helm', 'download'],
   },
   {
+    title: 'Limitations',
+    slug: '/wiki/limitations',
+    description: 'Grafana infinity datasource limitations',
+    tags: ['limitations', 'feature', 'recorded queries', 'alerting', 'oauth'],
+  },
+  {
     title: 'Provisioning',
     slug: '/wiki/provisioning',
     description: 'Grafana datasource provisioning',
@@ -190,7 +196,7 @@ const sitemap: any[] = [
     title: 'Template Variables',
     slug: '/wiki/template-variables',
     description: 'Creating template variables',
-    tags: ['variables', 'template variables', 'query', 'global variables'],
+    tags: ['variables', 'template variables', 'query', 'global variables', 'collection', 'collection lookup', 'join', 'random', 'UnixTimeStamp'],
   },
   {
     title: 'Annotations',

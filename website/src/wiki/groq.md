@@ -9,7 +9,7 @@ next_page_slug: '/wiki/json'
 
 ## GROQ
 
-[GROQ](https://groq.dev/) is query language (like SQL, but different) which is designed to work directly on JSON documents. [GROQ](https://www.sanity.io/docs/groq) was developed by [Sanity.io](https://www.sanity.io/docs/groq) (where it’s used as the primary query language).
+[GROQ](https://groq.dev/) is query language which is designed to work directly on JSON documents. [GROQ](https://www.sanity.io/docs/groq) was developed by [Sanity.io](https://www.sanity.io/docs/groq) (where it’s used as the primary query language).
 
 > GROQ is still in ALPHA.
 

@@ -21,3 +21,13 @@ Once you clone the repo locally in the grafana's plugin folder. Do the following
 - `yarn test` - To make sure all the existing tests passed
 - `cd website & yarn dev` - To build and see the changes of docs website
 - `cd website & yarn build` - To build the docs website
+
+## Heroku deploy
+
+In most cases, heroku instance will be deployed automatically. To manually deploy the heroku instance, perform the following commands.
+
+```sh
+heroku login
+heroku git:remote -a grafana-infinity-datasource
+git push heroku main
+```

@@ -89,3 +89,14 @@ Example:
 ```
 
 In the above json, if `$.premium_customers` is the root selector then only "john doe" will return. If `$.*` is the root selector all the three rows will be returned.
+
+## Looking for more JSON options?
+
+If you are looking for more JSON options like group by, order by, JSONata, field manipulation etc, then [UQL](/wiki/uql) is the one you need. Following is the simple UQL command to parse
+
+```sql
+parse-json
+| order by "field" asc
+```
+
+Infinity strongly suggests to use **UQL** instead **JSON** type. Give a try and let's know the feedback.

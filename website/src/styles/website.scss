@@ -239,6 +239,13 @@ html.dark-theme {
         button {
           background: transparent;
         }
+      } 
+      .dropdown-menu {
+        background-color: $gray12;
+        color: $gray1;
+        .dropdown-item:hover {
+          background-color: $gray12;
+        }
       }
     }
     #subnav {
@@ -369,6 +376,13 @@ html.light-theme {
       .special-menu.a {
         background-color: $cyanA9 !important;
         color: white !important;
+      }
+      .dropdown-menu {
+        background-color: $gray1;
+        color: $gray12;
+        .dropdown-item:hover {
+          background-color: $gray1;
+        }
       }
     }
     #subnav {

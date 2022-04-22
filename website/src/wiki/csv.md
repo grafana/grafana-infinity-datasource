@@ -154,3 +154,14 @@ For TSV files, you can choose TSV as query type. This works the same way as abov
 ### All Number fields (Timestamp, UserId and Metric)
 
 ![image](https://user-images.githubusercontent.com/153843/92991051-bda45c00-f4d8-11ea-84dd-4ee1606e8125.png#center)
+
+## Looking for more CSV options?
+
+If you are looking for more CSV options like group by, order by, field manipulation etc, then [UQL](/wiki/uql) is the one you need. Following is the simple UQL command to parse
+
+```sql
+parse-csv
+| order by "field" asc
+```
+
+Infinity strongly suggests to use **UQL** instead **CSV** type. Give a try and let's know the feedback.
