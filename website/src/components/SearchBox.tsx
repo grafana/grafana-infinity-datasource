@@ -199,6 +199,12 @@ const sitemap: any[] = [
     tags: ['variables', 'template variables', 'query', 'global variables', 'collection', 'collection lookup', 'join', 'random', 'UnixTimeStamp'],
   },
   {
+    title: 'Macros',
+    slug: '/wiki/macros',
+    description: 'Using macros in your queries/ template variables',
+    tags: ['macros', 'variables', 'template variables', 'query', 'combine values', 'custom interval', 'dynamic interval', 'dynamic value', `customInterval`, `combineValues`],
+  },
+  {
     title: 'Annotations',
     slug: '/wiki/annotations',
     description: 'Creating annotations',

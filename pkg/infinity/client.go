@@ -87,7 +87,9 @@ func (client *Client) req(url string, body *strings.Reader, settings InfinitySet
 	}
 	res, err := client.HttpClient.Do(req)
 	duration = time.Since(startTime)
-	defer res.Body.Close()
+	if res != nil {
+		defer res.Body.Close()
+	}
 	if err != nil && res != nil {
 		backend.Logger.Error("error getting response from server", "url", url, "method", req.Method, "error", err.Error(), "status code", res.StatusCode)
 		return nil, res.StatusCode, duration, fmt.Errorf("error getting response from %s", url)

@@ -14,6 +14,19 @@ export class InfinityProvider {
         return new HTMLParser(res, query).getResults();
       case 'json':
       case 'graphql':
+        if (query.format === 'as-is' && query.source === 'url') {
+          if (typeof res === 'object') {
+            return res;
+          } else if (typeof res === 'string') {
+            const data = JSON.parse(res || '[]');
+            return data;
+          } else {
+            return res;
+          }
+        } else if (query.format === 'as-is' && query.source === 'inline') {
+          const data = JSON.parse(query.data || '[]');
+          return data;
+        }
         return new JSONParser(res, query).getResults();
       case 'xml':
         let xmlData = await new XMLParser(res, query);

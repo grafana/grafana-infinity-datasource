@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { flatten } from 'lodash';
+import { flatten, sample } from 'lodash';
 import { DataQueryResponse, DataQueryRequest, LoadingState, TimeRange, ScopedVars, toDataFrame, DataFrame } from '@grafana/data';
 import { DataSourceWithBackend } from '@grafana/runtime';
 import { InfinityProvider } from './app/InfinityProvider';
@@ -8,7 +8,7 @@ import { applyGroq } from './app/GROQProvider';
 import { SeriesProvider } from './app/SeriesProvider';
 import { getUpdatedDataRequest } from './app/queryUtils';
 import { LegacyVariableProvider, getTemplateVariablesFromResult, migrateLegacyQuery } from './app/variablesQuery';
-import { interpolateQuery } from './interpolate';
+import { interpolateQuery, interpolateVariableQuery } from './interpolate';
 import { InfinityQuery, VariableQuery, MetricFindValue, InfinityInstanceSettings, InfinityOptions } from './types';
 
 export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOptions> {
@@ -32,9 +32,19 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
     });
   }
   metricFindQuery(originalQuery: VariableQuery): Promise<MetricFindValue[]> {
+    let query = migrateLegacyQuery(originalQuery);
+    query = interpolateVariableQuery(query);
     return new Promise((resolve) => {
-      let query = migrateLegacyQuery(originalQuery);
       switch (query.queryType) {
+        case 'random':
+          if (query.values && query.values.length > 0) {
+            const solvedValue = sample(query.values || []) || query.values[0];
+            resolve([{ text: solvedValue, value: solvedValue, label: solvedValue }]);
+          } else {
+            const solvedValue = new Date().getTime().toString();
+            resolve([{ text: solvedValue, value: solvedValue, label: solvedValue }]);
+          }
+          break;
         case 'infinity':
           if (query.infinityQuery) {
             const request = { targets: [interpolateQuery(query.infinityQuery, {})] } as DataQueryRequest<InfinityQuery>;
@@ -47,7 +57,6 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
                     if (r && r.data && r.data) {
                       resolve(getTemplateVariablesFromResult(r.data[0]) as MetricFindValue[]);
                     } else {
-                      console.error(`no result found for ${JSON.stringify(query.infinityQuery)}`);
                       resolve([]);
                     }
                   })
@@ -67,9 +76,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
         case 'legacy':
         default:
           const legacyVariableProvider = new LegacyVariableProvider(query.query);
-          legacyVariableProvider.query().then((res) => {
-            resolve(flatten(res));
-          });
+          legacyVariableProvider.query().then((res) => resolve(flatten(res)));
           break;
       }
     });
@@ -122,7 +129,9 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
         const error = d.meta?.custom?.error;
         promises.push(
           this.resolveData(target, options.range, options.scopedVars, data).then((r) => {
-            if (
+            if (target.type === 'json' && target.format === 'as-is') {
+              return r;
+            } else if (
               (target.type === 'csv' || target.type === 'json' || target.type === 'xml' || target.type === 'graphql' || target.type === 'uql' || target.type === 'groq') &&
               target.format !== 'timeseries'
             ) {

@@ -7,7 +7,7 @@ import { JoinVariable } from './Join';
 import { RandomVariable } from './Random';
 import { UnixTimeStampVariable } from './UnixTimeStamp';
 import { isTableData, isDataFrame } from './../utils';
-import { VariableQuery, DefaultInfinityQuery, MetricFindValue } from './../../types';
+import { VariableQuery, DefaultInfinityQuery, MetricFindValue, VariableQueryInfinity } from './../../types';
 
 export const getTemplateVariablesFromResult = (res: any): MetricFindValue[] => {
   if (isDataFrame(res) && res.fields.length > 0) {
@@ -54,13 +54,12 @@ export const migrateLegacyQuery = (query: VariableQuery | string): VariableQuery
   } else if (query && query.queryType) {
     return {
       ...query,
-      infinityQuery: defaultsDeep(query.infinityQuery, DefaultInfinityQuery),
-    };
+      infinityQuery: defaultsDeep((query as VariableQueryInfinity).infinityQuery, DefaultInfinityQuery),
+    } as VariableQuery;
   } else {
     return {
       query: '',
       queryType: 'legacy',
-      infinityQuery: defaultsDeep(query.infinityQuery, DefaultInfinityQuery),
     };
   }
 };

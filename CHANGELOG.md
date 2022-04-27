@@ -2,6 +2,14 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
+## [ 1.0.0 ]
+
+- New Macros: Support for macros (`$__combineValues()`,`$__customInterval()`) added in URL, Body, Inline data, UQL queries
+- Variable Query: Random String from given array of strings
+- As-Is: Support for URL when using As-Is format with JSON
+- Chore: Test coverage improved
+- Chore: Added `vitest` for dev improvements
+
 ## [ 0.8.8 ]
 
 - UQL: New command `jsonata` which helps to perform JSONata query over json, xml, csv APIs

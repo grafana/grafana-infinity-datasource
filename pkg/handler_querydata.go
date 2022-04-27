@@ -40,6 +40,14 @@ func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient in
 		backend.Logger.Error("error un-marshaling the query", "error", response.Error.Error())
 		return response
 	}
+
+	query, err := InterpolateInfinityQuery(query, backendQuery.TimeRange)
+	if err != nil {
+		backend.Logger.Error("error applying macros", "error", err.Error())
+		response.Error = err
+		return response
+	}
+
 	frameName := query.RefID
 	if frameName == "" {
 		frameName = "response"

@@ -65,25 +65,24 @@ func GetQueryURL(settings InfinitySettings, query Query, includeSect bool) (stri
 }
 
 func (client *Client) GetExecutedURL(query Query) string {
-	req, err := GetRequest(client.Settings, GetQueryBody(query), query, map[string]string{}, false)
-	if err != nil {
-		return fmt.Sprintf("error retrieving full url. %s", query.URL)
+	out := []string{}
+	if query.Source != "inline" {
+		req, err := GetRequest(client.Settings, GetQueryBody(query), query, map[string]string{}, false)
+		if err != nil {
+			return fmt.Sprintf("error retrieving full url. %s", query.URL)
+		}
+		command, err := http2curl.GetCurlCommand(req)
+		if err != nil {
+			return fmt.Sprintf("error retrieving full url. %s", query.URL)
+		}
+		out = append(out, "###############", "## URL", "###############", "", req.URL.String(), "")
+		out = append(out, "###############", "## Curl Command", "###############", "", command.String())
 	}
-	command, err := http2curl.GetCurlCommand(req)
-	if err != nil {
-		return fmt.Sprintf("error retrieving full url. %s", query.URL)
+	if query.Type == QueryTypeUQL {
+		out = append(out, "", "###############", "## UQL", "###############", "", query.UQL)
 	}
-	return strings.Join([]string{
-		"###############",
-		"## URL",
-		"###############",
-		"",
-		req.URL.String(),
-		"",
-		"###############",
-		"## Curl Command",
-		"###############",
-		"",
-		command.String(),
-	}, "\n")
+	if query.Type == QueryTypeGROQ {
+		out = append(out, "###############", "## GROQ", "###############", "", query.GROQ, "")
+	}
+	return strings.Join(out, "\n")
 }

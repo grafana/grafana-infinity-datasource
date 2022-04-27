@@ -1,10 +1,10 @@
 import { getTemplateSrv } from '@grafana/runtime';
 import { ScopedVars } from '@grafana/data';
 import { isDataQuery } from './app/utils';
-import { InfinityQuery } from './types';
+import { InfinityQuery, VariableQuery } from './types';
 
-const replaceVariable = (input: string, scopedVars: ScopedVars): string => {
-  return getTemplateSrv().replace(input || '', scopedVars, 'glob');
+const replaceVariable = (input: string, scopedVars: ScopedVars = {}, format = 'glob'): string => {
+  return getTemplateSrv().replace(input || '', scopedVars, format);
 };
 
 export const interpolateQuery = (query: InfinityQuery, scopedVars: ScopedVars): InfinityQuery => {
@@ -48,4 +48,18 @@ export const interpolateQuery = (query: InfinityQuery, scopedVars: ScopedVars): 
     }
   }
   return newQuery;
+};
+
+export const interpolateVariableQuery = (query: VariableQuery): VariableQuery => {
+  switch (query.queryType) {
+    case 'random':
+      return {
+        ...query,
+        values: (query.values || []).map((v) => replaceVariable(v)),
+      };
+    default:
+      return {
+        ...query,
+      };
+  }
 };

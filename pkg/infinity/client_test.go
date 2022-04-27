@@ -50,48 +50,6 @@ func TestInfinityClient_GetResults(t *testing.T) {
 			wantO: mockCSVDATA,
 		},
 		{
-			name: "should respect basic auth details provided",
-			settings: infinity.InfinitySettings{
-				URL:              "https://httpbin.org/basic-auth",
-				BasicAuthEnabled: true,
-				UserName:         "foo",
-				Password:         "bar",
-			},
-			query: infinity.Query{
-				URL:  "/foo/bar",
-				Type: "json",
-			},
-			wantO: map[string]interface{}(map[string]interface{}{"authenticated": true, "user": "foo"}),
-		},
-		{
-			name: "should throw error when incorrect auth specified",
-			settings: infinity.InfinitySettings{
-				URL:      "https://httpbin.org/basic-auth",
-				UserName: "foo",
-				Password: "baz",
-			},
-			query: infinity.Query{
-				URL:  "/foo/bar",
-				Type: "json",
-			},
-			wantErr: true,
-		},
-		{
-			name: "should respect oauthPassThru",
-			settings: infinity.InfinitySettings{
-				URL:                  "https://httpbin.org",
-				ForwardOauthIdentity: true,
-			},
-			query: infinity.Query{
-				URL:  "/bearer",
-				Type: "json",
-			},
-			requestHeaders: map[string]string{
-				"Authorization": "Bearer 123",
-			},
-			wantO: map[string]interface{}(map[string]interface{}{"authenticated": true, "token": "123"}),
-		},
-		{
 			name:     "should return correct json",
 			settings: infinity.InfinitySettings{},
 			query: infinity.Query{
