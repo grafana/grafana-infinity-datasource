@@ -2,10 +2,14 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
-## [ 1.0.0 ]
+## [ 1.0.0 ] - unreleased
 
-- New Macros: Support for macros (`$__combineValues()`,`$__customInterval()`) added in URL, Body, Inline data, UQL queries
-- Variable Query: Random String from given array of strings
+- New Query Type: JSON Backend ( _experimental_ )
+- New Macro: Support for macros (`$__combineValues()`,`$__customInterval()`) added in URL, Body, Inline data, UQL queries
+- New Variable Query Type: Random String from given array of strings
+- UQL: new root level command `where` added to support basic filters
+- UQL: new method `extract` added to extract part of the string using regex
+- UQL: new summarize methods `countif`, `sumif`, `minif` and `maxif`
 - As-Is: Support for URL when using As-Is format with JSON
 - Chore: Test coverage improved
 - Chore: Added `vitest` for dev improvements

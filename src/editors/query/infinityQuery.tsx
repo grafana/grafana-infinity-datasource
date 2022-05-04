@@ -5,6 +5,7 @@ import { URLEditor } from './query.url';
 import { QueryColumnsEditor } from './query.columns.editor';
 import { SeriesEditor } from './query.series';
 import { TableFilter } from './query.filters';
+import { JSONBackendEditor } from './query.json-backend';
 import { UQLEditor } from './query.uql';
 import { GROQEditor } from './query.groq';
 import { InfinityQuery, EditorMode, DefaultInfinityQuery, InfinityQueryType } from '../../types';
@@ -20,9 +21,10 @@ export type InfinityEditorProps = {
 export const InfinityQueryEditor = (props: InfinityEditorProps) => {
   const { onChange, mode, instanceSettings, onRunQuery } = props;
   const query: InfinityQuery = defaultsDeep(props.query, DefaultInfinityQuery) as InfinityQuery;
-  let canShowURLEditor = ['csv', 'tsv', 'html', 'json', 'graphql', 'xml', 'uql', 'groq'].includes(query.type);
-  let canShowColumnsEditor = ['csv', 'tsv', 'html', 'json', 'graphql', 'xml'].includes(query.type);
-  let canShowFilterEditor = query.type !== 'series' && query.type !== 'global' && query.type !== 'uql' && query.type !== 'groq' && query.columns && query.columns.length > 0;
+  let canShowURLEditor = ['csv', 'tsv', 'html', 'json', 'json-backend', 'graphql', 'xml', 'uql', 'groq'].includes(query.type);
+  let canShowColumnsEditor = ['csv', 'tsv', 'html', 'json', 'json-backend', 'graphql', 'xml'].includes(query.type);
+  let canShowFilterEditor =
+    query.type !== 'series' && query.type !== 'global' && query.type !== 'json-backend' && query.type !== 'uql' && query.type !== 'groq' && query.columns && query.columns.length > 0;
   return (
     <div className="infinity-query-editor">
       <TypeChooser {...{ instanceSettings, mode, query, onChange, onRunQuery }} />
@@ -30,6 +32,7 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
       {canShowURLEditor && <URLEditor {...{ mode, query, onChange, onRunQuery }} />}
       {canShowColumnsEditor && <QueryColumnsEditor {...{ mode, query, onChange, onRunQuery }} />}
       {canShowFilterEditor && <TableFilter {...{ query, onChange, onRunQuery }} />}
+      {query.type === 'json-backend' && <JSONBackendEditor {...{ query, onChange, onRunQuery, mode }} />}
       {query.type === 'uql' && <UQLEditor {...{ query, onChange, onRunQuery, mode }} />}
       {query.type === 'groq' && <GROQEditor {...{ query, onChange, onRunQuery, mode }} />}
       <UQLPromotion queryType={query.type} />

@@ -12,7 +12,7 @@ export const QueryColumnsEditor = (props: { query: InfinityQuery; mode: EditorMo
   if (!isDataQuery(query)) {
     return <></>;
   }
-  const canShowRootSelector = ['html', 'json', 'xml', 'graphql'].indexOf(props.query.type) > -1;
+  const canShowRootSelector = ['html', 'json', 'json-backend', 'xml', 'graphql'].indexOf(props.query.type) > -1;
   const onColumnAdd = () => {
     const columns = cloneDeep(query.columns || []);
     const defaultColumn = {

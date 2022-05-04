@@ -1,13 +1,13 @@
 {
   "name": "grafana-infinity-datasource",
-  "version": "1.0.0-dev.1",
+  "version": "1.0.0-dev.2",
   "description": "JSON, CSV, XML, GraphQL & HTML datasource for Grafana. Do infinite things with Grafana.",
   "main": "dist/module.js",
   "scripts": {
     "dev": "grafana-toolkit plugin:dev",
     "watch": "grafana-toolkit plugin:dev --watch",
     "start": "yarn watch",
-    "spellcheck": "cspell -c cspell.config.js \"**/*.{ts,tsx,js,go,md,mdx,yml,yaml,json,scss,css}\"",
+    "spellcheck": "cspell -c cspell.config.json \"**/*.{ts,tsx,js,go,md,mdx,yml,yaml,json,scss,css}\"",
     "lint": "yarn spellcheck && yarn audit-ci",
     "test": "yarn lint && grafana-toolkit plugin:test",
     "e2e": "yarn lint && grafana-e2e run",
@@ -64,7 +64,7 @@
     "react": "16.12.0",
     "react-dom": "16.12.0",
     "rxjs": "6.6.3",
-    "uql": "0.0.15",
+    "uql": "0.0.16",
     "xml2js": "^0.4.23"
   },
   "devDependencies": {

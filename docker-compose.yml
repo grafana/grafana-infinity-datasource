@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   grafana:
-    image: grafana/grafana-enterprise:8.5.0
+    image: grafana/grafana-enterprise:main
     container_name: yesoreyeram-infinity-datasource
     ports:
       - '3000:3000'

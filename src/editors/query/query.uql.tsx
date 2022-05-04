@@ -82,7 +82,7 @@ async function registerUQL(editor: any) {
   }
 }
 
-const UQLKeyWords = ['parse-json', 'parse-csv', 'parse-xml', 'parse-yaml', 'project', 'project-away', 'project kv()', 'jsonata', 'extend', 'scope', 'summarize', 'mv-expand', 'order by'];
+const UQLKeyWords = ['parse-json', 'parse-csv', 'parse-xml', 'parse-yaml', 'project', 'project-away', 'project kv()', 'jsonata', 'extend', 'scope', 'summarize', 'mv-expand', 'order by', 'where'];
 const UQLFunctions = [
   'count',
   'sum',
@@ -95,6 +95,10 @@ const UQLFunctions = [
   'first',
   'last',
   'latest',
+  'countif',
+  'sumif',
+  'minif',
+  'maxif',
   'strcat',
   'dcount',
   'distinct',

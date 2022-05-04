@@ -21,11 +21,12 @@ export const normalizeURL = (url: string): string => {
   }
   return url;
 };
-export const isDataQuery = (query: InfinityQuery): query is InfinityQueryWithDataSource<'csv' | 'json' | 'xml' | 'html' | 'graphql'> => {
+export const isDataQuery = (query: InfinityQuery): query is InfinityQueryWithDataSource<'csv' | 'json' | 'json-backend' | 'xml' | 'html' | 'graphql'> => {
   switch (query.type) {
     case 'csv':
     case 'tsv':
     case 'json':
+    case 'json-backend':
     case 'xml':
     case 'graphql':
     case 'html':

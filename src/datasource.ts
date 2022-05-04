@@ -127,34 +127,38 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
         const data = d.meta?.custom?.data;
         const responseCodeFromServer = d.meta?.custom?.responseCodeFromServer;
         const error = d.meta?.custom?.error;
-        promises.push(
-          this.resolveData(target, options.range, options.scopedVars, data).then((r) => {
-            if (target.type === 'json' && target.format === 'as-is') {
+        if (target.type === 'json-backend') {
+          promises.push(Promise.resolve(d));
+        } else {
+          promises.push(
+            this.resolveData(target, options.range, options.scopedVars, data).then((r) => {
+              if (target.type === 'json' && target.format === 'as-is') {
+                return r;
+              } else if (
+                (target.type === 'csv' || target.type === 'json' || target.type === 'xml' || target.type === 'graphql' || target.type === 'uql' || target.type === 'groq') &&
+                target.format !== 'timeseries'
+              ) {
+                const df = toDataFrame(r);
+                let frame = { ...df, meta: d.meta, refId: target.refId };
+                if (error || (responseCodeFromServer && responseCodeFromServer >= 400)) {
+                  frame.meta.notices = [
+                    {
+                      severity: 'error',
+                      text: `Response code from server : ${responseCodeFromServer}. Error Message : ${error || '-'}`,
+                    },
+                  ];
+                } else if (responseCodeFromServer && responseCodeFromServer > 300) {
+                  frame.meta.notices = [{ severity: 'warning', text: `Response Code From Server : ${responseCodeFromServer}` }];
+                }
+                if (target.format === 'node-graph-edges' || target.format === 'node-graph-nodes') {
+                  frame.meta.preferredVisualisationType = 'nodeGraph';
+                }
+                return frame;
+              }
               return r;
-            } else if (
-              (target.type === 'csv' || target.type === 'json' || target.type === 'xml' || target.type === 'graphql' || target.type === 'uql' || target.type === 'groq') &&
-              target.format !== 'timeseries'
-            ) {
-              const df = toDataFrame(r);
-              let frame = { ...df, meta: d.meta, refId: target.refId };
-              if (error || (responseCodeFromServer && responseCodeFromServer >= 400)) {
-                frame.meta.notices = [
-                  {
-                    severity: 'error',
-                    text: `Response code from server : ${responseCodeFromServer}. Error Message : ${error || '-'}`,
-                  },
-                ];
-              } else if (responseCodeFromServer && responseCodeFromServer > 300) {
-                frame.meta.notices = [{ severity: 'warning', text: `Response Code From Server : ${responseCodeFromServer}` }];
-              }
-              if (target.format === 'node-graph-edges' || target.format === 'node-graph-nodes') {
-                frame.meta.preferredVisualisationType = 'nodeGraph';
-              }
-              return frame;
-            }
-            return r;
-          })
-        );
+            })
+          );
+        }
       });
     }
     return Promise.all(promises)

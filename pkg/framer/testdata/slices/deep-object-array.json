@@ -1,0 +1,14 @@
+[
+  {
+    "name": "foo",
+    "age": 12,
+    "full_name": { "first": "foo_first", "last": "foo_last" },
+    "hobbies": ["one", "two"]
+  },
+  {
+    "name": "bar",
+    "age": 21.12,
+    "full_name": { "first": "bar_first", "last": "bar_last" },
+    "hobbies": ["three"]
+  }
+]

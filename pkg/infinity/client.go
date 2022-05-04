@@ -136,7 +136,7 @@ func (client *Client) GetResults(query Query, requestHeaders map[string]string) 
 }
 
 func CanParseAsJSON(queryType string, responseHeaders http.Header) bool {
-	if queryType == QueryTypeJSON || queryType == QueryTypeGraphQL {
+	if queryType == QueryTypeJSON || queryType == QueryTypeGraphQL || queryType == QueryTypeJSONBackend {
 		return true
 	}
 	if queryType == QueryTypeUQL || queryType == QueryTypeGROQ {

@@ -20,8 +20,18 @@ if your data looks like this,
 
 ```json
 [
-  { "id": 1, "name": { "firstName": "john", "lastName": "doe" }, "dob": "1985-01-01", "city": "chennai" },
-  { "id": 2, "name": { "firstName": "alice", "lastName": "bob" }, "dob": "1990-12-31", "city": "london" }
+  {
+    "id": 1,
+    "name": { "firstName": "john", "lastName": "doe" },
+    "dob": "1985-01-01",
+    "city": "chennai"
+  },
+  {
+    "id": 2,
+    "name": { "firstName": "alice", "lastName": "bob" },
+    "dob": "1990-12-31",
+    "city": "london"
+  }
 ]
 ```
 
@@ -30,11 +40,11 @@ then the following UQL query
 ```sql
 parse-json
 | extend "full name"=strcat("name.firstName",' ',"name.lastName"), "dob"=todatetime("dob")
-| project "id", "full name", "dob", "date of birth"="dob"
+| project-away "name"
 | order by "full name" asc
 ```
 
-will produce four column table (id,full name, dob, date of birth).
+will produce four column table (id, dob, city, full name).
 
 ### Basic UQL commands
 
@@ -98,6 +108,7 @@ following are some of the available functions
 | startofmonth                     | startofmonth("dob")                     | rounds the datetime field to the starting month                                                      | 0.8.0          |
 | startofweek                      | startofweek("dob")                      | rounds the datetime field to the starting week                                                       | 0.8.0          |
 | startofyear                      | startofyear("dob")                      | rounds the datetime field to the starting year                                                       | 0.8.0          |
+| extract                          | extract('regex',index,"col1")           | extracts part of the string field using regex and match index (0/1/..)                               | 1.0.0          |
 | sum                              | sum("col1","col2")                      | sum of two or more columns                                                                           | 0.8.0          |
 | diff                             | diff("col1","col2")                     | difference between two columns                                                                       | 0.8.0          |
 | mul                              | mul("col1","col2")                      | multiplication of two columns                                                                        | 0.8.0          |

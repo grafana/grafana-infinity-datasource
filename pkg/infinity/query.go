@@ -1,19 +1,20 @@
 package infinity
 
 const (
-	QueryTypeJSON    = "json"
-	QueryTypeCSV     = "csv"
-	QueryTypeTSV     = "tsv"
-	QueryTypeXML     = "xml"
-	QueryTypeGraphQL = "graphql"
-	QueryTypeHTML    = "html"
-	QueryTypeUQL     = "uql"
-	QueryTypeGROQ    = "groq"
+	QueryTypeJSON        = "json"
+	QueryTypeJSONBackend = "json-backend"
+	QueryTypeCSV         = "csv"
+	QueryTypeTSV         = "tsv"
+	QueryTypeXML         = "xml"
+	QueryTypeGraphQL     = "graphql"
+	QueryTypeHTML        = "html"
+	QueryTypeUQL         = "uql"
+	QueryTypeGROQ        = "groq"
 )
 
 type Query struct {
 	RefID         string              `json:"refId"`
-	Type          string              `json:"type"`   // 'json' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'uql' | 'groq' | 'series' | 'global'
+	Type          string              `json:"type"`   // 'json' | 'json-backend' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'uql' | 'groq' | 'series' | 'global'
 	Format        string              `json:"format"` // 'table' | 'timeseries' | 'dataframe' | 'as-is' | 'node-graph-nodes' | 'node-graph-edges'
 	Source        string              `json:"source"` // 'url' | 'inline' | 'random-walk' | 'expression'
 	URL           string              `json:"url"`
