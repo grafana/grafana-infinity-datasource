@@ -17,18 +17,28 @@ Most of the times, fields are referred within double quotes and string values ar
 <p>if your data looks like this,</p>
 <deckgo-highlight-code language="json" terminal="carbon" theme="vscode"  >
           <code slot="code">[
-  { &quot;id&quot;: 1, &quot;name&quot;: { &quot;firstName&quot;: &quot;john&quot;, &quot;lastName&quot;: &quot;doe&quot; }, &quot;dob&quot;: &quot;1985-01-01&quot;, &quot;city&quot;: &quot;chennai&quot; },
-  { &quot;id&quot;: 2, &quot;name&quot;: { &quot;firstName&quot;: &quot;alice&quot;, &quot;lastName&quot;: &quot;bob&quot; }, &quot;dob&quot;: &quot;1990-12-31&quot;, &quot;city&quot;: &quot;london&quot; }
+  {
+    &quot;id&quot;: 1,
+    &quot;name&quot;: { &quot;firstName&quot;: &quot;john&quot;, &quot;lastName&quot;: &quot;doe&quot; },
+    &quot;dob&quot;: &quot;1985-01-01&quot;,
+    &quot;city&quot;: &quot;chennai&quot;
+  },
+  {
+    &quot;id&quot;: 2,
+    &quot;name&quot;: { &quot;firstName&quot;: &quot;alice&quot;, &quot;lastName&quot;: &quot;bob&quot; },
+    &quot;dob&quot;: &quot;1990-12-31&quot;,
+    &quot;city&quot;: &quot;london&quot;
+  }
 ]</code>
         </deckgo-highlight-code>
 <p>then the following UQL query</p>
 <deckgo-highlight-code language="sql" terminal="carbon" theme="vscode"  >
           <code slot="code">parse-json
 | extend &quot;full name&quot;=strcat(&quot;name.firstName&quot;,&#39; &#39;,&quot;name.lastName&quot;), &quot;dob&quot;=todatetime(&quot;dob&quot;)
-| project &quot;id&quot;, &quot;full name&quot;, &quot;dob&quot;, &quot;date of birth&quot;=&quot;dob&quot;
+| project-away &quot;name&quot;
 | order by &quot;full name&quot; asc</code>
         </deckgo-highlight-code>
-<p>will produce four column table (id,full name, dob, date of birth).</p>
+<p>will produce four column table (id, dob, city, full name).</p>
 <h3>Basic UQL commands</h3>
 <p>following are the basic UQL commands. All these commands are available in all the version unless specified.</p>
 <h3>project</h3>
@@ -173,6 +183,12 @@ Most of the times, fields are referred within double quotes and string values ar
 <td>startofyear("dob")</td>
 <td>rounds the datetime field to the starting year</td>
 <td>0.8.0</td>
+</tr>
+<tr>
+<td>extract</td>
+<td>extract('regex',index,"col1")</td>
+<td>extracts part of the string field using regex and match index (0/1/..)</td>
+<td>1.0.0</td>
 </tr>
 <tr>
 <td>sum</td>
