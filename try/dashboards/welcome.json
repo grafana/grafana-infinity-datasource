@@ -26,6 +26,10 @@
   "liveNow": false,
   "panels": [
     {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "Infinity"
+      },
       "description": "",
       "gridPos": {
         "h": 5,
@@ -69,6 +73,10 @@
       "type": "text"
     },
     {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "Infinity"
+      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -143,6 +151,10 @@
       "type": "table"
     },
     {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "Infinity"
+      },
       "description": "",
       "fieldConfig": {
         "defaults": {

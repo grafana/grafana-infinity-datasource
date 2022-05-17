@@ -2,11 +2,13 @@ version: '3.7'
 
 services:
   grafana:
-    image: grafana/grafana-enterprise:main
+    image: grafana/grafana-enterprise:8.5.2
     container_name: yesoreyeram-infinity-datasource
     ports:
       - '3000:3000'
     volumes:
+      - ./try/dashboards/:/dashboards/
+      - ./try/provisioning:/etc/grafana/provisioning
       - ./dist/:/var/lib/grafana/plugins/yesoreyeram-infinity-datasource
     environment:
       - TERM=linux

@@ -96,9 +96,7 @@ func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient in
 				customMeta.Error = err.Error()
 			}
 			if newFrame != nil {
-				for _, ff := range newFrame.Fields {
-					frame.Fields = append(frame.Fields, ff)
-				}
+				frame.Fields = append(frame.Fields, newFrame.Fields...)
 			}
 		}
 		frame.Meta.ExecutedQueryString = infClient.GetExecutedURL(query)
@@ -135,9 +133,7 @@ func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient in
 				customMeta.Error = err.Error()
 			}
 			if newFrame != nil {
-				for _, ff := range newFrame.Fields {
-					frame.Fields = append(frame.Fields, ff)
-				}
+				frame.Fields = append(frame.Fields, newFrame.Fields...)
 			}
 		}
 	}

@@ -2,7 +2,8 @@ apiVersion: 1
 
 datasources:
   - name: Infinity
+    uid: Infinity
     type: yesoreyeram-infinity-datasource
-    access: proxy
-    isDefault: true
-    jsonData:
+  - name: Test
+    uid: test
+    type: yesoreyeram-infinity-datasource

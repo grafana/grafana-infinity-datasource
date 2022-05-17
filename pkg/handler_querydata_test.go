@@ -138,7 +138,7 @@ func TestAuthentication(t *testing.T) {
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				if r.URL.String() == "/token" {
 					w.Header().Set("Content-Type", "application/json")
-					io.WriteString(w, `{"access_token": "foo", "refresh_token": "bar"}`)
+					_, _ = io.WriteString(w, `{"access_token": "foo", "refresh_token": "bar"}`)
 					return
 				}
 				if r.Header.Get("Authorization") != "Bearer foo" {
@@ -146,7 +146,7 @@ func TestAuthentication(t *testing.T) {
 					return
 				}
 				w.Header().Set("Content-Type", "application/json")
-				io.WriteString(w, `{"foo":"bar"}`)
+				_, _ = io.WriteString(w, `{"foo":"bar"}`)
 			}))
 			defer server.Close()
 			client, err := infinity.NewClient(infinity.InfinitySettings{
@@ -185,7 +185,7 @@ func TestAuthentication(t *testing.T) {
 					return
 				}
 				w.Header().Set("Content-Type", "application/json")
-				io.WriteString(w, `{"foo":"bar"}`)
+				_, _ = io.WriteString(w, `{"foo":"bar"}`)
 			}))
 			defer server.Close()
 			client, err := infinity.NewClient(infinity.InfinitySettings{

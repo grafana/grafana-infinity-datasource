@@ -109,7 +109,6 @@ func (host *PluginHost) getGraphQLHandler() http.Handler {
 func GetPingHandler(client *instanceSettings) http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(rw, "%s", "pong")
-		return
 	}
 }
 

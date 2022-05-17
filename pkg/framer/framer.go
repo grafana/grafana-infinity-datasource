@@ -11,14 +11,16 @@ import (
 
 type FramerOptions struct{}
 
+func NOOP(x interface{}) {}
+
 func ToDataFrame(name string, input interface{}, options FramerOptions, executedQueryString string) (frame *data.Frame, err error) {
-	frame = data.NewFrame(name)
-	switch input.(type) {
+	switch x := input.(type) {
 	case nil, string, float64, float32, int64, int32, int16, int, bool:
 		return StructToFrame(name, map[string]interface{}{name: input}, executedQueryString)
 	case []interface{}:
 		return SliceToFrame(name, input.([]interface{}), executedQueryString)
 	default:
+		NOOP(x)
 		return StructToFrame(name, input, executedQueryString)
 	}
 }
@@ -33,8 +35,9 @@ func StructToFrame(name string, input interface{}, executedQueryString string) (
 	if in, ok := input.(map[string]interface{}); ok {
 		fields := map[string]*data.Field{}
 		for key, value := range in {
-			switch value.(type) {
+			switch x := value.(type) {
 			case nil, string, float64, float32, int64, int32, int16, int, bool:
+				NOOP(x)
 				a, b := getFieldTypeAndValue(value)
 				field := data.NewFieldFromFieldType(a, 1)
 				field.Name = key
@@ -146,7 +149,7 @@ func SliceToFrame(name string, input []interface{}, executedQueryString string) 
 }
 
 func getFieldTypeAndValue(value interface{}) (t data.FieldType, out interface{}) {
-	switch value.(type) {
+	switch x := value.(type) {
 	case nil:
 		return data.FieldTypeNullableString, value
 	case string:
@@ -168,6 +171,7 @@ func getFieldTypeAndValue(value interface{}) (t data.FieldType, out interface{})
 	case interface{}:
 		return data.FieldTypeJSON, value
 	default:
+		NOOP(x)
 		return data.FieldTypeNullableString, value
 	}
 }

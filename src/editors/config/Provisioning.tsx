@@ -7,18 +7,23 @@ import { InfinityOptions } from './../../types';
 export const ProvisioningScript = (props: { options: DataSourceSettings<InfinityOptions, {}> }) => {
   const { options } = props;
   const [isOpen, setIsOpen] = useState(false);
-  const getYaml = () => {
-    let { secureJsonFields, database, user, password, basicAuthPassword, withCredentials, access, typeLogoUrl, ...newOptions }: Record<string, any> = { ...options };
-    newOptions.secureJsonData = {};
-    Object.keys(options?.secureJsonFields || {}).forEach((secret) => {
-      newOptions.secureJsonData[secret] = 'xxxxxxx';
-    });
-    if (Object.keys(options?.secureJsonFields || {}).length === 0) {
-      delete newOptions.secureJsonData;
+  const getYaml = (): string => {
+    try {
+      let { version, secureJsonFields, database, user, password, basicAuthPassword, withCredentials, access, typeLogoUrl, accessControl, ...newOptions }: Record<string, any> = { ...options };
+      newOptions.secureJsonData = {};
+      Object.keys(options?.secureJsonFields || {}).forEach((secret) => {
+        newOptions.secureJsonData[secret] = 'xxxxxxx';
+      });
+      if (Object.keys(options?.secureJsonFields || {}).length === 0) {
+        delete newOptions.secureJsonData;
+      }
+      delete newOptions.secureJsonFields;
+      const data: string = YAML.stringify({ apiVersion: 1, datasources: [newOptions] });
+      return typeof data === 'string' ? data : 'oops.. error getting provisioning yaml';
+    } catch (ex) {
+      console.error(ex);
+      return 'oops.. error getting provisioning yaml';
     }
-    delete newOptions.secureJsonFields;
-    const data = YAML.stringify({ apiVersion: 1, datasources: [newOptions] });
-    return data;
   };
   return (
     <>

@@ -27,7 +27,10 @@
   "liveNow": false,
   "panels": [
     {
-      "datasource": null,
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "Infinity"
+      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -97,7 +100,10 @@
       "type": "table"
     },
     {
-      "datasource": null,
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "Infinity"
+      },
       "description": "",
       "fieldConfig": {
         "defaults": {

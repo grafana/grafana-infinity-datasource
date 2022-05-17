@@ -1,0 +1,612 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 8,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "Infinity"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "8.5.2",
+      "targets": [
+        {
+          "columns": [],
+          "data": "[\n  { \"city\": \"chennai\", \"country\": \"india\", \"population\": 300 },\n  { \"city\": \"london\", \"country\": \"uk\", \"population\": 200 }\n]\n",
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "Infinity"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "refId": "A",
+          "root_selector": "",
+          "source": "inline",
+          "type": "json",
+          "url": "https://jsonplaceholder.typicode.com/users",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "inline json table",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "Infinity"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 8,
+        "y": 0
+      },
+      "id": 3,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "8.5.2",
+      "targets": [
+        {
+          "columns": [],
+          "data": "city,country,population\nchennai,india,300\nlondon,uk,200",
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "Infinity"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "refId": "A",
+          "root_selector": "",
+          "source": "inline",
+          "type": "csv",
+          "url": "",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "inline csv table",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "Infinity"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 16,
+        "y": 0
+      },
+      "id": 4,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "8.5.2",
+      "targets": [
+        {
+          "columns": [
+            {
+              "selector": "city",
+              "text": "",
+              "type": "string"
+            },
+            {
+              "selector": "country",
+              "text": "",
+              "type": "string"
+            },
+            {
+              "selector": "population",
+              "text": "",
+              "type": "number"
+            }
+          ],
+          "data": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<root>\n  <row>\n    <city>chennai</city>\n    <country>india</country>\n    <population>300</population>\n  </row>\n  <row>\n    <city>london</city>\n    <country>uk</country>\n    <population>200</population>\n  </row>\n</root>",
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "Infinity"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "refId": "A",
+          "root_selector": "root.row",
+          "source": "inline",
+          "type": "xml",
+          "url": "",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "inline xml table",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "Infinity"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 0,
+        "y": 4
+      },
+      "id": 5,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "8.5.2",
+      "targets": [
+        {
+          "columns": [],
+          "data": "[\n  { \"city\": \"chennai\", \"country\": \"india\", \"population\": 300 },\n  { \"city\": \"london\", \"country\": \"uk\", \"population\": 200 }\n]\n",
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "Infinity"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "refId": "A",
+          "root_selector": "",
+          "source": "inline",
+          "type": "uql",
+          "uql": "parse-json",
+          "url": "https://jsonplaceholder.typicode.com/users",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "uql json table",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "Infinity"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 8,
+        "y": 4
+      },
+      "id": 6,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "8.5.2",
+      "targets": [
+        {
+          "columns": [],
+          "data": "city,country,population\nchennai,india,300\nlondon,uk,200",
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "Infinity"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "refId": "A",
+          "root_selector": "",
+          "source": "inline",
+          "type": "uql",
+          "uql": "parse-csv",
+          "url": "",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "uql csv table",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "Infinity"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 16,
+        "y": 4
+      },
+      "id": 7,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "8.5.2",
+      "targets": [
+        {
+          "columns": [
+            {
+              "selector": "city",
+              "text": "",
+              "type": "string"
+            },
+            {
+              "selector": "country",
+              "text": "",
+              "type": "string"
+            },
+            {
+              "selector": "population",
+              "text": "",
+              "type": "number"
+            }
+          ],
+          "data": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<root>\n  <row>\n    <city>chennai</city>\n    <country>india</country>\n    <population>300</population>\n  </row>\n  <row>\n    <city>london</city>\n    <country>uk</country>\n    <population>200</population>\n  </row>\n</root>",
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "Infinity"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "refId": "A",
+          "root_selector": "root.row",
+          "source": "inline",
+          "type": "uql",
+          "uql": "parse-xml\n| scope \"root.row\"",
+          "url": "",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "uql xml table",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "Infinity"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 8
+      },
+      "id": 8,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "8.5.2",
+      "targets": [
+        {
+          "columns": [
+            {
+              "selector": "city",
+              "text": "",
+              "type": "string"
+            },
+            {
+              "selector": "country",
+              "text": "",
+              "type": "string"
+            },
+            {
+              "selector": "population",
+              "text": "",
+              "type": "number"
+            }
+          ],
+          "data": "{\n        \"totalCount\": 3,\n        \"nextPageKey\": \"null\",\n        \"resolution\": \"1h\",\n        \"warnings\": [\n          \"The contains filter transformation is deprecated and will be removed in a future release.\"\n        ],\n        \"result\": [\n          {\n            \"metricId\": \"builtin:host.disk.avail\",\n            \"dataPointCountRatio\": \"0.1211\",\n            \"dimensionCountRatio\": \"0.0322\",\n            \"data\": [\n              {\n                \"dimensions\": [\n                  \"HOST-F1266E1D0AAC2C3C\",\n                  \"DISK-F1266E1D0AAC2C3F\"\n                ],\n                \"timestamps\": [\n                  3151435100000,\n                  3151438700000,\n                  3151442300000\n                ],\n                \"values\": [\n                  11.1,\n                  22.2,\n                  33.3\n                ]\n              },\n              {\n                \"dimensions\": [\n                  \"HOST-F1266E1D0AAC2C3C\",\n                  \"DISK-F1266E1D0AAC2C3D\"\n                ],\n                \"timestamps\": [\n                  3151435100000,\n                  3151438700000,\n                  3151442300000\n                ],\n                \"values\": [\n                  111.1,\n                  222.2,\n                  333.3\n                ]\n              }\n            ]\n          },\n          {\n            \"metricId\": \"builtin:host.cpu.idle\",\n            \"data\": [\n              {\n                \"dimensions\": [\n                  \"HOST-F1266E1D0AAC2C3C\"\n                ],\n                \"timestamps\": [\n                  3151435100000,\n                  3151438700000,\n                  3151442300000\n                ],\n                \"values\": [\n                  1.1,\n                  2.2,\n                  3.3\n                ]\n              }\n            ]\n          }\n        ]\n      }",
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "Infinity"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "refId": "A",
+          "root_selector": "root.row",
+          "source": "inline",
+          "type": "uql",
+          "uql": "parse-json\n          | scope \"result\"\n          | project-away \"dataPointCountRatio\", \"dimensionCountRatio\"\n          | mv-expand \"data\"\n          | project \"dimensions\"=array_to_map(\"data.dimensions\",'host','disk'), \"series\"=array_from_entries('timestamp',\"data.timestamps\",'value',\"data.values\"), \"metricId\"\n          | project \"host\"=\"dimensions.host\", \"disk\"=\"dimensions.disk\", \"series\", \"metricId\"\n          | mv-expand \"series\"\n          | project \"timestamp\"=\"series.timestamp\", \"value\"=\"series.value\", \"host\", \"disk\", \"metricId\"\n          | extend \"timestamp\"=unixtime_milliseconds_todatetime(\"timestamp\")\n          | order by \"timestamp\" asc",
+          "url": "",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "big uql",
+      "type": "table"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 36,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "E2E - Validation",
+  "uid": "e2e-validation",
+  "version": 6,
+  "weekStart": ""
+}

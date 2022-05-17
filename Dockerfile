@@ -34,9 +34,7 @@ WORKDIR /var/lib/grafana/plugins/yesoreyeram-infinity-datasource
 COPY --from=backend /app/grafana-infinity-datasource/backend/dist ./dist/
 COPY --from=frontend /app/grafana-infinity-datasource/frontend/dist ./dist/
 ENV GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS yesoreyeram-infinity-datasource
-ADD ./try/heroku.sh /
-ADD ./try/grafana.ini /etc/grafana/grafana.ini
 ADD ./try/dashboards /dashboards/
 ADD ./try/provisioning/datasources/default.yml /etc/grafana/provisioning/datasources/default.yml
 ADD ./try/provisioning/dashboards/default.yml /etc/grafana/provisioning/dashboards/default.yml
-ENTRYPOINT [ "/heroku.sh" ]
+ENTRYPOINT [ "/run.sh" ]
