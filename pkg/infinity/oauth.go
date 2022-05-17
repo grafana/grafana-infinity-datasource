@@ -6,6 +6,7 @@ import (
 	"net/url"
 	"strings"
 
+	dac "github.com/xinsnake/go-http-digest-auth-client"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
 	"golang.org/x/oauth2/jwt"
@@ -52,6 +53,13 @@ func ApplyOAuthJWT(httpClient *http.Client, settings InfinitySettings) *http.Cli
 		}
 		ctx := context.WithValue(context.Background(), oauth2.HTTPClient, httpClient)
 		httpClient = jwtConfig.Client(ctx)
+	}
+	return httpClient
+}
+func ApplyDigestAuth(httpClient *http.Client, settings InfinitySettings) *http.Client {
+	if settings.AuthenticationMethod == AuthenticationMethodDigestAuth {
+		a := dac.NewTransport(settings.UserName, settings.Password)
+		httpClient.Transport = &a
 	}
 	return httpClient
 }

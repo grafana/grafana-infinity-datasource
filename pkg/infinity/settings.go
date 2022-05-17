@@ -14,6 +14,7 @@ const (
 	AuthenticationMethodApiKey       = "apiKey"
 	AuthenticationMethodBearerToken  = "bearerToken"
 	AuthenticationMethodForwardOauth = "oauthPassThru"
+	AuthenticationMethodDigestAuth   = "digestAuth"
 	AuthenticationMethodOAuth        = "oauth2"
 )
 

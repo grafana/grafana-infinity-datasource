@@ -9,6 +9,7 @@ require (
 	github.com/graphql-go/handler v0.2.3
 	github.com/stretchr/testify v1.7.0
 	github.com/tidwall/gjson v1.14.1
+	github.com/xinsnake/go-http-digest-auth-client v0.6.0
 	golang.org/x/oauth2 v0.0.0-20211104180415-d3ed0bb246c8
 	moul.io/http2curl v1.0.0
 )

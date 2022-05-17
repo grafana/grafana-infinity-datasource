@@ -15,6 +15,7 @@ Infinity datasource supports following authentication methods
 - Basic authentication
 - Bearer token authentication
 - API Key authentication
+- Digest authentication
 - OAuth passthrough
 - OAuth2 client credentials
 - OAuth2 JWT authentication
@@ -36,6 +37,10 @@ With API key authentication, you can send a key-value pair to the API via reques
 | Key   | Key of the API token                                                                                                                                                       |
 | Value | Value of the API token                                                                                                                                                     |
 | In    | Accepts `header`/`query`. Most APIs accept API keys via headers which is preferred way of sending api keys. Sending API keys via the query parameter is not suggested way. |
+
+## Digest Authentication
+
+Digest authentication enable requests to authenticate using [RFC7616 HTTP Digest Access Authentication protocol](https://www.rfc-editor.org/rfc/rfc7616.txt).
 
 ## Bearer Token Authentication
 

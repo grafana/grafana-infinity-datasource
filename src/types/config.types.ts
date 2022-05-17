@@ -7,7 +7,7 @@ export interface GlobalInfinityQuery {
   id: string;
   query: InfinityQuery;
 }
-export type AuthType = 'none' | 'basicAuth' | 'apiKey' | 'bearerToken' | 'oauthPassThru' | 'oauth2';
+export type AuthType = 'none' | 'basicAuth' | 'apiKey' | 'bearerToken' | 'oauthPassThru' | 'digestAuth' | 'oauth2';
 export type OAuth2Type = 'client_credentials' | 'jwt' | 'others';
 export type APIKeyType = 'header' | 'query';
 export type OAuth2Props = {

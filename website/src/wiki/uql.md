@@ -112,7 +112,12 @@ following are some of the available functions
 | sum                              | sum("col1","col2")                      | sum of two or more columns                                                                           | 0.8.0          |
 | diff                             | diff("col1","col2")                     | difference between two columns                                                                       | 0.8.0          |
 | mul                              | mul("col1","col2")                      | multiplication of two columns                                                                        | 0.8.0          |
+| div                              | div("col1","col2")                      | division of two columns (col1/col2)                                                                  | 0.8.0          |
+| percentage                       | percentage("col1","col2")               | percentage of two columns ((col1/col2)\*100)                                                         | 1.0.0          |
 | strcat                           | strcat("col1","col2")                   | concatenates two or more columns                                                                     | 0.8.0          |
+| split                            | split("col1",'delimiter')               | splits a string using delimiter                                                                      | 1.0.0          |
+| replace_string                   | replace_string("col1",'src','replacer') | replace a portion of string with another                                                             | 1.0.0          |
+| reverse                          | revers("col1")                          | reverse a string                                                                                     | 1.0.0          |
 | floor                            | floor("col1")                           | calculates the floor value of given numeric field                                                    | 0.8.7          |
 | ceil                             | ceil("col1")                            | calculates the ceil value of given numeric field                                                     | 0.8.7          |
 | round                            | round("col1")                           | calculates the round value of given numeric field                                                    | 0.8.7          |
@@ -144,6 +149,20 @@ a,triple,thrice,sum,diff,mul
 ```
 
 To apply multiple transformations over a field, repeat them with the same field name. For example, the uql query `extend "name"=tolower("name"), "name"=trim("name")` will apply tolower function and then trim function over the name field.
+
+There are few other extend/project methods also available to deal with array
+
+#### pack
+
+pack method converts array of key value pairs into a map. Example `extend "foo"=pack('key1',"value1",'key1',"value2")` will yield a object `{key1:value1,key2:value2}`
+
+#### array_from_entries
+
+array_from_entries method builds an array of objects from entries. Example `extend "foo"=array_from_entries('timestamp',[2010,2020,2030])` will yield an array `[{timestamp:2010},{timestamp:2020},{timestamp:2030}]`
+
+#### array_to_map
+
+array_to_map converts an array of entries to a map. Optionally, one can provide alias for keys instead of index. Example `extend "foo"=array_to_map(['chennai','india'],'city','country')` will yield `{ 'city': 'chennai', 'country':'india'}`
 
 ### summarize
 

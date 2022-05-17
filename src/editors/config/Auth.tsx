@@ -9,6 +9,7 @@ const authTypes: Array<SelectableValue<AuthType>> = [
   { value: 'basicAuth', label: 'Basic Authentication' },
   { value: 'apiKey', label: 'API Key' },
   { value: 'bearerToken', label: 'Bearer Token' },
+  { value: 'digestAuth', label: 'Digest Auth' },
   { value: 'oauthPassThru', label: 'Forward OAuth' },
   { value: 'oauth2', label: 'OAuth2' },
 ];
@@ -33,6 +34,7 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
       case 'apiKey':
       case 'bearerToken':
       case 'oauthPassThru':
+      case 'digestAuth':
       default:
         onOptionsChange({ ...options, basicAuth: false, jsonData: { ...options.jsonData, oauthPassThru: false, auth_method: authMethod } });
         break;
@@ -60,7 +62,7 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
         <InlineFormLabel width={10}>Auth Type</InlineFormLabel>
         <RadioButtonGroup<AuthType> options={authTypes} value={authType} onChange={(e = 'none') => onAuthTypeChange(e!)}></RadioButtonGroup>
       </div>
-      {authType === 'basicAuth' && (
+      {(authType === 'basicAuth' || authType === 'digestAuth') && (
         <>
           <div className="gf-form">
             <FormField label="User Name" placeholder="username" labelWidth={10} value={props.options.basicAuthUser || ''} onChange={(e) => onUserNameChange(e.currentTarget.value)}></FormField>

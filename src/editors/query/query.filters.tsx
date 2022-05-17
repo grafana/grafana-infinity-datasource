@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import { SelectableValue } from '@grafana/data';
 import { Modal } from '@grafana/ui';
 import { Select } from './../../components/extended/ui';
-import { SelectableValue } from '@grafana/data';
 import { filterOperators } from '../../app/parsers/filter';
 import { isDataQuery } from './../../app/utils';
 import { InfinityQuery, InfinityFilter, FilterOperator } from '../../types';
@@ -15,8 +15,8 @@ export const TableFilter = (props: { query: InfinityQuery; onChange: (value: any
   const getFields = () => {
     return query.columns.map((col) => {
       return {
-        label: col.text,
-        value: col.text,
+        label: col.text || col.selector,
+        value: col.text || col.selector,
       };
     });
   };
@@ -61,7 +61,7 @@ export const TableFilter = (props: { query: InfinityQuery; onChange: (value: any
         role="button"
         title={query.filters && query.filters.length > 0 ? query.filters.length + ' filters configured' : ''}
         className="btn btn-secondary btn-medium width-2"
-        onClick={(e) => setPopupOpenStatus(true)}
+        onClick={() => setPopupOpenStatus(true)}
         style={{ padding: '10px' }}
       >
         <i className="fa fa-filter fa-large btn btn-medium"></i>

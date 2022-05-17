@@ -34,10 +34,10 @@ export const interpolateQuery = (query: InfinityQuery, scopedVars: ScopedVars): 
     }
     if (isDataQuery(newQuery)) {
       newQuery.filters = (newQuery.filters || []).map((filter) => {
-        filter.value = filter.value.map((val) => {
+        const value = (filter.value || []).map((val) => {
           return getTemplateSrv().replace(val || '', scopedVars, 'glob');
         });
-        return filter;
+        return { ...filter, value };
       });
     }
     if (newQuery.type === 'uql') {

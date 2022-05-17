@@ -58,6 +58,7 @@ func NewClient(settings InfinitySettings) (client *Client, err error) {
 		Transport: transport,
 		Timeout:   time.Second * time.Duration(settings.TimeoutInSeconds),
 	}
+	httpClient = ApplyDigestAuth(httpClient, settings)
 	httpClient = ApplyOAuthClientCredentials(httpClient, settings)
 	httpClient = ApplyOAuthJWT(httpClient, settings)
 	return &Client{
