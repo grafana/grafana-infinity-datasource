@@ -12,11 +12,13 @@ import (
 	"time"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
+	"github.com/prometheus/client_golang/prometheus"
 )
 
 type Client struct {
 	Settings   InfinitySettings
 	HttpClient *http.Client
+	Registry   *prometheus.Registry
 }
 
 func GetTLSConfigFromSettings(settings InfinitySettings) (*tls.Config, error) {
@@ -64,7 +66,19 @@ func NewClient(settings InfinitySettings) (client *Client, err error) {
 	return &Client{
 		Settings:   settings,
 		HttpClient: httpClient,
+		Registry:   prometheus.NewRegistry(),
 	}, err
+}
+
+func NewClientWithCounters(settings InfinitySettings, counters []prometheus.Collector) (client *Client, err error) {
+	client, err = NewClient(settings)
+	if err != nil {
+		return client, err
+	}
+	for _, counter := range counters {
+		client.Registry.MustRegister(counter)
+	}
+	return client, err
 }
 
 func replaceSect(input string, settings InfinitySettings, includeSect bool) string {

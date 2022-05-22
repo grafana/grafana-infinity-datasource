@@ -7,6 +7,7 @@ require (
 	github.com/grafana/grafana-plugin-sdk-go v0.134.0
 	github.com/graphql-go/graphql v0.8.0
 	github.com/graphql-go/handler v0.2.3
+	github.com/prometheus/client_golang v1.12.2
 	github.com/stretchr/testify v1.7.0
 	github.com/tidwall/gjson v1.14.1
 	github.com/xinsnake/go-http-digest-auth-client v0.6.0
@@ -54,7 +55,6 @@ require (
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
 	github.com/pierrec/lz4/v4 v4.1.8 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/prometheus/client_golang v1.12.1 // indirect
 	github.com/prometheus/client_model v0.2.0 // indirect
 	github.com/prometheus/common v0.32.1 // indirect
 	github.com/prometheus/procfs v0.7.3 // indirect

@@ -36,7 +36,7 @@ func newDataSourceInstance(setting backend.DataSourceInstanceSettings) (instance
 	if err != nil {
 		return nil, err
 	}
-	client, err := infinity.NewClient(settings)
+	client, err := infinity.NewClientWithCounters(settings, counters)
 	if err != nil {
 		return nil, err
 	}

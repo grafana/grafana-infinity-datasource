@@ -4,17 +4,18 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 
 ## [ 1.0.0 ] - unreleased
 
-- New Query Type: JSON Backend ( _experimental_ )
-- New Auth Type: Digest auth support
-- New Macro: Support for macros (`$__combineValues()`,`$__customInterval()`) added in URL, Body, Inline data, UQL queries
-- New Variable Query Type: Random String from given array of strings
-- UQL: new root level command `where` added to support basic filters
-- UQL: new method `extract` added to extract part of the string using regex
-- UQL: new summarize methods `countif`, `sumif`, `minif` and `maxif`
-- UQL: new methods `percentage`,`split`,`replace_string`,`reverse`,`pack`,`array_to_map` and `array_from_entries`
-- As-Is: Support for URL when using As-Is format with JSON
-- Chore: Test coverage improved
-- Chore: Added `vitest` for dev improvements
+- **New Query Type**: JSON Backend ( _experimental_ )
+- **New Auth Type**: Digest auth support
+- **New Macro**: Support for macros (`$__combineValues()`,`$__customInterval()`) added in URL, Body, Inline data, UQL queries
+- **New Variable Query Type**: Random String from given array of strings
+- **UQL**: new root level command `where` added to support basic filters
+- **UQL**: new method `extract` added to extract part of the string using regex
+- **UQL**: new summarize methods `countif`, `sumif`, `minif` and `maxif`
+- **UQL**: new methods `percentage`,`split`,`replace_string`,`reverse`,`pack`,`array_to_map` and `array_from_entries`
+- **As-Is**: Support for URL when using As-Is format with JSON
+- **Chore**: Test coverage improved
+- **Chore**: prometheus `metrics` resource endpoint added
+- **Chore**: Added `vitest` for dev improvements
 
 ## [ 0.8.8 ]
 
