@@ -62,7 +62,7 @@ export const QueryColumnsEditor = (props: { query: InfinityQuery; mode: EditorMo
           <div className="gf-form gf-form--grow">
             {(query.columns || []).length === 0 ? (
               <label className={`gf-form-label query-keyword width-${LABEL_WIDTH}`} title="Columns">
-                Columns
+                Fields / Columns
               </label>
             ) : (
               <div className={`width-${LABEL_WIDTH}`} style={{ marginRight: '5px' }}></div>

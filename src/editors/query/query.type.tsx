@@ -6,7 +6,7 @@ import { TypeSelector } from '../../components/TypeSelector';
 import { SourceSelector } from '../../components/SourceSelector';
 import { FormatSelector } from '../../components/FormatSelector';
 import { GlobalQuerySelector } from '../../components/GlobalQuerySelector';
-import { Help } from '../../components/Help';
+import { InfinityHelp } from '../../components/Help';
 
 export const TypeChooser = (props: { mode: EditorMode; instanceSettings: any; query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void }) => {
   const { query, mode } = props;
@@ -18,7 +18,7 @@ export const TypeChooser = (props: { mode: EditorMode; instanceSettings: any; qu
         {query.type !== 'series' && mode !== 'variable' && <FormatSelector {...props} />}
         {(query.type === 'csv' || query.type === 'tsv') && <CSVOptionsEditor {...props} />}
         {query.type === 'json' && <JSONOptionsEditor {...props} />}
-        <Help />
+        <InfinityHelp />
       </div>
     </div>
   );
