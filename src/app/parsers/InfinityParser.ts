@@ -1,5 +1,5 @@
 import { uniq, flatten } from 'lodash';
-import { DataFrame, FieldColorMode, PreferredVisualisationType, toDataFrame } from '@grafana/data';
+import { DataFrame, FieldColorModeId, PreferredVisualisationType, toDataFrame } from '@grafana/data';
 import { filterResults } from './filter';
 import { normalizeColumns } from './utils';
 import { isDataQuery } from './../utils';
@@ -70,7 +70,7 @@ export class InfinityParser<T extends InfinityQuery> {
               field.config = {
                 displayName: field.name.replace('arc__', ''),
                 color: {
-                  mode: FieldColorMode?.Fixed || 'fixed',
+                  mode: FieldColorModeId?.Fixed || 'fixed',
                   fixedColor: matching_color_field.values.get(0) || '',
                 },
               };

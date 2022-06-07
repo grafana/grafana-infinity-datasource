@@ -39,7 +39,6 @@ const VariableEditorLegacy = (props: { query: VariableQueryLegacy; onChange: (qu
     <div className="gf-form">
       <span className="gf-form-label width-10">Query</span>
       <TextArea
-        css={{}}
         rows={1}
         className="gf-form-input"
         placeholder="Collection(India,in,United Kingdom,uk)"

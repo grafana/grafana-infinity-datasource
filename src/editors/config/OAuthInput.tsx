@@ -43,7 +43,7 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
         <>
           <div className="gf-form">
             <InlineFormLabel width={10}>Client ID</InlineFormLabel>
-            <Input css={null} onChange={(v) => onOAuth2PropsChange('client_id', v.currentTarget.value)} value={oauth2.client_id} width={30} placeholder={'Client ID'} />
+            <Input onChange={(v) => onOAuth2PropsChange('client_id', v.currentTarget.value)} value={oauth2.client_id} width={30} placeholder={'Client ID'} />
           </div>
           <div className="gf-form">
             <LegacyForms.SecretFormField
@@ -61,12 +61,11 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
           </div>
           <div className="gf-form">
             <InlineFormLabel width={10}>Token URL</InlineFormLabel>
-            <Input css={null} onChange={(v) => onOAuth2PropsChange('token_url', v.currentTarget.value)} value={oauth2.token_url} width={30} placeholder={'Token URL'} />
+            <Input onChange={(v) => onOAuth2PropsChange('token_url', v.currentTarget.value)} value={oauth2.token_url} width={30} placeholder={'Token URL'} />
           </div>
           <div className="gf-form">
             <InlineFormLabel width={10}>Scopes</InlineFormLabel>
             <Input
-              css={null}
               onChange={(v) => onOAuth2PropsChange('scopes', (v.currentTarget.value || '').split(','))}
               value={(oauth2.scopes || []).join(',')}
               width={30}
@@ -93,19 +92,13 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
             <InlineFormLabel width={10} tooltip="Email is the OAuth client identifier used when communicating with the configured OAuth provider.">
               Email
             </InlineFormLabel>
-            <Input css={null} onChange={(v) => onOAuth2PropsChange('email', v.currentTarget.value)} value={oauth2.email} width={30} placeholder={'email'} />
+            <Input onChange={(v) => onOAuth2PropsChange('email', v.currentTarget.value)} value={oauth2.email} width={30} placeholder={'email'} />
           </div>
           <div className="gf-form">
             <InlineFormLabel width={10} tooltip="PrivateKeyID contains an optional hint indicating which key is being used">
               Private Key Identifier
             </InlineFormLabel>
-            <Input
-              css={null}
-              onChange={(v) => onOAuth2PropsChange('private_key_id', v.currentTarget.value)}
-              value={oauth2.private_key_id}
-              width={30}
-              placeholder={'(optional) private key identifier'}
-            />
+            <Input onChange={(v) => onOAuth2PropsChange('private_key_id', v.currentTarget.value)} value={oauth2.private_key_id} width={30} placeholder={'(optional) private key identifier'} />
           </div>
           <div className="gf-form">
             <LegacyForms.SecretFormField
@@ -126,20 +119,19 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
             <InlineFormLabel width={10} tooltip="TokenURL is the endpoint required to complete the 2-legged JWT flow.">
               Token URL
             </InlineFormLabel>
-            <Input css={null} onChange={(v) => onOAuth2PropsChange('token_url', v.currentTarget.value)} value={oauth2.token_url} width={30} placeholder={'Token URL'} />
+            <Input onChange={(v) => onOAuth2PropsChange('token_url', v.currentTarget.value)} value={oauth2.token_url} width={30} placeholder={'Token URL'} />
           </div>
           <div className="gf-form">
             <InlineFormLabel width={10} tooltip="Subject is the optional user to impersonate.">
               Subject
             </InlineFormLabel>
-            <Input css={null} onChange={(v) => onOAuth2PropsChange('subject', v.currentTarget.value)} value={oauth2.subject} width={30} placeholder={'(optional) Subject'} />
+            <Input onChange={(v) => onOAuth2PropsChange('subject', v.currentTarget.value)} value={oauth2.subject} width={30} placeholder={'(optional) Subject'} />
           </div>
           <div className="gf-form">
             <InlineFormLabel width={10} tooltip="Scopes optionally specifies a list of requested permission scopes. Enter comma separated values">
               Scopes
             </InlineFormLabel>
             <Input
-              css={null}
               onChange={(v) => onOAuth2PropsChange('scopes', (v.currentTarget.value || '').split(','))}
               value={(oauth2.scopes || []).join(',')}
               width={30}

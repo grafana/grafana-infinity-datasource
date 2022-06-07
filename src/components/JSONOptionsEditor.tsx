@@ -33,13 +33,13 @@ export const JSONOptionsEditor = (props: { query: InfinityQuery; onChange: (valu
           <div className="gf-form">
             <label className="gf-form-label query-keyword width-14">Root returns object instead array?</label>
             <div style={{ margin: '5px' }}>
-              <Checkbox css={{}} value={json_options.root_is_not_array} onChange={(e) => onJsonOptionsChange('root_is_not_array', e.currentTarget.checked)}></Checkbox>
+              <Checkbox value={json_options.root_is_not_array} onChange={(e) => onJsonOptionsChange('root_is_not_array', e.currentTarget.checked)}></Checkbox>
             </div>
           </div>
           <div className="gf-form">
             <label className="gf-form-label query-keyword width-14">Is data in columnar format?</label>
             <div style={{ margin: '5px' }}>
-              <Checkbox css={{}} value={json_options.columnar} onChange={(e) => onJsonOptionsChange('columnar', e.currentTarget.checked)}></Checkbox>
+              <Checkbox value={json_options.columnar} onChange={(e) => onJsonOptionsChange('columnar', e.currentTarget.checked)}></Checkbox>
             </div>
           </div>
         </Drawer>

@@ -49,7 +49,6 @@ export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<I
           <div className="gf-form">
             <InlineFormLabel>Timeout in seconds</InlineFormLabel>
             <Input
-              css={null}
               value={timeoutInSeconds}
               type="number"
               placeholder="timeout in seconds"

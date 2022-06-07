@@ -69,7 +69,7 @@ export const TLSConfigEditor = (props: TLSConfigEditorProps) => {
             Skip TLS Verify
           </InlineFormLabel>
           <div style={switchContainerStyle}>
-            <Switch css={{}} className="gf-form" value={jsonData.tlsSkipVerify || false} onChange={(e) => onTLSSettingsChange('tlsSkipVerify', e.currentTarget.checked)} />
+            <Switch className="gf-form" value={jsonData.tlsSkipVerify || false} onChange={(e) => onTLSSettingsChange('tlsSkipVerify', e.currentTarget.checked)} />
           </div>
         </div>
         <div className="gf-form">
@@ -77,7 +77,7 @@ export const TLSConfigEditor = (props: TLSConfigEditorProps) => {
             With CA Cert
           </InlineFormLabel>
           <div style={switchContainerStyle}>
-            <Switch css={{}} className="gf-form" value={jsonData.tlsAuthWithCACert || false} onChange={(e) => onTLSSettingsChange('tlsAuthWithCACert', e.currentTarget.checked)} />
+            <Switch className="gf-form" value={jsonData.tlsAuthWithCACert || false} onChange={(e) => onTLSSettingsChange('tlsAuthWithCACert', e.currentTarget.checked)} />
           </div>
         </div>
         <div className="gf-form">
@@ -85,7 +85,7 @@ export const TLSConfigEditor = (props: TLSConfigEditorProps) => {
             TLS Client Auth
           </InlineFormLabel>
           <div style={switchContainerStyle}>
-            <Switch css={{}} className="gf-form" value={jsonData.tlsAuth || false} onChange={(e) => onTLSSettingsChange('tlsAuth', e.currentTarget.checked)} />
+            <Switch className="gf-form" value={jsonData.tlsAuth || false} onChange={(e) => onTLSSettingsChange('tlsAuth', e.currentTarget.checked)} />
           </div>
         </div>
         {jsonData.tlsAuthWithCACert && (

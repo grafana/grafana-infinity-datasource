@@ -11,6 +11,7 @@ import { GROQEditor } from './query.groq';
 import { InfinityQuery, EditorMode, DefaultInfinityQuery, InfinityQueryType } from '../../types';
 
 export type InfinityEditorProps = {
+  hideTip?: boolean;
   query: InfinityQuery;
   onChange: (query: InfinityQuery) => void;
   onRunQuery: () => void;
@@ -19,7 +20,7 @@ export type InfinityEditorProps = {
 };
 
 export const InfinityQueryEditor = (props: InfinityEditorProps) => {
-  const { onChange, mode, instanceSettings, onRunQuery } = props;
+  const { onChange, mode, instanceSettings, onRunQuery, hideTip } = props;
   const query: InfinityQuery = defaultsDeep(props.query, DefaultInfinityQuery) as InfinityQuery;
   let canShowURLEditor = ['csv', 'tsv', 'html', 'json', 'json-backend', 'graphql', 'xml', 'uql', 'groq'].includes(query.type);
   let canShowColumnsEditor = ['csv', 'tsv', 'html', 'json', 'json-backend', 'graphql', 'xml'].includes(query.type);
@@ -35,7 +36,7 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
       {query.type === 'json-backend' && <JSONBackendEditor {...{ query, onChange, onRunQuery, mode }} />}
       {query.type === 'uql' && <UQLEditor {...{ query, onChange, onRunQuery, mode }} />}
       {query.type === 'groq' && <GROQEditor {...{ query, onChange, onRunQuery, mode }} />}
-      <UQLPromotion queryType={query.type} />
+      {!hideTip && <UQLPromotion queryType={query.type} />}
     </div>
   );
 };

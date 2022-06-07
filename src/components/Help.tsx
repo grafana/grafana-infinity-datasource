@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { Button, Drawer, CustomScrollbar, TabsBar, Tab, TabContent, LinkButton } from '@grafana/ui';
+import { css } from '@emotion/css';
+import { Button, Drawer, CustomScrollbar, TabsBar, Tab, TabContent, LinkButton, useTheme } from '@grafana/ui';
 
 export const InfinityHelp = () => {
+  const theme = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('general');
   return (
@@ -16,12 +18,17 @@ export const InfinityHelp = () => {
           width={'50%'}
           subtitle={
             <>
-              <TabsBar>
-                <Tab css={{}} label="JSON" onChangeTab={() => setActiveTab('json')} active={activeTab === 'json'}></Tab>
-                <Tab css={{}} label="CSV" onChangeTab={() => setActiveTab('csv')} active={activeTab === 'csv'}></Tab>
-                <Tab css={{}} label="XML" onChangeTab={() => setActiveTab('xml')} active={activeTab === 'xml'}></Tab>
-                <Tab css={{}} label="UQL" onChangeTab={() => setActiveTab('uql')} active={activeTab === 'uql'}></Tab>
-                <Tab css={{}} label="General" onChangeTab={() => setActiveTab('general')} active={activeTab === 'general'}></Tab>
+              <TabsBar
+                className={css({
+                  paddingLeft: theme.spacing.md,
+                  margin: `${theme.spacing.lg} -${theme.spacing.sm} -${theme.spacing.lg} -${theme.spacing.lg}`,
+                })}
+              >
+                <Tab label="JSON" onChangeTab={() => setActiveTab('json')} active={activeTab === 'json'}></Tab>
+                <Tab label="CSV" onChangeTab={() => setActiveTab('csv')} active={activeTab === 'csv'}></Tab>
+                <Tab label="XML" onChangeTab={() => setActiveTab('xml')} active={activeTab === 'xml'}></Tab>
+                <Tab label="UQL" onChangeTab={() => setActiveTab('uql')} active={activeTab === 'uql'}></Tab>
+                <Tab label="General" onChangeTab={() => setActiveTab('general')} active={activeTab === 'general'}></Tab>
               </TabsBar>
             </>
           }

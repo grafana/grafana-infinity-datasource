@@ -147,13 +147,13 @@ const GlobalQuery = (props: { query: GlobalInfinityQuery; onUpdate: (query: Glob
             <InlineFormLabel width={8} className="query-keyword">
               Name
             </InlineFormLabel>
-            <Input css={{}} value={name} onChange={(e) => setName(e.currentTarget.value)} onBlur={() => onUpdate({ ...query, name })}></Input>
+            <Input value={name} onChange={(e) => setName(e.currentTarget.value)} onBlur={() => onUpdate({ ...query, name })}></Input>
           </div>
           <div className="gf-form">
             <InlineFormLabel width={8} className="query-keyword">
               ID
             </InlineFormLabel>
-            <Input css={{}} value={id} onChange={(e) => setId(e.currentTarget.value)} onBlur={() => onUpdate({ ...query, id })}></Input>
+            <Input value={id} onChange={(e) => setId(e.currentTarget.value)} onBlur={() => onUpdate({ ...query, id })}></Input>
           </div>
           <InfinityQueryEditor query={query.query} onChange={(newQuery: InfinityQuery) => onUpdate({ ...query, query: newQuery })} onRunQuery={() => {}} instanceSettings={options} mode="global" />
           <div className="gf-form">

@@ -1,4 +1,4 @@
-import { PluginType } from '@grafana/data';
+import { DataSourceInstanceSettings, PluginType } from '@grafana/data';
 import { Datasource } from './datasource';
 
 function TemplateSrvStub(this: any) {
@@ -15,10 +15,11 @@ jest.mock('@grafana/runtime', () => ({
   getTemplateSrv: () => templateSrv,
 }));
 
-const DummyDatasource = {
+const DummyDatasource: DataSourceInstanceSettings = {
   id: 1,
   uid: '',
   name: '',
+  access: 'proxy',
   type: 'yesoreyeram-infinity-datasource',
   meta: {
     id: '',

@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/grafana/grafana/v7.2.0/docs/sources/developers/plugins/plugin.schema.json",
+  "$schema": "https://raw.githubusercontent.com/grafana/grafana/v8.4.7/docs/sources/developers/plugins/plugin.schema.json",
   "name": "Infinity",
   "id": "yesoreyeram-infinity-datasource",
   "type": "datasource",
@@ -93,8 +93,8 @@
     ]
   },
   "dependencies": {
-    "grafanaDependency": ">=7.2.0",
-    "grafanaVersion": "7.2.0",
+    "grafanaDependency": ">=8.4.7",
+    "grafanaVersion": "8.4.7",
     "plugins": []
   },
   "includes": [],

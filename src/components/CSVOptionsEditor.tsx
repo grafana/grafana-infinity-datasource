@@ -45,7 +45,7 @@ export const CSVOptionsEditor = (props: { query: InfinityQuery; onChange: (value
               <InlineFormLabel className="query-keyword" width={LABEL_WIDTH} tooltip="Defaults to comma. If your file is TSV then use '\t'">
                 Delimiter
               </InlineFormLabel>
-              <Input css={{}} width={4} value={query.csv_options?.delimiter} placeholder="," onChange={(e) => onCSVOptionsChange('delimiter', e.currentTarget.value)}></Input>
+              <Input width={4} value={query.csv_options?.delimiter} placeholder="," onChange={(e) => onCSVOptionsChange('delimiter', e.currentTarget.value)}></Input>
             </div>
           )}
           <div className="gf-form">
@@ -53,12 +53,7 @@ export const CSVOptionsEditor = (props: { query: InfinityQuery; onChange: (value
               Skip empty lines
             </InlineFormLabel>
             <div style={{ margin: '5px' }}>
-              <Checkbox
-                data-testid="skip_empty_lines"
-                css={{}}
-                value={query.csv_options?.skip_empty_lines}
-                onChange={(e) => onCSVOptionsChange('skip_empty_lines', e.currentTarget.checked)}
-              ></Checkbox>
+              <Checkbox data-testid="skip_empty_lines" value={query.csv_options?.skip_empty_lines} onChange={(e) => onCSVOptionsChange('skip_empty_lines', e.currentTarget.checked)}></Checkbox>
             </div>
           </div>
           <div className="gf-form">
@@ -68,7 +63,6 @@ export const CSVOptionsEditor = (props: { query: InfinityQuery; onChange: (value
             <div style={{ margin: '5px' }}>
               <Checkbox
                 data-testid="skip_lines_with_error"
-                css={{}}
                 value={query.csv_options?.skip_lines_with_error}
                 onChange={(e) => onCSVOptionsChange('skip_lines_with_error', e.currentTarget.checked)}
               ></Checkbox>
@@ -79,20 +73,20 @@ export const CSVOptionsEditor = (props: { query: InfinityQuery; onChange: (value
               Relax column count
             </InlineFormLabel>
             <div style={{ margin: '5px' }}>
-              <Checkbox css={{}} value={query.csv_options?.relax_column_count} onChange={(e) => onCSVOptionsChange('relax_column_count', e.currentTarget.checked)}></Checkbox>
+              <Checkbox value={query.csv_options?.relax_column_count} onChange={(e) => onCSVOptionsChange('relax_column_count', e.currentTarget.checked)}></Checkbox>
             </div>
           </div>
           <div className="gf-form">
             <InlineFormLabel className="query-keyword" width={LABEL_WIDTH}>
               Headers
             </InlineFormLabel>
-            <Input css={{}} width={30} value={query.csv_options?.columns} placeholder="Comma separated headers" onChange={(e) => onCSVOptionsChange('columns', e.currentTarget.value)}></Input>
+            <Input width={30} value={query.csv_options?.columns} placeholder="Comma separated headers" onChange={(e) => onCSVOptionsChange('columns', e.currentTarget.value)}></Input>
           </div>
           <div className="gf-form">
             <InlineFormLabel className="query-keyword" width={LABEL_WIDTH}>
               Comment
             </InlineFormLabel>
-            <Input css={{}} width={4} value={query.csv_options?.comment} placeholder="#" onChange={(e) => onCSVOptionsChange('comment', e.currentTarget.value)}></Input>
+            <Input width={4} value={query.csv_options?.comment} placeholder="#" onChange={(e) => onCSVOptionsChange('comment', e.currentTarget.value)}></Input>
           </div>
         </Drawer>
       )}

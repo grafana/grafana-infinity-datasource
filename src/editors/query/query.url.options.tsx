@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { cloneDeep } from 'lodash';
-import { css } from 'emotion';
+import { css } from '@emotion/css';
 import { Select, Button, Drawer, TabsBar, Tab, CustomScrollbar, TabContent, useTheme, Input } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
 import { isDataQuery } from './../../app/utils';
@@ -166,15 +166,14 @@ export const URLOptionsEditor = ({ query, onChange, onRunQuery }: { query: Infin
                     &nbsp;<i className="fa fa-refresh mx-2" onClick={onRunQuery}></i>
                   </div>
                   <TabsBar
-                    className={css`
-                      padding-left: ${theme.spacing.md};
-                      margin: ${theme.spacing.lg} -${theme.spacing.sm} -${theme.spacing.lg} -${theme.spacing.lg};
-                    `}
+                    className={css({
+                      paddingLeft: theme.spacing.md,
+                      margin: `${theme.spacing.lg} -${theme.spacing.sm} -${theme.spacing.lg} -${theme.spacing.lg}`,
+                    })}
                   >
                     {tabs.map((t, index) => {
                       return (
                         <Tab
-                          css={{}}
                           key={`${t.value}-${index}`}
                           label={t.label + ''}
                           active={t.value === activeTab}
@@ -255,7 +254,6 @@ export const URLOptionsEditor = ({ query, onChange, onRunQuery }: { query: Infin
                             <tr key={index}>
                               <td>
                                 <Input
-                                  css={{}}
                                   value={param.key}
                                   onChange={(e) => {
                                     onQueryParamItemChange(index, e.currentTarget.value, 'key');
@@ -264,7 +262,6 @@ export const URLOptionsEditor = ({ query, onChange, onRunQuery }: { query: Infin
                               </td>
                               <td>
                                 <Input
-                                  css={{}}
                                   value={param.value}
                                   onChange={(e) => {
                                     onQueryParamItemChange(index, e.currentTarget.value, 'value');
@@ -307,7 +304,6 @@ export const URLOptionsEditor = ({ query, onChange, onRunQuery }: { query: Infin
                             <tr key={index}>
                               <td>
                                 <Input
-                                  css={{}}
                                   value={header.key}
                                   onChange={(e) => {
                                     onQueryHeaderItemChange(index, e.currentTarget.value, 'key');
@@ -316,7 +312,6 @@ export const URLOptionsEditor = ({ query, onChange, onRunQuery }: { query: Infin
                               </td>
                               <td>
                                 <Input
-                                  css={{}}
                                   value={header.value}
                                   onChange={(e) => {
                                     onQueryHeaderItemChange(index, e.currentTarget.value, 'value');

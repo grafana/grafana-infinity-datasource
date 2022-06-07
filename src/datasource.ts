@@ -2,6 +2,7 @@ import { Observable } from 'rxjs';
 import { flatten, sample } from 'lodash';
 import { DataQueryResponse, DataQueryRequest, LoadingState, TimeRange, ScopedVars, toDataFrame, DataFrame } from '@grafana/data';
 import { DataSourceWithBackend } from '@grafana/runtime';
+import { AnnotationsEditor } from './editors/annotation.editor';
 import { InfinityProvider } from './app/InfinityProvider';
 import { applyUQL } from './app/UQLProvider';
 import { applyGroq } from './app/GROQProvider';
@@ -14,7 +15,9 @@ import { InfinityQuery, VariableQuery, MetricFindValue, InfinityInstanceSettings
 export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOptions> {
   constructor(public instanceSettings: InfinityInstanceSettings) {
     super(instanceSettings);
-    this.annotations = {};
+    this.annotations = {
+      QueryEditor: AnnotationsEditor,
+    };
   }
   query(options: DataQueryRequest<InfinityQuery>): Observable<DataQueryResponse> {
     return new Observable<DataQueryResponse>((subscriber) => {
@@ -168,5 +171,27 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
       .catch((ex) => {
         throw ex;
       });
+  }
+  getQueryDisplayText(query: InfinityQuery) {
+    return (
+      query.type.toUpperCase() +
+      ((query.type === 'json' ||
+        query.type === 'csv' ||
+        query.type === 'xml' ||
+        query.type === 'uql' ||
+        query.type === 'graphql' ||
+        query.type === 'groq' ||
+        query.type === 'json-backend' ||
+        query.type === 'tsv') &&
+      query.source === 'url'
+        ? ` ${query.url}`
+        : '')
+    );
+  }
+  filterQuery(query: InfinityQuery) {
+    if (query.hide) {
+      return false;
+    }
+    return true;
   }
 }
