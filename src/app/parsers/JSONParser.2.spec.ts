@@ -14,72 +14,55 @@ const defaultTarget: InfinityQuery = {
 describe('Empty Object', () => {
   const a = new JSONParser({}, defaultTarget);
   it('default test', () => {
-    const tableResults = a.toTable();
-    expect(tableResults.rows.length).toBe(0);
+    expect(a.toTable()).toMatchSnapshot();
   });
 });
 describe('Empty Array', () => {
   const a = new JSONParser([], defaultTarget);
   it('default test', () => {
-    const tableResults = a.toTable();
-    expect(tableResults.rows.length).toBe(0);
+    expect(a.toTable()).toMatchSnapshot();
   });
 });
 describe('String Array', () => {
   const a = new JSONParser(['foo', 'bar', 'baz'], defaultTarget);
   it('default test', () => {
-    const tableResults = a.toTable();
-    expect(tableResults.columns.length).toBe(1);
-    expect(tableResults.columns[0].type).toBe('string');
-    expect(tableResults.rows.length).toBe(3);
+    expect(a.toTable()).toMatchSnapshot();
   });
 });
 describe('Number Array', () => {
   const a = new JSONParser([1, 2, 3], defaultTarget);
   it('default test', () => {
-    const tableResults = a.toTable();
-    expect(tableResults.columns.length).toBe(1);
-    expect(tableResults.columns[0].type).toBe('number');
-    expect(tableResults.rows.length).toBe(3);
+    expect(a.toTable()).toMatchSnapshot();
   });
 });
 describe('String Array with duplicates', () => {
   const a = new JSONParser(['foo', 'bar', 'foo'], defaultTarget);
   it('default test', () => {
-    const tableResults = a.toTable();
-    expect(tableResults.rows.length).toBe(3);
+    expect(a.toTable()).toMatchSnapshot();
   });
 });
 describe('Simple Object', () => {
   const a = new JSONParser({ firstName: 'foo', lastName: 'bar' }, defaultTarget);
   it('default test', () => {
-    const tableResults = a.toTable();
-    expect(tableResults.rows.length).toBe(1);
-    expect(tableResults.columns.length).toBe(2);
+    expect(a.toTable()).toMatchSnapshot();
   });
 });
 describe('Simple Object with string array', () => {
   const a = new JSONParser({ firstName: 'foo', lastName: 'bar', users: ['one', 'two'] }, defaultTarget);
   it('default test', () => {
-    const tableResults = a.toTable();
-    expect(tableResults.rows.length).toBe(1);
-    expect(tableResults.columns.length).toBe(3);
+    expect(a.toTable()).toMatchSnapshot();
   });
 });
 describe('Simple Object with number array', () => {
   const a = new JSONParser({ firstName: 'foo', lastName: 'bar', users: [1, 2, 3] }, defaultTarget);
   it('default test', () => {
-    const tableResults = a.toTable();
-    expect(tableResults.rows.length).toBe(1);
-    expect(tableResults.columns.length).toBe(3);
+    expect(a.toTable()).toMatchSnapshot();
   });
 });
 describe('Simple Object with number array and string array', () => {
   const a = new JSONParser({ firstName: 'foo', lastName: 'bar', users: ['foo', 'bar'], users1: [1, 2, 3] }, defaultTarget);
   it('default test', () => {
-    const tableResults = a.toTable();
-    expect(tableResults.rows.length).toBe(1);
-    expect(tableResults.columns.length).toBe(4);
+    expect(a.toTable()).toMatchSnapshot();
   });
 });
 describe('Simple Object with number array, string array, object array', () => {
@@ -111,11 +94,7 @@ describe('Simple Object with number array, string array, object array', () => {
     defaultTarget
   );
   it('default test', () => {
-    const tableResults = a.toTable();
-    expect(tableResults.rows.length).toBe(4);
-    expect(tableResults.columns.length).toBe(2);
-    expect(tableResults.columns[0].text).toBe('koo');
-    expect(tableResults.columns[1].text).toBe('moo');
+    expect(a.toTable()).toMatchSnapshot();
   });
 });
 describe('Nested object without array', () => {
@@ -133,13 +112,6 @@ describe('Nested object without array', () => {
     { ...defaultTarget, root_selector: 'values' }
   );
   it('default test', () => {
-    const tableResults = a.toTable();
-    expect(tableResults.columns.length).toBe(4);
-    expect(tableResults.columns[0].text).toBe('foo');
-    expect(tableResults.columns[1].text).toBe('bar');
-    expect(tableResults.rows.length).toBe(1);
-    expect(tableResults.rows[0].length).toBe(4);
-    expect(tableResults.rows[0][0]).toBe('foo1');
-    expect(tableResults.rows[0][1]).toBe('bar1');
+    expect(a.toTable()).toMatchSnapshot();
   });
 });

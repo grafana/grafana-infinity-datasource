@@ -40,10 +40,7 @@ const JSONResults = new JSONParser(
 );
 describe('JSON - JSONPath', () => {
   it('With Columns', () => {
-    expect(JSONResults.toTable().rows.length).toBe(3);
-    expect(JSONResults.toTable().rows[0].length).toBe(1);
-    expect(JSONResults.toTable().rows[1][0]).toBe('joseph');
-    expect(JSONResults.toTable().columns.length).toBe(1);
+    expect(JSONResults.toTable()).toMatchSnapshot();
   });
 });
 
@@ -92,10 +89,7 @@ const JSONResults1 = new JSONParser(
 );
 describe('JSON - JSONPath', () => {
   it('With multi Columns', () => {
-    expect(JSONResults1.toTable().rows.length).toBe(3);
-    expect(JSONResults1.toTable().rows[0].length).toBe(2);
-    expect(JSONResults1.toTable().rows[2][0]).toBe('john doe');
-    expect(JSONResults1.toTable().columns.length).toBe(2);
+    expect(JSONResults1.toTable()).toMatchSnapshot();
   });
 });
 
@@ -144,10 +138,7 @@ const JSONResults2 = new JSONParser(
 );
 describe('JSON - JSONPath', () => {
   it('With multi Columns', () => {
-    expect(JSONResults2.toTable().rows.length).toBe(2);
-    expect(JSONResults2.toTable().rows[0].length).toBe(2);
-    expect(JSONResults2.toTable().rows[0][0]).toBe('mary');
-    expect(JSONResults2.toTable().columns.length).toBe(2);
+    expect(JSONResults2.toTable()).toMatchSnapshot();
   });
 });
 
@@ -201,9 +192,6 @@ const JSONResults3 = new JSONParser(
 );
 describe('JSON - JSONPath', () => {
   it('With multi Columns', () => {
-    expect(JSONResults3.toTable().rows.length).toBe(2);
-    expect(JSONResults3.toTable().rows[0].length).toBe(3);
-    expect(JSONResults3.toTable().rows[0][0]).toBe('mary');
-    expect(JSONResults3.toTable().columns.length).toBe(3);
+    expect(JSONResults3.toTable()).toMatchSnapshot();
   });
 });

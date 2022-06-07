@@ -14,8 +14,7 @@ const JSONResults1 = new JSONParser(
 );
 describe('JSONParser', () => {
   it('Basic', () => {
-    expect(JSONResults1.toTable().rows.length).toBe(0);
-    expect(JSONResults1.toTable().columns.length).toBe(0);
+    expect(JSONResults1.toTable()).toMatchSnapshot();
   });
 });
 
@@ -48,10 +47,7 @@ const JSONResults2 = new JSONParser(
 );
 describe('JSONParser', () => {
   it('With Columns', () => {
-    expect(JSONResults2.toTable().rows.length).toBe(2);
-    expect(JSONResults2.toTable().rows[0].length).toBe(1);
-    expect(JSONResults2.toTable().rows[1][0]).toBe('bar');
-    expect(JSONResults2.toTable().columns.length).toBe(1);
+    expect(JSONResults2.toTable()).toMatchSnapshot();
   });
 });
 
@@ -96,11 +92,7 @@ const JSONResults3 = new JSONParser(
 );
 describe('JSONParser', () => {
   it('With Columns & Root Selector', () => {
-    expect(JSONResults3.toTable().rows.length).toBe(3);
-    expect(JSONResults3.toTable().rows[0].length).toBe(2);
-    expect(JSONResults3.toTable().rows[1][0]).toBe('bar');
-    expect(JSONResults3.toTable().rows[2][1]).toBe('30');
-    expect(JSONResults3.toTable().columns.length).toBe(2);
+    expect(JSONResults3.toTable()).toMatchSnapshot();
   });
 });
 
@@ -167,19 +159,7 @@ const JSONResults4 = new JSONParser(
 );
 describe('JSONParser', () => {
   it('With Columns & Root Selector', () => {
-    expect(JSONResults4.toTable().rows.length).toBe(4);
-    expect(JSONResults4.toTable().rows[0].length).toBe(4);
-    expect(JSONResults4.toTable().rows[1][0]).toBe('bar');
-    expect(JSONResults4.toTable().rows[2][1]).toBe(30);
-    expect(JSONResults4.toTable().rows[0][2]).toStrictEqual(new Date('2010-01-01T00:00:00.000Z'));
-    expect(JSONResults4.toTable().rows[1][2]).toStrictEqual(new Date('2011-01-01T00:00:00.000Z'));
-    expect(JSONResults4.toTable().rows[2][2]).toStrictEqual(new Date('2012-01-01T00:00:00.000Z'));
-    expect(JSONResults4.toTable().rows[3][2]).toStrictEqual(new Date('2013-12-25T00:00:00.000Z'));
-    expect(JSONResults4.toTable().rows[0][3]).toStrictEqual(new Date('2010-01-01T00:00:00.000Z'));
-    expect(JSONResults4.toTable().rows[1][3]).toStrictEqual(new Date('2011-01-01T00:00:00.000Z'));
-    expect(JSONResults4.toTable().rows[2][3]).toStrictEqual(new Date('2012-01-01T00:00:00.000Z'));
-    expect(JSONResults4.toTable().rows[3][3]).toStrictEqual(new Date('2013-12-25T00:00:00.000Z'));
-    expect(JSONResults4.toTable().columns.length).toBe(4);
+    expect(JSONResults4.toTable()).toMatchSnapshot();
   });
 });
 
@@ -213,10 +193,6 @@ const JSONResults5 = new JSONParser(
 );
 describe('JSONParser', () => {
   it('Auto Columns Table', () => {
-    expect(JSONResults5.toTable().rows.length).toBe(3);
-    expect(JSONResults5.toTable().rows[0].length).toBe(2);
-    expect(JSONResults5.toTable().rows[1][0]).toBe('bar');
-    expect(JSONResults5.toTable().rows[2][1]).toBe(30);
-    expect(JSONResults5.toTable().columns.length).toBe(2);
+    expect(JSONResults5.toTable()).toMatchSnapshot();
   });
 });

@@ -1,0 +1,412 @@
+// Vitest Snapshot v1
+
+exports[`CSVParser > Auto Columns Table 1`] = `
+{
+  "columns": [
+    {
+      "selector": "year",
+      "text": "year",
+      "type": "string",
+    },
+    {
+      "selector": "country",
+      "text": "country",
+      "type": "string",
+    },
+    {
+      "selector": "population",
+      "text": "population",
+      "type": "string",
+    },
+  ],
+  "name": "",
+  "rows": [
+    [
+      "1990",
+      "india",
+      "10",
+    ],
+    [
+      "1990",
+      "usa",
+      "7",
+    ],
+    [
+      "1990",
+      "uk",
+      "5",
+    ],
+    [
+      "1992",
+      "china",
+      "11",
+    ],
+    [
+      "1990",
+      "india",
+      "11",
+    ],
+    [
+      "1990",
+      "usa",
+      "8",
+    ],
+    [
+      "1990",
+      "uk",
+      "5",
+    ],
+    [
+      "1990",
+      "china",
+      "12",
+    ],
+  ],
+}
+`;
+
+exports[`CSVParser > Auto Columns Table 2`] = `[]`;
+
+exports[`CSVParser > Basic 1`] = `
+{
+  "columns": [],
+  "name": "",
+  "rows": [],
+}
+`;
+
+exports[`CSVParser > Parse numbers correctly 1`] = `
+{
+  "columns": [
+    {
+      "selector": "key",
+      "text": "key",
+      "type": "string",
+    },
+    {
+      "selector": "value",
+      "text": "value",
+      "type": "number",
+    },
+  ],
+  "name": "",
+  "rows": [
+    [
+      "normal number",
+      123,
+    ],
+    [
+      "string number",
+      123,
+    ],
+    [
+      "number with decimal",
+      123.45,
+    ],
+    [
+      "number with comma",
+      123456.78,
+    ],
+  ],
+}
+`;
+
+exports[`CSVParser > Parse numbers correctly 2`] = `
+[
+  {
+    "datapoints": [
+      [
+        123,
+        1652832000000,
+      ],
+    ],
+    "name": "",
+    "target": "normal number",
+  },
+  {
+    "datapoints": [
+      [
+        123,
+        1652832000000,
+      ],
+    ],
+    "name": "",
+    "target": "string number",
+  },
+  {
+    "datapoints": [
+      [
+        123.45,
+        1652832000000,
+      ],
+    ],
+    "name": "",
+    "target": "number with decimal",
+  },
+  {
+    "datapoints": [
+      [
+        123456.78,
+        1652832000000,
+      ],
+    ],
+    "name": "",
+    "target": "number with comma",
+  },
+]
+`;
+
+exports[`CSVParser > With Columns 1`] = `
+{
+  "columns": [
+    {
+      "selector": "country",
+      "text": "Country",
+      "type": "string",
+    },
+    {
+      "selector": "population",
+      "text": "Population",
+      "type": "number",
+    },
+  ],
+  "name": "",
+  "rows": [
+    [
+      "india",
+      10,
+    ],
+    [
+      "usa",
+      7,
+    ],
+    [
+      "uk",
+      NaN,
+    ],
+    [
+      "china",
+      11,
+    ],
+  ],
+}
+`;
+
+exports[`CSVParser > With Columns 2`] = `
+[
+  {
+    "datapoints": [
+      [
+        10,
+        1652832000000,
+      ],
+    ],
+    "name": "",
+    "target": "india",
+  },
+  {
+    "datapoints": [
+      [
+        7,
+        1652832000000,
+      ],
+    ],
+    "name": "",
+    "target": "usa",
+  },
+  {
+    "datapoints": [
+      [
+        NaN,
+        1652832000000,
+      ],
+    ],
+    "name": "",
+    "target": "uk",
+  },
+  {
+    "datapoints": [
+      [
+        11,
+        1652832000000,
+      ],
+    ],
+    "name": "",
+    "target": "china",
+  },
+]
+`;
+
+exports[`CSVParser > With Timestamp YYYY And Aggregation 1`] = `
+{
+  "columns": [
+    {
+      "selector": "year",
+      "text": "Year",
+      "type": "timestamp",
+    },
+    {
+      "selector": "country",
+      "text": "Country",
+      "type": "string",
+    },
+    {
+      "selector": "population",
+      "text": "Population",
+      "type": "number",
+    },
+  ],
+  "name": "",
+  "rows": [
+    [
+      1990-01-01T00:00:00.000Z,
+      "india",
+      10,
+    ],
+    [
+      1990-01-01T00:00:00.000Z,
+      "usa",
+      7,
+    ],
+    [
+      1990-01-01T00:00:00.000Z,
+      "uk",
+      5,
+    ],
+    [
+      1990-01-01T00:00:00.000Z,
+      "china",
+      11,
+    ],
+    [
+      1990-01-01T00:00:00.000Z,
+      "india",
+      11,
+    ],
+    [
+      1990-01-01T00:00:00.000Z,
+      "usa",
+      8,
+    ],
+    [
+      1990-01-01T00:00:00.000Z,
+      "uk",
+      5,
+    ],
+    [
+      1990-01-01T00:00:00.000Z,
+      "china",
+      12,
+    ],
+  ],
+}
+`;
+
+exports[`CSVParser > With Timestamp YYYY And Aggregation 2`] = `
+[
+  {
+    "datapoints": [
+      [
+        10,
+        631152000000,
+      ],
+      [
+        11,
+        631152000000,
+      ],
+    ],
+    "name": "",
+    "target": "india",
+  },
+  {
+    "datapoints": [
+      [
+        7,
+        631152000000,
+      ],
+      [
+        8,
+        631152000000,
+      ],
+    ],
+    "name": "",
+    "target": "usa",
+  },
+  {
+    "datapoints": [
+      [
+        5,
+        631152000000,
+      ],
+      [
+        5,
+        631152000000,
+      ],
+    ],
+    "name": "",
+    "target": "uk",
+  },
+  {
+    "datapoints": [
+      [
+        11,
+        631152000000,
+      ],
+      [
+        12,
+        631152000000,
+      ],
+    ],
+    "name": "",
+    "target": "china",
+  },
+]
+`;
+
+exports[`geo map > table 1`] = `
+{
+  "columns": [
+    {
+      "selector": "lat",
+      "text": "lat",
+      "type": "number",
+    },
+    {
+      "selector": "long",
+      "text": "long",
+      "type": "number",
+    },
+    {
+      "selector": "desc",
+      "text": "desc",
+      "type": "string",
+    },
+    {
+      "selector": "branches",
+      "text": "branches",
+      "type": "number",
+    },
+  ],
+  "name": "A",
+  "rows": [
+    [
+      51.5072,
+      0.1276,
+      "London",
+      2,
+    ],
+    [
+      35.6897,
+      139.6922,
+      "Tokyo",
+      3,
+    ],
+    [
+      18.9667,
+      72.8333,
+      "Mumbai",
+      10,
+    ],
+  ],
+}
+`;

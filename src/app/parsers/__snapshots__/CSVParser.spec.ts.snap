@@ -1,0 +1,412 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CSVParser Auto Columns Table 1`] = `
+Object {
+  "columns": Array [
+    Object {
+      "selector": "year",
+      "text": "year",
+      "type": "string",
+    },
+    Object {
+      "selector": "country",
+      "text": "country",
+      "type": "string",
+    },
+    Object {
+      "selector": "population",
+      "text": "population",
+      "type": "string",
+    },
+  ],
+  "name": "",
+  "rows": Array [
+    Array [
+      "1990",
+      "india",
+      "10",
+    ],
+    Array [
+      "1990",
+      "usa",
+      "7",
+    ],
+    Array [
+      "1990",
+      "uk",
+      "5",
+    ],
+    Array [
+      "1992",
+      "china",
+      "11",
+    ],
+    Array [
+      "1990",
+      "india",
+      "11",
+    ],
+    Array [
+      "1990",
+      "usa",
+      "8",
+    ],
+    Array [
+      "1990",
+      "uk",
+      "5",
+    ],
+    Array [
+      "1990",
+      "china",
+      "12",
+    ],
+  ],
+}
+`;
+
+exports[`CSVParser Auto Columns Table 2`] = `Array []`;
+
+exports[`CSVParser Basic 1`] = `
+Object {
+  "columns": Array [],
+  "name": "",
+  "rows": Array [],
+}
+`;
+
+exports[`CSVParser Parse numbers correctly 1`] = `
+Object {
+  "columns": Array [
+    Object {
+      "selector": "key",
+      "text": "key",
+      "type": "string",
+    },
+    Object {
+      "selector": "value",
+      "text": "value",
+      "type": "number",
+    },
+  ],
+  "name": "",
+  "rows": Array [
+    Array [
+      "normal number",
+      123,
+    ],
+    Array [
+      "string number",
+      123,
+    ],
+    Array [
+      "number with decimal",
+      123.45,
+    ],
+    Array [
+      "number with comma",
+      123456.78,
+    ],
+  ],
+}
+`;
+
+exports[`CSVParser Parse numbers correctly 2`] = `
+Array [
+  Object {
+    "datapoints": Array [
+      Array [
+        123,
+        1652832000000,
+      ],
+    ],
+    "name": "",
+    "target": "normal number",
+  },
+  Object {
+    "datapoints": Array [
+      Array [
+        123,
+        1652832000000,
+      ],
+    ],
+    "name": "",
+    "target": "string number",
+  },
+  Object {
+    "datapoints": Array [
+      Array [
+        123.45,
+        1652832000000,
+      ],
+    ],
+    "name": "",
+    "target": "number with decimal",
+  },
+  Object {
+    "datapoints": Array [
+      Array [
+        123456.78,
+        1652832000000,
+      ],
+    ],
+    "name": "",
+    "target": "number with comma",
+  },
+]
+`;
+
+exports[`CSVParser With Columns 1`] = `
+Object {
+  "columns": Array [
+    Object {
+      "selector": "country",
+      "text": "Country",
+      "type": "string",
+    },
+    Object {
+      "selector": "population",
+      "text": "Population",
+      "type": "number",
+    },
+  ],
+  "name": "",
+  "rows": Array [
+    Array [
+      "india",
+      10,
+    ],
+    Array [
+      "usa",
+      7,
+    ],
+    Array [
+      "uk",
+      NaN,
+    ],
+    Array [
+      "china",
+      11,
+    ],
+  ],
+}
+`;
+
+exports[`CSVParser With Columns 2`] = `
+Array [
+  Object {
+    "datapoints": Array [
+      Array [
+        10,
+        1652832000000,
+      ],
+    ],
+    "name": "",
+    "target": "india",
+  },
+  Object {
+    "datapoints": Array [
+      Array [
+        7,
+        1652832000000,
+      ],
+    ],
+    "name": "",
+    "target": "usa",
+  },
+  Object {
+    "datapoints": Array [
+      Array [
+        NaN,
+        1652832000000,
+      ],
+    ],
+    "name": "",
+    "target": "uk",
+  },
+  Object {
+    "datapoints": Array [
+      Array [
+        11,
+        1652832000000,
+      ],
+    ],
+    "name": "",
+    "target": "china",
+  },
+]
+`;
+
+exports[`CSVParser With Timestamp YYYY And Aggregation 1`] = `
+Object {
+  "columns": Array [
+    Object {
+      "selector": "year",
+      "text": "Year",
+      "type": "timestamp",
+    },
+    Object {
+      "selector": "country",
+      "text": "Country",
+      "type": "string",
+    },
+    Object {
+      "selector": "population",
+      "text": "Population",
+      "type": "number",
+    },
+  ],
+  "name": "",
+  "rows": Array [
+    Array [
+      1990-01-01T00:00:00.000Z,
+      "india",
+      10,
+    ],
+    Array [
+      1990-01-01T00:00:00.000Z,
+      "usa",
+      7,
+    ],
+    Array [
+      1990-01-01T00:00:00.000Z,
+      "uk",
+      5,
+    ],
+    Array [
+      1990-01-01T00:00:00.000Z,
+      "china",
+      11,
+    ],
+    Array [
+      1990-01-01T00:00:00.000Z,
+      "india",
+      11,
+    ],
+    Array [
+      1990-01-01T00:00:00.000Z,
+      "usa",
+      8,
+    ],
+    Array [
+      1990-01-01T00:00:00.000Z,
+      "uk",
+      5,
+    ],
+    Array [
+      1990-01-01T00:00:00.000Z,
+      "china",
+      12,
+    ],
+  ],
+}
+`;
+
+exports[`CSVParser With Timestamp YYYY And Aggregation 2`] = `
+Array [
+  Object {
+    "datapoints": Array [
+      Array [
+        10,
+        631152000000,
+      ],
+      Array [
+        11,
+        631152000000,
+      ],
+    ],
+    "name": "",
+    "target": "india",
+  },
+  Object {
+    "datapoints": Array [
+      Array [
+        7,
+        631152000000,
+      ],
+      Array [
+        8,
+        631152000000,
+      ],
+    ],
+    "name": "",
+    "target": "usa",
+  },
+  Object {
+    "datapoints": Array [
+      Array [
+        5,
+        631152000000,
+      ],
+      Array [
+        5,
+        631152000000,
+      ],
+    ],
+    "name": "",
+    "target": "uk",
+  },
+  Object {
+    "datapoints": Array [
+      Array [
+        11,
+        631152000000,
+      ],
+      Array [
+        12,
+        631152000000,
+      ],
+    ],
+    "name": "",
+    "target": "china",
+  },
+]
+`;
+
+exports[`geo map table 1`] = `
+Object {
+  "columns": Array [
+    Object {
+      "selector": "lat",
+      "text": "lat",
+      "type": "number",
+    },
+    Object {
+      "selector": "long",
+      "text": "long",
+      "type": "number",
+    },
+    Object {
+      "selector": "desc",
+      "text": "desc",
+      "type": "string",
+    },
+    Object {
+      "selector": "branches",
+      "text": "branches",
+      "type": "number",
+    },
+  ],
+  "name": "A",
+  "rows": Array [
+    Array [
+      51.5072,
+      0.1276,
+      "London",
+      2,
+    ],
+    Array [
+      35.6897,
+      139.6922,
+      "Tokyo",
+      3,
+    ],
+    Array [
+      18.9667,
+      72.8333,
+      "Mumbai",
+      10,
+    ],
+  ],
+}
+`;

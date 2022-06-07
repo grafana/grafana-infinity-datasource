@@ -1,0 +1,120 @@
+// Vitest Snapshot v1
+
+exports[`JSON - JSONPath > With Columns 1`] = `
+{
+  "columns": [
+    {
+      "selector": "name",
+      "text": "Name",
+      "type": "string",
+    },
+  ],
+  "name": "",
+  "rows": [
+    [
+      "mary",
+    ],
+    [
+      "joseph",
+    ],
+    [
+      "john doe",
+    ],
+  ],
+}
+`;
+
+exports[`JSON - JSONPath > With multi Columns 1`] = `
+{
+  "columns": [
+    {
+      "selector": "name",
+      "text": "Name",
+      "type": "string",
+    },
+    {
+      "selector": "age",
+      "text": "Age",
+      "type": "number",
+    },
+  ],
+  "name": "",
+  "rows": [
+    [
+      "mary",
+      22,
+    ],
+    [
+      "joseph",
+      41,
+    ],
+    [
+      "john doe",
+      21,
+    ],
+  ],
+}
+`;
+
+exports[`JSON - JSONPath > With multi Columns 2`] = `
+{
+  "columns": [
+    {
+      "selector": "name",
+      "text": "Name",
+      "type": "string",
+    },
+    {
+      "selector": "age",
+      "text": "Age",
+      "type": "number",
+    },
+  ],
+  "name": "",
+  "rows": [
+    [
+      "mary",
+      22,
+    ],
+    [
+      "joseph",
+      41,
+    ],
+  ],
+}
+`;
+
+exports[`JSON - JSONPath > With multi Columns 3`] = `
+{
+  "columns": [
+    {
+      "selector": "name",
+      "text": "Name",
+      "type": "string",
+    },
+    {
+      "selector": "age",
+      "text": "Age",
+      "type": "number",
+    },
+    {
+      "selector": "gender",
+      "text": "Gender",
+      "type": "string",
+    },
+  ],
+  "name": "",
+  "rows": [
+    [
+      "mary",
+      22,
+      "female",
+    ],
+    [
+      "joseph",
+      41,
+      "male",
+    ],
+  ],
+}
+`;

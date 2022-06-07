@@ -11,8 +11,7 @@ const XMLResults1 = new XMLParser('', {
 });
 describe('XMLParser', () => {
   it('Basic', () => {
-    expect(XMLResults1.toTable().rows.length).toBe(0);
-    expect(XMLResults1.toTable().columns.length).toBe(0);
+    expect(XMLResults1.toTable()).toMatchSnapshot();
   });
 });
 
@@ -52,11 +51,7 @@ const XMLResults2 = new XMLParser(
 );
 describe('XMLParser', () => {
   it('Basic XML', () => {
-    expect(XMLResults2.toTable().rows.length).toBe(3);
-    expect(XMLResults2.toTable().rows[0].length).toBe(2);
-    expect(XMLResults2.toTable().rows[1][0]?.toString()).toBe('User B');
-    expect(XMLResults2.toTable().rows[2][0]?.toString()).toBe('User C1,User C2');
-    expect(XMLResults2.toTable().columns.length).toBe(2);
+    expect(XMLResults2.toTable()).toMatchSnapshot();
   });
 });
 
@@ -84,10 +79,7 @@ const XMLResults3 = new XMLParser(
 );
 describe('XMLParser', () => {
   it('Basic XML', () => {
-    expect(XMLResults3.toTable().rows.length).toBe(3);
-    expect(XMLResults3.toTable().rows[0].length).toBe(1);
-    expect(XMLResults3.toTable().rows[1][0]?.toString()).toBe('User B');
-    expect(XMLResults3.toTable().columns.length).toBe(1);
+    expect(XMLResults3.toTable()).toMatchSnapshot();
   });
 });
 
@@ -124,11 +116,6 @@ const XMLResults4 = new XMLParser(
 );
 describe('XMLParser', () => {
   it('Basic XML', () => {
-    expect(XMLResults4.toTable().rows.length).toBe(2);
-    expect(XMLResults4.toTable().rows[0].length).toBe(3);
-    expect(XMLResults4.toTable().rows[1][0]).toStrictEqual(2552517.5573549846);
-    expect(XMLResults4.toTable().rows[1][1]).toStrictEqual('world');
-    expect(XMLResults4.toTable().rows[1][2]).toStrictEqual(new Date('2021-Nov-11'));
-    expect(XMLResults4.toTable().columns.length).toBe(3);
+    expect(XMLResults4.toTable()).toMatchSnapshot();
   });
 });
