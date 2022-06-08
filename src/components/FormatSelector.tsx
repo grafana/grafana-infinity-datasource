@@ -1,8 +1,8 @@
 import React from 'react';
 import { Select } from './extended/ui';
-import { InfinityQuery, INFINITY_RESULT_FORMATS, InfinityQueryFormat } from '../types';
+import { isDataQuery } from '../app/utils';
 import { Components } from '../selectors';
-import { isDataQuery } from 'app/utils';
+import { InfinityQuery, INFINITY_RESULT_FORMATS, InfinityQueryFormat } from '../types';
 interface FormatSelectorProps {
   query: InfinityQuery;
   onChange: (e: InfinityQuery) => void;

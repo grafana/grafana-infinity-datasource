@@ -1,34 +1,34 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`metricFindQuery - Collection Collection 1`] = `
-Array [
-  Object {
+exports[`metricFindQuery - Collection > Collection 1`] = `
+[
+  {
     "text": "A",
     "value": "B",
   },
-  Object {
+  {
     "text": "C",
     "value": "D",
   },
 ]
 `;
 
-exports[`metricFindQuery - CollectionLookup CollectionLookup 1`] = `
-Array [
-  Object {
+exports[`metricFindQuery - CollectionLookup > CollectionLookup 1`] = `
+[
+  {
     "text": "nonprod-server",
     "value": "nonprod-server",
   },
 ]
 `;
 
-exports[`metricFindQuery - CollectionLookup CollectionLookup 2`] = `
-Array [
-  Object {
+exports[`metricFindQuery - CollectionLookup > CollectionLookup 2`] = `
+[
+  {
     "text": "c",
     "value": "c",
   },
 ]
 `;
 
-exports[`metricFindQuery - CollectionLookup CollectionLookup 3`] = `Array []`;
+exports[`metricFindQuery - CollectionLookup > CollectionLookup 3`] = `[]`;

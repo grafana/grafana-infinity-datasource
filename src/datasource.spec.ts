@@ -1,14 +1,17 @@
+import { vi } from 'vitest';
 import { DataSourceInstanceSettings, PluginType } from '@grafana/data';
 import { Datasource } from './datasource';
 
-jest.mock('@grafana/runtime', () => ({
-  ...(jest.requireActual('@grafana/runtime') as unknown as object),
-  getTemplateSrv: () => {
-    return {
-      replace: (s: string) => s,
-    };
-  },
-}));
+vi.mock('@grafana/runtime', () => {
+  return {
+    ...require('@grafana/runtime'),
+    getTemplateSrv: () => {
+      return {
+        replace: (s: string) => s,
+      };
+    },
+  };
+});
 
 const DummyDatasource: DataSourceInstanceSettings = {
   id: 1,

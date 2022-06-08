@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import React from 'react';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -8,8 +9,8 @@ describe('components', () => {
   describe('CSVOptionsEditor', () => {
     it('should render nothing if type is not csv/tsx', () => {
       const query: InfinityQuery = { type: 'xml' } as InfinityQuery;
-      const onChange = jest.fn();
-      const onRunQuery = jest.fn();
+      const onChange = vi.fn();
+      const onRunQuery = vi.fn();
       const result = render(<CSVOptionsEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />);
       expect(result.container.firstChild).toBeNull();
       expect(result.queryByText('CSV options')).not.toBeInTheDocument();
@@ -17,8 +18,8 @@ describe('components', () => {
     });
     it('should render without error', () => {
       const query: InfinityQuery = { type: 'csv' } as InfinityQuery;
-      const onChange = jest.fn();
-      const onRunQuery = jest.fn();
+      const onChange = vi.fn();
+      const onRunQuery = vi.fn();
       const result = render(<CSVOptionsEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />);
       expect(result.container.firstChild).not.toBeNull();
       expect(result.getByText('CSV options')).toBeInTheDocument();
@@ -26,8 +27,8 @@ describe('components', () => {
     });
     it('should trigger events with correct parameters', () => {
       const query: InfinityQuery = { type: 'csv' } as InfinityQuery;
-      const onChange = jest.fn();
-      const onRunQuery = jest.fn();
+      const onChange = vi.fn();
+      const onRunQuery = vi.fn();
       const result = render(<CSVOptionsEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />);
       expect(result.container.firstChild).not.toBeNull();
       expect(result.getByText('CSV options')).toBeInTheDocument();

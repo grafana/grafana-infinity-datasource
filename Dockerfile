@@ -22,7 +22,7 @@ COPY LICENSE ./
 COPY package.json ./
 COPY yarn.lock ./
 COPY tsconfig.json ./
-COPY jest.config.js ./
+COPY vitest.config.ts ./
 COPY .prettierrc.js ./
 COPY cspell.config.json ./
 COPY src/ ./src/

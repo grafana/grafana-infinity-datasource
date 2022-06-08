@@ -22,6 +22,10 @@ Once you clone the repo locally in the grafana's plugin folder. Do the following
 - `cd website & yarn dev` - To build and see the changes of docs website
 - `cd website & yarn build` - To build the docs website
 
+## Testing
+
+Unit tests are based on [vitest](https://vitest.dev/) framework. In order to run unit tests, execute `yarn test` or `yarn vitest --run` command. To run tests on watch mode, execute `yarn vitest`.
+
 ## Heroku deploy
 
 In most cases, heroku instance will be deployed automatically. To manually deploy the heroku instance, perform the following commands.

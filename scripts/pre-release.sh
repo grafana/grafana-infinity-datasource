@@ -4,7 +4,7 @@ echo "Publishing pre release - "$PRE_RELEASE_TAG.$1;
 yarn install --frozen-lockfile;
 yarn audit-ci;
 yarn spellcheck;
-yarn ci-build;
+yarn build;
 go test -v ./...
 mage -v
 yarn sign

@@ -1,38 +1,38 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`XMLParser Basic 1`] = `
-Object {
-  "columns": Array [],
+exports[`XMLParser > Basic 1`] = `
+{
+  "columns": [],
   "name": "",
-  "rows": Array [],
+  "rows": [],
 }
 `;
 
-exports[`XMLParser Basic XML 1`] = `
-Object {
-  "columns": Array [
-    Object {
+exports[`XMLParser > Basic XML 1`] = `
+{
+  "columns": [
+    {
       "selector": "name",
       "text": "Name",
       "type": "string",
     },
-    Object {
+    {
       "selector": "$.age",
       "text": "Name",
       "type": "string",
     },
   ],
   "name": "",
-  "rows": Array [
-    Array [
+  "rows": [
+    [
       "User A",
       "20",
     ],
-    Array [
+    [
       "User B",
       "21",
     ],
-    Array [
+    [
       "User C1,User C2",
       "18",
     ],
@@ -40,57 +40,57 @@ Object {
 }
 `;
 
-exports[`XMLParser Basic XML 2`] = `
-Object {
-  "columns": Array [
-    Object {
+exports[`XMLParser > Basic XML 2`] = `
+{
+  "columns": [
+    {
       "selector": "_",
       "text": "Name",
       "type": "string",
     },
   ],
   "name": "",
-  "rows": Array [
-    Array [
+  "rows": [
+    [
       "User A",
     ],
-    Array [
+    [
       "User B",
     ],
-    Array [
+    [
       "User C",
     ],
   ],
 }
 `;
 
-exports[`XMLParser Basic XML 3`] = `
-Object {
-  "columns": Array [
-    Object {
+exports[`XMLParser > Basic XML 3`] = `
+{
+  "columns": [
+    {
       "selector": "e1",
       "text": "value",
       "type": "number",
     },
-    Object {
+    {
       "selector": "e2",
       "text": "foo",
       "type": "string",
     },
-    Object {
+    {
       "selector": "e3",
       "text": "date",
       "type": "timestamp",
     },
   ],
   "name": "",
-  "rows": Array [
-    Array [
+  "rows": [
+    [
       2553517.5573549946,
       "hello",
       2021-11-12T00:00:00.000Z,
     ],
-    Array [
+    [
       2552517.557354985,
       "world",
       2021-11-11T00:00:00.000Z,

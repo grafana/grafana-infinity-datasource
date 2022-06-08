@@ -15,7 +15,7 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 - **As-Is**: Support for URL when using As-Is format with JSON
 - **Chore**: Test coverage improved
 - **Chore**: prometheus `metrics` resource endpoint added
-- **Chore**: Added `vitest` for dev improvements
+- **Chore**: Replaced `jest` based unit testing with `vitest`
 
 ## [ 0.8.8 ]
 

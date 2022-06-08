@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import React from 'react';
 import { FormatSelector } from './FormatSelector';
 import { render, within } from '@testing-library/react';
@@ -9,8 +10,8 @@ const { Title: DropdownPlaceholderTitle } = Components.QueryEditor.Format.Dropdo
 
 describe('FormatSelector', () => {
   it('renders', () => {
-    const onChange = jest.fn();
-    const onRunQuery = jest.fn();
+    const onChange = vi.fn();
+    const onRunQuery = vi.fn();
     const query: InfinityQuery = { ...DefaultInfinityQuery };
     const wrapper = render(<FormatSelector query={query} onChange={onChange} onRunQuery={onRunQuery} />);
     expect(wrapper).not.toBeNull();
@@ -19,8 +20,8 @@ describe('FormatSelector', () => {
     expect(within(wrapper.getByTitle(DropdownPlaceholderTitle)).getByText('Table')).toBeInTheDocument();
   });
   it('renders timeseries format', () => {
-    const onChange = jest.fn();
-    const onRunQuery = jest.fn();
+    const onChange = vi.fn();
+    const onRunQuery = vi.fn();
     const query: InfinityQuery = { type: 'json', format: 'timeseries', source: 'inline', data: '{}', json_options: {}, root_selector: '', columns: [], filters: [], refId: '' };
     const wrapper = render(<FormatSelector query={query} onChange={onChange} onRunQuery={onRunQuery} />);
     expect(wrapper).not.toBeNull();
