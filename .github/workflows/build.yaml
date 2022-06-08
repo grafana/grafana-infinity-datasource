@@ -40,7 +40,7 @@ jobs:
       - name: NodeJS Setup
         uses: actions/setup-node@v1
         with:
-          node-version: 16.x
+          node-version: 16.14.0
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
@@ -75,7 +75,7 @@ jobs:
           yarn spellcheck;
       - name: Build Frontend
         run: |
-          yarn ci-build;
+          NODE_OPTIONS=--max_old_space_size=8192 yarn ci-build;
       - name: Start the docker container for e2e
         run: |
           docker-compose pull

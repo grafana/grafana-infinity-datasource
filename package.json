@@ -15,7 +15,7 @@
     "e2e:update": "yarn lint && grafana-e2e run --update-screenshots",
     "build": "yarn lint && grafana-toolkit plugin:build",
     "ci-build": "yarn lint && grafana-toolkit plugin:ci-build",
-    "audit-ci": "audit-ci --critical",
+    "audit-ci": "audit-ci",
     "sign": "grafana-toolkit plugin:sign"
   },
   "repository": {
@@ -91,6 +91,11 @@
   },
   "resolutions": {
     "rxjs": "6.6.3",
-    "minimist": "1.2.6"
+    "minimist": "1.2.6",
+    "underscore": "1.12.1",
+    "glob-parent": "5.1.2",
+    "follow-redirects": "1.14.8",
+    "prismjs": "1.27.0",
+    "log4js": "6.4.0"
   }
 }

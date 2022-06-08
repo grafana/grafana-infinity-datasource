@@ -10,11 +10,11 @@
 <p align="center">Visualize data from JSON, CSV, XML, GraphQL and HTML endpoints in Grafana.</p>
 
 <p align="center">
-  <a href="#🎯-key-features">Key Features</a> •
-  <a href="#⚙️-download">Download</a> •
-  <a href="#⚡️-useful-links">Useful links</a> •
-  <a href="#⭐️-project-assistance">Project assistance</a> •
-  <a href="#⚠️-license">License</a>
+  <a href="#-key-features">Key Features</a> •
+  <a href="#%EF%B8%8F-download">Download</a> •
+  <a href="#%EF%B8%8F-useful-links">Useful links</a> •
+  <a href="#%EF%B8%8F-project-assistance">Project assistance</a> •
+  <a href="#%EF%B8%8F-license">License</a>
 </p>
 
 <p align="center">
