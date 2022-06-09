@@ -143,6 +143,15 @@ func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinityS
 	settings.CustomHeaders = GetSecrets(config, "httpHeaderName", "httpHeaderValue")
 	settings.SecureQueryFields = GetSecrets(config, "secureQueryName", "secureQueryValue")
 	settings.OAuth2Settings.EndpointParams = GetSecrets(config, "oauth2EndPointParamsName", "oauth2EndPointParamsValue")
+	if settings.AuthenticationMethod == "" {
+		settings.AuthenticationMethod = AuthenticationMethodNone
+		if settings.BasicAuthEnabled {
+			settings.AuthenticationMethod = AuthenticationMethodBasic
+		}
+		if settings.ForwardOauthIdentity {
+			settings.AuthenticationMethod = AuthenticationMethodForwardOauth
+		}
+	}
 	return
 }
 

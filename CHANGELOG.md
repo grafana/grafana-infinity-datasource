@@ -4,6 +4,8 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 
 ## [ 1.0.0 ] - unreleased
 
+### **New Features & Bug Fixes**
+
 - **New Query Type**: JSON Backend ( _experimental_ )
 - **New Auth Type**: Digest auth support
 - **New Macro**: Support for macros (`$__combineValues()`,`$__customInterval()`) added in URL, Body, Inline data, UQL queries
@@ -14,8 +16,28 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 - **UQL**: new methods `percentage`,`split`,`replace_string`,`reverse`,`pack`,`array_to_map` and `array_from_entries`
 - **As-Is**: Support for URL when using As-Is format with JSON
 - **Chore**: Test coverage improved
-- **Chore**: prometheus `metrics` resource endpoint added
+- **Chore**: prometheus `metrics` resource endpoint added ( _experimental_ )
 - **Chore**: Added `vitest` for dev improvements
+
+### **BREAKING CHANGES**
+
+#### **Authentication & Allowed host URLs**
+
+If you are using any APIs/URLs that require authentication, You will now need to specify the list of allowed Host URLs in the config. This change is introduced to allow additional security to your endpoints.
+
+To migrate your existing datasources, add allowed URLs/allowed Hosts in the datasource configuration section. Example: If you are using `https://foo.com/some/path?id=123` which require authentication, you will need to add `https://foo.com` in the allowed hosts list.
+
+If your datasource is provisioned, then you have to add the following to your provisioning yaml file.
+
+```yaml
+jsonData:
+  allowedHosts:
+    - https://foo.com
+```
+
+If the allowed hosts are not configured correctly, you will get `Datasource is missing allowed hosts/URLs. Configure it in the datasource settings page.` error when performing the query.
+
+Learn more about this breaking change in the [github discussion](https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/322)
 
 ## [ 0.8.8 ]
 

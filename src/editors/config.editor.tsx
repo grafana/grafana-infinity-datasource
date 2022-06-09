@@ -12,9 +12,9 @@ import { InfinityOptions } from '../types';
 
 export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
   const { options, onOptionsChange } = props;
-  const [urlOpen, setURLOpen] = useState(false);
+  const [miscOpen, setMiscOpen] = useState(false);
   const [tlsOpen, setTlsOpen] = useState(false);
-  const [authOpen, setAuthOpen] = useState(false);
+  const [authOpen, setAuthOpen] = useState(true);
   const [headersOpen, setHeadersOpen] = useState(false);
   const [queriesOpen, setQueriesOpen] = useState(false);
   const [globalsOpen, setGlobalsOpen] = useState(false);
@@ -27,11 +27,6 @@ export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<I
       <Collapse label="Authentication" isOpen={authOpen} collapsible={true} onToggle={(e) => setAuthOpen(!authOpen)}>
         <div style={{ padding: '0px 10px' }}>
           <AuthEditor options={options} onOptionsChange={onOptionsChange} />
-        </div>
-      </Collapse>
-      <Collapse label="URL" isOpen={urlOpen} collapsible={true} onToggle={(e) => setURLOpen(!urlOpen)}>
-        <div style={{ padding: '0px 10px' }}>
-          <URLEditor options={options} onOptionsChange={onOptionsChange} />
         </div>
       </Collapse>
       <Collapse label="Headers" isOpen={headersOpen} collapsible={true} onToggle={(e) => setHeadersOpen(!headersOpen)}>
@@ -68,6 +63,11 @@ export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<I
       <Collapse label="Global Queries" isOpen={globalsOpen} collapsible={true} onToggle={(e) => setGlobalsOpen(!globalsOpen)}>
         <div style={{ padding: '0px 10px' }}>
           <GlobalQueryEditor options={options} onOptionsChange={onOptionsChange} />
+        </div>
+      </Collapse>
+      <Collapse label="Misc" isOpen={miscOpen} collapsible={true} onToggle={(e) => setMiscOpen(!miscOpen)}>
+        <div style={{ padding: '0px 10px' }}>
+          <URLEditor options={options} onOptionsChange={onOptionsChange} />
         </div>
       </Collapse>
       <Collapse label="More" isOpen={true} collapsible={true}>

@@ -18,6 +18,7 @@ func TestLoadSettings(t *testing.T) {
 		{
 			name: "empty settings shouldn't throw error",
 			wantSettings: infinity.InfinitySettings{
+				AuthenticationMethod: infinity.AuthenticationMethodNone,
 				OAuth2Settings: infinity.OAuth2Settings{
 					EndpointParams: map[string]string{},
 				},
@@ -49,11 +50,13 @@ func TestLoadSettings(t *testing.T) {
 				},
 			},
 			wantSettings: infinity.InfinitySettings{
-				URL:              "https://foo.com",
-				UserName:         "user",
-				Password:         "password",
-				TimeoutInSeconds: 60,
-				ApiKeyType:       "header",
+				URL:                  "https://foo.com",
+				UserName:             "user",
+				Password:             "password",
+				TimeoutInSeconds:     60,
+				ApiKeyType:           "header",
+				BasicAuthEnabled:     false,
+				AuthenticationMethod: infinity.AuthenticationMethodNone,
 				OAuth2Settings: infinity.OAuth2Settings{
 					EndpointParams: map[string]string{},
 				},
@@ -68,8 +71,9 @@ func TestLoadSettings(t *testing.T) {
 		{
 			name: "custom timeout settings should parse correctly",
 			config: backend.DataSourceInstanceSettings{
-				URL:           "https://foo.com",
-				BasicAuthUser: "user",
+				URL:              "https://foo.com",
+				BasicAuthUser:    "user",
+				BasicAuthEnabled: true,
 				JSONData: []byte(`{ 
 					"datasource_mode"  : "advanced",
 					"secureQueryName1" : "foo",
@@ -83,11 +87,13 @@ func TestLoadSettings(t *testing.T) {
 				},
 			},
 			wantSettings: infinity.InfinitySettings{
-				URL:              "https://foo.com",
-				UserName:         "user",
-				Password:         "password",
-				TimeoutInSeconds: 30,
-				ApiKeyType:       "header",
+				URL:                  "https://foo.com",
+				UserName:             "user",
+				Password:             "password",
+				TimeoutInSeconds:     30,
+				ApiKeyType:           "header",
+				BasicAuthEnabled:     true,
+				AuthenticationMethod: infinity.AuthenticationMethodBasic,
 				OAuth2Settings: infinity.OAuth2Settings{
 					EndpointParams: map[string]string{},
 				},

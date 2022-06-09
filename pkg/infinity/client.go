@@ -48,6 +48,15 @@ func GetTLSConfigFromSettings(settings InfinitySettings) (*tls.Config, error) {
 }
 
 func NewClient(settings InfinitySettings) (client *Client, err error) {
+	if settings.AuthenticationMethod == "" {
+		settings.AuthenticationMethod = AuthenticationMethodNone
+		if settings.BasicAuthEnabled {
+			settings.AuthenticationMethod = AuthenticationMethodBasic
+		}
+		if settings.ForwardOauthIdentity {
+			settings.AuthenticationMethod = AuthenticationMethodForwardOauth
+		}
+	}
 	tlsConfig, err := GetTLSConfigFromSettings(settings)
 	if err != nil {
 		return nil, err

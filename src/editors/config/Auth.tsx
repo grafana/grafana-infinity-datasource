@@ -2,6 +2,7 @@ import React from 'react';
 import { DataSourcePluginOptionsEditorProps, onUpdateDatasourceSecureJsonDataOption, SelectableValue } from '@grafana/data';
 import { InlineFormLabel, RadioButtonGroup, LegacyForms } from '@grafana/ui';
 import { OAuthInputsEditor } from './OAuthInput';
+import { AllowedHostsEditor } from './AllowedHosts';
 import { InfinityOptions, InfinitySecureOptions, AuthType, APIKeyType } from '../../types';
 
 const authTypes: Array<SelectableValue<AuthType>> = [
@@ -144,6 +145,7 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
         </>
       )}
       {authType === 'oauth2' && <OAuthInputsEditor {...props} />}
+      {authType !== 'none' && <AllowedHostsEditor options={options} onOptionsChange={onOptionsChange} />}
     </>
   );
 };

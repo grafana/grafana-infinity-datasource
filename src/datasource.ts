@@ -84,6 +84,14 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
       }
     });
   }
+  testDatasource() {
+    if (this.instanceSettings.basicAuth || this.instanceSettings.jsonData?.oauthPassThru || (this.instanceSettings.jsonData?.auth_method && this.instanceSettings.jsonData?.auth_method !== 'none')) {
+      if (!this.instanceSettings?.jsonData?.allowedHosts || (this.instanceSettings?.jsonData?.allowedHosts && this.instanceSettings?.jsonData?.allowedHosts.length < 1)) {
+        return Promise.resolve({ status: 'error', message: 'Configure allowed hosts in the authentication section' });
+      }
+    }
+    return super.testDatasource();
+  }
   private resolveData = (t: InfinityQuery, range: TimeRange, scopedVars: ScopedVars, data: string): Promise<any> => {
     return new Promise((resolve, reject) => {
       switch (t.type) {

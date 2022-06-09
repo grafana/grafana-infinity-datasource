@@ -19,6 +19,21 @@ import (
 )
 
 func TestAuthentication(t *testing.T) {
+	t.Run("should throw error when allowed hosts not configured", func(t *testing.T) {
+		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			fmt.Fprintf(w, `{ "message" : "OK" }`)
+		}))
+		defer server.Close()
+		client, err := infinity.NewClient(infinity.InfinitySettings{AuthenticationMethod: infinity.AuthenticationMethodApiKey})
+		require.Nil(t, err)
+		require.NotNil(t, client)
+		res := main.QueryData(context.Background(), backend.DataQuery{
+			JSON: []byte(fmt.Sprintf(`{ "source" : "url" }`)),
+		}, *client, map[string]string{})
+		require.NotNil(t, res)
+		require.NotNil(t, res.Error)
+		assert.Equal(t, "Datasource is missing allowed hosts/URLs. Configure it in the datasource settings page.", res.Error.Error())
+	})
 	t.Run("basic auth", func(t *testing.T) {
 		t.Run("should set basic auth headers when set the username and password", func(t *testing.T) {
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -31,6 +46,7 @@ func TestAuthentication(t *testing.T) {
 			client, err := infinity.NewClient(infinity.InfinitySettings{
 				URL:                  server.URL,
 				AuthenticationMethod: infinity.AuthenticationMethodBasic,
+				AllowedHosts:         []string{server.URL},
 				BasicAuthEnabled:     true,
 				UserName:             "infinityUser",
 				Password:             "myPassword",
@@ -64,6 +80,7 @@ func TestAuthentication(t *testing.T) {
 			defer server.Close()
 			client, err := infinity.NewClient(infinity.InfinitySettings{
 				URL:                  server.URL,
+				AllowedHosts:         []string{server.URL},
 				AuthenticationMethod: infinity.AuthenticationMethodBasic,
 				BasicAuthEnabled:     true,
 				UserName:             "infinityUser",
@@ -96,11 +113,12 @@ func TestAuthentication(t *testing.T) {
 			defer server.Close()
 			client, err := infinity.NewClient(infinity.InfinitySettings{
 				URL:                  server.URL,
+				AllowedHosts:         []string{server.URL},
 				ForwardOauthIdentity: true,
 			})
 			require.Nil(t, err)
 			res := main.QueryData(context.Background(), backend.DataQuery{
-				JSON: []byte(fmt.Sprintf(`{ 
+				JSON: []byte(fmt.Sprintf(`{
 					"type": "json",
 					"url":  "%s",
 					"source": "url"
@@ -119,11 +137,12 @@ func TestAuthentication(t *testing.T) {
 			defer server.Close()
 			client, err := infinity.NewClient(infinity.InfinitySettings{
 				URL:                  server.URL,
+				AllowedHosts:         []string{server.URL},
 				ForwardOauthIdentity: false,
 			})
 			require.Nil(t, err)
 			res := main.QueryData(context.Background(), backend.DataQuery{
-				JSON: []byte(fmt.Sprintf(`{ 
+				JSON: []byte(fmt.Sprintf(`{
 					"type": "json",
 					"url":  "%s",
 					"source": "url"
@@ -151,6 +170,7 @@ func TestAuthentication(t *testing.T) {
 			defer server.Close()
 			client, err := infinity.NewClient(infinity.InfinitySettings{
 				URL:                  server.URL,
+				AllowedHosts:         []string{server.URL},
 				AuthenticationMethod: infinity.AuthenticationMethodOAuth,
 				OAuth2Settings: infinity.OAuth2Settings{
 					OAuth2Type:   infinity.AuthOAuthTypeClientCredentials,
@@ -162,7 +182,7 @@ func TestAuthentication(t *testing.T) {
 			})
 			require.Nil(t, err)
 			res := main.QueryData(context.Background(), backend.DataQuery{
-				JSON: []byte(fmt.Sprintf(`{ 
+				JSON: []byte(fmt.Sprintf(`{
 					"type": "json",
 					"source": "url",
 					"url":  "%s/something-else"
@@ -190,6 +210,7 @@ func TestAuthentication(t *testing.T) {
 			defer server.Close()
 			client, err := infinity.NewClient(infinity.InfinitySettings{
 				URL:                  server.URL,
+				AllowedHosts:         []string{server.URL},
 				AuthenticationMethod: infinity.AuthenticationMethodOAuth,
 				OAuth2Settings: infinity.OAuth2Settings{
 					OAuth2Type:   infinity.AuthOAuthTypeClientCredentials,
@@ -201,7 +222,7 @@ func TestAuthentication(t *testing.T) {
 			})
 			require.Nil(t, err)
 			res := main.QueryData(context.Background(), backend.DataQuery{
-				JSON: []byte(fmt.Sprintf(`{ 
+				JSON: []byte(fmt.Sprintf(`{
 					"type": "json",
 					"source": "url",
 					"url":  "%s/something-else"
@@ -223,7 +244,7 @@ func TestAuthentication(t *testing.T) {
 				assert.Equal(t, "", r.Header.Get("X-ID-Token"))
 				fmt.Fprintf(w, `{ "message" : "OK" }`)
 			}))
-			server.TLS = getServerCertifcate(server.URL)
+			server.TLS = getServerCertificate(server.URL)
 			assert.NotNil(t, server.TLS)
 			server.StartTLS()
 			defer server.Close()
@@ -235,7 +256,7 @@ func TestAuthentication(t *testing.T) {
 			})
 			require.Nil(t, err)
 			res := main.QueryData(context.Background(), backend.DataQuery{
-				JSON: []byte(fmt.Sprintf(`{ 
+				JSON: []byte(fmt.Sprintf(`{
 					"type": "json",
 					"url":  "%s",
 					"source": "url"
@@ -254,7 +275,7 @@ func TestAuthentication(t *testing.T) {
 				assert.Equal(t, "", r.Header.Get("X-ID-Token"))
 				fmt.Fprintf(w, `{ "message" : "OK" }`)
 			}))
-			server.TLS = getServerCertifcate(server.URL)
+			server.TLS = getServerCertificate(server.URL)
 			assert.NotNil(t, server.TLS)
 			server.StartTLS()
 			defer server.Close()
@@ -265,7 +286,7 @@ func TestAuthentication(t *testing.T) {
 			})
 			require.Nil(t, err)
 			res := main.QueryData(context.Background(), backend.DataQuery{
-				JSON: []byte(fmt.Sprintf(`{ 
+				JSON: []byte(fmt.Sprintf(`{
 					"type": "json",
 					"url":  "%s",
 					"source": "url"
@@ -318,7 +339,7 @@ func TestResponseFormats(t *testing.T) {
 			client, err := infinity.NewClient(infinity.InfinitySettings{URL: server.URL})
 			require.Nil(t, err)
 			res := main.QueryData(context.Background(), backend.DataQuery{
-				JSON: []byte(fmt.Sprintf(`{ 
+				JSON: []byte(fmt.Sprintf(`{
 					"type": "graphql",
 					"url":  "%s",
 					"source": "url"
@@ -344,7 +365,7 @@ func TestResponseFormats(t *testing.T) {
 			client, err := infinity.NewClient(infinity.InfinitySettings{URL: server.URL})
 			require.Nil(t, err)
 			res := main.QueryData(context.Background(), backend.DataQuery{
-				JSON: []byte(fmt.Sprintf(`{ 
+				JSON: []byte(fmt.Sprintf(`{
 					"type": "uql",
 					"url":  "%s",
 					"source": "url"
@@ -370,7 +391,7 @@ func TestResponseFormats(t *testing.T) {
 			client, err := infinity.NewClient(infinity.InfinitySettings{URL: server.URL})
 			require.Nil(t, err)
 			res := main.QueryData(context.Background(), backend.DataQuery{
-				JSON: []byte(fmt.Sprintf(`{ 
+				JSON: []byte(fmt.Sprintf(`{
 					"type": "xml",
 					"url":  "%s",
 					"source": "url"
@@ -396,7 +417,7 @@ func TestResponseFormats(t *testing.T) {
 			client, err := infinity.NewClient(infinity.InfinitySettings{URL: server.URL})
 			require.Nil(t, err)
 			res := main.QueryData(context.Background(), backend.DataQuery{
-				JSON: []byte(fmt.Sprintf(`{ 
+				JSON: []byte(fmt.Sprintf(`{
 					"type": "uql",
 					"url":  "%s",
 					"source": "url"
@@ -422,7 +443,7 @@ func TestResponseFormats(t *testing.T) {
 			client, err := infinity.NewClient(infinity.InfinitySettings{URL: server.URL})
 			require.Nil(t, err)
 			res := main.QueryData(context.Background(), backend.DataQuery{
-				JSON: []byte(fmt.Sprintf(`{ 
+				JSON: []byte(fmt.Sprintf(`{
 					"type": "groq",
 					"url":  "%s",
 					"source": "url"
@@ -439,7 +460,7 @@ func TestResponseFormats(t *testing.T) {
 	})
 }
 
-func getServerCertifcate(serverName string) *tls.Config {
+func getServerCertificate(serverName string) *tls.Config {
 	caPool := x509.NewCertPool()
 	if ok := caPool.AppendCertsFromPEM([]byte(mockPEMClientCACet)); !ok {
 		return nil

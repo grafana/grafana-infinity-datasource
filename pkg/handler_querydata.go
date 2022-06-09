@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"strings"
 	"time"
@@ -55,7 +56,10 @@ func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient in
 		backend.Logger.Error("error un-marshaling the query", "error", response.Error.Error())
 		return response
 	}
-
+	if infClient.Settings.AuthenticationMethod != infinity.AuthenticationMethodNone && infClient.Settings.AuthenticationMethod != "" && len(infClient.Settings.AllowedHosts) < 1 && query.Source == "url" {
+		response.Error = errors.New("Datasource is missing allowed hosts/URLs. Configure it in the datasource settings page.")
+		return response
+	}
 	query, err := InterpolateInfinityQuery(query, backendQuery.TimeRange)
 	if err != nil {
 		backend.Logger.Error("error applying macros", "error", err.Error())
