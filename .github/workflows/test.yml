@@ -1,5 +1,11 @@
-name: Pull Requests
-on: [pull_request]
+name: Test
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '30 8,18 * * *'
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
@@ -89,3 +95,15 @@ jobs:
       - name: Stop the docker container
         if: always()
         run: docker-compose down
+      - name: Build Docs
+        if: github.event_name != 'push'
+        run: |
+          cd website;
+          yarn install --frozen-lockfile;
+          yarn build;
+      - name: Deploy Docs to github pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.event_name != 'push'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./website/public
