@@ -11,9 +11,8 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/tidwall/gjson"
-	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/framer"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/infinity"
+	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/parsers"
 )
 
 type CustomMeta struct {
@@ -104,29 +103,13 @@ func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient in
 	if query.Source == "url" {
 		urlResponseObject, statusCode, duration, err := infClient.GetResults(query, requestHeaders)
 		if query.Type == infinity.QueryTypeJSONBackend {
-			if query.RootSelector != "" {
-				responseString, err := json.Marshal(urlResponseObject)
-				if err != nil {
-					backend.Logger.Error("error json parsing root data", "error", err.Error())
-					response.Error = fmt.Errorf("error parsing json root data")
-					return response
-				}
-				if !gjson.Valid(string(responseString)) {
-					backend.Logger.Error("error json parsing root data")
-					response.Error = fmt.Errorf("error parsing json root data")
-					return response
-				}
-				r := gjson.Get(string(responseString), query.RootSelector)
-				var out interface{}
-				err = json.Unmarshal([]byte(r.String()), &out)
-				if err != nil {
-					backend.Logger.Error("error json parsing root data", "error", err.Error())
-					response.Error = fmt.Errorf("error parsing json root data")
-					return response
-				}
-				urlResponseObject = out
+			responseString, err := json.Marshal(urlResponseObject)
+			if err != nil {
+				backend.Logger.Error("error json parsing root data", "error", err.Error())
+				response.Error = fmt.Errorf("error parsing json root data")
+				return response
 			}
-			newFrame, err := framer.ToDataFrame(query.RefID, urlResponseObject, framer.FramerOptions{}, "")
+			newFrame, err := parsers.JsonStringToFrame(string(responseString), query.RefID, query.RootSelector, []parsers.ColumnSelector{})
 			if err != nil {
 				backend.Logger.Error("error getting response for query", "error", err.Error())
 				customMeta.Error = err.Error()
@@ -147,23 +130,7 @@ func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient in
 	if query.Source == "inline" {
 		customMeta.Data = query.Data
 		if query.Type == infinity.QueryTypeJSONBackend {
-			data := query.Data
-			if query.RootSelector != "" {
-				if !gjson.Valid(data) {
-					backend.Logger.Error("error json parsing root data")
-					response.Error = fmt.Errorf("error parsing json root data")
-					return response
-				}
-				r := gjson.Get(data, query.RootSelector)
-				data = r.String()
-			}
-			var out interface{}
-			err := json.Unmarshal([]byte(data), &out)
-			if err != nil {
-				backend.Logger.Error("error json parsing", "error", err.Error())
-				customMeta.Error = fmt.Errorf("error parsing json %s", err.Error()).Error()
-			}
-			newFrame, err := framer.ToDataFrame(query.RefID, out, framer.FramerOptions{}, "")
+			newFrame, err := parsers.JsonStringToFrame(query.Data, query.RefID, query.RootSelector, []parsers.ColumnSelector{})
 			if err != nil {
 				backend.Logger.Error("error building frame", "error", err.Error())
 				customMeta.Error = err.Error()

@@ -1,0 +1,84 @@
+//  🌟 This was machine generated.  Do not edit. 🌟
+//  
+//  Frame[0] 
+//  Name: 
+//  Dimensions: 5 Fields by 1 Rows
+//  +------------------+------------------+------------------------+-----------------+-----------------+
+//  | Name: age        | Name: height     | Name: hobbies          | Name: isPremium | Name: username  |
+//  | Labels:          | Labels:          | Labels:                | Labels:         | Labels:         |
+//  | Type: []*float64 | Type: []*float64 | Type: []*string        | Type: []*bool   | Type: []*string |
+//  +------------------+------------------+------------------------+-----------------+-----------------+
+//  | 1                | 123.45           | ["reading","swimming"] | true            | foo             |
+//  +------------------+------------------+------------------------+-----------------+-----------------+
+//  
+//  
+//  🌟 This was machine generated.  Do not edit. 🌟
+{
+  "frames": [
+    {
+      "schema": {
+        "fields": [
+          {
+            "name": "age",
+            "type": "number",
+            "typeInfo": {
+              "frame": "float64",
+              "nullable": true
+            }
+          },
+          {
+            "name": "height",
+            "type": "number",
+            "typeInfo": {
+              "frame": "float64",
+              "nullable": true
+            }
+          },
+          {
+            "name": "hobbies",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "isPremium",
+            "type": "boolean",
+            "typeInfo": {
+              "frame": "bool",
+              "nullable": true
+            }
+          },
+          {
+            "name": "username",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          }
+        ]
+      },
+      "data": {
+        "values": [
+          [
+            1
+          ],
+          [
+            123.45
+          ],
+          [
+            "[\"reading\",\"swimming\"]"
+          ],
+          [
+            true
+          ],
+          [
+            "foo"
+          ]
+        ]
+      }
+    }
+  ]
+}

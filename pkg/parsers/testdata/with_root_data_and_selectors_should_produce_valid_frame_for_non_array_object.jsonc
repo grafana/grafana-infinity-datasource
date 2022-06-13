@@ -1,0 +1,51 @@
+//  🌟 This was machine generated.  Do not edit. 🌟
+//  
+//  Frame[0] 
+//  Name: 
+//  Dimensions: 2 Fields by 1 Rows
+//  +------------------+-----------------+
+//  | Name: occupation | Name: user-name |
+//  | Labels:          | Labels:         |
+//  | Type: []*string  | Type: []*string |
+//  +------------------+-----------------+
+//  | student          | bar             |
+//  +------------------+-----------------+
+//  
+//  
+//  🌟 This was machine generated.  Do not edit. 🌟
+{
+  "frames": [
+    {
+      "schema": {
+        "fields": [
+          {
+            "name": "occupation",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "user-name",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          }
+        ]
+      },
+      "data": {
+        "values": [
+          [
+            "student"
+          ],
+          [
+            "bar"
+          ]
+        ]
+      }
+    }
+  ]
+}

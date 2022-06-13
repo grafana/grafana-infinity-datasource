@@ -1,0 +1,51 @@
+//  🌟 This was machine generated.  Do not edit. 🌟
+//  
+//  Frame[0] 
+//  Name: 
+//  Dimensions: 2 Fields by 1 Rows
+//  +------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------+
+//  | Name: data                                                                                                                                                                                                       | Name: meta      |
+//  | Labels:                                                                                                                                                                                                          | Labels:         |
+//  | Type: []*string                                                                                                                                                                                                  | Type: []*string |
+//  +------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------+
+//  | [{"age":1,"height":123,"hobbies":["reading","swimming"],"isPremium":true,"username":"foo"},{"age":2,"height":123.45,"hobbies":["reading","swimming"],"isPremium":false,"occupation":"student","username":"bar"}] | {}              |
+//  +------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------+
+//  
+//  
+//  🌟 This was machine generated.  Do not edit. 🌟
+{
+  "frames": [
+    {
+      "schema": {
+        "fields": [
+          {
+            "name": "data",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "meta",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          }
+        ]
+      },
+      "data": {
+        "values": [
+          [
+            "[{\"age\":1,\"height\":123,\"hobbies\":[\"reading\",\"swimming\"],\"isPremium\":true,\"username\":\"foo\"},{\"age\":2,\"height\":123.45,\"hobbies\":[\"reading\",\"swimming\"],\"isPremium\":false,\"occupation\":\"student\",\"username\":\"bar\"}]"
+          ],
+          [
+            "{}"
+          ]
+        ]
+      }
+    }
+  ]
+}
