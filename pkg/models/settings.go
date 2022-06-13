@@ -1,4 +1,4 @@
-package infinity
+package models
 
 import (
 	"encoding/json"

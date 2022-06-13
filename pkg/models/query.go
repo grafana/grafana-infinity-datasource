@@ -1,4 +1,11 @@
-package infinity
+package models
+
+import (
+	"encoding/json"
+	"fmt"
+
+	"github.com/grafana/grafana-plugin-sdk-go/backend"
+)
 
 const (
 	QueryTypeJSON        = "json"
@@ -38,6 +45,7 @@ type URLOptionKeyValuePair struct {
 	Key   string `json:"key"`
 	Value string `json:"value"`
 }
+
 type URLOptions struct {
 	Data    string                  `json:"data"`
 	Method  string                  `json:"method"` // 'GET' | 'POST'
@@ -64,8 +72,23 @@ type InfinityColumn struct {
 	Text     string `json:"text"`
 	Type     string `json:"type"` // "string" | "number" | "timestamp" | "timestamp_epoch" | "timestamp_epoch_s"
 }
+
 type InfinityFilter struct {
 	Field    string   `json:"field"`
 	Operator string   `json:"operator"`
 	Value    []string `json:"value"`
+}
+
+func ApplyDefaultsToQuery(query Query) Query {
+	return query
+}
+
+func LoadQuery(backendQuery backend.DataQuery) (Query, error) {
+	var query Query
+	err := json.Unmarshal(backendQuery.JSON, &query)
+	if err != nil {
+		return query, fmt.Errorf("error while parsing the query json. %s", err.Error())
+	}
+	query = ApplyDefaultsToQuery(query)
+	return ApplyMacros(query, backendQuery.TimeRange)
 }

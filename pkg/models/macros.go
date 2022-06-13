@@ -1,4 +1,4 @@
-package main
+package models
 
 import (
 	"errors"
@@ -8,18 +8,17 @@ import (
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/gtime"
-	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/infinity"
 )
 
 type macroFunc func(string, []string) (string, error)
 
-func getMatches(macroName, rawSQL string) ([][]string, error) {
+func getMatches(macroName, input string) ([][]string, error) {
 	macroRegex := fmt.Sprintf("\\$__%s\\b(?:\\((.*?)\\))?", macroName)
 	rgx, err := regexp.Compile(macroRegex)
 	if err != nil {
 		return nil, err
 	}
-	return rgx.FindAllStringSubmatch(rawSQL, -1), nil
+	return rgx.FindAllStringSubmatch(input, -1), nil
 }
 
 func escapeKeywords(input string) string {
@@ -97,35 +96,35 @@ func InterPolateMacros(queryString string, timeRange backend.TimeRange) (string,
 	return strings.Trim(queryString, " "), nil
 }
 
-// InterpolateInfinityQuery interpolates macros on a given infinity Query
-func InterpolateInfinityQuery(query infinity.Query, timeRange backend.TimeRange) (infinity.Query, error) {
+// ApplyMacros interpolates macros on a given infinity Query
+func ApplyMacros(query Query, timeRange backend.TimeRange) (Query, error) {
 	url, err := InterPolateMacros(query.URL, timeRange)
 	if err != nil {
-		return query, err
+		return query, fmt.Errorf("error applying macros to url field. %s", err.Error())
 	}
 	query.URL = url
 
 	uql, err := InterPolateMacros(query.UQL, timeRange)
 	if err != nil {
-		return query, err
+		return query, fmt.Errorf("error applying macros to uql field. %s", err.Error())
 	}
 	query.UQL = uql
 
 	groq, err := InterPolateMacros(query.GROQ, timeRange)
 	if err != nil {
-		return query, err
+		return query, fmt.Errorf("error applying macros to uql field. %s", err.Error())
 	}
 	query.GROQ = groq
 
 	data, err := InterPolateMacros(query.Data, timeRange)
 	if err != nil {
-		return query, err
+		return query, fmt.Errorf("error applying macros to data field. %s", err.Error())
 	}
 	query.Data = data
 
 	body, err := InterPolateMacros(query.URLOptions.Data, timeRange)
 	if err != nil {
-		return query, err
+		return query, fmt.Errorf("error applying macros to body data field. %s", err.Error())
 	}
 	query.URLOptions.Data = body
 

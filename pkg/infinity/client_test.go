@@ -9,21 +9,22 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	infinity "github.com/yesoreyeram/grafana-infinity-datasource/pkg/infinity"
+	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 )
 
 func TestInfinityClient_GetResults(t *testing.T) {
 	tests := []struct {
 		name           string
-		settings       infinity.InfinitySettings
+		settings       models.InfinitySettings
 		requestHeaders map[string]string
-		query          infinity.Query
+		query          models.Query
 		wantO          interface{}
 		wantErr        bool
 	}{
 		{
 			name:     "should return csv when no mode specified",
-			settings: infinity.InfinitySettings{},
-			query: infinity.Query{
+			settings: models.InfinitySettings{},
+			query: models.Query{
 				URL:  fmt.Sprintf("%s%s", mockCSVDomain, mockCSVURL),
 				Type: "csv",
 			},
@@ -31,8 +32,8 @@ func TestInfinityClient_GetResults(t *testing.T) {
 		},
 		{
 			name:     "should return xml when no mode specified",
-			settings: infinity.InfinitySettings{},
-			query: infinity.Query{
+			settings: models.InfinitySettings{},
+			query: models.Query{
 				URL:  fmt.Sprintf("%s%s", mockXMLDomain, mockXMLURL),
 				Type: "xml",
 			},
@@ -40,10 +41,10 @@ func TestInfinityClient_GetResults(t *testing.T) {
 		},
 		{
 			name: "should return correct csv in advanced mode",
-			settings: infinity.InfinitySettings{
+			settings: models.InfinitySettings{
 				URL: mockCSVDomain,
 			},
-			query: infinity.Query{
+			query: models.Query{
 				URL:  mockCSVURL,
 				Type: "csv",
 			},
@@ -51,8 +52,8 @@ func TestInfinityClient_GetResults(t *testing.T) {
 		},
 		{
 			name:     "should return correct json",
-			settings: infinity.InfinitySettings{},
-			query: infinity.Query{
+			settings: models.InfinitySettings{},
+			query: models.Query{
 				URL:  fmt.Sprintf("%s%s", mockJSONDomain, mockJSONURL),
 				Type: "json",
 			},
@@ -120,13 +121,13 @@ func TestCanAllowURL(t *testing.T) {
 
 func Test_getTLSConfigFromSettings(t *testing.T) {
 	t.Run("default settings should return default client", func(t *testing.T) {
-		got, err := infinity.GetTLSConfigFromSettings(infinity.InfinitySettings{})
+		got, err := infinity.GetTLSConfigFromSettings(models.InfinitySettings{})
 		assert.Equal(t, nil, err)
 		assert.Equal(t, &tls.Config{}, got)
 		assert.Equal(t, false, got.InsecureSkipVerify)
 	})
 	t.Run("InsecureSkipVerify settings", func(t *testing.T) {
-		got, err := infinity.GetTLSConfigFromSettings(infinity.InfinitySettings{
+		got, err := infinity.GetTLSConfigFromSettings(models.InfinitySettings{
 			InsecureSkipVerify: true,
 		})
 		assert.Equal(t, nil, err)
@@ -135,7 +136,7 @@ func Test_getTLSConfigFromSettings(t *testing.T) {
 		}, got)
 	})
 	t.Run("InsecureSkipVerify settings with Servername", func(t *testing.T) {
-		got, err := infinity.GetTLSConfigFromSettings(infinity.InfinitySettings{
+		got, err := infinity.GetTLSConfigFromSettings(models.InfinitySettings{
 			InsecureSkipVerify: true,
 			ServerName:         "foo",
 		})
@@ -146,27 +147,27 @@ func Test_getTLSConfigFromSettings(t *testing.T) {
 		}, got)
 	})
 	t.Run("invalid TLSAuthWithCACert should throw error", func(t *testing.T) {
-		_, err := infinity.GetTLSConfigFromSettings(infinity.InfinitySettings{
+		_, err := infinity.GetTLSConfigFromSettings(models.InfinitySettings{
 			TLSAuthWithCACert: true,
 			TLSCACert:         "hello",
 		})
 		assert.Equal(t, errors.New("invalid TLS CA certificate"), err)
 	})
 	t.Run("valid TLSAuthWithCACert should not throw error", func(t *testing.T) {
-		_, err := infinity.GetTLSConfigFromSettings(infinity.InfinitySettings{
+		_, err := infinity.GetTLSConfigFromSettings(models.InfinitySettings{
 			TLSAuthWithCACert: true,
 			TLSCACert:         mockPEMClientCACet,
 		})
 		assert.Equal(t, nil, err)
 	})
 	t.Run("empty TLSClientCert should throw error", func(t *testing.T) {
-		_, err := infinity.GetTLSConfigFromSettings(infinity.InfinitySettings{
+		_, err := infinity.GetTLSConfigFromSettings(models.InfinitySettings{
 			TLSClientAuth: true,
 		})
 		assert.Equal(t, errors.New("invalid Client cert or key"), err)
 	})
 	t.Run("invalid TLSClientCert should throw error", func(t *testing.T) {
-		_, err := infinity.GetTLSConfigFromSettings(infinity.InfinitySettings{
+		_, err := infinity.GetTLSConfigFromSettings(models.InfinitySettings{
 			TLSClientAuth: true,
 			TLSClientCert: "hello",
 			TLSClientKey:  "hello",
@@ -174,7 +175,7 @@ func Test_getTLSConfigFromSettings(t *testing.T) {
 		assert.Equal(t, errors.New("tls: failed to find any PEM data in certificate input"), err)
 	})
 	t.Run("valid TLSClientCert should not throw error", func(t *testing.T) {
-		_, err := infinity.GetTLSConfigFromSettings(infinity.InfinitySettings{
+		_, err := infinity.GetTLSConfigFromSettings(models.InfinitySettings{
 			TLSClientAuth: true,
 			TLSClientCert: mockClientCert,
 			TLSClientKey:  mockClientKey,
@@ -182,7 +183,7 @@ func Test_getTLSConfigFromSettings(t *testing.T) {
 		assert.Equal(t, nil, err)
 	})
 	t.Run("valid TLS settings should not throw error", func(t *testing.T) {
-		got, err := infinity.GetTLSConfigFromSettings(infinity.InfinitySettings{
+		got, err := infinity.GetTLSConfigFromSettings(models.InfinitySettings{
 			InsecureSkipVerify: true,
 			TLSClientAuth:      true,
 			TLSClientCert:      mockClientCert,

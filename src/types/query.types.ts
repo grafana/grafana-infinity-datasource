@@ -7,20 +7,16 @@ export type InfinityColumnFormat = 'string' | 'number' | 'timestamp' | 'timestam
 export type InfinityQueryFormat = 'table' | 'timeseries' | 'dataframe' | 'as-is' | 'node-graph-nodes' | 'node-graph-edges';
 export type InfinityQueryBase<T extends InfinityQueryType> = { type: T } & DataQuery;
 export type InfinityQueryWithSource<S extends InfinityQuerySources> = { source: S } & DataQuery;
+export type InfinityKV = { key: string; value: string };
+export type InfinityURLOptions = {
+  method: 'GET' | 'POST';
+  data?: string;
+  params?: InfinityKV[];
+  headers?: InfinityKV[];
+};
 export type InfinityQueryWithURLSource<T extends InfinityQueryType> = {
   url: string;
-  url_options: {
-    method: 'GET' | 'POST';
-    data?: string;
-    params?: Array<{
-      key: string;
-      value: string;
-    }>;
-    headers?: Array<{
-      key: string;
-      value: string;
-    }>;
-  };
+  url_options: InfinityURLOptions;
 } & InfinityQueryWithSource<'url'> &
   InfinityQueryBase<T>;
 export type InfinityQueryWithInlineSource<T extends InfinityQueryType> = {

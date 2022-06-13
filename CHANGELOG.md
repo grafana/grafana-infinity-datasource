@@ -17,7 +17,6 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 - **As-Is**: Support for URL when using As-Is format with JSON
 - **Chore**: Test coverage improved
 - **Chore**: prometheus `metrics` resource endpoint added ( _experimental_ )
-- **Chore**: Added `vitest` for dev improvements
 
 ### **BREAKING CHANGES**
 
@@ -38,6 +37,22 @@ jsonData:
 If the allowed hosts are not configured correctly, you will get `Datasource is missing allowed hosts/URLs. Configure it in the datasource settings page.` error when performing the query.
 
 Learn more about this breaking change in the [github discussion](https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/322)
+
+#### **Content-Type and Accept headers**
+
+The default header values for `Content-Type` and `Accept` are changing. The default value for these headers are set as follows
+
+- For `json` and `graphql` types, the `Accept` will be now set to `application/json;q=0.9,text/plain`
+- For `csv` query type, the `Accept` header will now be set to `text/csv; charset=utf-8`
+- For `xml` query type, the `Accept` header will now be set to `text/xml;q=0.9,text/plain`
+
+- For http `post` methods, the `Content-Type` header value will be set to `Content-Type` for `json` and `graphql` query types
+
+You can override these headers, in settings/query headers.
+
+### **Minimum Grafana version update**
+
+Minimum required grafana version for the infinity plugin is now Grafana v8.4.7. Though the older versions are expected to work, there may be some minor unexpected issues.
 
 ## [ 0.8.8 ]
 

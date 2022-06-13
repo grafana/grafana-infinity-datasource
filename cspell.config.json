@@ -1,15 +1,8 @@
 {
   "language": "en",
-  "ignorePaths": [
-    "node_modules/**",
-    "website/node_modules/**",
-    "website/public/**",
-    "try/dashboards/**",
-    "*SeriesProvider.ts",
-    "coverage/**",
-    "dist/**"
-  ],
+  "ignorePaths": ["node_modules/**", "website/node_modules/**", "website/public/**", "try/dashboards/**", "*SeriesProvider.ts", "coverage/**", "dist/**"],
   "words": [
+    "Collapsable",
     "countif",
     "dataframe",
     "datapoints",
@@ -24,6 +17,7 @@
     "fontawesome",
     "fortawesome",
     "frontmatter",
+    "gframer",
     "gjson",
     "gomodcache",
     "grafana",
@@ -103,7 +97,6 @@
     "urlquery",
     "vercel",
     "visualisation",
-    "vitest",
     "vlookup",
     "vuepress",
     "xinsnake",

@@ -9,7 +9,7 @@ import (
 	"github.com/graphql-go/graphql"
 	"github.com/graphql-go/handler"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/infinity"
+	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 )
 
 func (host *PluginHost) getRouter() *mux.Router {
@@ -74,7 +74,7 @@ func (host *PluginHost) getGraphQLHandler() http.Handler {
 								},
 							},
 							Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-								res, _, _, err := client.client.GetResults(infinity.Query{
+								res, _, _, err := client.client.GetResults(models.Query{
 									Type: p.Args["type"].(string),
 									URL:  p.Args["url"].(string),
 								}, map[string]string{})

@@ -8,9 +8,9 @@ require (
 	github.com/graphql-go/graphql v0.8.0
 	github.com/graphql-go/handler v0.2.3
 	github.com/prometheus/client_golang v1.12.2
-	github.com/stretchr/testify v1.7.0
-	github.com/tidwall/gjson v1.14.1
+	github.com/stretchr/testify v1.7.2
 	github.com/xinsnake/go-http-digest-auth-client v0.6.0
+	github.com/yesoreyeram/grafana-framer v0.0.0-20220614104124-9e57c1e96ed6
 	golang.org/x/oauth2 v0.0.0-20211104180415-d3ed0bb246c8
 	moul.io/http2curl v1.0.0
 )
@@ -59,6 +59,7 @@ require (
 	github.com/prometheus/common v0.32.1 // indirect
 	github.com/prometheus/procfs v0.7.3 // indirect
 	github.com/smartystreets/goconvey v1.7.2 // indirect
+	github.com/tidwall/gjson v1.14.1 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.0 // indirect
 	golang.org/x/net v0.0.0-20210614182718-04defd469f4e // indirect
@@ -70,5 +71,5 @@ require (
 	google.golang.org/grpc v1.41.0 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

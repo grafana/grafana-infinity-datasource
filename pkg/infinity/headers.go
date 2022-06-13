@@ -4,71 +4,57 @@ import (
 	"encoding/base64"
 	"fmt"
 	"net/http"
+	"strings"
+
+	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 )
 
 const dummyHeader = "xxxxxxxx"
-const authorizationHeaderKey = "Authorization"
-const idTokenHeaderKey = "X-ID-Token"
-const contentTypeHeaderKey = "Content-Type"
+
 const contentTypeJSON = "application/json"
 
-func ApplyBasicAuth(settings InfinitySettings, req *http.Request, includeSect bool) *http.Request {
-	if settings.BasicAuthEnabled && (settings.UserName != "" || settings.Password != "") {
-		basicAuthHeader := fmt.Sprintf("Basic %s", dummyHeader)
+const (
+	headerKeyAccept        = "Accept"
+	headerKeyContentType   = "Content-Type"
+	headerKeyAuthorization = "Authorization"
+	headerKeyIdToken       = "X-ID-Token"
+)
+
+func ApplyAcceptHeader(query models.Query, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
+	if query.Type == models.QueryTypeJSON || query.Type == models.QueryTypeGraphQL {
+		req.Header.Set(headerKeyAccept, `application/json;q=0.9,text/plain`)
+	}
+	if query.Type == models.QueryTypeCSV {
+		req.Header.Set(headerKeyAccept, `text/csv; charset=utf-8`)
+	}
+	if query.Type == models.QueryTypeXML {
+		req.Header.Set(headerKeyAccept, `text/xml;q=0.9,text/plain`)
+	}
+	return req
+}
+
+func ApplyContentTypeHeader(query models.Query, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
+	if strings.ToUpper(query.URLOptions.Method) == http.MethodPost {
+		switch query.Type {
+		case models.QueryTypeJSON, models.QueryTypeGraphQL:
+			req.Header.Set(headerKeyContentType, contentTypeJSON)
+		}
+	}
+	return req
+}
+
+func ApplyHeadersFromSettings(settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
+	for key, value := range settings.CustomHeaders {
+		val := dummyHeader
 		if includeSect {
-			basicAuthHeader = "Basic " + base64.StdEncoding.EncodeToString([]byte(settings.UserName+":"+settings.Password))
+			val = value
 		}
-		req.Header.Set(authorizationHeaderKey, basicAuthHeader)
+		req.Header.Set(key, val)
 	}
 	return req
 }
 
-func ApplyBearerToken(settings InfinitySettings, req *http.Request, includeSect bool) *http.Request {
-	if settings.AuthenticationMethod == AuthenticationMethodBearerToken {
-		bearerAuthHeader := fmt.Sprintf("Bearer %s", dummyHeader)
-		if includeSect {
-			bearerAuthHeader = fmt.Sprintf("Bearer %s", settings.BearerToken)
-		}
-		req.Header.Add(authorizationHeaderKey, bearerAuthHeader)
-	}
-	return req
-}
-
-func ApplyApiKeyAuth(settings InfinitySettings, req *http.Request, includeSect bool) *http.Request {
-	if settings.AuthenticationMethod == AuthenticationMethodApiKey && settings.ApiKeyType == ApiKeyTypeHeader {
-		apiKeyHeader := dummyHeader
-		if includeSect {
-			apiKeyHeader = settings.ApiKeyValue
-		}
-		req.Header.Add(settings.ApiKeyKey, apiKeyHeader)
-	}
-	return req
-}
-
-func ApplyForwardedOAuthIdentity(requestHeaders map[string]string, settings InfinitySettings, req *http.Request, includeSect bool) *http.Request {
-	if settings.ForwardOauthIdentity {
-		authHeader := dummyHeader
-		token := dummyHeader
-		if includeSect {
-			authHeader = requestHeaders[authorizationHeaderKey]
-			token = requestHeaders[idTokenHeaderKey]
-		}
-		req.Header.Add(authorizationHeaderKey, authHeader)
-		if requestHeaders[idTokenHeaderKey] != "" {
-			req.Header.Add(idTokenHeaderKey, token)
-		}
-	}
-	return req
-}
-
-func ApplyContentType(query Query, settings InfinitySettings, req *http.Request, includeSect bool) *http.Request {
-	if query.Type == QueryTypeJSON || query.Type == QueryTypeGraphQL {
-		req.Header.Set(contentTypeHeaderKey, contentTypeJSON)
-	}
-	return req
-}
-
-func ApplyQueryHeader(query Query, settings InfinitySettings, req *http.Request, includeSect bool) *http.Request {
+func ApplyHeadersFromQuery(query models.Query, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
 	for _, header := range query.URLOptions.Headers {
 		value := dummyHeader
 		if includeSect {
@@ -79,13 +65,51 @@ func ApplyQueryHeader(query Query, settings InfinitySettings, req *http.Request,
 	return req
 }
 
-func ApplySettingHeaders(settings InfinitySettings, req *http.Request, includeSect bool) *http.Request {
-	for key, value := range settings.CustomHeaders {
-		val := dummyHeader
+func ApplyBasicAuth(settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
+	if settings.BasicAuthEnabled && (settings.UserName != "" || settings.Password != "") {
+		basicAuthHeader := fmt.Sprintf("Basic %s", dummyHeader)
 		if includeSect {
-			val = value
+			basicAuthHeader = "Basic " + base64.StdEncoding.EncodeToString([]byte(settings.UserName+":"+settings.Password))
 		}
-		req.Header.Set(key, val)
+		req.Header.Set(headerKeyAuthorization, basicAuthHeader)
+	}
+	return req
+}
+
+func ApplyBearerToken(settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
+	if settings.AuthenticationMethod == models.AuthenticationMethodBearerToken {
+		bearerAuthHeader := fmt.Sprintf("Bearer %s", dummyHeader)
+		if includeSect {
+			bearerAuthHeader = fmt.Sprintf("Bearer %s", settings.BearerToken)
+		}
+		req.Header.Add(headerKeyAuthorization, bearerAuthHeader)
+	}
+	return req
+}
+
+func ApplyApiKeyAuth(settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
+	if settings.AuthenticationMethod == models.AuthenticationMethodApiKey && settings.ApiKeyType == models.ApiKeyTypeHeader {
+		apiKeyHeader := dummyHeader
+		if includeSect {
+			apiKeyHeader = settings.ApiKeyValue
+		}
+		req.Header.Add(settings.ApiKeyKey, apiKeyHeader)
+	}
+	return req
+}
+
+func ApplyForwardedOAuthIdentity(requestHeaders map[string]string, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
+	if settings.ForwardOauthIdentity {
+		authHeader := dummyHeader
+		token := dummyHeader
+		if includeSect {
+			authHeader = requestHeaders[headerKeyAuthorization]
+			token = requestHeaders[headerKeyIdToken]
+		}
+		req.Header.Add(headerKeyAuthorization, authHeader)
+		if requestHeaders[headerKeyIdToken] != "" {
+			req.Header.Add(headerKeyIdToken, token)
+		}
 	}
 	return req
 }
