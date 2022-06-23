@@ -9,7 +9,7 @@ import { replaceTokenFromVariable } from './utils';
 // UnixTimeStamp() --> current timestamp in ms
 
 export const relativeTimeStampParse = (input: string): { value: number; key: string } => {
-  let numberParts = input.match(/[\-\d]+/g) || ['1'];
+  let numberParts = input.match(/[-\d]+/g) || ['1'];
   let textParts = input.match(/[A-Za-z]+/g) || ['h'];
   return {
     value: numberParts[0] === '-' ? -1 : +numberParts[0],
@@ -73,7 +73,6 @@ export const UnixTimeStampVariable = (query: string): Array<SelectableValue<stri
     case 'milliseconds':
     case 'ms':
     default:
-      value = value;
   }
   return [
     {

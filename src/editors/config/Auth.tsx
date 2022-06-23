@@ -34,7 +34,6 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
         break;
       case 'apiKey':
       case 'bearerToken':
-      case 'oauthPassThru':
       case 'digestAuth':
       default:
         onOptionsChange({ ...options, basicAuth: false, jsonData: { ...options.jsonData, oauthPassThru: false, auth_method: authMethod } });

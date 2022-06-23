@@ -12,6 +12,7 @@
     "dist/**"
   ],
   "words": [
+    "builtins",
     "httpbin",
     "kennethreitz",
     "Collapsable",

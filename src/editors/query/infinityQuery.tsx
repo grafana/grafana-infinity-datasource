@@ -11,6 +11,22 @@ import { GROQEditor } from './query.groq';
 import { migrateQuery } from './../../migrate';
 import { InfinityQuery, EditorMode, DefaultInfinityQuery, InfinityQueryType } from '../../types';
 
+const UQLPromotion = ({ queryType }: { queryType: InfinityQueryType }) => {
+  return queryType === 'xml' || queryType === 'csv' ? (
+    <div>
+      <p style={{ paddingBlock: '10px', color: 'yellowgreen' }}>
+        💡 You can also use{' '}
+        <a href="https://yesoreyeram.github.io/grafana-infinity-datasource/wiki/uql" target="_blank" rel="noreferrer">
+          UQL
+        </a>{' '}
+        query type instead of <b style={{}}>{queryType.toUpperCase()}</b> and get better flexibility and built-in transformations with <b>same data</b> you already have. Give a try!!
+      </p>
+    </div>
+  ) : (
+    <></>
+  );
+};
+
 export type InfinityEditorProps = {
   hideTip?: boolean;
   query: InfinityQuery;
@@ -40,21 +56,5 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
       {query.type === 'groq' && <GROQEditor {...{ query, onChange, onRunQuery, mode }} />}
       {!hideTip && <UQLPromotion queryType={query.type} />}
     </div>
-  );
-};
-
-const UQLPromotion = ({ queryType }: { queryType: InfinityQueryType }) => {
-  return queryType === 'xml' || queryType === 'csv' ? (
-    <div>
-      <p style={{ paddingBlock: '10px', color: 'yellowgreen' }}>
-        💡 You can also use{' '}
-        <a href="https://yesoreyeram.github.io/grafana-infinity-datasource/wiki/uql" target="_blank" rel="noreferrer">
-          UQL
-        </a>{' '}
-        query type instead of <b style={{}}>{queryType.toUpperCase()}</b> and get better flexibility and built-in transformations with <b>same data</b> you already have. Give a try!!
-      </p>
-    </div>
-  ) : (
-    <></>
   );
 };

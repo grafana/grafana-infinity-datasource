@@ -80,6 +80,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
           break;
         case 'legacy':
         default:
+          // eslint-disable-next-line no-case-declarations
           const legacyVariableProvider = new LegacyVariableProvider(query.query);
           legacyVariableProvider.query().then((res) => resolve(flatten(res)));
           break;
@@ -116,9 +117,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
           applyGroq(t.groq, data, t.format, t.refId).then(resolve).catch(reject);
           break;
         case 'series':
-          const startTime = new Date(range.from.toDate()).getTime();
-          const endTime = new Date(range.to.toDate()).getTime();
-          new SeriesProvider(interpolateQuery(t, scopedVars)).query(startTime, endTime).then(resolve).catch(reject);
+          new SeriesProvider(interpolateQuery(t, scopedVars)).query(new Date(range?.from?.toDate()).getTime(), new Date(range?.to?.toDate()).getTime()).then(resolve).catch(reject);
           break;
         case 'global':
           reject('Query not found');

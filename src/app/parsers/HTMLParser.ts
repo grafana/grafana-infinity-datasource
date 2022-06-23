@@ -16,6 +16,7 @@ export class HTMLParser extends InfinityParser<InfinityHTMLQuery> {
     const rootElements = $(this.target.root_selector);
     return rootElements;
   }
+  // eslint-disable-next-line no-undef
   private constructTableData(rootElements: cheerio.Cheerio) {
     forEach(rootElements, (r) => {
       const row: GrafanaTableRow = [];
@@ -28,6 +29,8 @@ export class HTMLParser extends InfinityParser<InfinityHTMLQuery> {
       this.rows.push(row);
     });
   }
+
+  // eslint-disable-next-line no-undef
   private constructTimeSeriesData(rootElements: cheerio.Cheerio, endTime: Date | undefined) {
     this.NumbersColumns.forEach((metricColumn: InfinityColumn) => {
       forEach(rootElements, (r) => {
@@ -46,7 +49,7 @@ export class HTMLParser extends InfinityParser<InfinityHTMLQuery> {
           timestamp = getValue($$(FirstTimeColumn.selector).text().trim(), FirstTimeColumn.type, true) as number;
         }
         if (seriesName) {
-          let metric = getValue($$(metricColumn.selector).text().trim().replace(/\,/g, ''), 'number') as number;
+          let metric = getValue($$(metricColumn.selector).text().trim().replace(/,/g, ''), 'number') as number;
           this.series.push({
             target: seriesName,
             datapoints: [[metric, timestamp]],

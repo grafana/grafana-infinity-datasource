@@ -69,10 +69,12 @@ async function registerUQL(editor: any) {
     editor.updateOptions({ fixedOverflowWidgets: true });
     const allLangs = monaco.languages.getLanguages();
     const { language: uqlLang } = await allLangs.find(({ id }: any) => id === 'sql').loader();
+    // eslint-disable-next-line no-prototype-builtins
     if (!uqlLang.hasOwnProperty('keywords')) {
       uqlLang.keywords = [];
     }
     uqlLang.keywords.unshift.apply(uqlLang.keywords, UQLKeyWords);
+    // eslint-disable-next-line no-prototype-builtins
     if (!uqlLang.hasOwnProperty('builtinFunctions')) {
       uqlLang.builtinFunctions = [];
     }

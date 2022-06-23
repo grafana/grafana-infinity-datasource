@@ -20,7 +20,7 @@ export class XMLParser extends InfinityParser<InfinityXMLQuery> {
     });
   }
   private formatInput(XMLResponse: string) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       parseString(XMLResponse, (err, res) => {
         resolve(res);
       });
