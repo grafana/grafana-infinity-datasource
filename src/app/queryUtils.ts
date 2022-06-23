@@ -1,6 +1,7 @@
 import { DataSourceInstanceSettings, DataQueryRequest } from '@grafana/data';
 import { isDataQuery, normalizeURL } from './utils';
 import { interpolateQuery } from './../interpolate';
+import { migrateQuery } from './../migrate';
 import { InfinityQuery, InfinityInstanceSettings, InfinityOptions, GlobalInfinityQuery } from '../types';
 
 export const overrideWithGlobalQuery = (t: InfinityQuery, instanceSettings: DataSourceInstanceSettings<InfinityOptions>): InfinityQuery => {
@@ -36,9 +37,10 @@ export const getUpdatedDataRequest = (options: DataQueryRequest<InfinityQuery>, 
       .filter((t: InfinityQuery) => t.hide !== true)
       .map((t) => overrideWithGlobalQuery(t, instanceSettings))
       .filter((t) => t.type !== 'global')
+      .map((t) => migrateQuery(t))
       .map((t) => interpolateQuery(t, options.scopedVars))
       .map((t) => {
-        if ((isDataQuery(t) || t.type === 'uql' || t.type === 'groq') && t.source === 'url') {
+        if (isDataQuery(t) && t.source === 'url') {
           t.url = normalizeURL(t.url);
         }
         return t;

@@ -3,6 +3,7 @@ package models
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 )
@@ -20,25 +21,26 @@ const (
 )
 
 type Query struct {
-	RefID         string              `json:"refId"`
-	Type          string              `json:"type"`   // 'json' | 'json-backend' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'uql' | 'groq' | 'series' | 'global'
-	Format        string              `json:"format"` // 'table' | 'timeseries' | 'dataframe' | 'as-is' | 'node-graph-nodes' | 'node-graph-edges'
-	Source        string              `json:"source"` // 'url' | 'inline' | 'random-walk' | 'expression'
-	URL           string              `json:"url"`
-	URLOptions    URLOptions          `json:"url_options"`
-	Data          string              `json:"data"`
-	UQL           string              `json:"uql"`
-	GROQ          string              `json:"groq"`
-	CSVOptions    InfinityCSVOptions  `json:"csv_options"`
-	JSONOptions   InfinityJSONOptions `json:"json_options"`
-	RootSelector  string              `json:"root_selector"`
-	Columns       []InfinityColumn    `json:"columns"`
-	Filters       []InfinityFilter    `json:"filters"`
-	SeriesCount   int64               `json:"seriesCount"`
-	Expression    string              `json:"expression"`
-	Alias         string              `json:"alias"`
-	GlobalQueryID string              `json:"global_query_id"`
-	QueryMode     string              `json:"query_mode"`
+	RefID         string                 `json:"refId"`
+	Type          string                 `json:"type"`   // 'json' | 'json-backend' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'uql' | 'groq' | 'series' | 'global'
+	Format        string                 `json:"format"` // 'table' | 'timeseries' | 'dataframe' | 'as-is' | 'node-graph-nodes' | 'node-graph-edges'
+	Source        string                 `json:"source"` // 'url' | 'inline' | 'random-walk' | 'expression'
+	URL           string                 `json:"url"`
+	URLOptions    URLOptions             `json:"url_options"`
+	Data          string                 `json:"data"`
+	UQL           string                 `json:"uql"`
+	GROQ          string                 `json:"groq"`
+	CSVOptions    InfinityCSVOptions     `json:"csv_options"`
+	JSONOptions   InfinityJSONOptions    `json:"json_options"`
+	RootSelector  string                 `json:"root_selector"`
+	Columns       []InfinityColumn       `json:"columns"`
+	Filters       []InfinityFilter       `json:"filters"`
+	SeriesCount   int64                  `json:"seriesCount"`
+	Expression    string                 `json:"expression"`
+	Alias         string                 `json:"alias"`
+	DataOverrides []InfinityDataOverride `json:"dataOverrides"`
+	GlobalQueryID string                 `json:"global_query_id"`
+	QueryMode     string                 `json:"query_mode"`
 }
 
 type URLOptionKeyValuePair struct {
@@ -47,10 +49,15 @@ type URLOptionKeyValuePair struct {
 }
 
 type URLOptions struct {
-	Data    string                  `json:"data"`
-	Method  string                  `json:"method"` // 'GET' | 'POST'
-	Params  []URLOptionKeyValuePair `json:"params"`
-	Headers []URLOptionKeyValuePair `json:"headers"`
+	Method           string                  `json:"method"` // 'GET' | 'POST'
+	Params           []URLOptionKeyValuePair `json:"params"`
+	Headers          []URLOptionKeyValuePair `json:"headers"`
+	Body             string                  `json:"data"`
+	BodyType         string                  `json:"body_type"`
+	BodyContentType  string                  `json:"body_content_type"`
+	BodyForm         []URLOptionKeyValuePair `json:"body_form"`
+	BodyGraphQLQuery string                  `json:"body_graphql_query"`
+	// BodyGraphQLVariables string           `json:"body_graphql_variables"`
 }
 
 type InfinityCSVOptions struct {
@@ -79,7 +86,28 @@ type InfinityFilter struct {
 	Value    []string `json:"value"`
 }
 
+type InfinityDataOverride struct {
+	Values   []string `json:"values"`
+	Operator string   `json:"operator"`
+	Override string   `json:"override"`
+}
+
 func ApplyDefaultsToQuery(query Query) Query {
+	if query.Source == "url" && strings.ToUpper(query.URLOptions.Method) == "POST" {
+		if query.URLOptions.BodyType == "" {
+			query.URLOptions.BodyType = "raw"
+			if query.Type == QueryTypeGraphQL {
+				query.URLOptions.BodyType = "graphql"
+				query.URLOptions.BodyContentType = "application/json"
+				if query.URLOptions.BodyGraphQLQuery == "" {
+					query.URLOptions.BodyGraphQLQuery = query.URLOptions.Body
+				}
+			}
+		}
+		if query.URLOptions.BodyContentType == "" {
+			query.URLOptions.BodyContentType = "text/plain"
+		}
+	}
 	return query
 }
 

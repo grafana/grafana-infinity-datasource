@@ -5,14 +5,21 @@ export type InfinityQueryType = 'json' | 'json-backend' | 'csv' | 'tsv' | 'xml' 
 export type InfinityQuerySources = 'url' | 'inline' | 'random-walk' | 'expression';
 export type InfinityColumnFormat = 'string' | 'number' | 'timestamp' | 'timestamp_epoch' | 'timestamp_epoch_s';
 export type InfinityQueryFormat = 'table' | 'timeseries' | 'dataframe' | 'as-is' | 'node-graph-nodes' | 'node-graph-edges';
+export type QueryBodyType = 'none' | 'form-data' | 'x-www-form-urlencoded' | 'raw' | 'graphql';
+export type QueryBodyContentType = 'text/plain' | 'application/json' | 'application/xml' | 'text/html' | 'application/javascript';
 export type InfinityQueryBase<T extends InfinityQueryType> = { type: T } & DataQuery;
 export type InfinityQueryWithSource<S extends InfinityQuerySources> = { source: S } & DataQuery;
 export type InfinityKV = { key: string; value: string };
 export type InfinityURLOptions = {
   method: 'GET' | 'POST';
-  data?: string;
   params?: InfinityKV[];
   headers?: InfinityKV[];
+  data?: string;
+  body_type?: QueryBodyType;
+  body_content_type?: QueryBodyContentType;
+  body_form?: InfinityKV[];
+  body_graphql_query?: string;
+  // body_graphql_variables?: string;
 };
 export type InfinityQueryWithURLSource<T extends InfinityQueryType> = {
   url: string;

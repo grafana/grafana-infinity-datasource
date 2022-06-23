@@ -10,6 +10,7 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 - **New Auth Type**: Digest auth support
 - **New Macro**: Support for macros (`$__combineValues()`,`$__customInterval()`) added in URL, Body, Inline data, UQL queries
 - **New Variable Query Type**: Random String from given array of strings
+- **URL**: More body types supported. (including `raw`, `form-data`, `x-www-form-urlencoded`)
 - **UQL**: new root level command `where` added to support basic filters
 - **UQL**: new method `extract` added to extract part of the string using regex
 - **UQL**: new summarize methods `countif`, `sumif`, `minif` and `maxif`

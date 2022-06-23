@@ -1,13 +1,17 @@
 package infinity
 
 import (
+	"bytes"
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"io/ioutil"
+	"mime/multipart"
 	"net/http"
+	"net/url"
 	"strings"
 	"time"
 
@@ -103,7 +107,7 @@ func replaceSect(input string, settings models.InfinitySettings, includeSect boo
 	return input
 }
 
-func (client *Client) req(url string, body *strings.Reader, settings models.InfinitySettings, isJSON bool, query models.Query, requestHeaders map[string]string) (obj interface{}, statusCode int, duration time.Duration, err error) {
+func (client *Client) req(url string, body io.Reader, settings models.InfinitySettings, isJSON bool, query models.Query, requestHeaders map[string]string) (obj interface{}, statusCode int, duration time.Duration, err error) {
 	req, _ := GetRequest(settings, body, query, requestHeaders, true)
 	startTime := time.Now()
 	if !CanAllowURL(req.URL.String(), settings.AllowedHosts) {
@@ -186,14 +190,38 @@ func CanAllowURL(url string, allowedHosts []string) bool {
 	return allow
 }
 
-func GetQueryBody(query models.Query) *strings.Reader {
-	body := strings.NewReader(query.URLOptions.Data)
-	if query.Type == models.QueryTypeGraphQL {
-		jsonData := map[string]string{
-			"query": query.URLOptions.Data,
+func GetQueryBody(query models.Query) io.Reader {
+	var body io.Reader
+	if strings.ToUpper(query.URLOptions.Method) == http.MethodPost {
+		switch query.URLOptions.BodyType {
+		case "raw":
+			body = strings.NewReader(query.URLOptions.Body)
+		case "form-data":
+			payload := &bytes.Buffer{}
+			writer := multipart.NewWriter(payload)
+			for _, f := range query.URLOptions.BodyForm {
+				_ = writer.WriteField(f.Key, f.Value)
+			}
+			if err := writer.Close(); err != nil {
+				backend.Logger.Error("error closing the query body reader")
+				return nil
+			}
+			body = payload
+		case "x-www-form-urlencoded":
+			form := url.Values{}
+			for _, f := range query.URLOptions.BodyForm {
+				form.Set(f.Key, f.Value)
+			}
+			body = strings.NewReader(form.Encode())
+		case "graphql":
+			jsonData := map[string]string{
+				"query": query.URLOptions.BodyGraphQLQuery,
+			}
+			jsonValue, _ := json.Marshal(jsonData)
+			body = strings.NewReader(string(jsonValue))
+		default:
+			body = strings.NewReader(query.URLOptions.Body)
 		}
-		jsonValue, _ := json.Marshal(jsonData)
-		body = strings.NewReader(string(jsonValue))
 	}
 	return body
 }

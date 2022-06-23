@@ -1,8 +1,10 @@
 package infinity
 
 import (
+	"bytes"
 	"encoding/base64"
 	"fmt"
+	"mime/multipart"
 	"net/http"
 	"strings"
 
@@ -11,7 +13,10 @@ import (
 
 const dummyHeader = "xxxxxxxx"
 
-const contentTypeJSON = "application/json"
+const (
+	contentTypeJSON           = "application/json"
+	contentTypeFormURLEncoded = "application/x-www-form-urlencoded"
+)
 
 const (
 	headerKeyAccept        = "Accept"
@@ -35,8 +40,25 @@ func ApplyAcceptHeader(query models.Query, settings models.InfinitySettings, req
 
 func ApplyContentTypeHeader(query models.Query, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
 	if strings.ToUpper(query.URLOptions.Method) == http.MethodPost {
-		switch query.Type {
-		case models.QueryTypeJSON, models.QueryTypeGraphQL:
+		switch query.URLOptions.BodyType {
+		case "raw":
+			if query.URLOptions.BodyContentType != "" {
+				req.Header.Set(headerKeyContentType, query.URLOptions.BodyContentType)
+			}
+		case "form-data":
+			writer := multipart.NewWriter(&bytes.Buffer{})
+			for _, f := range query.URLOptions.BodyForm {
+				_ = writer.WriteField(f.Key, f.Value)
+			}
+			if err := writer.Close(); err != nil {
+				return req
+			}
+			req.Header.Set(headerKeyContentType, writer.FormDataContentType())
+		case "x-www-form-urlencoded":
+			req.Header.Set(headerKeyContentType, contentTypeFormURLEncoded)
+		case "graphql":
+			req.Header.Set(headerKeyContentType, contentTypeJSON)
+		default:
 			req.Header.Set(headerKeyContentType, contentTypeJSON)
 		}
 	}
@@ -49,7 +71,10 @@ func ApplyHeadersFromSettings(settings models.InfinitySettings, req *http.Reques
 		if includeSect {
 			val = value
 		}
-		req.Header.Set(key, val)
+		req.Header.Add(key, val)
+		if strings.EqualFold(key, headerKeyAccept) || strings.EqualFold(key, headerKeyContentType) {
+			req.Header.Set(key, val)
+		}
 	}
 	return req
 }
@@ -60,7 +85,10 @@ func ApplyHeadersFromQuery(query models.Query, settings models.InfinitySettings,
 		if includeSect {
 			value = replaceSect(header.Value, settings, includeSect)
 		}
-		req.Header.Set(header.Key, value)
+		req.Header.Add(header.Key, value)
+		if strings.EqualFold(header.Key, headerKeyAccept) || strings.EqualFold(header.Key, headerKeyContentType) {
+			req.Header.Set(header.Key, value)
+		}
 	}
 	return req
 }

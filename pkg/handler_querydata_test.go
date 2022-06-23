@@ -29,7 +29,7 @@ func TestAuthentication(t *testing.T) {
 		require.Nil(t, err)
 		require.NotNil(t, client)
 		res := main.QueryData(context.Background(), backend.DataQuery{
-			JSON: []byte(fmt.Sprintf(`{ "source" : "url" }`)),
+			JSON: []byte(`{ "source" : "url" }`),
 		}, *client, map[string]string{})
 		require.NotNil(t, res)
 		require.NotNil(t, res.Error)

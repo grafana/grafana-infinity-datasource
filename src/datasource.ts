@@ -10,6 +10,7 @@ import { SeriesProvider } from './app/SeriesProvider';
 import { getUpdatedDataRequest } from './app/queryUtils';
 import { LegacyVariableProvider, getTemplateVariablesFromResult, migrateLegacyQuery } from './app/variablesQuery';
 import { interpolateQuery, interpolateVariableQuery } from './interpolate';
+import { migrateQuery } from './migrate';
 import { InfinityQuery, VariableQuery, MetricFindValue, InfinityInstanceSettings, InfinityOptions } from './types';
 
 export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOptions> {
@@ -50,7 +51,8 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
           break;
         case 'infinity':
           if (query.infinityQuery) {
-            const request = { targets: [interpolateQuery(query.infinityQuery, {})] } as DataQueryRequest<InfinityQuery>;
+            const updatedQuery = migrateQuery(query.infinityQuery);
+            const request = { targets: [interpolateQuery(updatedQuery, {})] } as DataQueryRequest<InfinityQuery>;
             super
               .query(request)
               .toPromise()

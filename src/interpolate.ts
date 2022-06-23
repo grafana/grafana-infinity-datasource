@@ -2,6 +2,7 @@ import { getTemplateSrv } from '@grafana/runtime';
 import { ScopedVars } from '@grafana/data';
 import { isDataQuery } from './app/utils';
 import { InfinityQuery, VariableQuery } from './types';
+import { QueryBodyContentType, QueryBodyType } from 'types/query.types';
 
 const replaceVariable = (input: string, scopedVars: ScopedVars = {}, format = 'glob'): string => {
   return getTemplateSrv().replace(input || '', scopedVars, format);
@@ -15,6 +16,16 @@ export const interpolateQuery = (query: InfinityQuery, scopedVars: ScopedVars): 
       newQuery.url_options = {
         ...newQuery.url_options,
         data: replaceVariable(newQuery.url_options?.data || '', scopedVars),
+        body_type: replaceVariable(newQuery.url_options?.body_type || '', scopedVars) as QueryBodyType,
+        body_content_type: replaceVariable(newQuery.url_options?.body_content_type || '', scopedVars) as QueryBodyContentType,
+        body_graphql_query: replaceVariable(newQuery.url_options?.body_graphql_query || '', scopedVars),
+        // body_graphql_variables: replaceVariable(newQuery.url_options?.body_graphql_variables || '', scopedVars),
+        body_form: newQuery.url_options?.body_form?.map((f) => {
+          return {
+            ...f,
+            value: getTemplateSrv().replace(f?.value || '', scopedVars, 'glob'),
+          };
+        }),
         params: newQuery.url_options?.params?.map((param) => {
           return {
             ...param,

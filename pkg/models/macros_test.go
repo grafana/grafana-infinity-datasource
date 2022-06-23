@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
@@ -82,6 +83,61 @@ func TestInterPolateCustomIntervalMacros(t *testing.T) {
 			}
 			require.Nil(t, err)
 			require.Equal(t, tt.want, got)
+		})
+	}
+}
+
+func TestApplyMacros(t *testing.T) {
+	tests := []struct {
+		name    string
+		query   Query
+		want    Query
+		wantErr error
+	}{
+		{
+			query: Query{
+				URL:  "foo_$__customInterval(1m,1 MIN)",
+				UQL:  "UQL_$__customInterval(1m,1 MIN)",
+				GROQ: "GROQ_$__customInterval(1m,1 MIN)",
+				Data: "Data_$__customInterval(1m,1 MIN)",
+				URLOptions: URLOptions{
+					Body:             "Body_$__customInterval(1m,1 MIN)",
+					BodyGraphQLQuery: "GraphQL_$__customInterval(1m,1 MIN)",
+					Params: []URLOptionKeyValuePair{
+						{Key: "p1", Value: "v1_$__customInterval(1m,1 MIN)"},
+						{Key: "p2", Value: "v2"},
+						{Key: "p3", Value: "v3_$__customInterval(1m,1 MIN)"},
+					},
+				},
+			},
+			want: Query{
+				URL:  "foo_1 MIN",
+				UQL:  "UQL_1 MIN",
+				GROQ: "GROQ_1 MIN",
+				Data: "Data_1 MIN",
+				URLOptions: URLOptions{
+					Body:             "Body_1 MIN",
+					BodyGraphQLQuery: "GraphQL_1 MIN",
+					Params: []URLOptionKeyValuePair{
+						{Key: "p1", Value: "v1_1 MIN"},
+						{Key: "p2", Value: "v2"},
+						{Key: "p3", Value: "v3_1 MIN"},
+					},
+				},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := ApplyMacros(tt.query, backend.TimeRange{From: time.UnixMilli(1610582400000), To: time.UnixMilli(1610668800000)})
+			if tt.wantErr != nil {
+				require.NotNil(t, err)
+				assert.Equal(t, tt.wantErr, err)
+				return
+			}
+			require.Nil(t, err)
+			require.NotNil(t, got)
+			assert.Equal(t, tt.want, got)
 		})
 	}
 }

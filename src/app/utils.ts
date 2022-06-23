@@ -30,6 +30,8 @@ export const isDataQuery = (query: InfinityQuery): query is InfinityQueryWithDat
     case 'xml':
     case 'graphql':
     case 'html':
+    case 'uql':
+    case 'groq':
       return true;
     default:
       return false;

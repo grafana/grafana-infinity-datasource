@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
-import { Select, Button, Drawer, CustomScrollbar, CollapsableSection } from '@grafana/ui';
+import { Select, Button, Drawer, CustomScrollbar, CollapsableSection, InlineFormLabel, CodeEditor } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
 import { KeyValueEditor } from './../../components/KeyValuePairEditor';
 import { isDataQuery } from './../../app/utils';
-import type { InfinityQuery } from '../../types';
+import type { InfinityQuery, QueryBodyType, QueryBodyContentType, InfinityURLOptions } from '../../types';
 
 export const URLOptionsEditor = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void }) => {
   const [popupOpenStatus, setPopupOpenStatus] = useState(false);
-  const [body, setBody] = useState((isDataQuery(query) || query.type === 'uql') && query.source === 'url' ? query.url_options.data : '');
   if (!((isDataQuery(query) || query.type === 'uql') && query.source === 'url')) {
     return <></>;
   }
   const btnText = 'HTTP method, Query param, Headers';
   const btnTitle = 'Expand for advanced query options like method, body, etc';
-  const placeholderGraphQLQuery = `{\n    query : {\n        # Write your query here\n    }}`;
+  const placeholderGraphQLQuery = `{ query : { }}`;
   const defaultHeader = {
     key: 'header-key',
     value: 'header-value',
@@ -36,15 +35,8 @@ export const URLOptionsEditor = ({ query, onChange, onRunQuery }: { query: Infin
     });
     onRunQuery();
   };
-  const onBodyChange = () => {
-    onChange({
-      ...query,
-      url_options: {
-        ...query.url_options,
-        data: body,
-      },
-    });
-    onRunQuery();
+  const onURLOptionsChange = <K extends keyof InfinityURLOptions, V extends InfinityURLOptions[K]>(key: K, value: V) => {
+    onChange({ ...query, url_options: { ...query.url_options, [key]: value } });
   };
   return (
     <>
@@ -61,11 +53,10 @@ export const URLOptionsEditor = ({ query, onChange, onRunQuery }: { query: Infin
         >
           <CustomScrollbar autoHeightMin="100%">
             <CollapsableSection label="Method &amp; Body" isOpen={true}>
-              <div className="gf-form-inline">
+              <>
                 <div className="gf-form">
-                  <label className="gf-form-label query-keyword width-8">Method</label>
+                  <InlineFormLabel width={15}>Method</InlineFormLabel>
                   <Select
-                    className="width-8 min-width-8"
                     value={URL_METHODS.find((e) => e.value === (query.url_options.method || 'GET'))}
                     defaultValue={URL_METHODS.find((e) => e.value === 'GET')}
                     options={URL_METHODS}
@@ -73,21 +64,103 @@ export const URLOptionsEditor = ({ query, onChange, onRunQuery }: { query: Infin
                   ></Select>
                 </div>
                 {query.url_options.method === 'POST' ? (
-                  <div className="gf-form">
-                    <label className="gf-form-label query-keyword width-8">Body</label>
-                    <textarea
-                      rows={8}
-                      className="gf-form-input min-width-30"
-                      value={body}
-                      placeholder={placeholderGraphQLQuery}
-                      onChange={(e) => setBody(e.currentTarget.value)}
-                      onBlur={() => onBodyChange()}
-                    ></textarea>
-                  </div>
+                  <>
+                    <div className="gf-form">
+                      <InlineFormLabel width={15}>Body Type</InlineFormLabel>
+                      <Select<QueryBodyType>
+                        value={query.url_options.body_type || 'raw'}
+                        options={[
+                          { value: 'none', label: 'None' },
+                          { value: 'form-data', label: 'Form Data' },
+                          { value: 'x-www-form-urlencoded', label: 'x-www-form-urlencoded' },
+                          { value: 'raw', label: 'Raw' },
+                          { value: 'graphql', label: 'GraphQL' },
+                        ]}
+                        onChange={(e) => onURLOptionsChange('body_type', e?.value ?? 'raw')}
+                      ></Select>
+                    </div>
+                    {(query.url_options?.body_type === 'form-data' || query.url_options?.body_type === 'x-www-form-urlencoded') && (
+                      <KeyValueEditor value={query.url_options.body_form || []} onChange={(e) => onURLOptionsChange('body_form', e)} addButtonText="Add form item" />
+                    )}
+                    {query.url_options?.body_type === 'graphql' && (
+                      <>
+                        <div className="gf-form">
+                          <InlineFormLabel width={15} tooltip={'write your Graphql query below. Example query:  ' + placeholderGraphQLQuery}>
+                            Query
+                          </InlineFormLabel>
+                        </div>
+                        <CodeEditor
+                          language="graphql"
+                          height={'200px'}
+                          value={query.url_options?.body_graphql_query || ''}
+                          onSave={(e) => onURLOptionsChange('body_graphql_query', e)}
+                          onBlur={(e) => onURLOptionsChange('body_graphql_query', e)}
+                        />
+                        {/* <div className="gf-form" style={{ marginTop: '5px' }}>
+                          <InlineFormLabel width={15} tooltip="Define variables in JSON format to use in the query">
+                            Variables
+                          </InlineFormLabel>
+                        </div>
+                        <CodeEditor
+                          language="json"
+                          height={'200px'}
+                          value={query.url_options?.body_graphql_variables || ''}
+                          onSave={(e) => onURLOptionsChange('body_graphql_variables', e)}
+                          onBlur={(e) => onURLOptionsChange('body_graphql_variables', e)}
+                        /> */}
+                      </>
+                    )}
+                    {(query.url_options?.body_type === 'raw' || !query.url_options?.body_type) && (
+                      <>
+                        <div className="gf-form">
+                          <InlineFormLabel width={15}>Body Content Type</InlineFormLabel>
+                          <Select<QueryBodyContentType>
+                            value={query.url_options?.body_content_type || 'text/plain'}
+                            options={[
+                              { value: 'text/plain', label: 'Text' },
+                              { value: 'application/json', label: 'JSON' },
+                              { value: 'application/xml', label: 'XML' },
+                              { value: 'text/html', label: 'HTML' },
+                              { value: 'application/javascript', label: 'JavaScript' },
+                            ]}
+                            onChange={(e) => onURLOptionsChange('body_content_type', e?.value ?? 'text/plain')}
+                          ></Select>
+                        </div>
+                        <div className="gf-form">
+                          <InlineFormLabel width={15}>Body Content</InlineFormLabel>
+                        </div>
+                        <CodeEditor
+                          language={
+                            query.url_options?.body_content_type === 'application/json'
+                              ? 'json'
+                              : query.url_options?.body_content_type === 'application/xml'
+                              ? 'xml'
+                              : query.url_options?.body_content_type === 'text/html'
+                              ? 'html'
+                              : query.url_options?.body_content_type === 'application/javascript'
+                              ? 'javascript'
+                              : query.url_options?.body_content_type === 'text/plain'
+                              ? 'text'
+                              : 'text'
+                          }
+                          height={'200px'}
+                          value={query.url_options?.data || ''}
+                          onSave={(e) => {
+                            onURLOptionsChange('data', e);
+                            onRunQuery();
+                          }}
+                          onBlur={(e) => {
+                            onURLOptionsChange('data', e);
+                            onRunQuery();
+                          }}
+                        />
+                      </>
+                    )}
+                  </>
                 ) : (
                   <></>
                 )}
-              </div>
+              </>
             </CollapsableSection>
             <CollapsableSection label="Query Params" isOpen={true}>
               <KeyValueEditor

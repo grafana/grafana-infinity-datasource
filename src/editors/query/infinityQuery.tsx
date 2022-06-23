@@ -8,6 +8,7 @@ import { TableFilter } from './query.filters';
 import { JSONBackendEditor } from './query.json-backend';
 import { UQLEditor } from './query.uql';
 import { GROQEditor } from './query.groq';
+import { migrateQuery } from './../../migrate';
 import { InfinityQuery, EditorMode, DefaultInfinityQuery, InfinityQueryType } from '../../types';
 
 export type InfinityEditorProps = {
@@ -21,7 +22,8 @@ export type InfinityEditorProps = {
 
 export const InfinityQueryEditor = (props: InfinityEditorProps) => {
   const { onChange, mode, instanceSettings, onRunQuery, hideTip } = props;
-  const query: InfinityQuery = defaultsDeep(props.query, DefaultInfinityQuery) as InfinityQuery;
+  let query: InfinityQuery = defaultsDeep(props.query, DefaultInfinityQuery) as InfinityQuery;
+  query = migrateQuery(query);
   let canShowURLEditor = ['csv', 'tsv', 'html', 'json', 'json-backend', 'graphql', 'xml', 'uql', 'groq'].includes(query.type);
   let canShowColumnsEditor = ['csv', 'tsv', 'html', 'json', 'json-backend', 'graphql', 'xml'].includes(query.type);
   let canShowFilterEditor =

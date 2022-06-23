@@ -122,11 +122,25 @@ func ApplyMacros(query Query, timeRange backend.TimeRange) (Query, error) {
 	}
 	query.Data = data
 
-	body, err := InterPolateMacros(query.URLOptions.Data, timeRange)
+	body, err := InterPolateMacros(query.URLOptions.Body, timeRange)
 	if err != nil {
 		return query, fmt.Errorf("error applying macros to body data field. %s", err.Error())
 	}
-	query.URLOptions.Data = body
+	query.URLOptions.Body = body
+
+	graphqlQuery, err := InterPolateMacros(query.URLOptions.BodyGraphQLQuery, timeRange)
+	if err != nil {
+		return query, fmt.Errorf("error applying macros to body graphql query field. %s", err.Error())
+	}
+	query.URLOptions.BodyGraphQLQuery = graphqlQuery
+
+	for idx, p := range query.URLOptions.Params {
+		up, err := InterPolateMacros(p.Value, timeRange)
+		if err != nil {
+			return query, fmt.Errorf("error applying macros to url parameter field %s. %s", p.Key, err.Error())
+		}
+		query.URLOptions.Params[idx].Value = up
+	}
 
 	return query, nil
 }
