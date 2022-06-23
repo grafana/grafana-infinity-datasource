@@ -10,9 +10,8 @@
     "spellcheck": "cspell -c cspell.config.json \"**/*.{ts,tsx,js,go,md,mdx,yml,yaml,json,scss,css}\"",
     "lint": "yarn spellcheck && yarn audit-ci",
     "test": "yarn lint && grafana-toolkit plugin:test",
-    "e2e": "yarn lint && grafana-e2e run",
-    "e2e:open": "yarn lint && grafana-e2e open",
-    "e2e:update": "yarn lint && grafana-e2e run --update-screenshots",
+    "e2e": "yarn lint && yarn exec cypress run",
+    "e2e:open": "yarn lint&& yarn exec cypress open",
     "build": "yarn lint && grafana-toolkit plugin:build",
     "ci-build": "yarn lint && grafana-toolkit plugin:ci-build",
     "audit-ci": "audit-ci",
@@ -49,7 +48,7 @@
   "bugs": {
     "url": "https://github.com/yesoreyeram/grafana-infinity-datasource/issues"
   },
-  "homepage": "https://github.com/yesoreyeram/grafana-infinity-datasource#readme",
+  "homepage": "https://yesoreyeram.github.io/grafana-infinity-datasource",
   "dependencies": {
     "@emotion/css": "^11.9.0",
     "@grafana/data": "8.4.7",
@@ -81,16 +80,16 @@
     "@types/xml2js": "^0.4.6",
     "audit-ci": "^5.1.2",
     "cspell": "^5.19.7",
-    "cypress": "7.7.0",
+    "cypress": "^10.2.0",
     "jest-runner": "^27.0.4",
     "ts-jest": "^26.5.4",
     "ts-loader": "^8.0.18",
     "tslib": "^2.3.1",
-    "typescript": "4.4.3",
-    "vitest": "^0.10.0"
+    "typescript": "4.4.3"
   },
   "resolutions": {
     "rxjs": "6.6.3",
+    "d3-color": "3.1.0",
     "minimist": "1.2.6",
     "underscore": "1.12.1",
     "glob-parent": "5.1.2",

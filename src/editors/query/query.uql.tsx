@@ -32,7 +32,7 @@ export const UQLEditor = (props: { mode: EditorMode; query: InfinityQuery; onCha
         <InlineFormLabel className="query-keyword" width={LABEL_WIDTH}>
           UQL
         </InlineFormLabel>
-        <div>
+        <div data-testid="infinity-query-uql-selector">
           <CodeEditor
             language="sql"
             width="594px"

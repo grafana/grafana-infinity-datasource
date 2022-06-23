@@ -27,7 +27,7 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
   let canShowFilterEditor =
     query.type !== 'series' && query.type !== 'global' && query.type !== 'json-backend' && query.type !== 'uql' && query.type !== 'groq' && query.columns && query.columns.length > 0;
   return (
-    <div className="infinity-query-editor">
+    <div className="infinity-query-editor" data-testid="infinity-query-editor">
       <TypeChooser {...{ instanceSettings, mode, query, onChange, onRunQuery }} />
       {query.type === 'series' && <SeriesEditor {...{ query, onChange }} />}
       {canShowURLEditor && <URLEditor {...{ mode, query, onChange, onRunQuery }} />}
