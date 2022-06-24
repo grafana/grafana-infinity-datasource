@@ -1,6 +1,6 @@
+import { Button, Checkbox, Drawer, InlineFormLabel, Input } from '@grafana/ui';
 import React, { useState } from 'react';
-import { Checkbox, Drawer, Button, InlineFormLabel, Input } from '@grafana/ui';
-import { InfinityQuery, InfinityCSVQueryOptions } from '../types';
+import type { InfinityCSVQueryOptions, InfinityQuery } from './../types';
 
 export const CSVOptionsEditor = (props: { query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void }) => {
   const [popupStatus, setPopupStatus] = useState(false);

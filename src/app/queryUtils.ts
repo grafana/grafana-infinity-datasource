@@ -1,8 +1,8 @@
-import { DataSourceInstanceSettings, DataQueryRequest } from '@grafana/data';
-import { isDataQuery, normalizeURL } from './utils';
 import { interpolateQuery } from './../interpolate';
 import { migrateQuery } from './../migrate';
-import { InfinityQuery, InfinityInstanceSettings, InfinityOptions, GlobalInfinityQuery } from '../types';
+import { isDataQuery, normalizeURL } from './utils';
+import type { GlobalInfinityQuery, InfinityInstanceSettings, InfinityOptions, InfinityQuery } from './../types';
+import type { DataQueryRequest, DataSourceInstanceSettings, ScopedVars } from '@grafana/data/types';
 
 export const overrideWithGlobalQuery = (t: InfinityQuery, instanceSettings: DataSourceInstanceSettings<InfinityOptions>): InfinityQuery => {
   if (t.type === 'global' && t.global_query_id && instanceSettings.jsonData.global_queries && instanceSettings.jsonData.global_queries.length > 0) {
@@ -33,17 +33,24 @@ export const getDefaultGlobalQueryID = (ins: InfinityInstanceSettings): string =
 export const getUpdatedDataRequest = (options: DataQueryRequest<InfinityQuery>, instanceSettings: DataSourceInstanceSettings<InfinityOptions>): DataQueryRequest<InfinityQuery> => {
   return {
     ...options,
-    targets: options.targets
-      .filter((t: InfinityQuery) => t.hide !== true)
-      .map((t) => overrideWithGlobalQuery(t, instanceSettings))
-      .filter((t) => t.type !== 'global')
-      .map((t) => migrateQuery(t))
-      .map((t) => interpolateQuery(t, options.scopedVars))
-      .map((t) => {
-        if (isDataQuery(t) && t.source === 'url') {
-          t.url = normalizeURL(t.url);
-        }
-        return t;
-      }),
+    targets: interpolateVariablesInQueries(
+      options.targets
+        .filter((t: InfinityQuery) => t.hide !== true)
+        .map((t) => overrideWithGlobalQuery(t, instanceSettings))
+        .filter((t) => t.type !== 'global'),
+      options.scopedVars
+    ),
   };
+};
+
+export const interpolateVariablesInQueries = (queries: InfinityQuery[], scopedVars: ScopedVars): InfinityQuery[] => {
+  return queries
+    .map((t) => migrateQuery(t))
+    .map((t) => interpolateQuery(t, scopedVars))
+    .map((t) => {
+      if (isDataQuery(t) && t.source === 'url') {
+        t.url = normalizeURL(t.url);
+      }
+      return t;
+    });
 };

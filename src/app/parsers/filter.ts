@@ -1,5 +1,6 @@
-import { SelectableValue } from '@grafana/data';
-import { GrafanaTableRow, InfinityColumn, InfinityFilter, FilterOperator } from './../../types';
+import { FilterOperator } from './../../constants';
+import type { GrafanaTableRow, InfinityColumn, InfinityFilter } from './../../types';
+import type { SelectableValue } from '@grafana/data/types';
 
 export const filterOperators: Array<SelectableValue<FilterOperator>> = [
   { label: 'Equals', value: FilterOperator.Equals },

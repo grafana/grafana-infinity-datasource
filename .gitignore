@@ -92,8 +92,7 @@ typings/
 # public
 
 # gatsby build output
-public/
-docs/
+website/public/
 
 # Serverless directories
 .serverless/

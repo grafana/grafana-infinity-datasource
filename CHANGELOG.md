@@ -2,7 +2,7 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
-## [ 1.0.0 ] - unreleased
+## [ 1.0.0 ] - next
 
 ### **New Features & Bug Fixes**
 
@@ -16,6 +16,7 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 - **UQL**: new summarize methods `countif`, `sumif`, `minif` and `maxif`
 - **UQL**: new methods `percentage`,`split`,`replace_string`,`reverse`,`pack`,`array_to_map` and `array_from_entries`
 - **As-Is**: Support for URL when using As-Is format with JSON
+- **UX**: Variables interpolated in queries when navigating from dashboard to explore page
 - **Chore**: Updated cypress and improved E2E tests coverage
 - **Chore**: prometheus `metrics` resource endpoint added ( _experimental_ )
 

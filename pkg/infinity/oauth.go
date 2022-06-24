@@ -11,11 +11,11 @@ import (
 	"golang.org/x/oauth2/clientcredentials"
 	"golang.org/x/oauth2/jwt"
 
-	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
+	settingsSrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/settings"
 )
 
-func ApplyOAuthClientCredentials(httpClient *http.Client, settings models.InfinitySettings) *http.Client {
-	if settings.AuthenticationMethod == models.AuthenticationMethodOAuth && settings.OAuth2Settings.OAuth2Type == models.AuthOAuthTypeClientCredentials {
+func ApplyOAuthClientCredentials(httpClient *http.Client, settings settingsSrv.InfinitySettings) *http.Client {
+	if settings.AuthenticationMethod == settingsSrv.AuthenticationMethodOAuth && settings.OAuth2Settings.OAuth2Type == settingsSrv.AuthOAuthTypeClientCredentials {
 		oauthConfig := clientcredentials.Config{
 			ClientID:       settings.OAuth2Settings.ClientID,
 			ClientSecret:   settings.OAuth2Settings.ClientSecret,
@@ -38,8 +38,8 @@ func ApplyOAuthClientCredentials(httpClient *http.Client, settings models.Infini
 	}
 	return httpClient
 }
-func ApplyOAuthJWT(httpClient *http.Client, settings models.InfinitySettings) *http.Client {
-	if settings.AuthenticationMethod == models.AuthenticationMethodOAuth && settings.OAuth2Settings.OAuth2Type == models.AuthOAuthJWT {
+func ApplyOAuthJWT(httpClient *http.Client, settings settingsSrv.InfinitySettings) *http.Client {
+	if settings.AuthenticationMethod == settingsSrv.AuthenticationMethodOAuth && settings.OAuth2Settings.OAuth2Type == settingsSrv.AuthOAuthJWT {
 		jwtConfig := jwt.Config{
 			Email:        settings.OAuth2Settings.Email,
 			TokenURL:     settings.OAuth2Settings.TokenURL,
@@ -58,8 +58,8 @@ func ApplyOAuthJWT(httpClient *http.Client, settings models.InfinitySettings) *h
 	}
 	return httpClient
 }
-func ApplyDigestAuth(httpClient *http.Client, settings models.InfinitySettings) *http.Client {
-	if settings.AuthenticationMethod == models.AuthenticationMethodDigestAuth {
+func ApplyDigestAuth(httpClient *http.Client, settings settingsSrv.InfinitySettings) *http.Client {
+	if settings.AuthenticationMethod == settingsSrv.AuthenticationMethodDigestAuth {
 		a := dac.NewTransport(settings.UserName, settings.Password)
 		httpClient.Transport = &a
 	}

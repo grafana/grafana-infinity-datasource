@@ -1,8 +1,8 @@
 import React from 'react';
-import { QueryEditorProps } from '@grafana/data';
-import { QueryEditor } from './query.editor';
 import { Datasource } from './../datasource';
-import { InfinityQuery } from './../types';
+import { QueryEditor } from './query.editor';
+import type { InfinityQuery } from './../types';
+import type { QueryEditorProps } from '@grafana/data/types';
 
 export const AnnotationsEditor = (props: QueryEditorProps<Datasource, InfinityQuery>) => {
   return (

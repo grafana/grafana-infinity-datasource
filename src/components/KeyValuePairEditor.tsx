@@ -1,5 +1,5 @@
+import { Button, Input } from '@grafana/ui';
 import React from 'react';
-import { Input, Button } from '@grafana/ui';
 import type { InfinityKV } from './../types';
 
 export const KeyValueEditor = (props: { value: InfinityKV[]; onChange: (value: InfinityKV[]) => void; defaultValue?: InfinityKV; addButtonText?: string }) => {

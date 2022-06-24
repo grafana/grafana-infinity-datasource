@@ -1,8 +1,9 @@
-import React from 'react';
-import { FormatSelector } from './FormatSelector';
 import { render, within } from '@testing-library/react';
-import { DefaultInfinityQuery, InfinityQuery } from '../types';
-import { Components } from '../selectors';
+import React from 'react';
+import { DefaultInfinityQuery } from './../constants';
+import { Components } from './../selectors';
+import { FormatSelector } from './FormatSelector';
+import type { InfinityQuery } from './../types';
 
 const { Text: LabelText } = Components.QueryEditor.Format.Label;
 const { Title: DropdownPlaceholderTitle } = Components.QueryEditor.Format.Dropdown.PlaceHolder;

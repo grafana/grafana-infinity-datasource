@@ -1,5 +1,5 @@
 import { JSONParser } from './JSONParser';
-import { InfinityQuery } from './../../types';
+import type { InfinityQuery } from './../../types';
 
 const defaultTarget: InfinityQuery = {
   refId: '',

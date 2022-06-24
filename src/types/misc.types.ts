@@ -27,5 +27,4 @@ export type HealthCheckResult = {
 
 export type queryResult = timeSeriesResult | tableResult;
 export type EditorMode = 'standard' | 'global' | 'variable';
-export const IGNORE_URL = '__IGNORE_URL__';
 //#endregion

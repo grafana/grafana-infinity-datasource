@@ -1,6 +1,6 @@
 import { sample } from 'lodash';
 import * as math from 'mathjs';
-import { InfinityQuery, dataPoint, DataOverride } from '../types';
+import type { DataOverride, dataPoint, InfinityQuery } from './../types';
 
 const LOREM = `
 Lorem ipsum dolor sit amet consectetur adipiscing elit Vivamus nec condimentum ex non volutpat ante Aenean in velit nulla In hac habitasse platea dictumst Vestibulum congue sapien pretium neque condimentum rutrum Sed metus nunc condimentum ut velit non consectetur posuere nulla Phasellus feugiat porttitor odio id laoreet risus tincidunt ac Sed quis felis fermentum pulvinar justo vitae fringilla lacus Etiam molestie urna magna sit amet semper diam pharetra at Aliquam hendrerit enim a varius ullamcorper Nulla eu pulvinar mi

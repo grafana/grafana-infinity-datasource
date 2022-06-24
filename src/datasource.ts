@@ -1,17 +1,18 @@
-import { Observable } from 'rxjs';
-import { flatten, sample } from 'lodash';
-import { DataQueryResponse, DataQueryRequest, LoadingState, TimeRange, ScopedVars, toDataFrame, DataFrame } from '@grafana/data';
+import { LoadingState, toDataFrame } from '@grafana/data';
 import { DataSourceWithBackend } from '@grafana/runtime';
-import { AnnotationsEditor } from './editors/annotation.editor';
-import { InfinityProvider } from './app/InfinityProvider';
-import { applyUQL } from './app/UQLProvider';
+import { flatten, sample } from 'lodash';
+import { Observable } from 'rxjs';
 import { applyGroq } from './app/GROQProvider';
+import { InfinityProvider } from './app/InfinityProvider';
 import { SeriesProvider } from './app/SeriesProvider';
-import { getUpdatedDataRequest } from './app/queryUtils';
-import { LegacyVariableProvider, getTemplateVariablesFromResult, migrateLegacyQuery } from './app/variablesQuery';
+import { applyUQL } from './app/UQLProvider';
+import { getUpdatedDataRequest, interpolateVariablesInQueries } from './app/queryUtils';
+import { getTemplateVariablesFromResult, LegacyVariableProvider, migrateLegacyQuery } from './app/variablesQuery';
+import { AnnotationsEditor } from './editors/annotation.editor';
 import { interpolateQuery, interpolateVariableQuery } from './interpolate';
 import { migrateQuery } from './migrate';
-import { InfinityQuery, VariableQuery, MetricFindValue, InfinityInstanceSettings, InfinityOptions } from './types';
+import type { InfinityInstanceSettings, InfinityOptions, InfinityQuery, MetricFindValue, VariableQuery } from './types';
+import type { DataFrame, DataQueryRequest, DataQueryResponse, ScopedVars, TimeRange } from '@grafana/data/types';
 
 export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOptions> {
   constructor(public instanceSettings: InfinityInstanceSettings) {
@@ -34,6 +35,9 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
         })
         .finally(() => subscriber.complete());
     });
+  }
+  interpolateVariablesInQueries(queries: InfinityQuery[], scopedVars: ScopedVars) {
+    return interpolateVariablesInQueries(queries, scopedVars);
   }
   metricFindQuery(originalQuery: VariableQuery): Promise<MetricFindValue[]> {
     let query = migrateLegacyQuery(originalQuery);
@@ -88,49 +92,45 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
     });
   }
   testDatasource() {
-    if (this.instanceSettings.basicAuth || this.instanceSettings.jsonData?.oauthPassThru || (this.instanceSettings.jsonData?.auth_method && this.instanceSettings.jsonData?.auth_method !== 'none')) {
-      if (!this.instanceSettings?.jsonData?.allowedHosts || (this.instanceSettings?.jsonData?.allowedHosts && this.instanceSettings?.jsonData?.allowedHosts.length < 1)) {
-        return Promise.resolve({ status: 'error', message: 'Configure allowed hosts in the authentication section' });
-      }
-    }
-    return super.testDatasource();
+    return super
+      .testDatasource()
+      .then((o) => {
+        switch (o?.message) {
+          case 'OK':
+            return Promise.resolve({ status: 'success', message: 'OK. Settings saved' });
+          default:
+            return Promise.resolve({ status: o?.status || 'success', message: o?.message || 'Settings saved' });
+        }
+      })
+      .catch((ex) => {
+        return Promise.resolve({ status: 'error', message: ex.message });
+      });
   }
-  private resolveData = (t: InfinityQuery, range: TimeRange, scopedVars: ScopedVars, data: string): Promise<any> => {
-    return new Promise((resolve, reject) => {
-      switch (t.type) {
-        case 'csv':
-        case 'tsv':
-        case 'html':
-        case 'json':
-        case 'xml':
-        case 'graphql':
-          if (t.format === 'as-is' && t.source === 'inline') {
-            const data = JSON.parse(t.data || '[]');
-            resolve(data);
-          }
-          new InfinityProvider(t, this).formatResults(data).then(resolve).catch(reject);
-          break;
-        case 'uql':
-          applyUQL(t.uql, data, t.format, t.refId).then(resolve).catch(reject);
-          break;
-        case 'groq':
-          applyGroq(t.groq, data, t.format, t.refId).then(resolve).catch(reject);
-          break;
-        case 'series':
-          new SeriesProvider(interpolateQuery(t, scopedVars)).query(new Date(range?.from?.toDate()).getTime(), new Date(range?.to?.toDate()).getTime()).then(resolve).catch(reject);
-          break;
-        case 'global':
-          reject('Query not found');
-          break;
-        default:
-          reject('Unknown Query Type');
-          break;
-      }
-    });
-  };
+  getQueryDisplayText(query: InfinityQuery) {
+    return (
+      query.type.toUpperCase() +
+      ((query.type === 'json' ||
+        query.type === 'csv' ||
+        query.type === 'xml' ||
+        query.type === 'uql' ||
+        query.type === 'graphql' ||
+        query.type === 'groq' ||
+        query.type === 'json-backend' ||
+        query.type === 'tsv') &&
+      query.source === 'url'
+        ? ` ${query.url}`
+        : '')
+    );
+  }
+  filterQuery(query: InfinityQuery) {
+    if (query.hide) {
+      return false;
+    }
+    return true;
+  }
   private getResults(options: DataQueryRequest<InfinityQuery>, result: DataQueryResponse): Promise<DataQueryResponse> {
     if (result && result.error) {
-      return Promise.reject(JSON.stringify(result.error || { msg: 'error getting result', error: result.error }));
+      return Promise.resolve({ data: result?.data, error: result.error || 'error while getting the results. Refer grafana logs for more details', state: LoadingState.Error });
     }
     const promises: Array<Promise<DataFrame>> = [];
     if (result && result.data) {
@@ -181,26 +181,37 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
         throw ex;
       });
   }
-  getQueryDisplayText(query: InfinityQuery) {
-    return (
-      query.type.toUpperCase() +
-      ((query.type === 'json' ||
-        query.type === 'csv' ||
-        query.type === 'xml' ||
-        query.type === 'uql' ||
-        query.type === 'graphql' ||
-        query.type === 'groq' ||
-        query.type === 'json-backend' ||
-        query.type === 'tsv') &&
-      query.source === 'url'
-        ? ` ${query.url}`
-        : '')
-    );
-  }
-  filterQuery(query: InfinityQuery) {
-    if (query.hide) {
-      return false;
-    }
-    return true;
-  }
+  private resolveData = (t: InfinityQuery, range: TimeRange, scopedVars: ScopedVars, data: string): Promise<any> => {
+    return new Promise((resolve, reject) => {
+      switch (t.type) {
+        case 'csv':
+        case 'tsv':
+        case 'html':
+        case 'json':
+        case 'xml':
+        case 'graphql':
+          if (t.format === 'as-is' && t.source === 'inline') {
+            const data = JSON.parse(t.data || '[]');
+            resolve(data);
+          }
+          new InfinityProvider(t, this).formatResults(data).then(resolve).catch(reject);
+          break;
+        case 'uql':
+          applyUQL(t.uql, data, t.format, t.refId).then(resolve).catch(reject);
+          break;
+        case 'groq':
+          applyGroq(t.groq, data, t.format, t.refId).then(resolve).catch(reject);
+          break;
+        case 'series':
+          new SeriesProvider(interpolateQuery(t, scopedVars)).query(new Date(range?.from?.toDate()).getTime(), new Date(range?.to?.toDate()).getTime()).then(resolve).catch(reject);
+          break;
+        case 'global':
+          reject('Query not found');
+          break;
+        default:
+          reject('Unknown Query Type');
+          break;
+      }
+    });
+  };
 }

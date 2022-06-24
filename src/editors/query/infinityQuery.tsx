@@ -1,15 +1,16 @@
-import React from 'react';
 import { defaultsDeep } from 'lodash';
-import { TypeChooser } from './query.type';
-import { URLEditor } from './query.url';
-import { QueryColumnsEditor } from './query.columns.editor';
-import { SeriesEditor } from './query.series';
-import { TableFilter } from './query.filters';
-import { JSONBackendEditor } from './query.json-backend';
-import { UQLEditor } from './query.uql';
-import { GROQEditor } from './query.groq';
+import React from 'react';
+import { DefaultInfinityQuery } from './../../constants';
 import { migrateQuery } from './../../migrate';
-import { InfinityQuery, EditorMode, DefaultInfinityQuery, InfinityQueryType } from '../../types';
+import { QueryColumnsEditor } from './query.columns.editor';
+import { TableFilter } from './query.filters';
+import { GROQEditor } from './query.groq';
+import { JSONBackendEditor } from './query.json-backend';
+import { SeriesEditor } from './query.series';
+import { TypeChooser } from './query.type';
+import { UQLEditor } from './query.uql';
+import { URLEditor } from './query.url';
+import type { EditorMode, InfinityQuery, InfinityQueryType } from './../../types';
 
 const UQLPromotion = ({ queryType }: { queryType: InfinityQueryType }) => {
   return queryType === 'xml' || queryType === 'csv' ? (

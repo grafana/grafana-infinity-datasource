@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
 import { Button, Modal } from '@grafana/ui';
-import { DataSourceSettings } from '@grafana/data';
+import React, { useState } from 'react';
+import type { InfinityOptions } from './../../types';
+import type { DataSourceSettings } from '@grafana/data/types';
 const YAML = require('json-to-pretty-yaml');
-import { InfinityOptions } from './../../types';
 
 export const ProvisioningScript = (props: { options: DataSourceSettings<InfinityOptions, {}> }) => {
   const { options } = props;

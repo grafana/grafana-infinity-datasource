@@ -1,9 +1,9 @@
+import { Button, CodeEditor, CollapsableSection, CustomScrollbar, Drawer, InlineFormLabel, Select } from '@grafana/ui';
 import React, { useState } from 'react';
-import { Select, Button, Drawer, CustomScrollbar, CollapsableSection, InlineFormLabel, CodeEditor } from '@grafana/ui';
-import { SelectableValue } from '@grafana/data';
-import { KeyValueEditor } from './../../components/KeyValuePairEditor';
 import { isDataQuery } from './../../app/utils';
-import type { InfinityQuery, QueryBodyType, QueryBodyContentType, InfinityURLOptions } from '../../types';
+import { KeyValueEditor } from './../../components/KeyValuePairEditor';
+import type { InfinityQuery, InfinityURLOptions, QueryBodyContentType, QueryBodyType } from './../../types';
+import type { SelectableValue } from '@grafana/data';
 
 export const URLOptionsEditor = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void }) => {
   const [popupOpenStatus, setPopupOpenStatus] = useState(false);

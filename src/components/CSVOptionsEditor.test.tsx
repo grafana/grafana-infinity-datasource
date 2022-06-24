@@ -1,8 +1,8 @@
-import React from 'react';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import React from 'react';
 import { CSVOptionsEditor } from './CSVOptionsEditor';
-import { InfinityQuery } from 'types';
+import type { InfinityQuery } from './../types';
 
 describe('components', () => {
   describe('CSVOptionsEditor', () => {

@@ -1,6 +1,7 @@
+import { PluginType } from '@grafana/data';
 import { DataSourceWithBackend } from '@grafana/runtime';
-import { DataSourceInstanceSettings, PluginType } from '@grafana/data';
 import { Datasource } from './datasource';
+import type { DataSourceInstanceSettings } from '@grafana/data/types';
 
 jest.mock('@grafana/runtime', () => ({
   ...(jest.requireActual('@grafana/runtime') as unknown as object),
@@ -72,25 +73,10 @@ describe('metricFindQuery', () => {
 });
 
 describe('testDatasource', () => {
-  beforeEach(() => jest.spyOn(DataSourceWithBackend.prototype, 'testDatasource').mockResolvedValue({ a: 'b' }));
-  it('should throw error when allowed hosts not configured', async () => {
-    const ds = new Datasource({ ...DummyDatasource, jsonData: { auth_method: 'basicAuth' } });
-    const result = await ds.testDatasource();
-    expect(result).toStrictEqual({ status: 'error', message: 'Configure allowed hosts in the authentication section' });
-  });
-  it('should throw error when allowed hosts does not have any values', async () => {
-    const ds = new Datasource({ ...DummyDatasource, jsonData: { auth_method: 'apiKey', allowedHosts: [] } });
-    const result = await ds.testDatasource();
-    expect(result).toStrictEqual({ status: 'error', message: 'Configure allowed hosts in the authentication section' });
-  });
+  beforeEach(() => jest.spyOn(DataSourceWithBackend.prototype, 'testDatasource').mockResolvedValue({ message: 'OK' }));
   it('should not throw error when allowed hosts configured', async () => {
     const ds = new Datasource({ ...DummyDatasource, jsonData: { auth_method: 'apiKey', allowedHosts: ['foo'] } });
     const result = await ds.testDatasource();
-    expect(result).toStrictEqual({ a: 'b' });
-  });
-  it('should throw error when allowed hosts configured with oauth passthrough', async () => {
-    const ds = new Datasource({ ...DummyDatasource, jsonData: { oauthPassThru: true } });
-    const result = await ds.testDatasource();
-    expect(result).toStrictEqual({ status: 'error', message: 'Configure allowed hosts in the authentication section' });
+    expect(result).toStrictEqual({ status: 'success', message: 'OK. Settings saved' });
   });
 });

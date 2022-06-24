@@ -6,12 +6,7 @@ module.exports = {
   ...{
     ...standard.jestConfig(),
     setupFilesAfterEnv: ['<rootDir>/src/tests.ts'],
-    modulePathIgnorePatterns: [
-      '<rootDir>/src/module.ts',
-      '<rootDir>/src/selectors.ts',
-      '<rootDir>/src/styles.ts',
-      '<rootDir>/src/types.ts',
-    ],
+    modulePathIgnorePatterns: ['<rootDir>/src/module.ts', '<rootDir>/src/selectors.ts', '<rootDir>/src/styles.ts', '<rootDir>/src/types.ts'],
     globals: {
       ...globals,
       'ts-jest': {

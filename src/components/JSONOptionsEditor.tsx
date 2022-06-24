@@ -1,6 +1,6 @@
+import { Button, Checkbox, Drawer } from '@grafana/ui';
 import React, { useState } from 'react';
-import { Checkbox, Drawer, Button } from '@grafana/ui';
-import { InfinityQuery, InfinityJSONQueryOptions } from '../types';
+import type { InfinityJSONQueryOptions, InfinityQuery } from './../types';
 
 export const JSONOptionsEditor = (props: { query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void }) => {
   const [popupStatus, setPopupStatus] = useState(false);

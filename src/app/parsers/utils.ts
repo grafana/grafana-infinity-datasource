@@ -1,5 +1,5 @@
 import { get, isArray, set } from 'lodash';
-import { InfinityColumn, InfinityColumnFormat } from './../../types';
+import type { InfinityColumn, InfinityColumnFormat } from './../../types';
 
 const guessColumnTypeFromField = (obj: any): InfinityColumnFormat => {
   switch (typeof obj) {

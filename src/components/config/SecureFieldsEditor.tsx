@@ -1,8 +1,8 @@
-import React, { PureComponent } from 'react';
+import { Button, IconButton, LegacyForms } from '@grafana/ui';
 import uniqueId from 'lodash/uniqueId';
-import { DataSourceSettings } from '@grafana/data';
-import { Button, LegacyForms, IconButton } from '@grafana/ui';
-import { InfinityOptions, SecureField } from '../../types';
+import React, { PureComponent } from 'react';
+import { InfinityOptions, SecureField } from './../../types';
+import type { DataSourceSettings } from '@grafana/data/types';
 
 const SecureFieldEditor = ({
   title,

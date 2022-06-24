@@ -1,8 +1,8 @@
-import { forEach, get } from 'lodash';
 import parse from 'csv-parse/lib/sync';
+import { forEach, get } from 'lodash';
 import { InfinityParser } from './InfinityParser';
 import { getColumnsFromObjectArray, getValue } from './utils';
-import { InfinityColumn, GrafanaTableRow, InfinityCSVQuery, InfinityTSVQuery } from './../../types';
+import type { GrafanaTableRow, InfinityColumn, InfinityCSVQuery, InfinityTSVQuery } from './../../types';
 
 export class CSVParser extends InfinityParser<InfinityCSVQuery | InfinityTSVQuery> {
   constructor(CSVResponse: string, target: InfinityCSVQuery | InfinityTSVQuery, endTime?: Date) {

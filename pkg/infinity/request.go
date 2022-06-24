@@ -9,10 +9,11 @@ import (
 
 	"moul.io/http2curl"
 
-	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
+	querySrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/query"
+	settingsSrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/settings"
 )
 
-func GetRequest(settings models.InfinitySettings, body io.Reader, query models.Query, requestHeaders map[string]string, includeSect bool) (req *http.Request, err error) {
+func GetRequest(settings settingsSrv.InfinitySettings, body io.Reader, query querySrv.Query, requestHeaders map[string]string, includeSect bool) (req *http.Request, err error) {
 	url, err := GetQueryURL(settings, query, includeSect)
 	if err != nil {
 		return nil, err
@@ -34,7 +35,7 @@ func GetRequest(settings models.InfinitySettings, body io.Reader, query models.Q
 	return req, err
 }
 
-func GetQueryURL(settings models.InfinitySettings, query models.Query, includeSect bool) (string, error) {
+func GetQueryURL(settings settingsSrv.InfinitySettings, query querySrv.Query, includeSect bool) (string, error) {
 	urlString := query.URL
 	if !strings.HasPrefix(query.URL, settings.URL) {
 		urlString = settings.URL + urlString
@@ -56,7 +57,7 @@ func GetQueryURL(settings models.InfinitySettings, query models.Query, includeSe
 		}
 		q.Set(key, val)
 	}
-	if settings.AuthenticationMethod == models.AuthenticationMethodApiKey && settings.ApiKeyType == models.ApiKeyTypeQuery {
+	if settings.AuthenticationMethod == settingsSrv.AuthenticationMethodApiKey && settings.ApiKeyType == settingsSrv.ApiKeyTypeQuery {
 		val := dummyHeader
 		if includeSect {
 			val = settings.ApiKeyValue
@@ -67,7 +68,7 @@ func GetQueryURL(settings models.InfinitySettings, query models.Query, includeSe
 	return u.String(), nil
 }
 
-func (client *Client) GetExecutedURL(query models.Query) string {
+func (client *Client) GetExecutedURL(query querySrv.Query) string {
 	out := []string{}
 	if query.Source != "inline" {
 		req, err := GetRequest(client.Settings, GetQueryBody(query), query, map[string]string{}, false)
@@ -81,10 +82,10 @@ func (client *Client) GetExecutedURL(query models.Query) string {
 		out = append(out, "###############", "## URL", "###############", "", req.URL.String(), "")
 		out = append(out, "###############", "## Curl Command", "###############", "", command.String())
 	}
-	if query.Type == models.QueryTypeUQL {
+	if query.Type == querySrv.QueryTypeUQL {
 		out = append(out, "", "###############", "## UQL", "###############", "", query.UQL)
 	}
-	if query.Type == models.QueryTypeGROQ {
+	if query.Type == querySrv.QueryTypeGROQ {
 		out = append(out, "###############", "## GROQ", "###############", "", query.GROQ, "")
 	}
 	return strings.Join(out, "\n")

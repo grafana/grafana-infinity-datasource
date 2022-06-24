@@ -1,7 +1,7 @@
 import React from 'react';
 import { graphql } from 'gatsby';
 import { Link } from 'gatsby';
-import { Layout } from '../components/Layout';
+import { Layout } from './../components/Layout';
 
 export interface TemplateProps {
   data: {

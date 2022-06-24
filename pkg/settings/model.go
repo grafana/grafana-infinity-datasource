@@ -1,7 +1,8 @@
-package models
+package settingsSrv
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"strings"
 
@@ -65,6 +66,22 @@ type InfinitySettings struct {
 	TLSClientCert        string
 	TLSClientKey         string
 	AllowedHosts         []string
+}
+
+func (s *InfinitySettings) Validate() error {
+	if (s.BasicAuthEnabled || s.AuthenticationMethod == AuthenticationMethodDigestAuth) && s.Password == "" {
+		return errors.New("invalid or empty password detected")
+	}
+	if s.AuthenticationMethod == AuthenticationMethodApiKey && (s.ApiKeyValue == "" || s.ApiKeyKey == "") {
+		return errors.New("invalid API key specified")
+	}
+	if s.AuthenticationMethod == AuthenticationMethodBearerToken && s.BearerToken == "" {
+		return errors.New("invalid or empty bearer token detected")
+	}
+	if (s.AuthenticationMethod != AuthenticationMethodNone) && len(s.AllowedHosts) < 1 {
+		return errors.New("configure allowed hosts in the authentication section")
+	}
+	return nil
 }
 
 type InfinitySettingsJson struct {

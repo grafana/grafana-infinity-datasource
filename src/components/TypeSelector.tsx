@@ -1,8 +1,9 @@
-import React from 'react';
 import { InlineFormLabel } from '@grafana/ui';
+import React from 'react';
+import { SCRAP_QUERY_TYPES } from './../constants';
 import { Select } from './extended/ui';
-import { SelectableValue } from '@grafana/data';
-import { InfinityQuery, SCRAP_QUERY_TYPES, EditorMode, InfinityQueryType } from '../types';
+import type { EditorMode, InfinityQuery, InfinityQueryType } from './../types';
+import type { SelectableValue } from '@grafana/data/types';
 
 export const TypeSelector = (props: { query: InfinityQuery; onChange: (e: InfinityQuery) => void; onRunQuery: () => void; mode: EditorMode }) => {
   const { query, mode, onChange, onRunQuery } = props;

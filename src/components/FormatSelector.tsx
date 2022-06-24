@@ -1,8 +1,9 @@
-import React from 'react';
 import { InlineFormLabel, Select } from '@grafana/ui';
-import { Components } from '../selectors';
-import { isDataQuery } from '../app/utils';
-import { InfinityQuery, INFINITY_RESULT_FORMATS, InfinityQueryFormat } from '../types';
+import React from 'react';
+import { isDataQuery } from './../app/utils';
+import { INFINITY_RESULT_FORMATS } from './../constants';
+import { Components } from './../selectors';
+import type { InfinityQuery, InfinityQueryFormat } from './../types';
 interface FormatSelectorProps {
   query: InfinityQuery;
   onChange: (e: InfinityQuery) => void;

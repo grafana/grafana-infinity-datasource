@@ -1,5 +1,5 @@
-import { DataSourceJsonData, DataSourceInstanceSettings } from '@grafana/data';
-import { InfinityQuery } from './query.types';
+import type { InfinityQuery } from './query.types';
+import type { DataSourceInstanceSettings, DataSourceJsonData } from '@grafana/data';
 
 //#region Config
 export interface GlobalInfinityQuery {

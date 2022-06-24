@@ -1,7 +1,8 @@
-import React from 'react';
 import { InlineFormLabel } from '@grafana/ui';
+import React from 'react';
+import { INFINITY_SOURCES } from './../constants';
 import { Select } from './extended/ui';
-import { InfinityQuery, INFINITY_SOURCES, InfinityQuerySources } from '../types';
+import type { InfinityQuery, InfinityQuerySources } from './../types';
 
 export const SourceSelector = (props: { query: InfinityQuery; onChange: (e: InfinityQuery) => void; onRunQuery: () => void }) => {
   const { query, onChange, onRunQuery } = props;

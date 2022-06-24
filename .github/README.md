@@ -12,6 +12,7 @@
 <p align="center">
   <a href="#-key-features">Key Features</a> •
   <a href="#%EF%B8%8F-download">Download</a> •
+  <a href="#%EF%B8%8F-documentation">Documentation</a> •
   <a href="#%EF%B8%8F-useful-links">Useful links</a> •
   <a href="#%EF%B8%8F-project-assistance">Project assistance</a> •
   <a href="#%EF%B8%8F-license">License</a>
@@ -28,7 +29,7 @@
 - Get data from multiple sources into grafana
 - Supports various data formats
   - JSON
-  - CSV/TSV/any delimited format
+  - CSV / TSV / any delimited format
   - XML
   - GraphQL
   - HTML
@@ -55,6 +56,10 @@ You can download and install this grafana plugin using various options
   - `grafana-cli plugins install yesoreyeram-infinity-datasource`
 - Using docker
   - `docker run -p 3000:3000 -e "GF_INSTALL_PLUGINS=yesoreyeram-infinity-datasource" grafana/grafana:latest`
+
+## 🎯 Documentation
+
+For the plugin documentation, visit [plugin documentation website](https://yesoreyeram.github.io/grafana-infinity-datasource).
 
 ## ⚡️ Useful Links
 

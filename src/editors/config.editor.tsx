@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import { Collapse, InlineFormLabel, Input, LinkButton } from '@grafana/ui';
 import defaultsDeep from 'lodash/defaultsDeep';
-import { DataSourcePluginOptionsEditorProps } from '@grafana/data';
-import { Collapse, LinkButton, InlineFormLabel, Input } from '@grafana/ui';
-import { TLSConfigEditor } from './config/TLSConfigEditor';
-import { GlobalQueryEditor } from './config/GlobalQueryEditor';
-import { SecureFieldsEditor } from '../components/config/SecureFieldsEditor';
-import { URLEditor } from './config/URL';
+import React, { useState } from 'react';
+import { SecureFieldsEditor } from './../components/config/SecureFieldsEditor';
 import { AuthEditor } from './config/Auth';
+import { GlobalQueryEditor } from './config/GlobalQueryEditor';
 import { ProvisioningScript } from './config/Provisioning';
-import { InfinityOptions } from '../types';
+import { TLSConfigEditor } from './config/TLSConfigEditor';
+import { URLEditor } from './config/URL';
+import type { InfinityOptions } from './../types';
+import type { DataSourcePluginOptionsEditorProps } from '@grafana/data/types';
 
 export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
   const { options, onOptionsChange } = props;

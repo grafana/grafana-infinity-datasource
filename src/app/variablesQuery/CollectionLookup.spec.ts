@@ -1,5 +1,5 @@
-import { SelectableValue } from '@grafana/data';
 import { CollectionLookupVariable } from './CollectionLookup';
+import type { SelectableValue } from '@grafana/data/types';
 
 const data: Array<[string, string, Array<SelectableValue<string>>]> = [
   ['it should return correct kv pairs and remove the variable keyword', 'CollectionLookup(prod,pd,nonprod,np,nonprod)', [{ value: 'np', text: 'np' }]],

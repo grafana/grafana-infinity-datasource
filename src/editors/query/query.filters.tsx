@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { SelectableValue } from '@grafana/data';
 import { Modal } from '@grafana/ui';
-import { Select } from './../../components/extended/ui';
-import { filterOperators } from '../../app/parsers/filter';
+import React, { useState } from 'react';
+import { filterOperators } from './../../app/parsers/filter';
 import { isDataQuery } from './../../app/utils';
-import { InfinityQuery, InfinityFilter, FilterOperator } from '../../types';
+import { Select } from './../../components/extended/ui';
+import { FilterOperator } from './../../constants';
+import type { InfinityFilter, InfinityQuery } from './../../types';
+import type { SelectableValue } from '@grafana/data/types';
 
 export const TableFilter = (props: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: any }) => {
   const [popupOpenStatus, setPopupOpenStatus] = useState(false);

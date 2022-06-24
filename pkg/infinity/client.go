@@ -17,16 +17,18 @@ import (
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
+	querySrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/query"
+	settingsSrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/settings"
 )
 
 type Client struct {
-	Settings   models.InfinitySettings
+	Settings   settingsSrv.InfinitySettings
 	HttpClient *http.Client
 	Registry   *prometheus.Registry
+	IsMock     bool
 }
 
-func GetTLSConfigFromSettings(settings models.InfinitySettings) (*tls.Config, error) {
+func GetTLSConfigFromSettings(settings settingsSrv.InfinitySettings) (*tls.Config, error) {
 	tlsConfig := &tls.Config{
 		InsecureSkipVerify: settings.InsecureSkipVerify,
 		ServerName:         settings.ServerName,
@@ -52,14 +54,14 @@ func GetTLSConfigFromSettings(settings models.InfinitySettings) (*tls.Config, er
 	return tlsConfig, nil
 }
 
-func NewClient(settings models.InfinitySettings) (client *Client, err error) {
+func NewClient(settings settingsSrv.InfinitySettings) (client *Client, err error) {
 	if settings.AuthenticationMethod == "" {
-		settings.AuthenticationMethod = models.AuthenticationMethodNone
+		settings.AuthenticationMethod = settingsSrv.AuthenticationMethodNone
 		if settings.BasicAuthEnabled {
-			settings.AuthenticationMethod = models.AuthenticationMethodBasic
+			settings.AuthenticationMethod = settingsSrv.AuthenticationMethodBasic
 		}
 		if settings.ForwardOauthIdentity {
-			settings.AuthenticationMethod = models.AuthenticationMethodForwardOauth
+			settings.AuthenticationMethod = settingsSrv.AuthenticationMethodForwardOauth
 		}
 	}
 	tlsConfig, err := GetTLSConfigFromSettings(settings)
@@ -84,7 +86,7 @@ func NewClient(settings models.InfinitySettings) (client *Client, err error) {
 	}, err
 }
 
-func NewClientWithCounters(settings models.InfinitySettings, counters []prometheus.Collector) (client *Client, err error) {
+func NewClientWithCounters(settings settingsSrv.InfinitySettings, counters []prometheus.Collector) (client *Client, err error) {
 	client, err = NewClient(settings)
 	if err != nil {
 		return client, err
@@ -95,7 +97,7 @@ func NewClientWithCounters(settings models.InfinitySettings, counters []promethe
 	return client, err
 }
 
-func replaceSect(input string, settings models.InfinitySettings, includeSect bool) string {
+func replaceSect(input string, settings settingsSrv.InfinitySettings, includeSect bool) string {
 	for key, value := range settings.SecureQueryFields {
 		if includeSect {
 			input = strings.ReplaceAll(input, fmt.Sprintf("${__qs.%s}", key), value)
@@ -107,7 +109,7 @@ func replaceSect(input string, settings models.InfinitySettings, includeSect boo
 	return input
 }
 
-func (client *Client) req(url string, body io.Reader, settings models.InfinitySettings, isJSON bool, query models.Query, requestHeaders map[string]string) (obj interface{}, statusCode int, duration time.Duration, err error) {
+func (client *Client) req(url string, body io.Reader, settings settingsSrv.InfinitySettings, query querySrv.Query, requestHeaders map[string]string) (obj interface{}, statusCode int, duration time.Duration, err error) {
 	req, _ := GetRequest(settings, body, query, requestHeaders, true)
 	startTime := time.Now()
 	if !CanAllowURL(req.URL.String(), settings.AllowedHosts) {
@@ -150,25 +152,21 @@ func (client *Client) req(url string, body io.Reader, settings models.InfinitySe
 	return string(bodyBytes), res.StatusCode, duration, err
 }
 
-func (client *Client) GetResults(query models.Query, requestHeaders map[string]string) (o interface{}, statusCode int, duration time.Duration, err error) {
-	isJSON := false
-	if query.Type == models.QueryTypeJSON || query.Type == models.QueryTypeGraphQL {
-		isJSON = true
-	}
+func (client *Client) GetResults(query querySrv.Query, requestHeaders map[string]string) (o interface{}, statusCode int, duration time.Duration, err error) {
 	switch strings.ToUpper(query.URLOptions.Method) {
 	case http.MethodPost:
 		body := GetQueryBody(query)
-		return client.req(query.URL, body, client.Settings, isJSON, query, requestHeaders)
+		return client.req(query.URL, body, client.Settings, query, requestHeaders)
 	default:
-		return client.req(query.URL, nil, client.Settings, isJSON, query, requestHeaders)
+		return client.req(query.URL, nil, client.Settings, query, requestHeaders)
 	}
 }
 
 func CanParseAsJSON(queryType string, responseHeaders http.Header) bool {
-	if queryType == models.QueryTypeJSON || queryType == models.QueryTypeGraphQL || queryType == models.QueryTypeJSONBackend {
+	if queryType == querySrv.QueryTypeJSON || queryType == querySrv.QueryTypeGraphQL || queryType == querySrv.QueryTypeJSONBackend {
 		return true
 	}
-	if queryType == models.QueryTypeUQL || queryType == models.QueryTypeGROQ {
+	if queryType == querySrv.QueryTypeUQL || queryType == querySrv.QueryTypeGROQ {
 		contentType := responseHeaders.Get(headerKeyContentType)
 		if strings.Contains(strings.ToLower(contentType), contentTypeJSON) {
 			return true
@@ -190,7 +188,7 @@ func CanAllowURL(url string, allowedHosts []string) bool {
 	return allow
 }
 
-func GetQueryBody(query models.Query) io.Reader {
+func GetQueryBody(query querySrv.Query) io.Reader {
 	var body io.Reader
 	if strings.ToUpper(query.URLOptions.Method) == http.MethodPost {
 		switch query.URLOptions.BodyType {

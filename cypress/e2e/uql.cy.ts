@@ -11,6 +11,7 @@ describe('UQL', () => {
     cy.get(`button[aria-label='${selectors.pages.Login.submit}']`).should('be.visible').click();
     cy.get(`button[aria-label='${selectors.pages.Login.skip}']`).should('be.visible').click();
     cy.get('body.login-page').should('not.exist');
+    // Explore
     cy.get(`nav a[aria-label="Explore"]`).should('be.visible').click();
     cy.get(`input[aria-label="Select a data source"]`).should('be.visible').type('Infinity{enter}');
     cy.get(`[data-testid="infinity-query-type-selector"] input`).should('be.visible');
@@ -37,6 +38,7 @@ describe('UQL', () => {
     cy.get(`button[aria-label='Run query']`).should('be.visible').click();
     cy.get(`[data-testid="infinity-query-uql-selector"]`).should('be.visible').type(`{selectall}{del}parse-json | scope "args" | project kv(){cmd+s}`);
     cy.get(`button[aria-label='Run query']`).should('be.visible').click();
+    cy.wait(2000);
     cy.get(`div[aria-label='${selectors.pages.Explore.General.table}']`).should(($p) => expect($p).to.contain(`keyvalue` + `foo["bar","baz"]` + `jack"jill"`));
     /// UQL URL query - with url with headers
     cy.get(`[data-testid="infinity-query-type-selector"] input`).type('{selectall}{del}UQL{enter}');
@@ -45,6 +47,7 @@ describe('UQL', () => {
     cy.get(`button[aria-label='Run query']`).should('be.visible').click();
     cy.get(`[data-testid="infinity-query-uql-selector"]`).should('be.visible').type(`{selectall}{del}parse-json | scope "headers" | project kv(){cmd+s}`);
     cy.get(`button[aria-label='Run query']`).should('be.visible').click();
+    cy.wait(2000);
     cy.get(`div[aria-label='${selectors.pages.Explore.General.table}']`).should(($p) => expect($p).to.contain(`keyvalue` + `Accept-Encodinggzip` + `Hosthttpbin` + `User-AgentGo-http-client/1.1`));
   });
 });

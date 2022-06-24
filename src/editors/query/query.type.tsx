@@ -1,12 +1,12 @@
 import React from 'react';
-import { InfinityQuery, EditorMode } from '../../types';
-import { CSVOptionsEditor } from '../../components/CSVOptionsEditor';
-import { JSONOptionsEditor } from '../../components/JSONOptionsEditor';
-import { TypeSelector } from '../../components/TypeSelector';
-import { SourceSelector } from '../../components/SourceSelector';
-import { FormatSelector } from '../../components/FormatSelector';
-import { GlobalQuerySelector } from '../../components/GlobalQuerySelector';
-import { InfinityHelp } from '../../components/Help';
+import { CSVOptionsEditor } from './../../components/CSVOptionsEditor';
+import { FormatSelector } from './../../components/FormatSelector';
+import { GlobalQuerySelector } from './../../components/GlobalQuerySelector';
+import { InfinityHelp } from './../../components/Help';
+import { JSONOptionsEditor } from './../../components/JSONOptionsEditor';
+import { SourceSelector } from './../../components/SourceSelector';
+import { TypeSelector } from './../../components/TypeSelector';
+import type { EditorMode, InfinityQuery } from './../../types';
 
 export const TypeChooser = (props: { mode: EditorMode; instanceSettings: any; query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void }) => {
   const { query, mode } = props;

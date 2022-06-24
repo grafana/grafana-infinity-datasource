@@ -1,6 +1,6 @@
 import chunk from 'lodash/chunk';
-import { SelectableValue } from '@grafana/data';
 import { replaceTokenFromVariable } from './utils';
+import type { SelectableValue } from '@grafana/data';
 
 export const CollectionVariable = (query: string): Array<SelectableValue<string>> => {
   query = replaceTokenFromVariable(query, 'Collection');

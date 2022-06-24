@@ -1,8 +1,8 @@
-import { forEach } from 'lodash';
 import { load } from 'cheerio';
+import { forEach } from 'lodash';
 import { InfinityParser } from './InfinityParser';
 import { getValue } from './utils';
-import { InfinityColumn, GrafanaTableRow, GrafanaTableRowItem, InfinityHTMLQuery } from './../../types';
+import type { GrafanaTableRow, GrafanaTableRowItem, InfinityColumn, InfinityHTMLQuery } from './../../types';
 
 export class HTMLParser extends InfinityParser<InfinityHTMLQuery> {
   constructor(HTMLResponse: string, target: InfinityHTMLQuery, endTime?: Date) {

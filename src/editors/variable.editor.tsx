@@ -1,9 +1,10 @@
+import { Select, TagsInput, TextArea } from '@grafana/ui';
 import React from 'react';
-import { TextArea, Select, TagsInput } from '@grafana/ui';
-import { Datasource } from '../datasource';
-import { InfinityQueryEditor } from './query/infinityQuery';
 import { migrateLegacyQuery } from './../app/variablesQuery';
-import { VariableQuery, VariableQueryType, variableQueryTypes, InfinityQuery, VariableQueryInfinity, VariableQueryLegacy, VariableQueryRandom } from '../types';
+import { variableQueryTypes } from './../constants';
+import { Datasource } from './../datasource';
+import { InfinityQueryEditor } from './query/infinityQuery';
+import type { InfinityQuery, VariableQuery, VariableQueryInfinity, VariableQueryLegacy, VariableQueryRandom, VariableQueryType } from './../types';
 
 export const VariableEditor = (props: { query: VariableQuery; onChange: (query: VariableQuery, definition: string) => void; datasource: Datasource }) => {
   const query = migrateLegacyQuery(props.query);
@@ -76,7 +77,7 @@ const VariableEditorRandom = (props: { query: VariableQueryRandom; onChange: (qu
   return (
     <div className="gf-form">
       <label className="gf-form-label query-keyword width-10">Values</label>
-      <TagsInput tags={query.values || []} onChange={onQueryChange}></TagsInput>
+      <TagsInput tags={query.values || []} onChange={onQueryChange} placeholder="Enter values (enter key to add)" />
     </div>
   );
 };
