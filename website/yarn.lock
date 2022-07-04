@@ -5854,10 +5854,10 @@ gatsby-plugin-feed@^4.4.0:
     lodash.merge "^4.6.2"
     rss "^1.2.2"
 
-gatsby-plugin-mdx@^2.5.0:
-  version "2.14.0"
-  resolved "https://registry.yarnpkg.com/gatsby-plugin-mdx/-/gatsby-plugin-mdx-2.14.0.tgz#adbbe14820de493eb926ee490019c43df4c7d3f3"
-  integrity sha512-aEAx4KrfSL/A4LFhh5nlOWUZZ2FA70X5xl+j5PiBRFEVTCgSOb8D0XPrHvtwNFYlAhdl/cuH3NcqlbRPJkX+Uw==
+gatsby-plugin-mdx@^2.14.2:
+  version "2.14.2"
+  resolved "https://registry.yarnpkg.com/gatsby-plugin-mdx/-/gatsby-plugin-mdx-2.14.2.tgz#c27de463af036e5186f0f99e1a3913fe04876500"
+  integrity sha512-OHOAPBSOKxy1H5Ks0/FFVueeuJh9QRGGr9PSZVEZ6hd+54YF/8zvi+R3vuDYXnFyju2BREWO2aWj7NEmwfKFVw==
   dependencies:
     "@babel/core" "^7.15.5"
     "@babel/generator" "^7.15.4"
