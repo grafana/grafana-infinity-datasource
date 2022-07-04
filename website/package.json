@@ -17,7 +17,7 @@
     "@radix-ui/react-dialog": "^0.1.5",
     "@stitches/react": "^1.2.6",
     "bootstrap": "^5.0.0",
-    "fuse.js": "^6.5.3",
+    "fuse.js": "^6.6.2",
     "gatsby": "^4.4.0",
     "gatsby-plugin-feed": "^4.4.0",
     "gatsby-plugin-mdx": "^2.5.0",
