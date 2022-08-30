@@ -12,7 +12,9 @@ describe('UQL', () => {
     cy.get(`button[aria-label='${selectors.pages.Login.skip}']`).should('be.visible').click();
     cy.get('body.login-page').should('not.exist');
     // Explore
+    cy.wait(3000);
     cy.get(`nav a[aria-label="Explore"]`).should('be.visible').click();
+    cy.wait(3000);
     cy.get(`input[aria-label="Select a data source"]`).should('be.visible').type('Infinity{enter}');
     cy.get(`[data-testid="infinity-query-type-selector"] input`).should('be.visible');
     /// UQL Inline query - with string array
