@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
 import { css } from '@emotion/css';
-import { Button, Drawer, CustomScrollbar, TabsBar, Tab, TabContent, LinkButton, useTheme } from '@grafana/ui';
+import { Button, CustomScrollbar, Drawer, LinkButton, Tab, TabContent, TabsBar, useTheme } from '@grafana/ui';
+import React, { useState } from 'react';
 
 export const InfinityHelp = () => {
   const theme = useTheme();

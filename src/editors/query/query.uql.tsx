@@ -1,6 +1,6 @@
+import { CodeEditor, CodeEditorSuggestionItem, CodeEditorSuggestionItemKind, Icon, InlineFormLabel } from '@grafana/ui';
 import React from 'react';
-import { InlineFormLabel, CodeEditor, CodeEditorSuggestionItem, Icon, CodeEditorSuggestionItemKind } from '@grafana/ui';
-import { InfinityQuery, EditorMode } from '../../types';
+import type { EditorMode, InfinityQuery } from './../../types';
 declare const monaco: any;
 
 const UQLTips: string[] = [
@@ -32,7 +32,7 @@ export const UQLEditor = (props: { mode: EditorMode; query: InfinityQuery; onCha
         <InlineFormLabel className="query-keyword" width={LABEL_WIDTH}>
           UQL
         </InlineFormLabel>
-        <div>
+        <div data-testid="infinity-query-uql-selector">
           <CodeEditor
             language="sql"
             width="594px"
@@ -69,10 +69,12 @@ async function registerUQL(editor: any) {
     editor.updateOptions({ fixedOverflowWidgets: true });
     const allLangs = monaco.languages.getLanguages();
     const { language: uqlLang } = await allLangs.find(({ id }: any) => id === 'sql').loader();
+    // eslint-disable-next-line no-prototype-builtins
     if (!uqlLang.hasOwnProperty('keywords')) {
       uqlLang.keywords = [];
     }
     uqlLang.keywords.unshift.apply(uqlLang.keywords, UQLKeyWords);
+    // eslint-disable-next-line no-prototype-builtins
     if (!uqlLang.hasOwnProperty('builtinFunctions')) {
       uqlLang.builtinFunctions = [];
     }

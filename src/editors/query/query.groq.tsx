@@ -1,6 +1,6 @@
+import { CodeEditor, Icon, InlineFormLabel } from '@grafana/ui';
 import React from 'react';
-import { InlineFormLabel, CodeEditor, Icon } from '@grafana/ui';
-import { InfinityQuery, EditorMode } from '../../types';
+import type { EditorMode, InfinityQuery } from './../../types';
 
 export const GROQEditor = (props: { mode: EditorMode; query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void }) => {
   const { query, mode, onChange, onRunQuery } = props;

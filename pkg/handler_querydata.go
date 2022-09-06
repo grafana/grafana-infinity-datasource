@@ -2,26 +2,17 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"strings"
-	"time"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/tidwall/gjson"
-	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/framer"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/infinity"
+	querySrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/query"
+	settingsSrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/settings"
 )
 
-type CustomMeta struct {
-	Query                  infinity.Query `json:"query"`
-	Data                   interface{}    `json:"data"`
-	ResponseCodeFromServer int            `json:"responseCodeFromServer"`
-	Duration               time.Duration  `json:"duration"`
-	Error                  string         `json:"error"`
-}
 type key string
 
 const contextKeyInstanceID key = "InstanceID"
@@ -49,19 +40,15 @@ func (ds *PluginHost) QueryData(ctx context.Context, req *backend.QueryDataReque
 }
 
 func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient infinity.Client, requestHeaders map[string]string) (response backend.DataResponse) {
-	var query infinity.Query
-	response.Error = json.Unmarshal(backendQuery.JSON, &query)
-	if response.Error != nil {
-		backend.Logger.Error("error un-marshaling the query", "error", response.Error.Error())
-		return response
-	}
-
-	query, err := InterpolateInfinityQuery(query, backendQuery.TimeRange)
+	//region Loading Query
+	query, err := querySrv.LoadQuery(backendQuery)
 	if err != nil {
-		backend.Logger.Error("error applying macros", "error", err.Error())
+		backend.Logger.Error("error un-marshaling the query", "error", err.Error())
 		response.Error = err
 		return response
 	}
+	//endregion
+	//region Tracking Query
 	var instanceID string
 	if ctx.Value(contextKeyInstanceUID) != nil {
 		instanceID = fmt.Sprintf("%v", ctx.Value(contextKeyInstanceID))
@@ -83,93 +70,31 @@ func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient in
 		"format":       query.Format,
 		"authType":     strings.Trim(infClient.Settings.AuthenticationMethod+" "+infClient.Settings.OAuth2Settings.OAuth2Type, " "),
 	}).Inc()
-	frameName := query.RefID
-	if frameName == "" {
-		frameName = "response"
-	}
-	frame := data.NewFrame(frameName)
-	frame.Meta = &data.FrameMeta{
-		ExecutedQueryString: "This feature is not available for this type of query yet",
-	}
-	customMeta := &CustomMeta{
-		Query:                  query,
-		Data:                   nil,
-		ResponseCodeFromServer: 0,
-		Error:                  "",
-	}
+	//endregion
+	//region Frame Builder
+	frame := infinity.GetDummyFrame(query)
 	if query.Source == "url" {
-		urlResponseObject, statusCode, duration, err := infClient.GetResults(query, requestHeaders)
-		if query.Type == infinity.QueryTypeJSONBackend {
-			if query.RootSelector != "" {
-				responseString, err := json.Marshal(urlResponseObject)
-				if err != nil {
-					backend.Logger.Error("error json parsing root data", "error", err.Error())
-					response.Error = fmt.Errorf("error parsing json root data")
-					return response
-				}
-				if !gjson.Valid(string(responseString)) {
-					backend.Logger.Error("error json parsing root data")
-					response.Error = fmt.Errorf("error parsing json root data")
-					return response
-				}
-				r := gjson.Get(string(responseString), query.RootSelector)
-				var out interface{}
-				err = json.Unmarshal([]byte(r.String()), &out)
-				if err != nil {
-					backend.Logger.Error("error json parsing root data", "error", err.Error())
-					response.Error = fmt.Errorf("error parsing json root data")
-					return response
-				}
-				urlResponseObject = out
-			}
-			newFrame, err := framer.ToDataFrame(query.RefID, urlResponseObject, framer.FramerOptions{}, "")
-			if err != nil {
-				backend.Logger.Error("error getting response for query", "error", err.Error())
-				customMeta.Error = err.Error()
-			}
-			if newFrame != nil {
-				frame.Fields = append(frame.Fields, newFrame.Fields...)
-			}
-		}
-		frame.Meta.ExecutedQueryString = infClient.GetExecutedURL(query)
-		customMeta.Data = urlResponseObject
-		customMeta.ResponseCodeFromServer = statusCode
-		customMeta.Duration = duration
+		frame, err = infinity.GetFrameForURLSources(query, infClient, requestHeaders)
 		if err != nil {
-			backend.Logger.Error("error getting response for query", "error", err.Error())
-			customMeta.Error = err.Error()
+			response.Frames = append(response.Frames, frame)
+			response.Error = err
+			return response
 		}
 	}
 	if query.Source == "inline" {
-		customMeta.Data = query.Data
-		if query.Type == infinity.QueryTypeJSONBackend {
-			data := query.Data
-			if query.RootSelector != "" {
-				if !gjson.Valid(data) {
-					backend.Logger.Error("error json parsing root data")
-					response.Error = fmt.Errorf("error parsing json root data")
-					return response
-				}
-				r := gjson.Get(data, query.RootSelector)
-				data = r.String()
-			}
-			var out interface{}
-			err := json.Unmarshal([]byte(data), &out)
-			if err != nil {
-				backend.Logger.Error("error json parsing", "error", err.Error())
-				customMeta.Error = fmt.Errorf("error parsing json %s", err.Error()).Error()
-			}
-			newFrame, err := framer.ToDataFrame(query.RefID, out, framer.FramerOptions{}, "")
-			if err != nil {
-				backend.Logger.Error("error building frame", "error", err.Error())
-				customMeta.Error = err.Error()
-			}
-			if newFrame != nil {
-				frame.Fields = append(frame.Fields, newFrame.Fields...)
-			}
+		frame, err = infinity.GetFrameForInlineSources(query)
+		if err != nil {
+			response.Frames = append(response.Frames, frame)
+			response.Error = err
+			return response
 		}
 	}
-	frame.Meta.Custom = customMeta
 	response.Frames = append(response.Frames, frame)
+	if infClient.Settings.AuthenticationMethod != settingsSrv.AuthenticationMethodNone && infClient.Settings.AuthenticationMethod != "" && len(infClient.Settings.AllowedHosts) < 1 && query.Source == "url" {
+		frame.AppendNotices(data.Notice{
+			Text: "Datasource is missing allowed hosts/URLs. Configure it in the datasource settings page for enhanced security.",
+		})
+	}
+	//endregion
 	return response
 }

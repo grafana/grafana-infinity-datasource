@@ -10,10 +10,12 @@ import (
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
 	"golang.org/x/oauth2/jwt"
+
+	settingsSrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/settings"
 )
 
-func ApplyOAuthClientCredentials(httpClient *http.Client, settings InfinitySettings) *http.Client {
-	if settings.AuthenticationMethod == AuthenticationMethodOAuth && settings.OAuth2Settings.OAuth2Type == AuthOAuthTypeClientCredentials {
+func ApplyOAuthClientCredentials(httpClient *http.Client, settings settingsSrv.InfinitySettings) *http.Client {
+	if settings.AuthenticationMethod == settingsSrv.AuthenticationMethodOAuth && settings.OAuth2Settings.OAuth2Type == settingsSrv.AuthOAuthTypeClientCredentials {
 		oauthConfig := clientcredentials.Config{
 			ClientID:       settings.OAuth2Settings.ClientID,
 			ClientSecret:   settings.OAuth2Settings.ClientSecret,
@@ -36,8 +38,8 @@ func ApplyOAuthClientCredentials(httpClient *http.Client, settings InfinitySetti
 	}
 	return httpClient
 }
-func ApplyOAuthJWT(httpClient *http.Client, settings InfinitySettings) *http.Client {
-	if settings.AuthenticationMethod == AuthenticationMethodOAuth && settings.OAuth2Settings.OAuth2Type == AuthOAuthJWT {
+func ApplyOAuthJWT(httpClient *http.Client, settings settingsSrv.InfinitySettings) *http.Client {
+	if settings.AuthenticationMethod == settingsSrv.AuthenticationMethodOAuth && settings.OAuth2Settings.OAuth2Type == settingsSrv.AuthOAuthJWT {
 		jwtConfig := jwt.Config{
 			Email:        settings.OAuth2Settings.Email,
 			TokenURL:     settings.OAuth2Settings.TokenURL,
@@ -56,8 +58,8 @@ func ApplyOAuthJWT(httpClient *http.Client, settings InfinitySettings) *http.Cli
 	}
 	return httpClient
 }
-func ApplyDigestAuth(httpClient *http.Client, settings InfinitySettings) *http.Client {
-	if settings.AuthenticationMethod == AuthenticationMethodDigestAuth {
+func ApplyDigestAuth(httpClient *http.Client, settings settingsSrv.InfinitySettings) *http.Client {
+	if settings.AuthenticationMethod == settingsSrv.AuthenticationMethodDigestAuth {
 		a := dac.NewTransport(settings.UserName, settings.Password)
 		httpClient.Transport = &a
 	}

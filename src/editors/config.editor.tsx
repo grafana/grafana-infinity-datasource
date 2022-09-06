@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
+import { Collapse, InlineFormLabel, Input, LinkButton } from '@grafana/ui';
 import defaultsDeep from 'lodash/defaultsDeep';
-import { DataSourcePluginOptionsEditorProps } from '@grafana/data';
-import { Collapse, LinkButton, InlineFormLabel, Input } from '@grafana/ui';
-import { TLSConfigEditor } from './config/TLSConfigEditor';
-import { GlobalQueryEditor } from './config/GlobalQueryEditor';
-import { SecureFieldsEditor } from '../components/config/SecureFieldsEditor';
-import { URLEditor } from './config/URL';
+import React, { useState } from 'react';
+import { SecureFieldsEditor } from './../components/config/SecureFieldsEditor';
 import { AuthEditor } from './config/Auth';
+import { GlobalQueryEditor } from './config/GlobalQueryEditor';
 import { ProvisioningScript } from './config/Provisioning';
-import { InfinityOptions } from '../types';
+import { TLSConfigEditor } from './config/TLSConfigEditor';
+import { URLEditor } from './config/URL';
+import type { InfinityOptions } from './../types';
+import type { DataSourcePluginOptionsEditorProps } from '@grafana/data/types';
 
 export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
   const { options, onOptionsChange } = props;
-  const [urlOpen, setURLOpen] = useState(false);
+  const [miscOpen, setMiscOpen] = useState(false);
   const [tlsOpen, setTlsOpen] = useState(false);
-  const [authOpen, setAuthOpen] = useState(false);
+  const [authOpen, setAuthOpen] = useState(true);
   const [headersOpen, setHeadersOpen] = useState(false);
   const [queriesOpen, setQueriesOpen] = useState(false);
   const [globalsOpen, setGlobalsOpen] = useState(false);
@@ -27,11 +27,6 @@ export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<I
       <Collapse label="Authentication" isOpen={authOpen} collapsible={true} onToggle={(e) => setAuthOpen(!authOpen)}>
         <div style={{ padding: '0px 10px' }}>
           <AuthEditor options={options} onOptionsChange={onOptionsChange} />
-        </div>
-      </Collapse>
-      <Collapse label="URL" isOpen={urlOpen} collapsible={true} onToggle={(e) => setURLOpen(!urlOpen)}>
-        <div style={{ padding: '0px 10px' }}>
-          <URLEditor options={options} onOptionsChange={onOptionsChange} />
         </div>
       </Collapse>
       <Collapse label="Headers" isOpen={headersOpen} collapsible={true} onToggle={(e) => setHeadersOpen(!headersOpen)}>
@@ -68,6 +63,11 @@ export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<I
       <Collapse label="Global Queries" isOpen={globalsOpen} collapsible={true} onToggle={(e) => setGlobalsOpen(!globalsOpen)}>
         <div style={{ padding: '0px 10px' }}>
           <GlobalQueryEditor options={options} onOptionsChange={onOptionsChange} />
+        </div>
+      </Collapse>
+      <Collapse label="Misc" isOpen={miscOpen} collapsible={true} onToggle={(e) => setMiscOpen(!miscOpen)}>
+        <div style={{ padding: '0px 10px' }}>
+          <URLEditor options={options} onOptionsChange={onOptionsChange} />
         </div>
       </Collapse>
       <Collapse label="More" isOpen={true} collapsible={true}>

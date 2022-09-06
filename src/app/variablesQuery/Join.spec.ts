@@ -1,5 +1,5 @@
-import { SelectableValue } from '@grafana/data';
 import { JoinVariable } from './Join';
+import type { SelectableValue } from '@grafana/data';
 
 const data: Array<[string, string, Array<SelectableValue<string>>]> = [
   ['it should return correct kv pairs and remove the variable keyword', 'Join(a,b,c)', [{ value: 'abc', text: 'abc' }]],

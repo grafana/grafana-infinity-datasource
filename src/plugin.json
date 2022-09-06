@@ -7,7 +7,7 @@
   "backend": true,
   "metrics": true,
   "annotations": true,
-  "alerting": false,
+  "alerting": true,
   "info": {
     "version": "%VERSION%",
     "updated": "%TODAY%",

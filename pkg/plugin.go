@@ -8,6 +8,7 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend/instancemgmt"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/resource/httpadapter"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/infinity"
+	settingsSrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/settings"
 )
 
 type PluginHost struct {
@@ -32,7 +33,7 @@ type instanceSettings struct {
 func (is *instanceSettings) Dispose() {}
 
 func newDataSourceInstance(setting backend.DataSourceInstanceSettings) (instancemgmt.Instance, error) {
-	settings, err := infinity.LoadSettings(setting)
+	settings, err := settingsSrv.LoadSettings(setting)
 	if err != nil {
 		return nil, err
 	}

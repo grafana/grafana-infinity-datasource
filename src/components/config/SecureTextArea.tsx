@@ -1,5 +1,5 @@
-import React, { ChangeEvent, MouseEvent } from 'react';
 import { InlineFormLabel } from '@grafana/ui';
+import React, { ChangeEvent, MouseEvent } from 'react';
 
 export const SecureTextArea = ({
   configured,

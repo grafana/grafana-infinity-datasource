@@ -1,6 +1,6 @@
 import sample from 'lodash/sample';
-import { SelectableValue } from '@grafana/data';
 import { replaceTokenFromVariable } from './utils';
+import type { SelectableValue } from '@grafana/data';
 
 export const RandomVariable = (query: string): Array<SelectableValue<string>> => {
   query = replaceTokenFromVariable(query, 'Random');

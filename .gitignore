@@ -92,8 +92,7 @@ typings/
 # public
 
 # gatsby build output
-public/
-docs/
+website/public/
 
 # Serverless directories
 .serverless/
@@ -117,7 +116,7 @@ node_modules
 dist
 coverage
 cypress/report.json
-cypress/screenshots/actual
+cypress/screenshots/
 cypress/videos/
-
-*.vitest.snap
+.data/
+__debug_bin

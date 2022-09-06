@@ -1,8 +1,8 @@
+import { Icon, InlineFormLabel } from '@grafana/ui';
 import React, { useState } from 'react';
-import { InlineFormLabel, Icon } from '@grafana/ui';
-import { URLOptionsEditor } from './query.url.options';
 import { isDataQuery } from './../../app/utils';
-import { InfinityQuery, EditorMode } from '../../types';
+import { URLOptionsEditor } from './query.url.options';
+import type { EditorMode, InfinityQuery } from './../../types';
 
 export const URLEditor = (props: { query: InfinityQuery; mode: EditorMode; onChange: (value: any) => void; onRunQuery: () => void }) => {
   const { query, onChange, onRunQuery } = props;
@@ -36,6 +36,7 @@ export const URLEditor = (props: { query: InfinityQuery; mode: EditorMode; onCha
             style={{ width: '594px' }}
             onChange={(e) => setURL(e.currentTarget.value)}
             onBlur={onURLChange}
+            data-testid="infinity-query-url-input"
           ></input>
           <div style={{ marginLeft: '5px' }}>
             <URLOptionsEditor {...props} />
@@ -46,7 +47,16 @@ export const URLEditor = (props: { query: InfinityQuery; mode: EditorMode; onCha
           <InlineFormLabel className={`query-keyword`} width={LABEL_WIDTH}>
             Data
           </InlineFormLabel>
-          <textarea rows={5} className="gf-form-input" style={{ width: '594px' }} value={data} placeholder="" onBlur={onDataChange} onChange={(e) => setData(e.target.value)}></textarea>
+          <textarea
+            rows={5}
+            className="gf-form-input"
+            style={{ width: '594px' }}
+            value={data}
+            placeholder=""
+            onBlur={onDataChange}
+            onChange={(e) => setData(e.target.value)}
+            data-testid="infinity-query-inline-data-selector"
+          />
           <Icon name="play" size="lg" style={{ color: 'greenyellow' }} onClick={() => onDataChange()} />
         </div>
       )}

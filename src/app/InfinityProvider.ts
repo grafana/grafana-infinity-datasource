@@ -1,8 +1,8 @@
 import { getTemplateSrv } from '@grafana/runtime';
-import { CSVParser, JSONParser, XMLParser, HTMLParser } from './parsers';
-import { InfinityDataQuery } from '../types';
 import { Datasource } from './../datasource';
+import { CSVParser, HTMLParser, JSONParser, XMLParser } from './parsers';
 import { normalizeURL } from './utils';
+import type { InfinityDataQuery } from './../types';
 
 export class InfinityProvider {
   constructor(private target: InfinityDataQuery, private datasource: Datasource) {}
@@ -29,6 +29,7 @@ export class InfinityProvider {
         }
         return new JSONParser(res, query).getResults();
       case 'xml':
+        // eslint-disable-next-line no-case-declarations
         let xmlData = await new XMLParser(res, query);
         return xmlData.getResults();
       case 'csv':

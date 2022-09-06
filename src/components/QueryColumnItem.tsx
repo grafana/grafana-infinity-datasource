@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { cloneDeep } from 'lodash';
-import { Select } from './extended/ui';
-import { INFINITY_COLUMN_FORMATS, InfinityQuery, InfinityColumnFormat, EditorMode, InfinityColumn } from '../types';
 import { isDataQuery } from 'app/utils';
+import { cloneDeep } from 'lodash';
+import React, { useState } from 'react';
+import { INFINITY_COLUMN_FORMATS } from './../constants';
+import { Select } from './extended/ui';
+import type { EditorMode, InfinityColumn, InfinityColumnFormat, InfinityQuery } from './../types';
 
 interface QueryColumnItemProps {
   query: InfinityQuery;

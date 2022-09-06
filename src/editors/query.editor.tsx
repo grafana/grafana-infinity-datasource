@@ -1,10 +1,11 @@
-import React from 'react';
 import { defaultsDeep } from 'lodash';
-import { QueryEditorProps } from '@grafana/data';
-import { Datasource } from '../datasource';
+import React from 'react';
+import { getDefaultGlobalQueryID } from './../app/queryUtils';
+import { DefaultInfinityQuery } from './../constants';
+import { Datasource } from './../datasource';
 import { InfinityQueryEditor } from './query/infinityQuery';
-import { getDefaultGlobalQueryID } from '../app/queryUtils';
-import { InfinityQuery, DefaultInfinityQuery } from '../types';
+import type { InfinityQuery } from './../types';
+import type { QueryEditorProps } from '@grafana/data/types';
 
 export const QueryEditor = (props: QueryEditorProps<Datasource, InfinityQuery> & { hideTip?: boolean }) => {
   const { datasource, onChange, onRunQuery, hideTip } = props;

@@ -1,5 +1,11 @@
-name: Pull Requests
-on: [pull_request]
+name: Test
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '30 8,18 * * *'
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
@@ -8,14 +14,14 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        node-version: [16.x]
+        grafana-version: [8.4.7]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Setup Go environment
         uses: actions/setup-go@v2
         with:
-          go-version: '1.17'
+          go-version: '1.18'
       - name: Get go cache directory path
         id: go-cache-paths
         run: echo "::set-output name=go-mod::$(go env GOMODCACHE)"
@@ -56,9 +62,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: node_modules
-          key: ${{ runner.os }}-${{ matrix.node-version }}-nodemodules-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-16.14.0-nodemodules-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ matrix.node-version }}-nodemodules-
+            ${{ runner.os }}-16.14.0-nodemodules-
       - name: Install dependencies
         run: CYPRESS_CACHE_FOLDER=/home/runner/.cache/Cypress yarn install --frozen-lockfile;
         if: |
@@ -89,3 +95,15 @@ jobs:
       - name: Stop the docker container
         if: always()
         run: docker-compose down
+      - name: Build Docs
+        if: github.event_name != 'push'
+        run: |
+          cd website;
+          yarn install --frozen-lockfile;
+          yarn build;
+      - name: Deploy Docs to github pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.event_name != 'push'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./website/public

@@ -2,7 +2,7 @@ import { forEach, get } from 'lodash';
 import { parseString } from 'xml2js';
 import { InfinityParser } from './InfinityParser';
 import { getValue } from './utils';
-import { InfinityColumn, GrafanaTableRow, InfinityXMLQuery } from './../../types';
+import type { GrafanaTableRow, InfinityColumn, InfinityXMLQuery } from './../../types';
 
 export class XMLParser extends InfinityParser<InfinityXMLQuery> {
   constructor(XMLResponse: any | string, target: InfinityXMLQuery, endTime?: Date) {
@@ -20,7 +20,7 @@ export class XMLParser extends InfinityParser<InfinityXMLQuery> {
     });
   }
   private formatInput(XMLResponse: string) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       parseString(XMLResponse, (err, res) => {
         resolve(res);
       });

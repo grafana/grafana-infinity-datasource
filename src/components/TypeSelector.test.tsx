@@ -1,7 +1,7 @@
-import React from 'react';
 import { render } from '@testing-library/react';
+import React from 'react';
 import { TypeSelector } from './TypeSelector';
-import { InfinityQuery } from '../types';
+import type { InfinityQuery } from './../types';
 
 describe('app/components/TypeSelector', () => {
   it('should render without error', () => {

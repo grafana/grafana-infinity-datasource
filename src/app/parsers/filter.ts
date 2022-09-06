@@ -1,5 +1,6 @@
-import { SelectableValue } from '@grafana/data';
-import { GrafanaTableRow, InfinityColumn, InfinityFilter, FilterOperator } from './../../types';
+import { FilterOperator } from './../../constants';
+import type { GrafanaTableRow, InfinityColumn, InfinityFilter } from './../../types';
+import type { SelectableValue } from '@grafana/data/types';
 
 export const filterOperators: Array<SelectableValue<FilterOperator>> = [
   { label: 'Equals', value: FilterOperator.Equals },
@@ -69,12 +70,10 @@ export const filterResults = (rows: GrafanaTableRow[], columns: InfinityColumn[]
           filterResults.push((row[columnIndex] + '').toLowerCase().endsWith(filter.value[0].toLowerCase()));
           break;
         case FilterOperator.RegexMatch:
-          let regex = new RegExp(filter.value[0]);
-          filterResults.push(regex.test(row[columnIndex] + ''));
+          filterResults.push(new RegExp(filter.value[0]).test(row[columnIndex] + ''));
           break;
         case FilterOperator.RegexNotMatch:
-          let regex1 = new RegExp(filter.value[0]);
-          filterResults.push(!regex1.test(row[columnIndex] + ''));
+          filterResults.push(!new RegExp(filter.value[0]).test(row[columnIndex] + ''));
           break;
         case FilterOperator.In:
           filterResults.push((filter.value[0] + '').split(',').includes(row[columnIndex] + ''));

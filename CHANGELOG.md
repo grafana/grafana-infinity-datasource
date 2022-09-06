@@ -2,20 +2,59 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
-## [ 1.0.0 ] - unreleased
+## [ 1.0.0 ] - next
 
-- **New Query Type**: JSON Backend ( _experimental_ )
+### **New Features & Bug Fixes**
+
+- **New Query Type**: JSON Backend (with support for alerting)( **beta** )
 - **New Auth Type**: Digest auth support
 - **New Macro**: Support for macros (`$__combineValues()`,`$__customInterval()`) added in URL, Body, Inline data, UQL queries
 - **New Variable Query Type**: Random String from given array of strings
+- **URL**: More body types supported. (including `raw`, `form-data`, `x-www-form-urlencoded`)
 - **UQL**: new root level command `where` added to support basic filters
 - **UQL**: new method `extract` added to extract part of the string using regex
 - **UQL**: new summarize methods `countif`, `sumif`, `minif` and `maxif`
 - **UQL**: new methods `percentage`,`split`,`replace_string`,`reverse`,`pack`,`array_to_map` and `array_from_entries`
 - **As-Is**: Support for URL when using As-Is format with JSON
-- **Chore**: Test coverage improved
-- **Chore**: prometheus `metrics` resource endpoint added
-- **Chore**: Added `vitest` for dev improvements
+- **UX**: Variables interpolated in queries when navigating from dashboard to explore page
+- **Chore**: Updated cypress and improved E2E tests coverage
+- **Chore**: prometheus `metrics` resource endpoint added ( _experimental_ )
+
+### **BREAKING CHANGES**
+
+#### **Authentication & Allowed host URLs**
+
+If you are using any APIs/URLs that require authentication, You will now need to specify the list of allowed Host URLs in the config. This change is introduced to allow additional security to your endpoints.
+
+To migrate your existing datasources, add allowed URLs/allowed Hosts in the datasource configuration section. Example: If you are using `https://foo.com/some/path?id=123` which require authentication, you will need to add `https://foo.com` in the allowed hosts list.
+
+If your datasource is provisioned, then you have to add the following to your provisioning yaml file.
+
+```yaml
+jsonData:
+  allowedHosts:
+    - https://foo.com
+```
+
+If the allowed hosts are not configured correctly, you will get `Datasource is missing allowed hosts/URLs. Configure it in the datasource settings page.` error when performing the query.
+
+Learn more about this breaking change in the [github discussion](https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/322)
+
+#### **Content-Type and Accept headers**
+
+The default header values for `Content-Type` and `Accept` are changing. The default value for these headers are set as follows
+
+- For `json` and `graphql` types, the `Accept` will be now set to `application/json;q=0.9,text/plain`
+- For `csv` query type, the `Accept` header will now be set to `text/csv; charset=utf-8`
+- For `xml` query type, the `Accept` header will now be set to `text/xml;q=0.9,text/plain`
+
+- For http `post` methods, the `Content-Type` header value will be set to `Content-Type` for `json` and `graphql` query types
+
+You can override these headers, in settings/query headers.
+
+### **Minimum Grafana version update**
+
+Minimum required grafana version for the infinity plugin is now Grafana v8.4.7. Though the older versions are expected to work, there may be some minor unexpected issues.
 
 ## [ 0.8.8 ]
 

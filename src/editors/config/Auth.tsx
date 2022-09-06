@@ -1,10 +1,13 @@
-import React from 'react';
-import { DataSourcePluginOptionsEditorProps, onUpdateDatasourceSecureJsonDataOption, SelectableValue } from '@grafana/data';
-import { InlineFormLabel, RadioButtonGroup, LegacyForms } from '@grafana/ui';
+import { onUpdateDatasourceSecureJsonDataOption } from '@grafana/data';
+import { InlineFormLabel, LegacyForms, RadioButtonGroup } from '@grafana/ui';
+import React, { useState } from 'react';
+import { AllowedHostsEditor } from './AllowedHosts';
 import { OAuthInputsEditor } from './OAuthInput';
-import { InfinityOptions, InfinitySecureOptions, AuthType, APIKeyType } from '../../types';
+import { OthersAuthentication } from './OtherAuthProviders';
+import type { APIKeyType, AuthType, InfinityOptions, InfinitySecureOptions } from './../../types';
+import type { DataSourcePluginOptionsEditorProps, SelectableValue } from '@grafana/data/types';
 
-const authTypes: Array<SelectableValue<AuthType>> = [
+const authTypes: Array<SelectableValue<AuthType | 'others'>> = [
   { value: 'none', label: 'No Auth' },
   { value: 'basicAuth', label: 'Basic Authentication' },
   { value: 'apiKey', label: 'API Key' },
@@ -12,39 +15,35 @@ const authTypes: Array<SelectableValue<AuthType>> = [
   { value: 'digestAuth', label: 'Digest Auth' },
   { value: 'oauthPassThru', label: 'Forward OAuth' },
   { value: 'oauth2', label: 'OAuth2' },
+  { value: 'others', label: 'Other Auth Providers' },
 ];
 
 export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
   const { FormField, SecretFormField } = LegacyForms;
   const { options, onOptionsChange } = props;
   const { secureJsonFields } = options;
+  const [othersOpen, setOthersOpen] = useState(false);
   const secureJsonData = (options.secureJsonData || {}) as InfinitySecureOptions;
   const authType = props.options.basicAuth ? 'basicAuth' : props.options.jsonData.oauthPassThru ? 'oauthPassThru' : props.options.jsonData.auth_method || 'none';
-  const onAuthTypeChange = (authMethod: AuthType) => {
+  const onAuthTypeChange = (authMethod: AuthType = 'none') => {
     switch (authMethod) {
-      case 'none':
-        onOptionsChange({ ...options, basicAuth: false, jsonData: { ...options.jsonData, oauthPassThru: false, auth_method: 'none' } });
-        break;
       case 'basicAuth':
         onOptionsChange({ ...options, basicAuth: true, jsonData: { ...options.jsonData, oauthPassThru: false, auth_method: 'basicAuth' } });
         break;
       case 'oauthPassThru':
         onOptionsChange({ ...options, basicAuth: false, jsonData: { ...options.jsonData, oauthPassThru: true, auth_method: 'oauthPassThru' } });
         break;
+      case 'digestAuth':
       case 'apiKey':
       case 'bearerToken':
-      case 'oauthPassThru':
-      case 'digestAuth':
+      case 'oauth2':
+      case 'none':
       default:
         onOptionsChange({ ...options, basicAuth: false, jsonData: { ...options.jsonData, oauthPassThru: false, auth_method: authMethod } });
-        break;
     }
   };
   const onUserNameChange = (basicAuthUser: string) => {
-    onOptionsChange({
-      ...options,
-      basicAuthUser,
-    });
+    onOptionsChange({ ...options, basicAuthUser });
   };
   const onAPIKeyKeyChange = (apiKeyKey: string) => {
     onOptionsChange({ ...options, jsonData: { ...options.jsonData, apiKeyKey } });
@@ -60,7 +59,19 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
     <>
       <div className="gf-form">
         <InlineFormLabel width={10}>Auth Type</InlineFormLabel>
-        <RadioButtonGroup<AuthType> options={authTypes} value={authType} onChange={(e = 'none') => onAuthTypeChange(e!)}></RadioButtonGroup>
+        <RadioButtonGroup<AuthType | 'others'>
+          options={authTypes}
+          value={authType}
+          onChange={(e = 'none') => {
+            if (e !== 'others') {
+              onAuthTypeChange(e!);
+            }
+            if (e === 'others') {
+              setOthersOpen(true);
+            }
+          }}
+        ></RadioButtonGroup>
+        <OthersAuthentication options={options} isOpen={othersOpen} onClose={() => setOthersOpen(false)} onOptionsChange={onOptionsChange} />
       </div>
       {(authType === 'basicAuth' || authType === 'digestAuth') && (
         <>
@@ -144,6 +155,7 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
         </>
       )}
       {authType === 'oauth2' && <OAuthInputsEditor {...props} />}
+      {authType !== 'none' && <AllowedHostsEditor options={options} onOptionsChange={onOptionsChange} />}
     </>
   );
 };

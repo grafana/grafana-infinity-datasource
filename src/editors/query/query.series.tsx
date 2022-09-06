@@ -1,9 +1,9 @@
-import React from 'react';
-import { DataLinkInput } from '@grafana/ui';
 import { VariableOrigin } from '@grafana/data';
-import { set, defaultsDeep } from 'lodash';
-import { InfinitySeriesQuery } from '../../types';
+import { DataLinkInput } from '@grafana/ui';
+import { defaultsDeep, set } from 'lodash';
+import React from 'react';
 import { SeriesAdvancedOptions } from './query.series_options';
+import type { InfinitySeriesQuery } from './../../types';
 
 export const SeriesEditor = ({ query, onChange }: { query: InfinitySeriesQuery; onChange: (value: any) => void }) => {
   query = defaultsDeep(query, {

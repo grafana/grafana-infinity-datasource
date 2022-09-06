@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { cloneDeep } from 'lodash';
 import { Button } from '@grafana/ui';
-import { QueryColumnItem } from './../../components/QueryColumnItem';
+import { cloneDeep } from 'lodash';
+import React, { useState } from 'react';
 import { isDataQuery } from './../../app/utils';
-import { InfinityColumn, InfinityQuery, EditorMode } from '../../types';
+import { QueryColumnItem } from './../../components/QueryColumnItem';
+import type { EditorMode, InfinityColumn, InfinityQuery } from './../../types';
 
 export const QueryColumnsEditor = (props: { query: InfinityQuery; mode: EditorMode; onChange: (value: any) => void; onRunQuery: () => void }) => {
   const { query, mode, onChange, onRunQuery } = props;

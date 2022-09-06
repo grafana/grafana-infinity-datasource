@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { defaultsDeep, set } from 'lodash';
 import { Modal } from '@grafana/ui';
+import { defaultsDeep, set } from 'lodash';
+import React, { useState } from 'react';
 import { Select } from './../../components/extended/ui';
-import { InfinitySeriesQuery, DataOverride } from '../../types';
+import type { DataOverride, InfinitySeriesQuery } from './../../types';
 
 export const SeriesAdvancedOptions = ({ query, onChange }: { query: InfinitySeriesQuery; onChange: (value: any) => void }) => {
   query = defaultsDeep(query, {

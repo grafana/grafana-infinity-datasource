@@ -4,6 +4,7 @@ datasources:
   - name: Infinity
     uid: Infinity
     type: yesoreyeram-infinity-datasource
+    isDefault: true
   - name: Test
     uid: test
     type: yesoreyeram-infinity-datasource

@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import { updateDatasourcePluginJsonDataOption } from '@grafana/data';
+import { Button, Drawer, InlineFormLabel, Input, LegacyForms } from '@grafana/ui';
 import { set } from 'lodash';
-import { DataSourcePluginOptionsEditorProps, updateDatasourcePluginJsonDataOption, DataSourceSettings } from '@grafana/data';
-import { Button, LegacyForms, Drawer, InlineFormLabel, Input } from '@grafana/ui';
+import React, { useState } from 'react';
 import { InfinityQueryEditor } from './../query/infinityQuery';
-import { GlobalInfinityQuery, InfinityQuery, InfinityOptions } from '../../types';
+import type { GlobalInfinityQuery, InfinityOptions, InfinityQuery } from './../../types';
+import type { DataSourcePluginOptionsEditorProps, DataSourceSettings } from '@grafana/data/types';
 
 const DefaultGlobalQuery: InfinityQuery = {
   refId: '',

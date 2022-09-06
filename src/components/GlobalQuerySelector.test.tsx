@@ -1,7 +1,7 @@
-import React from 'react';
 import { render } from '@testing-library/react';
+import React from 'react';
 import { GlobalQuerySelector } from './GlobalQuerySelector';
-import { InfinityQuery } from './../types';
+import type { InfinityQuery } from './../types';
 
 describe('app/components/GlobalQuerySelector', () => {
   it('should render without error', () => {

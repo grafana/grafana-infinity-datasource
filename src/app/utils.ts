@@ -1,5 +1,6 @@
-import { DataFrame, Field, FieldType, Labels, MutableDataFrame, ArrayVector, TableData } from '@grafana/data';
-import { InfinityCSVQuery, InfinityGraphQLQuery, InfinityHTMLQuery, InfinityJSONQuery, InfinityQuery, InfinityQueryWithDataSource, InfinityXMLQuery } from './../types';
+import { ArrayVector, MutableDataFrame, FieldType } from '@grafana/data';
+import type { InfinityCSVQuery, InfinityGraphQLQuery, InfinityHTMLQuery, InfinityJSONQuery, InfinityQuery, InfinityQueryWithDataSource, InfinityXMLQuery } from './../types';
+import type { DataFrame, Field, Labels, TableData } from '@grafana/data/types';
 
 export const isTableData = (res: any): res is TableData => res && res.columns;
 export const isDataFrame = (res: any): res is DataFrame => res && res.fields;
@@ -21,7 +22,7 @@ export const normalizeURL = (url: string): string => {
   }
   return url;
 };
-export const isDataQuery = (query: InfinityQuery): query is InfinityQueryWithDataSource<'csv' | 'json' | 'json-backend' | 'xml' | 'html' | 'graphql'> => {
+export const isDataQuery = (query: InfinityQuery): query is InfinityQueryWithDataSource<any> => {
   switch (query.type) {
     case 'csv':
     case 'tsv':
@@ -30,6 +31,8 @@ export const isDataQuery = (query: InfinityQuery): query is InfinityQueryWithDat
     case 'xml':
     case 'graphql':
     case 'html':
+    case 'uql':
+    case 'groq':
       return true;
     default:
       return false;
@@ -78,8 +81,9 @@ export const toTimeSeriesLong = (data: DataFrame[]): DataFrame[] => {
             uniqueValueNamesToType[field.name] = field.type;
             uniqueValueNames.push(field.name);
           }
-
+          // eslint-disable-next-line no-case-declarations
           const tKey = JSON.stringify(field.labels);
+          // eslint-disable-next-line no-case-declarations
           const wideIndices = labelKeyToWideIndices[tKey];
 
           if (wideIndices !== undefined) {

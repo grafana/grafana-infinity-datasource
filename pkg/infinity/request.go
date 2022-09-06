@@ -8,9 +8,12 @@ import (
 	"strings"
 
 	"moul.io/http2curl"
+
+	querySrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/query"
+	settingsSrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/settings"
 )
 
-func GetRequest(settings InfinitySettings, body io.Reader, query Query, requestHeaders map[string]string, includeSect bool) (req *http.Request, err error) {
+func GetRequest(settings settingsSrv.InfinitySettings, body io.Reader, query querySrv.Query, requestHeaders map[string]string, includeSect bool) (req *http.Request, err error) {
 	url, err := GetQueryURL(settings, query, includeSect)
 	if err != nil {
 		return nil, err
@@ -21,9 +24,10 @@ func GetRequest(settings InfinitySettings, body io.Reader, query Query, requestH
 	default:
 		req, err = http.NewRequest(http.MethodGet, url, nil)
 	}
-	req = ApplyContentType(query, settings, req, includeSect)
-	req = ApplyQueryHeader(query, settings, req, includeSect)
-	req = ApplySettingHeaders(settings, req, includeSect)
+	req = ApplyAcceptHeader(query, settings, req, includeSect)
+	req = ApplyContentTypeHeader(query, settings, req, includeSect)
+	req = ApplyHeadersFromSettings(settings, req, includeSect)
+	req = ApplyHeadersFromQuery(query, settings, req, includeSect)
 	req = ApplyBasicAuth(settings, req, includeSect)
 	req = ApplyBearerToken(settings, req, includeSect)
 	req = ApplyApiKeyAuth(settings, req, includeSect)
@@ -31,7 +35,7 @@ func GetRequest(settings InfinitySettings, body io.Reader, query Query, requestH
 	return req, err
 }
 
-func GetQueryURL(settings InfinitySettings, query Query, includeSect bool) (string, error) {
+func GetQueryURL(settings settingsSrv.InfinitySettings, query querySrv.Query, includeSect bool) (string, error) {
 	urlString := query.URL
 	if !strings.HasPrefix(query.URL, settings.URL) {
 		urlString = settings.URL + urlString
@@ -53,7 +57,7 @@ func GetQueryURL(settings InfinitySettings, query Query, includeSect bool) (stri
 		}
 		q.Set(key, val)
 	}
-	if settings.AuthenticationMethod == AuthenticationMethodApiKey && settings.ApiKeyType == ApiKeyTypeQuery {
+	if settings.AuthenticationMethod == settingsSrv.AuthenticationMethodApiKey && settings.ApiKeyType == settingsSrv.ApiKeyTypeQuery {
 		val := dummyHeader
 		if includeSect {
 			val = settings.ApiKeyValue
@@ -64,7 +68,7 @@ func GetQueryURL(settings InfinitySettings, query Query, includeSect bool) (stri
 	return u.String(), nil
 }
 
-func (client *Client) GetExecutedURL(query Query) string {
+func (client *Client) GetExecutedURL(query querySrv.Query) string {
 	out := []string{}
 	if query.Source != "inline" {
 		req, err := GetRequest(client.Settings, GetQueryBody(query), query, map[string]string{}, false)
@@ -78,10 +82,10 @@ func (client *Client) GetExecutedURL(query Query) string {
 		out = append(out, "###############", "## URL", "###############", "", req.URL.String(), "")
 		out = append(out, "###############", "## Curl Command", "###############", "", command.String())
 	}
-	if query.Type == QueryTypeUQL {
+	if query.Type == querySrv.QueryTypeUQL {
 		out = append(out, "", "###############", "## UQL", "###############", "", query.UQL)
 	}
-	if query.Type == QueryTypeGROQ {
+	if query.Type == querySrv.QueryTypeGROQ {
 		out = append(out, "###############", "## GROQ", "###############", "", query.GROQ, "")
 	}
 	return strings.Join(out, "\n")

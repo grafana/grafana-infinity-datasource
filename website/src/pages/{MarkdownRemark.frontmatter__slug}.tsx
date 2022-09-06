@@ -1,8 +1,8 @@
 import React from 'react';
 import { graphql, Link } from 'gatsby';
 import { Helmet } from 'react-helmet';
-import { Layout } from '../components/Layout';
-import { InspiringStory } from '../components/InspiringStory';
+import { Layout } from './../components/Layout';
+import { InspiringStory } from './../components/InspiringStory';
 
 export interface TemplateProps {
   data: any;
