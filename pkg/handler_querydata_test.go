@@ -29,11 +29,15 @@ func TestAuthentication(t *testing.T) {
 		require.Nil(t, err)
 		require.NotNil(t, client)
 		res := main.QueryData(context.Background(), backend.DataQuery{
-			JSON: []byte(`{ "source" : "url" }`),
+			JSON: []byte(fmt.Sprintf(`{
+				"type": "json",
+				"url":  "%s",
+				"source": "url"
+			}`, server.URL)),
 		}, *client, map[string]string{})
 		require.NotNil(t, res)
 		require.NotNil(t, res.Error)
-		assert.Equal(t, "Datasource is missing allowed hosts/URLs. Configure it in the datasource settings page.", res.Error.Error())
+		assert.Equal(t, "Datasource is missing allowed hosts/URLs. Configure it in the datasource settings page for enhanced security.", res.Error.Error())
 	})
 	t.Run("basic auth", func(t *testing.T) {
 		t.Run("should set basic auth headers when set the username and password", func(t *testing.T) {
@@ -459,6 +463,87 @@ func TestResponseFormats(t *testing.T) {
 			require.Equal(t, "", metaData.Error)
 			require.Equal(t, http.StatusOK, metaData.ResponseCodeFromServer)
 			require.Equal(t, map[string]interface{}(map[string]interface{}{"foo": "bar"}), metaData.Data)
+		})
+	})
+	t.Run("JSON Backend", func(t *testing.T) {
+		t.Run("should parse the response and send results", func(t *testing.T) {
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				assert.Equal(t, http.MethodGet, r.Method)
+				fmt.Fprintf(w, `{
+					"channel": {
+					  "id": 38629,
+					  "name": "Traffic Monitor",
+					  "description": "Traffic Monitor showing density of cars detected",
+					  "latitude": "42.28",
+					  "longitude": "-71.35",
+					  "field1": "Density of Westbound Cars",
+					  "field2": "Density of Eastbound Cars",
+					  "created_at": "2015-05-19T20:14:03Z",
+					  "updated_at": "2019-07-24T20:12:00Z",
+					  "last_entry_id": 13487228
+					},
+					"feeds": [
+					  {
+						"created_at": "2022-09-06T16:40:50Z",
+						"entry_id": 13487129,
+						"field1": "20.000000",
+						"field2": "46.000000"
+					  },
+					  {
+						"created_at": "2022-09-06T16:40:50Z",
+						"entry_id": 13487130,
+						"field1": "22.000000",
+						"field2": "32.000000"
+					  },
+					  {
+						"created_at": "2022-09-06T17:40:50Z",
+						"entry_id": 13487129,
+						"field1": "30.000000",
+						"field2": "56.000000"
+					  },
+					  {
+						"created_at": "2022-09-06T17:40:50Z",
+						"entry_id": 13487130,
+						"field1": "10.000000",
+						"field2": "36.000000"
+					  }
+					]
+				  }`)
+			}))
+			defer server.Close()
+			client, err := infinity.NewClient(settingsSrv.InfinitySettings{URL: server.URL})
+			require.Nil(t, err)
+			res := main.QueryData(context.Background(), backend.DataQuery{
+				JSON: []byte(fmt.Sprintf(`{ 
+					"type": "json-backend",
+					"url":  "%s",
+					"source": "url",
+					"format": "timeseries",
+					"root_selector": "feeds",
+					"columns": [
+					  {
+						"text": "",
+						"selector": "created_at",
+						"type": "timestamp"
+					  },
+					  {
+						"text": "",
+						"selector": "field1",
+						"type": "number"
+					  },
+					  {
+						"text": "",
+						"selector": "entry_id",
+						"type": "string"
+					  }
+					]
+				}`, server.URL)),
+			}, *client, map[string]string{})
+			require.NotNil(t, res)
+			require.Nil(t, res.Error)
+			// require.Equal(t, data.FieldTypeNullableFloat64, res.Frames[0].Fields[0].Type())
+			// require.Equal(t, data.FieldTypeNullableString, res.Frames[0].Fields[1].Type())
+			// require.Equal(t, data.FieldTypeNullableTime, res.Frames[0].Fields[2].Type())
 		})
 	})
 }

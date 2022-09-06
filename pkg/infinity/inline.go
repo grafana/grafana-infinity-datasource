@@ -10,10 +10,18 @@ import (
 func GetFrameForInlineSources(query querySrv.Query) (*data.Frame, error) {
 	frame := GetDummyFrame(query)
 	if query.Type == querySrv.QueryTypeJSONBackend {
+		columns := []jsonFramer.ColumnSelector{}
+		for _, c := range query.Columns {
+			columns = append(columns, jsonFramer.ColumnSelector{
+				Selector: c.Selector,
+				Alias:    c.Text,
+				Type:     c.Type,
+			})
+		}
 		newFrame, err := jsonFramer.JsonStringToFrame(query.Data, jsonFramer.JSONFramerOptions{
 			FrameName:    query.RefID,
 			RootSelector: query.RootSelector,
-			Columns:      []jsonFramer.ColumnSelector{},
+			Columns:      columns,
 		})
 		if err != nil {
 			backend.Logger.Error("error building frame", "error", err.Error())

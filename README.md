@@ -26,5 +26,5 @@ Using the following links,You can try **Infinity datasource plugin** without ins
 
 ## Known limitations
 
-- Doesn't support alerting
-- Doesn't support recorded queries
+- Alerting only supports on `JSON backend` type queries.
+- Recorded queries only supports on `JSON backend` type queries.

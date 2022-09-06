@@ -6,7 +6,7 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 
 ### **New Features & Bug Fixes**
 
-- **New Query Type**: JSON Backend ( _experimental_ )
+- **New Query Type**: JSON Backend (with support for alerting)( **beta** )
 - **New Auth Type**: Digest auth support
 - **New Macro**: Support for macros (`$__combineValues()`,`$__customInterval()`) added in URL, Body, Inline data, UQL queries
 - **New Variable Query Type**: Random String from given array of strings

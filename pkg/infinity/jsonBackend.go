@@ -17,10 +17,18 @@ func GetJSONBackendResponse(urlResponseObject interface{}, query querySrv.Query)
 		backend.Logger.Error("error json parsing root data", "error", err.Error())
 		return frame, fmt.Errorf("error parsing json root data")
 	}
+	columns := []jsonFramer.ColumnSelector{}
+	for _, c := range query.Columns {
+		columns = append(columns, jsonFramer.ColumnSelector{
+			Selector: c.Selector,
+			Alias:    c.Text,
+			Type:     c.Type,
+		})
+	}
 	newFrame, err := jsonFramer.JsonStringToFrame(string(responseString), jsonFramer.JSONFramerOptions{
 		FrameName:    query.RefID,
 		RootSelector: query.RootSelector,
-		Columns:      []jsonFramer.ColumnSelector{},
+		Columns:      columns,
 	})
 	frame.Meta = &data.FrameMeta{
 		Custom: &CustomMeta{
@@ -37,6 +45,11 @@ func GetJSONBackendResponse(urlResponseObject interface{}, query querySrv.Query)
 	}
 	if newFrame != nil {
 		frame.Fields = append(frame.Fields, newFrame.Fields...)
+	}
+	if query.Format == "timeseries" && frame.TimeSeriesSchema().Type == data.TimeSeriesTypeLong {
+		if wFrame, err := data.LongToWide(frame, &data.FillMissing{Mode: data.FillModeNull}); err == nil {
+			return wFrame, err
+		}
 	}
 	return frame, err
 }

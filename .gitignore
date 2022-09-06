@@ -119,3 +119,4 @@ cypress/report.json
 cypress/screenshots/
 cypress/videos/
 .data/
+__debug_bin

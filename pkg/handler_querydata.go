@@ -48,12 +48,6 @@ func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient in
 		return response
 	}
 	//endregion
-	//region Validating Query
-	if infClient.Settings.AuthenticationMethod != settingsSrv.AuthenticationMethodNone && infClient.Settings.AuthenticationMethod != "" && len(infClient.Settings.AllowedHosts) < 1 && query.Source == "url" {
-		response.Error = errors.New("Datasource is missing allowed hosts/URLs. Configure it in the datasource settings page.")
-		return response
-	}
-	//endregion
 	//region Tracking Query
 	var instanceID string
 	if ctx.Value(contextKeyInstanceUID) != nil {
@@ -96,6 +90,10 @@ func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient in
 		}
 	}
 	response.Frames = append(response.Frames, frame)
+	if infClient.Settings.AuthenticationMethod != settingsSrv.AuthenticationMethodNone && infClient.Settings.AuthenticationMethod != "" && len(infClient.Settings.AllowedHosts) < 1 && query.Source == "url" {
+		response.Error = errors.New("Datasource is missing allowed hosts/URLs. Configure it in the datasource settings page for enhanced security.")
+		return response
+	}
 	//endregion
 	return response
 }
