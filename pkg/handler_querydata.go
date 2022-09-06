@@ -2,11 +2,11 @@ package main
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"strings"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
+	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/infinity"
 	querySrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/query"
@@ -91,8 +91,9 @@ func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient in
 	}
 	response.Frames = append(response.Frames, frame)
 	if infClient.Settings.AuthenticationMethod != settingsSrv.AuthenticationMethodNone && infClient.Settings.AuthenticationMethod != "" && len(infClient.Settings.AllowedHosts) < 1 && query.Source == "url" {
-		response.Error = errors.New("Datasource is missing allowed hosts/URLs. Configure it in the datasource settings page for enhanced security.")
-		return response
+		frame.AppendNotices(data.Notice{
+			Text: "Datasource is missing allowed hosts/URLs. Configure it in the datasource settings page for enhanced security.",
+		})
 	}
 	//endregion
 	return response
