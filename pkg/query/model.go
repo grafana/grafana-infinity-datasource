@@ -9,15 +9,14 @@ import (
 )
 
 const (
-	QueryTypeJSON        = "json"
-	QueryTypeJSONBackend = "json-backend"
-	QueryTypeCSV         = "csv"
-	QueryTypeTSV         = "tsv"
-	QueryTypeXML         = "xml"
-	QueryTypeGraphQL     = "graphql"
-	QueryTypeHTML        = "html"
-	QueryTypeUQL         = "uql"
-	QueryTypeGROQ        = "groq"
+	QueryTypeJSON    = "json"
+	QueryTypeCSV     = "csv"
+	QueryTypeTSV     = "tsv"
+	QueryTypeXML     = "xml"
+	QueryTypeGraphQL = "graphql"
+	QueryTypeHTML    = "html"
+	QueryTypeUQL     = "uql"
+	QueryTypeGROQ    = "groq"
 )
 
 type Query struct {
@@ -28,6 +27,7 @@ type Query struct {
 	URL           string                 `json:"url"`
 	URLOptions    URLOptions             `json:"url_options"`
 	Data          string                 `json:"data"`
+	Parser        string                 `json:"parser"` // 'simple' | 'backend' | 'uql'
 	UQL           string                 `json:"uql"`
 	GROQ          string                 `json:"groq"`
 	CSVOptions    InfinityCSVOptions     `json:"csv_options"`

@@ -1,6 +1,7 @@
-import { CodeEditor, CodeEditorSuggestionItem, CodeEditorSuggestionItemKind, Icon, InlineFormLabel } from '@grafana/ui';
+import { CodeEditor, CodeEditorSuggestionItem, CodeEditorSuggestionItemKind, Icon } from '@grafana/ui';
 import React from 'react';
-import type { EditorMode, InfinityQuery } from './../../types';
+import { EditorField } from './../../components/extended/EditorField';
+import type { InfinityQuery } from './../../types';
 declare const monaco: any;
 
 const UQLTips: string[] = [
@@ -10,11 +11,10 @@ const UQLTips: string[] = [
   '💡 You can prefix each line with # to mark that as a comment',
 ];
 
-export const UQLEditor = (props: { mode: EditorMode; query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void }) => {
-  const { query, mode, onChange, onRunQuery } = props;
-  const LABEL_WIDTH = mode === 'variable' ? 10 : 8;
+export const UQLEditor = (props: { query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void }) => {
+  const { query, onChange, onRunQuery } = props;
   const onUQLChange = (uql: string) => {
-    if (query.type === 'uql') {
+    if (query.type === 'uql' || (query.type === 'json' && query.parser === 'uql')) {
       onChange({ ...query, uql });
       onRunQuery();
     }
@@ -26,18 +26,15 @@ export const UQLEditor = (props: { mode: EditorMode; query: InfinityQuery; onCha
       ...UQLFunctions.map((item: string) => ({ label: item, kind: CodeEditorSuggestionItemKind.Method })),
     ];
   };
-  return query.type === 'uql' ? (
-    <>
+  return query.type === 'uql' || (query.type === 'json' && query.parser === 'uql') ? (
+    <EditorField label="UQL">
       <div className="gf-form">
-        <InlineFormLabel className="query-keyword" width={LABEL_WIDTH}>
-          UQL
-        </InlineFormLabel>
         <div data-testid="infinity-query-uql-selector">
           <CodeEditor
             language="sql"
-            width="594px"
+            width="680px"
             height="140px"
-            value={query.uql}
+            value={query.uql || ''}
             showMiniMap={false}
             showLineNumbers={false}
             getSuggestions={getUQLSuggestions}
@@ -45,7 +42,7 @@ export const UQLEditor = (props: { mode: EditorMode; query: InfinityQuery; onCha
             onBlur={onUQLChange}
             onEditorDidMount={handleMount}
           />
-          <p style={{ paddingBlock: '5px', color: 'yellowgreen' }}>{UQLTips[Math.floor(Math.random() * UQLTips.length)]}</p>
+          <span style={{ color: 'yellowgreen' }}>{UQLTips[Math.floor(Math.random() * UQLTips.length)]}</span>
         </div>
         <div title="Alternatively, you can also press ctrl+s ">
           <Icon
@@ -58,7 +55,7 @@ export const UQLEditor = (props: { mode: EditorMode; query: InfinityQuery; onCha
           />
         </div>
       </div>
-    </>
+    </EditorField>
   ) : (
     <></>
   );

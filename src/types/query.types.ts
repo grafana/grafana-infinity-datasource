@@ -2,7 +2,7 @@ import { FilterOperator } from './../constants';
 import type { DataQuery, SelectableValue } from '@grafana/data';
 
 //#region Query
-export type InfinityQueryType = 'json' | 'json-backend' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'series' | 'global' | 'uql' | 'groq';
+export type InfinityQueryType = 'json' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'series' | 'global' | 'uql' | 'groq';
 export type InfinityQuerySources = 'url' | 'inline' | 'random-walk' | 'expression';
 export type InfinityColumnFormat = 'string' | 'number' | 'timestamp' | 'timestamp_epoch' | 'timestamp_epoch_s';
 export type InfinityQueryFormat = 'table' | 'timeseries' | 'dataframe' | 'as-is' | 'node-graph-nodes' | 'node-graph-edges';
@@ -44,8 +44,12 @@ export type InfinityJSONQueryOptions = {
   root_is_not_array?: boolean;
   columnar?: boolean;
 };
-export type InfinityJSONQuery = { json_options?: InfinityJSONQueryOptions } & InfinityQueryWithDataSource<'json'>;
-export type InfinityJSONBackendQuery = {} & InfinityQueryWithDataSource<'json-backend'>;
+export type InfinityJSONQuery = {
+  json_options?: InfinityJSONQueryOptions;
+  parser?: 'simple' | 'backend' | 'uql' | 'groq';
+  uql?: string;
+  groq?: string;
+} & InfinityQueryWithDataSource<'json'>;
 export type InfinityCSVQueryOptions = {
   delimiter?: string;
   skip_empty_lines?: boolean;
@@ -69,7 +73,7 @@ export type InfinitySeriesQueryRandomWalk = {} & InfinitySeriesQueryBase<'random
 export type InfinitySeriesQueryExpression = { expression?: string } & InfinitySeriesQueryBase<'expression'>;
 export type InfinitySeriesQuery = InfinitySeriesQueryRandomWalk | InfinitySeriesQueryExpression;
 export type InfinityGlobalQuery = { global_query_id: string } & InfinityQueryBase<'global'>;
-export type InfinityDataQuery = InfinityJSONQuery | InfinityJSONBackendQuery | InfinityCSVQuery | InfinityTSVQuery | InfinityXMLQuery | InfinityGraphQLQuery | InfinityHTMLQuery;
+export type InfinityDataQuery = InfinityJSONQuery | InfinityCSVQuery | InfinityTSVQuery | InfinityXMLQuery | InfinityGraphQLQuery | InfinityHTMLQuery;
 export type InfinityDestinationQuery = InfinityDataQuery | InfinitySeriesQuery;
 export type InfinityLegacyQuery = InfinityDestinationQuery | InfinityGlobalQuery;
 export type InfinityUQLQuerySource = InfinityQueryWithURLSource<'uql'> | InfinityQueryWithInlineSource<'uql'>;

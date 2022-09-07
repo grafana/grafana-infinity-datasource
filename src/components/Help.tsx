@@ -8,9 +8,11 @@ export const InfinityHelp = () => {
   const [activeTab, setActiveTab] = useState('general');
   return (
     <>
-      <Button icon="question-circle" size="sm" style={{ margin: '5px' }} onClick={() => setIsOpen(!isOpen)}>
-        Need Help?
-      </Button>
+      <div style={{ paddingBlockStart: '4px' }}>
+        <Button icon="question-circle" size="sm" variant="secondary" onClick={() => setIsOpen(!isOpen)}>
+          Need Help?
+        </Button>
+      </div>
       {isOpen && (
         <Drawer
           title="Infinity Datasource Plugin Help"

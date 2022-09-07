@@ -27,7 +27,6 @@ export const isDataQuery = (query: InfinityQuery): query is InfinityQueryWithDat
     case 'csv':
     case 'tsv':
     case 'json':
-    case 'json-backend':
     case 'xml':
     case 'graphql':
     case 'html':

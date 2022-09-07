@@ -23,6 +23,7 @@ func TestLoadQuery(t *testing.T) {
 				"type"			: "json",
 				"source"		: "url",
 				"global_query_id" 	: "hello",
+				"parser"		: "backend",
 				"url"			: "https://foo.com" ,
 				"url_options"	: {
 					"method"  			: 	"POST",
@@ -74,6 +75,7 @@ func TestLoadQuery(t *testing.T) {
 					BodyGraphQLQuery: "bar",
 				},
 				Data:         "my-inline-data",
+				Parser:       "backend",
 				RootSelector: "my-root_selector",
 				Columns:      []querySrv.InfinityColumn{{Selector: "s", Text: "t", Type: "string"}},
 				Filters:      []querySrv.InfinityFilter{{Field: "ff1", Operator: "fo1", Value: []string{"fa1", "fb1"}}},

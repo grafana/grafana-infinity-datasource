@@ -9,8 +9,10 @@ import (
 func GetFrameForURLSources(query querySrv.Query, infClient Client, requestHeaders map[string]string) (*data.Frame, error) {
 	frame := GetDummyFrame(query)
 	urlResponseObject, statusCode, duration, err := infClient.GetResults(query, requestHeaders)
-	if query.Type == querySrv.QueryTypeJSONBackend {
-		return GetJSONBackendResponse(urlResponseObject, query)
+	if query.Type == querySrv.QueryTypeJSON && query.Parser == "backend" {
+		if frame, err = GetJSONBackendResponse(urlResponseObject, query); err != nil {
+			return frame, err
+		}
 	}
 	frame.Meta.ExecutedQueryString = infClient.GetExecutedURL(query)
 	if infClient.IsMock {
