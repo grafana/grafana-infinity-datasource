@@ -19,6 +19,7 @@
 //                  "body_graphql_query": ""
 //              },
 //              "data": "",
+//              "parser": "",
 //              "uql": "parse-json | count",
 //              "groq": "",
 //              "csv_options": {
@@ -81,6 +82,7 @@
                 "body_graphql_query": ""
               },
               "data": "",
+              "parser": "",
               "uql": "parse-json | count",
               "groq": "",
               "csv_options": {

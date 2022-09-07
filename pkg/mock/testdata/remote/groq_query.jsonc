@@ -19,6 +19,7 @@
 //                  "body_graphql_query": ""
 //              },
 //              "data": "",
+//              "parser": "",
 //              "uql": "",
 //              "groq": "*{1,2,3}",
 //              "csv_options": {
@@ -81,6 +82,7 @@
                 "body_graphql_query": ""
               },
               "data": "",
+              "parser": "",
               "uql": "",
               "groq": "*{1,2,3}",
               "csv_options": {

@@ -9,6 +9,9 @@ export const JSONOptionsEditor = (props: { query: InfinityQuery; onChange: (valu
   if (query.type !== 'json') {
     return <></>;
   }
+  if (query.parser === 'backend' || query.parser === 'uql' || query.parser === 'groq') {
+    return <></>;
+  }
   const { json_options = {} } = query;
   const onJsonOptionsChange = <T extends keyof InfinityJSONQueryOptions, V extends InfinityJSONQueryOptions[T]>(key: T, value: V) => {
     onChange({ ...query, json_options: { ...json_options, [key]: value } });

@@ -109,14 +109,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
   getQueryDisplayText(query: InfinityQuery) {
     return (
       query.type.toUpperCase() +
-      ((query.type === 'json' ||
-        query.type === 'csv' ||
-        query.type === 'xml' ||
-        query.type === 'uql' ||
-        query.type === 'graphql' ||
-        query.type === 'groq' ||
-        query.type === 'json-backend' ||
-        query.type === 'tsv') &&
+      ((query.type === 'json' || query.type === 'csv' || query.type === 'xml' || query.type === 'uql' || query.type === 'graphql' || query.type === 'groq' || query.type === 'tsv') &&
       query.source === 'url'
         ? ` ${query.url}`
         : '')
@@ -139,7 +132,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
         const data = d.meta?.custom?.data;
         const responseCodeFromServer = d.meta?.custom?.responseCodeFromServer;
         const error = d.meta?.custom?.error;
-        if (target.type === 'json-backend') {
+        if (target.type === 'json' && target.parser === 'backend') {
           promises.push(Promise.resolve(d));
         } else {
           promises.push(
@@ -193,6 +186,18 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
           if (t.format === 'as-is' && t.source === 'inline') {
             const data = JSON.parse(t.data || '[]');
             resolve(data);
+          }
+          if (t.type === 'json' && t.parser === 'uql') {
+            applyUQL(t.uql || '', data, t.format, t.refId)
+              .then(resolve)
+              .catch(reject);
+            break;
+          }
+          if (t.type === 'json' && t.parser === 'groq') {
+            applyGroq(t.groq || '', data, t.format, t.refId)
+              .then(resolve)
+              .catch(reject);
+            break;
           }
           new InfinityProvider(t, this).formatResults(data).then(resolve).catch(reject);
           break;

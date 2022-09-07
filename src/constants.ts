@@ -24,7 +24,6 @@ export const SCRAP_QUERY_TYPES: Array<SelectableValue<InfinityQueryType>> = [
   { label: 'Series', value: 'series' },
   { label: 'Global Query', value: 'global' },
   { label: 'GROQ', value: 'groq' },
-  { label: 'JSON (backend - experimental)', value: 'json-backend' },
 ];
 export const INFINITY_RESULT_FORMATS: Array<SelectableValue<InfinityQueryFormat>> = [
   { label: 'Data Frame', value: 'dataframe' },
@@ -35,8 +34,8 @@ export const INFINITY_RESULT_FORMATS: Array<SelectableValue<InfinityQueryFormat>
   { label: 'As Is', value: 'as-is' },
 ];
 export const INFINITY_SOURCES: ScrapQuerySources[] = [
-  { label: 'URL', value: 'url', supported_types: ['csv', 'tsv', 'json', 'json-backend', 'html', 'xml', 'graphql', 'uql', 'groq'] },
-  { label: 'Inline', value: 'inline', supported_types: ['csv', 'tsv', 'json', 'json-backend', 'xml', 'uql', 'groq'] },
+  { label: 'URL', value: 'url', supported_types: ['csv', 'tsv', 'json', 'html', 'xml', 'graphql', 'uql', 'groq'] },
+  { label: 'Inline', value: 'inline', supported_types: ['csv', 'tsv', 'json', 'xml', 'uql', 'groq'] },
   { label: 'Random Walk', value: 'random-walk', supported_types: ['series'] },
   { label: 'Expression', value: 'expression', supported_types: ['series'] },
 ];

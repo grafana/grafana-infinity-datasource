@@ -1,6 +1,5 @@
 import { CodeEditor, CodeEditorSuggestionItem, CodeEditorSuggestionItemKind, Icon } from '@grafana/ui';
 import React from 'react';
-import { EditorRow } from './../../components/extended/EditorRow';
 import { EditorField } from './../../components/extended/EditorField';
 import type { InfinityQuery } from './../../types';
 declare const monaco: any;
@@ -15,7 +14,7 @@ const UQLTips: string[] = [
 export const UQLEditor = (props: { query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void }) => {
   const { query, onChange, onRunQuery } = props;
   const onUQLChange = (uql: string) => {
-    if (query.type === 'uql') {
+    if (query.type === 'uql' || (query.type === 'json' && query.parser === 'uql')) {
       onChange({ ...query, uql });
       onRunQuery();
     }
@@ -27,38 +26,36 @@ export const UQLEditor = (props: { query: InfinityQuery; onChange: (value: Infin
       ...UQLFunctions.map((item: string) => ({ label: item, kind: CodeEditorSuggestionItemKind.Method })),
     ];
   };
-  return query.type === 'uql' ? (
-    <EditorRow>
-      <EditorField label="UQL">
-        <div className="gf-form">
-          <div data-testid="infinity-query-uql-selector">
-            <CodeEditor
-              language="sql"
-              width="680px"
-              height="140px"
-              value={query.uql}
-              showMiniMap={false}
-              showLineNumbers={false}
-              getSuggestions={getUQLSuggestions}
-              onSave={onUQLChange}
-              onBlur={onUQLChange}
-              onEditorDidMount={handleMount}
-            />
-            <span style={{ color: 'yellowgreen' }}>{UQLTips[Math.floor(Math.random() * UQLTips.length)]}</span>
-          </div>
-          <div title="Alternatively, you can also press ctrl+s ">
-            <Icon
-              name="play"
-              size="lg"
-              style={{ color: 'greenyellow' }}
-              onClick={() => {
-                onRunQuery();
-              }}
-            />
-          </div>
+  return query.type === 'uql' || (query.type === 'json' && query.parser === 'uql') ? (
+    <EditorField label="UQL">
+      <div className="gf-form">
+        <div data-testid="infinity-query-uql-selector">
+          <CodeEditor
+            language="sql"
+            width="680px"
+            height="140px"
+            value={query.uql || ''}
+            showMiniMap={false}
+            showLineNumbers={false}
+            getSuggestions={getUQLSuggestions}
+            onSave={onUQLChange}
+            onBlur={onUQLChange}
+            onEditorDidMount={handleMount}
+          />
+          <span style={{ color: 'yellowgreen' }}>{UQLTips[Math.floor(Math.random() * UQLTips.length)]}</span>
         </div>
-      </EditorField>
-    </EditorRow>
+        <div title="Alternatively, you can also press ctrl+s ">
+          <Icon
+            name="play"
+            size="lg"
+            style={{ color: 'greenyellow' }}
+            onClick={() => {
+              onRunQuery();
+            }}
+          />
+        </div>
+      </div>
+    </EditorField>
   ) : (
     <></>
   );

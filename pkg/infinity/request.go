@@ -82,10 +82,10 @@ func (client *Client) GetExecutedURL(query querySrv.Query) string {
 		out = append(out, "###############", "## URL", "###############", "", req.URL.String(), "")
 		out = append(out, "###############", "## Curl Command", "###############", "", command.String())
 	}
-	if query.Type == querySrv.QueryTypeUQL {
+	if query.Type == querySrv.QueryTypeUQL || (query.Type == querySrv.QueryTypeJSON && query.Parser == "uql") {
 		out = append(out, "", "###############", "## UQL", "###############", "", query.UQL)
 	}
-	if query.Type == querySrv.QueryTypeGROQ {
+	if query.Type == querySrv.QueryTypeGROQ || (query.Type == querySrv.QueryTypeJSON && query.Parser == "groq") {
 		out = append(out, "###############", "## GROQ", "###############", "", query.GROQ, "")
 	}
 	return strings.Join(out, "\n")

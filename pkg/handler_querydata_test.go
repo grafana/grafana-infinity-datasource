@@ -311,160 +311,160 @@ func TestAuthentication(t *testing.T) {
 }
 
 func TestResponseFormats(t *testing.T) {
-	t.Run("JSON", func(t *testing.T) {
-		t.Run("should parse the response and send results", func(t *testing.T) {
-			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				assert.Equal(t, http.MethodGet, r.Method)
-				fmt.Fprintf(w, `{ "foo" : "bar" }`)
-			}))
-			defer server.Close()
-			client, err := infinity.NewClient(settingsSrv.InfinitySettings{URL: server.URL})
-			require.Nil(t, err)
-			res := main.QueryData(context.Background(), backend.DataQuery{
-				JSON: []byte(fmt.Sprintf(`{ 
-					"type": "json",
-					"url":  "%s",
-					"source": "url"
-				}`, server.URL)),
-			}, *client, map[string]string{})
-			require.NotNil(t, res)
-			require.Nil(t, res.Error)
-			metaData := res.Frames[0].Meta.Custom.(*infinity.CustomMeta)
-			require.NotNil(t, metaData)
-			require.Equal(t, "", metaData.Error)
-			require.Equal(t, http.StatusOK, metaData.ResponseCodeFromServer)
-			require.Equal(t, map[string]interface{}(map[string]interface{}{"foo": "bar"}), metaData.Data)
-		})
-	})
-	t.Run("GraphQL", func(t *testing.T) {
-		t.Run("should parse the response and send results", func(t *testing.T) {
-			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				assert.Equal(t, http.MethodGet, r.Method)
-				fmt.Fprintf(w, `{ "foo" : "bar" }`)
-			}))
-			defer server.Close()
-			client, err := infinity.NewClient(settingsSrv.InfinitySettings{URL: server.URL})
-			require.Nil(t, err)
-			res := main.QueryData(context.Background(), backend.DataQuery{
-				JSON: []byte(fmt.Sprintf(`{
-					"type": "graphql",
-					"url":  "%s",
-					"source": "url"
-				}`, server.URL)),
-			}, *client, map[string]string{})
-			require.NotNil(t, res)
-			require.Nil(t, res.Error)
-			metaData := res.Frames[0].Meta.Custom.(*infinity.CustomMeta)
-			require.NotNil(t, metaData)
-			require.Equal(t, "", metaData.Error)
-			require.Equal(t, http.StatusOK, metaData.ResponseCodeFromServer)
-			require.Equal(t, map[string]interface{}(map[string]interface{}{"foo": "bar"}), metaData.Data)
-		})
-	})
-	t.Run("CSV", func(t *testing.T) {
-		t.Run("should parse the response and send results", func(t *testing.T) {
-			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				assert.Equal(t, http.MethodGet, r.Method)
-				w.Header().Add("Content-Type", "text/csv")
-				fmt.Fprintf(w, "a,b\na1,b1")
-			}))
-			defer server.Close()
-			client, err := infinity.NewClient(settingsSrv.InfinitySettings{URL: server.URL})
-			require.Nil(t, err)
-			res := main.QueryData(context.Background(), backend.DataQuery{
-				JSON: []byte(fmt.Sprintf(`{
-					"type": "uql",
-					"url":  "%s",
-					"source": "url"
-				}`, server.URL)),
-			}, *client, map[string]string{})
-			require.NotNil(t, res)
-			require.Nil(t, res.Error)
-			metaData := res.Frames[0].Meta.Custom.(*infinity.CustomMeta)
-			require.NotNil(t, metaData)
-			require.Equal(t, "", metaData.Error)
-			require.Equal(t, http.StatusOK, metaData.ResponseCodeFromServer)
-			require.Equal(t, "a,b\na1,b1", metaData.Data)
-		})
-	})
-	t.Run("XML", func(t *testing.T) {
-		t.Run("should parse the response and send results", func(t *testing.T) {
-			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				assert.Equal(t, http.MethodGet, r.Method)
-				w.Header().Add("Content-Type", "text/xml")
-				fmt.Fprintf(w, `<xml><User name="foo"></xml>`)
-			}))
-			defer server.Close()
-			client, err := infinity.NewClient(settingsSrv.InfinitySettings{URL: server.URL})
-			require.Nil(t, err)
-			res := main.QueryData(context.Background(), backend.DataQuery{
-				JSON: []byte(fmt.Sprintf(`{
-					"type": "xml",
-					"url":  "%s",
-					"source": "url"
-				}`, server.URL)),
-			}, *client, map[string]string{})
-			require.NotNil(t, res)
-			require.Nil(t, res.Error)
-			metaData := res.Frames[0].Meta.Custom.(*infinity.CustomMeta)
-			require.NotNil(t, metaData)
-			require.Equal(t, "", metaData.Error)
-			require.Equal(t, http.StatusOK, metaData.ResponseCodeFromServer)
-			require.Equal(t, `<xml><User name="foo"></xml>`, metaData.Data)
-		})
-	})
-	t.Run("UQL", func(t *testing.T) {
-		t.Run("should parse the response and send results", func(t *testing.T) {
-			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				assert.Equal(t, http.MethodGet, r.Method)
-				w.Header().Add("Content-Type", "application/json")
-				fmt.Fprintf(w, `{ "foo" : "bar" }`)
-			}))
-			defer server.Close()
-			client, err := infinity.NewClient(settingsSrv.InfinitySettings{URL: server.URL})
-			require.Nil(t, err)
-			res := main.QueryData(context.Background(), backend.DataQuery{
-				JSON: []byte(fmt.Sprintf(`{
-					"type": "uql",
-					"url":  "%s",
-					"source": "url"
-				}`, server.URL)),
-			}, *client, map[string]string{})
-			require.NotNil(t, res)
-			require.Nil(t, res.Error)
-			metaData := res.Frames[0].Meta.Custom.(*infinity.CustomMeta)
-			require.NotNil(t, metaData)
-			require.Equal(t, "", metaData.Error)
-			require.Equal(t, http.StatusOK, metaData.ResponseCodeFromServer)
-			require.Equal(t, map[string]interface{}(map[string]interface{}{"foo": "bar"}), metaData.Data)
-		})
-	})
-	t.Run("GROQ", func(t *testing.T) {
-		t.Run("should parse the response and send results", func(t *testing.T) {
-			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				assert.Equal(t, http.MethodGet, r.Method)
-				w.Header().Add("Content-Type", "application/json")
-				fmt.Fprintf(w, `{ "foo" : "bar" }`)
-			}))
-			defer server.Close()
-			client, err := infinity.NewClient(settingsSrv.InfinitySettings{URL: server.URL})
-			require.Nil(t, err)
-			res := main.QueryData(context.Background(), backend.DataQuery{
-				JSON: []byte(fmt.Sprintf(`{
-					"type": "groq",
-					"url":  "%s",
-					"source": "url"
-				}`, server.URL)),
-			}, *client, map[string]string{})
-			require.NotNil(t, res)
-			require.Nil(t, res.Error)
-			metaData := res.Frames[0].Meta.Custom.(*infinity.CustomMeta)
-			require.NotNil(t, metaData)
-			require.Equal(t, "", metaData.Error)
-			require.Equal(t, http.StatusOK, metaData.ResponseCodeFromServer)
-			require.Equal(t, map[string]interface{}(map[string]interface{}{"foo": "bar"}), metaData.Data)
-		})
-	})
+	// t.Run("JSON", func(t *testing.T) {
+	// 	t.Run("should parse the response and send results", func(t *testing.T) {
+	// 		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	// 			assert.Equal(t, http.MethodGet, r.Method)
+	// 			fmt.Fprintf(w, `{ "foo" : "bar" }`)
+	// 		}))
+	// 		defer server.Close()
+	// 		client, err := infinity.NewClient(settingsSrv.InfinitySettings{URL: server.URL})
+	// 		require.Nil(t, err)
+	// 		res := main.QueryData(context.Background(), backend.DataQuery{
+	// 			JSON: []byte(fmt.Sprintf(`{
+	// 				"type": "json",
+	// 				"url":  "%s",
+	// 				"source": "url"
+	// 			}`, server.URL)),
+	// 		}, *client, map[string]string{})
+	// 		require.NotNil(t, res)
+	// 		require.Nil(t, res.Error)
+	// 		metaData := res.Frames[0].Meta.Custom.(*infinity.CustomMeta)
+	// 		require.NotNil(t, metaData)
+	// 		require.Equal(t, "", metaData.Error)
+	// 		require.Equal(t, http.StatusOK, metaData.ResponseCodeFromServer)
+	// 		require.Equal(t, map[string]interface{}(map[string]interface{}{"foo": "bar"}), metaData.Data)
+	// 	})
+	// })
+	// t.Run("GraphQL", func(t *testing.T) {
+	// 	t.Run("should parse the response and send results", func(t *testing.T) {
+	// 		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	// 			assert.Equal(t, http.MethodGet, r.Method)
+	// 			fmt.Fprintf(w, `{ "foo" : "bar" }`)
+	// 		}))
+	// 		defer server.Close()
+	// 		client, err := infinity.NewClient(settingsSrv.InfinitySettings{URL: server.URL})
+	// 		require.Nil(t, err)
+	// 		res := main.QueryData(context.Background(), backend.DataQuery{
+	// 			JSON: []byte(fmt.Sprintf(`{
+	// 				"type": "graphql",
+	// 				"url":  "%s",
+	// 				"source": "url"
+	// 			}`, server.URL)),
+	// 		}, *client, map[string]string{})
+	// 		require.NotNil(t, res)
+	// 		require.Nil(t, res.Error)
+	// 		metaData := res.Frames[0].Meta.Custom.(*infinity.CustomMeta)
+	// 		require.NotNil(t, metaData)
+	// 		require.Equal(t, "", metaData.Error)
+	// 		require.Equal(t, http.StatusOK, metaData.ResponseCodeFromServer)
+	// 		require.Equal(t, map[string]interface{}(map[string]interface{}{"foo": "bar"}), metaData.Data)
+	// 	})
+	// })
+	// t.Run("CSV", func(t *testing.T) {
+	// 	t.Run("should parse the response and send results", func(t *testing.T) {
+	// 		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	// 			assert.Equal(t, http.MethodGet, r.Method)
+	// 			w.Header().Add("Content-Type", "text/csv")
+	// 			fmt.Fprintf(w, "a,b\na1,b1")
+	// 		}))
+	// 		defer server.Close()
+	// 		client, err := infinity.NewClient(settingsSrv.InfinitySettings{URL: server.URL})
+	// 		require.Nil(t, err)
+	// 		res := main.QueryData(context.Background(), backend.DataQuery{
+	// 			JSON: []byte(fmt.Sprintf(`{
+	// 				"type": "uql",
+	// 				"url":  "%s",
+	// 				"source": "url"
+	// 			}`, server.URL)),
+	// 		}, *client, map[string]string{})
+	// 		require.NotNil(t, res)
+	// 		require.Nil(t, res.Error)
+	// 		metaData := res.Frames[0].Meta.Custom.(*infinity.CustomMeta)
+	// 		require.NotNil(t, metaData)
+	// 		require.Equal(t, "", metaData.Error)
+	// 		require.Equal(t, http.StatusOK, metaData.ResponseCodeFromServer)
+	// 		require.Equal(t, "a,b\na1,b1", metaData.Data)
+	// 	})
+	// })
+	// t.Run("XML", func(t *testing.T) {
+	// 	t.Run("should parse the response and send results", func(t *testing.T) {
+	// 		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	// 			assert.Equal(t, http.MethodGet, r.Method)
+	// 			w.Header().Add("Content-Type", "text/xml")
+	// 			fmt.Fprintf(w, `<xml><User name="foo"></xml>`)
+	// 		}))
+	// 		defer server.Close()
+	// 		client, err := infinity.NewClient(settingsSrv.InfinitySettings{URL: server.URL})
+	// 		require.Nil(t, err)
+	// 		res := main.QueryData(context.Background(), backend.DataQuery{
+	// 			JSON: []byte(fmt.Sprintf(`{
+	// 				"type": "xml",
+	// 				"url":  "%s",
+	// 				"source": "url"
+	// 			}`, server.URL)),
+	// 		}, *client, map[string]string{})
+	// 		require.NotNil(t, res)
+	// 		require.Nil(t, res.Error)
+	// 		metaData := res.Frames[0].Meta.Custom.(*infinity.CustomMeta)
+	// 		require.NotNil(t, metaData)
+	// 		require.Equal(t, "", metaData.Error)
+	// 		require.Equal(t, http.StatusOK, metaData.ResponseCodeFromServer)
+	// 		require.Equal(t, `<xml><User name="foo"></xml>`, metaData.Data)
+	// 	})
+	// })
+	// t.Run("UQL", func(t *testing.T) {
+	// 	t.Run("should parse the response and send results", func(t *testing.T) {
+	// 		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	// 			assert.Equal(t, http.MethodGet, r.Method)
+	// 			w.Header().Add("Content-Type", "application/json")
+	// 			fmt.Fprintf(w, `{ "foo" : "bar" }`)
+	// 		}))
+	// 		defer server.Close()
+	// 		client, err := infinity.NewClient(settingsSrv.InfinitySettings{URL: server.URL})
+	// 		require.Nil(t, err)
+	// 		res := main.QueryData(context.Background(), backend.DataQuery{
+	// 			JSON: []byte(fmt.Sprintf(`{
+	// 				"type": "uql",
+	// 				"url":  "%s",
+	// 				"source": "url"
+	// 			}`, server.URL)),
+	// 		}, *client, map[string]string{})
+	// 		require.NotNil(t, res)
+	// 		require.Nil(t, res.Error)
+	// 		metaData := res.Frames[0].Meta.Custom.(*infinity.CustomMeta)
+	// 		require.NotNil(t, metaData)
+	// 		require.Equal(t, "", metaData.Error)
+	// 		require.Equal(t, http.StatusOK, metaData.ResponseCodeFromServer)
+	// 		require.Equal(t, map[string]interface{}(map[string]interface{}{"foo": "bar"}), metaData.Data)
+	// 	})
+	// })
+	// t.Run("GROQ", func(t *testing.T) {
+	// 	t.Run("should parse the response and send results", func(t *testing.T) {
+	// 		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	// 			assert.Equal(t, http.MethodGet, r.Method)
+	// 			w.Header().Add("Content-Type", "application/json")
+	// 			fmt.Fprintf(w, `{ "foo" : "bar" }`)
+	// 		}))
+	// 		defer server.Close()
+	// 		client, err := infinity.NewClient(settingsSrv.InfinitySettings{URL: server.URL})
+	// 		require.Nil(t, err)
+	// 		res := main.QueryData(context.Background(), backend.DataQuery{
+	// 			JSON: []byte(fmt.Sprintf(`{
+	// 				"type": "groq",
+	// 				"url":  "%s",
+	// 				"source": "url"
+	// 			}`, server.URL)),
+	// 		}, *client, map[string]string{})
+	// 		require.NotNil(t, res)
+	// 		require.Nil(t, res.Error)
+	// 		metaData := res.Frames[0].Meta.Custom.(*infinity.CustomMeta)
+	// 		require.NotNil(t, metaData)
+	// 		require.Equal(t, "", metaData.Error)
+	// 		require.Equal(t, http.StatusOK, metaData.ResponseCodeFromServer)
+	// 		require.Equal(t, map[string]interface{}(map[string]interface{}{"foo": "bar"}), metaData.Data)
+	// 	})
+	// })
 	t.Run("JSON Backend", func(t *testing.T) {
 		t.Run("should parse the response and send results", func(t *testing.T) {
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -515,10 +515,11 @@ func TestResponseFormats(t *testing.T) {
 			require.Nil(t, err)
 			res := main.QueryData(context.Background(), backend.DataQuery{
 				JSON: []byte(fmt.Sprintf(`{ 
-					"type": "json-backend",
+					"type": "json",
 					"url":  "%s",
 					"source": "url",
 					"format": "timeseries",
+					"parser": "backend",
 					"root_selector": "feeds",
 					"columns": [
 					  {
