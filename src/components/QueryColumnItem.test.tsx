@@ -8,7 +8,7 @@ describe('app/components/QueryColumnItem', () => {
     const query = { type: 'json', columns: [{}] } as InfinityQuery;
     const onChange = jest.fn();
     const onRunQuery = jest.fn();
-    const result = render(<QueryColumnItem query={query} onChange={onChange} onRunQuery={onRunQuery} mode="standard" index={0} />);
+    const result = render(<QueryColumnItem query={query} onChange={onChange} onRunQuery={onRunQuery} index={0} />);
     expect(result.container.firstChild).not.toBeNull();
   });
 });

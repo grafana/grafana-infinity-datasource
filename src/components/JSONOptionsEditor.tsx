@@ -1,5 +1,6 @@
 import { Button, Checkbox, Drawer } from '@grafana/ui';
 import React, { useState } from 'react';
+import { EditorField } from './extended/EditorField';
 import type { InfinityJSONQueryOptions, InfinityQuery } from './../types';
 
 export const JSONOptionsEditor = (props: { query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void }) => {
@@ -14,20 +15,21 @@ export const JSONOptionsEditor = (props: { query: InfinityQuery; onChange: (valu
   };
   return (
     <>
-      <div style={{ padding: 'auto 15px' }}>
-        <Button
-          variant="secondary"
-          size="sm"
-          icon="cog"
-          style={{ margin: '5px' }}
-          onClick={(e) => {
-            setPopupStatus(!popupStatus);
-            e.preventDefault();
-          }}
-        >
-          JSON options
-        </Button>
-      </div>
+      <EditorField label="Options">
+        <div style={{ paddingBlockStart: '4px' }}>
+          <Button
+            variant="secondary"
+            size="sm"
+            icon="cog"
+            onClick={(e) => {
+              setPopupStatus(!popupStatus);
+              e.preventDefault();
+            }}
+          >
+            JSON options
+          </Button>
+        </div>
+      </EditorField>
       {popupStatus === true && (
         <Drawer title="Advanced JSON parsing options" onClose={() => setPopupStatus(!popupStatus)}>
           <div className="gf-form">

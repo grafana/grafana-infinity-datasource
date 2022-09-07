@@ -1,13 +1,12 @@
-import { InlineFormLabel } from '@grafana/ui';
 import React from 'react';
 import { SCRAP_QUERY_TYPES } from './../constants';
-import { Select } from './extended/ui';
+import { Select } from '@grafana/ui';
+import { EditorField } from './extended/EditorField';
 import type { EditorMode, InfinityQuery, InfinityQueryType } from './../types';
 import type { SelectableValue } from '@grafana/data/types';
 
 export const TypeSelector = (props: { query: InfinityQuery; onChange: (e: InfinityQuery) => void; onRunQuery: () => void; mode: EditorMode }) => {
   const { query, mode, onChange, onRunQuery } = props;
-  const LABEL_WIDTH = mode === 'variable' ? 10 : 8;
   const getTypes = (): Array<SelectableValue<InfinityQueryType>> => {
     switch (mode) {
       case 'standard':
@@ -21,18 +20,12 @@ export const TypeSelector = (props: { query: InfinityQuery; onChange: (e: Infini
     }
   };
   const onTypeChange = (type: InfinityQueryType) => {
-    const source = type === 'series' ? 'random-walk' : 'url';
-    onChange({ ...query, type, source } as InfinityQuery);
+    onChange({ ...query, type } as InfinityQuery);
     onRunQuery();
   };
   return (
-    <>
-      <InlineFormLabel width={LABEL_WIDTH} className={`query-keyword`}>
-        Type
-      </InlineFormLabel>
-      <div style={{ marginRight: '5px' }} data-testid="infinity-query-type-selector">
-        <Select width={30} options={getTypes()} onChange={(e) => onTypeChange(e.value as InfinityQueryType)} value={query.type || 'json'} menuShouldPortal={true}></Select>
-      </div>
-    </>
+    <EditorField label="Type">
+      <Select width={30} options={getTypes()} onChange={(e) => onTypeChange(e.value as InfinityQueryType)} value={query.type || 'json'} menuShouldPortal={true}></Select>
+    </EditorField>
   );
 };

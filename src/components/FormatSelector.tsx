@@ -1,6 +1,7 @@
-import { InlineFormLabel, Select } from '@grafana/ui';
+import { Select } from '@grafana/ui';
 import React from 'react';
 import { isDataQuery } from './../app/utils';
+import { EditorField } from './extended/EditorField';
 import { INFINITY_RESULT_FORMATS } from './../constants';
 import { Components } from './../selectors';
 import type { InfinityQuery, InfinityQueryFormat } from './../types';
@@ -28,13 +29,10 @@ export const FormatSelector = (props: FormatSelectorProps) => {
     }
   };
   return (
-    <>
-      <InlineFormLabel width={4} className={`query-keyword`}>
-        {Components.QueryEditor.Format.Label.Text}
-      </InlineFormLabel>
-      <div title={Components.QueryEditor.Format.Dropdown.PlaceHolder.Title} style={{ marginRight: '5px' }} data-testid="infinity-query-format-selector">
+    <EditorField label={Components.QueryEditor.Format.Label.Text}>
+      <div title={Components.QueryEditor.Format.Dropdown.PlaceHolder.Title} data-testid="infinity-query-format-selector">
         <Select className="min-width-12 width-12" value={query.format} options={getFormats()} onChange={(e) => onFormatChange(e.value as InfinityQueryFormat)} menuShouldPortal={true} />
       </div>
-    </>
+    </EditorField>
   );
 };

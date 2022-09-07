@@ -1,5 +1,5 @@
 import React from 'react';
-import { Select } from './extended/ui';
+import { Select } from '@grafana/ui';
 import type { GlobalInfinityQuery, InfinityQuery } from './../types';
 import type { SelectableValue } from '@grafana/data/types';
 

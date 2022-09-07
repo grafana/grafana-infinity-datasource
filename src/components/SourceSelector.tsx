@@ -1,7 +1,7 @@
-import { InlineFormLabel } from '@grafana/ui';
 import React from 'react';
 import { INFINITY_SOURCES } from './../constants';
-import { Select } from './extended/ui';
+import { Select } from '@grafana/ui';
+import { EditorField } from './extended/EditorField';
 import type { InfinityQuery, InfinityQuerySources } from './../types';
 
 export const SourceSelector = (props: { query: InfinityQuery; onChange: (e: InfinityQuery) => void; onRunQuery: () => void }) => {
@@ -15,13 +15,8 @@ export const SourceSelector = (props: { query: InfinityQuery; onChange: (e: Infi
     onRunQuery();
   };
   return (
-    <>
-      <InlineFormLabel className={`query-keyword`} width={4}>
-        {query.type === 'series' ? 'Scenario' : 'Source'}
-      </InlineFormLabel>
-      <div style={{ marginRight: '5px' }} data-testid="infinity-query-source-selector">
-        <Select width={16} options={supportedSources} value={query.source || 'url'} onChange={(e) => onSourceChange(e.value as InfinityQuerySources)} menuShouldPortal={true}></Select>
-      </div>
-    </>
+    <EditorField label={query.type === 'series' ? 'Scenario' : 'Source'}>
+      <Select width={16} options={supportedSources} value={query.source || 'url'} onChange={(e) => onSourceChange(e.value as InfinityQuerySources)} menuShouldPortal={true}></Select>
+    </EditorField>
   );
 };

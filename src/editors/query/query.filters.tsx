@@ -1,8 +1,9 @@
-import { Modal } from '@grafana/ui';
+import { Modal, Button, Select } from '@grafana/ui';
 import React, { useState } from 'react';
+import { EditorRow } from './../../components/extended/EditorRow';
+import { EditorField } from './../../components/extended/EditorField';
 import { filterOperators } from './../../app/parsers/filter';
 import { isDataQuery } from './../../app/utils';
-import { Select } from './../../components/extended/ui';
 import { FilterOperator } from './../../constants';
 import type { InfinityFilter, InfinityQuery } from './../../types';
 import type { SelectableValue } from '@grafana/data/types';
@@ -56,79 +57,84 @@ export const TableFilter = (props: { query: InfinityQuery; onChange: (value: any
     onRunQuery();
   };
   return (
-    <div className="gf-form">
-      <label className="gf-form-label query-keyword width-8">Results Filter {query.filters && query.filters.length > 0 ? `( ${query.filters.length} )` : ''}</label>
-      <label
-        role="button"
-        title={query.filters && query.filters.length > 0 ? query.filters.length + ' filters configured' : ''}
-        className="btn btn-secondary btn-medium width-2"
-        onClick={() => setPopupOpenStatus(true)}
-        style={{ padding: '10px' }}
-      >
-        <i className="fa fa-filter fa-large btn btn-medium"></i>
-      </label>
-      <Modal title={'Result Filters'} isOpen={popupOpenStatus} onDismiss={() => setPopupOpenStatus(false)}>
-        {query.filters && query.filters.length > 0 ? (
-          <>
-            {query.filters.map((filter, index) => (
-              <div className="gf-form-inline" key={index}>
-                <label className="gf-form-label width-6">Filter {index + 1}</label>
-                <Select
-                  className="width-8"
-                  options={getFields()}
-                  defaultValue={getFields()[0]}
-                  value={getFields().find((f) => f.value === filter.field) || getFields()[0]}
-                  onChange={(e) => onFilterFieldChange(index, e)}
-                  menuShouldPortal={true}
-                ></Select>
-                <Select
-                  className="width-8"
-                  options={filterOperators}
-                  defaultValue={filterOperators[0]}
-                  value={filterOperators.find((f) => f.value === filter.operator) || filterOperators[0]}
-                  onChange={(e) => onFilterOperatorChange(index, e)}
-                  menuShouldPortal={true}
-                ></Select>
-                <input type="text" className="gf-form-input min-width-10 width-10" value={filter.value[0]} onChange={(e) => onFilterValueChange(index, 0, e.target.value)} placeholder="Value"></input>
-                <span className="btn btn-success btn-small" style={{ margin: '5px' }} onClick={addFilter}>
-                  +
-                </span>
-                <span
-                  className="btn btn-danger btn-small"
-                  style={{ margin: '5px' }}
-                  onClick={() => {
-                    removeFilter(index);
-                  }}
-                >
-                  x
-                </span>
-                <br />
-              </div>
-            ))}
-          </>
-        ) : (
-          <>
-            <div className="gf-form-inline">
-              <div className="gf-form">
-                <label className="gf-form-label width-6">Filter</label>
-                <label className="gf-form-label query-keyword width-20" onClick={() => addFilter()}>
-                  Click to add filter
-                </label>
-              </div>
-            </div>
-          </>
-        )}
-        <span className="btn btn-success btn-medium" style={{ marginTop: '5px', marginRight: '10px' }} onClick={closePopup}>
-          OK
-        </span>
-        <span className="btn btn-primary btn-medium" style={{ marginTop: '5px', marginRight: '10px' }} onClick={addFilter}>
-          Add filter
-        </span>
-        <br />
-        <br />
-        <br />
-        <br />
-      </Modal>
-    </div>
+    <EditorRow>
+      <EditorField label={`Results Filter ${query.filters && query.filters.length > 0 ? `( ${query.filters.length} )` : ''}`}>
+        <>
+          <div style={{ paddingBlockStart: '4px' }}>
+            <Button icon="filter" size="sm" variant="secondary" onClick={() => setPopupOpenStatus(true)}>
+              Configure Filter
+            </Button>
+          </div>
+          <Modal title={'Result Filters'} isOpen={popupOpenStatus} onDismiss={() => setPopupOpenStatus(false)}>
+            {query.filters && query.filters.length > 0 ? (
+              <>
+                {query.filters.map((filter, index) => (
+                  <div className="gf-form-inline" key={index}>
+                    <label className="gf-form-label width-6">Filter {index + 1}</label>
+                    <Select
+                      className="width-8"
+                      options={getFields()}
+                      defaultValue={getFields()[0]}
+                      value={getFields().find((f) => f.value === filter.field) || getFields()[0]}
+                      onChange={(e) => onFilterFieldChange(index, e)}
+                      menuShouldPortal={true}
+                    ></Select>
+                    <Select
+                      className="width-8"
+                      options={filterOperators}
+                      defaultValue={filterOperators[0]}
+                      value={filterOperators.find((f) => f.value === filter.operator) || filterOperators[0]}
+                      onChange={(e) => onFilterOperatorChange(index, e)}
+                      menuShouldPortal={true}
+                    ></Select>
+                    <input
+                      type="text"
+                      className="gf-form-input min-width-10 width-10"
+                      value={filter.value[0]}
+                      onChange={(e) => onFilterValueChange(index, 0, e.target.value)}
+                      placeholder="Value"
+                    ></input>
+                    <span className="btn btn-success btn-small" style={{ margin: '5px' }} onClick={addFilter}>
+                      +
+                    </span>
+                    <span
+                      className="btn btn-danger btn-small"
+                      style={{ margin: '5px' }}
+                      onClick={() => {
+                        removeFilter(index);
+                      }}
+                    >
+                      x
+                    </span>
+                    <br />
+                  </div>
+                ))}
+              </>
+            ) : (
+              <>
+                <div className="gf-form-inline">
+                  <div className="gf-form">
+                    <label className="gf-form-label width-6">Filter</label>
+                    <label className="gf-form-label query-keyword width-20" onClick={() => addFilter()}>
+                      Click to add filter
+                    </label>
+                  </div>
+                </div>
+              </>
+            )}
+            <span className="btn btn-success btn-medium" style={{ marginTop: '5px', marginRight: '10px' }} onClick={closePopup}>
+              OK
+            </span>
+            <span className="btn btn-primary btn-medium" style={{ marginTop: '5px', marginRight: '10px' }} onClick={addFilter}>
+              Add filter
+            </span>
+            <br />
+            <br />
+            <br />
+            <br />
+          </Modal>
+        </>
+      </EditorField>
+    </EditorRow>
   );
 };
