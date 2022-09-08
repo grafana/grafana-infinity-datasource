@@ -10,6 +10,7 @@ import { SeriesEditor } from './query.series';
 import { TypeChooser } from './query.type';
 import { UQLEditor } from './query.uql';
 import { URLEditor } from './query.url';
+import { Summarize } from './query.summarize';
 import type { EditorMode, InfinityQuery } from './../../types';
 
 export type InfinityEditorProps = {
@@ -54,6 +55,7 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
             <GROQEditor {...{ query, onChange, onRunQuery, mode }} />
           </EditorRow>
         )}
+        {query.type === 'json' && query.parser === 'backend' && <Summarize {...{ query, onChange, onRunQuery }} />}
       </EditorRows>
     </div>
   );

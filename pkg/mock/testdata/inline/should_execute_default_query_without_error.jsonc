@@ -4,10 +4,10 @@
 //      "custom": {
 //          "query": {
 //              "refId": "",
-//              "type": "",
+//              "type": "json",
 //              "format": "",
-//              "source": "",
-//              "url": "",
+//              "source": "url",
+//              "url": "https://jsonplaceholder.typicode.com/users",
 //              "url_options": {
 //                  "method": "",
 //                  "params": null,
@@ -20,6 +20,7 @@
 //              },
 //              "data": "",
 //              "parser": "",
+//              "summarizeExpression": "",
 //              "uql": "",
 //              "groq": "",
 //              "csv_options": {
@@ -35,7 +36,7 @@
 //                  "columnar": false
 //              },
 //              "root_selector": "",
-//              "columns": null,
+//              "columns": [],
 //              "filters": null,
 //              "seriesCount": 0,
 //              "expression": "",
@@ -67,10 +68,10 @@
           "custom": {
             "query": {
               "refId": "",
-              "type": "",
+              "type": "json",
               "format": "",
-              "source": "",
-              "url": "",
+              "source": "url",
+              "url": "https://jsonplaceholder.typicode.com/users",
               "url_options": {
                 "method": "",
                 "params": null,
@@ -83,6 +84,7 @@
               },
               "data": "",
               "parser": "",
+              "summarizeExpression": "",
               "uql": "",
               "groq": "",
               "csv_options": {
@@ -98,7 +100,7 @@
                 "columnar": false
               },
               "root_selector": "",
-              "columns": null,
+              "columns": [],
               "filters": null,
               "seriesCount": 0,
               "expression": "",

@@ -25,7 +25,7 @@ export const TypeSelector = (props: { query: InfinityQuery; onChange: (e: Infini
   };
   return (
     <EditorField label="Type">
-      <Select width={30} options={getTypes()} onChange={(e) => onTypeChange(e.value as InfinityQueryType)} value={query.type || 'json'} menuShouldPortal={true}></Select>
+      <Select width={16} options={getTypes()} onChange={(e) => onTypeChange(e.value as InfinityQueryType)} value={query.type || 'json'} menuShouldPortal={true}></Select>
     </EditorField>
   );
 };

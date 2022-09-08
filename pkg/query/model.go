@@ -20,27 +20,28 @@ const (
 )
 
 type Query struct {
-	RefID         string                 `json:"refId"`
-	Type          string                 `json:"type"`   // 'json' | 'json-backend' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'uql' | 'groq' | 'series' | 'global'
-	Format        string                 `json:"format"` // 'table' | 'timeseries' | 'dataframe' | 'as-is' | 'node-graph-nodes' | 'node-graph-edges'
-	Source        string                 `json:"source"` // 'url' | 'inline' | 'random-walk' | 'expression'
-	URL           string                 `json:"url"`
-	URLOptions    URLOptions             `json:"url_options"`
-	Data          string                 `json:"data"`
-	Parser        string                 `json:"parser"` // 'simple' | 'backend' | 'uql'
-	UQL           string                 `json:"uql"`
-	GROQ          string                 `json:"groq"`
-	CSVOptions    InfinityCSVOptions     `json:"csv_options"`
-	JSONOptions   InfinityJSONOptions    `json:"json_options"`
-	RootSelector  string                 `json:"root_selector"`
-	Columns       []InfinityColumn       `json:"columns"`
-	Filters       []InfinityFilter       `json:"filters"`
-	SeriesCount   int64                  `json:"seriesCount"`
-	Expression    string                 `json:"expression"`
-	Alias         string                 `json:"alias"`
-	DataOverrides []InfinityDataOverride `json:"dataOverrides"`
-	GlobalQueryID string                 `json:"global_query_id"`
-	QueryMode     string                 `json:"query_mode"`
+	RefID               string                 `json:"refId"`
+	Type                string                 `json:"type"`   // 'json' | 'json-backend' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'uql' | 'groq' | 'series' | 'global'
+	Format              string                 `json:"format"` // 'table' | 'timeseries' | 'dataframe' | 'as-is' | 'node-graph-nodes' | 'node-graph-edges'
+	Source              string                 `json:"source"` // 'url' | 'inline' | 'random-walk' | 'expression'
+	URL                 string                 `json:"url"`
+	URLOptions          URLOptions             `json:"url_options"`
+	Data                string                 `json:"data"`
+	Parser              string                 `json:"parser"` // 'simple' | 'backend' | 'uql'
+	SummarizeExpression string                 `json:"summarizeExpression"`
+	UQL                 string                 `json:"uql"`
+	GROQ                string                 `json:"groq"`
+	CSVOptions          InfinityCSVOptions     `json:"csv_options"`
+	JSONOptions         InfinityJSONOptions    `json:"json_options"`
+	RootSelector        string                 `json:"root_selector"`
+	Columns             []InfinityColumn       `json:"columns"`
+	Filters             []InfinityFilter       `json:"filters"`
+	SeriesCount         int64                  `json:"seriesCount"`
+	Expression          string                 `json:"expression"`
+	Alias               string                 `json:"alias"`
+	DataOverrides       []InfinityDataOverride `json:"dataOverrides"`
+	GlobalQueryID       string                 `json:"global_query_id"`
+	QueryMode           string                 `json:"query_mode"`
 }
 
 type URLOptionKeyValuePair struct {
@@ -93,6 +94,18 @@ type InfinityDataOverride struct {
 }
 
 func ApplyDefaultsToQuery(query Query) Query {
+	if query.Type == "" {
+		query.Type = QueryTypeJSON
+		if query.Source == "" {
+			query.Source = "url"
+		}
+	}
+	if query.Type == QueryTypeJSON && query.Source == "inline" && query.Data == "" {
+		query.Data = "[]"
+	}
+	if query.Type == QueryTypeJSON && query.Source == "url" && query.URL == "" {
+		query.URL = "https://jsonplaceholder.typicode.com/users"
+	}
 	if query.Source == "url" && strings.ToUpper(query.URLOptions.Method) == "POST" {
 		if query.URLOptions.BodyType == "" {
 			query.URLOptions.BodyType = "raw"
@@ -107,6 +120,9 @@ func ApplyDefaultsToQuery(query Query) Query {
 		if query.URLOptions.BodyContentType == "" {
 			query.URLOptions.BodyContentType = "text/plain"
 		}
+	}
+	if query.Columns == nil {
+		query.Columns = []InfinityColumn{}
 	}
 	return query
 }

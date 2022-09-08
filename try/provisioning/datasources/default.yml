@@ -6,5 +6,5 @@ datasources:
     type: yesoreyeram-infinity-datasource
     isDefault: true
   - name: Test
-    uid: test
-    type: yesoreyeram-infinity-datasource
+    uid: TestData
+    type: testdata

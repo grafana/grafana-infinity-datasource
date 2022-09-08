@@ -20,6 +20,7 @@
 //              },
 //              "data": "",
 //              "parser": "",
+//              "summarizeExpression": "",
 //              "uql": "parse-json | count",
 //              "groq": "",
 //              "csv_options": {
@@ -35,7 +36,7 @@
 //                  "columnar": false
 //              },
 //              "root_selector": "",
-//              "columns": null,
+//              "columns": [],
 //              "filters": null,
 //              "seriesCount": 0,
 //              "expression": "",
@@ -83,6 +84,7 @@
               },
               "data": "",
               "parser": "",
+              "summarizeExpression": "",
               "uql": "parse-json | count",
               "groq": "",
               "csv_options": {
@@ -98,7 +100,7 @@
                 "columnar": false
               },
               "root_selector": "",
-              "columns": null,
+              "columns": [],
               "filters": null,
               "seriesCount": 0,
               "expression": "",
