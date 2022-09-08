@@ -49,6 +49,7 @@ export type InfinityJSONQuery = {
   parser?: 'simple' | 'backend' | 'uql' | 'groq';
   uql?: string;
   groq?: string;
+  summarizeExpression?: string;
 } & InfinityQueryWithDataSource<'json'>;
 export type InfinityCSVQueryOptions = {
   delimiter?: string;

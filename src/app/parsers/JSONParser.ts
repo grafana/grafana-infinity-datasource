@@ -62,8 +62,8 @@ export class JSONParser extends InfinityParser<InfinityJSONQuery | InfinityGraph
     return JSONResponse;
   }
   private constructTableData(JSONResponse: any[]) {
-    const columns = this.target.columns.length > 0 ? this.target.columns : getColumnsFromObjectArray(JSONResponse[0]);
-    this.AutoColumns = columns;
+    const columns = this.target?.columns?.length > 0 ? this.target.columns : getColumnsFromObjectArray(JSONResponse[0]);
+    this.AutoColumns = columns || [];
     forEach(JSONResponse, (r, rowKey) => {
       const row: GrafanaTableRow = [];
       columns.forEach((c: InfinityColumn) => {

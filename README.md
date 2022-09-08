@@ -2,7 +2,7 @@
 
 Visualize data from JSON, CSV, XML, GraphQL and HTML endpoints.
 
-[![click here for documentation](https://user-images.githubusercontent.com/153843/147651038-70923535-ace5-4589-9e65-ec352d76cf7c.png)](https://yesoreyeram.github.io/grafana-infinity-datasource)
+[![click here for documentation](https://user-images.githubusercontent.com/153843/189100076-7fe3535d-0bc3-4e4a-b37d-14934ae621db.png)](https://yesoreyeram.github.io/grafana-infinity-datasource)
 
 ## Documentation
 
@@ -26,5 +26,5 @@ Using the following links,You can try **Infinity datasource plugin** without ins
 
 ## Known limitations
 
-- Alerting only supports on `JSON backend` type queries.
-- Recorded queries only supports on `JSON backend` type queries.
+- Alerting only supports on `JSON` type queries with `backend` parser.
+- Recorded queries only supports on `JSON` type queries with `backend` parser.

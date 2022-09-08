@@ -110,7 +110,7 @@ func TestRemoteSources(t *testing.T) {
 				require.NotNil(t, frame)
 				t.Run("should have custom meta data correctly", func(t *testing.T) {
 					require.NotNil(t, frame.Meta.Custom)
-					require.Equal(t, "###############\n## URL\n###############\n\n\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' ''", frame.Meta.ExecutedQueryString)
+					require.Equal(t, "###############\n## URL\n###############\n\nhttps://jsonplaceholder.typicode.com/users\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' 'https://jsonplaceholder.typicode.com/users'", frame.Meta.ExecutedQueryString)
 				})
 			},
 		},

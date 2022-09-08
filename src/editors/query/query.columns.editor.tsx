@@ -1,4 +1,4 @@
-import { Button, Select } from '@grafana/ui';
+import { Button } from '@grafana/ui';
 import { cloneDeep } from 'lodash';
 import React, { useState } from 'react';
 import { EditorRow } from './../../components/extended/EditorRow';
@@ -36,23 +36,6 @@ export const QueryColumnsEditor = (props: { query: InfinityQuery; mode: EditorMo
   };
   return (
     <EditorRow>
-      {query.type === 'json' && (
-        <EditorField label="Parser">
-          <Select<typeof query.parser>
-            value={query.parser || 'simple'}
-            options={[
-              { value: 'simple', label: 'Default' },
-              { value: 'backend', label: 'Backend' },
-              { value: 'uql', label: 'UQL' },
-              { value: 'groq', label: 'GROQ' },
-            ]}
-            onChange={(e) => {
-              onChange({ ...query, parser: e.value });
-              onRunQuery();
-            }}
-          ></Select>
-        </EditorField>
-      )}
       {query.type === 'json' && query.parser === 'uql' ? (
         <UQLEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />
       ) : query.type === 'json' && query.parser === 'groq' ? (
@@ -60,19 +43,19 @@ export const QueryColumnsEditor = (props: { query: InfinityQuery; mode: EditorMo
       ) : (
         <>
           {canShowRootSelector && (
-            <EditorField label="Rows/Root">
+            <EditorField label="Rows/Root" optional={true}>
               <input
                 type="text"
                 className="gf-form-input"
                 style={{ width: '300px' }}
                 value={root_selector}
-                placeholder=""
+                placeholder="rows/root selector (optional)"
                 onChange={(e) => setRootSelector(e.currentTarget.value)}
                 onBlur={onRootSelectorChange}
               ></input>
             </EditorField>
           )}
-          <EditorField label="Columns">
+          <EditorField label="Columns" optional={true}>
             <>
               {query.columns.map((column: InfinityColumn, index: number) => {
                 return (

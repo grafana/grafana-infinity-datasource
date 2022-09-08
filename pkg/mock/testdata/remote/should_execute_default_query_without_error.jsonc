@@ -4,10 +4,10 @@
 //      "custom": {
 //          "query": {
 //              "refId": "",
-//              "type": "",
+//              "type": "json",
 //              "format": "",
-//              "source": "",
-//              "url": "",
+//              "source": "url",
+//              "url": "https://jsonplaceholder.typicode.com/users",
 //              "url_options": {
 //                  "method": "",
 //                  "params": null,
@@ -20,6 +20,7 @@
 //              },
 //              "data": "",
 //              "parser": "",
+//              "summarizeExpression": "",
 //              "uql": "",
 //              "groq": "",
 //              "csv_options": {
@@ -35,7 +36,7 @@
 //                  "columnar": false
 //              },
 //              "root_selector": "",
-//              "columns": null,
+//              "columns": [],
 //              "filters": null,
 //              "seriesCount": 0,
 //              "expression": "",
@@ -44,12 +45,12 @@
 //              "global_query_id": "",
 //              "query_mode": ""
 //          },
-//          "data": "{}",
+//          "data": {},
 //          "responseCodeFromServer": 200,
 //          "duration": 123,
 //          "error": ""
 //      },
-//      "executedQueryString": "###############\n## URL\n###############\n\n\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' ''"
+//      "executedQueryString": "###############\n## URL\n###############\n\nhttps://jsonplaceholder.typicode.com/users\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' 'https://jsonplaceholder.typicode.com/users'"
 //  }
 //  Name: response
 //  Dimensions: 0 Fields by 0 Rows
@@ -67,10 +68,10 @@
           "custom": {
             "query": {
               "refId": "",
-              "type": "",
+              "type": "json",
               "format": "",
-              "source": "",
-              "url": "",
+              "source": "url",
+              "url": "https://jsonplaceholder.typicode.com/users",
               "url_options": {
                 "method": "",
                 "params": null,
@@ -83,6 +84,7 @@
               },
               "data": "",
               "parser": "",
+              "summarizeExpression": "",
               "uql": "",
               "groq": "",
               "csv_options": {
@@ -98,7 +100,7 @@
                 "columnar": false
               },
               "root_selector": "",
-              "columns": null,
+              "columns": [],
               "filters": null,
               "seriesCount": 0,
               "expression": "",
@@ -107,12 +109,12 @@
               "global_query_id": "",
               "query_mode": ""
             },
-            "data": "{}",
+            "data": {},
             "responseCodeFromServer": 200,
             "duration": 123,
             "error": ""
           },
-          "executedQueryString": "###############\n## URL\n###############\n\n\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' ''"
+          "executedQueryString": "###############\n## URL\n###############\n\nhttps://jsonplaceholder.typicode.com/users\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' 'https://jsonplaceholder.typicode.com/users'"
         },
         "fields": []
       },

@@ -45,6 +45,7 @@
 - Flexible data manipulation with UQL, GROQ, JSONata
 - Utility variable functions
 - Supports for Grafana node graph panel, annotations etc
+- Supports alerting, recorded queries
 
 ## ⚙️ Download
 

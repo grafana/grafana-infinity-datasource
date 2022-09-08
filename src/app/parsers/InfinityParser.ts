@@ -20,13 +20,13 @@ export class InfinityParser<T extends InfinityQuery> {
     this.target = target;
     if (isDataQuery(target)) {
       this.AutoColumns = target.columns || [];
-      this.StringColumns = target.columns.filter((t) => t.type === 'string');
-      this.NumbersColumns = target.columns.filter((t) => t.type === 'number');
-      this.TimeColumns = target.columns.filter((t) => t.type.startsWith('timestamp'));
+      this.StringColumns = target.columns?.filter((t) => t.type === 'string') || [];
+      this.NumbersColumns = target.columns?.filter((t) => t.type === 'number') || [];
+      this.TimeColumns = target.columns?.filter((t) => t.type.startsWith('timestamp')) || [];
     }
   }
   private canAutoGenerateColumns(): boolean {
-    return ['csv', 'tsv', 'json', 'graphql'].includes(this.target.type) && isDataQuery(this.target) && this.target.columns.length === 0;
+    return ['csv', 'tsv', 'json', 'graphql'].includes(this.target.type) && isDataQuery(this.target) && this.target?.columns?.length === 0;
   }
   toTable() {
     let columns = isDataQuery(this.target) ? this.target.columns : [];
