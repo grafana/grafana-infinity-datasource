@@ -27,7 +27,7 @@ type Query struct {
 	URL                 string                 `json:"url"`
 	URLOptions          URLOptions             `json:"url_options"`
 	Data                string                 `json:"data"`
-	Parser              string                 `json:"parser"` // 'simple' | 'backend' | 'uql'
+	Parser              string                 `json:"parser"` // 'simple' | 'backend' | 'uql' | 'groq'
 	SummarizeExpression string                 `json:"summarizeExpression"`
 	UQL                 string                 `json:"uql"`
 	GROQ                string                 `json:"groq"`

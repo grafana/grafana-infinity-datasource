@@ -37,6 +37,21 @@ export const TypeChooser = (props: { mode: EditorMode; instanceSettings: any; qu
               ></Select>
             </EditorField>
           )}
+          {(query.type === 'csv' || query.type === 'tsv' || query.type === 'xml' || query.type === 'graphql') && (
+            <EditorField label="Parser">
+              <Select<typeof query.parser>
+                value={query.parser || 'simple'}
+                options={[
+                  { value: 'simple', label: 'Default' },
+                  { value: 'uql', label: 'UQL' },
+                ]}
+                onChange={(e) => {
+                  onChange({ ...query, parser: e.value });
+                  onRunQuery();
+                }}
+              ></Select>
+            </EditorField>
+          )}
           {query.type !== 'series' && mode !== 'variable' && <FormatSelector {...props} />}
           {(query.type === 'csv' || query.type === 'tsv') && <CSVOptionsEditor {...props} />}
           {query.type === 'json' && <JSONOptionsEditor {...props} />}

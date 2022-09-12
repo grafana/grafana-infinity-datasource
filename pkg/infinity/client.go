@@ -8,7 +8,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"mime/multipart"
 	"net/http"
 	"net/url"
@@ -136,7 +135,7 @@ func (client *Client) req(url string, body io.Reader, settings settingsSrv.Infin
 	if res.StatusCode >= http.StatusBadRequest {
 		return nil, res.StatusCode, duration, errors.New(res.Status)
 	}
-	bodyBytes, err := ioutil.ReadAll(res.Body)
+	bodyBytes, err := io.ReadAll(res.Body)
 	if err != nil {
 		backend.Logger.Error("error reading response body", "url", url, "error", err.Error())
 		return nil, res.StatusCode, duration, err

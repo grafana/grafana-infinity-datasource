@@ -10,6 +10,29 @@ import (
 	"gopkg.in/Knetic/govaluate.v3"
 )
 
+func EvaluateInFrame(expression string, input *data.Frame) (interface{}, error) {
+	if strings.TrimSpace(expression) == "" {
+		return nil, errors.New(strings.TrimSpace(fmt.Sprintf("empty/invalid expression. %s", expression)))
+	}
+	parsedExpression, err := govaluate.NewEvaluableExpressionWithFunctions(expression, expressionFunctions)
+	if err != nil {
+		return nil, err
+	}
+	parameters := map[string]interface{}{
+		"frame": input,
+	}
+	if input != nil {
+		for _, field := range input.Fields {
+			parameters[slugifyFieldName(field.Name)] = field
+		}
+	}
+	result, err := parsedExpression.Evaluate(parameters)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
 var expressionFunctions = map[string]govaluate.ExpressionFunction{
 	"count": func(arguments ...interface{}) (interface{}, error) {
 		field, ok := arguments[0].(*data.Field)
@@ -99,29 +122,6 @@ var expressionFunctions = map[string]govaluate.ExpressionFunction{
 		}
 		return sum / float64(field.Len()), nil
 	},
-}
-
-func EvaluateInFrame(expression string, input *data.Frame) (interface{}, error) {
-	if strings.TrimSpace(expression) == "" {
-		return nil, errors.New(strings.TrimSpace(fmt.Sprintf("empty/invalid expression. %s", expression)))
-	}
-	parsedExpression, err := govaluate.NewEvaluableExpressionWithFunctions(expression, expressionFunctions)
-	if err != nil {
-		return nil, err
-	}
-	parameters := map[string]interface{}{
-		"frame": input,
-	}
-	if input != nil {
-		for _, field := range input.Fields {
-			parameters[slugifyFieldName(field.Name)] = field
-		}
-	}
-	result, err := parsedExpression.Evaluate(parameters)
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
 }
 
 func slugifyFieldName(input string) string {

@@ -33,6 +33,10 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
     !(query.type === 'json' && query.parser === 'backend') &&
     !(query.type === 'json' && query.parser === 'uql') &&
     !(query.type === 'json' && query.parser === 'groq') &&
+    !(query.type === 'csv' && query.parser === 'uql') &&
+    !(query.type === 'tsv' && query.parser === 'uql') &&
+    !(query.type === 'graphql' && query.parser === 'uql') &&
+    !(query.type === 'xml' && query.parser === 'uql') &&
     query.type !== 'uql' &&
     query.type !== 'groq' &&
     query.columns &&

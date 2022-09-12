@@ -188,7 +188,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
             const data = JSON.parse(t.data || '[]');
             resolve(data);
           }
-          if (t.type === 'json' && t.parser === 'uql') {
+          if ((t.type === 'json' || t.type === 'csv' || t.type === 'tsv' || t.type === 'graphql' || t.type === 'xml') && t.parser === 'uql') {
             applyUQL(t.uql || '', data, t.format, t.refId)
               .then(resolve)
               .catch(reject);
