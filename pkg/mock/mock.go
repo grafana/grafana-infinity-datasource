@@ -4,8 +4,9 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
+	"os"
 
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/infinity"
 	settingsSrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/settings"
@@ -24,14 +25,14 @@ func (rt *InfinityMocker) RoundTrip(req *http.Request) (*http.Response, error) {
 	res := &http.Response{
 		StatusCode: http.StatusOK,
 		Status:     "200 OK",
-		Body:       ioutil.NopCloser(bytes.NewBufferString(responseBody)),
+		Body:       io.NopCloser(bytes.NewBufferString(responseBody)),
 	}
 	if rt.FileName != "" {
-		b, err := ioutil.ReadFile(rt.FileName)
+		b, err := os.ReadFile(rt.FileName)
 		if err != nil {
 			return res, fmt.Errorf("error reading testdata file %s", rt.FileName)
 		}
-		reader := ioutil.NopCloser(bytes.NewReader(b))
+		reader := io.NopCloser(bytes.NewReader(b))
 		res.Body = reader
 	}
 	if res.Body != nil {

@@ -31,7 +31,7 @@ export const TypeChooser = (props: { mode: EditorMode; instanceSettings: any; qu
                   { value: 'groq', label: 'GROQ' },
                 ]}
                 onChange={(e) => {
-                  onChange({ ...query, parser: e.value });
+                  onChange({ ...query, parser: e.value, uql: query.uql || 'parse-json' });
                   onRunQuery();
                 }}
               ></Select>
@@ -46,7 +46,20 @@ export const TypeChooser = (props: { mode: EditorMode; instanceSettings: any; qu
                   { value: 'uql', label: 'UQL' },
                 ]}
                 onChange={(e) => {
-                  onChange({ ...query, parser: e.value });
+                  let uql = query.uql || '';
+                  if (query.type === 'csv' && !query.uql) {
+                    uql = `parse-csv`;
+                  }
+                  if (query.type === 'tsv' && !query.uql) {
+                    uql = `parse-csv --delimiter "\t"`;
+                  }
+                  if (query.type === 'xml' && !query.uql) {
+                    uql = `parse-xml`;
+                  }
+                  if (query.type === 'graphql' && !query.uql) {
+                    uql = `parse-json`;
+                  }
+                  onChange({ ...query, parser: e?.value || 'simple', uql });
                   onRunQuery();
                 }}
               ></Select>

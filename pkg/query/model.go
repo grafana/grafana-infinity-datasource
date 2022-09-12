@@ -8,20 +8,22 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 )
 
+type QueryType string
+
 const (
-	QueryTypeJSON    = "json"
-	QueryTypeCSV     = "csv"
-	QueryTypeTSV     = "tsv"
-	QueryTypeXML     = "xml"
-	QueryTypeGraphQL = "graphql"
-	QueryTypeHTML    = "html"
-	QueryTypeUQL     = "uql"
-	QueryTypeGROQ    = "groq"
+	QueryTypeJSON    QueryType = "json"
+	QueryTypeCSV     QueryType = "csv"
+	QueryTypeTSV     QueryType = "tsv"
+	QueryTypeXML     QueryType = "xml"
+	QueryTypeGraphQL QueryType = "graphql"
+	QueryTypeHTML    QueryType = "html"
+	QueryTypeUQL     QueryType = "uql"
+	QueryTypeGROQ    QueryType = "groq"
 )
 
 type Query struct {
 	RefID               string                 `json:"refId"`
-	Type                string                 `json:"type"`   // 'json' | 'json-backend' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'uql' | 'groq' | 'series' | 'global'
+	Type                QueryType              `json:"type"`   // 'json' | 'json-backend' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'uql' | 'groq' | 'series' | 'global'
 	Format              string                 `json:"format"` // 'table' | 'timeseries' | 'dataframe' | 'as-is' | 'node-graph-nodes' | 'node-graph-edges'
 	Source              string                 `json:"source"` // 'url' | 'inline' | 'random-walk' | 'expression'
 	URL                 string                 `json:"url"`
@@ -76,9 +78,10 @@ type InfinityJSONOptions struct {
 }
 
 type InfinityColumn struct {
-	Selector string `json:"selector"`
-	Text     string `json:"text"`
-	Type     string `json:"type"` // "string" | "number" | "timestamp" | "timestamp_epoch" | "timestamp_epoch_s"
+	Selector        string `json:"selector"`
+	Text            string `json:"text"`
+	Type            string `json:"type"` // "string" | "number" | "timestamp" | "timestamp_epoch" | "timestamp_epoch_s"
+	TimeStampFormat string `json:"timestampFormat"`
 }
 
 type InfinityFilter struct {
@@ -120,6 +123,21 @@ func ApplyDefaultsToQuery(query Query) Query {
 		if query.URLOptions.BodyContentType == "" {
 			query.URLOptions.BodyContentType = "text/plain"
 		}
+	}
+	if query.Type == QueryTypeJSON && query.Parser == "uql" && query.UQL == "" {
+		query.UQL = "parse-json"
+	}
+	if query.Type == QueryTypeCSV && query.Parser == "uql" && query.UQL == "" {
+		query.UQL = "parse-csv"
+	}
+	if query.Type == QueryTypeTSV && query.Parser == "uql" && query.UQL == "" {
+		query.UQL = `parse-csv --delimiter "\t"`
+	}
+	if query.Type == QueryTypeXML && query.Parser == "uql" && query.UQL == "" {
+		query.UQL = "parse-xml"
+	}
+	if query.Type == QueryTypeJSON && query.Parser == "groq" && query.GROQ == "" {
+		query.GROQ = "*"
 	}
 	if query.Columns == nil {
 		query.Columns = []InfinityColumn{}

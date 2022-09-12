@@ -38,7 +38,7 @@ func TestLoadQuery(t *testing.T) {
 				},
 				"data" 			: "my-inline-data",
 				"root_selector" : "my-root_selector",
-				"columns" 		: [{"selector":"s","text":"t","type":"string"}],
+				"columns" 		: [{"selector":"s","text":"t","type":"string","timestampFormat":"2006"}],
 				"filters" 		: [{"field":"ff1","operator":"fo1","value":["fa1","fb1"]}],
 				"format" 		: "dataframe",
 				"json_options" 	: {
@@ -79,7 +79,7 @@ func TestLoadQuery(t *testing.T) {
 				Parser:              "backend",
 				SummarizeExpression: "sum(id)/10",
 				RootSelector:        "my-root_selector",
-				Columns:             []querySrv.InfinityColumn{{Selector: "s", Text: "t", Type: "string"}},
+				Columns:             []querySrv.InfinityColumn{{Selector: "s", Text: "t", Type: "string", TimeStampFormat: "2006"}},
 				Filters:             []querySrv.InfinityFilter{{Field: "ff1", Operator: "fo1", Value: []string{"fa1", "fb1"}}},
 				Format:              "dataframe",
 				JSONOptions: querySrv.InfinityJSONOptions{

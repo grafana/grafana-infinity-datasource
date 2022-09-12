@@ -2,7 +2,7 @@ import { isDataQuery } from 'app/utils';
 import { cloneDeep } from 'lodash';
 import React, { useState } from 'react';
 import { INFINITY_COLUMN_FORMATS } from './../constants';
-import { Select } from '@grafana/ui';
+import { Select, Input, InlineFormLabel } from '@grafana/ui';
 import type { InfinityColumn, InfinityColumnFormat, InfinityQuery } from './../types';
 
 interface QueryColumnItemProps {
@@ -17,6 +17,7 @@ export const QueryColumnItem = (props: QueryColumnItemProps) => {
   const column = isDataQuery(query) ? query.columns[index] : ({ selector: '', text: '', type: 'string' } as InfinityColumn);
   const [selector, setSelector] = useState(column.selector || '');
   const [text, setText] = useState(column.text || '');
+  const [timestampFormat, setTimestampFormat] = useState(column.timestampFormat || '');
   if (!isDataQuery(query)) {
     return <></>;
   }
@@ -29,6 +30,12 @@ export const QueryColumnItem = (props: QueryColumnItemProps) => {
   const onTextChange = () => {
     const columns = cloneDeep(query.columns || []);
     columns[index].text = text;
+    onChange({ ...query, columns });
+    onRunQuery();
+  };
+  const onTimeFormatChange = () => {
+    const columns = cloneDeep(query.columns || []);
+    columns[index].timestampFormat = timestampFormat;
     onChange({ ...query, columns });
     onRunQuery();
   };
@@ -59,6 +66,14 @@ export const QueryColumnItem = (props: QueryColumnItemProps) => {
         onChange={(e) => onFormatChange(e.value as InfinityColumnFormat)}
         menuShouldPortal={true}
       ></Select>
+      {query.type === 'json' && query.parser === 'backend' && column.type === 'timestamp' && (
+        <>
+          <InlineFormLabel width={10} tooltip={'Timestamp format in golang layout. Example: 2006-01-02T15:04:05Z07:00'}>
+            Layout (optional)
+          </InlineFormLabel>
+          <Input onChange={(e) => setTimestampFormat(e.currentTarget.value)} placeholder="2006-01-02T15:04:05Z07:00" value={timestampFormat} onBlur={onTimeFormatChange}></Input>
+        </>
+      )}
     </>
   );
 };

@@ -68,3 +68,7 @@ secureJsonData:
   httpHeaderValue2: xxxx-1234-xxxx-yyyy-1234
   httpHeaderValue4: <<Header4 Value>>
 ```
+
+## More examples
+
+For more examples of provisioning such as `oauth2`, etc, use provisioning section of the infinity datasource config. You will be able to generate provisioning file by manually configuring the datasource.

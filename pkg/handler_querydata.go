@@ -65,7 +65,7 @@ func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient in
 		"instanceID":   instanceID,
 		"instanceUID":  instanceUID,
 		"instanceName": instanceName,
-		"type":         query.Type,
+		"type":         string(query.Type),
 		"source":       query.Source,
 		"format":       query.Format,
 		"authType":     strings.Trim(infClient.Settings.AuthenticationMethod+" "+infClient.Settings.OAuth2Settings.OAuth2Type, " "),

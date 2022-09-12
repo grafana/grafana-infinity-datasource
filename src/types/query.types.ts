@@ -94,6 +94,7 @@ export interface InfinityColumn {
   selector: string;
   text: string;
   type: InfinityColumnFormat;
+  timestampFormat?: string;
 }
 export interface DataOverride {
   values: string[];
