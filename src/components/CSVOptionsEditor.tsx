@@ -10,6 +10,9 @@ export const CSVOptionsEditor = (props: { query: InfinityQuery; onChange: (value
   if (!(query.type === 'csv' || query.type === 'tsv')) {
     return <></>;
   }
+  if (query.parser === 'uql') {
+    return <></>;
+  }
   const togglePopup = () => setPopupStatus(!popupStatus);
   const onCSVOptionsChange = <T extends keyof InfinityCSVQueryOptions, V extends InfinityCSVQueryOptions[T]>(key: T, value: V) => {
     if (query.type === 'csv' || query.type === 'tsv') {

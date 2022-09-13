@@ -14,7 +14,7 @@ const UQLTips: string[] = [
 export const UQLEditor = (props: { query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void }) => {
   const { query, onChange, onRunQuery } = props;
   const onUQLChange = (uql: string) => {
-    if (query.type === 'uql' || (query.type === 'json' && query.parser === 'uql')) {
+    if (query.type === 'uql' || ((query.type === 'json' || query.type === 'csv' || query.type === 'tsv' || query.type === 'graphql' || query.type === 'xml') && query.parser === 'uql')) {
       onChange({ ...query, uql });
       onRunQuery();
     }
@@ -26,7 +26,7 @@ export const UQLEditor = (props: { query: InfinityQuery; onChange: (value: Infin
       ...UQLFunctions.map((item: string) => ({ label: item, kind: CodeEditorSuggestionItemKind.Method })),
     ];
   };
-  return query.type === 'uql' || (query.type === 'json' && query.parser === 'uql') ? (
+  return query.type === 'uql' || ((query.type === 'json' || query.type === 'csv' || query.type === 'tsv' || query.type === 'graphql' || query.type === 'xml') && query.parser === 'uql') ? (
     <EditorField label="UQL">
       <div className="gf-form">
         <div data-testid="infinity-query-uql-selector">

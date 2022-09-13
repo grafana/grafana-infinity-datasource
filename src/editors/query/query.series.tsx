@@ -1,8 +1,9 @@
 import { VariableOrigin } from '@grafana/data';
-import { DataLinkInput, Modal, Select } from '@grafana/ui';
+import { DataLinkInput, Modal, Select, Input } from '@grafana/ui';
 import { defaultsDeep, set } from 'lodash';
 import React, { useState } from 'react';
 import { EditorRow } from './../../components/extended/EditorRow';
+import { EditorField } from './../../components/extended/EditorField';
 import type { InfinitySeriesQuery, DataOverride } from './../../types';
 
 export const SeriesEditor = ({ query, onChange }: { query: InfinitySeriesQuery; onChange: (value: any) => void }) => {
@@ -17,42 +18,33 @@ export const SeriesEditor = ({ query, onChange }: { query: InfinitySeriesQuery; 
     <>
       <EditorRow>
         <div className="gf-form-inline">
-          <div className="gf-form">
-            <label className="gf-form-label query-keyword width-8">Alias</label>
+          <EditorField label="Alias">
             <DataLinkInput
               onChange={(e) => onInputTextChange(e, `alias`)}
               suggestions={[{ label: 'Series Index', value: '__series.index', origin: VariableOrigin.Series }]}
               value={query.alias || ''}
               placeholder="Alias / Random Walk"
             />
-            <label className="gf-form-label query-keyword width-6">Series Count</label>
-            <input type="text" className="gf-form-input min-width-12" value={query.seriesCount} placeholder="1" onChange={(e) => onInputTextChange(+e.target.value, `seriesCount`)}></input>
-          </div>
-        </div>
-        <div className="gf-form-inline">
-          <div className="gf-form">
-            {query.source === 'expression' ? (
-              <>
-                <label className="gf-form-label query-keyword width-8">Expression</label>
-                <DataLinkInput
-                  onChange={(e) => onInputTextChange(e, `expression`)}
-                  suggestions={[
-                    { label: 'Series Index', value: '__series.index', origin: VariableOrigin.Series },
-                    { label: 'Value Index', value: '__value.index', origin: VariableOrigin.Value },
-                  ]}
-                  value={query.expression || '                                             '}
-                  placeholder="Expression"
-                />
-              </>
-            ) : (
-              <></>
-            )}
-          </div>
-        </div>
-        <div className="gf-form-inline">
-          <div className="gf-form">
+          </EditorField>
+          <EditorField label="Series Count">
+            <Input width={12} value={query.seriesCount} placeholder="1" onChange={(e) => onInputTextChange(e.currentTarget.valueAsNumber, `seriesCount`)} />
+          </EditorField>
+          {query.source === 'expression' && (
+            <EditorField label="Expression">
+              <DataLinkInput
+                onChange={(e) => onInputTextChange(e, `expression`)}
+                suggestions={[
+                  { label: 'Series Index', value: '__series.index', origin: VariableOrigin.Series },
+                  { label: 'Value Index', value: '__value.index', origin: VariableOrigin.Value },
+                ]}
+                value={query.expression || '                                             '}
+                placeholder="Expression"
+              />
+            </EditorField>
+          )}
+          <EditorField label="Advanced Options">
             <SeriesAdvancedOptions onChange={onChange} query={query} />
-          </div>
+          </EditorField>
         </div>
       </EditorRow>
     </>
@@ -101,7 +93,6 @@ const SeriesAdvancedOptions = ({ query, onChange }: { query: InfinitySeriesQuery
           <></>
         ) : (
           <>
-            <label className="gf-form-label query-keyword width-8">Advanced Options</label>
             <label role="button" onClick={() => setPopupState(!popupState)} title="Advanced Options" className="btn btn-secondary btn-small" style={{ marginTop: '4px', padding: '10px' }}>
               Advanced Options <i className="fa fa-expand fa-large btn btn-small"></i>
             </label>

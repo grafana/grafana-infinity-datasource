@@ -51,7 +51,10 @@ export const interpolateQuery = (query: InfinityQuery, scopedVars: ScopedVars): 
         return { ...filter, value };
       });
     }
-    if (newQuery.type === 'uql' || (newQuery.type === 'json' && newQuery.parser === 'uql')) {
+    if (
+      newQuery.type === 'uql' ||
+      ((newQuery.type === 'json' || newQuery.type === 'csv' || newQuery.type === 'tsv' || newQuery.type === 'graphql' || newQuery.type === 'xml') && newQuery.parser === 'uql')
+    ) {
       newQuery.uql = replaceVariable(newQuery.uql || '', scopedVars);
     }
     if (newQuery.type === 'groq' || (newQuery.type === 'json' && newQuery.parser === 'groq')) {

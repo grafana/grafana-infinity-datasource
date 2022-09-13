@@ -22,9 +22,10 @@ func GetJSONBackendResponse(urlResponseObject interface{}, query querySrv.Query)
 	columns := []jsonFramer.ColumnSelector{}
 	for _, c := range query.Columns {
 		columns = append(columns, jsonFramer.ColumnSelector{
-			Selector: c.Selector,
-			Alias:    c.Text,
-			Type:     c.Type,
+			Selector:   c.Selector,
+			Alias:      c.Text,
+			Type:       c.Type,
+			TimeFormat: c.TimeStampFormat,
 		})
 	}
 	newFrame, err := jsonFramer.JsonStringToFrame(string(responseString), jsonFramer.JSONFramerOptions{

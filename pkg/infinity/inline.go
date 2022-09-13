@@ -17,9 +17,10 @@ func GetFrameForInlineSources(query querySrv.Query) (*data.Frame, error) {
 		columns := []jsonFramer.ColumnSelector{}
 		for _, c := range query.Columns {
 			columns = append(columns, jsonFramer.ColumnSelector{
-				Selector: c.Selector,
-				Alias:    c.Text,
-				Type:     c.Type,
+				Selector:   c.Selector,
+				Alias:      c.Text,
+				Type:       c.Type,
+				TimeFormat: c.TimeStampFormat,
 			})
 		}
 		newFrame, err := jsonFramer.JsonStringToFrame(query.Data, jsonFramer.JSONFramerOptions{

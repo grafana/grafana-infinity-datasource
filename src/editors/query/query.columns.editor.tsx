@@ -7,15 +7,13 @@ import { isDataQuery } from './../../app/utils';
 import { QueryColumnItem } from './../../components/QueryColumnItem';
 import { UQLEditor } from './query.uql';
 import { GROQEditor } from './query.groq';
-import type { EditorMode, InfinityColumn, InfinityQuery } from './../../types';
+import type { InfinityColumn, InfinityQuery } from './../../types';
 
-export const QueryColumnsEditor = (props: { query: InfinityQuery; mode: EditorMode; onChange: (value: any) => void; onRunQuery: () => void }) => {
+export const QueryColumnsEditor = (props: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void }) => {
   const { query, onChange, onRunQuery } = props;
-  const [root_selector, setRootSelector] = useState(isDataQuery(query) ? query.root_selector || '' : '');
   if (!isDataQuery(query)) {
     return <></>;
   }
-  const canShowRootSelector = ['html', 'json', 'xml', 'graphql'].indexOf(props.query.type) > -1;
   const onColumnAdd = () => {
     const columns = cloneDeep(query.columns || []);
     const defaultColumn = {
@@ -24,37 +22,23 @@ export const QueryColumnsEditor = (props: { query: InfinityQuery; mode: EditorMo
       type: 'string',
     };
     onChange({ ...query, columns: [...columns, defaultColumn] });
+    onRunQuery();
   };
   const onColumnRemove = (index: number) => {
     const columns = cloneDeep(query.columns || []);
     columns.splice(index, 1);
     onChange({ ...query, columns });
-  };
-  const onRootSelectorChange = () => {
-    onChange({ ...query, root_selector });
     onRunQuery();
   };
   return (
     <EditorRow>
-      {query.type === 'json' && query.parser === 'uql' ? (
+      {(query.type === 'json' || query.type === 'csv' || query.type === 'tsv' || query.type === 'graphql' || query.type === 'xml') && query.parser === 'uql' ? (
         <UQLEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />
       ) : query.type === 'json' && query.parser === 'groq' ? (
         <GROQEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />
       ) : (
         <>
-          {canShowRootSelector && (
-            <EditorField label="Rows/Root" optional={true}>
-              <input
-                type="text"
-                className="gf-form-input"
-                style={{ width: '300px' }}
-                value={root_selector}
-                placeholder="rows/root selector (optional)"
-                onChange={(e) => setRootSelector(e.currentTarget.value)}
-                onBlur={onRootSelectorChange}
-              ></input>
-            </EditorField>
-          )}
+          <RootSelector {...props} />
           <EditorField label="Columns" optional={true}>
             <>
               {query.columns.map((column: InfinityColumn, index: number) => {
@@ -81,5 +65,32 @@ export const QueryColumnsEditor = (props: { query: InfinityQuery; mode: EditorMo
         </>
       )}
     </EditorRow>
+  );
+};
+
+const RootSelector = (props: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void }) => {
+  const { query, onChange, onRunQuery } = props;
+  const [root_selector, setRootSelector] = useState(isDataQuery(query) ? query.root_selector || '' : '');
+  if (!isDataQuery(query)) {
+    return <></>;
+  }
+  const onRootSelectorChange = () => {
+    onChange({ ...query, root_selector });
+    onRunQuery();
+  };
+  return ['html', 'json', 'xml', 'graphql'].indexOf(props.query.type) > -1 ? (
+    <EditorField label="Rows/Root" optional={true}>
+      <input
+        type="text"
+        className="gf-form-input"
+        style={{ width: '300px' }}
+        value={root_selector}
+        placeholder="rows/root selector (optional)"
+        onChange={(e) => setRootSelector(e.currentTarget.value)}
+        onBlur={onRootSelectorChange}
+      ></input>
+    </EditorField>
+  ) : (
+    <></>
   );
 };

@@ -1,4 +1,4 @@
-package framesql
+package framesql_test
 
 import (
 	"errors"
@@ -7,6 +7,7 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/framesql"
 )
 
 func TestEvaluateInFrame(t *testing.T) {
@@ -48,7 +49,7 @@ func TestEvaluateInFrame(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := EvaluateInFrame(tt.expression, tt.input)
+			got, err := framesql.EvaluateInFrame(tt.expression, tt.input)
 			if tt.wantErr != nil {
 				require.NotNil(t, err)
 				assert.Equal(t, tt.wantErr, err)
