@@ -2,7 +2,7 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
-## [ 1.0.0 ] - next
+## [ 1.0.0 ]
 
 ### **New Features & Bug Fixes**
 
