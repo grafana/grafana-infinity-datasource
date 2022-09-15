@@ -1,0 +1,28 @@
+name: Compatibility check
+on:
+  schedule:
+    - cron: '30 6,18 * * *'
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+jobs:
+  compatibilitycheck:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        grVersion: [8.4.7, latest]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - name: Install dependencies
+        run: yarn install
+      - name: Build plugin
+        run: yarn build
+      - name: Compatibility check
+        uses: grafana/plugin-actions/is-compatible@v1
+        with:
+          module: './src/module.ts'
+          targets: '@grafana/data@${{ matrix.grVersion }},@grafana/ui@${{ matrix.grVersion }},@grafana/runtime@${{ matrix.grVersion }}'
+          fail-if-incompatible: 'no'
