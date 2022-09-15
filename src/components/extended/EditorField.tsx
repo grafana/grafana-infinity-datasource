@@ -59,7 +59,6 @@ const getStyles = stylesFactory((theme: GrafanaTheme2, width?: number | string) 
       fontSize: 12,
       fontWeight: theme.typography.fontWeightMedium,
       paddingLeft: '5px',
-      marginBottom: '5px',
     }),
     optional: css({
       fontStyle: 'italic',

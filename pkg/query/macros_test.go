@@ -13,10 +13,11 @@ import (
 
 func TestInterPolateCombineValueMacros(t *testing.T) {
 	tests := []struct {
-		name      string
-		query     string
-		want      string
-		wantError error
+		name          string
+		query         string
+		pluginContext backend.PluginContext
+		want          string
+		wantError     error
 	}{
 		{query: "foo", want: "foo"},
 		{query: "$__combineValues", wantError: errors.New("insufficient arguments to combineValues macro")},
@@ -35,7 +36,7 @@ func TestInterPolateCombineValueMacros(t *testing.T) {
 			got, err := querySrv.InterPolateMacros(tt.query, backend.TimeRange{
 				From: time.Unix(0, 1500376552001*1e6),
 				To:   time.Unix(0, 1500376552002*1e6),
-			})
+			}, tt.pluginContext)
 			if tt.wantError != nil {
 				require.NotNil(t, err)
 				require.Equal(t, tt.wantError, err)
@@ -48,12 +49,13 @@ func TestInterPolateCombineValueMacros(t *testing.T) {
 }
 func TestInterPolateCustomIntervalMacros(t *testing.T) {
 	tests := []struct {
-		name      string
-		query     string
-		from      int64
-		to        int64
-		want      string
-		wantError error
+		name          string
+		query         string
+		from          int64
+		to            int64
+		pluginContext backend.PluginContext
+		want          string
+		wantError     error
 	}{
 		{query: "foo", want: "foo"},
 		{query: "$__customInterval", want: ""},
@@ -76,7 +78,7 @@ func TestInterPolateCustomIntervalMacros(t *testing.T) {
 			if to == 0 {
 				to = 1610668800000 // Unix ms:  1610668800000 // Fri Jan 15 2021 00:00:00 GMT+0000 (Greenwich Mean Time)
 			}
-			got, err := querySrv.InterPolateMacros(tt.query, backend.TimeRange{From: time.UnixMilli(from), To: time.UnixMilli(to)})
+			got, err := querySrv.InterPolateMacros(tt.query, backend.TimeRange{From: time.UnixMilli(from), To: time.UnixMilli(to)}, tt.pluginContext)
 			if tt.wantError != nil {
 				require.NotNil(t, err)
 				require.Equal(t, tt.wantError, err)
@@ -90,10 +92,11 @@ func TestInterPolateCustomIntervalMacros(t *testing.T) {
 
 func TestApplyMacros(t *testing.T) {
 	tests := []struct {
-		name    string
-		query   querySrv.Query
-		want    querySrv.Query
-		wantErr error
+		name          string
+		query         querySrv.Query
+		pluginContext backend.PluginContext
+		want          querySrv.Query
+		wantErr       error
 	}{
 		{
 			query: querySrv.Query{
@@ -130,7 +133,7 @@ func TestApplyMacros(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := querySrv.ApplyMacros(tt.query, backend.TimeRange{From: time.UnixMilli(1610582400000), To: time.UnixMilli(1610668800000)})
+			got, err := querySrv.ApplyMacros(tt.query, backend.TimeRange{From: time.UnixMilli(1610582400000), To: time.UnixMilli(1610668800000)}, tt.pluginContext)
 			if tt.wantErr != nil {
 				require.NotNil(t, err)
 				assert.Equal(t, tt.wantErr, err)

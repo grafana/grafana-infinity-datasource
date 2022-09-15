@@ -145,12 +145,12 @@ func ApplyDefaultsToQuery(query Query) Query {
 	return query
 }
 
-func LoadQuery(backendQuery backend.DataQuery) (Query, error) {
+func LoadQuery(backendQuery backend.DataQuery, pluginContext backend.PluginContext) (Query, error) {
 	var query Query
 	err := json.Unmarshal(backendQuery.JSON, &query)
 	if err != nil {
 		return query, fmt.Errorf("error while parsing the query json. %s", err.Error())
 	}
 	query = ApplyDefaultsToQuery(query)
-	return ApplyMacros(query, backendQuery.TimeRange)
+	return ApplyMacros(query, backendQuery.TimeRange, pluginContext)
 }

@@ -106,7 +106,7 @@ func TestLoadQuery(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			q := &backend.DataQuery{JSON: []byte(tt.queryJSON)}
-			got, err := querySrv.LoadQuery(*q)
+			got, err := querySrv.LoadQuery(*q, backend.PluginContext{})
 			if tt.wantErr != nil {
 				require.NotNil(t, err)
 				assert.Equal(t, tt.wantErr, err)

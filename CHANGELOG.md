@@ -2,6 +2,10 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
+## [ 1.0.1]
+
+- **Macros/Variables** Global variables in queries such as `${__user.name}`,`${__user.email}` and `${__user.login}` interpolated correctly in server side
+
 ## [ 1.0.0 ]
 
 ### **New Features & Bug Fixes**

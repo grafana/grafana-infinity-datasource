@@ -34,7 +34,7 @@ func TestAuthentication(t *testing.T) {
 				"url":  "%s",
 				"source": "url"
 			}`, server.URL)),
-		}, *client, map[string]string{})
+		}, *client, map[string]string{}, backend.PluginContext{})
 		require.NotNil(t, res)
 		require.Nil(t, res.Error)
 		require.Equal(t, "Datasource is missing allowed hosts/URLs. Configure it in the datasource settings page for enhanced security.", res.Frames[0].Meta.Notices[0].Text)
@@ -63,7 +63,7 @@ func TestAuthentication(t *testing.T) {
 					"url":  "%s",
 					"source": "url"
 				}`, server.URL)),
-			}, *client, map[string]string{"Authorization": "foo", "X-ID-Token": "bar"})
+			}, *client, map[string]string{"Authorization": "foo", "X-ID-Token": "bar"}, backend.PluginContext{})
 			require.NotNil(t, res)
 			require.Nil(t, res.Error)
 			metaData := res.Frames[0].Meta.Custom.(*infinity.CustomMeta)
@@ -98,7 +98,7 @@ func TestAuthentication(t *testing.T) {
 						"url":  "%s",
 						"source": "url"
 					}`, server.URL)),
-			}, *client, map[string]string{"Authorization": "foo", "X-ID-Token": "bar"})
+			}, *client, map[string]string{"Authorization": "foo", "X-ID-Token": "bar"}, backend.PluginContext{})
 			require.NotNil(t, res)
 			metaData := res.Frames[0].Meta.Custom.(*infinity.CustomMeta)
 			require.NotNil(t, res.Error)
@@ -128,7 +128,7 @@ func TestAuthentication(t *testing.T) {
 					"url":  "%s",
 					"source": "url"
 				}`, server.URL)),
-			}, *client, map[string]string{"Authorization": "foo", "X-ID-Token": "bar"})
+			}, *client, map[string]string{"Authorization": "foo", "X-ID-Token": "bar"}, backend.PluginContext{})
 			require.NotNil(t, res)
 			require.Nil(t, res.Error)
 		})
@@ -152,7 +152,7 @@ func TestAuthentication(t *testing.T) {
 						"url":  "%s",
 						"source": "url"
 					}`, server.URL)),
-			}, *client, map[string]string{"Authorization": "foo", "X-ID-Token": "bar"})
+			}, *client, map[string]string{"Authorization": "foo", "X-ID-Token": "bar"}, backend.PluginContext{})
 			require.NotNil(t, res)
 			require.Nil(t, res.Error)
 		})
@@ -192,7 +192,7 @@ func TestAuthentication(t *testing.T) {
 					"source": "url",
 					"url":  "%s/something-else"
 				}`, server.URL)),
-			}, *client, map[string]string{})
+			}, *client, map[string]string{}, backend.PluginContext{})
 			require.NotNil(t, res)
 			require.Nil(t, res.Error)
 			metaData := res.Frames[0].Meta.Custom.(*infinity.CustomMeta)
@@ -232,7 +232,7 @@ func TestAuthentication(t *testing.T) {
 					"source": "url",
 					"url":  "%s/something-else"
 				}`, server.URL)),
-			}, *client, map[string]string{})
+			}, *client, map[string]string{}, backend.PluginContext{})
 			require.NotNil(t, res)
 			require.NotNil(t, res.Error)
 			assert.Equal(t, fmt.Sprintf("error getting response from url %s/something-else. no response received. Error: Get \"%s/something-else\": oauth2: cannot fetch token: 401 Unauthorized\nResponse: ", server.URL, server.URL), res.Error.Error())
@@ -267,7 +267,7 @@ func TestAuthentication(t *testing.T) {
 					"url":  "%s",
 					"source": "url"
 				}`, server.URL)),
-			}, *client, map[string]string{"Authorization": "foo", "X-ID-Token": "bar"})
+			}, *client, map[string]string{"Authorization": "foo", "X-ID-Token": "bar"}, backend.PluginContext{})
 			require.NotNil(t, res)
 			require.NotNil(t, res.Error)
 			assert.Equal(t, fmt.Errorf("error getting response from url %s. no response received. Error: Get \"%s\": x509: certificate signed by unknown authority", server.URL, server.URL), res.Error)
@@ -298,7 +298,7 @@ func TestAuthentication(t *testing.T) {
 					"url":  "%s",
 					"source": "url"
 				}`, server.URL)),
-			}, *client, map[string]string{"Authorization": "foo", "X-ID-Token": "bar"})
+			}, *client, map[string]string{"Authorization": "foo", "X-ID-Token": "bar"}, backend.PluginContext{})
 			require.NotNil(t, res)
 			require.Nil(t, res.Error)
 			metaData := res.Frames[0].Meta.Custom.(*infinity.CustomMeta)
@@ -539,7 +539,7 @@ func TestResponseFormats(t *testing.T) {
 					  }
 					]
 				}`, server.URL)),
-			}, *client, map[string]string{})
+			}, *client, map[string]string{}, backend.PluginContext{})
 			require.NotNil(t, res)
 			require.Nil(t, res.Error)
 			// require.Equal(t, data.FieldTypeNullableFloat64, res.Frames[0].Fields[0].Type())

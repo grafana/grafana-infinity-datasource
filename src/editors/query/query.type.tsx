@@ -31,7 +31,9 @@ export const TypeChooser = (props: { mode: EditorMode; instanceSettings: any; qu
                   { value: 'groq', label: 'GROQ' },
                 ]}
                 onChange={(e) => {
-                  onChange({ ...query, parser: e.value, uql: query.uql || 'parse-json' });
+                  let uql = query.uql || 'parse-json';
+                  let groq = query.groq || '*';
+                  onChange({ ...query, parser: e.value, uql, groq });
                   onRunQuery();
                 }}
               ></Select>

@@ -33,15 +33,15 @@ func (ds *PluginHost) QueryData(ctx context.Context, req *backend.QueryDataReque
 		ctx = context.WithValue(ctx, contextKeyInstanceName, req.PluginContext.DataSourceInstanceSettings.Name)
 	}
 	for _, q := range req.Queries {
-		res := QueryData(ctx, q, *client.client, req.Headers)
+		res := QueryData(ctx, q, *client.client, req.Headers, req.PluginContext)
 		response.Responses[q.RefID] = res
 	}
 	return response, nil
 }
 
-func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient infinity.Client, requestHeaders map[string]string) (response backend.DataResponse) {
+func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient infinity.Client, requestHeaders map[string]string, pluginContext backend.PluginContext) (response backend.DataResponse) {
 	//region Loading Query
-	query, err := querySrv.LoadQuery(backendQuery)
+	query, err := querySrv.LoadQuery(backendQuery, pluginContext)
 	if err != nil {
 		backend.Logger.Error("error un-marshaling the query", "error", err.Error())
 		response.Error = err
