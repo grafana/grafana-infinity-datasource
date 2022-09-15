@@ -29,10 +29,11 @@ type Query struct {
 	URL                 string                 `json:"url"`
 	URLOptions          URLOptions             `json:"url_options"`
 	Data                string                 `json:"data"`
-	Parser              string                 `json:"parser"` // 'simple' | 'backend' | 'uql' | 'groq'
+	Parser              string                 `json:"parser"` // 'simple' | 'backend' | 'sqlite' | 'uql' | 'groq'
 	SummarizeExpression string                 `json:"summarizeExpression"`
 	UQL                 string                 `json:"uql"`
 	GROQ                string                 `json:"groq"`
+	SQLiteQuery         string                 `json:"sqlite_query"`
 	CSVOptions          InfinityCSVOptions     `json:"csv_options"`
 	JSONOptions         InfinityJSONOptions    `json:"json_options"`
 	RootSelector        string                 `json:"root_selector"`

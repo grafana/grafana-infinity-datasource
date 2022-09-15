@@ -44,13 +44,14 @@ export type InfinityJSONQueryOptions = {
   root_is_not_array?: boolean;
   columnar?: boolean;
 };
-export type InfinityJSONQuery = {
-  json_options?: InfinityJSONQueryOptions;
-  parser?: 'simple' | 'backend' | 'uql' | 'groq';
-  uql?: string;
-  groq?: string;
-  summarizeExpression?: string;
-} & InfinityQueryWithDataSource<'json'>;
+export type InfinityJSONQuery = (
+  | { parser?: 'simple'; json_options?: InfinityJSONQueryOptions }
+  | { parser: 'backend'; summarizeExpression?: string }
+  | { parser: 'sqlite'; sqlite_query?: string }
+  | { parser: 'uql'; uql?: string }
+  | { parser: 'groq'; groq?: string }
+) &
+  InfinityQueryWithDataSource<'json'>;
 export type InfinityCSVQueryOptions = {
   delimiter?: string;
   skip_empty_lines?: boolean;

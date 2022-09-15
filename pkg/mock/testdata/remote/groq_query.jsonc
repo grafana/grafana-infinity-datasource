@@ -23,6 +23,7 @@
 //              "summarizeExpression": "",
 //              "uql": "",
 //              "groq": "*{1,2,3}",
+//              "sqlite_query": "",
 //              "csv_options": {
 //                  "delimiter": "",
 //                  "skip_empty_lines": false,
@@ -87,6 +88,7 @@
               "summarizeExpression": "",
               "uql": "",
               "groq": "*{1,2,3}",
+              "sqlite_query": "",
               "csv_options": {
                 "delimiter": "",
                 "skip_empty_lines": false,

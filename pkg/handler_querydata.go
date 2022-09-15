@@ -21,6 +21,7 @@ const contextKeyInstanceName key = "InstanceName"
 
 // QueryData handles multiple queries and returns multiple responses.
 func (ds *PluginHost) QueryData(ctx context.Context, req *backend.QueryDataRequest) (*backend.QueryDataResponse, error) {
+
 	response := backend.NewQueryDataResponse()
 	client, err := getInstance(ds.im, req.PluginContext)
 	if err != nil {
