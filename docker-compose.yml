@@ -1,9 +1,9 @@
 version: '3.7'
 services:
   grafana:
-    # image: grafana/grafana-enterprise:8.4.7
-    image: grafana/grafana-enterprise:9.1.3
     # image: grafana/grafana-enterprise:main
+    image: grafana/grafana-enterprise:9.2.0-beta1
+    # image: grafana/grafana-enterprise:8.4.7
     container_name: yesoreyeram-infinity-datasource
     ports:
       - '3000:3000'
@@ -15,6 +15,7 @@ services:
       - TERM=linux
       - GF_DEFAULT_APP_MODE=development
       - GF_ENTERPRISE_LICENSE_TEXT=$GF_ENTERPRISE_LICENSE_TEXT
+      - GF_FEATURE_TOGGLES_ENABLE=publicDashboards
     depends_on:
       - httpbin
       - mock-api-server
