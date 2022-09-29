@@ -7,6 +7,7 @@ import { isDataQuery } from './../../app/utils';
 import { QueryColumnItem } from './../../components/QueryColumnItem';
 import { UQLEditor } from './query.uql';
 import { GROQEditor } from './query.groq';
+import { SQLiteEditor } from './query.sqlite';
 import type { InfinityColumn, InfinityQuery } from './../../types';
 
 export const QueryColumnsEditor = (props: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void }) => {
@@ -36,6 +37,8 @@ export const QueryColumnsEditor = (props: { query: InfinityQuery; onChange: (val
         <UQLEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />
       ) : query.type === 'json' && query.parser === 'groq' ? (
         <GROQEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />
+      ) : query.type === 'json' && query.parser === 'sqlite' ? (
+        <SQLiteEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />
       ) : (
         <>
           <RootSelector {...props} />

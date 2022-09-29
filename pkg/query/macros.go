@@ -30,7 +30,7 @@ func escapeKeywords(input string) string {
 }
 
 // InterPolateMacros interpolate macros on a given string
-func InterPolateMacros(queryString string, timeRange backend.TimeRange) (string, error) {
+func InterPolateMacros(queryString string, timeRange backend.TimeRange, pluginContext backend.PluginContext) (string, error) {
 	timeRangeInMilliSeconds := timeRange.To.UnixMilli() - timeRange.From.UnixMilli()
 	macros := map[string]macroFunc{
 		"combineValues": func(query string, args []string) (string, error) {
@@ -93,49 +93,54 @@ func InterPolateMacros(queryString string, timeRange backend.TimeRange) (string,
 			queryString = strings.Replace(queryString, match[0], res, -1)
 		}
 	}
+	if pluginContext.User != nil {
+		queryString = strings.ReplaceAll(queryString, "${__user.name}", pluginContext.User.Name)
+		queryString = strings.ReplaceAll(queryString, "${__user.email}", pluginContext.User.Email)
+		queryString = strings.ReplaceAll(queryString, "${__user.login}", pluginContext.User.Login)
+	}
 	return strings.Trim(queryString, " "), nil
 }
 
 // ApplyMacros interpolates macros on a given infinity Query
-func ApplyMacros(query Query, timeRange backend.TimeRange) (Query, error) {
-	url, err := InterPolateMacros(query.URL, timeRange)
+func ApplyMacros(query Query, timeRange backend.TimeRange, pluginContext backend.PluginContext) (Query, error) {
+	url, err := InterPolateMacros(query.URL, timeRange, pluginContext)
 	if err != nil {
 		return query, fmt.Errorf("error applying macros to url field. %s", err.Error())
 	}
 	query.URL = url
 
-	uql, err := InterPolateMacros(query.UQL, timeRange)
+	uql, err := InterPolateMacros(query.UQL, timeRange, pluginContext)
 	if err != nil {
 		return query, fmt.Errorf("error applying macros to uql field. %s", err.Error())
 	}
 	query.UQL = uql
 
-	groq, err := InterPolateMacros(query.GROQ, timeRange)
+	groq, err := InterPolateMacros(query.GROQ, timeRange, pluginContext)
 	if err != nil {
 		return query, fmt.Errorf("error applying macros to uql field. %s", err.Error())
 	}
 	query.GROQ = groq
 
-	data, err := InterPolateMacros(query.Data, timeRange)
+	data, err := InterPolateMacros(query.Data, timeRange, pluginContext)
 	if err != nil {
 		return query, fmt.Errorf("error applying macros to data field. %s", err.Error())
 	}
 	query.Data = data
 
-	body, err := InterPolateMacros(query.URLOptions.Body, timeRange)
+	body, err := InterPolateMacros(query.URLOptions.Body, timeRange, pluginContext)
 	if err != nil {
 		return query, fmt.Errorf("error applying macros to body data field. %s", err.Error())
 	}
 	query.URLOptions.Body = body
 
-	graphqlQuery, err := InterPolateMacros(query.URLOptions.BodyGraphQLQuery, timeRange)
+	graphqlQuery, err := InterPolateMacros(query.URLOptions.BodyGraphQLQuery, timeRange, pluginContext)
 	if err != nil {
 		return query, fmt.Errorf("error applying macros to body graphql query field. %s", err.Error())
 	}
 	query.URLOptions.BodyGraphQLQuery = graphqlQuery
 
 	for idx, p := range query.URLOptions.Params {
-		up, err := InterPolateMacros(p.Value, timeRange)
+		up, err := InterPolateMacros(p.Value, timeRange, pluginContext)
 		if err != nil {
 			return query, fmt.Errorf("error applying macros to url parameter field %s. %s", p.Key, err.Error())
 		}

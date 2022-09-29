@@ -73,7 +73,7 @@ func TestInlineSources(t *testing.T) {
 				queryJSON = "{}"
 			}
 			bq := backend.DataQuery{JSON: []byte(queryJSON), TimeRange: tt.timeRange}
-			query, err := querySrv.LoadQuery(bq)
+			query, err := querySrv.LoadQuery(bq, backend.PluginContext{})
 			require.Nil(t, err)
 			frame, err := infinity.GetFrameForInlineSources(query)
 			if tt.wantErr != nil {
@@ -243,7 +243,7 @@ func TestRemoteSources(t *testing.T) {
 				queryJSON = "{}"
 			}
 			bq := backend.DataQuery{JSON: []byte(queryJSON), TimeRange: tt.timeRange}
-			query, err := querySrv.LoadQuery(bq)
+			query, err := querySrv.LoadQuery(bq, backend.PluginContext{})
 			require.Nil(t, err)
 			client := tt.client
 			if client == nil {

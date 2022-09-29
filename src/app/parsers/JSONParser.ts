@@ -8,6 +8,9 @@ export class JSONParser extends InfinityParser<InfinityJSONQuery | InfinityGraph
   constructor(JSONResponse: object, target: InfinityJSONQuery | InfinityGraphQLQuery, endTime?: Date) {
     super(target);
     let jsonResponse = this.formatInput(JSONResponse);
+    if (this.target.parser === 'backend' || this.target.parser === 'uql' || this.target.parser === 'groq' || this.target.parser === 'sqlite') {
+      return;
+    }
     if (this.target.json_options?.columnar) {
       jsonResponse = columnarToTable(jsonResponse, this.target.columns);
     }
@@ -18,7 +21,7 @@ export class JSONParser extends InfinityParser<InfinityJSONQuery | InfinityGraph
     } else if (!(Array.isArray(jsonResponse) || (this.target.json_options && this.target.json_options.root_is_not_array))) {
       jsonResponse = this.findArrayData(jsonResponse);
     }
-    if (Array.isArray(jsonResponse) || (target.json_options && target.json_options.root_is_not_array)) {
+    if (Array.isArray(jsonResponse) || (this.target.json_options && this.target.json_options.root_is_not_array)) {
       this.constructTableData(jsonResponse as any[]);
       this.constructTimeSeriesData(jsonResponse, endTime);
     } else {

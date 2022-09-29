@@ -163,6 +163,12 @@ const sitemap: any[] = [
     tags: ['authentication', 'auth', 'username', 'password', 'secure', 'security', 'oauth', 'oauth2', 'api token', 'api key', 'bearer token', 'forward oauth identity', 'digest authentication'],
   },
   {
+    title: 'Azure Authentication',
+    slug: '/wiki/azure-authentication',
+    description: 'Microsoft Azure Authentication Steps',
+    tags: ['authentication', 'auth', 'username', 'password', 'secure', 'security', 'oauth', 'oauth2', 'azure', 'microsoft', 'cloud'],
+  },
+  {
     title: 'Global Queries',
     slug: '/wiki/global-queries',
     description: 'Grafana datasource configuration with global queries',

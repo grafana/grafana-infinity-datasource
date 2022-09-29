@@ -135,6 +135,8 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
         const error = d.meta?.custom?.error;
         if (target.type === 'json' && target.parser === 'backend') {
           promises.push(Promise.resolve(d));
+        } else if (target.type === 'json' && target.parser === 'sqlite') {
+          promises.push(Promise.resolve(d));
         } else {
           promises.push(
             this.resolveData(target, options.range, options.scopedVars, data).then((r) => {

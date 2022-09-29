@@ -2,6 +2,11 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
+## [ 1.0.1]
+
+- **Macros/Variables** Global variables in queries such as `${__user.name}`,`${__user.email}` and `${__user.login}` interpolated correctly in server side
+- **Bug fix** Fixed a bug where editor crashes when using POST method in variable editor. Fixes [#413](https://github.com/yesoreyeram/grafana-infinity-datasource/issues/413)
+
 ## [ 1.0.0 ]
 
 ### **New Features & Bug Fixes**

@@ -37,7 +37,9 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
   return (
     <>
       <div className="gf-form">
-        <InlineFormLabel width={10}>OAuth Type</InlineFormLabel>
+        <InlineFormLabel width={10} tooltip="This refers to OAuth2 grant type">
+          Grant Type
+        </InlineFormLabel>
         <RadioButtonGroup<OAuth2Type> options={oAuthTypes} onChange={(v) => onOAuth2PropsChange('oauth2_type', v)} value={oauth2.oauth2_type || 'client_credentials'}></RadioButtonGroup>
       </div>
       {oauth2.oauth2_type === 'client_credentials' && (

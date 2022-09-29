@@ -189,7 +189,7 @@ func CanAllowURL(url string, allowedHosts []string) bool {
 
 func GetQueryBody(query querySrv.Query) io.Reader {
 	var body io.Reader
-	if strings.ToUpper(query.URLOptions.Method) == http.MethodPost {
+	if strings.EqualFold(query.URLOptions.Method, http.MethodPost) {
 		switch query.URLOptions.BodyType {
 		case "raw":
 			body = strings.NewReader(query.URLOptions.Body)

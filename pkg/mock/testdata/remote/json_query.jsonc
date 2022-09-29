@@ -23,6 +23,7 @@
 //              "summarizeExpression": "",
 //              "uql": "",
 //              "groq": "",
+//              "sqlite_query": "",
 //              "csv_options": {
 //                  "delimiter": "",
 //                  "skip_empty_lines": false,
@@ -91,6 +92,7 @@
               "summarizeExpression": "",
               "uql": "",
               "groq": "",
+              "sqlite_query": "",
               "csv_options": {
                 "delimiter": "",
                 "skip_empty_lines": false,

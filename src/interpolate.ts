@@ -60,6 +60,9 @@ export const interpolateQuery = (query: InfinityQuery, scopedVars: ScopedVars): 
     if (newQuery.type === 'groq' || (newQuery.type === 'json' && newQuery.parser === 'groq')) {
       newQuery.groq = replaceVariable(newQuery.groq || '', scopedVars);
     }
+    if (newQuery.type === 'json' && newQuery.parser === 'sqlite') {
+      newQuery.sqlite_query = replaceVariable(newQuery.sqlite_query || '', scopedVars);
+    }
   }
   return newQuery;
 };

@@ -9,7 +9,7 @@ export const JSONOptionsEditor = (props: { query: InfinityQuery; onChange: (valu
   if (query.type !== 'json') {
     return <></>;
   }
-  if (query.parser === 'backend' || query.parser === 'uql' || query.parser === 'groq') {
+  if (query.parser === 'backend' || query.parser === 'uql' || query.parser === 'groq' || query.parser === 'sqlite') {
     return <></>;
   }
   const { json_options = {} } = query;
