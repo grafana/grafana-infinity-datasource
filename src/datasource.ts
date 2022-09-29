@@ -137,6 +137,8 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
           promises.push(Promise.resolve(d));
         } else if (target.type === 'json' && target.parser === 'sqlite') {
           promises.push(Promise.resolve(d));
+        } else if (target.type === 'graphql' && target.parser === 'backend') {
+          promises.push(Promise.resolve(d));
         } else {
           promises.push(
             this.resolveData(target, options.range, options.scopedVars, data).then((r) => {
@@ -196,7 +198,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
               .catch(reject);
             break;
           }
-          if (t.type === 'json' && t.parser === 'groq') {
+          if ((t.type === 'json' || t.type === 'graphql') && t.parser === 'groq') {
             applyGroq(t.groq || '', data, t.format, t.refId)
               .then(resolve)
               .catch(reject);

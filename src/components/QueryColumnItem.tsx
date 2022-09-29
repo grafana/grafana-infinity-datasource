@@ -66,7 +66,7 @@ export const QueryColumnItem = (props: QueryColumnItemProps) => {
         onChange={(e) => onFormatChange(e.value as InfinityColumnFormat)}
         menuShouldPortal={true}
       ></Select>
-      {query.type === 'json' && query.parser === 'backend' && column.type === 'timestamp' && (
+      {(query.type === 'json' || query.type === 'graphql') && query.parser === 'backend' && column.type === 'timestamp' && (
         <>
           <InlineFormLabel width={10} tooltip={'Timestamp format in golang layout. Example: 2006-01-02T15:04:05Z07:00'}>
             Layout (optional)

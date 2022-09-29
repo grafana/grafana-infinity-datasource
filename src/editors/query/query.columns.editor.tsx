@@ -35,7 +35,7 @@ export const QueryColumnsEditor = (props: { query: InfinityQuery; onChange: (val
     <EditorRow>
       {(query.type === 'json' || query.type === 'csv' || query.type === 'tsv' || query.type === 'graphql' || query.type === 'xml') && query.parser === 'uql' ? (
         <UQLEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />
-      ) : query.type === 'json' && query.parser === 'groq' ? (
+      ) : (query.type === 'json' || query.type === 'graphql') && query.parser === 'groq' ? (
         <GROQEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />
       ) : query.type === 'json' && query.parser === 'sqlite' ? (
         <SQLiteEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />

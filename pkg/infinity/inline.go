@@ -13,7 +13,7 @@ import (
 
 func GetFrameForInlineSources(query querySrv.Query) (*data.Frame, error) {
 	frame := GetDummyFrame(query)
-	if query.Type == querySrv.QueryTypeJSON && query.Parser == "backend" {
+	if (query.Type == querySrv.QueryTypeJSON || query.Type == querySrv.QueryTypeGraphQL) && query.Parser == "backend" {
 		columns := []jsonFramer.ColumnSelector{}
 		for _, c := range query.Columns {
 			columns = append(columns, jsonFramer.ColumnSelector{
