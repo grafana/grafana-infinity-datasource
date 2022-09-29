@@ -12,16 +12,25 @@ import type { InfinityQuery } from './types';
  * @returns InfinityQuery
  */
 export const migrateQuery = (query: InfinityQuery): InfinityQuery => {
-  const newQuery: InfinityQuery = { ...query };
+  let newQuery: InfinityQuery = { ...query };
   if (isDataQuery(newQuery) && newQuery.source === 'url' && newQuery.url_options.method === 'POST') {
     if (!newQuery.url_options.body_type) {
       if (newQuery.type === 'graphql') {
-        newQuery.url_options.body_type = 'graphql';
-        newQuery.url_options.body_graphql_query = newQuery.url_options.body_graphql_query || newQuery.url_options.data || '';
-        newQuery.url_options.body_content_type = 'application/json';
-        newQuery.url_options.data = '';
+        newQuery = {
+          ...newQuery,
+          url_options: {
+            ...(newQuery.url_options || {}),
+            body_type: 'graphql',
+            body_graphql_query: newQuery.url_options.body_graphql_query || newQuery.url_options.data || '',
+            body_content_type: 'application/json',
+            data: '',
+          },
+        };
       } else {
-        newQuery.url_options.body_type = 'raw';
+        newQuery = {
+          ...newQuery,
+          url_options: { ...(newQuery.url_options || {}), body_type: 'raw' },
+        };
       }
     }
     if (!newQuery.url_options.body_content_type) {
