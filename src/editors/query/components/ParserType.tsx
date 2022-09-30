@@ -5,7 +5,7 @@ import type { InfinityQuery } from './../../../types';
 
 export const ParseTypeEditor = (props: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void }) => {
   const { query, onChange, onRunQuery } = props;
-  if (query.type === 'json') {
+  if (query.type === 'json' || query.type === 'graphql') {
     return (
       <EditorField label="Parser">
         <Select<typeof query.parser>
@@ -36,13 +36,14 @@ export const ParseTypeEditor = (props: { query: InfinityQuery; onChange: (value:
       </EditorField>
     );
   }
-  if (query.type === 'csv' || query.type === 'tsv' || query.type === 'xml' || query.type === 'graphql') {
+  if (query.type === 'csv' || query.type === 'tsv') {
     return (
       <EditorField label="Parser">
         <Select<typeof query.parser>
           value={query.parser || 'simple'}
           options={[
             { value: 'simple', label: 'Default' },
+            { value: 'backend', label: 'Backend' },
             { value: 'uql', label: 'UQL' },
           ]}
           onChange={(e) => {
@@ -53,11 +54,26 @@ export const ParseTypeEditor = (props: { query: InfinityQuery; onChange: (value:
             if (query.type === 'tsv' && !query.uql) {
               uql = `parse-csv --delimiter "\t"`;
             }
+            onChange({ ...query, parser: e?.value || 'simple', uql });
+            onRunQuery();
+          }}
+        ></Select>
+      </EditorField>
+    );
+  }
+  if (query.type === 'xml') {
+    return (
+      <EditorField label="Parser">
+        <Select<typeof query.parser>
+          value={query.parser || 'simple'}
+          options={[
+            { value: 'simple', label: 'Default' },
+            { value: 'uql', label: 'UQL' },
+          ]}
+          onChange={(e) => {
+            let uql = query.uql || '';
             if (query.type === 'xml' && !query.uql) {
               uql = `parse-xml`;
-            }
-            if (query.type === 'graphql' && !query.uql) {
-              uql = `parse-json`;
             }
             onChange({ ...query, parser: e?.value || 'simple', uql });
             onRunQuery();

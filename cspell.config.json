@@ -13,6 +13,7 @@
     "dist/**"
   ],
   "words": [
+    "ANSIC",
     "builtins",
     "Collapsable",
     "compatibilitycheck",
@@ -54,6 +55,7 @@
     "magefile",
     "mainbg",
     "maxif",
+    "Milli",
     "minif",
     "mkdir",
     "moul",

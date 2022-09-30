@@ -15,13 +15,14 @@ interface EditorFieldProps extends ComponentProps<typeof Field> {
   width?: number | string;
   optional?: boolean;
   tooltip?: PopoverContent;
+  invalid?: boolean;
 }
 
 export const EditorField: React.FC<EditorFieldProps> = (props) => {
-  const { label, optional, tooltip, children, width, ...fieldProps } = props;
+  const { label, optional, tooltip, children, width, invalid, ...fieldProps } = props;
 
   const theme = useTheme2();
-  const styles = getStyles(theme, width);
+  const styles = getStyles(theme, width, invalid);
 
   // Null check for backward compatibility
   const childInputId = fieldProps?.htmlFor || ReactUtils?.getChildId(children);
@@ -50,10 +51,12 @@ export const EditorField: React.FC<EditorFieldProps> = (props) => {
   );
 };
 
-const getStyles = stylesFactory((theme: GrafanaTheme2, width?: number | string) => {
+const getStyles = stylesFactory((theme: GrafanaTheme2, width?: number | string, invalid = false) => {
   return {
     root: css({
       minWidth: theme.spacing(width ?? 0),
+      paddingLeft: '5px',
+      borderLeft: invalid ? '1px solid red' : '1px solid transparent',
     }),
     label: css({
       fontSize: 12,

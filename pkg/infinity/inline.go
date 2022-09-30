@@ -13,7 +13,10 @@ import (
 
 func GetFrameForInlineSources(query querySrv.Query) (*data.Frame, error) {
 	frame := GetDummyFrame(query)
-	if query.Type == querySrv.QueryTypeJSON && query.Parser == "backend" {
+	if (query.Type == querySrv.QueryTypeCSV || query.Type == querySrv.QueryTypeTSV) && query.Parser == "backend" {
+		return GetCSVBackendResponse(query.Data, query)
+	}
+	if (query.Type == querySrv.QueryTypeJSON || query.Type == querySrv.QueryTypeGraphQL) && query.Parser == "backend" {
 		columns := []jsonFramer.ColumnSelector{}
 		for _, c := range query.Columns {
 			columns = append(columns, jsonFramer.ColumnSelector{
@@ -34,7 +37,7 @@ func GetFrameForInlineSources(query querySrv.Query) (*data.Frame, error) {
 				Query: query,
 				Error: err.Error(),
 			}
-			return newFrame, err
+			return frame, err
 		}
 		if newFrame != nil {
 			frame.Fields = append(frame.Fields, newFrame.Fields...)

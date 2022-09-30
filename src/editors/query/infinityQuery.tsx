@@ -31,6 +31,9 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
     query.type !== 'series' &&
     query.type !== 'global' &&
     !(query.type === 'json' && query.parser === 'backend') &&
+    !(query.type === 'graphql' && query.parser === 'backend') &&
+    !(query.type === 'csv' && query.parser === 'backend') &&
+    !(query.type === 'tsv' && query.parser === 'backend') &&
     !(query.type === 'json' && query.parser === 'uql') &&
     !(query.type === 'json' && query.parser === 'groq') &&
     !(query.type === 'csv' && query.parser === 'uql') &&
@@ -59,7 +62,7 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
             <GROQEditor {...{ query, onChange, onRunQuery, mode }} />
           </EditorRow>
         )}
-        {query.type === 'json' && query.parser === 'backend' && <Summarize {...{ query, onChange, onRunQuery }} />}
+        {(query.type === 'json' || query.type === 'graphql' || query.type === 'csv' || query.type === 'tsv') && query.parser === 'backend' && <Summarize {...{ query, onChange, onRunQuery }} />}
       </EditorRows>
     </div>
   );

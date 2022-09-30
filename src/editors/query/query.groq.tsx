@@ -6,12 +6,12 @@ import type { InfinityQuery } from './../../types';
 export const GROQEditor = (props: { query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void }) => {
   const { query, onChange, onRunQuery } = props;
   const onGROQChange = (groq: string) => {
-    if (query.type === 'groq' || (query.type === 'json' && query.parser === 'groq')) {
+    if (query.type === 'groq' || (query.type === 'json' && query.parser === 'groq') || (query.type === 'graphql' && query.parser === 'groq')) {
       onChange({ ...query, groq });
       onRunQuery();
     }
   };
-  return query.type === 'groq' || (query.type === 'json' && query.parser === 'groq') ? (
+  return query.type === 'groq' || (query.type === 'json' && query.parser === 'groq') || (query.type === 'graphql' && query.parser === 'groq') ? (
     <>
       <EditorField label="GROQ Query" tooltip={'GROQ Query'}>
         <CodeEditor

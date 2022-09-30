@@ -1,8 +1,8 @@
-import { isDataQuery } from 'app/utils';
 import { cloneDeep } from 'lodash';
 import React, { useState } from 'react';
+import { isDataQuery } from './../app/utils';
 import { INFINITY_COLUMN_FORMATS } from './../constants';
-import { Select, Input, InlineFormLabel } from '@grafana/ui';
+import { Select, InlineFormLabel } from '@grafana/ui';
 import type { InfinityColumn, InfinityColumnFormat, InfinityQuery } from './../types';
 
 interface QueryColumnItemProps {
@@ -17,7 +17,6 @@ export const QueryColumnItem = (props: QueryColumnItemProps) => {
   const column = isDataQuery(query) ? query.columns[index] : ({ selector: '', text: '', type: 'string' } as InfinityColumn);
   const [selector, setSelector] = useState(column.selector || '');
   const [text, setText] = useState(column.text || '');
-  const [timestampFormat, setTimestampFormat] = useState(column.timestampFormat || '');
   if (!isDataQuery(query)) {
     return <></>;
   }
@@ -33,7 +32,7 @@ export const QueryColumnItem = (props: QueryColumnItemProps) => {
     onChange({ ...query, columns });
     onRunQuery();
   };
-  const onTimeFormatChange = () => {
+  const onTimeFormatChange = (timestampFormat: string) => {
     const columns = cloneDeep(query.columns || []);
     columns[index].timestampFormat = timestampFormat;
     onChange({ ...query, columns });
@@ -66,12 +65,42 @@ export const QueryColumnItem = (props: QueryColumnItemProps) => {
         onChange={(e) => onFormatChange(e.value as InfinityColumnFormat)}
         menuShouldPortal={true}
       ></Select>
-      {query.type === 'json' && query.parser === 'backend' && column.type === 'timestamp' && (
+      {(query.type === 'json' || query.type === 'graphql' || query.type === 'csv' || query.type === 'tsv') && query.parser === 'backend' && column.type === 'timestamp' && (
         <>
-          <InlineFormLabel width={10} tooltip={'Timestamp format in golang layout. Example: 2006-01-02T15:04:05Z07:00'}>
-            Layout (optional)
+          <InlineFormLabel width={11} tooltip={'Timestamp format in golang layout. Example: 2006-01-02T15:04:05Z07:00'}>
+            Time Format (optional)
           </InlineFormLabel>
-          <Input onChange={(e) => setTimestampFormat(e.currentTarget.value)} placeholder="2006-01-02T15:04:05Z07:00" value={timestampFormat} onBlur={onTimeFormatChange}></Input>
+          <Select
+            value={column.timestampFormat}
+            placeholder="Auto"
+            options={[
+              { value: '', label: 'Auto' },
+              { value: '2006-01-02T15:04:05Z07:00', label: 'Default ISO' },
+              { value: '2006-01-02', label: 'YYYY-MM-DD' },
+              { value: '2006/01/02', label: 'YYYY/MM/DD' },
+              { value: '2006-01', label: 'YYYY-MM' },
+              { value: '2006/01', label: 'YYYY/MM' },
+              { value: '2006', label: 'YYYY' },
+              { value: '2006/01/02 15:04', label: 'YYYY/MM/DD HH:mm' },
+              { value: '2006/01/02 15:04:05', label: 'YYYY/MM/DD HH:mm:ss' },
+              { value: 'Mon Jan _2 15:04:05 2006', label: 'ANSIC' },
+              { value: 'Mon Jan _2 15:04:05 MST 2006', label: 'UnixDate' },
+              { value: 'Mon Jan 02 15:04:05 -0700 2006', label: 'RubyDate' },
+              { value: '02 Jan 06 15:04 MST', label: 'RFC822' },
+              { value: '02 Jan 06 15:04 -0700', label: 'RFC822Z' },
+              { value: 'Monday, 02-Jan-06 15:04:05 MST', label: 'RFC850' },
+              { value: 'Mon, 02 Jan 2006 15:04:05 MST', label: 'RFC1123' },
+              { value: 'Mon, 02 Jan 2006 15:04:05 -0700', label: 'RFC1123Z' },
+              { value: '2006-01-02T15:04:05Z07:00', label: 'RFC3339' },
+              { value: '2006-01-02T15:04:05.999999999Z07:00', label: 'RFC3339Nano' },
+              { value: '3:04PM', label: 'Kitchen' },
+              { value: 'Jan _2 15:04:05', label: 'Stamp' },
+              { value: 'Jan _2 15:04:05.000', label: 'StampMilli' },
+              { value: 'Jan _2 15:04:05.000000', label: 'StampMicro' },
+              { value: 'Jan _2 15:04:05.000000000', label: 'StampNano' },
+            ].map((o) => ({ ...o, description: o.value }))}
+            onChange={(e) => onTimeFormatChange(e?.value || '')}
+          />
         </>
       )}
     </>

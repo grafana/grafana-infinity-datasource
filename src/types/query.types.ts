@@ -60,16 +60,28 @@ export type InfinityCSVQueryOptions = {
   columns?: string;
   comment?: string;
 };
-export type InfinityCSVQuery = { csv_options?: InfinityCSVQueryOptions; parser?: 'simple' | 'uql'; uql?: string } & InfinityQueryWithDataSource<'csv'>;
-export type InfinityTSVQuery = { csv_options?: Exclude<InfinityCSVQueryOptions, 'delimiter'>; parser?: 'simple' | 'uql'; uql?: string } & InfinityQueryWithDataSource<'tsv'>;
+export type InfinityCSVQuery = {
+  csv_options?: InfinityCSVQueryOptions;
+  parser?: 'simple' | 'backend' | 'uql';
+  summarizeExpression?: string;
+  uql?: string;
+} & InfinityQueryWithDataSource<'csv'>;
+export type InfinityTSVQuery = {
+  csv_options?: Exclude<InfinityCSVQueryOptions, 'delimiter'>;
+  parser?: 'simple' | 'backend' | 'uql';
+  summarizeExpression?: string;
+  uql?: string;
+} & InfinityQueryWithDataSource<'tsv'>;
 export type InfinityXMLQuery = { parser?: 'simple' | 'uql'; uql?: string } & InfinityQueryWithDataSource<'xml'>;
 export type InfinityGraphQLQuery = {
   json_options?: {
     root_is_not_array?: boolean;
     columnar?: boolean;
   };
-  parser?: 'simple' | 'uql';
+  parser?: 'simple' | 'backend' | 'uql' | 'groq';
+  summarizeExpression?: string;
   uql?: string;
+  groq?: string;
 } & InfinityQueryWithDataSource<'graphql'>;
 export type InfinityHTMLQuery = {} & InfinityQueryWithDataSource<'html'>;
 export type InfinitySeriesQueryBase<S extends InfinityQuerySources> = { seriesCount: number; alias: string; dataOverrides: DataOverride[] } & InfinityQueryWithSource<S> & InfinityQueryBase<'series'>;

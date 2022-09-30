@@ -14,9 +14,16 @@ import (
 func GetFrameForURLSources(query querySrv.Query, infClient Client, requestHeaders map[string]string) (*data.Frame, error) {
 	frame := GetDummyFrame(query)
 	urlResponseObject, statusCode, duration, err := infClient.GetResults(query, requestHeaders)
-	if query.Type == querySrv.QueryTypeJSON && query.Parser == "backend" {
+	if (query.Type == querySrv.QueryTypeJSON || query.Type == querySrv.QueryTypeGraphQL) && query.Parser == "backend" {
 		if frame, err = GetJSONBackendResponse(urlResponseObject, query); err != nil {
 			return frame, err
+		}
+	}
+	if (query.Type == querySrv.QueryTypeCSV || query.Type == querySrv.QueryTypeTSV) && query.Parser == "backend" {
+		if responseString, ok := urlResponseObject.(string); ok {
+			if frame, err = GetCSVBackendResponse(responseString, query); err != nil {
+				return frame, err
+			}
 		}
 	}
 	if query.Type == querySrv.QueryTypeJSON && query.Parser == "sqlite" {
