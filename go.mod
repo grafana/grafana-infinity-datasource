@@ -10,7 +10,7 @@ require (
 	github.com/prometheus/client_golang v1.13.0
 	github.com/stretchr/testify v1.8.0
 	github.com/xinsnake/go-http-digest-auth-client v0.6.0
-	github.com/yesoreyeram/grafana-framer v0.0.6
+	github.com/yesoreyeram/grafana-framer v0.0.7
 	golang.org/x/oauth2 v0.0.0-20220822191816-0ebed06d0094
 	gopkg.in/Knetic/govaluate.v3 v3.0.0
 	moul.io/http2curl v1.0.0
@@ -88,3 +88,5 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
+
+// replace github.com/yesoreyeram/grafana-framer => /Users/sriram/Documents/grafana/dev/tools/grafana-framer

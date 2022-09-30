@@ -62,12 +62,14 @@ export type InfinityCSVQueryOptions = {
 };
 export type InfinityCSVQuery = {
   csv_options?: InfinityCSVQueryOptions;
-  parser?: 'simple' | 'uql';
+  parser?: 'simple' | 'backend' | 'uql';
+  summarizeExpression?: string;
   uql?: string;
 } & InfinityQueryWithDataSource<'csv'>;
 export type InfinityTSVQuery = {
   csv_options?: Exclude<InfinityCSVQueryOptions, 'delimiter'>;
-  parser?: 'simple' | 'uql';
+  parser?: 'simple' | 'backend' | 'uql';
+  summarizeExpression?: string;
   uql?: string;
 } & InfinityQueryWithDataSource<'tsv'>;
 export type InfinityXMLQuery = { parser?: 'simple' | 'uql'; uql?: string } & InfinityQueryWithDataSource<'xml'>;
@@ -77,6 +79,7 @@ export type InfinityGraphQLQuery = {
     columnar?: boolean;
   };
   parser?: 'simple' | 'backend' | 'uql' | 'groq';
+  summarizeExpression?: string;
   uql?: string;
   groq?: string;
 } & InfinityQueryWithDataSource<'graphql'>;

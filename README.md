@@ -26,6 +26,6 @@ Using the following links,You can try **Infinity datasource plugin** without ins
 
 ## Known limitations
 
-- Alerting only supports on `JSON`/`GraphQL` type queries with `backend` parser.
-- Recorded queries only supports on `JSON`/`GraphQL` type queries with `backend` parser.
-- Public dashboards only supports on `JSON`/`GraphQL` type queries with `backend` parser.
+- Alerting only supports on `JSON`/`GraphQL`/`CSV`/`TSV` type queries with `backend` parser.
+- Recorded queries only supports on `JSON`/`GraphQL`/`CSV`/`TSV` type queries with `backend` parser.
+- Public dashboards only supports on `JSON`/`GraphQL`/`CSV`/`TSV` type queries with `backend` parser.

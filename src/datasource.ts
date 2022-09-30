@@ -139,6 +139,10 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
           promises.push(Promise.resolve(d));
         } else if (target.type === 'graphql' && target.parser === 'backend') {
           promises.push(Promise.resolve(d));
+        } else if (target.type === 'csv' && target.parser === 'backend') {
+          promises.push(Promise.resolve(d));
+        } else if (target.type === 'tsv' && target.parser === 'backend') {
+          promises.push(Promise.resolve(d));
         } else {
           promises.push(
             this.resolveData(target, options.range, options.scopedVars, data).then((r) => {

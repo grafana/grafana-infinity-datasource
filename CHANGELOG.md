@@ -6,6 +6,7 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 
 - **GraphQL** Support for backend parser (alerts, recorded queries, public dashboards etc)
 - **GraphQL** Support for GROQ parser
+- **CSV/TSV** Support for backend parser (alerts, recorded queries, public dashboards etc)
 
 ## [ 1.0.1 ]
 
