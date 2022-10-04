@@ -10,7 +10,9 @@ import { SeriesEditor } from './query.series';
 import { TypeChooser } from './query.type';
 import { UQLEditor } from './query.uql';
 import { URLEditor } from './query.url';
+import { InlineDataEditor } from './query.data';
 import { Summarize } from './query.summarize';
+import { isDataQuery } from './../../app/utils';
 import type { EditorMode, InfinityQuery } from './../../types';
 
 export type InfinityEditorProps = {
@@ -25,7 +27,6 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
   const { onChange, mode, instanceSettings, onRunQuery } = props;
   let query: InfinityQuery = defaultsDeep(props.query, DefaultInfinityQuery) as InfinityQuery;
   query = migrateQuery(query);
-  let canShowURLEditor = ['csv', 'tsv', 'html', 'json', 'graphql', 'xml', 'uql', 'groq'].includes(query.type);
   let canShowColumnsEditor = ['csv', 'tsv', 'html', 'json', 'graphql', 'xml'].includes(query.type);
   let canShowFilterEditor =
     query.type !== 'series' &&
@@ -49,7 +50,8 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
       <EditorRows>
         <TypeChooser {...{ instanceSettings, mode, query, onChange, onRunQuery }} />
         {query.type === 'series' && <SeriesEditor {...{ query, onChange }} />}
-        {canShowURLEditor && <URLEditor {...{ mode, query, onChange, onRunQuery }} />}
+        {isDataQuery(query) && query.source !== 'inline' && <URLEditor {...{ mode, query, onChange, onRunQuery }} />}
+        {isDataQuery(query) && query.source === 'inline' && <InlineDataEditor {...{ mode, query, onChange, onRunQuery }} />}
         {canShowColumnsEditor && <QueryColumnsEditor {...{ mode, query, onChange, onRunQuery }} />}
         {canShowFilterEditor && <TableFilter {...{ query, onChange, onRunQuery }} />}
         {query.type === 'uql' && (
