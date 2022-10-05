@@ -77,7 +77,7 @@ async function registerUQL(editor: any) {
     }
     uqlLang.builtinFunctions.unshift.apply(uqlLang.builtinFunctions, UQLFunctions);
   } catch (ex) {
-    console.log('error while loading monaco editor', ex);
+    console.error('error while loading monaco editor', ex);
   }
 }
 

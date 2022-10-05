@@ -1,5 +1,5 @@
-import { InlineFormLabel, Button, CodeEditor, Drawer, Select } from '@grafana/ui';
 import React, { useState } from 'react';
+import { InlineFormLabel, Button, CodeEditor, Drawer, Select } from '@grafana/ui';
 import { EditorRow } from './../../components/extended/EditorRow';
 import { EditorField } from './../../components/extended/EditorField';
 import { isDataQuery } from './../../app/utils';
@@ -7,46 +7,17 @@ import { KeyValueEditor } from './../../components/KeyValuePairEditor';
 import type { InfinityQuery, InfinityURLOptions, QueryBodyContentType, QueryBodyType } from './../../types';
 import type { SelectableValue } from '@grafana/data';
 
-export const URLEditor = (props: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void }) => {
-  const { query, onChange, onRunQuery } = props;
-  const canShowURLField = (isDataQuery(query) || query.type === 'uql' || query.type === 'groq') && query.source === 'url';
-  const [data, setData] = useState((isDataQuery(query) || query.type === 'uql' || query.type === 'groq') && query.source === 'inline' ? query.data || '' : '');
-  if (!(isDataQuery(query) || query.type === 'uql' || query.type === 'groq')) {
-    return <></>;
-  }
-  const onDataChange = () => {
-    onChange({ ...query, data });
-    onRunQuery();
-  };
-  return (
-    <>
-      {canShowURLField ? (
-        <>
-          <EditorRow>
-            <Method query={query} onChange={onChange} onRunQuery={onRunQuery} />
-            <URL query={query} onChange={onChange} onRunQuery={onRunQuery} />
-            <Headers query={query} onChange={onChange} onRunQuery={onRunQuery} />
-            <QueryParams query={query} onChange={onChange} onRunQuery={onRunQuery} />
-            <Body query={query} onChange={onChange} onRunQuery={onRunQuery} />
-          </EditorRow>
-        </>
-      ) : (
-        <EditorRow>
-          <EditorField label="Data">
-            <textarea
-              rows={5}
-              className="gf-form-input"
-              style={{ width: '680px' }}
-              value={data}
-              placeholder=""
-              onBlur={onDataChange}
-              onChange={(e) => setData(e.target.value)}
-              data-testid="infinity-query-inline-data-selector"
-            />
-          </EditorField>
-        </EditorRow>
-      )}
-    </>
+export const URLEditor = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void }) => {
+  return isDataQuery(query) && query.source === 'url' ? (
+    <EditorRow>
+      <Method query={query} onChange={onChange} onRunQuery={onRunQuery} />
+      <URL query={query} onChange={onChange} onRunQuery={onRunQuery} />
+      <Headers query={query} onChange={onChange} onRunQuery={onRunQuery} />
+      <QueryParams query={query} onChange={onChange} onRunQuery={onRunQuery} />
+      <Body query={query} onChange={onChange} onRunQuery={onRunQuery} />
+    </EditorRow>
+  ) : (
+    <></>
   );
 };
 
