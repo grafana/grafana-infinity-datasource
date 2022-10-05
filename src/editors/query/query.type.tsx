@@ -8,6 +8,7 @@ import { JSONOptionsEditor } from './../../components/JSONOptionsEditor';
 import { SourceSelector } from './../../components/SourceSelector';
 import { TypeSelector } from './../../components/TypeSelector';
 import { ParseTypeEditor } from './components/ParserType';
+import { GoogleSheetsEditor } from './components/GoogleSheets';
 import type { EditorMode, InfinityQuery } from './../../types';
 
 export const TypeChooser = (props: { mode: EditorMode; instanceSettings: any; query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void }) => {
@@ -20,7 +21,8 @@ export const TypeChooser = (props: { mode: EditorMode; instanceSettings: any; qu
       {query.type !== 'series' && mode !== 'variable' && <FormatSelector {...props} />}
       {(query.type === 'csv' || query.type === 'tsv') && <CSVOptionsEditor {...props} />}
       {query.type === 'json' && <JSONOptionsEditor {...props} />}
-      <InfinityHelp />
+      {query.type !== 'google-sheets' && <InfinityHelp />}
+      {query.type === 'google-sheets' && <GoogleSheetsEditor query={query} onChange={props.onChange} onRunQuery={props.onRunQuery} />}
     </EditorRow>
   );
 };

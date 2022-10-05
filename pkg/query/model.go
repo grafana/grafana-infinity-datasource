@@ -11,19 +11,20 @@ import (
 type QueryType string
 
 const (
-	QueryTypeJSON    QueryType = "json"
-	QueryTypeCSV     QueryType = "csv"
-	QueryTypeTSV     QueryType = "tsv"
-	QueryTypeXML     QueryType = "xml"
-	QueryTypeGraphQL QueryType = "graphql"
-	QueryTypeHTML    QueryType = "html"
-	QueryTypeUQL     QueryType = "uql"
-	QueryTypeGROQ    QueryType = "groq"
+	QueryTypeJSON         QueryType = "json"
+	QueryTypeCSV          QueryType = "csv"
+	QueryTypeTSV          QueryType = "tsv"
+	QueryTypeXML          QueryType = "xml"
+	QueryTypeGraphQL      QueryType = "graphql"
+	QueryTypeHTML         QueryType = "html"
+	QueryTypeUQL          QueryType = "uql"
+	QueryTypeGROQ         QueryType = "groq"
+	QueryTypeGoogleSheets QueryType = "google-sheets"
 )
 
 type Query struct {
 	RefID               string                 `json:"refId"`
-	Type                QueryType              `json:"type"`   // 'json' | 'json-backend' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'uql' | 'groq' | 'series' | 'global'
+	Type                QueryType              `json:"type"`   // 'json' | 'json-backend' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'uql' | 'groq' | 'series' | 'global' | 'google-sheets'
 	Format              string                 `json:"format"` // 'table' | 'timeseries' | 'dataframe' | 'as-is' | 'node-graph-nodes' | 'node-graph-edges'
 	Source              string                 `json:"source"` // 'url' | 'inline' | 'random-walk' | 'expression'
 	URL                 string                 `json:"url"`
@@ -45,6 +46,9 @@ type Query struct {
 	DataOverrides       []InfinityDataOverride `json:"dataOverrides"`
 	GlobalQueryID       string                 `json:"global_query_id"`
 	QueryMode           string                 `json:"query_mode"`
+	Spreadsheet         string                 `json:"spreadsheet"`
+	SheetName           string                 `json:"sheetName"`
+	SheetRange          string                 `json:"range"`
 }
 
 type URLOptionKeyValuePair struct {

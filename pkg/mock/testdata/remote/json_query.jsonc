@@ -44,7 +44,10 @@
 //              "alias": "",
 //              "dataOverrides": null,
 //              "global_query_id": "",
-//              "query_mode": ""
+//              "query_mode": "",
+//              "spreadsheet": "",
+//              "sheetName": "",
+//              "range": ""
 //          },
 //          "data": [
 //              1,
@@ -113,7 +116,10 @@
               "alias": "",
               "dataOverrides": null,
               "global_query_id": "",
-              "query_mode": ""
+              "query_mode": "",
+              "spreadsheet": "",
+              "sheetName": "",
+              "range": ""
             },
             "data": [
               1,
