@@ -19,13 +19,21 @@ export const TypeSelector = (props: { query: InfinityQuery; onChange: (e: Infini
         return [];
     }
   };
+  let tag = '';
+  switch (query.type) {
+    case 'google-sheets':
+      tag = 'alpha';
+      break;
+    default:
+      tag = '';
+  }
   const onTypeChange = (type: InfinityQueryType) => {
     onChange({ ...query, type } as InfinityQuery);
     onRunQuery();
   };
   return (
-    <EditorField label="Type">
-      <Select width={16} options={getTypes()} onChange={(e) => onTypeChange(e.value as InfinityQueryType)} value={query.type || 'json'} menuShouldPortal={true}></Select>
+    <EditorField label="Type" tag={tag}>
+      <Select width={20} options={getTypes()} onChange={(e) => onTypeChange(e.value as InfinityQueryType)} value={query.type || 'json'} menuShouldPortal={true}></Select>
     </EditorField>
   );
 };

@@ -133,7 +133,9 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
         const data = d.meta?.custom?.data;
         const responseCodeFromServer = d.meta?.custom?.responseCodeFromServer;
         const error = d.meta?.custom?.error;
-        if (target.type === 'json' && target.parser === 'backend') {
+        if (target.type === 'google-sheets') {
+          promises.push(Promise.resolve(d));
+        } else if (target.type === 'json' && target.parser === 'backend') {
           promises.push(Promise.resolve(d));
         } else if (target.type === 'json' && target.parser === 'sqlite') {
           promises.push(Promise.resolve(d));
