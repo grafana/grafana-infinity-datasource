@@ -18,20 +18,22 @@ export const Summarize = ({ query, onChange, onRunQuery }: SummarizeProps) => {
   if ((query.type === 'csv' || query.type === 'tsv') && !(query.columns || []).find((c) => c.type === 'number') && query.summarizeExpression) {
     isValid = false;
   }
-  console.log(isValid);
   return (
     <EditorRow>
-      <div style={{ borderLeft: isValid ? '' : '1px solid red' }}>
-        <EditorField label="Summarize" tooltip={'Experimental support for summarize function. Supports basic operations such as min/max/mean/sum/count over numeric fields'} optional={true}>
-          <Input
-            value={query.summarizeExpression || ''}
-            width={60}
-            placeholder={'Summarize expression goes here. Example: sum(salary)'}
-            onChange={(e) => onChange({ ...query, summarizeExpression: e.currentTarget.value })}
-            onBlur={onRunQuery}
-          />
-        </EditorField>
-      </div>
+      <EditorField
+        invalid={!isValid}
+        label="Summarize"
+        tooltip={'Experimental support for summarize function. Supports basic operations such as min/max/mean/sum/count over numeric fields'}
+        optional={true}
+      >
+        <Input
+          value={query.summarizeExpression || ''}
+          width={60}
+          placeholder={'Summarize expression goes here. Example: sum(salary)'}
+          onChange={(e) => onChange({ ...query, summarizeExpression: e.currentTarget.value })}
+          onBlur={onRunQuery}
+        />
+      </EditorField>
     </EditorRow>
   );
 };

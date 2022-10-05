@@ -66,6 +66,10 @@ type InfinitySettings struct {
 	TLSClientCert        string
 	TLSClientKey         string
 	AllowedHosts         []string
+	EnableOpenAPI        bool
+	OpenAPIVersion       string
+	OpenAPIUrl           string
+	OpenAPIBaseUrl       string
 }
 
 func (s *InfinitySettings) Validate() error {
@@ -96,6 +100,10 @@ type InfinitySettingsJson struct {
 	TLSAuthWithCACert    bool           `json:"tlsAuthWithCACert,omitempty"`
 	TimeoutInSeconds     int64          `json:"timeoutInSeconds,omitempty"`
 	AllowedHosts         []string       `json:"allowedHosts,omitempty"`
+	EnableOpenAPI        bool           `json:"enableOpenApi,omitempty"`
+	OpenAPIVersion       string         `json:"openApiVersion,omitempty"`
+	OpenAPIUrl           string         `json:"openApiUrl,omitempty"`
+	OpenAPIBaseUrl       string         `json:"openAPIBaseURL,omitempty"`
 }
 
 func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinitySettings, err error) {
@@ -136,6 +144,10 @@ func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinityS
 			settings.AllowedHosts = infJson.AllowedHosts
 		}
 	}
+	settings.EnableOpenAPI = infJson.EnableOpenAPI
+	settings.OpenAPIVersion = infJson.OpenAPIVersion
+	settings.OpenAPIUrl = infJson.OpenAPIUrl
+	settings.OpenAPIBaseUrl = infJson.OpenAPIBaseUrl
 	if val, ok := config.DecryptedSecureJSONData["basicAuthPassword"]; ok {
 		settings.Password = val
 	}
