@@ -7,6 +7,7 @@ import { GlobalQueryEditor } from './config/GlobalQueryEditor';
 import { ProvisioningScript } from './config/Provisioning';
 import { TLSConfigEditor } from './config/TLSConfigEditor';
 import { URLEditor } from './config/URL';
+import { OpenAPIEditor } from './config/OpenAPI';
 import type { InfinityOptions } from './../types';
 import type { DataSourcePluginOptionsEditorProps } from '@grafana/data/types';
 
@@ -18,6 +19,7 @@ export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<I
   const [headersOpen, setHeadersOpen] = useState(false);
   const [queriesOpen, setQueriesOpen] = useState(false);
   const [globalsOpen, setGlobalsOpen] = useState(false);
+  const [experimentalOpen, setExperimentalOpen] = useState(false);
   options.jsonData = defaultsDeep(options.jsonData, {
     global_queries: [],
   });
@@ -68,6 +70,11 @@ export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<I
       <Collapse label="Misc" isOpen={miscOpen} collapsible={true} onToggle={(e) => setMiscOpen(!miscOpen)}>
         <div style={{ padding: '0px 10px' }}>
           <URLEditor options={options} onOptionsChange={onOptionsChange} />
+        </div>
+      </Collapse>
+      <Collapse label="Experimental" isOpen={experimentalOpen} collapsible={true} onToggle={(e) => setExperimentalOpen(!experimentalOpen)}>
+        <div style={{ padding: '0px 10px' }}>
+          <OpenAPIEditor options={options} onOptionsChange={onOptionsChange} />
         </div>
       </Collapse>
       <Collapse label="More" isOpen={true} collapsible={true}>

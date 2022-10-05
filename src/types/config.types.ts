@@ -32,6 +32,10 @@ export interface InfinityOptions extends DataSourceJsonData {
   timeoutInSeconds?: number;
   oauthPassThru?: boolean;
   allowedHosts?: string[];
+  enableOpenApi?: boolean;
+  openApiVersion?: 'open-api-2.0';
+  openApiUrl?: string;
+  openAPIBaseURL?: string;
 }
 
 export interface InfinitySecureOptions {
