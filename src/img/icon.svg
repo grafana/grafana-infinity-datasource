@@ -1,8 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="500" height="500" viewBox="0 0 500 500">
   <defs>
     <radialGradient id="radial-gradient" cx="0.5" cy="0.5" r="0.313" gradientTransform="matrix(-0.835, 0.55, -1.931, -2.935, 1.883, 1.693)" gradientUnits="objectBoundingBox">
-      <stop offset="0" stop-color="#e05050"/>
-      <stop offset="1" stop-color="#fec000"/>
+      <stop offset="0" stop-color="#e05050">
+        <animate attributeName="stop-color" values="#fec000;#e05050;#fec000" dur="1s" repeatCount="indefinite" />
+      </stop>
+      <stop offset="1" stop-color="#fec000">
+        <animate attributeName="stop-color" values="#e05050;#fec000;#e05050" dur="1s" repeatCount="indefinite" />
+      </stop>
     </radialGradient>
     <radialGradient id="radial-gradient-2" cx="0.5" cy="0.5" r="0.5" gradientUnits="objectBoundingBox">
       <stop offset="0" stop-color="#6da3ec"/>
