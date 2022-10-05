@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"net/http"
 	"time"
 
@@ -14,7 +15,8 @@ import (
 
 func (host *PluginHost) getRouter() *mux.Router {
 	router := mux.NewRouter()
-	router.Handle("/graphql", host.getGraphQLHandler()) // NOT IN USE YET
+	router.Handle("/graphql", host.getGraphQLHandler())                                              // NOT IN USE YET
+	router.HandleFunc("/open-api", host.withDatasourceHandlerFunc(GetOpenAPIHandler)).Methods("GET") // NOT IN USE YET
 	router.HandleFunc("/metrics", host.withDatasourceHandlerFunc(GetMetricsHandler)).Methods("GET")
 	router.HandleFunc("/ping", host.withDatasourceHandlerFunc(GetPingHandler)).Methods("GET")
 	router.NotFoundHandler = http.HandlerFunc(host.withDatasourceHandlerFunc(defaultHandler))
@@ -112,6 +114,26 @@ func GetMetricsHandler(client *instanceSettings) http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
 		h := promhttp.HandlerFor(client.client.Registry, promhttp.HandlerOpts{})
 		h.ServeHTTP(rw, r)
+	}
+}
+
+func GetOpenAPIHandler(client *instanceSettings) http.HandlerFunc {
+	return func(rw http.ResponseWriter, r *http.Request) {
+		if client.client.Settings.EnableOpenAPI && client.client.Settings.OpenAPIUrl != "" {
+			resp, err := client.client.HttpClient.Get(client.client.Settings.OpenAPIUrl)
+			if err != nil {
+				fmt.Fprintf(rw, "%s", err.Error())
+				return
+			}
+			if resp != nil {
+				defer resp.Body.Close()
+				b, _ := io.ReadAll(resp.Body)
+				fmt.Fprintf(rw, "%s", string(b))
+				return
+			}
+		}
+		rw.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintf(rw, "%s", "invalid open api settings")
 	}
 }
 
