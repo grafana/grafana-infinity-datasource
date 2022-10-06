@@ -27,7 +27,7 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
   const { onChange, mode, instanceSettings, onRunQuery } = props;
   let query: InfinityQuery = defaultsDeep(props.query, DefaultInfinityQuery) as InfinityQuery;
   query = migrateQuery(query);
-  let canShowColumnsEditor = ['csv', 'tsv', 'html', 'json', 'graphql', 'xml'].includes(query.type);
+  let canShowColumnsEditor = ['csv', 'tsv', 'html', 'json', 'graphql', 'xml', 'google-sheets'].includes(query.type);
   let canShowFilterEditor =
     query.type !== 'series' &&
     query.type !== 'global' &&

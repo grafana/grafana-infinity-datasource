@@ -96,7 +96,7 @@ export type InfinityUQLQuerySource = InfinityQueryWithURLSource<'uql'> | Infinit
 export type InfinityUQLQuery = { uql: string; format: InfinityQueryFormat } & InfinityUQLQuerySource & InfinityQueryBase<'uql'>;
 export type InfinityGROQQuerySource = InfinityQueryWithURLSource<'groq'> | InfinityQueryWithInlineSource<'groq'>;
 export type InfinityGROQQuery = { groq: string; format: InfinityQueryFormat } & InfinityGROQQuerySource & InfinityQueryBase<'groq'>;
-export type InfinityGSheetsQuery = { spreadsheet: string; sheetName?: string; range: string } & InfinityQueryBase<'google-sheets'>;
+export type InfinityGSheetsQuery = { spreadsheet: string; sheetName?: string; range: string; columns: InfinityColumn[] } & InfinityQueryBase<'google-sheets'>;
 export type InfinityQuery = InfinityLegacyQuery | InfinityUQLQuery | InfinityGROQQuery | InfinityGSheetsQuery;
 //#endregion
 

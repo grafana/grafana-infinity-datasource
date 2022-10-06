@@ -7,6 +7,7 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 - **GraphQL** Support for backend parser (alerts, recorded queries, public dashboards etc)
 - **GraphQL** Support for GROQ parser
 - **CSV/TSV** Support for backend parser (alerts, recorded queries, public dashboards etc)
+- **Google Sheets** Support for querying Google Sheets (alpha)
 - **Chore** Removed unused metrics resource handler
 - **Demo** Removed demo instance due to pricing changes in heroku. (will figure out alternatives later)
 
