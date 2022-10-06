@@ -1,6 +1,7 @@
 package infinity
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 
@@ -13,10 +14,13 @@ import (
 
 func GetFrameForInlineSources(query querySrv.Query) (*data.Frame, error) {
 	frame := GetDummyFrame(query)
-	if (query.Type == querySrv.QueryTypeCSV || query.Type == querySrv.QueryTypeTSV) && query.Parser == "backend" {
-		return GetCSVBackendResponse(query.Data, query)
+	if query.Parser != "backend" {
+		return frame, nil
 	}
-	if (query.Type == querySrv.QueryTypeJSON || query.Type == querySrv.QueryTypeGraphQL) && query.Parser == "backend" {
+	switch query.Type {
+	case querySrv.QueryTypeCSV, querySrv.QueryTypeTSV:
+		return GetCSVBackendResponse(query.Data, query)
+	case querySrv.QueryTypeJSON, querySrv.QueryTypeGraphQL:
 		columns := []jsonFramer.ColumnSelector{}
 		for _, c := range query.Columns {
 			columns = append(columns, jsonFramer.ColumnSelector{
@@ -71,6 +75,8 @@ func GetFrameForInlineSources(query querySrv.Query) (*data.Frame, error) {
 				return wFrame, err
 			}
 		}
+		return frame, nil
+	default:
+		return frame, errors.New("unknown backend query type")
 	}
-	return frame, nil
 }

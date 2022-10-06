@@ -10,11 +10,8 @@ import (
 	settingsSrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/settings"
 )
 
-type key string
-
 // QueryData handles multiple queries and returns multiple responses.
 func (ds *PluginHost) QueryData(ctx context.Context, req *backend.QueryDataRequest) (*backend.QueryDataResponse, error) {
-
 	response := backend.NewQueryDataResponse()
 	client, err := getInstance(ds.im, req.PluginContext)
 	if err != nil {
@@ -38,28 +35,31 @@ func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient in
 	}
 	//endregion
 	//region Frame Builder
-	frame := infinity.GetDummyFrame(query)
-	if query.Source == "url" {
-		frame, err = infinity.GetFrameForURLSources(query, infClient, requestHeaders)
-		if err != nil {
+	switch query.Type {
+	default:
+		if query.Source == "url" {
+			frame, err := infinity.GetFrameForURLSources(query, infClient, requestHeaders)
+			if err != nil {
+				response.Frames = append(response.Frames, frame)
+				response.Error = err
+				return response
+			}
+			if frame != nil && infClient.Settings.AuthenticationMethod != settingsSrv.AuthenticationMethodNone && infClient.Settings.AuthenticationMethod != "" && len(infClient.Settings.AllowedHosts) < 1 {
+				frame.AppendNotices(data.Notice{
+					Text: "Datasource is missing allowed hosts/URLs. Configure it in the datasource settings page for enhanced security.",
+				})
+			}
 			response.Frames = append(response.Frames, frame)
-			response.Error = err
-			return response
 		}
-	}
-	if query.Source == "inline" {
-		frame, err = infinity.GetFrameForInlineSources(query)
-		if err != nil {
+		if query.Source == "inline" {
+			frame, err := infinity.GetFrameForInlineSources(query)
+			if err != nil {
+				response.Frames = append(response.Frames, frame)
+				response.Error = err
+				return response
+			}
 			response.Frames = append(response.Frames, frame)
-			response.Error = err
-			return response
 		}
-	}
-	response.Frames = append(response.Frames, frame)
-	if infClient.Settings.AuthenticationMethod != settingsSrv.AuthenticationMethodNone && infClient.Settings.AuthenticationMethod != "" && len(infClient.Settings.AllowedHosts) < 1 && query.Source == "url" {
-		frame.AppendNotices(data.Notice{
-			Text: "Datasource is missing allowed hosts/URLs. Configure it in the datasource settings page for enhanced security.",
-		})
 	}
 	//endregion
 	return response
