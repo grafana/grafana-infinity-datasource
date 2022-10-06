@@ -15,7 +15,6 @@ import (
 	"time"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
-	"github.com/prometheus/client_golang/prometheus"
 	querySrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/query"
 	settingsSrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/settings"
 )
@@ -23,7 +22,6 @@ import (
 type Client struct {
 	Settings   settingsSrv.InfinitySettings
 	HttpClient *http.Client
-	Registry   *prometheus.Registry
 	IsMock     bool
 }
 
@@ -81,19 +79,7 @@ func NewClient(settings settingsSrv.InfinitySettings) (client *Client, err error
 	return &Client{
 		Settings:   settings,
 		HttpClient: httpClient,
-		Registry:   prometheus.NewRegistry(),
 	}, err
-}
-
-func NewClientWithCounters(settings settingsSrv.InfinitySettings, counters []prometheus.Collector) (client *Client, err error) {
-	client, err = NewClient(settings)
-	if err != nil {
-		return client, err
-	}
-	for _, counter := range counters {
-		client.Registry.MustRegister(counter)
-	}
-	return client, err
 }
 
 func replaceSect(input string, settings settingsSrv.InfinitySettings, includeSect bool) string {
