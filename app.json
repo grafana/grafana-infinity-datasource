@@ -1,8 +1,0 @@
-{
-  "name": "Grafana Infinity Datasource",
-  "description": "Grafana Infinity Datasource",
-  "repository": "https://github.com/yesoreyeram/grafana-infinity-datasource",
-  "keywords": ["grafana", "infinity datasource", "grafana plugin", "json", "api"],
-  "stack": "container",
-  "addons": ["heroku-postgresql:hobby-dev"]
-}
