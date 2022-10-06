@@ -116,9 +116,6 @@ export const Header = (props: HeaderProps) => {
               <Link className="nav-links rounded special-menu fw-bolder" to="/blog">
                 Blog
               </Link>
-              <a className="nav-links rounded special-menu" href="https://grafana-infinity-datasource.herokuapp.com/d/try/try?orgId=1&editPanel=2" target="_blank" rel="noreferrer">
-                Try online
-              </a>
               <Link className="nav-links rounded special-menu" to="/wiki/installation">
                 Install
               </Link>

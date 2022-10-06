@@ -14,6 +14,20 @@ import (
 func GetFrameForURLSources(query querySrv.Query, infClient Client, requestHeaders map[string]string) (*data.Frame, error) {
 	frame := GetDummyFrame(query)
 	urlResponseObject, statusCode, duration, err := infClient.GetResults(query, requestHeaders)
+	frame.Meta.ExecutedQueryString = infClient.GetExecutedURL(query)
+	if infClient.IsMock {
+		duration = 123
+	}
+	if err != nil {
+		frame.Meta.Custom = &CustomMeta{
+			Data:                   urlResponseObject,
+			ResponseCodeFromServer: statusCode,
+			Duration:               duration,
+			Query:                  query,
+			Error:                  err.Error(),
+		}
+		return frame, err
+	}
 	if (query.Type == querySrv.QueryTypeJSON || query.Type == querySrv.QueryTypeGraphQL) && query.Parser == "backend" {
 		if frame, err = GetJSONBackendResponse(urlResponseObject, query); err != nil {
 			return frame, err

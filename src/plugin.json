@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/grafana/grafana/v8.4.7/docs/sources/developers/plugins/plugin.schema.json",
+  "$schema": "https://raw.githubusercontent.com/grafana/grafana/main/docs/sources/developers/plugins/plugin.schema.json",
   "name": "Infinity",
   "id": "yesoreyeram-infinity-datasource",
   "type": "datasource",
@@ -66,14 +66,6 @@
       {
         "name": "Wiki",
         "url": "https://yesoreyeram.github.io/grafana-infinity-datasource"
-      },
-      {
-        "name": "Demo",
-        "url": "https://grafana-infinity-datasource.herokuapp.com"
-      },
-      {
-        "name": "Try before installing",
-        "url": "https://grafana-infinity-datasource.herokuapp.com/explore"
       },
       {
         "name": "Github",

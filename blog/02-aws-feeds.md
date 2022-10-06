@@ -62,5 +62,3 @@ parse-xml
 ## More status feeds
 
 With this approach, Not only AWS status feed but you can monitor any RSS feeds also.
-
-You may find live example of using aws feed in [our demo instance](https://grafana-infinity-datasource.herokuapp.com/d/aws-status/aws-status-feed)

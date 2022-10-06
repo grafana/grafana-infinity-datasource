@@ -66,8 +66,6 @@ For the plugin documentation, visit [plugin documentation website](https://yesor
 
 - [Plugin documentation](https://yesoreyeram.github.io/grafana-infinity-datasource)
 - [Demo video](https://youtu.be/Wmgs1E9Ry-s)
-- [Demo grafana instance](https://grafana-infinity-datasource.herokuapp.com/d/yesoreyeram-infinty-datasource)
-- [UQL examples](https://grafana-infinity-datasource.herokuapp.com/d/uql)
 
 ## 👍 Contributing
 

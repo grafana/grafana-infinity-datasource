@@ -9,7 +9,6 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/graphql-go/graphql"
 	"github.com/graphql-go/handler"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 	querySrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/query"
 )
 
@@ -17,7 +16,6 @@ func (host *PluginHost) getRouter() *mux.Router {
 	router := mux.NewRouter()
 	router.Handle("/graphql", host.getGraphQLHandler())                                              // NOT IN USE YET
 	router.HandleFunc("/open-api", host.withDatasourceHandlerFunc(GetOpenAPIHandler)).Methods("GET") // NOT IN USE YET
-	router.HandleFunc("/metrics", host.withDatasourceHandlerFunc(GetMetricsHandler)).Methods("GET")
 	router.HandleFunc("/ping", host.withDatasourceHandlerFunc(GetPingHandler)).Methods("GET")
 	router.NotFoundHandler = http.HandlerFunc(host.withDatasourceHandlerFunc(defaultHandler))
 	return router
@@ -108,13 +106,6 @@ func (host *PluginHost) getGraphQLHandler() http.Handler {
 		})
 		h.ServeHTTP(w, r)
 	})
-}
-
-func GetMetricsHandler(client *instanceSettings) http.HandlerFunc {
-	return func(rw http.ResponseWriter, r *http.Request) {
-		h := promhttp.HandlerFor(client.client.Registry, promhttp.HandlerOpts{})
-		h.ServeHTTP(rw, r)
-	}
 }
 
 func GetOpenAPIHandler(client *instanceSettings) http.HandlerFunc {
