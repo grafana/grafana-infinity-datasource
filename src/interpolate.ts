@@ -4,7 +4,7 @@ import { QueryBodyContentType, QueryBodyType } from './types/query.types';
 import type { InfinityQuery, VariableQuery } from './types';
 import type { ScopedVars } from '@grafana/data';
 
-const replaceVariable = (input: string = '', scopedVars: ScopedVars = {}, format = 'glob'): string => {
+const replaceVariable = (input = '', scopedVars: ScopedVars = {}, format = 'glob'): string => {
   return getTemplateSrv().replace(input, scopedVars, format);
 };
 

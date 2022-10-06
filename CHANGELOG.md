@@ -8,8 +8,9 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 - **GraphQL** Support for GROQ parser
 - **CSV/TSV** Support for backend parser (alerts, recorded queries, public dashboards etc)
 - **Google Sheets** Support for querying Google Sheets (alpha)
+- **Auth** Support for Google JWT Token authentication (via guided auth providers)
 - **Chore** Removed unused metrics resource handler
-- **Demo** Removed demo instance due to pricing changes in heroku. (will figure out alternatives later)
+- **Demo** BREAKING: Removed demo instance due to pricing changes in heroku. (will figure out alternatives later)
 
 ## [ 1.0.1 ]
 
