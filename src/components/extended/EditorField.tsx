@@ -1,7 +1,7 @@
 import { css } from '@emotion/css';
 import React, { ComponentProps } from 'react';
 import { GrafanaTheme2 } from '@grafana/data';
-import { stylesFactory, useTheme2, ReactUtils, Field, Icon, PopoverContent, Tooltip } from '@grafana/ui';
+import { stylesFactory, useTheme2, ReactUtils, Field, Icon, PopoverContent, Tooltip, Tag } from '@grafana/ui';
 import { Space } from './Space';
 import { Stack } from './Stack';
 
@@ -16,10 +16,11 @@ interface EditorFieldProps extends ComponentProps<typeof Field> {
   optional?: boolean;
   tooltip?: PopoverContent;
   invalid?: boolean;
+  tag?: string;
 }
 
 export const EditorField: React.FC<EditorFieldProps> = (props) => {
-  const { label, optional, tooltip, children, width, invalid, ...fieldProps } = props;
+  const { label, optional, tooltip, children, width, invalid, tag, ...fieldProps } = props;
 
   const theme = useTheme2();
   const styles = getStyles(theme, width, invalid);
@@ -31,6 +32,7 @@ export const EditorField: React.FC<EditorFieldProps> = (props) => {
     <>
       <label className={styles.label} htmlFor={childInputId}>
         {label}
+        {tag && <Tag name={tag} className={styles.tag} colorIndex={10} />}
         {optional && <span className={styles.optional}> - optional</span>}
         {tooltip && (
           <Tooltip placement="top" content={tooltip} theme="info">
@@ -62,6 +64,9 @@ const getStyles = stylesFactory((theme: GrafanaTheme2, width?: number | string, 
       fontSize: 12,
       fontWeight: theme.typography.fontWeightMedium,
       paddingLeft: '5px',
+    }),
+    tag: css({
+      marginLeft: '10px',
     }),
     optional: css({
       fontStyle: 'italic',

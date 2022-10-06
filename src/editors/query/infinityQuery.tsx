@@ -31,6 +31,7 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
   let canShowFilterEditor =
     query.type !== 'series' &&
     query.type !== 'global' &&
+    query.type !== 'google-sheets' &&
     !(query.type === 'json' && query.parser === 'backend') &&
     !(query.type === 'graphql' && query.parser === 'backend') &&
     !(query.type === 'csv' && query.parser === 'backend') &&
