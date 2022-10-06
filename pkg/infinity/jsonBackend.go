@@ -19,6 +19,9 @@ func GetJSONBackendResponse(urlResponseObject interface{}, query querySrv.Query)
 		backend.Logger.Error("error json parsing root data", "error", err.Error())
 		return frame, fmt.Errorf("error parsing json root data")
 	}
+	if query.Type == querySrv.QueryTypeGoogleSheets {
+		return HandleGoogleSheetsResponse(query, string(responseString))
+	}
 	columns := []jsonFramer.ColumnSelector{}
 	for _, c := range query.Columns {
 		columns = append(columns, jsonFramer.ColumnSelector{
@@ -80,4 +83,36 @@ func GetJSONBackendResponse(urlResponseObject interface{}, query querySrv.Query)
 		}
 	}
 	return frame, err
+}
+
+func HandleGoogleSheetsResponse(query querySrv.Query, responseString string) (*data.Frame, error) {
+	frame := data.NewFrame("response")
+	out := []string{responseString}
+	frame.Fields = append(frame.Fields, data.NewField("response", nil, out))
+	return frame, nil
+}
+
+type Spreadsheet struct {
+	Sheets     []*Sheet `json:"sheets,omitempty"`
+	NullFields []string `json:"-"`
+}
+
+type Sheet struct {
+	Data       []*GridData `json:"data,omitempty"`
+	NullFields []string    `json:"-"`
+}
+
+type GridData struct {
+	RowData    []*RowData `json:"rowData,omitempty"`
+	NullFields []string   `json:"-"`
+}
+
+type RowData struct {
+	Values     []*CellData `json:"values,omitempty"`
+	NullFields []string    `json:"-"`
+}
+
+type CellData struct {
+	FormattedValue string   `json:"formattedValue,omitempty"`
+	NullFields     []string `json:"-"`
 }

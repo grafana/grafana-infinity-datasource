@@ -43,6 +43,11 @@ func GetFrameForURLSources(query querySrv.Query, infClient Client, requestHeader
 			return frame, err
 		}
 	}
+	if query.Type == querySrv.QueryTypeGoogleSheets {
+		if frame, err = GetJSONBackendResponse(urlResponseObject, query); err != nil {
+			return frame, err
+		}
+	}
 	if frame.Meta == nil {
 		frame.Meta = &data.FrameMeta{}
 	}

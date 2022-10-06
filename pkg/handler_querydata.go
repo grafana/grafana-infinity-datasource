@@ -2,15 +2,14 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"strings"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
-	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/infinity"
 	querySrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/query"
-	settingsSrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/settings"
 )
 
 type key string
@@ -74,28 +73,51 @@ func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient in
 	//endregion
 	//region Frame Builder
 	frame := infinity.GetDummyFrame(query)
-	if query.Source == "url" {
+	switch query.Type {
+	case querySrv.QueryTypeGoogleSheets:
+		sheetId := query.Spreadsheet
+		sheetName := query.SheetName
+		sheetRange := query.SheetRange
+		if sheetName != "" {
+			sheetRange = sheetName + "!" + sheetRange
+		}
+		if sheetId == "" {
+			response.Error = errors.New("invalid sheet ID")
+			return response
+		}
+		query.URL = fmt.Sprintf("https://sheets.googleapis.com/v4/spreadsheets/%s?includeGridData=true&ranges=%s", sheetId, sheetRange)
 		frame, err = infinity.GetFrameForURLSources(query, infClient, requestHeaders)
 		if err != nil {
 			response.Frames = append(response.Frames, frame)
 			response.Error = err
 			return response
 		}
-	}
-	if query.Source == "inline" {
-		frame, err = infinity.GetFrameForInlineSources(query)
-		if err != nil {
-			response.Frames = append(response.Frames, frame)
-			response.Error = err
-			return response
+	default:
+		if query.Source == "url" {
+			frame, err = infinity.GetFrameForURLSources(query, infClient, requestHeaders)
+			if err != nil {
+				response.Frames = append(response.Frames, frame)
+				response.Error = err
+				return response
+			}
+		}
+		if query.Source == "inline" {
+			frame, err = infinity.GetFrameForInlineSources(query)
+			if err != nil {
+				response.Frames = append(response.Frames, frame)
+				response.Error = err
+				return response
+			}
 		}
 	}
+	// if infClient.Settings.AuthenticationMethod != settingsSrv.AuthenticationMethodNone && infClient.Settings.AuthenticationMethod != "" && len(infClient.Settings.AllowedHosts) < 1 && query.Source == "url" {
+	// 	if frame != nil && frame.Meta != nil {
+	// 		frame.AppendNotices(data.Notice{
+	// 			Text: "Datasource is missing allowed hosts/URLs. Configure it in the datasource settings page for enhanced security.",
+	// 		})
+	// 	}
+	// }
 	response.Frames = append(response.Frames, frame)
-	if infClient.Settings.AuthenticationMethod != settingsSrv.AuthenticationMethodNone && infClient.Settings.AuthenticationMethod != "" && len(infClient.Settings.AllowedHosts) < 1 && query.Source == "url" {
-		frame.AppendNotices(data.Notice{
-			Text: "Datasource is missing allowed hosts/URLs. Configure it in the datasource settings page for enhanced security.",
-		})
-	}
 	//endregion
 	return response
 }
