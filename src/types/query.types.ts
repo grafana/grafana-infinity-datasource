@@ -2,7 +2,7 @@ import { FilterOperator } from './../constants';
 import type { DataQuery, SelectableValue } from '@grafana/data';
 
 //#region Query
-export type InfinityQueryType = 'json' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'series' | 'global' | 'uql' | 'groq';
+export type InfinityQueryType = 'json' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'series' | 'global' | 'uql' | 'groq' | 'google-sheets';
 export type InfinityQuerySources = 'url' | 'inline' | 'random-walk' | 'expression';
 export type InfinityColumnFormat = 'string' | 'number' | 'timestamp' | 'timestamp_epoch' | 'timestamp_epoch_s';
 export type InfinityQueryFormat = 'table' | 'timeseries' | 'dataframe' | 'as-is' | 'node-graph-nodes' | 'node-graph-edges';
@@ -96,7 +96,8 @@ export type InfinityUQLQuerySource = InfinityQueryWithURLSource<'uql'> | Infinit
 export type InfinityUQLQuery = { uql: string; format: InfinityQueryFormat } & InfinityUQLQuerySource & InfinityQueryBase<'uql'>;
 export type InfinityGROQQuerySource = InfinityQueryWithURLSource<'groq'> | InfinityQueryWithInlineSource<'groq'>;
 export type InfinityGROQQuery = { groq: string; format: InfinityQueryFormat } & InfinityGROQQuerySource & InfinityQueryBase<'groq'>;
-export type InfinityQuery = InfinityLegacyQuery | InfinityUQLQuery | InfinityGROQQuery;
+export type InfinityGSheetsQuery = { spreadsheet: string; sheetName?: string; range: string; columns: InfinityColumn[] } & InfinityQueryBase<'google-sheets'>;
+export type InfinityQuery = InfinityLegacyQuery | InfinityUQLQuery | InfinityGROQQuery | InfinityGSheetsQuery;
 //#endregion
 
 //#region Misc

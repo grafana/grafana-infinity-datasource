@@ -4,8 +4,8 @@ import { QueryBodyContentType, QueryBodyType } from './types/query.types';
 import type { InfinityQuery, VariableQuery } from './types';
 import type { ScopedVars } from '@grafana/data';
 
-const replaceVariable = (input: string, scopedVars: ScopedVars = {}, format = 'glob'): string => {
-  return getTemplateSrv().replace(input || '', scopedVars, format);
+const replaceVariable = (input = '', scopedVars: ScopedVars = {}, format = 'glob'): string => {
+  return getTemplateSrv().replace(input, scopedVars, format);
 };
 
 export const interpolateQuery = (query: InfinityQuery, scopedVars: ScopedVars): InfinityQuery => {
@@ -66,6 +66,11 @@ export const interpolateQuery = (query: InfinityQuery, scopedVars: ScopedVars): 
     if ((newQuery.type === 'json' || newQuery.type === 'graphql' || newQuery.type === 'csv' || newQuery.type === 'tsv') && newQuery.parser === 'backend') {
       newQuery.summarizeExpression = replaceVariable(newQuery.summarizeExpression || '', scopedVars);
     }
+  }
+  if (newQuery.type === 'google-sheets') {
+    newQuery.spreadsheet = replaceVariable(newQuery.spreadsheet, scopedVars);
+    newQuery.sheetName = replaceVariable(newQuery.sheetName, scopedVars);
+    newQuery.range = replaceVariable(newQuery.range, scopedVars);
   }
   return newQuery;
 };

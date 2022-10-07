@@ -12,7 +12,7 @@ import type { InfinityColumn, InfinityQuery } from './../../types';
 
 export const QueryColumnsEditor = (props: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void }) => {
   const { query, onChange, onRunQuery } = props;
-  if (!isDataQuery(query)) {
+  if (!isDataQuery(query) && query.type !== 'google-sheets') {
     return <></>;
   }
   const onColumnAdd = () => {

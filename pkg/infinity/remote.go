@@ -28,6 +28,11 @@ func GetFrameForURLSources(query querySrv.Query, infClient Client, requestHeader
 		}
 		return frame, err
 	}
+	if query.Type == querySrv.QueryTypeGSheets {
+		if frame, err = GetGoogleSheetsResponse(urlResponseObject, query); err != nil {
+			return frame, err
+		}
+	}
 	if (query.Type == querySrv.QueryTypeJSON || query.Type == querySrv.QueryTypeGraphQL) && query.Parser == "backend" {
 		if frame, err = GetJSONBackendResponse(urlResponseObject, query); err != nil {
 			return frame, err
