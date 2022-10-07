@@ -4,13 +4,14 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 
 ## [ 1.1.0 ]
 
-- **GraphQL** Support for backend parser (alerts, recorded queries, public dashboards etc)
-- **GraphQL** Support for GROQ parser
 - **CSV/TSV** Support for backend parser (alerts, recorded queries, public dashboards etc)
 - **Google Sheets** Support for querying Google Sheets (alpha)
+- **GraphQL** Support for backend parser (alerts, recorded queries, public dashboards etc)
+- **GraphQL** Support for GROQ parser
 - **Auth** Support for Google JWT Token authentication (via guided auth providers)
-- **Chore** Removed unused metrics resource handler
+- **Inline Data** Support for importing local files as inline data
 - **Demo** BREAKING: Removed demo instance due to pricing changes in heroku. (will figure out alternatives later)
+- **Chore** Removed unused metrics resource handler
 
 ## [ 1.0.1 ]
 

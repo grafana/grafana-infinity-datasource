@@ -16,7 +16,7 @@ export const SourceSelector = (props: { query: InfinityQuery; onChange: (e: Infi
   };
   return (
     <EditorField label={query.type === 'series' ? 'Scenario' : 'Source'}>
-      <Select width={16} options={supportedSources} value={query.source || 'url'} onChange={(e) => onSourceChange(e.value as InfinityQuerySources)} menuShouldPortal={true}></Select>
+      <Select width={18} options={supportedSources} value={query.source || 'url'} onChange={(e) => onSourceChange(e.value as InfinityQuerySources)} menuShouldPortal={true}></Select>
     </EditorField>
   );
 };
