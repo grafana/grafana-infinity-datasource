@@ -72,7 +72,9 @@ func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient in
 					Text: "Datasource is missing allowed hosts/URLs. Configure it in the datasource settings page for enhanced security.",
 				})
 			}
-			response.Frames = append(response.Frames, frame)
+			if frame != nil {
+				response.Frames = append(response.Frames, frame)
+			}
 		}
 		if query.Source == "inline" {
 			frame, err := infinity.GetFrameForInlineSources(query)
@@ -81,7 +83,9 @@ func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient in
 				response.Error = err
 				return response
 			}
-			response.Frames = append(response.Frames, frame)
+			if frame != nil {
+				response.Frames = append(response.Frames, frame)
+			}
 		}
 	}
 	//endregion
