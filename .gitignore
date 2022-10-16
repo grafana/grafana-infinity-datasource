@@ -111,6 +111,11 @@ website/public/
 
 .notes
 
+# Go
+
+mage_output_file.go
+__debug_bin
+
 # Grafana
 node_modules
 dist
@@ -119,4 +124,3 @@ cypress/report.json
 cypress/screenshots/
 cypress/videos/
 .data/
-__debug_bin

@@ -151,6 +151,12 @@ const sitemap: any[] = [
     tags: ['groq', 'query', 'sanity', 'filter'],
   },
   {
+    title: 'Backend Parser',
+    slug: '/wiki/backend',
+    description: 'Infinity backend parser',
+    tags: ['backend', 'parser', 'json', 'csv', 'tsv', 'alerting', 'recorded queries', 'caching', 'public dashboards', 'summarize', 'gjson', 'jsonpath', 'calculated field', 'computed columns'],
+  },
+  {
     title: 'Configuration',
     slug: '/wiki/configuration',
     description: 'Grafana datasource configuration',

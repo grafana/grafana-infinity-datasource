@@ -27,7 +27,7 @@ export const SeriesEditor = ({ query, onChange }: { query: InfinitySeriesQuery; 
             />
           </EditorField>
           <EditorField label="Series Count">
-            <Input width={12} value={query.seriesCount} placeholder="1" onChange={(e) => onInputTextChange(e.currentTarget.valueAsNumber, `seriesCount`)} />
+            <Input type="number" width={12} value={query.seriesCount} placeholder="1" onChange={(e) => onInputTextChange(e.currentTarget.valueAsNumber || 1, `seriesCount`)} />
           </EditorField>
           {query.source === 'expression' && (
             <EditorField label="Expression">

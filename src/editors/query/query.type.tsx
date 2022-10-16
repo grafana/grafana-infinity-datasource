@@ -14,7 +14,7 @@ import type { EditorMode, InfinityQuery } from './../../types';
 export const TypeChooser = (props: { mode: EditorMode; instanceSettings: any; query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void }) => {
   const { query, mode } = props;
   return (
-    <EditorRow>
+    <EditorRow collapsible={true} title={() => 'Query meta'}>
       <TypeSelector {...props} />
       {query.type !== 'global' ? <SourceSelector {...props} /> : <GlobalQuerySelector {...props} />}
       <ParseTypeEditor {...props} />

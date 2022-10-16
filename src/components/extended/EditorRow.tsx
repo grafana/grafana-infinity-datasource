@@ -1,17 +1,28 @@
 import { css } from '@emotion/css';
-import React from 'react';
+import React, { useState } from 'react';
 import { GrafanaTheme2 } from '@grafana/data';
-import { useStyles2 } from '@grafana/ui';
+import { useStyles2, Icon } from '@grafana/ui';
 import { Stack } from './Stack';
 
-interface EditorRowProps {}
+interface EditorRowProps {
+  collapsible?: boolean;
+  title?: () => string;
+}
 
-export const EditorRow: React.FC<EditorRowProps> = ({ children }) => {
+export const EditorRow: React.FC<EditorRowProps> = ({ collapsible, title, children }) => {
   const styles = useStyles2(getStyles);
-
+  const [show, setShow] = useState(true);
   return (
     <div className={styles.root}>
-      <Stack gap={2}>{children}</Stack>
+      <Stack gap={2}>
+        {collapsible && (
+          <>
+            <Icon name={show ? 'angle-down' : 'angle-right'} style={{ marginBlockStart: '5px' }} onClick={() => setShow(!show)} />
+            {title && !show && <>{title()}</>}
+          </>
+        )}
+        {show && <>{children}</>}
+      </Stack>
     </div>
   );
 };

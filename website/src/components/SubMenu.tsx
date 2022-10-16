@@ -28,6 +28,7 @@ export const SubMenu = () => {
           <SubMenuLink to="/wiki/groq">GROQ</SubMenuLink>
           <SubMenuLink to="/wiki/html">HTML</SubMenuLink>
           <SubMenuLink to="/wiki/url">URL</SubMenuLink>
+          <SubMenuLink to="/wiki/backend">Backend Parser</SubMenuLink>
           <SubMenuLink to="/wiki/time-formats">Time Formats</SubMenuLink>
           <SubMenuLink to="/wiki/template-variables">Template Variables</SubMenuLink>
           <SubMenuLink to="/wiki/macros">Macros</SubMenuLink>

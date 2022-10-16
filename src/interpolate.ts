@@ -64,6 +64,13 @@ export const interpolateQuery = (query: InfinityQuery, scopedVars: ScopedVars): 
       newQuery.sqlite_query = replaceVariable(newQuery.sqlite_query || '', scopedVars);
     }
     if ((newQuery.type === 'json' || newQuery.type === 'graphql' || newQuery.type === 'csv' || newQuery.type === 'tsv') && newQuery.parser === 'backend') {
+      newQuery.computed_columns = (newQuery.computed_columns || []).map((c) => {
+        return {
+          ...c,
+          selector: replaceVariable(c.selector || '', scopedVars),
+        };
+      });
+      newQuery.filterExpression = replaceVariable(newQuery.filterExpression || '', scopedVars);
       newQuery.summarizeExpression = replaceVariable(newQuery.summarizeExpression || '', scopedVars);
     }
   }

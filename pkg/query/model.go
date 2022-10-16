@@ -31,6 +31,7 @@ type Query struct {
 	URLOptions          URLOptions             `json:"url_options"`
 	Data                string                 `json:"data"`
 	Parser              string                 `json:"parser"` // 'simple' | 'backend' | 'sqlite' | 'uql' | 'groq'
+	FilterExpression    string                 `json:"filterExpression"`
 	SummarizeExpression string                 `json:"summarizeExpression"`
 	UQL                 string                 `json:"uql"`
 	GROQ                string                 `json:"groq"`
@@ -39,6 +40,7 @@ type Query struct {
 	JSONOptions         InfinityJSONOptions    `json:"json_options"`
 	RootSelector        string                 `json:"root_selector"`
 	Columns             []InfinityColumn       `json:"columns"`
+	ComputedColumns     []InfinityColumn       `json:"computed_columns"`
 	Filters             []InfinityFilter       `json:"filters"`
 	SeriesCount         int64                  `json:"seriesCount"`
 	Expression          string                 `json:"expression"`
@@ -146,6 +148,9 @@ func ApplyDefaultsToQuery(query Query) Query {
 	}
 	if query.Columns == nil {
 		query.Columns = []InfinityColumn{}
+	}
+	if query.ComputedColumns == nil {
+		query.ComputedColumns = []InfinityColumn{}
 	}
 	return query
 }

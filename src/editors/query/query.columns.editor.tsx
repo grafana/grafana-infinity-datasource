@@ -3,12 +3,14 @@ import { cloneDeep } from 'lodash';
 import React, { useState } from 'react';
 import { EditorRow } from './../../components/extended/EditorRow';
 import { EditorField } from './../../components/extended/EditorField';
+import { ComputedColumnsEditor } from './query.computedColumns';
 import { isDataQuery } from './../../app/utils';
 import { QueryColumnItem } from './../../components/QueryColumnItem';
 import { UQLEditor } from './query.uql';
 import { GROQEditor } from './query.groq';
 import { SQLiteEditor } from './query.sqlite';
 import type { InfinityColumn, InfinityQuery } from './../../types';
+import { Stack } from 'components/extended/Stack';
 
 export const QueryColumnsEditor = (props: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void }) => {
   const { query, onChange, onRunQuery } = props;
@@ -32,7 +34,18 @@ export const QueryColumnsEditor = (props: { query: InfinityQuery; onChange: (val
     onRunQuery();
   };
   return (
-    <EditorRow>
+    <EditorRow
+      collapsible={true}
+      title={() => {
+        switch (query.type) {
+          case 'json':
+          case 'graphql':
+            return `root selector, columns, computed columns`;
+          default:
+            return 'columns, computed columns';
+        }
+      }}
+    >
       {(query.type === 'json' || query.type === 'csv' || query.type === 'tsv' || query.type === 'graphql' || query.type === 'xml') && query.parser === 'uql' ? (
         <UQLEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />
       ) : (query.type === 'json' || query.type === 'graphql') && query.parser === 'groq' ? (
@@ -42,29 +55,32 @@ export const QueryColumnsEditor = (props: { query: InfinityQuery; onChange: (val
       ) : (
         <>
           <RootSelector {...props} />
-          <EditorField label="Columns" optional={true}>
-            <>
-              {query.columns.map((column: InfinityColumn, index: number) => {
-                return (
-                  <div className="gf-form-inline" key={JSON.stringify(column) + index}>
-                    <div className="gf-form">
-                      <QueryColumnItem {...props} index={index} />
-                      <Button className="btn btn-danger btn-small" icon="trash-alt" variant="destructive" size="sm" style={{ margin: '5px' }} onClick={() => onColumnRemove(index)} />
+          <Stack direction="column">
+            <EditorField label="Columns" optional={true}>
+              <>
+                {query.columns.map((column: InfinityColumn, index: number) => {
+                  return (
+                    <div className="gf-form-inline" key={JSON.stringify(column) + index}>
+                      <div className="gf-form">
+                        <QueryColumnItem {...props} index={index} />
+                        <Button className="btn btn-danger btn-small" icon="trash-alt" variant="destructive" size="sm" style={{ margin: '5px' }} onClick={() => onColumnRemove(index)} />
+                      </div>
+                    </div>
+                  );
+                })}
+                <div className="gf-form-inline">
+                  <div className="gf-form">
+                    <div className="gf-form gf-form--grow">
+                      <Button variant="secondary" size="sm" style={{ marginTop: '5px', marginLeft: '5px' }} onClick={() => onColumnAdd()}>
+                        Add Columns
+                      </Button>
                     </div>
                   </div>
-                );
-              })}
-              <div className="gf-form-inline">
-                <div className="gf-form">
-                  <div className="gf-form gf-form--grow">
-                    <span className="btn btn-secondary btn-small" style={{ marginTop: '5px' }} onClick={() => onColumnAdd()}>
-                      Add Columns
-                    </span>
-                  </div>
                 </div>
-              </div>
-            </>
-          </EditorField>
+              </>
+            </EditorField>
+            <ComputedColumnsEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />
+          </Stack>
         </>
       )}
     </EditorRow>

@@ -19,7 +19,16 @@ export const Summarize = ({ query, onChange, onRunQuery }: SummarizeProps) => {
     isValid = false;
   }
   return (
-    <EditorRow>
+    <EditorRow collapsible={true} title={() => 'filter, summarize expression'}>
+      <EditorField label="Filter" tooltip={'Experimental support for filter function.'} tag="alpha" optional={true}>
+        <Input
+          value={query.filterExpression || ''}
+          width={60}
+          placeholder={'Filter expression goes here. Example: age >= 18'}
+          onChange={(e) => onChange({ ...query, filterExpression: e.currentTarget.value })}
+          onBlur={onRunQuery}
+        />
+      </EditorField>
       <EditorField
         invalid={!isValid}
         label="Summarize"

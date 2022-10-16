@@ -13,7 +13,7 @@ export const InlineDataEditor = ({ query, onChange, onRunQuery }: { query: Infin
   };
   if (isDataQuery(query) && query.source === 'inline') {
     return (
-      <EditorRow>
+      <EditorRow collapsible={true} title={() => 'Inline data'}>
         <EditorField label="Data" tooltip={'Inline Data'}>
           <TextArea
             rows={6}

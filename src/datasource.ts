@@ -30,7 +30,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
         .then((result) => this.getResults(request, result))
         .then((result) => subscriber.next({ ...result, state: LoadingState.Done }))
         .catch((error) => {
-          console.log(error);
+          console.error(error);
           subscriber.next({ data: [], error, state: LoadingState.Error });
           subscriber.error(error);
         })

@@ -9,7 +9,7 @@ import type { SelectableValue } from '@grafana/data';
 
 export const URLEditor = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void }) => {
   return isDataQuery(query) && query.source === 'url' ? (
-    <EditorRow>
+    <EditorRow collapsible={true} title={() => 'URL details'}>
       <Method query={query} onChange={onChange} onRunQuery={onRunQuery} />
       <URL query={query} onChange={onChange} onRunQuery={onRunQuery} />
       <Headers query={query} onChange={onChange} onRunQuery={onRunQuery} />
