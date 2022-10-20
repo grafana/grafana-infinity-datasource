@@ -1,6 +1,7 @@
 package infinity
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 
@@ -8,9 +9,12 @@ import (
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/framesql"
 )
 
-func GetSummaryFrame(frame *data.Frame, expression string) (*data.Frame, error) {
+func GetSummaryFrame(frame *data.Frame, expression string, by string) (*data.Frame, error) {
 	if strings.TrimSpace(expression) == "" {
 		return frame, nil
+	}
+	if strings.TrimSpace(by) != "" {
+		return GetSummarizeByFrame(frame, expression, by)
 	}
 	summary, err := framesql.EvaluateInFrame(expression, frame)
 	summaryFrame := &data.Frame{Name: frame.Name, RefID: frame.RefID, Fields: []*data.Field{}}
@@ -59,4 +63,57 @@ func GetSummaryFrame(frame *data.Frame, expression string) (*data.Frame, error) 
 	}
 	summaryFrame.SetMeta(frame.Meta)
 	return summaryFrame, err
+}
+
+func GetSummarizeByFrame(frame *data.Frame, expression, by string) (*data.Frame, error) {
+	var byField *data.Field
+	var byFieldIndex int = -1
+	for idx, field := range frame.Fields {
+		if field.Name == by || framesql.SlugifyFieldName(field.Name) == by {
+			byField = field
+			byFieldIndex = idx
+			break
+		}
+	}
+	if byField == nil {
+		return frame, errors.New("summarize by field not found. Not applying summarize")
+	}
+	uniqueValuesArray := []interface{}{}
+	uniqueValues := map[interface{}]bool{}
+	for i := 0; i < byField.Len(); i++ {
+		if !uniqueValues[framesql.GetValue(byField.At(i))] {
+			uniqueValuesArray = append(uniqueValuesArray, framesql.GetValue(byField.At(i)))
+		}
+		uniqueValues[framesql.GetValue(byField.At(i))] = true
+	}
+	summarizeFrame := data.NewFrame("summary")
+	nameField := framesql.ConvertFieldValuesToField(uniqueValuesArray, by)
+	summarizeFrame.Fields = append(summarizeFrame.Fields, nameField)
+	values := []interface{}{}
+	for _, item := range uniqueValuesArray {
+		filteredFrame := frame.EmptyCopy()
+		rowLen, err := frame.RowLen()
+		if err != nil {
+			return frame, err
+		}
+		for inRowIdx := 0; inRowIdx < rowLen; inRowIdx++ {
+			if frame.Fields[byFieldIndex].Name == by || framesql.SlugifyFieldName(frame.Fields[byFieldIndex].Name) == by {
+				if framesql.GetValue(frame.Fields[byFieldIndex].At(inRowIdx)) == framesql.GetValue(item) {
+					filteredFrame.AppendRow(frame.RowCopy(inRowIdx)...)
+				}
+			}
+		}
+		oFrame, err := GetSummaryFrame(filteredFrame, expression, "")
+		if err != nil {
+			return frame, fmt.Errorf("unable to summarize. %w", err)
+		}
+		values = append(values, framesql.GetValue(oFrame.Fields[0].At(0)))
+	}
+	valueField := framesql.ConvertFieldValuesToField(values, by)
+	if valueField == nil {
+		return frame, errors.New("invalid summarize by operation. Not applying summarize")
+	}
+	valueField.Name = expression
+	summarizeFrame.Fields = append(summarizeFrame.Fields, valueField)
+	return summarizeFrame, nil
 }

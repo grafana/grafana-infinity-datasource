@@ -201,7 +201,7 @@ func GetFrameWithComputedColumns(frame *data.Frame, columns []querySrv.InfinityC
 			return frame, err
 		}
 		for i := 0; i < frameLen; i++ {
-			parameters := map[string]interface{}{"frame": frame, "null": nil, "nil": nil, "rowIndex": i}
+			parameters := map[string]interface{}{"frame": frame, "null": nil, "nil": nil, "rowIndex": i, "recordsCount": frameLen}
 			for _, field := range frame.Fields {
 				v := framesql.GetValue(field.At(i))
 				parameters[framesql.SlugifyFieldName(field.Name)] = v

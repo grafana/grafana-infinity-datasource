@@ -69,7 +69,7 @@ func GetCSVBackendResponse(responseString string, query querySrv.Query) (*data.F
 		return frame, fmt.Errorf("error applying filter. %w", err)
 	}
 	if strings.TrimSpace(query.SummarizeExpression) != "" {
-		return GetSummaryFrame(frame, query.SummarizeExpression)
+		return GetSummaryFrame(frame, query.SummarizeExpression, query.SummarizeBy)
 	}
 	if query.Format == "timeseries" && frame.TimeSeriesSchema().Type == data.TimeSeriesTypeLong {
 		if wFrame, err := data.LongToWide(frame, &data.FillMissing{Mode: data.FillModeNull}); err == nil {

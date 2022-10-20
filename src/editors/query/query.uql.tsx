@@ -27,7 +27,7 @@ export const UQLEditor = (props: { query: InfinityQuery; onChange: (value: Infin
     ];
   };
   return query.type === 'uql' || ((query.type === 'json' || query.type === 'csv' || query.type === 'tsv' || query.type === 'graphql' || query.type === 'xml') && query.parser === 'uql') ? (
-    <EditorField label="UQL">
+    <EditorField label="">
       <div className="gf-form">
         <div data-testid="infinity-query-uql-selector">
           <CodeEditor

@@ -64,6 +64,43 @@ func TestInlineSources(t *testing.T) {
 				})
 			},
 		},
+		{
+			name: "should return backend results correctly",
+			queryJSON: `{
+				"refId":					"q1",
+				"type": 					"json",
+				"parser": 					"backend",
+				"source":					"inline",
+				"data":						"[{\"Sex\":\"Male\"},{\"Sex\":\"Male\"},{\"Sex\":null},{\"Sex\":\"Female\"},{\"Sex\":\"Others\"}]",
+				"filterExpression": 		"Sex != 'Female' && Sex != null",
+				"summarizeExpression": 		"count(Sex)",
+				"summarizeBy": 				"Sex"
+			}`,
+			skipGoldenCheck: true,
+			test: func(t *testing.T, frame *data.Frame) {
+				require.NotNil(t, frame)
+				assert.Equal(t, data.NewField("Sex", nil, []*string{toSP("Male"), toSP(""), toSP("Others")}), frame.Fields[0])
+				assert.Equal(t, data.NewField("count(Sex)", nil, []*float64{toFP(2), toFP(1), toFP(1)}), frame.Fields[1])
+			},
+		},
+		{
+			name: "should return backend results correctly with computed columns",
+			queryJSON: `{
+				"refId":					"q1",
+				"type": 					"json",
+				"parser": 					"backend",
+				"source":					"inline",
+				"data":						"[1,2,3,4,5,6]",
+				"computed_columns": 		[{"selector":"q1 == 2 ? '' : 'Male'", "text":"something"}]
+			}`,
+			skipGoldenCheck: true,
+			test: func(t *testing.T, frame *data.Frame) {
+				require.NotNil(t, frame)
+				// TODO: fix null vlues. When the selector is changed to `q1 == 2 ? null : "Male"`, it produces invalid results.
+				assert.Equal(t, data.NewField("q1", nil, []*float64{toFP(1), toFP(2), toFP(3), toFP(4), toFP(5), toFP(6)}), frame.Fields[0])
+				assert.Equal(t, data.NewField("something", nil, []*string{toSP("Male"), toSP(""), toSP("Male"), toSP("Male"), toSP("Male"), toSP("Male")}), frame.Fields[1])
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -110,7 +147,7 @@ func TestRemoteSources(t *testing.T) {
 				require.NotNil(t, frame)
 				t.Run("should have custom meta data correctly", func(t *testing.T) {
 					require.NotNil(t, frame.Meta.Custom)
-					require.Equal(t, "###############\n## URL\n###############\n\nhttps://jsonplaceholder.typicode.com/users\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' 'https://jsonplaceholder.typicode.com/users'", frame.Meta.ExecutedQueryString)
+					require.Equal(t, "###############\n## URL\n###############\n\nhttps://raw.githubusercontent.com/yesoreyeram/grafana-infinity-datasource/main/testdata/users.json\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' 'https://raw.githubusercontent.com/yesoreyeram/grafana-infinity-datasource/main/testdata/users.json'", frame.Meta.ExecutedQueryString)
 				})
 			},
 		},
@@ -266,4 +303,12 @@ func TestRemoteSources(t *testing.T) {
 			}
 		})
 	}
+}
+
+func toFP(v float64) *float64 {
+	return &v
+}
+
+func toSP(v string) *string {
+	return &v
 }

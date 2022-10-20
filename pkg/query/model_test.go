@@ -25,6 +25,7 @@ func TestLoadQuery(t *testing.T) {
 				"global_query_id" 	: "hello",
 				"parser"		: "backend",
 				"summarizeExpression": "sum(id)/10",
+				"summarizeBy" : "none",
 				"filterExpression": "id > 3 && id < 8",
 				"url"			: "https://foo.com" ,
 				"url_options"	: {
@@ -81,6 +82,7 @@ func TestLoadQuery(t *testing.T) {
 				Data:                "my-inline-data",
 				Parser:              "backend",
 				SummarizeExpression: "sum(id)/10",
+				SummarizeBy:         "none",
 				FilterExpression:    "id > 3 && id < 8",
 				RootSelector:        "my-root_selector",
 				Columns:             []querySrv.InfinityColumn{{Selector: "s", Text: "t", Type: "string", TimeStampFormat: "2006"}},

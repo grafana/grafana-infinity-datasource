@@ -46,7 +46,7 @@ export type InfinityJSONQueryOptions = {
 };
 export type InfinityJSONQuery = (
   | { parser?: 'simple'; json_options?: InfinityJSONQueryOptions }
-  | { parser: 'backend'; filterExpression?: string; summarizeExpression?: string; computed_columns?: InfinityColumn[] }
+  | { parser: 'backend'; filterExpression?: string; summarizeExpression?: string; summarizeBy?: string; computed_columns?: InfinityColumn[] }
   | { parser: 'sqlite'; sqlite_query?: string }
   | { parser: 'uql'; uql?: string }
   | { parser: 'groq'; groq?: string }
@@ -65,6 +65,7 @@ export type InfinityCSVQuery = {
   parser?: 'simple' | 'backend' | 'uql';
   filterExpression?: string;
   summarizeExpression?: string;
+  summarizeBy?: string;
   computed_columns?: InfinityColumn[];
   uql?: string;
 } & InfinityQueryWithDataSource<'csv'>;
@@ -73,6 +74,7 @@ export type InfinityTSVQuery = {
   parser?: 'simple' | 'backend' | 'uql';
   filterExpression?: string;
   summarizeExpression?: string;
+  summarizeBy?: string;
   computed_columns?: InfinityColumn[];
   uql?: string;
 } & InfinityQueryWithDataSource<'tsv'>;
@@ -85,6 +87,7 @@ export type InfinityGraphQLQuery = {
   parser?: 'simple' | 'backend' | 'uql' | 'groq';
   filterExpression?: string;
   summarizeExpression?: string;
+  summarizeBy?: string;
   computed_columns?: InfinityColumn[];
   uql?: string;
   groq?: string;

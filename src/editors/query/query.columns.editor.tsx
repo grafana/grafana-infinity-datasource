@@ -1,16 +1,17 @@
+import React, { useState } from 'react';
 import { Button } from '@grafana/ui';
 import { cloneDeep } from 'lodash';
-import React, { useState } from 'react';
 import { EditorRow } from './../../components/extended/EditorRow';
 import { EditorField } from './../../components/extended/EditorField';
-import { ComputedColumnsEditor } from './query.computedColumns';
+import { Stack } from './../../components/extended/Stack';
 import { isDataQuery } from './../../app/utils';
 import { QueryColumnItem } from './../../components/QueryColumnItem';
+import { JSONOptionsEditor } from '../../components/JSONOptionsEditor';
+import { CSVOptionsEditor } from '../../components/CSVOptionsEditor';
 import { UQLEditor } from './query.uql';
 import { GROQEditor } from './query.groq';
 import { SQLiteEditor } from './query.sqlite';
 import type { InfinityColumn, InfinityQuery } from './../../types';
-import { Stack } from 'components/extended/Stack';
 
 export const QueryColumnsEditor = (props: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void }) => {
   const { query, onChange, onRunQuery } = props;
@@ -25,24 +26,39 @@ export const QueryColumnsEditor = (props: { query: InfinityQuery; onChange: (val
       type: 'string',
     };
     onChange({ ...query, columns: [...columns, defaultColumn] });
-    onRunQuery();
   };
   const onColumnRemove = (index: number) => {
     const columns = cloneDeep(query.columns || []);
     columns.splice(index, 1);
     onChange({ ...query, columns });
-    onRunQuery();
   };
   return (
     <EditorRow
+      label={
+        (query.type === 'json' || query.type === 'graphql' || query.type === 'csv' || query.type === 'tsv') && query.parser === 'uql'
+          ? 'UQL'
+          : (query.type === 'json' || query.type === 'graphql' || query.type === 'csv' || query.type === 'tsv') && query.parser === 'groq'
+          ? 'GROQ'
+          : 'Parsing options & Result fields'
+      }
       collapsible={true}
+      collapsed={false}
       title={() => {
         switch (query.type) {
           case 'json':
           case 'graphql':
-            return `root selector, columns, computed columns`;
+            if (query.parser === 'uql') {
+              return 'UQL Query';
+            }
+            if (query.parser === 'groq') {
+              return 'GROQ Query';
+            }
+            if (query.parser === 'sqlite') {
+              return 'SQLite Query';
+            }
+            return `Field types, alias and selectors`;
           default:
-            return 'columns, computed columns';
+            return 'Field types and alias';
         }
       }}
     >
@@ -54,7 +70,11 @@ export const QueryColumnsEditor = (props: { query: InfinityQuery; onChange: (val
         <SQLiteEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />
       ) : (
         <>
-          <RootSelector {...props} />
+          <Stack direction="column">
+            <RootSelector {...props} />
+            {query.type === 'json' && <JSONOptionsEditor {...props} />}
+            {(query.type === 'csv' || query.type === 'tsv') && <CSVOptionsEditor {...props} />}
+          </Stack>
           <Stack direction="column">
             <EditorField label="Columns" optional={true}>
               <>
@@ -63,7 +83,17 @@ export const QueryColumnsEditor = (props: { query: InfinityQuery; onChange: (val
                     <div className="gf-form-inline" key={JSON.stringify(column) + index}>
                       <div className="gf-form">
                         <QueryColumnItem {...props} index={index} />
-                        <Button className="btn btn-danger btn-small" icon="trash-alt" variant="destructive" size="sm" style={{ margin: '5px' }} onClick={() => onColumnRemove(index)} />
+                        <Button
+                          className="btn btn-danger btn-small"
+                          icon="trash-alt"
+                          variant="destructive"
+                          size="sm"
+                          style={{ margin: '5px' }}
+                          onClick={(e) => {
+                            onColumnRemove(index);
+                            e.preventDefault();
+                          }}
+                        />
                       </div>
                     </div>
                   );
@@ -71,7 +101,15 @@ export const QueryColumnsEditor = (props: { query: InfinityQuery; onChange: (val
                 <div className="gf-form-inline">
                   <div className="gf-form">
                     <div className="gf-form gf-form--grow">
-                      <Button variant="secondary" size="sm" style={{ marginTop: '5px', marginLeft: '5px' }} onClick={() => onColumnAdd()}>
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        style={{ marginTop: '5px', marginLeft: '5px' }}
+                        onClick={(e) => {
+                          onColumnAdd();
+                          e.preventDefault();
+                        }}
+                      >
                         Add Columns
                       </Button>
                     </div>
@@ -79,7 +117,6 @@ export const QueryColumnsEditor = (props: { query: InfinityQuery; onChange: (val
                 </div>
               </>
             </EditorField>
-            <ComputedColumnsEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />
           </Stack>
         </>
       )}

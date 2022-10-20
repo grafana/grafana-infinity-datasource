@@ -12,6 +12,9 @@ import (
 
 func GetFrameForInlineSources(query querySrv.Query) (*data.Frame, error) {
 	frame := GetDummyFrame(query)
+	if query.Type == querySrv.QueryTypeGROQ || query.Type == querySrv.QueryTypeUQL || query.Type == querySrv.QueryTypeHTML || query.Type == querySrv.QueryTypeXML {
+		return frame, nil
+	}
 	if query.Parser != "backend" {
 		return frame, nil
 	}
@@ -48,7 +51,7 @@ func GetFrameForInlineSources(query querySrv.Query) (*data.Frame, error) {
 			return frame, fmt.Errorf("error applying filter. %w", err)
 		}
 		if strings.TrimSpace(query.SummarizeExpression) != "" {
-			return GetSummaryFrame(frame, query.SummarizeExpression)
+			return GetSummaryFrame(frame, query.SummarizeExpression, query.SummarizeBy)
 		}
 		if query.Format == "timeseries" && frame.TimeSeriesSchema().Type == data.TimeSeriesTypeLong {
 			if wFrame, err := data.LongToWide(frame, &data.FillMissing{Mode: data.FillModeNull}); err == nil {

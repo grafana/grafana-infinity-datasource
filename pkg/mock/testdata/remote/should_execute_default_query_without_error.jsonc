@@ -7,7 +7,7 @@
 //              "type": "json",
 //              "format": "",
 //              "source": "url",
-//              "url": "https://jsonplaceholder.typicode.com/users",
+//              "url": "https://raw.githubusercontent.com/yesoreyeram/grafana-infinity-datasource/main/testdata/users.json",
 //              "url_options": {
 //                  "method": "",
 //                  "params": null,
@@ -22,6 +22,7 @@
 //              "parser": "",
 //              "filterExpression": "",
 //              "summarizeExpression": "",
+//              "summarizeBy": "",
 //              "uql": "",
 //              "groq": "",
 //              "sqlite_query": "",
@@ -53,7 +54,7 @@
 //          "duration": 123,
 //          "error": ""
 //      },
-//      "executedQueryString": "###############\n## URL\n###############\n\nhttps://jsonplaceholder.typicode.com/users\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' 'https://jsonplaceholder.typicode.com/users'"
+//      "executedQueryString": "###############\n## URL\n###############\n\nhttps://raw.githubusercontent.com/yesoreyeram/grafana-infinity-datasource/main/testdata/users.json\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' 'https://raw.githubusercontent.com/yesoreyeram/grafana-infinity-datasource/main/testdata/users.json'"
 //  }
 //  Name: response
 //  Dimensions: 0 Fields by 0 Rows
@@ -74,7 +75,7 @@
               "type": "json",
               "format": "",
               "source": "url",
-              "url": "https://jsonplaceholder.typicode.com/users",
+              "url": "https://raw.githubusercontent.com/yesoreyeram/grafana-infinity-datasource/main/testdata/users.json",
               "url_options": {
                 "method": "",
                 "params": null,
@@ -89,6 +90,7 @@
               "parser": "",
               "filterExpression": "",
               "summarizeExpression": "",
+              "summarizeBy": "",
               "uql": "",
               "groq": "",
               "sqlite_query": "",
@@ -120,7 +122,7 @@
             "duration": 123,
             "error": ""
           },
-          "executedQueryString": "###############\n## URL\n###############\n\nhttps://jsonplaceholder.typicode.com/users\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' 'https://jsonplaceholder.typicode.com/users'"
+          "executedQueryString": "###############\n## URL\n###############\n\nhttps://raw.githubusercontent.com/yesoreyeram/grafana-infinity-datasource/main/testdata/users.json\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' 'https://raw.githubusercontent.com/yesoreyeram/grafana-infinity-datasource/main/testdata/users.json'"
         },
         "fields": []
       },

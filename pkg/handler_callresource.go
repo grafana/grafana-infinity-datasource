@@ -70,7 +70,7 @@ func (host *PluginHost) getGraphQLHandler() http.Handler {
 								"url": &graphql.ArgumentConfig{
 									Type:         graphql.String,
 									Description:  "URL to be queried",
-									DefaultValue: "https://jsonplaceholder.typicode.com/users",
+									DefaultValue: "https://github.com/yesoreyeram/grafana-infinity-datasource/blob/main/testdata/users.json",
 								},
 							},
 							Resolve: func(p graphql.ResolveParams) (interface{}, error) {

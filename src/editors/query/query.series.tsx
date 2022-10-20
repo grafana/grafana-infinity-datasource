@@ -16,7 +16,7 @@ export const SeriesEditor = ({ query, onChange }: { query: InfinitySeriesQuery; 
   };
   return (
     <>
-      <EditorRow>
+      <EditorRow label="Series">
         <div className="gf-form-inline">
           <EditorField label="Alias">
             <DataLinkInput

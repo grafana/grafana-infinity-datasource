@@ -8,6 +8,7 @@
     "website/public/**",
     "try/dashboards/**",
     "*SeriesProvider.ts",
+    "testdata/**",
     "coverage/**",
     "cypress/**",
     "dist/**"

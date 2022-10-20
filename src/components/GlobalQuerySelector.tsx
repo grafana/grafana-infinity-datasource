@@ -1,5 +1,6 @@
 import React from 'react';
 import { Select } from '@grafana/ui';
+import { EditorField } from './extended/EditorField';
 import type { GlobalInfinityQuery, InfinityQuery } from './../types';
 import type { SelectableValue } from '@grafana/data/types';
 
@@ -20,14 +21,15 @@ export const GlobalQuerySelector = (props: { query: InfinityQuery; instanceSetti
   };
   return (
     <>
-      <label className={`gf-form-label query-keyword width-4`}>Source</label>
-      {global_queries.length > 0 ? (
-        <div style={{ marginRight: '5px' }}>
-          <Select options={global_queries} value={query.global_query_id} onChange={(e) => onGlobalQueryIDChange(e.value as string)} menuShouldPortal={true}></Select>
-        </div>
-      ) : (
-        <label className="gf-form-label width-8">No Queries found</label>
-      )}
+      <EditorField label="Source">
+        {global_queries.length > 0 ? (
+          <div style={{ marginRight: '5px' }}>
+            <Select options={global_queries} value={query.global_query_id} onChange={(e) => onGlobalQueryIDChange(e.value as string)} menuShouldPortal={true}></Select>
+          </div>
+        ) : (
+          <label className="gf-form-label width-8">No Queries found</label>
+        )}
+      </EditorField>
     </>
   );
 };

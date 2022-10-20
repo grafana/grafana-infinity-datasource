@@ -18,9 +18,8 @@ func EvaluateInFrame(expression string, input *data.Frame) (interface{}, error) 
 	if err != nil {
 		return nil, err
 	}
-	parameters := map[string]interface{}{
-		"frame": input,
-	}
+	frameLen, _ := input.RowLen()
+	parameters := map[string]interface{}{"frame": input, "recordsCount": frameLen}
 	if input != nil {
 		for _, field := range input.Fields {
 			parameters[SlugifyFieldName(field.Name)] = field
@@ -28,10 +27,7 @@ func EvaluateInFrame(expression string, input *data.Frame) (interface{}, error) 
 		}
 	}
 	result, err := parsedExpression.Evaluate(parameters)
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
+	return result, err
 }
 
 var expressionFunctions = map[string]govaluate.ExpressionFunction{
@@ -99,7 +95,7 @@ var expressionFunctions = map[string]govaluate.ExpressionFunction{
 		}
 		sum := float64(0)
 		for i := 0; i < field.Len(); i++ {
-			if v, ok := toFloat64p(field.At(i)); ok {
+			if v, ok := toFloat64p(field.At(i)); ok && v != nil {
 				sum += *v
 			}
 
@@ -116,7 +112,7 @@ var expressionFunctions = map[string]govaluate.ExpressionFunction{
 		}
 		var min *float64
 		for i := 0; i < field.Len(); i++ {
-			if v, ok := toFloat64p(field.At(i)); ok {
+			if v, ok := toFloat64p(field.At(i)); ok && v != nil {
 				if min == nil || *v < *min {
 					min = v
 				}
@@ -134,7 +130,7 @@ var expressionFunctions = map[string]govaluate.ExpressionFunction{
 		}
 		var max *float64
 		for i := 0; i < field.Len(); i++ {
-			if v, ok := toFloat64p(field.At(i)); ok {
+			if v, ok := toFloat64p(field.At(i)); ok && v != nil {
 				if max == nil || *v > *max {
 					max = v
 				}
@@ -152,7 +148,7 @@ var expressionFunctions = map[string]govaluate.ExpressionFunction{
 		}
 		sum := float64(0)
 		for i := 0; i < field.Len(); i++ {
-			if v, ok := toFloat64p(field.At(i)); ok {
+			if v, ok := toFloat64p(field.At(i)); ok && v != nil {
 				sum += *v
 			}
 
