@@ -11,6 +11,7 @@ import { getTemplateVariablesFromResult, LegacyVariableProvider, migrateLegacyQu
 import { AnnotationsEditor } from './editors/annotation.editor';
 import { interpolateQuery, interpolateVariableQuery } from './interpolate';
 import { migrateQuery } from './migrate';
+import { isDataQuery, normalizeURL } from './app/utils';
 import type { InfinityInstanceSettings, InfinityOptions, InfinityQuery, MetricFindValue, VariableQuery } from './types';
 import type { DataFrame, DataQueryRequest, DataQueryResponse, ScopedVars, TimeRange } from '@grafana/data/types';
 
@@ -30,7 +31,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
         .then((result) => this.getResults(request, result))
         .then((result) => subscriber.next({ ...result, state: LoadingState.Done }))
         .catch((error) => {
-          console.log(error);
+          console.error(error);
           subscriber.next({ data: [], error, state: LoadingState.Error });
           subscriber.error(error);
         })
@@ -43,6 +44,15 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
   metricFindQuery(originalQuery: VariableQuery): Promise<MetricFindValue[]> {
     let query = migrateLegacyQuery(originalQuery);
     query = interpolateVariableQuery(query);
+    if (query.queryType === 'infinity' && isDataQuery(query.infinityQuery) && query.infinityQuery.source === 'url') {
+      query = {
+        ...query,
+        infinityQuery: {
+          ...query.infinityQuery,
+          url: normalizeURL(query.infinityQuery.url),
+        },
+      };
+    }
     return new Promise((resolve) => {
       switch (query.queryType) {
         case 'random':
@@ -56,7 +66,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
           break;
         case 'infinity':
           if (query.infinityQuery) {
-            const updatedQuery = migrateQuery(query.infinityQuery);
+            let updatedQuery = migrateQuery(query.infinityQuery);
             const request = { targets: [interpolateQuery(updatedQuery, {})] } as DataQueryRequest<InfinityQuery>;
             super
               .query(request)

@@ -15,7 +15,7 @@ export const VariableEditor = (props: { query: VariableQuery; onChange: (query: 
   return (
     <>
       <div className="gf-form">
-        <label className="gf-form-label query-keyword width-10">Query Type</label>
+        <label className="gf-form-label width-10">Query Type</label>
         <Select
           options={variableQueryTypes}
           value={variableQueryTypes.find((v) => v.value === query.queryType)}
@@ -76,7 +76,7 @@ const VariableEditorRandom = (props: { query: VariableQueryRandom; onChange: (qu
   };
   return (
     <div className="gf-form">
-      <label className="gf-form-label query-keyword width-10">Values</label>
+      <label className="gf-form-label width-10">Values</label>
       <TagsInput tags={query.values || []} onChange={onQueryChange} placeholder="Enter values (enter key to add)" />
     </div>
   );

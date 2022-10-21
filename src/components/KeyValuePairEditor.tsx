@@ -19,28 +19,47 @@ export const KeyValueEditor = (props: { value: InfinityKV[]; onChange: (value: I
       <table style={{ width: '100%' }}>
         {value && value.length > 0 && (
           <thead>
-            <td width="40%">Key</td>
-            <td width="40%">Value</td>
-            <td width="20%"></td>
+            <td width="40%" style={{ paddingInlineEnd: '10px' }}>
+              Key
+            </td>
+            <td width="40%" style={{ paddingInlineEnd: '10px' }}>
+              Value
+            </td>
+            <td width="20%" style={{ paddingInlineEnd: '10px' }}></td>
           </thead>
         )}
         {value &&
           value.map((header, index) => (
             <tr key={index}>
-              <td>
+              <td style={{ paddingInlineEnd: '10px' }}>
                 <Input value={header.key} onChange={(e) => onItemChange(index, 'key', e.currentTarget.value)}></Input>
               </td>
-              <td>
+              <td style={{ paddingInlineEnd: '10px' }}>
                 <Input value={header.value} onChange={(e) => onItemChange(index, 'value', e.currentTarget.value)}></Input>
               </td>
-              <td>
-                <Button icon="trash-alt" variant="secondary" size="sm" onClick={() => removeItem(index)} />
+              <td style={{ paddingInlineEnd: '10px' }}>
+                <Button
+                  icon="trash-alt"
+                  variant="destructive"
+                  size="sm"
+                  onClick={(e) => {
+                    removeItem(index);
+                    e.preventDefault();
+                  }}
+                />
               </td>
             </tr>
           ))}
       </table>
       <div style={{ width: '100%', textAlign: 'left' }}>
-        <Button variant="secondary" size="md" onClick={(e) => onChange([...(value || []), { ...defaultValue }])}>
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={(e) => {
+            onChange([...(value || []), { ...defaultValue }]);
+            e.preventDefault();
+          }}
+        >
           {addButtonText}
         </Button>
       </div>

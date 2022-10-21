@@ -7,10 +7,9 @@ import (
 	"net/url"
 	"strings"
 
-	"moul.io/http2curl"
-
 	querySrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/query"
 	settingsSrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/settings"
+	"moul.io/http2curl"
 )
 
 func GetRequest(settings settingsSrv.InfinitySettings, body io.Reader, query querySrv.Query, requestHeaders map[string]string, includeSect bool) (req *http.Request, err error) {

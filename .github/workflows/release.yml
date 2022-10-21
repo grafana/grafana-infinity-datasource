@@ -18,7 +18,7 @@ jobs:
       - name: NodeJS Setup
         uses: actions/setup-node@v1
         with:
-          node-version: 16.14.0
+          node-version: 16.18.0
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
@@ -37,9 +37,9 @@ jobs:
           path: |
             ~/.cache/Cypress
              node_modules
-          key: ${{ runner.os }}-16.14.0-nodemodules-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-16.18.0-nodemodules-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-16.14.0-nodemodules-
+            ${{ runner.os }}-16.18.0-nodemodules-
       - name: Install dependencies
         run: CYPRESS_CACHE_FOLDER=/home/runner/.cache/Cypress yarn install --frozen-lockfile;
         if: |
@@ -57,7 +57,7 @@ jobs:
       - name: Setup Go environment
         uses: actions/setup-go@v2
         with:
-          go-version: '1.18'
+          go-version: '1.19.2'
       - name: Get go cache directory path
         id: go-cache-paths
         run: echo "::set-output name=go-mod::$(go env GOMODCACHE)"

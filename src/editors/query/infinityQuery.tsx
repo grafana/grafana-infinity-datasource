@@ -1,5 +1,5 @@
 import { defaultsDeep } from 'lodash';
-import React from 'react';
+import React, { useState } from 'react';
 import { EditorRows, EditorRow } from './../../components/extended/EditorRow';
 import { DefaultInfinityQuery } from './../../constants';
 import { migrateQuery } from './../../migrate';
@@ -7,11 +7,12 @@ import { QueryColumnsEditor } from './query.columns.editor';
 import { TableFilter } from './query.filters';
 import { GROQEditor } from './query.groq';
 import { SeriesEditor } from './query.series';
-import { TypeChooser } from './query.type';
+import { HelpLinks } from './../query.help';
+import { BasicOptions } from './query.options';
 import { UQLEditor } from './query.uql';
 import { URLEditor } from './query.url';
 import { InlineDataEditor } from './query.data';
-import { Summarize } from './query.summarize';
+import { ExperimentalFeatures } from './query.experimental';
 import { isDataQuery } from './../../app/utils';
 import type { EditorMode, InfinityQuery } from './../../types';
 
@@ -25,6 +26,8 @@ export type InfinityEditorProps = {
 
 export const InfinityQueryEditor = (props: InfinityEditorProps) => {
   const { onChange, mode, instanceSettings, onRunQuery } = props;
+  const [showUrlOptions, setShowUrlOptions] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
   let query: InfinityQuery = defaultsDeep(props.query, DefaultInfinityQuery) as InfinityQuery;
   query = migrateQuery(query);
   let canShowColumnsEditor = ['csv', 'tsv', 'html', 'json', 'graphql', 'xml', 'google-sheets'].includes(query.type);
@@ -47,25 +50,36 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
     query.columns &&
     query.columns.length > 0;
   return (
-    <div className="infinity-query-editor" data-testid="infinity-query-editor">
+    <div className="infinity-query-editor" data-testid="infinity-query-editor" style={{ marginBottom: '5px' }}>
       <EditorRows>
-        <TypeChooser {...{ instanceSettings, mode, query, onChange, onRunQuery }} />
+        {showHelp && (
+          <EditorRow label="Help">
+            <div style={{ marginBlock: '10px' }}>
+              <HelpLinks />
+            </div>
+          </EditorRow>
+        )}
+        <BasicOptions {...{ instanceSettings, mode, query, onChange, onRunQuery }} onShowUrlOptions={() => setShowUrlOptions(!showUrlOptions)} onShowHelp={() => setShowHelp(!showHelp)} />
         {query.type === 'series' && <SeriesEditor {...{ query, onChange }} />}
-        {isDataQuery(query) && query.source !== 'inline' && <URLEditor {...{ mode, query, onChange, onRunQuery }} />}
+        {isDataQuery(query) && query.source !== 'inline' && showUrlOptions && <URLEditor {...{ mode, query, onChange, onRunQuery }} />}
         {isDataQuery(query) && query.source === 'inline' && <InlineDataEditor {...{ mode, query, onChange, onRunQuery }} />}
         {canShowColumnsEditor && <QueryColumnsEditor {...{ mode, query, onChange, onRunQuery }} />}
         {canShowFilterEditor && <TableFilter {...{ query, onChange, onRunQuery }} />}
         {query.type === 'uql' && (
-          <EditorRow>
-            <UQLEditor {...{ query, onChange, onRunQuery, mode }} />
-          </EditorRow>
+          <>
+            <EditorRow label="UQL" collapsible={true} title={() => 'UQL'}>
+              <UQLEditor {...{ query, onChange, onRunQuery, mode }} />
+            </EditorRow>
+          </>
         )}
         {query.type === 'groq' && (
-          <EditorRow>
+          <EditorRow label="GROQ" collapsible={true} title={() => 'GROQ'}>
             <GROQEditor {...{ query, onChange, onRunQuery, mode }} />
           </EditorRow>
         )}
-        {(query.type === 'json' || query.type === 'graphql' || query.type === 'csv' || query.type === 'tsv') && query.parser === 'backend' && <Summarize {...{ query, onChange, onRunQuery }} />}
+        {(query.type === 'json' || query.type === 'graphql' || query.type === 'csv' || query.type === 'tsv') && query.parser === 'backend' && (
+          <ExperimentalFeatures query={query} onChange={onChange} onRunQuery={onRunQuery} />
+        )}
       </EditorRows>
     </div>
   );

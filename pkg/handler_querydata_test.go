@@ -12,12 +12,15 @@ import (
 	"testing"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
+	"github.com/grafana/grafana-plugin-sdk-go/experimental"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	main "github.com/yesoreyeram/grafana-infinity-datasource/pkg"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/infinity"
 	settingsSrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/settings"
 )
+
+const updateGolden = false
 
 func TestAuthentication(t *testing.T) {
 	t.Run("should throw error when allowed hosts not configured", func(t *testing.T) {
@@ -235,7 +238,7 @@ func TestAuthentication(t *testing.T) {
 			}, *client, map[string]string{}, backend.PluginContext{})
 			require.NotNil(t, res)
 			require.NotNil(t, res.Error)
-			assert.Equal(t, fmt.Sprintf("error getting response from url %s/something-else. no response received. Error: Get \"%s/something-else\": oauth2: cannot fetch token: 401 Unauthorized\nResponse: ", server.URL, server.URL), res.Error.Error())
+			assert.Equal(t, fmt.Sprintf("error getting data frame. error getting response from url %s/something-else. no response received. Error: Get \"%s/something-else\": oauth2: cannot fetch token: 401 Unauthorized\nResponse: ", server.URL, server.URL), res.Error.Error())
 			metaData := res.Frames[0].Meta.Custom.(*infinity.CustomMeta)
 			require.NotNil(t, metaData)
 			require.Equal(t, http.StatusInternalServerError, metaData.ResponseCodeFromServer)
@@ -270,7 +273,7 @@ func TestAuthentication(t *testing.T) {
 			}, *client, map[string]string{"Authorization": "foo", "X-ID-Token": "bar"}, backend.PluginContext{})
 			require.NotNil(t, res)
 			require.NotNil(t, res.Error)
-			assert.Equal(t, fmt.Errorf("error getting response from url %s. no response received. Error: Get \"%s\": x509: certificate signed by unknown authority", server.URL, server.URL), res.Error)
+			assert.Equal(t, fmt.Sprintf("error getting data frame. error getting response from url %s. no response received. Error: Get \"%s\": x509: certificate signed by unknown authority", server.URL, server.URL), res.Error.Error())
 			metaData := res.Frames[0].Meta.Custom.(*infinity.CustomMeta)
 			require.NotNil(t, metaData)
 			require.Equal(t, fmt.Sprintf("error getting response from url %s. no response received. Error: Get \"%s\": x509: certificate signed by unknown authority", server.URL, server.URL), metaData.Error)
@@ -416,6 +419,43 @@ func TestResponseFormats(t *testing.T) {
 			// require.Equal(t, data.FieldTypeNullableFloat64, res.Frames[0].Fields[0].Type())
 			// require.Equal(t, data.FieldTypeNullableString, res.Frames[0].Fields[1].Type())
 			// require.Equal(t, data.FieldTypeNullableTime, res.Frames[0].Fields[2].Type())
+		})
+		t.Run("should parse the computed columns", func(t *testing.T) {
+			client, err := infinity.NewClient(settingsSrv.InfinitySettings{URL: ""})
+			require.Nil(t, err)
+			res := main.QueryData(context.Background(), backend.DataQuery{
+				JSON: []byte(`{
+					"type": "json",
+					"data":  "[{ \"Name\": \"amc ambassador dpl\", \"Miles_per_Gallon\": 15, \"Cylinders\": 8, \"Displacement\": 390, \"Horsepower\": 190, \"Weight_in_lbs\": 3850, \"Acceleration\": 8.5, \"Year\": \"1970-01-01\", \"Origin\": \"USA\" }, { \"Name\": \"citroen ds-21 pallas\", \"Miles_per_Gallon\": null, \"Cylinders\": null, \"Displacement\": 133, \"Horsepower\": 115, \"Weight_in_lbs\": 3090, \"Acceleration\": 17.5, \"Year\": \"1970-01-01\", \"Origin\": \"Europe\" }, { \"Name\": \"chevrolet hello concours (sw)\", \"Miles_per_Gallon\": null, \"Cylinders\": 8, \"Displacement\": 350, \"Horsepower\": 165, \"Weight_in_lbs\": 4142, \"Acceleration\": 11.5, \"Year\": \"1970-01-01\", \"Origin\": \"USA\" }]",
+					"source": "inline",
+					"parser": "backend",
+					"root_selector": "",
+					"columns": [],
+					"computed_columns": [{ "selector" : "[Cylinders] + horsepower" , "text": "power" }]
+				}`),
+			}, *client, map[string]string{}, backend.PluginContext{})
+			require.NotNil(t, res)
+			require.Nil(t, res.Error)
+			experimental.CheckGoldenJSONResponse(t, "testdata", "backend-computed-columns", &res, updateGolden)
+		})
+		t.Run("should filter computed columns", func(t *testing.T) {
+			client, err := infinity.NewClient(settingsSrv.InfinitySettings{URL: ""})
+			require.Nil(t, err)
+			res := main.QueryData(context.Background(), backend.DataQuery{
+				JSON: []byte(`{
+					"type": "json",
+					"data":  "[{\"id\":0,\"name\":\"iPhone 6S\",\"description\":\"Kogi skateboard tattooed, whatever portland fingerstache coloring book mlkshk leggings flannel dreamcatcher.\",\"imageUrl\":\"http://www.icentar.me/phone/6s/images/goldbig.jpg\",\"price\":799},{\"id\":1,\"name\":\"iPhone 5S\",\"description\":\"Kogi skateboard tattooed, whatever portland fingerstache coloring book mlkshk leggings flannel dreamcatcher.\",\"imageUrl\":\"http://www.icentar.me/phone/5s/images/silverbig.png\",\"price\":349},{\"id\":2,\"name\":\"Macbook\",\"description\":\"Kogi skateboard tattooed, whatever portland fingerstache coloring book mlkshk leggings flannel dreamcatcher.\",\"imageUrl\":\"http://www.icentar.me/mac/macbook/images/pro.jpg\",\"price\":1499},{\"id\":3,\"name\":\"Macbook Air\",\"description\":\"Kogi skateboard tattooed, whatever portland fingerstache coloring book mlkshk leggings flannel dreamcatcher.\",\"imageUrl\":\"http://www.icentar.me/mac/mbair/images/air.jpg\",\"price\":999},{\"id\":4,\"name\":\"Macbook Air 2013\",\"description\":\"Kogi skateboard tattooed, whatever portland fingerstache coloring book mlkshk leggings flannel dreamcatcher.\",\"imageUrl\":\"http://www.icentar.me/mac/mbair/images/air.jpg\",\"price\":599},{\"id\":5,\"name\":\"Macbook Air 2012\",\"description\":\"Kogi skateboard tattooed, whatever portland fingerstache coloring book mlkshk leggings flannel dreamcatcher.\",\"imageUrl\":\"http://www.icentar.me/mac/mbair/images/air.jpg\",\"price\":499}]",
+					"source": "inline",
+					"parser": "backend",
+					"root_selector": "",
+					"computed_columns": [{ "selector" : "price > 500 ? 2 : 5" , "text": "no of items" },{ "selector" : "[no of items] * price" , "text": "cost" }],
+					"filterExpression" : "!(name IN ('Macbook','Macbook Air'))",
+					"summarizeExpression" : "sum(cost)"
+				}`),
+			}, *client, map[string]string{}, backend.PluginContext{})
+			require.NotNil(t, res)
+			require.Nil(t, res.Error)
+			experimental.CheckGoldenJSONResponse(t, "testdata", "backend-filter-computed-columns", &res, updateGolden)
 		})
 	})
 	t.Run("JSON SQLite", func(t *testing.T) {

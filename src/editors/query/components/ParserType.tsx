@@ -1,14 +1,47 @@
+import { css } from '@emotion/css';
 import React from 'react';
-import { Select } from '@grafana/ui';
+import { Select, useStyles2 } from '@grafana/ui';
 import { EditorField } from './../../../components/extended/EditorField';
+import type { GrafanaTheme2 } from '@grafana/data';
 import type { InfinityQuery } from './../../../types';
 
+const getStyles = (theme: GrafanaTheme2) => {
+  return {
+    parserType: {
+      promoNode: css({
+        marginInlineStart: '5px',
+        color: theme.colors.success.border,
+      }),
+    },
+  };
+};
+
 export const ParseTypeEditor = (props: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void }) => {
+  const styles = useStyles2(getStyles);
   const { query, onChange, onRunQuery } = props;
   if (query.type === 'json' || query.type === 'graphql') {
     return (
-      <EditorField label="Parser">
+      <EditorField
+        label="Parser"
+        tooltip={query.parser !== 'backend' ? 'Try backend parser to get support for alerting, public dashboards, query caching, recorded queries and many more options' : ''}
+        promoNode={
+          query.parser !== 'backend' && query.parser !== 'uql' ? (
+            <span
+              className={styles.parserType.promoNode}
+              onClick={() => {
+                onChange({ ...query, parser: 'backend' });
+                onRunQuery();
+              }}
+            >
+              Try backend!
+            </span>
+          ) : (
+            <></>
+          )
+        }
+      >
         <Select<typeof query.parser>
+          width={20}
           value={query.parser || 'simple'}
           options={[
             { value: 'simple', label: 'Default' },
@@ -32,14 +65,32 @@ export const ParseTypeEditor = (props: { query: InfinityQuery; onChange: (value:
             }
             onRunQuery();
           }}
-        ></Select>
+        />
       </EditorField>
     );
   }
   if (query.type === 'csv' || query.type === 'tsv') {
     return (
-      <EditorField label="Parser">
+      <EditorField
+        label="Parser"
+        promoNode={
+          query.parser !== 'backend' && query.parser !== 'uql' ? (
+            <span
+              style={{ marginInline: '5px', color: 'yellowgreen' }}
+              onClick={() => {
+                onChange({ ...query, parser: 'backend' });
+                onRunQuery();
+              }}
+            >
+              Try backend parser!
+            </span>
+          ) : (
+            <></>
+          )
+        }
+      >
         <Select<typeof query.parser>
+          width={20}
           value={query.parser || 'simple'}
           options={[
             { value: 'simple', label: 'Default' },
@@ -65,6 +116,7 @@ export const ParseTypeEditor = (props: { query: InfinityQuery; onChange: (value:
     return (
       <EditorField label="Parser">
         <Select<typeof query.parser>
+          width={20}
           value={query.parser || 'simple'}
           options={[
             { value: 'simple', label: 'Default' },

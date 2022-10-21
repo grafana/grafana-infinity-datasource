@@ -25,6 +25,8 @@ func TestLoadQuery(t *testing.T) {
 				"global_query_id" 	: "hello",
 				"parser"		: "backend",
 				"summarizeExpression": "sum(id)/10",
+				"summarizeBy" : "none",
+				"filterExpression": "id > 3 && id < 8",
 				"url"			: "https://foo.com" ,
 				"url_options"	: {
 					"method"  			: 	"POST",
@@ -38,7 +40,8 @@ func TestLoadQuery(t *testing.T) {
 				},
 				"data" 			: "my-inline-data",
 				"root_selector" : "my-root_selector",
-				"columns" 		: [{"selector":"s","text":"t","type":"string","timestampFormat":"2006"}],
+				"columns" 				: [{"selector":"s","text":"t","type":"string","timestampFormat":"2006"}],
+				"computed_columns" 		: [{"selector":"s1","text":"t1"}],
 				"filters" 		: [{"field":"ff1","operator":"fo1","value":["fa1","fb1"]}],
 				"format" 		: "dataframe",
 				"json_options" 	: {
@@ -79,8 +82,11 @@ func TestLoadQuery(t *testing.T) {
 				Data:                "my-inline-data",
 				Parser:              "backend",
 				SummarizeExpression: "sum(id)/10",
+				SummarizeBy:         "none",
+				FilterExpression:    "id > 3 && id < 8",
 				RootSelector:        "my-root_selector",
 				Columns:             []querySrv.InfinityColumn{{Selector: "s", Text: "t", Type: "string", TimeStampFormat: "2006"}},
+				ComputedColumns:     []querySrv.InfinityColumn{{Selector: "s1", Text: "t1"}},
 				Filters:             []querySrv.InfinityFilter{{Field: "ff1", Operator: "fo1", Value: []string{"fa1", "fb1"}}},
 				Format:              "dataframe",
 				JSONOptions: querySrv.InfinityJSONOptions{

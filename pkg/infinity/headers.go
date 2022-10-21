@@ -72,9 +72,11 @@ func ApplyHeadersFromSettings(settings settingsSrv.InfinitySettings, req *http.R
 		if includeSect {
 			val = value
 		}
-		req.Header.Add(key, val)
-		if strings.EqualFold(key, headerKeyAccept) || strings.EqualFold(key, headerKeyContentType) {
-			req.Header.Set(key, val)
+		if key != "" {
+			req.Header.Add(key, val)
+			if strings.EqualFold(key, headerKeyAccept) || strings.EqualFold(key, headerKeyContentType) {
+				req.Header.Set(key, val)
+			}
 		}
 	}
 	return req
@@ -86,9 +88,11 @@ func ApplyHeadersFromQuery(query querySrv.Query, settings settingsSrv.InfinitySe
 		if includeSect {
 			value = replaceSect(header.Value, settings, includeSect)
 		}
-		req.Header.Add(header.Key, value)
-		if strings.EqualFold(header.Key, headerKeyAccept) || strings.EqualFold(header.Key, headerKeyContentType) {
-			req.Header.Set(header.Key, value)
+		if header.Key != "" {
+			req.Header.Add(header.Key, value)
+			if strings.EqualFold(header.Key, headerKeyAccept) || strings.EqualFold(header.Key, headerKeyContentType) {
+				req.Header.Set(header.Key, value)
+			}
 		}
 	}
 	return req
@@ -122,7 +126,9 @@ func ApplyApiKeyAuth(settings settingsSrv.InfinitySettings, req *http.Request, i
 		if includeSect {
 			apiKeyHeader = settings.ApiKeyValue
 		}
-		req.Header.Add(settings.ApiKeyKey, apiKeyHeader)
+		if settings.ApiKeyKey != "" {
+			req.Header.Add(settings.ApiKeyKey, apiKeyHeader)
+		}
 	}
 	return req
 }
