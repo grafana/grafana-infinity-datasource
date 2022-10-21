@@ -46,6 +46,11 @@ func TestEvaluateInFrame(t *testing.T) {
 			expression: `mean(hello_1st_world_)`,
 			want:       float64(1.25),
 		},
+		{
+			input:      data.NewFrame("test", data.NewField("grafana infinity 數據源!", nil, []*float64{toFP(1), toFP(2), toFP(0.5), toFP(1.5)})),
+			expression: `mean([grafana infinity 數據源!])`,
+			want:       float64(1.25),
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

@@ -62,6 +62,7 @@ export const Header = (props: HeaderProps) => {
                   <DropDownLink to="/wiki/configuration">Configuration</DropDownLink>
                   <DropDownLink to="/wiki/authentication">Authentication</DropDownLink>
                   <DropDownLink to="/wiki/template-variables">Variables</DropDownLink>
+                  <DropDownLink to="/wiki/backend">Backend Parser</DropDownLink>
                   <DropDownLink to="/wiki/macros">Macros</DropDownLink>
                   <DropDownLink to="/wiki/annotations">Annotations</DropDownLink>
                   <DropDownLink to="/wiki/limitations">Limitations</DropDownLink>

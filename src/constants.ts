@@ -6,7 +6,7 @@ export const DefaultInfinityQuery: InfinityQuery = {
   type: 'json',
   source: 'url',
   format: 'table',
-  url: 'https://jsonplaceholder.typicode.com/users',
+  url: 'https://github.com/yesoreyeram/grafana-infinity-datasource/blob/main/testdata/users.json',
   url_options: { method: 'GET', data: '' },
   root_selector: '',
   columns: [],
@@ -14,17 +14,17 @@ export const DefaultInfinityQuery: InfinityQuery = {
 };
 
 export const SCRAP_QUERY_TYPES: Array<SelectableValue<InfinityQueryType>> = [
-  { label: 'UQL', value: 'uql' },
   { label: 'JSON', value: 'json' },
   { label: 'CSV', value: 'csv' },
   { label: 'TSV', value: 'tsv' },
   { label: 'GraphQL', value: 'graphql' },
   { label: 'XML', value: 'xml' },
   { label: 'HTML', value: 'html' },
+  { label: 'Google Sheets', value: 'google-sheets' },
+  { label: 'UQL', value: 'uql' },
+  { label: 'GROQ', value: 'groq' },
   { label: 'Series', value: 'series' },
   { label: 'Global Query', value: 'global' },
-  { label: 'GROQ', value: 'groq' },
-  { label: 'Google Sheets', value: 'google-sheets' },
 ];
 export const INFINITY_RESULT_FORMATS: Array<SelectableValue<InfinityQueryFormat>> = [
   { label: 'Data Frame', value: 'dataframe' },
@@ -36,7 +36,7 @@ export const INFINITY_RESULT_FORMATS: Array<SelectableValue<InfinityQueryFormat>
 ];
 export const INFINITY_SOURCES: ScrapQuerySources[] = [
   { label: 'URL', value: 'url', supported_types: ['csv', 'tsv', 'json', 'html', 'xml', 'graphql', 'uql', 'groq'] },
-  { label: 'Inline / Upload', value: 'inline', supported_types: ['csv', 'tsv', 'json', 'xml', 'uql', 'groq'] },
+  { label: 'Inline', value: 'inline', supported_types: ['csv', 'tsv', 'json', 'xml', 'uql', 'groq'] },
   { label: 'Random Walk', value: 'random-walk', supported_types: ['series'] },
   { label: 'Expression', value: 'expression', supported_types: ['series'] },
 ];
