@@ -37,15 +37,20 @@ const Method = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChang
     { label: 'POST', value: 'POST' },
   ];
   const onMethodChange = (method: 'GET' | 'POST') => {
-    onChange({
-      ...query,
-      url_options: {
-        ...query.url_options,
-        method,
-      },
-    });
+    if (query.source === 'url') {
+      onChange({
+        ...query,
+        url_options: {
+          ...query.url_options,
+          method,
+        },
+      });
+    }
     onRunQuery();
   };
+  if (query.source !== 'url') {
+    return <></>;
+  }
   return (
     <EditorField label="HTTP Method">
       <Select
@@ -101,7 +106,7 @@ const Headers = ({ query, onChange }: { query: InfinityQuery; onChange: (value: 
   if (!(isDataQuery(query) || query.type === 'uql' || query.type === 'groq')) {
     return <></>;
   }
-  if (query.source === 'inline') {
+  if (query.source === 'inline' || query.source === 'reference') {
     return <></>;
   }
   const defaultHeader = {
@@ -124,7 +129,7 @@ const QueryParams = ({ query, onChange, onRunQuery }: { query: InfinityQuery; on
   if (!(isDataQuery(query) || query.type === 'uql' || query.type === 'groq')) {
     return <></>;
   }
-  if (query.source === 'inline') {
+  if (query.source === 'inline' || query.source === 'reference') {
     return <></>;
   }
   const defaultParam = {
@@ -147,7 +152,7 @@ const Body = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange:
   if (!(isDataQuery(query) || query.type === 'uql' || query.type === 'groq')) {
     return <></>;
   }
-  if (query.source === 'inline') {
+  if (query.source === 'inline' || query.source === 'reference') {
     return <></>;
   }
   const placeholderGraphQLQuery = `{ query : { }}`;

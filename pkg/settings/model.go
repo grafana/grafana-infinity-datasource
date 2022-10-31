@@ -70,6 +70,7 @@ type InfinitySettings struct {
 	OpenAPIVersion       string
 	OpenAPIUrl           string
 	OpenAPIBaseUrl       string
+	ReferenceData        []RefData
 }
 
 func (s *InfinitySettings) Validate() error {
@@ -88,6 +89,11 @@ func (s *InfinitySettings) Validate() error {
 	return nil
 }
 
+type RefData struct {
+	Name string `json:"name,omitempty"`
+	Data string `json:"data,omitempty"`
+}
+
 type InfinitySettingsJson struct {
 	AuthenticationMethod string         `json:"auth_method,omitempty"`
 	APIKeyKey            string         `json:"apiKeyKey,omitempty"`
@@ -104,6 +110,7 @@ type InfinitySettingsJson struct {
 	OpenAPIVersion       string         `json:"openApiVersion,omitempty"`
 	OpenAPIUrl           string         `json:"openApiUrl,omitempty"`
 	OpenAPIBaseUrl       string         `json:"openAPIBaseURL,omitempty"`
+	ReferenceData        []RefData      `json:"refData,omitempty"`
 }
 
 func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinitySettings, err error) {
@@ -148,6 +155,7 @@ func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinityS
 	settings.OpenAPIVersion = infJson.OpenAPIVersion
 	settings.OpenAPIUrl = infJson.OpenAPIUrl
 	settings.OpenAPIBaseUrl = infJson.OpenAPIBaseUrl
+	settings.ReferenceData = infJson.ReferenceData
 	if val, ok := config.DecryptedSecureJSONData["basicAuthPassword"]; ok {
 		settings.Password = val
 	}

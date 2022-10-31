@@ -17,6 +17,8 @@ export const IsValidInfinityQuery = (query: InfinityQuery): boolean => {
   if (query && (query.type === 'csv' || query.type === 'tsv' || query.type === 'graphql' || query.type === 'json' || query.type === 'xml')) {
     if (query.source === 'url') {
       return query.url !== undefined && query.url !== '';
+    } else if (query.source === 'reference') {
+      return query.referenceName !== undefined && query.referenceName !== '';
     } else {
       return query.data !== undefined && query.data !== '';
     }

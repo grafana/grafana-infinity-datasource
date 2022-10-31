@@ -4,6 +4,7 @@ import { EditorRow } from '../../components/extended/EditorRow';
 import { EditorField } from '../../components/extended/EditorField';
 import { FormatSelector } from '../../components/FormatSelector';
 import { GlobalQuerySelector } from '../../components/GlobalQuerySelector';
+import { ReferenceNameEditor } from './components/ReferenceName';
 import { InlineDataEntry } from './query.data';
 import { SourceSelector } from '../../components/SourceSelector';
 import { TypeSelector } from '../../components/TypeSelector';
@@ -12,9 +13,11 @@ import { GoogleSheetsEditor } from './components/GoogleSheets';
 import { URL } from './query.url';
 import { isDataQuery } from './../../app/utils';
 import type { EditorMode, InfinityQuery } from '../../types';
+import { Datasource } from './../../datasource';
 
 export const BasicOptions = (props: {
   mode: EditorMode;
+  datasource: Datasource;
   instanceSettings: any;
   query: InfinityQuery;
   onChange: (value: any) => void;
@@ -22,12 +25,13 @@ export const BasicOptions = (props: {
   onShowUrlOptions: () => void;
   onShowHelp: () => void;
 }) => {
-  const { query, mode, onChange, onRunQuery, onShowUrlOptions, onShowHelp } = props;
+  const { query, mode, onChange, onRunQuery, onShowUrlOptions, onShowHelp, datasource } = props;
   return (
     <EditorRow label="Query options">
       <TypeSelector {...props} />
       <ParseTypeEditor {...props} />
       {query.type !== 'global' ? <SourceSelector {...props} /> : <GlobalQuerySelector {...props} />}
+      {isDataQuery(query) && query.source === 'reference' && <ReferenceNameEditor query={query} onChange={onChange} onRunQuery={onRunQuery} datasource={datasource} />}
       {isDataQuery(query) && query.source === 'url' && <URL query={query} onChange={onChange} onRunQuery={onRunQuery} onShowUrlOptions={onShowUrlOptions} />}
       {query.type !== 'series' && mode !== 'variable' && query.type !== 'google-sheets' && query.type !== 'global' && <FormatSelector {...props} />}
       {isDataQuery(query) && query.source === 'inline' && <InlineDataEntry query={query} onChange={onChange} onRunQuery={onRunQuery} />}
