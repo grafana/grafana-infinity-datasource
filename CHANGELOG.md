@@ -5,6 +5,7 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 ## [ 1.2.0 ]
 
 - **Inline** Support for adding and querying reference data globally as alternative to inline data.
+- **Chore** E2E tests updated
 
 ## [ 1.1.0 ]
 

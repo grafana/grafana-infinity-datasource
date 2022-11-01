@@ -2,6 +2,7 @@
   "language": "en",
   "ignorePaths": [
     "node_modules/**",
+    "try/provisioning/**",
     "pkg/testdata/**",
     "pkg/**/*_test.go",
     "website/node_modules/**",
