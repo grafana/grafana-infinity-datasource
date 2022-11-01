@@ -19,6 +19,7 @@ export type OAuth2Props = {
   token_url?: string;
   scopes?: string[];
 };
+export type InfinityReferenceData = { name: string; data: string };
 export interface InfinityOptions extends DataSourceJsonData {
   auth_method?: AuthType;
   apiKeyKey?: string;
@@ -32,6 +33,7 @@ export interface InfinityOptions extends DataSourceJsonData {
   timeoutInSeconds?: number;
   oauthPassThru?: boolean;
   allowedHosts?: string[];
+  refData?: InfinityReferenceData[];
   enableOpenApi?: boolean;
   openApiVersion?: 'open-api-2.0';
   openApiUrl?: string;

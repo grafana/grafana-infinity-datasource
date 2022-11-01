@@ -52,7 +52,7 @@ const VariableEditorLegacy = (props: { query: VariableQueryLegacy; onChange: (qu
 };
 
 const VariableEditorInfinity = (props: { query: VariableQueryInfinity; onChange: (query: VariableQueryInfinity, definition: string) => void; datasource: Datasource }) => {
-  const { query, onChange } = props;
+  const { query, onChange, datasource } = props;
   const onInfinityQueryUpdate = (infinityQuery: InfinityQuery) => {
     const newQuery: VariableQueryInfinity = { ...query, infinityQuery } as VariableQueryInfinity;
     onChange(newQuery, `${props.datasource.name}- (${newQuery.queryType}) ${newQuery.infinityQuery?.type || newQuery.query}`);
@@ -63,7 +63,8 @@ const VariableEditorInfinity = (props: { query: VariableQueryInfinity; onChange:
       mode={'variable'}
       onChange={onInfinityQueryUpdate}
       onRunQuery={() => {}}
-      instanceSettings={props.datasource.instanceSettings}
+      instanceSettings={datasource.instanceSettings}
+      datasource={datasource}
     ></InfinityQueryEditor>
   );
 };

@@ -60,6 +60,7 @@ func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient in
 			response.Frames = append(response.Frames, frame)
 		}
 	default:
+		query, _ := infinity.UpdateQueryWithReferenceData(query, infClient.Settings)
 		switch query.Source {
 		case "url":
 			frame, err := infinity.GetFrameForURLSources(query, infClient, requestHeaders)

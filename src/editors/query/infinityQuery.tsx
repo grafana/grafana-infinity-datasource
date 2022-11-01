@@ -15,6 +15,7 @@ import { InlineDataEditor } from './query.data';
 import { ExperimentalFeatures } from './query.experimental';
 import { isDataQuery } from './../../app/utils';
 import type { EditorMode, InfinityQuery } from './../../types';
+import { Datasource } from './../../datasource';
 
 export type InfinityEditorProps = {
   query: InfinityQuery;
@@ -22,10 +23,11 @@ export type InfinityEditorProps = {
   onRunQuery: () => void;
   instanceSettings: any;
   mode: EditorMode;
+  datasource: Datasource;
 };
 
 export const InfinityQueryEditor = (props: InfinityEditorProps) => {
-  const { onChange, mode, instanceSettings, onRunQuery } = props;
+  const { onChange, mode, instanceSettings, onRunQuery, datasource } = props;
   const [showUrlOptions, setShowUrlOptions] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   let query: InfinityQuery = defaultsDeep(props.query, DefaultInfinityQuery) as InfinityQuery;
@@ -59,7 +61,12 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
             </div>
           </EditorRow>
         )}
-        <BasicOptions {...{ instanceSettings, mode, query, onChange, onRunQuery }} onShowUrlOptions={() => setShowUrlOptions(!showUrlOptions)} onShowHelp={() => setShowHelp(!showHelp)} />
+        <BasicOptions
+          {...{ instanceSettings, mode, query, onChange, onRunQuery }}
+          onShowUrlOptions={() => setShowUrlOptions(!showUrlOptions)}
+          onShowHelp={() => setShowHelp(!showHelp)}
+          datasource={datasource}
+        />
         {query.type === 'series' && <SeriesEditor {...{ query, onChange }} />}
         {isDataQuery(query) && query.source !== 'inline' && showUrlOptions && <URLEditor {...{ mode, query, onChange, onRunQuery }} />}
         {isDataQuery(query) && query.source === 'inline' && <InlineDataEditor {...{ mode, query, onChange, onRunQuery }} />}

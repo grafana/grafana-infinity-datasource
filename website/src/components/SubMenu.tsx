@@ -31,6 +31,7 @@ export const SubMenu = () => {
           <SubMenuLink to="/wiki/backend">Backend Parser</SubMenuLink>
           <SubMenuLink to="/wiki/time-formats">Time Formats</SubMenuLink>
           <SubMenuLink to="/wiki/template-variables">Template Variables</SubMenuLink>
+          <SubMenuLink to="/wiki/reference-data">Reference Data</SubMenuLink>
           <SubMenuLink to="/wiki/macros">Macros</SubMenuLink>
           <SubMenuLink to="/wiki/annotations">Annotations</SubMenuLink>
           <SubMenuLink to="/wiki/node-graph">Node Graph</SubMenuLink>

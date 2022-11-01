@@ -2,6 +2,11 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
+## [ 1.2.0 ]
+
+- **Inline** Support for adding and querying reference data globally as alternative to inline data.
+- **Chore** E2E tests updated
+
 ## [ 1.1.0 ]
 
 - **Computed fields** Backend parser now supports computed fields (beta)

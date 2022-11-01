@@ -3,6 +3,7 @@ import { Button, Drawer, InlineFormLabel, Input, LegacyForms } from '@grafana/ui
 import { set } from 'lodash';
 import React, { useState } from 'react';
 import { InfinityQueryEditor } from './../query/infinityQuery';
+import { Datasource } from './../../datasource';
 import type { GlobalInfinityQuery, InfinityOptions, InfinityQuery } from './../../types';
 import type { DataSourcePluginOptionsEditorProps, DataSourceSettings } from '@grafana/data/types';
 
@@ -156,7 +157,14 @@ const GlobalQuery = (props: { query: GlobalInfinityQuery; onUpdate: (query: Glob
             </InlineFormLabel>
             <Input value={id} onChange={(e) => setId(e.currentTarget.value)} onBlur={() => onUpdate({ ...query, id })}></Input>
           </div>
-          <InfinityQueryEditor query={query.query} onChange={(newQuery: InfinityQuery) => onUpdate({ ...query, query: newQuery })} onRunQuery={() => {}} instanceSettings={options} mode="global" />
+          <InfinityQueryEditor
+            query={query.query}
+            onChange={(newQuery: InfinityQuery) => onUpdate({ ...query, query: newQuery })}
+            onRunQuery={() => {}}
+            instanceSettings={options}
+            mode="global"
+            datasource={{} as Datasource}
+          />
           <div className="gf-form">
             <Button variant="primary" onClick={() => setPopupState(false)}>
               Update

@@ -3,7 +3,7 @@ import type { DataQuery, SelectableValue } from '@grafana/data';
 
 //#region Query
 export type InfinityQueryType = 'json' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'series' | 'global' | 'uql' | 'groq' | 'google-sheets';
-export type InfinityQuerySources = 'url' | 'inline' | 'random-walk' | 'expression';
+export type InfinityQuerySources = 'url' | 'inline' | 'reference' | 'random-walk' | 'expression';
 export type InfinityColumnFormat = 'string' | 'number' | 'timestamp' | 'timestamp_epoch' | 'timestamp_epoch_s';
 export type InfinityQueryFormat = 'table' | 'timeseries' | 'dataframe' | 'as-is' | 'node-graph-nodes' | 'node-graph-edges';
 export type QueryBodyType = 'none' | 'form-data' | 'x-www-form-urlencoded' | 'raw' | 'graphql';
@@ -22,6 +22,10 @@ export type InfinityURLOptions = {
   body_graphql_query?: string;
   // body_graphql_variables?: string;
 };
+export type InfinityQueryWithReferenceSource<T extends InfinityQueryType> = {
+  referenceName: string;
+} & InfinityQueryWithSource<'reference'> &
+  InfinityQueryBase<T>;
 export type InfinityQueryWithURLSource<T extends InfinityQueryType> = {
   url: string;
   url_options: InfinityURLOptions;
@@ -38,7 +42,7 @@ export type InfinityQueryWithDataSource<T extends InfinityQueryType> = {
   columns: InfinityColumn[];
   filters?: InfinityFilter[];
   format: InfinityQueryFormat;
-} & (InfinityQueryWithURLSource<T> | InfinityQueryWithInlineSource<T>) &
+} & (InfinityQueryWithURLSource<T> | InfinityQueryWithInlineSource<T> | InfinityQueryWithReferenceSource<T>) &
   InfinityQueryBase<T>;
 export type InfinityJSONQueryOptions = {
   root_is_not_array?: boolean;

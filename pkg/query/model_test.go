@@ -22,6 +22,7 @@ func TestLoadQuery(t *testing.T) {
 			queryJSON: `{
 				"type"			: "json",
 				"source"		: "url",
+				"referenceName" : "foo.csv",
 				"global_query_id" 	: "hello",
 				"parser"		: "backend",
 				"summarizeExpression": "sum(id)/10",
@@ -80,6 +81,7 @@ func TestLoadQuery(t *testing.T) {
 					BodyGraphQLQuery: "bar",
 				},
 				Data:                "my-inline-data",
+				RefName:             "foo.csv",
 				Parser:              "backend",
 				SummarizeExpression: "sum(id)/10",
 				SummarizeBy:         "none",
