@@ -1,6 +1,6 @@
 {
   "name": "grafana-infinity-datasource",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "JSON, CSV, XML, GraphQL, HTML and REST API datasource for Grafana. Do infinite things with Grafana. Transform data with UQL/GROQ. Visualize data from many apis, RSS/ATOM feeds directly",
   "main": "dist/module.js",
   "scripts": {
@@ -68,6 +68,7 @@
     "xml2js": "^0.4.23"
   },
   "devDependencies": {
+    "@cypress/snapshot": "^2.1.7",
     "@grafana/e2e": "8.5.4",
     "@grafana/e2e-selectors": "8.5.4",
     "@grafana/eslint-config": "^3.0.0",
@@ -78,6 +79,7 @@
     "@types/cheerio": "^0.22.21",
     "@types/lodash": "^4.14.149",
     "@types/mathjs": "^6.0.5",
+    "@types/node": "^18.11.9",
     "@types/xml2js": "^0.4.6",
     "@typescript-eslint/eslint-plugin": "^5.29.0",
     "@typescript-eslint/parser": "^5.29.0",

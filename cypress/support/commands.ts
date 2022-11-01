@@ -1,3 +1,7 @@
+import * as snapshot from '@cypress/snapshot';
+
+snapshot.register();
+
 /// <reference types="cypress" />
 // ***********************************************
 // This example commands.ts shows you how to

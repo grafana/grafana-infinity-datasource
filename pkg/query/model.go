@@ -26,7 +26,8 @@ type Query struct {
 	RefID               string                 `json:"refId"`
 	Type                QueryType              `json:"type"`   // 'json' | 'json-backend' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'uql' | 'groq' | 'series' | 'global' | 'google-sheets'
 	Format              string                 `json:"format"` // 'table' | 'timeseries' | 'dataframe' | 'as-is' | 'node-graph-nodes' | 'node-graph-edges'
-	Source              string                 `json:"source"` // 'url' | 'inline' | 'random-walk' | 'expression'
+	Source              string                 `json:"source"` // 'url' | 'inline' | 'reference' | 'random-walk' | 'expression'
+	RefName             string                 `json:"referenceName,omitempty"`
 	URL                 string                 `json:"url"`
 	URLOptions          URLOptions             `json:"url_options"`
 	Data                string                 `json:"data"`

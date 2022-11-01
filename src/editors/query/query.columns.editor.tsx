@@ -36,7 +36,7 @@ export const QueryColumnsEditor = (props: { query: InfinityQuery; onChange: (val
     <>
       <EditorRow
         label={
-          (query.type === 'json' || query.type === 'graphql' || query.type === 'csv' || query.type === 'tsv') && query.parser === 'uql'
+          (query.type === 'json' || query.type === 'graphql' || query.type === 'csv' || query.type === 'tsv' || query.type === 'xml') && query.parser === 'uql'
             ? 'UQL'
             : (query.type === 'json' || query.type === 'graphql' || query.type === 'csv' || query.type === 'tsv') && query.parser === 'groq'
             ? 'GROQ'
@@ -74,7 +74,7 @@ export const QueryColumnsEditor = (props: { query: InfinityQuery; onChange: (val
             <Stack direction="column">
               <RootSelector {...props} />
               {query.type === 'json' && <JSONOptionsEditor {...props} />}
-              {(query.type === 'csv' || query.type === 'tsv') && query.parser !== 'uql' && <CSVOptionsEditor {...props} />}
+              {(query.type === 'csv' || query.type === 'tsv') && <CSVOptionsEditor {...props} />}
             </Stack>
             <EditorField label="Columns" optional={true}>
               <>

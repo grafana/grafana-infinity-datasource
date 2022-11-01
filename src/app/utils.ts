@@ -10,6 +10,15 @@ export const isXMLQuery = (query: InfinityQuery): query is InfinityXMLQuery => q
 export const isGraphQLQuery = (query: InfinityQuery): query is InfinityGraphQLQuery => query.type === 'graphql';
 export const isHTMLQuery = (query: InfinityQuery): query is InfinityHTMLQuery => query.type === 'html';
 
+export const isBackendQuerySupported = (
+  query: InfinityQuery
+): query is Extract<InfinityQuery, { type: 'json' } | { type: 'csv' } | { type: 'tsv' } | { type: 'xml' } | { type: 'graphql' } | { type: 'html' }> =>
+  query.type === 'json' || query.type === 'csv' || query.type === 'tsv' || query.type === 'graphql' || query.type === 'xml' || query.type === 'html';
+export const isBackendQuery = (
+  query: InfinityQuery
+): query is Extract<InfinityQuery, ({ type: 'json' } | { type: 'csv' } | { type: 'tsv' } | { type: 'xml' } | { type: 'graphql' } | { type: 'html' }) & { parser: 'backend' }> =>
+  isBackendQuerySupported(query) && query.parser === 'backend';
+
 export const normalizeURL = (url: string): string => {
   if (url.startsWith('https://github.com')) {
     return url

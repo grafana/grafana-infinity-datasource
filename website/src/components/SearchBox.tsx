@@ -157,6 +157,12 @@ const sitemap: any[] = [
     tags: ['backend', 'parser', 'json', 'csv', 'tsv', 'alerting', 'recorded queries', 'caching', 'public dashboards', 'summarize', 'gjson', 'jsonpath', 'calculated field', 'computed columns'],
   },
   {
+    title: 'Reference data',
+    slug: '/wiki/reference-data',
+    description: 'Reference data',
+    tags: ['reference', 'reference data', 'variables', 'static data', 'inline', 'global', 'config'],
+  },
+  {
     title: 'Configuration',
     slug: '/wiki/configuration',
     description: 'Grafana datasource configuration',

@@ -1,10 +1,43 @@
 apiVersion: 1
-
 datasources:
+  - name: Test
+    uid: TestData
+    type: testdata
   - name: Infinity
     uid: Infinity
     type: yesoreyeram-infinity-datasource
     isDefault: true
-  - name: Test
-    uid: TestData
-    type: testdata
+    jsonData:
+      refData:
+        - name: users.csv
+          data: |
+            name,age,country,occupation,salary
+            Leanne Graham,38,USA,Devops Engineer,3000
+            Ervin Howell,27,USA,Software Engineer,2300
+            Clementine Bauch,17,Canada,Student,
+            Patricia Lebsack,42,UK,Software Engineer,2800
+            Leanne Bell,38,USA,Senior Software Engineer,4000
+            Chelsey Dietrich,32,USA,Software Engineer,3500
+        - name: users.tsv
+          data: |
+            name	age	country	occupation	salary
+            Leanne Graham	38	USA	Devops Engineer	3000
+            Ervin Howell	27	USA	Software Engineer	2300
+            Clementine Bauch	17	Canada	Student	
+            Patricia Lebsack	42	UK	Software Engineer	2800
+            Leanne Bell	38	USA	Senior Software Engineer	4000
+            Chelsey Dietrich	32	USA	Software Engineer	3500
+        - name: users.xml
+          data: '<?xml version="1.0" encoding="UTF-8" ?><root>  <row>    <name>Leanne Graham</name>    <age>38</age>    <country>USA</country>    <occupation>Devops Engineer</occupation>    <salary>3000</salary>  </row>  <row>    <name>Ervin Howell</name>    <age>27</age>    <country>USA</country>    <occupation>Software Engineer</occupation>    <salary>2300</salary>  </row>  <row>    <name>Clementine Bauch</name>    <age>17</age>    <country>Canada</country>    <occupation>Student</occupation>    <salary />  </row>  <row>    <name>Patricia Lebsack</name>    <age>42</age>    <country>UK</country>    <occupation>Software Engineer</occupation>    <salary>2800</salary>  </row>  <row>    <name>Leanne Bell</name>    <age>38</age>    <country>USA</country>    <occupation>Senior Software Engineer</occupation>    <salary>4000</salary>  </row>  <row>    <name>Chelsey Dietrich</name>    <age>32</age>    <country>USA</country>    <occupation>Software Engineer</occupation>    <salary>3500</salary>  </row></root>'
+        - name: users.html
+          data: '<!DOCTYPE html><html lang="en">  <head>    <meta charset="UTF-8" />    <meta http-equiv="X-UA-Compatible" content="IE=edge" />    <meta name="viewport" content="width=device-width, initial-scale=1.0" />    <title>Users</title>  </head>  <body>    <table class="table table-bordered table-hover table-condensed">      <thead>        <tr>          <th title="Field #1">name</th>          <th title="Field #2">age</th>          <th title="Field #3">country</th>          <th title="Field #4">occupation</th>          <th title="Field #5">salary</th>        </tr>      </thead>      <tbody>        <tr>          <td>Leanne Graham</td>          <td align="right">38</td>          <td>USA</td>          <td>Devops Engineer</td>          <td align="right">3000</td>        </tr>        <tr>          <td>Ervin Howell</td>          <td align="right">27</td>          <td>USA</td>          <td>Software Engineer</td>          <td align="right">2300</td>        </tr>        <tr>          <td>Clementine Bauch</td>          <td align="right">17</td>          <td>Canada</td>          <td>Student</td>          <td align="right"></td>        </tr>        <tr>          <td>Patricia Lebsack</td>          <td align="right">42</td>          <td>UK</td>          <td>Software Engineer</td>          <td align="right">2800</td>        </tr>        <tr>          <td>Leanne Bell</td>          <td align="right">38</td>          <td>USA</td>          <td>Senior Software Engineer</td>          <td align="right">4000</td>        </tr>        <tr>          <td>Chelsey Dietrich</td>          <td align="right">32</td>          <td>USA</td>          <td>Software Engineer</td>          <td align="right">3500</td>        </tr>      </tbody>    </table>  </body></html>'
+        - name: users.json
+          data: |
+            [
+              { "name": "Leanne Graham", "age": 38, "country": "USA", "occupation": "Devops Engineer", "salary": 3000 },
+              { "name": "Ervin Howell", "age": 27, "country": "USA", "occupation": "Software Engineer", "salary": 2300 },
+              { "name": "Clementine Bauch", "age": 17, "country": "Canada", "occupation": "Student", "salary": null },
+              { "name": "Patricia Lebsack", "age": 42, "country": "UK", "occupation": "Software Engineer", "salary": 2800 },
+              { "name": "Leanne Bell", "age": 38, "country": "USA", "occupation": "Senior Software Engineer", "salary": 4000 },
+              { "name": "Chelsey Dietrich", "age": 32, "country": "USA", "occupation": "Software Engineer", "salary": 3500 }
+            ]

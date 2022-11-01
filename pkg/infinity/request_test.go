@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	infinity "github.com/yesoreyeram/grafana-infinity-datasource/pkg/infinity"
 	querySrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/query"
 	settingsSrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/settings"
@@ -207,6 +208,24 @@ func TestClient_GetExecutedURL(t *testing.T) {
 			client := &infinity.Client{Settings: tt.settings}
 			got := client.GetExecutedURL(tt.query)
 			assert.Equal(t, fmt.Sprintf("###############\n## URL\n###############\n\n%s\n\n###############\n## Curl Command\n###############\n\n%s", tt.url, tt.command), got)
+		})
+	}
+}
+
+func TestNormalizeURL(t *testing.T) {
+	tests := []struct {
+		name string
+		u    string
+		want string
+	}{
+		{u: "https://github.com/yesoreyeram/grafana-infinity-datasource/blob/main/testdata/users.csv", want: "https://raw.githubusercontent.com/yesoreyeram/grafana-infinity-datasource/main/testdata/users.csv"},
+		{u: "https://github.com/yesoreyeram/grafana-infinity-datasource/blob/main/testdata/blob/users.csv", want: "https://raw.githubusercontent.com/yesoreyeram/grafana-infinity-datasource/main/testdata/blob/users.csv"},
+		{u: "https://raw.githubusercontent.com/yesoreyeram/grafana-infinity-datasource/main/testdata/users.csv", want: "https://raw.githubusercontent.com/yesoreyeram/grafana-infinity-datasource/main/testdata/users.csv"},
+		{u: "https://foo.com/channels/38629/feed.json", want: "https://foo.com/channels/38629/feed.json"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			require.Equal(t, tt.want, infinity.NormalizeURL(tt.u))
 		})
 	}
 }

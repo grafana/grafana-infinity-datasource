@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Input } from '@grafana/ui';
+import { Stack } from '../../components/extended/Stack';
 import { EditorRow } from '../../components/extended/EditorRow';
 import { EditorField } from '../../components/extended/EditorField';
 import { ComputedColumnsEditor } from './query.computedColumns';
+import { isBackendQuery } from 'app/utils';
 import type { InfinityQuery } from '../../types';
-import { Stack } from 'components/extended/Stack';
 
 type ExperimentalFeaturesProps = {
   query: InfinityQuery;
@@ -13,7 +14,7 @@ type ExperimentalFeaturesProps = {
 };
 
 export const ExperimentalFeatures = ({ query, onChange, onRunQuery }: ExperimentalFeaturesProps) => {
-  if (!((query.type === 'json' || query.type === 'graphql' || query.type === 'csv' || query.type === 'tsv') && query.parser === 'backend')) {
+  if (!isBackendQuery(query)) {
     return <></>;
   }
   return (
@@ -28,10 +29,8 @@ export const ExperimentalFeatures = ({ query, onChange, onRunQuery }: Experiment
 };
 
 const Filter = ({ query, onChange, onRunQuery }: ExperimentalFeaturesProps) => {
-  const [filterExpression, setFilterExpression] = useState(
-    (query.type === 'json' || query.type === 'graphql' || query.type === 'csv' || query.type === 'tsv') && query.parser === 'backend' ? query.filterExpression : ''
-  );
-  if ((query.type === 'json' || query.type === 'graphql' || query.type === 'csv' || query.type === 'tsv') && query.parser === 'backend') {
+  const [filterExpression, setFilterExpression] = useState(isBackendQuery(query) ? query.filterExpression : '');
+  if (isBackendQuery(query)) {
     return (
       <EditorField label="Filter" tooltip={'Filter the results'} optional={true}>
         <Input
@@ -52,13 +51,9 @@ const Filter = ({ query, onChange, onRunQuery }: ExperimentalFeaturesProps) => {
 
 const Summarize = ({ query, onChange, onRunQuery }: ExperimentalFeaturesProps) => {
   let isValid = true;
-  const [summarizeExpression, setSummarizeExpression] = useState(
-    (query.type === 'json' || query.type === 'graphql' || query.type === 'csv' || query.type === 'tsv') && query.parser === 'backend' ? query.summarizeExpression : ''
-  );
-  const [summarizeBy, setSummarizeBy] = useState(
-    (query.type === 'json' || query.type === 'graphql' || query.type === 'csv' || query.type === 'tsv') && query.parser === 'backend' ? query.summarizeBy : ''
-  );
-  if (!((query.type === 'json' || query.type === 'graphql' || query.type === 'csv' || query.type === 'tsv') && query.parser === 'backend')) {
+  const [summarizeExpression, setSummarizeExpression] = useState(isBackendQuery(query) ? query.summarizeExpression : '');
+  const [summarizeBy, setSummarizeBy] = useState(isBackendQuery(query) ? query.summarizeBy : '');
+  if (!isBackendQuery(query)) {
     return <></>;
   }
   if ((query.type === 'csv' || query.type === 'tsv') && !(query.columns || []).find((c) => c.type === 'number') && query.summarizeExpression) {

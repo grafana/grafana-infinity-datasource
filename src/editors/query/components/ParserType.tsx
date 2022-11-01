@@ -52,7 +52,7 @@ export const ParseTypeEditor = (props: { query: InfinityQuery; onChange: (value:
           ]}
           onChange={(e) => {
             if (query.parser === 'uql') {
-              let uql = query.uql || 'parse-json';
+              let uql = (query as any).uql || 'parse-json';
               onChange({ ...query, parser: e.value, uql });
             } else if (query.parser === 'groq') {
               let groq = query.groq || '*';
@@ -98,11 +98,11 @@ export const ParseTypeEditor = (props: { query: InfinityQuery; onChange: (value:
             { value: 'uql', label: 'UQL' },
           ]}
           onChange={(e) => {
-            let uql = query.uql || '';
-            if (query.type === 'csv' && !query.uql) {
+            let uql = (query as any).uql || '';
+            if (query.type === 'csv' && !(query as any).uql) {
               uql = `parse-csv`;
             }
-            if (query.type === 'tsv' && !query.uql) {
+            if (query.type === 'tsv' && !(query as any).uql) {
               uql = `parse-csv --delimiter "\t"`;
             }
             onChange({ ...query, parser: e?.value || 'simple', uql });
@@ -114,20 +114,73 @@ export const ParseTypeEditor = (props: { query: InfinityQuery; onChange: (value:
   }
   if (query.type === 'xml') {
     return (
-      <EditorField label="Parser">
+      <EditorField
+        label="Parser"
+        promoNode={
+          query.parser !== 'backend' && query.parser !== 'uql' ? (
+            <span
+              style={{ marginInline: '5px', color: 'yellowgreen' }}
+              onClick={() => {
+                onChange({ ...query, parser: 'backend' });
+                onRunQuery();
+              }}
+            >
+              Try backend parser!
+            </span>
+          ) : (
+            <></>
+          )
+        }
+      >
         <Select<typeof query.parser>
           width={20}
           value={query.parser || 'simple'}
           options={[
             { value: 'simple', label: 'Default' },
+            { value: 'backend', label: 'Backend' },
             { value: 'uql', label: 'UQL' },
           ]}
           onChange={(e) => {
-            let uql = query.uql || '';
-            if (query.type === 'xml' && !query.uql) {
+            let uql = (query as any).uql || '';
+            if (query.type === 'xml' && !(query as any).uql) {
               uql = `parse-xml`;
             }
             onChange({ ...query, parser: e?.value || 'simple', uql });
+            onRunQuery();
+          }}
+        ></Select>
+      </EditorField>
+    );
+  }
+  if (query.type === 'html') {
+    return (
+      <EditorField
+        label="Parser"
+        promoNode={
+          query.parser !== 'backend' ? (
+            <span
+              style={{ marginInline: '5px', color: 'yellowgreen' }}
+              onClick={() => {
+                onChange({ ...query, parser: 'backend' });
+                onRunQuery();
+              }}
+            >
+              Try backend parser!
+            </span>
+          ) : (
+            <></>
+          )
+        }
+      >
+        <Select<typeof query.parser>
+          width={20}
+          value={query.parser || 'simple'}
+          options={[
+            { value: 'simple', label: 'Default' },
+            { value: 'backend', label: 'Backend' },
+          ]}
+          onChange={(e) => {
+            onChange({ ...query, parser: e?.value || 'simple' });
             onRunQuery();
           }}
         ></Select>

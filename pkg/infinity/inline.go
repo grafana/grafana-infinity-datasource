@@ -12,7 +12,7 @@ import (
 
 func GetFrameForInlineSources(query querySrv.Query) (*data.Frame, error) {
 	frame := GetDummyFrame(query)
-	if query.Type == querySrv.QueryTypeGROQ || query.Type == querySrv.QueryTypeUQL || query.Type == querySrv.QueryTypeHTML || query.Type == querySrv.QueryTypeXML {
+	if query.Type == querySrv.QueryTypeGROQ || query.Type == querySrv.QueryTypeUQL {
 		return frame, nil
 	}
 	if query.Parser != "backend" {
@@ -21,6 +21,8 @@ func GetFrameForInlineSources(query querySrv.Query) (*data.Frame, error) {
 	switch query.Type {
 	case querySrv.QueryTypeCSV, querySrv.QueryTypeTSV:
 		return GetCSVBackendResponse(query.Data, query)
+	case querySrv.QueryTypeXML, querySrv.QueryTypeHTML:
+		return GetXMLBackendResponse(query.Data, query)
 	case querySrv.QueryTypeJSON, querySrv.QueryTypeGraphQL:
 		columns := []jsonFramer.ColumnSelector{}
 		for _, c := range query.Columns {

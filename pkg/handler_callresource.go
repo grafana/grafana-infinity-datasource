@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -14,7 +15,8 @@ import (
 
 func (host *PluginHost) getRouter() *mux.Router {
 	router := mux.NewRouter()
-	router.Handle("/graphql", host.getGraphQLHandler())                                              // NOT IN USE YET
+	router.Handle("/graphql", host.getGraphQLHandler()) // NOT IN USE YET
+	router.HandleFunc("/reference-data", host.withDatasourceHandlerFunc(GetReferenceDataHandler)).Methods("GET")
 	router.HandleFunc("/open-api", host.withDatasourceHandlerFunc(GetOpenAPIHandler)).Methods("GET") // NOT IN USE YET
 	router.HandleFunc("/ping", host.withDatasourceHandlerFunc(GetPingHandler)).Methods("GET")
 	router.NotFoundHandler = http.HandlerFunc(host.withDatasourceHandlerFunc(defaultHandler))
@@ -126,6 +128,22 @@ func GetOpenAPIHandler(client *instanceSettings) http.HandlerFunc {
 		rw.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprintf(rw, "%s", "invalid open api settings")
 	}
+}
+
+func GetReferenceDataHandler(client *instanceSettings) http.HandlerFunc {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		referenceKeys := []string{}
+		for _, k := range client.client.Settings.ReferenceData {
+			referenceKeys = append(referenceKeys, k.Name)
+		}
+		b, err := json.Marshal(referenceKeys)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Fprintf(w, "%s", err.Error())
+			return
+		}
+		fmt.Fprintf(w, "%s", string(b))
+	})
 }
 
 func GetPingHandler(client *instanceSettings) http.HandlerFunc {

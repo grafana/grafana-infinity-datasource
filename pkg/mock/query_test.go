@@ -14,8 +14,6 @@ import (
 	querySrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/query"
 )
 
-var updateGoldenFiles bool = false
-
 func TestInlineSources(t *testing.T) {
 	tests := []struct {
 		name            string
@@ -122,7 +120,7 @@ func TestInlineSources(t *testing.T) {
 			if !tt.skipGoldenCheck {
 				require.NotNil(t, frame)
 				response := &backend.DataResponse{Frames: data.Frames{frame}}
-				experimental.CheckGoldenJSONResponse(t, "testdata", strings.ReplaceAll(t.Name(), "TestInlineSources/", "inline/"), response, updateGoldenFiles)
+				experimental.CheckGoldenJSONResponse(t, "testdata", strings.ReplaceAll(t.Name(), "TestInlineSources/", "inline/"), response, mock.UPDATE_GOLDEN_DATA)
 			}
 			if tt.test != nil {
 				tt.test(t, frame)
@@ -296,7 +294,7 @@ func TestRemoteSources(t *testing.T) {
 			if !tt.skipGoldenCheck {
 				require.NotNil(t, frame)
 				response := &backend.DataResponse{Frames: data.Frames{frame}}
-				experimental.CheckGoldenJSONResponse(t, "testdata", strings.ReplaceAll(t.Name(), "TestRemoteSources/", "remote/"), response, updateGoldenFiles)
+				experimental.CheckGoldenJSONResponse(t, "testdata", strings.ReplaceAll(t.Name(), "TestRemoteSources/", "remote/"), response, mock.UPDATE_GOLDEN_DATA)
 			}
 			if tt.test != nil {
 				tt.test(t, frame)

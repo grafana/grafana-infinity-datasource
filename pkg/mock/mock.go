@@ -12,6 +12,8 @@ import (
 	settingsSrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/settings"
 )
 
+const UPDATE_GOLDEN_DATA = false
+
 type InfinityMocker struct {
 	Body     string
 	FileName string // filename (relative path of where it is being called)

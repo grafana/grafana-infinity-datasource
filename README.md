@@ -14,6 +14,6 @@ Docs on how to use JSON API - [Docs](https://yesoreyeram.github.io/grafana-infin
 
 ## Known limitations
 
-- Alerting only supports on `JSON`/`GraphQL`/`CSV`/`TSV` type queries with `backend` parser.
-- Recorded queries only supports on `JSON`/`GraphQL`/`CSV`/`TSV` type queries with `backend` parser.
-- Public dashboards only supports on `JSON`/`GraphQL`/`CSV`/`TSV` type queries with `backend` parser.
+- Alerting only supports on `JSON`/`GraphQL`/`CSV`/`TSV`/`XML` type queries with `backend` parser.
+- Recorded queries only supports on `JSON`/`GraphQL`/`CSV`/`TSV`/`XML` type queries with `backend` parser.
+- Public dashboards only supports on `JSON`/`GraphQL`/`CSV`/`TSV`/`XML` type queries with `backend` parser.

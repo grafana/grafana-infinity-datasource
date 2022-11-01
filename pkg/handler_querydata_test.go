@@ -17,10 +17,9 @@ import (
 	"github.com/stretchr/testify/require"
 	main "github.com/yesoreyeram/grafana-infinity-datasource/pkg"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/infinity"
+	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/mock"
 	settingsSrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/settings"
 )
-
-const updateGolden = false
 
 func TestAuthentication(t *testing.T) {
 	t.Run("should throw error when allowed hosts not configured", func(t *testing.T) {
@@ -436,7 +435,7 @@ func TestResponseFormats(t *testing.T) {
 			}, *client, map[string]string{}, backend.PluginContext{})
 			require.NotNil(t, res)
 			require.Nil(t, res.Error)
-			experimental.CheckGoldenJSONResponse(t, "testdata", "backend-computed-columns", &res, updateGolden)
+			experimental.CheckGoldenJSONResponse(t, "testdata", "backend-computed-columns", &res, mock.UPDATE_GOLDEN_DATA)
 		})
 		t.Run("should filter computed columns", func(t *testing.T) {
 			client, err := infinity.NewClient(settingsSrv.InfinitySettings{URL: ""})
@@ -455,7 +454,7 @@ func TestResponseFormats(t *testing.T) {
 			}, *client, map[string]string{}, backend.PluginContext{})
 			require.NotNil(t, res)
 			require.Nil(t, res.Error)
-			experimental.CheckGoldenJSONResponse(t, "testdata", "backend-filter-computed-columns", &res, updateGolden)
+			experimental.CheckGoldenJSONResponse(t, "testdata", "backend-filter-computed-columns", &res, mock.UPDATE_GOLDEN_DATA)
 		})
 	})
 	t.Run("JSON SQLite", func(t *testing.T) {

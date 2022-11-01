@@ -64,7 +64,16 @@ func GetQueryURL(settings settingsSrv.InfinitySettings, query querySrv.Query, in
 		q.Set(settings.ApiKeyKey, val)
 	}
 	u.RawQuery = q.Encode()
-	return u.String(), nil
+	return NormalizeURL(u.String()), nil
+}
+
+func NormalizeURL(u string) string {
+	urlArray := strings.Split(u, "/")
+	if strings.HasPrefix(u, "https://github.com") && len(urlArray) > 5 && urlArray[5] == "blob" && urlArray[4] != "blob" && urlArray[3] != "blob" {
+		u = strings.Replace(u, "https://github.com", "https://raw.githubusercontent.com", 1)
+		u = strings.Replace(u, "/blob/", "/", 1)
+	}
+	return u
 }
 
 func (client *Client) GetExecutedURL(query querySrv.Query) string {

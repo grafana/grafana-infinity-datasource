@@ -15,6 +15,7 @@ import { InlineDataEditor } from './query.data';
 import { ExperimentalFeatures } from './query.experimental';
 import { isDataQuery } from './../../app/utils';
 import type { EditorMode, InfinityQuery } from './../../types';
+import { Datasource } from './../../datasource';
 
 export type InfinityEditorProps = {
   query: InfinityQuery;
@@ -22,10 +23,11 @@ export type InfinityEditorProps = {
   onRunQuery: () => void;
   instanceSettings: any;
   mode: EditorMode;
+  datasource: Datasource;
 };
 
 export const InfinityQueryEditor = (props: InfinityEditorProps) => {
-  const { onChange, mode, instanceSettings, onRunQuery } = props;
+  const { onChange, mode, instanceSettings, onRunQuery, datasource } = props;
   const [showUrlOptions, setShowUrlOptions] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   let query: InfinityQuery = defaultsDeep(props.query, DefaultInfinityQuery) as InfinityQuery;
@@ -39,6 +41,8 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
     !(query.type === 'graphql' && query.parser === 'backend') &&
     !(query.type === 'csv' && query.parser === 'backend') &&
     !(query.type === 'tsv' && query.parser === 'backend') &&
+    !(query.type === 'xml' && query.parser === 'backend') &&
+    !(query.type === 'html' && query.parser === 'backend') &&
     !(query.type === 'json' && query.parser === 'uql') &&
     !(query.type === 'json' && query.parser === 'groq') &&
     !(query.type === 'csv' && query.parser === 'uql') &&
@@ -59,7 +63,12 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
             </div>
           </EditorRow>
         )}
-        <BasicOptions {...{ instanceSettings, mode, query, onChange, onRunQuery }} onShowUrlOptions={() => setShowUrlOptions(!showUrlOptions)} onShowHelp={() => setShowHelp(!showHelp)} />
+        <BasicOptions
+          {...{ instanceSettings, mode, query, onChange, onRunQuery }}
+          onShowUrlOptions={() => setShowUrlOptions(!showUrlOptions)}
+          onShowHelp={() => setShowHelp(!showHelp)}
+          datasource={datasource}
+        />
         {query.type === 'series' && <SeriesEditor {...{ query, onChange }} />}
         {isDataQuery(query) && query.source !== 'inline' && showUrlOptions && <URLEditor {...{ mode, query, onChange, onRunQuery }} />}
         {isDataQuery(query) && query.source === 'inline' && <InlineDataEditor {...{ mode, query, onChange, onRunQuery }} />}
@@ -77,7 +86,7 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
             <GROQEditor {...{ query, onChange, onRunQuery, mode }} />
           </EditorRow>
         )}
-        {(query.type === 'json' || query.type === 'graphql' || query.type === 'csv' || query.type === 'tsv') && query.parser === 'backend' && (
+        {(query.type === 'json' || query.type === 'graphql' || query.type === 'csv' || query.type === 'tsv' || query.type === 'xml') && query.parser === 'backend' && (
           <ExperimentalFeatures query={query} onChange={onChange} onRunQuery={onRunQuery} />
         )}
       </EditorRows>

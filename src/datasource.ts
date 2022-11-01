@@ -11,7 +11,7 @@ import { getTemplateVariablesFromResult, LegacyVariableProvider, migrateLegacyQu
 import { AnnotationsEditor } from './editors/annotation.editor';
 import { interpolateQuery, interpolateVariableQuery } from './interpolate';
 import { migrateQuery } from './migrate';
-import { isDataQuery, normalizeURL } from './app/utils';
+import { isBackendQuery, isDataQuery, normalizeURL } from './app/utils';
 import type { InfinityInstanceSettings, InfinityOptions, InfinityQuery, MetricFindValue, VariableQuery } from './types';
 import type { DataFrame, DataQueryRequest, DataQueryResponse, ScopedVars, TimeRange } from '@grafana/data/types';
 
@@ -143,17 +143,11 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
         const data = d.meta?.custom?.data;
         const responseCodeFromServer = d.meta?.custom?.responseCodeFromServer;
         const error = d.meta?.custom?.error;
-        if (target.type === 'google-sheets') {
+        if (isBackendQuery(target)) {
           promises.push(Promise.resolve(d));
-        } else if (target.type === 'json' && target.parser === 'backend') {
+        } else if (target.type === 'google-sheets') {
           promises.push(Promise.resolve(d));
         } else if (target.type === 'json' && target.parser === 'sqlite') {
-          promises.push(Promise.resolve(d));
-        } else if (target.type === 'graphql' && target.parser === 'backend') {
-          promises.push(Promise.resolve(d));
-        } else if (target.type === 'csv' && target.parser === 'backend') {
-          promises.push(Promise.resolve(d));
-        } else if (target.type === 'tsv' && target.parser === 'backend') {
           promises.push(Promise.resolve(d));
         } else {
           promises.push(

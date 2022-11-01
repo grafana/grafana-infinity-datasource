@@ -13,5 +13,5 @@ export const QueryEditor = (props: QueryEditorProps<Datasource, InfinityQuery>) 
     ...DefaultInfinityQuery,
     global_query_id: getDefaultGlobalQueryID(datasource.instanceSettings),
   });
-  return <InfinityQueryEditor onChange={onChange} onRunQuery={onRunQuery} query={query} mode={'standard'} instanceSettings={datasource.instanceSettings} />;
+  return <InfinityQueryEditor onChange={onChange} onRunQuery={onRunQuery} query={query} mode={'standard'} instanceSettings={datasource.instanceSettings} datasource={datasource} />;
 };

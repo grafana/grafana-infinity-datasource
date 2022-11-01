@@ -2,6 +2,7 @@
   "language": "en",
   "ignorePaths": [
     "node_modules/**",
+    "try/provisioning/**",
     "pkg/testdata/**",
     "pkg/**/*_test.go",
     "website/node_modules/**",
@@ -15,6 +16,7 @@
   ],
   "words": [
     "ANSIC",
+    "basgys",
     "builtins",
     "Collapsable",
     "compatibilitycheck",
@@ -39,6 +41,7 @@
     "gjson",
     "gomodcache",
     "govaluate",
+    "goxml",
     "grafana",
     "graphiQL",
     "GROQ",

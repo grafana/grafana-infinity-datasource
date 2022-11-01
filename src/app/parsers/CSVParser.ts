@@ -17,12 +17,18 @@ export class CSVParser extends InfinityParser<InfinityCSVQuery | InfinityTSVQuer
     if (target.type === 'tsv') {
       return `\t`;
     }
+    if (target.parser === 'uql') {
+      return '';
+    }
     if (target.csv_options && target.csv_options.delimiter) {
       return (target.csv_options.delimiter || '').replace('\\t', '\t');
     }
     return ',';
   }
   private formatInput(CSVResponse: string) {
+    if (this.target.parser === 'uql') {
+      return '';
+    }
     const options = {
       columns: this.target.csv_options && this.target.csv_options.columns ? this.target.csv_options.columns.split(',') : true,
       delimiter: [this.getDelimiter(this.target)],

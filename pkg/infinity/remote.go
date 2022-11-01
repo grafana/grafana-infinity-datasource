@@ -45,6 +45,13 @@ func GetFrameForURLSources(query querySrv.Query, infClient Client, requestHeader
 			}
 		}
 	}
+	if (query.Type == querySrv.QueryTypeXML || query.Type == querySrv.QueryTypeHTML) && query.Parser == "backend" {
+		if responseString, ok := urlResponseObject.(string); ok {
+			if frame, err = GetXMLBackendResponse(responseString, query); err != nil {
+				return frame, err
+			}
+		}
+	}
 	if query.Type == querySrv.QueryTypeJSON && query.Parser == "sqlite" {
 		sqliteQuery := query.SQLiteQuery
 		if strings.TrimSpace(sqliteQuery) == "" {

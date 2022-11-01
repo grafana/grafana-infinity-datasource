@@ -2,6 +2,15 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
+## [ 1.2.0 ]
+
+- **XML** Support for backend parser (alerts, recorded queries, public dashboards etc)
+- **HTML** Support for backend parser (alerts, recorded queries, public dashboards etc)
+- **Inline** Support for adding and querying reference data globally as alternative to inline data
+- **Security** Backend binaries are now compiled with latest GoLang version 1.19.3 which fixes CVE-2022-41716
+- **Chore** Grafana backend plugin SDK updated to latest
+- **Chore** E2E tests updated
+
 ## [ 1.1.0 ]
 
 - **Computed fields** Backend parser now supports computed fields (beta)
