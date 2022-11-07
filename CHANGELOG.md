@@ -8,6 +8,7 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 - **HTML** Support for backend parser (alerts, recorded queries, public dashboards etc)
 - **Inline** Support for adding and querying reference data globally as alternative to inline data
 - **Security** Backend binaries are now compiled with latest GoLang version 1.19.3 which fixes CVE-2022-41716
+- **Backend Parser** Root data selector in the backend parser now supports JSONata
 - **Chore** Grafana backend plugin SDK updated to latest
 - **Chore** E2E tests updated
 

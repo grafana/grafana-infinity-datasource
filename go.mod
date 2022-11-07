@@ -9,9 +9,9 @@ require (
 	github.com/grafana/grafana-plugin-sdk-go v0.142.0
 	github.com/graphql-go/graphql v0.8.0
 	github.com/graphql-go/handler v0.2.3
-	github.com/stretchr/testify v1.8.0
+	github.com/stretchr/testify v1.8.1
 	github.com/xinsnake/go-http-digest-auth-client v0.6.0
-	github.com/yesoreyeram/grafana-framer v0.0.7
+	github.com/yesoreyeram/grafana-framer v0.0.8
 	golang.org/x/oauth2 v0.0.0-20220822191816-0ebed06d0094
 	gopkg.in/Knetic/govaluate.v3 v3.0.0
 	moul.io/http2curl v1.0.0
@@ -21,6 +21,7 @@ require (
 	github.com/apache/arrow/go/arrow v0.0.0-20211112161151-bc219186db40 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bitly/go-simplejson v0.5.0 // indirect
+	github.com/blues/jsonata-go v1.5.4 // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/cheekybits/genny v1.0.0 // indirect
 	github.com/chromedp/cdproto v0.0.0-20220208224320-6efb837e6bc2 // indirect

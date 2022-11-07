@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Button } from '@grafana/ui';
+import { Button, TextArea } from '@grafana/ui';
 import { cloneDeep } from 'lodash';
 import { EditorRow } from './../../components/extended/EditorRow';
 import { EditorField } from './../../components/extended/EditorField';
 import { Stack } from './../../components/extended/Stack';
-import { isDataQuery } from './../../app/utils';
+import { isBackendQuery, isDataQuery } from './../../app/utils';
 import { QueryColumnItem } from './../../components/QueryColumnItem';
 import { JSONOptionsEditor } from '../../components/JSONOptionsEditor';
 import { CSVOptionsEditor } from '../../components/CSVOptionsEditor';
@@ -136,15 +136,15 @@ const RootSelector = (props: { query: InfinityQuery; onChange: (value: any) => v
   };
   return ['html', 'json', 'xml', 'graphql'].indexOf(props.query.type) > -1 ? (
     <EditorField label="Rows/Root" optional={true}>
-      <input
-        type="text"
-        className="gf-form-input"
-        style={{ width: '300px' }}
+      <TextArea
+        width={'300px'}
+        cols={50}
+        rows={isBackendQuery(query) ? 7 : 2}
         value={root_selector}
-        placeholder="rows/root selector (optional)"
+        placeholder={isBackendQuery(query) ? 'JSONata / rows selector' : 'rows/root selector (optional)'}
         onChange={(e) => setRootSelector(e.currentTarget.value)}
         onBlur={onRootSelectorChange}
-      ></input>
+      />
     </EditorField>
   ) : (
     <></>

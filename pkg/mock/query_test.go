@@ -99,6 +99,21 @@ func TestInlineSources(t *testing.T) {
 				assert.Equal(t, data.NewField("something", nil, []*string{toSP("Male"), toSP(""), toSP("Male"), toSP("Male"), toSP("Male"), toSP("Male")}), frame.Fields[1])
 			},
 		},
+		{
+			name: "should return backend results jsonata root selector",
+			queryJSON: `{
+				"refId":					"q1",
+				"type": 					"json",
+				"parser": 					"backend",
+				"source":					"inline",
+				"data":						"{\"orders\":[{\"price\":10,\"quantity\":3},{\"price\":0.5,\"quantity\":10},{\"price\":100,\"quantity\":1}]}",
+				"root_selector": 			"$sum(orders.price)",
+				"computed_columns": 		[]
+			}`,
+			test: func(t *testing.T, frame *data.Frame) {
+				require.NotNil(t, frame)
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

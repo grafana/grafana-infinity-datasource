@@ -13,7 +13,6 @@ interface QueryColumnItemProps {
 }
 export const QueryColumnItem = (props: QueryColumnItemProps) => {
   const { query, index, onChange } = props;
-
   const column = isDataQuery(query) || query.type === 'google-sheets' ? query.columns[index] : ({ selector: '', text: '', type: 'string' } as InfinityColumn);
   const [selector, setSelector] = useState(column.selector || '');
   const [text, setText] = useState(column.text || '');
@@ -46,20 +45,15 @@ export const QueryColumnItem = (props: QueryColumnItemProps) => {
       <Input width={60} value={selector} placeholder={query.type === 'csv' ? 'Column Name' : 'Selector'} onChange={(e) => setSelector(e.currentTarget.value)} onBlur={onSelectorChange} />
       <InlineFormLabel width={2}>as</InlineFormLabel>
       <Input value={text} width={30} placeholder="Title" onChange={(e) => setText(e.currentTarget.value)} onBlur={onTextChange}></Input>
-      <label className="gf-form-label width-5">format as</label>
-      <Select
-        className="min-width-12 width-12"
-        value={column.type}
-        options={INFINITY_COLUMN_FORMATS}
-        onChange={(e) => onFormatChange(e.value as InfinityColumnFormat)}
-        menuShouldPortal={true}
-      ></Select>
+      <InlineFormLabel width={5}>format as</InlineFormLabel>
+      <Select width={30} value={column.type} options={INFINITY_COLUMN_FORMATS} onChange={(e) => onFormatChange(e.value as InfinityColumnFormat)} menuShouldPortal={true}></Select>
       {(isBackendQuery(query) || query.type === 'google-sheets') && column.type === 'timestamp' && (
         <>
           <InlineFormLabel width={11} tooltip={'Timestamp format in golang layout. Example: 2006-01-02T15:04:05Z07:00'}>
             Time Format (optional)
           </InlineFormLabel>
           <Select
+            width={30}
             value={column.timestampFormat}
             placeholder="Auto"
             options={[

@@ -1,0 +1,153 @@
+//  🌟 This was machine generated.  Do not edit. 🌟
+//  
+//  Frame[0] {
+//      "custom": {
+//          "query": {
+//              "refId": "q1",
+//              "type": "json",
+//              "format": "",
+//              "source": "inline",
+//              "url": "",
+//              "url_options": {
+//                  "method": "",
+//                  "params": null,
+//                  "headers": null,
+//                  "data": "",
+//                  "body_type": "",
+//                  "body_content_type": "",
+//                  "body_form": null,
+//                  "body_graphql_query": ""
+//              },
+//              "data": "{\"orders\":[{\"price\":10,\"quantity\":3},{\"price\":0.5,\"quantity\":10},{\"price\":100,\"quantity\":1}]}",
+//              "parser": "backend",
+//              "filterExpression": "",
+//              "summarizeExpression": "",
+//              "summarizeBy": "",
+//              "uql": "",
+//              "groq": "",
+//              "sqlite_query": "",
+//              "csv_options": {
+//                  "delimiter": "",
+//                  "skip_empty_lines": false,
+//                  "skip_lines_with_error": false,
+//                  "relax_column_count": false,
+//                  "columns": "",
+//                  "comment": ""
+//              },
+//              "json_options": {
+//                  "root_is_not_array": false,
+//                  "columnar": false
+//              },
+//              "root_selector": "$sum(orders.price)",
+//              "columns": [],
+//              "computed_columns": [],
+//              "filters": null,
+//              "seriesCount": 0,
+//              "expression": "",
+//              "alias": "",
+//              "dataOverrides": null,
+//              "global_query_id": "",
+//              "query_mode": ""
+//          },
+//          "data": "{\"orders\":[{\"price\":10,\"quantity\":3},{\"price\":0.5,\"quantity\":10},{\"price\":100,\"quantity\":1}]}",
+//          "responseCodeFromServer": 0,
+//          "duration": 0,
+//          "error": ""
+//      },
+//      "executedQueryString": "This feature is not available for this type of query yet"
+//  }
+//  Name: q1
+//  Dimensions: 1 Fields by 1 Rows
+//  +------------------+
+//  | Name: q1         |
+//  | Labels:          |
+//  | Type: []*float64 |
+//  +------------------+
+//  | 110.5            |
+//  +------------------+
+//  
+//  
+//  🌟 This was machine generated.  Do not edit. 🌟
+{
+  "status": 200,
+  "frames": [
+    {
+      "schema": {
+        "name": "q1",
+        "meta": {
+          "custom": {
+            "query": {
+              "refId": "q1",
+              "type": "json",
+              "format": "",
+              "source": "inline",
+              "url": "",
+              "url_options": {
+                "method": "",
+                "params": null,
+                "headers": null,
+                "data": "",
+                "body_type": "",
+                "body_content_type": "",
+                "body_form": null,
+                "body_graphql_query": ""
+              },
+              "data": "{\"orders\":[{\"price\":10,\"quantity\":3},{\"price\":0.5,\"quantity\":10},{\"price\":100,\"quantity\":1}]}",
+              "parser": "backend",
+              "filterExpression": "",
+              "summarizeExpression": "",
+              "summarizeBy": "",
+              "uql": "",
+              "groq": "",
+              "sqlite_query": "",
+              "csv_options": {
+                "delimiter": "",
+                "skip_empty_lines": false,
+                "skip_lines_with_error": false,
+                "relax_column_count": false,
+                "columns": "",
+                "comment": ""
+              },
+              "json_options": {
+                "root_is_not_array": false,
+                "columnar": false
+              },
+              "root_selector": "$sum(orders.price)",
+              "columns": [],
+              "computed_columns": [],
+              "filters": null,
+              "seriesCount": 0,
+              "expression": "",
+              "alias": "",
+              "dataOverrides": null,
+              "global_query_id": "",
+              "query_mode": ""
+            },
+            "data": "{\"orders\":[{\"price\":10,\"quantity\":3},{\"price\":0.5,\"quantity\":10},{\"price\":100,\"quantity\":1}]}",
+            "responseCodeFromServer": 0,
+            "duration": 0,
+            "error": ""
+          },
+          "executedQueryString": "This feature is not available for this type of query yet"
+        },
+        "fields": [
+          {
+            "name": "q1",
+            "type": "number",
+            "typeInfo": {
+              "frame": "float64",
+              "nullable": true
+            }
+          }
+        ]
+      },
+      "data": {
+        "values": [
+          [
+            110.5
+          ]
+        ]
+      }
+    }
+  ]
+}

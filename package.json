@@ -58,6 +58,7 @@
     "csv-parse": "^4.12.0",
     "groq-js": "0.4.0-beta.2",
     "json-to-pretty-yaml": "^1.2.2",
+    "jsonata": "^1.8.6",
     "jsonpath-plus": "^6.0.1",
     "lodash": "^4.17.21",
     "mathjs": "^10.0.0",
