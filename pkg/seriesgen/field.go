@@ -55,7 +55,7 @@ func GenerateField(input GenerateFieldInput) *data.Field {
 		input.Source = FieldSourceStep
 	}
 	fieldLength := GetFieldLength(input.Source, input.Count, input.TimeRange)
-	fieldValues := make([]interface{}, fieldLength)
+	fieldValues := make([]any, fieldLength)
 	field := data.NewField(input.Name, input.Labels, fieldValues)
 	return field
 }

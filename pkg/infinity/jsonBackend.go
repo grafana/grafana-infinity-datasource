@@ -11,7 +11,7 @@ import (
 	querySrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/query"
 )
 
-func GetJSONBackendResponse(urlResponseObject interface{}, query querySrv.Query) (*data.Frame, error) {
+func GetJSONBackendResponse(urlResponseObject any, query querySrv.Query) (*data.Frame, error) {
 	frame := GetDummyFrame(query)
 	responseString, err := json.Marshal(urlResponseObject)
 	if err != nil {

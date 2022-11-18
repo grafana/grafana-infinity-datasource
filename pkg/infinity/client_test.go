@@ -19,7 +19,7 @@ func TestInfinityClient_GetResults(t *testing.T) {
 		settings       settingsSrv.InfinitySettings
 		requestHeaders map[string]string
 		query          querySrv.Query
-		wantO          interface{}
+		wantO          any
 		wantErr        bool
 	}{
 		{
@@ -58,7 +58,7 @@ func TestInfinityClient_GetResults(t *testing.T) {
 				URL:  fmt.Sprintf("%s%s", mockJSONDomain, mockJSONURL),
 				Type: "json",
 			},
-			wantO: []interface{}([]interface{}{map[string]interface{}{"age": 20.0, "name": "foo"}, map[string]interface{}{"age": 25.0, "name": "bar"}}),
+			wantO: []any([]any{map[string]any{"age": 20.0, "name": "foo"}, map[string]any{"age": 25.0, "name": "bar"}}),
 		},
 	}
 	for _, tt := range tests {

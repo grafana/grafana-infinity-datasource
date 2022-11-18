@@ -57,7 +57,7 @@ func (host *PluginHost) getGraphQLHandler() http.Handler {
 									DefaultValue: "World",
 								},
 							},
-							Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+							Resolve: func(p graphql.ResolveParams) (any, error) {
 								return fmt.Sprintf("Hello %s! 👋", p.Args["to"]), nil
 							},
 						},
@@ -75,7 +75,7 @@ func (host *PluginHost) getGraphQLHandler() http.Handler {
 									DefaultValue: "https://github.com/yesoreyeram/grafana-infinity-datasource/blob/main/testdata/users.json",
 								},
 							},
-							Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+							Resolve: func(p graphql.ResolveParams) (any, error) {
 								res, _, _, err := client.client.GetResults(querySrv.Query{
 									Type: p.Args["type"].(querySrv.QueryType),
 									URL:  p.Args["url"].(string),
@@ -92,7 +92,7 @@ func (host *PluginHost) getGraphQLHandler() http.Handler {
 									DefaultValue: "2006-01-02T15:04:05Z07:00",
 								},
 							},
-							Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+							Resolve: func(p graphql.ResolveParams) (any, error) {
 								return time.Now().Format(p.Args["format"].(string)), nil
 							},
 						},

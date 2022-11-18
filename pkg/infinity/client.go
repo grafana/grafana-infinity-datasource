@@ -94,7 +94,7 @@ func replaceSect(input string, settings settingsSrv.InfinitySettings, includeSec
 	return input
 }
 
-func (client *Client) req(url string, body io.Reader, settings settingsSrv.InfinitySettings, query querySrv.Query, requestHeaders map[string]string) (obj interface{}, statusCode int, duration time.Duration, err error) {
+func (client *Client) req(url string, body io.Reader, settings settingsSrv.InfinitySettings, query querySrv.Query, requestHeaders map[string]string) (obj any, statusCode int, duration time.Duration, err error) {
 	req, _ := GetRequest(settings, body, query, requestHeaders, true)
 	startTime := time.Now()
 	if !CanAllowURL(req.URL.String(), settings.AllowedHosts) {
@@ -127,7 +127,7 @@ func (client *Client) req(url string, body io.Reader, settings settingsSrv.Infin
 		return nil, res.StatusCode, duration, err
 	}
 	if CanParseAsJSON(query.Type, res.Header) {
-		var out interface{}
+		var out any
 		err := json.Unmarshal(bodyBytes, &out)
 		if err != nil {
 			backend.Logger.Error("error un-marshaling JSON response", "url", url, "error", err.Error())
@@ -137,7 +137,7 @@ func (client *Client) req(url string, body io.Reader, settings settingsSrv.Infin
 	return string(bodyBytes), res.StatusCode, duration, err
 }
 
-func (client *Client) GetResults(query querySrv.Query, requestHeaders map[string]string) (o interface{}, statusCode int, duration time.Duration, err error) {
+func (client *Client) GetResults(query querySrv.Query, requestHeaders map[string]string) (o any, statusCode int, duration time.Duration, err error) {
 	switch strings.ToUpper(query.URLOptions.Method) {
 	case http.MethodPost:
 		body := GetQueryBody(query)

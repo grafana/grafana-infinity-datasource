@@ -33,7 +33,7 @@ func ApplyFilter(frame *data.Frame, filterExpression string) (*data.Frame, error
 	for inRowIdx := 0; inRowIdx < rowLen; inRowIdx++ {
 		var match *bool
 		var err error
-		parameters := map[string]interface{}{"frame": frame, "null": nil, "nil": nil, "rowIndex": inRowIdx}
+		parameters := map[string]any{"frame": frame, "null": nil, "nil": nil, "rowIndex": inRowIdx}
 		for _, field := range frame.Fields {
 			v := framesql.GetValue(field.At(inRowIdx))
 			parameters[framesql.SlugifyFieldName(field.Name)] = v

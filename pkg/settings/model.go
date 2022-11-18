@@ -194,7 +194,7 @@ func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinityS
 
 func GetSecrets(config backend.DataSourceInstanceSettings, secretType string, secretValue string) map[string]string {
 	headers := make(map[string]string)
-	JsonData := make(map[string]interface{})
+	JsonData := make(map[string]any)
 	if err := json.Unmarshal(config.JSONData, &JsonData); err != nil {
 		return headers
 	}

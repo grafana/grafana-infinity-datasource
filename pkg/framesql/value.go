@@ -4,7 +4,7 @@ import (
 	"time"
 )
 
-func GetValue(input interface{}) interface{} {
+func GetValue(input any) any {
 	if v, ok := input.(*float64); ok {
 		if v == nil {
 			return 0
@@ -94,7 +94,7 @@ func GetValue(input interface{}) interface{} {
 	return input
 }
 
-func GetValuePointer(input interface{}) interface{} {
+func GetValuePointer(input any) any {
 	if input == nil {
 		return nil
 	}

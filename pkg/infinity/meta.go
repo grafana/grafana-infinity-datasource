@@ -9,7 +9,7 @@ import (
 
 type CustomMeta struct {
 	Query                  querySrv.Query `json:"query"`
-	Data                   interface{}    `json:"data"`
+	Data                   any            `json:"data"`
 	ResponseCodeFromServer int            `json:"responseCodeFromServer"`
 	Duration               time.Duration  `json:"duration"`
 	Error                  string         `json:"error"`

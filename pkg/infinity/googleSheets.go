@@ -37,7 +37,7 @@ type CellData struct {
 	NullFields     []string `json:"-"`
 }
 
-func GetGoogleSheetsResponse(urlResponseObject interface{}, query querySrv.Query) (*data.Frame, error) {
+func GetGoogleSheetsResponse(urlResponseObject any, query querySrv.Query) (*data.Frame, error) {
 	frame := GetDummyFrame(query)
 	sheetsString, ok := urlResponseObject.(string)
 	if !ok {
@@ -99,9 +99,9 @@ func GetGoogleSheetsResponse(urlResponseObject interface{}, query querySrv.Query
 				}
 				framerOptions.Columns = append(framerOptions.Columns, colum)
 			}
-			out := []interface{}{}
+			out := []any{}
 			for _, row := range records {
-				item := map[string]interface{}{}
+				item := map[string]any{}
 				for colId, col := range header {
 					if colId < len(row) {
 						item[col] = row[colId]
