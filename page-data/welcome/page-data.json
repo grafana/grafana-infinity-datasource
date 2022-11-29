@@ -1,1 +1,5 @@
-{"componentChunkName":"component---src-pages-welcome-tsx","path":"/welcome/","result":{"pageContext":{}},"staticQueryHashes":["1915384699","561970757"]}
+{
+    "componentChunkName": "component---src-pages-welcome-tsx",
+    "path": "/welcome/",
+    "result": {"pageContext":{}},
+    "staticQueryHashes": ["1915384699","561970757"]}
