@@ -18,7 +18,7 @@
     "@stitches/react": "^1.2.6",
     "bootstrap": "^5.0.0",
     "fuse.js": "^6.5.3",
-    "gatsby": "^4.4.0",
+    "gatsby": "^4.14.0",
     "gatsby-plugin-feed": "^4.4.0",
     "gatsby-plugin-mdx": "^2.5.0",
     "gatsby-plugin-postcss": "^4.4.0",
