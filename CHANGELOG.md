@@ -2,6 +2,10 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
+## [ 1.2.1 ]
+
+- **Chore** Backend binaries are now compiled with Go 1.19.4
+
 ## [ 1.2.0 ]
 
 - **XML** Support for backend parser (alerts, recorded queries, public dashboards etc)
