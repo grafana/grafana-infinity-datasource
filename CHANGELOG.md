@@ -2,8 +2,9 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
-## [ 1.2.1 ]
+## [ 1.3.0 ]
 
+- **UQL** Support for new methods `atob`, `btoa` and `substring`
 - **Chore** Backend binaries are now compiled with Go 1.19.4
 
 ## [ 1.2.0 ]
