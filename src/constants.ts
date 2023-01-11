@@ -90,7 +90,7 @@ export enum FilterOperator {
   NumberGreaterThanOrEqualTo = '>=',
 }
 
-export const AWSRegions: SelectableValue<string>[] = [
+export const AWSRegions: Array<SelectableValue<string>> = [
   'af-south-1',
   'ap-east-1',
   'ap-northeast-1',
