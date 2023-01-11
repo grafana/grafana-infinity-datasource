@@ -178,7 +178,13 @@ const sitemap: any[] = [
     title: 'Azure Authentication',
     slug: '/wiki/azure-authentication',
     description: 'Microsoft Azure Authentication Steps',
-    tags: ['authentication', 'auth', 'username', 'password', 'secure', 'security', 'oauth', 'oauth2', 'azure', 'microsoft', 'cloud'],
+    tags: ['authentication', 'auth', 'username', 'password', 'secure', 'security', 'oauth', 'oauth2', 'azure', 'microsoft', 'cloud', 'kusto', 'log analytics', 'azure monitor'],
+  },
+  {
+    title: 'AWS Authentication',
+    slug: '/wiki/aws-authentication',
+    description: 'AWS Cloud Authentication Steps',
+    tags: ['authentication', 'auth', 'username', 'password', 'secure', 'security', 'oauth', 'oauth2', 'aws', 'amazon', 'cloud', 'cloudwatch', 'signing'],
   },
   {
     title: 'Global Queries',

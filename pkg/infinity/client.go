@@ -51,6 +51,21 @@ func GetTLSConfigFromSettings(settings settingsSrv.InfinitySettings) (*tls.Confi
 	return tlsConfig, nil
 }
 
+func getBaseHTTPClient(settings settingsSrv.InfinitySettings) *http.Client {
+	tlsConfig, err := GetTLSConfigFromSettings(settings)
+	if err != nil {
+		return nil
+	}
+	transport := &http.Transport{
+		Proxy:           http.ProxyFromEnvironment,
+		TLSClientConfig: tlsConfig,
+	}
+	return &http.Client{
+		Transport: transport,
+		Timeout:   time.Second * time.Duration(settings.TimeoutInSeconds),
+	}
+}
+
 func NewClient(settings settingsSrv.InfinitySettings) (client *Client, err error) {
 	if settings.AuthenticationMethod == "" {
 		settings.AuthenticationMethod = settingsSrv.AuthenticationMethodNone
@@ -61,21 +76,14 @@ func NewClient(settings settingsSrv.InfinitySettings) (client *Client, err error
 			settings.AuthenticationMethod = settingsSrv.AuthenticationMethodForwardOauth
 		}
 	}
-	tlsConfig, err := GetTLSConfigFromSettings(settings)
-	if err != nil {
-		return nil, err
-	}
-	transport := &http.Transport{
-		Proxy:           http.ProxyFromEnvironment,
-		TLSClientConfig: tlsConfig,
-	}
-	httpClient := &http.Client{
-		Transport: transport,
-		Timeout:   time.Second * time.Duration(settings.TimeoutInSeconds),
+	httpClient := getBaseHTTPClient(settings)
+	if httpClient == nil {
+		return nil, errors.New("invalid http client")
 	}
 	httpClient = ApplyDigestAuth(httpClient, settings)
 	httpClient = ApplyOAuthClientCredentials(httpClient, settings)
 	httpClient = ApplyOAuthJWT(httpClient, settings)
+	httpClient = ApplyAWSAuth(httpClient, settings)
 	return &Client{
 		Settings:   settings,
 		HttpClient: httpClient,

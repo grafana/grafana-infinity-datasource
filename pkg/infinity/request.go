@@ -96,5 +96,11 @@ func (client *Client) GetExecutedURL(query querySrv.Query) string {
 	if query.Type == querySrv.QueryTypeGROQ || query.Parser == "groq" {
 		out = append(out, "###############", "## GROQ", "###############", "", query.GROQ, "")
 	}
+	if client.Settings.AuthenticationMethod == settingsSrv.AuthenticationMethodOAuth {
+		out = append(out, "###############", "> Authentication steps not included for OAuth authentication")
+	}
+	if client.Settings.AuthenticationMethod == settingsSrv.AuthenticationMethodAWS {
+		out = append(out, "###############", "> Authentication steps not included for AWS authentication")
+	}
 	return strings.Join(out, "\n")
 }

@@ -76,3 +76,11 @@ OAuth2 JWT require the following parameters
 | Token URL              | TokenURL is the endpoint required to complete the 2-legged JWT flow                                             |
 | Subject                | Optional. Subject is the optional user to impersonate                                                           |
 | Scopes                 | Scopes optionally specifies a list of requested permission scopes. Provide scopes as a comma separated values   |
+
+## Azure Authentication
+
+If you want to authenticate your API endpoints via microsoft azure authentication, refer steps given [here](/wiki/azure-authentication).
+
+## AWS Authentication
+
+If you want to authenticate your API endpoints via amazon aws authentication, refer steps given [here](/wiki/aws-authentication).

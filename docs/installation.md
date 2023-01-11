@@ -39,7 +39,7 @@ grafana-cli --pluginUrl https://github.com/yesoreyeram/grafana-infinity-datasour
 
 ### Install using helm chart
 
-If you use helm chart to provision grafana, use the following config to install the plugin
+If you use [grafana helm chart](https://github.com/grafana/helm-charts/blob/grafana-6.32.12/charts/grafana/values.yaml#L482) to provision grafana, use the following config to install the plugin
 
 ```yml
 plugins:
