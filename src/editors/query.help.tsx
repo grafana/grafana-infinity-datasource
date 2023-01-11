@@ -1,15 +1,7 @@
 import React, { useState } from 'react';
-import { Button, LinkButton, Modal } from '@grafana/ui';
+import { Button, LinkButton, Modal, Drawer, Card, TagList } from '@grafana/ui';
 import { Stack } from './../components/extended/Stack';
-
-export const InfinityHelp = () => {
-  return (
-    <div>
-      <h4 style={{ margin: '5px', marginBottom: '20px' }}>Help Topics</h4>
-      <HelpLinks />
-    </div>
-  );
-};
+import type { InfinityQuery } from './../types';
 
 export const HelpLinks = () => {
   const [activeTab, setActiveTab] = useState(false);
@@ -225,3 +217,393 @@ export const HelpLinks = () => {
     </div>
   );
 };
+
+export const SampleQueries = (props: { onChange: (query: InfinityQuery) => void; onRunQuery: () => void }) => {
+  const [showSampleQueries, setShowSampleQueries] = useState(false);
+  const queries: Array<{ title: string; description?: string; query: InfinityQuery; tags?: string[] }> = [
+    {
+      title: 'Simple JSON',
+      query: {
+        type: 'json',
+        source: 'inline',
+        parser: 'backend',
+        refId: '',
+        root_selector: '',
+        columns: [],
+        format: 'dataframe',
+        data: sampleJSON,
+      },
+      tags: ['json', 'backend'],
+    },
+    {
+      title: 'Simple CSV',
+      query: {
+        type: 'csv',
+        source: 'inline',
+        parser: 'backend',
+        refId: '',
+        root_selector: '',
+        format: 'dataframe',
+        data: sampleCSV,
+        columns: [
+          {
+            selector: 'name',
+            text: 'Name',
+            type: 'string',
+          },
+          {
+            selector: 'age',
+            text: 'Age',
+            type: 'number',
+          },
+          {
+            selector: 'country',
+            text: 'Country',
+            type: 'string',
+          },
+          {
+            selector: 'occupation',
+            text: 'Occupation',
+            type: 'string',
+          },
+          {
+            selector: 'salary',
+            text: 'Salary',
+            type: 'number',
+          },
+        ],
+      },
+      tags: ['csv', 'backend'],
+    },
+    {
+      title: 'Simple TSV',
+      query: {
+        type: 'tsv',
+        source: 'inline',
+        parser: 'backend',
+        refId: '',
+        root_selector: '',
+        format: 'dataframe',
+        data: sampleTSV,
+        columns: [
+          {
+            selector: 'name',
+            text: 'Name',
+            type: 'string',
+          },
+          {
+            selector: 'age',
+            text: 'Age',
+            type: 'number',
+          },
+          {
+            selector: 'country',
+            text: 'Country',
+            type: 'string',
+          },
+          {
+            selector: 'occupation',
+            text: 'Occupation',
+            type: 'string',
+          },
+          {
+            selector: 'salary',
+            text: 'Salary',
+            type: 'number',
+          },
+        ],
+      },
+      tags: ['tsv', 'backend'],
+    },
+    {
+      title: 'Simple XML',
+      query: {
+        type: 'xml',
+        source: 'inline',
+        parser: 'backend',
+        refId: '',
+        format: 'dataframe',
+        data: sampleXML,
+        root_selector: 'root.row',
+        columns: [
+          {
+            selector: 'name',
+            text: 'Name',
+            type: 'string',
+          },
+          {
+            selector: 'age',
+            text: 'Age',
+            type: 'number',
+          },
+          {
+            selector: 'country',
+            text: 'Country',
+            type: 'string',
+          },
+          {
+            selector: 'occupation',
+            text: 'Occupation',
+            type: 'string',
+          },
+          {
+            selector: 'salary',
+            text: 'Salary',
+            type: 'number',
+          },
+        ],
+      },
+      tags: ['xml', 'backend'],
+    },
+    {
+      title: 'Simple HTML',
+      query: {
+        type: 'html',
+        source: 'inline',
+        parser: 'backend',
+        refId: '',
+        format: 'dataframe',
+        data: sampleHTML,
+        root_selector: 'html.body.table.tbody.tr',
+        columns: [
+          {
+            selector: 'td.0',
+            text: 'Name',
+            type: 'string',
+          },
+          {
+            selector: 'td.1.#content',
+            text: 'Age',
+            type: 'number',
+          },
+          {
+            selector: 'td.2',
+            text: 'Country',
+            type: 'string',
+          },
+          {
+            selector: 'td.3',
+            text: 'Occupation',
+            type: 'string',
+          },
+          {
+            selector: 'td.4.#content',
+            text: 'Salary',
+            type: 'number',
+          },
+        ],
+      },
+      tags: ['html', 'backend'],
+    },
+  ];
+  return (
+    <>
+      <Button
+        variant="secondary"
+        fill="outline"
+        size="sm"
+        icon="document-info"
+        style={{ marginTop: '18px', padding: '10px', marginRight: '10px' }}
+        onClick={() => setShowSampleQueries(!showSampleQueries)}
+      >
+        Examples
+      </Button>
+      {showSampleQueries ? (
+        <Drawer title="Sample Queries" onClose={() => setShowSampleQueries(false)}>
+          <>
+            {queries.map((q, index) => (
+              <Card key={index}>
+                <Card.Heading>{q.title}</Card.Heading>
+                {q.description ? <Card.Description>{q.description}</Card.Description> : null}
+                <Card.Actions>
+                  <Button
+                    key="run"
+                    variant="secondary"
+                    onClick={(e) => {
+                      props.onChange(q.query);
+                      props.onRunQuery();
+                      setShowSampleQueries(false);
+                      e.preventDefault();
+                    }}
+                  >
+                    Run Query
+                  </Button>
+                </Card.Actions>
+                <Card.Tags>
+                  <TagList tags={q.tags || []} onClick={() => {}} />
+                </Card.Tags>
+              </Card>
+            ))}
+          </>
+        </Drawer>
+      ) : null}
+    </>
+  );
+};
+
+const sampleJSON = `[  
+  {    
+      "name": "Leanne Graham",    
+      "age": 38,   
+      "country": "USA",    
+      "occupation": "Devops Engineer",    
+      "salary": 3000  
+  },  
+  {    
+      "name": "Ervin Howell",    
+      "age": 27,    
+      "country": "USA",    
+      "occupation": "Software Engineer",   
+      "salary": 2300  
+  },  
+  {    
+      "name": "Clementine Bauch",    
+      "age": 17,   
+      "country": "Canada",    
+      "occupation": "Student",    
+      "salary": null  
+  },  
+  {    
+      "name": "Patricia Lebsack",    
+      "age": 42,    
+      "country": "UK",    
+      "occupation": "Software Engineer",    
+      "salary": 2800  
+  },  
+  {    
+      "name": "Leanne Bell",    
+      "age": 38,   
+      "country": "USA",   
+      "occupation": "Senior Software Engineer",   
+       "salary": 4000  
+  },  
+  {    
+      "name": "Chelsey Dietrich",   
+      "age": 32,   
+      "country": "USA",    
+      "occupation": "Software Engineer",    
+      "salary": 3500  
+  }
+]`;
+const sampleCSV = `name,age,country,occupation,salary
+Leanne Graham,38,USA,Devops Engineer,3000
+Ervin Howell,27,USA,Software Engineer,2300
+Clementine Bauch,17,Canada,Student,
+Patricia Lebsack,42,UK,Software Engineer,2800
+Leanne Bell,38,USA,Senior Software Engineer,4000
+Chelsey Dietrich,32,USA,Software Engineer,3500`;
+const sampleTSV = `name	age	country	occupation	salary
+Leanne Graham	38	USA	Devops Engineer	3000
+Ervin Howell	27	USA	Software Engineer	2300
+Clementine Bauch	17	Canada	Student	
+Patricia Lebsack	42	UK	Software Engineer	2800
+Leanne Bell	38	USA	Senior Software Engineer	4000
+Chelsey Dietrich	32	USA	Software Engineer	3500`;
+const sampleXML = `<?xml version="1.0" encoding="UTF-8" ?>
+<root>  
+    <row>    
+        <name>Leanne Graham</name>    
+        <age>38</age>    
+        <country>USA</country>
+        <occupation>Devops Engineer</occupation>
+        <salary>3000</salary>  
+    </row>
+    <row>    
+        <name>Ervin Howell</name>
+        <age>27</age>
+        <country>USA</country>
+        <occupation>Software Engineer</occupation>
+        <salary>2300</salary>  
+    </row>  
+    <row>
+        <name>Clementine Bauch</name>
+        <age>17</age>
+        <country>Canada</country>
+        <occupation>Student</occupation>
+        <salary />
+    </row>  
+    <row>
+        <name>Patricia Lebsack</name>
+        <age>42</age>
+        <country>UK</country>
+        <occupation>Software Engineer</occupation>
+        <salary>2800</salary>
+    </row>  
+    <row>
+        <name>Leanne Bell</name>
+        <age>38</age>
+        <country>USA</country>
+        <occupation>Senior Software Engineer</occupation>
+        <salary>4000</salary>
+    </row>  
+    <row>
+        <name>Chelsey Dietrich</name>
+        <age>32</age>
+        <country>USA</country>
+        <occupation>Software Engineer</occupation>
+        <salary>3500</salary>
+    </row>
+</root>`;
+const sampleHTML = `<!DOCTYPE html>
+<html lang="en">
+    <head>    
+        <meta charset="UTF-8" />
+        <title>Users</title></head>
+    <body>
+        <table class="table table-bordered table-hover table-condensed">
+            <thead>        
+                <tr>
+                    <th title="Field #1">name</th>
+                    <th title="Field #2">age</th>
+                    <th title="Field #3">country</th>
+                    <th title="Field #4">occupation</th>
+                    <th title="Field #5">salary</th>
+                </tr>
+            </thead>
+            <tbody>        
+                <tr>
+                    <td>Leanne Graham</td>
+                    <td align="right">38</td>
+                    <td>USA</td>
+                    <td>Devops Engineer</td>
+                    <td align="right">3000</td>
+                </tr>        
+                <tr>
+                    <td>Ervin Howell</td>
+                    <td align="right">27</td>
+                    <td>USA</td>
+                    <td>Software Engineer</td>
+                    <td align="right">2300</td>
+                </tr>        
+                <tr>
+                    <td>Clementine Bauch</td>
+                    <td align="right">17</td>
+                    <td>Canada</td>
+                    <td>Student</td>
+                    <td align="right"></td>
+                </tr>       
+                <tr>
+                    <td>Patricia Lebsack</td>
+                    <td align="right">42</td>
+                    <td>UK</td>
+                    <td>Software Engineer</td>
+                    <td align="right">2800</td>
+                </tr>       
+                <tr>
+                    <td>Leanne Bell</td>
+                    <td align="right">38</td>
+                    <td>USA</td>
+                    <td>Senior Software Engineer</td>
+                    <td align="right">4000</td>
+                </tr>        
+                <tr>
+                    <td>Chelsey Dietrich</td>
+                    <td align="right">32</td>
+                    <td>USA</td>
+                    <td>Software Engineer</td>
+                    <td align="right">3500</td>
+                </tr>      
+            </tbody>    
+        </table>  
+    </body>
+</html>`;

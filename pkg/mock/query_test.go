@@ -188,7 +188,7 @@ func TestRemoteSources(t *testing.T) {
 					require.Equal(t, "url", customMeta.Query.Source)
 					require.Equal(t, "table", customMeta.Query.Format)
 					require.Equal(t, "http://foo", customMeta.Query.URL)
-					require.Equal(t, []interface{}([]interface{}{float64(1), float64(2), float64(3)}), customMeta.Data)
+					require.Equal(t, []any([]any{float64(1), float64(2), float64(3)}), customMeta.Data)
 					require.Equal(t, "", customMeta.Error)
 				})
 			},

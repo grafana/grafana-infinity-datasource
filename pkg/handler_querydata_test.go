@@ -199,7 +199,7 @@ func TestAuthentication(t *testing.T) {
 			require.Nil(t, res.Error)
 			metaData := res.Frames[0].Meta.Custom.(*infinity.CustomMeta)
 			require.NotNil(t, metaData)
-			require.Equal(t, map[string]interface{}(map[string]interface{}{"foo": "bar"}), metaData.Data)
+			require.Equal(t, map[string]any(map[string]any{"foo": "bar"}), metaData.Data)
 		})
 		t.Run("should throw error with invalid oauth credentials", func(t *testing.T) {
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -307,7 +307,7 @@ func TestAuthentication(t *testing.T) {
 			require.NotNil(t, metaData)
 			require.Equal(t, "", metaData.Error)
 			require.Equal(t, http.StatusOK, metaData.ResponseCodeFromServer)
-			require.Equal(t, map[string]interface{}(map[string]interface{}{"message": "OK"}), metaData.Data)
+			require.Equal(t, map[string]any(map[string]any{"message": "OK"}), metaData.Data)
 		})
 	})
 }
@@ -335,7 +335,7 @@ func TestResponseFormats(t *testing.T) {
 			require.NotNil(t, metaData)
 			require.Equal(t, "", metaData.Error)
 			require.Equal(t, http.StatusOK, metaData.ResponseCodeFromServer)
-			require.Equal(t, map[string]interface{}(map[string]interface{}{"foo": "bar"}), metaData.Data)
+			require.Equal(t, map[string]any(map[string]any{"foo": "bar"}), metaData.Data)
 		})
 	})
 	t.Run("JSON Backend", func(t *testing.T) {
@@ -545,7 +545,7 @@ func TestResponseFormats(t *testing.T) {
 			require.NotNil(t, metaData)
 			require.Equal(t, "", metaData.Error)
 			require.Equal(t, http.StatusOK, metaData.ResponseCodeFromServer)
-			require.Equal(t, map[string]interface{}(map[string]interface{}{"foo": "bar"}), metaData.Data)
+			require.Equal(t, map[string]any(map[string]any{"foo": "bar"}), metaData.Data)
 		})
 	})
 	t.Run("CSV", func(t *testing.T) {
@@ -623,7 +623,7 @@ func TestResponseFormats(t *testing.T) {
 			require.NotNil(t, metaData)
 			require.Equal(t, "", metaData.Error)
 			require.Equal(t, http.StatusOK, metaData.ResponseCodeFromServer)
-			require.Equal(t, map[string]interface{}(map[string]interface{}{"foo": "bar"}), metaData.Data)
+			require.Equal(t, map[string]any(map[string]any{"foo": "bar"}), metaData.Data)
 		})
 	})
 	t.Run("GROQ", func(t *testing.T) {
@@ -649,7 +649,7 @@ func TestResponseFormats(t *testing.T) {
 			require.NotNil(t, metaData)
 			require.Equal(t, "", metaData.Error)
 			require.Equal(t, http.StatusOK, metaData.ResponseCodeFromServer)
-			require.Equal(t, map[string]interface{}(map[string]interface{}{"foo": "bar"}), metaData.Data)
+			require.Equal(t, map[string]any(map[string]any{"foo": "bar"}), metaData.Data)
 		})
 	})
 }

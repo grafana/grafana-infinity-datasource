@@ -2,8 +2,8 @@ version: '3.7'
 services:
   grafana:
     container_name: yesoreyeram-infinity-datasource
-    image: grafana/grafana-enterprise:8.4.7
-    # image: grafana/grafana-enterprise:9.2.0
+    image: grafana/grafana-enterprise:9.3.1
+    # image: grafana/grafana-enterprise:8.4.7
     # image: grafana/grafana-enterprise:main
     ports:
       - '3000:3000'
@@ -17,4 +17,4 @@ services:
       - GF_SECURITY_ADMIN_USER=infinity
       - GF_SECURITY_ADMIN_PASSWORD=infinity
       - GF_ENTERPRISE_LICENSE_TEXT=$GF_ENTERPRISE_LICENSE_TEXT
-      - GF_FEATURE_TOGGLES_ENABLE=publicDashboards
+      - GF_FEATURE_TOGGLES_ENABLE=publicDashboards topnav

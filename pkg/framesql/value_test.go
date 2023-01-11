@@ -18,8 +18,8 @@ func TestGetValuePointer(t *testing.T) {
 	i8 := int8(1)
 	tests := []struct {
 		name  string
-		input interface{}
-		want  interface{}
+		input any
+		want  any
 	}{
 		{input: nil, want: nil},
 		{input: f64, want: &f64},
@@ -61,8 +61,8 @@ func TestGetValue(t *testing.T) {
 	b := true
 	tests := []struct {
 		name  string
-		input interface{}
-		want  interface{}
+		input any
+		want  any
 	}{
 		{input: nil, want: nil},
 		{input: f64, want: f64},

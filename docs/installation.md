@@ -39,7 +39,7 @@ grafana-cli --pluginUrl https://github.com/yesoreyeram/grafana-infinity-datasour
 
 ### Install using helm chart
 
-If you use helm chart to provision grafana, use the following config to install the plugin
+If you use [grafana helm chart](https://github.com/grafana/helm-charts/blob/grafana-6.32.12/charts/grafana/values.yaml#L482) to provision grafana, use the following config to install the plugin
 
 ```yml
 plugins:
@@ -65,11 +65,11 @@ plugins:
 With docker, you can install the plugin using the following command. This will download the latest published version of the plugin from grafana plugins directory.
 
 ```shell
-docker run -p 3000:3000 -e "GF_INSTALL_PLUGINS=yesoreyeram-infinity-datasource" grafana/grafana-enterprise:8.4.7
+docker run -p 3000:3000 -e "GF_INSTALL_PLUGINS=yesoreyeram-infinity-datasource" grafana/grafana-enterprise:9.3.1
 ```
 
 If you need to install a custom version of the plugin with docker, use the following command.
 
 ```shell
-docker run -p 3000:3000 -e "GF_INSTALL_PLUGINS=https://github.com/yesoreyeram/grafana-infinity-datasource/releases/download/v1.2.0/yesoreyeram-infinity-datasource-1.2.0.zip;yesoreyeram-infinity-datasource" grafana/grafana-enterprise:8.4.7
+docker run -p 3000:3000 -e "GF_INSTALL_PLUGINS=https://github.com/yesoreyeram/grafana-infinity-datasource/releases/download/v1.2.0/yesoreyeram-infinity-datasource-1.2.0.zip;yesoreyeram-infinity-datasource" grafana/grafana-enterprise:9.3.1
 ```

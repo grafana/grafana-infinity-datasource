@@ -124,3 +124,5 @@ cypress/report.json
 cypress/screenshots/
 cypress/videos/
 .data/
+
+./temp_test.go

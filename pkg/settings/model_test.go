@@ -137,6 +137,11 @@ func TestAllSettingsAgainstFrontEnd(t *testing.T) {
 			"oauth2EndPointParamsName2":"name",
 			"oauthPassThru": true,
 			"allowedHosts": ["host1","host2"],
+			"aws" : {
+				"authType" 	: "keys",
+				"region" 	: "region1",
+				"service" 	: "service1"
+			},
 			"oauth2" : {
 				"client_id":"myClientID",
 				"email":"myEmail",
@@ -155,6 +160,8 @@ func TestAllSettingsAgainstFrontEnd(t *testing.T) {
 			"httpHeaderValue1":           "headervalue1",
 			"apiKeyValue":                "earth",
 			"bearerToken":                "myBearerToken",
+			"awsAccessKey":               "awsAccessKey1",
+			"awsSecretKey":               "awsSecretKey1",
 			"oauth2ClientSecret":         "myOauth2ClientSecret",
 			"oauth2JWTPrivateKey":        "myOauth2JWTPrivateKey",
 			"oauth2EndPointParamsValue1": "Resource1",
@@ -173,6 +180,13 @@ func TestAllSettingsAgainstFrontEnd(t *testing.T) {
 		TLSClientCert:        "myTlsClientCert",
 		TLSCACert:            "myTlsCACert",
 		TLSClientKey:         "myTlsClientKey",
+		AWSAccessKey:         "awsAccessKey1",
+		AWSSecretKey:         "awsSecretKey1",
+		AWSSettings: settingsSrv.AWSSettings{
+			AuthType: settingsSrv.AWSAuthTypeKeys,
+			Service:  "service1",
+			Region:   "region1",
+		},
 		OAuth2Settings: settingsSrv.OAuth2Settings{
 			ClientID:     "myClientID",
 			OAuth2Type:   "client_credentials",

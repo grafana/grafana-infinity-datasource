@@ -6,6 +6,7 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/grafana/grafana-aws-sdk/pkg/sigv4"
 	dac "github.com/xinsnake/go-http-digest-auth-client"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
@@ -62,6 +63,36 @@ func ApplyDigestAuth(httpClient *http.Client, settings settingsSrv.InfinitySetti
 	if settings.AuthenticationMethod == settingsSrv.AuthenticationMethodDigestAuth {
 		a := dac.NewTransport(settings.UserName, settings.Password)
 		httpClient.Transport = &a
+	}
+	return httpClient
+}
+func ApplyAWSAuth(httpClient *http.Client, settings settingsSrv.InfinitySettings) *http.Client {
+	if settings.AuthenticationMethod == settingsSrv.AuthenticationMethodAWS {
+		tempHttpClient := getBaseHTTPClient(settings)
+		authType := settings.AWSSettings.AuthType
+		if authType == "" {
+			authType = settingsSrv.AWSAuthTypeKeys
+		}
+		region := settings.AWSSettings.Region
+		if region == "" {
+			region = "us-east-2"
+		}
+		service := settings.AWSSettings.Service
+		if service == "" {
+			service = "monitoring"
+		}
+		conf := &sigv4.Config{
+			AuthType:  string(authType),
+			Region:    region,
+			Service:   service,
+			AccessKey: settings.AWSAccessKey,
+			SecretKey: settings.AWSSecretKey,
+		}
+		rt, _ := sigv4.New(conf, sigv4.RoundTripperFunc(func(req *http.Request) (*http.Response, error) {
+			req.Header.Add("Accept", "application/json")
+			return tempHttpClient.Do(req)
+		}))
+		httpClient.Transport = rt
 	}
 	return httpClient
 }

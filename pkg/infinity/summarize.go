@@ -78,8 +78,8 @@ func GetSummarizeByFrame(frame *data.Frame, expression, by string) (*data.Frame,
 	if byField == nil {
 		return frame, errors.New("summarize by field not found. Not applying summarize")
 	}
-	uniqueValuesArray := []interface{}{}
-	uniqueValues := map[interface{}]bool{}
+	uniqueValuesArray := []any{}
+	uniqueValues := map[any]bool{}
 	for i := 0; i < byField.Len(); i++ {
 		if !uniqueValues[framesql.GetValue(byField.At(i))] {
 			uniqueValuesArray = append(uniqueValuesArray, framesql.GetValue(byField.At(i)))
@@ -89,7 +89,7 @@ func GetSummarizeByFrame(frame *data.Frame, expression, by string) (*data.Frame,
 	summarizeFrame := data.NewFrame("summary")
 	nameField := framesql.ConvertFieldValuesToField(uniqueValuesArray, by)
 	summarizeFrame.Fields = append(summarizeFrame.Fields, nameField)
-	values := []interface{}{}
+	values := []any{}
 	for _, item := range uniqueValuesArray {
 		filteredFrame := frame.EmptyCopy()
 		rowLen, err := frame.RowLen()

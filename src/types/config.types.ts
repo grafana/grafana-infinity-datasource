@@ -7,7 +7,7 @@ export interface GlobalInfinityQuery {
   id: string;
   query: InfinityQuery;
 }
-export type AuthType = 'none' | 'basicAuth' | 'apiKey' | 'bearerToken' | 'oauthPassThru' | 'digestAuth' | 'oauth2';
+export type AuthType = 'none' | 'basicAuth' | 'apiKey' | 'bearerToken' | 'oauthPassThru' | 'digestAuth' | 'aws' | 'oauth2';
 export type OAuth2Type = 'client_credentials' | 'jwt' | 'others';
 export type APIKeyType = 'header' | 'query';
 export type OAuth2Props = {
@@ -19,12 +19,18 @@ export type OAuth2Props = {
   token_url?: string;
   scopes?: string[];
 };
+export type AWSAuthProps = {
+  authType?: 'keys';
+  region?: string;
+  service?: string;
+};
 export type InfinityReferenceData = { name: string; data: string };
 export interface InfinityOptions extends DataSourceJsonData {
   auth_method?: AuthType;
   apiKeyKey?: string;
   apiKeyType?: APIKeyType;
   oauth2?: OAuth2Props;
+  aws?: AWSAuthProps;
   tlsSkipVerify?: boolean;
   tlsAuth?: boolean;
   serverName?: string;
@@ -47,6 +53,8 @@ export interface InfinitySecureOptions {
   tlsClientKey?: string;
   apiKeyValue?: string;
   bearerToken?: string;
+  awsAccessKey?: string;
+  awsSecretKey?: string;
   oauth2ClientSecret?: string;
   oauth2JWTPrivateKey?: string;
 }

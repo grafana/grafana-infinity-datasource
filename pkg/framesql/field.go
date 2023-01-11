@@ -6,7 +6,7 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 )
 
-func ConvertFieldValuesToField(input []interface{}, name string) *data.Field {
+func ConvertFieldValuesToField(input []any, name string) *data.Field {
 	field := EmptyField(input, name)
 	for idx, item := range input {
 		if item != nil {
@@ -16,7 +16,7 @@ func ConvertFieldValuesToField(input []interface{}, name string) *data.Field {
 	return field
 }
 
-func EmptyField(input []interface{}, fieldName string) *data.Field {
+func EmptyField(input []any, fieldName string) *data.Field {
 	for _, i := range input {
 		if i == nil {
 			continue

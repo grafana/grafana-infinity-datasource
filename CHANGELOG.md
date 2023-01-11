@@ -2,6 +2,12 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
+## [ 1.3.0 ]
+
+- **Auth** Added support for **AWS authentication** using AWS Access and AWS Secret key
+- **UQL** Support for new methods `atob`, `btoa` and `substring`
+- **Chore** Backend binaries are now compiled with Go 1.19.5
+
 ## [ 1.2.0 ]
 
 - **XML** Support for backend parser (alerts, recorded queries, public dashboards etc)

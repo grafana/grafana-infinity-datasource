@@ -22,6 +22,16 @@ const (
 	QueryTypeGSheets QueryType = "google-sheets"
 )
 
+type InfinityParser string
+
+const (
+	InfinityParserSimple  InfinityParser = "simple"
+	InfinityParserBackend InfinityParser = "backend"
+	InfinityParserSQLite  InfinityParser = "sqlite"
+	InfinityParserUQL     InfinityParser = "uql"
+	InfinityParserGROQ    InfinityParser = "groq"
+)
+
 type Query struct {
 	RefID               string                 `json:"refId"`
 	Type                QueryType              `json:"type"`   // 'json' | 'json-backend' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'uql' | 'groq' | 'series' | 'global' | 'google-sheets'
@@ -31,7 +41,7 @@ type Query struct {
 	URL                 string                 `json:"url"`
 	URLOptions          URLOptions             `json:"url_options"`
 	Data                string                 `json:"data"`
-	Parser              string                 `json:"parser"` // 'simple' | 'backend' | 'sqlite' | 'uql' | 'groq'
+	Parser              InfinityParser         `json:"parser"` // 'simple' | 'backend' | 'sqlite' | 'uql' | 'groq'
 	FilterExpression    string                 `json:"filterExpression"`
 	SummarizeExpression string                 `json:"summarizeExpression"`
 	SummarizeBy         string                 `json:"summarizeBy"`
@@ -145,19 +155,19 @@ func ApplyDefaultsToQuery(query Query) Query {
 			query.URLOptions.BodyContentType = "text/plain"
 		}
 	}
-	if query.Type == QueryTypeJSON && query.Parser == "uql" && query.UQL == "" {
+	if query.Type == QueryTypeJSON && query.Parser == InfinityParserUQL && query.UQL == "" {
 		query.UQL = "parse-json"
 	}
-	if query.Type == QueryTypeCSV && query.Parser == "uql" && query.UQL == "" {
+	if query.Type == QueryTypeCSV && query.Parser == InfinityParserUQL && query.UQL == "" {
 		query.UQL = "parse-csv"
 	}
-	if query.Type == QueryTypeTSV && query.Parser == "uql" && query.UQL == "" {
+	if query.Type == QueryTypeTSV && query.Parser == InfinityParserUQL && query.UQL == "" {
 		query.UQL = `parse-csv --delimiter "\t"`
 	}
-	if query.Type == QueryTypeXML && query.Parser == "uql" && query.UQL == "" {
+	if query.Type == QueryTypeXML && query.Parser == InfinityParserUQL && query.UQL == "" {
 		query.UQL = "parse-xml"
 	}
-	if query.Type == QueryTypeJSON && query.Parser == "groq" && query.GROQ == "" {
+	if query.Type == QueryTypeJSON && query.Parser == InfinityParserGROQ && query.GROQ == "" {
 		query.GROQ = "*"
 	}
 	if query.Columns == nil {

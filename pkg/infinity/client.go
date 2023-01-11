@@ -51,6 +51,21 @@ func GetTLSConfigFromSettings(settings settingsSrv.InfinitySettings) (*tls.Confi
 	return tlsConfig, nil
 }
 
+func getBaseHTTPClient(settings settingsSrv.InfinitySettings) *http.Client {
+	tlsConfig, err := GetTLSConfigFromSettings(settings)
+	if err != nil {
+		return nil
+	}
+	transport := &http.Transport{
+		Proxy:           http.ProxyFromEnvironment,
+		TLSClientConfig: tlsConfig,
+	}
+	return &http.Client{
+		Transport: transport,
+		Timeout:   time.Second * time.Duration(settings.TimeoutInSeconds),
+	}
+}
+
 func NewClient(settings settingsSrv.InfinitySettings) (client *Client, err error) {
 	if settings.AuthenticationMethod == "" {
 		settings.AuthenticationMethod = settingsSrv.AuthenticationMethodNone
@@ -61,21 +76,14 @@ func NewClient(settings settingsSrv.InfinitySettings) (client *Client, err error
 			settings.AuthenticationMethod = settingsSrv.AuthenticationMethodForwardOauth
 		}
 	}
-	tlsConfig, err := GetTLSConfigFromSettings(settings)
-	if err != nil {
-		return nil, err
-	}
-	transport := &http.Transport{
-		Proxy:           http.ProxyFromEnvironment,
-		TLSClientConfig: tlsConfig,
-	}
-	httpClient := &http.Client{
-		Transport: transport,
-		Timeout:   time.Second * time.Duration(settings.TimeoutInSeconds),
+	httpClient := getBaseHTTPClient(settings)
+	if httpClient == nil {
+		return nil, errors.New("invalid http client")
 	}
 	httpClient = ApplyDigestAuth(httpClient, settings)
 	httpClient = ApplyOAuthClientCredentials(httpClient, settings)
 	httpClient = ApplyOAuthJWT(httpClient, settings)
+	httpClient = ApplyAWSAuth(httpClient, settings)
 	return &Client{
 		Settings:   settings,
 		HttpClient: httpClient,
@@ -94,7 +102,7 @@ func replaceSect(input string, settings settingsSrv.InfinitySettings, includeSec
 	return input
 }
 
-func (client *Client) req(url string, body io.Reader, settings settingsSrv.InfinitySettings, query querySrv.Query, requestHeaders map[string]string) (obj interface{}, statusCode int, duration time.Duration, err error) {
+func (client *Client) req(url string, body io.Reader, settings settingsSrv.InfinitySettings, query querySrv.Query, requestHeaders map[string]string) (obj any, statusCode int, duration time.Duration, err error) {
 	req, _ := GetRequest(settings, body, query, requestHeaders, true)
 	startTime := time.Now()
 	if !CanAllowURL(req.URL.String(), settings.AllowedHosts) {
@@ -127,7 +135,7 @@ func (client *Client) req(url string, body io.Reader, settings settingsSrv.Infin
 		return nil, res.StatusCode, duration, err
 	}
 	if CanParseAsJSON(query.Type, res.Header) {
-		var out interface{}
+		var out any
 		err := json.Unmarshal(bodyBytes, &out)
 		if err != nil {
 			backend.Logger.Error("error un-marshaling JSON response", "url", url, "error", err.Error())
@@ -137,7 +145,7 @@ func (client *Client) req(url string, body io.Reader, settings settingsSrv.Infin
 	return string(bodyBytes), res.StatusCode, duration, err
 }
 
-func (client *Client) GetResults(query querySrv.Query, requestHeaders map[string]string) (o interface{}, statusCode int, duration time.Duration, err error) {
+func (client *Client) GetResults(query querySrv.Query, requestHeaders map[string]string) (o any, statusCode int, duration time.Duration, err error) {
 	switch strings.ToUpper(query.URLOptions.Method) {
 	case http.MethodPost:
 		body := GetQueryBody(query)

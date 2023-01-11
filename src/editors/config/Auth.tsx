@@ -1,9 +1,10 @@
 import { onUpdateDatasourceSecureJsonDataOption } from '@grafana/data';
-import { InlineFormLabel, LegacyForms, RadioButtonGroup } from '@grafana/ui';
+import { InlineFormLabel, LegacyForms, RadioButtonGroup, Select } from '@grafana/ui';
 import React, { useState } from 'react';
 import { AllowedHostsEditor } from './AllowedHosts';
 import { OAuthInputsEditor } from './OAuthInput';
 import { OthersAuthentication } from './OtherAuthProviders';
+import { AWSRegions } from './../../constants';
 import type { APIKeyType, AuthType, InfinityOptions, InfinitySecureOptions } from './../../types';
 import type { DataSourcePluginOptionsEditorProps, SelectableValue } from '@grafana/data/types';
 
@@ -15,6 +16,7 @@ const authTypes: Array<SelectableValue<AuthType | 'others'>> = [
   { value: 'digestAuth', label: 'Digest Auth' },
   { value: 'oauthPassThru', label: 'Forward OAuth' },
   { value: 'oauth2', label: 'OAuth2' },
+  { value: 'aws', label: 'AWS' },
   { value: 'others', label: 'Other Auth Providers' },
 ];
 
@@ -36,6 +38,7 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
       case 'digestAuth':
       case 'apiKey':
       case 'bearerToken':
+      case 'aws':
       case 'oauth2':
       case 'none':
       default:
@@ -47,6 +50,12 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
   };
   const onAPIKeyKeyChange = (apiKeyKey: string) => {
     onOptionsChange({ ...options, jsonData: { ...options.jsonData, apiKeyKey } });
+  };
+  const onAwsRegionChange = (region: string) => {
+    onOptionsChange({ ...options, jsonData: { ...options.jsonData, aws: { ...options.jsonData?.aws, region } } });
+  };
+  const onAwsServiceChange = (service: string) => {
+    onOptionsChange({ ...options, jsonData: { ...options.jsonData, aws: { ...options.jsonData?.aws, service } } });
   };
   const onResetSecret = (key: keyof InfinitySecureOptions) => {
     onOptionsChange({
@@ -150,6 +159,53 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
               ]}
               value={options.jsonData.apiKeyType || 'header'}
               onChange={(apiKeyType = 'header') => onOptionsChange({ ...options, jsonData: { ...options.jsonData, apiKeyType } })}
+            />
+          </div>
+        </>
+      )}
+      {authType === 'aws' && (
+        <>
+          <div className="gf-form">
+            <InlineFormLabel>Region</InlineFormLabel>
+            <Select width={24} options={AWSRegions} placeholder="us-east-2" onChange={(e) => onAwsRegionChange(e.value!)} value={props.options.jsonData?.aws?.region || ''} />
+          </div>
+          <div className="gf-form">
+            <FormField
+              label="Service"
+              placeholder="monitoring"
+              labelWidth={10}
+              value={props.options.jsonData?.aws?.service || ''}
+              onChange={(e) => onAwsServiceChange(e.currentTarget.value)}
+            ></FormField>
+          </div>
+          <div className="gf-form">
+            <SecretFormField
+              labelWidth={10}
+              inputWidth={12}
+              required
+              value={secureJsonData.awsAccessKey || ''}
+              isConfigured={(secureJsonFields && secureJsonFields.awsAccessKey) as boolean}
+              onReset={() => onResetSecret('awsAccessKey')}
+              onChange={onUpdateDatasourceSecureJsonDataOption(props, 'awsAccessKey')}
+              label="Access Key"
+              aria-label="aws access key"
+              placeholder="aws access key"
+              tooltip="aws access key"
+            />
+          </div>
+          <div className="gf-form">
+            <SecretFormField
+              labelWidth={10}
+              inputWidth={12}
+              required
+              value={secureJsonData.awsSecretKey || ''}
+              isConfigured={(secureJsonFields && secureJsonFields.awsSecretKey) as boolean}
+              onReset={() => onResetSecret('awsSecretKey')}
+              onChange={onUpdateDatasourceSecureJsonDataOption(props, 'awsSecretKey')}
+              label="Secret Key"
+              aria-label="aws secret key"
+              placeholder="aws secret key"
+              tooltip="aws secret key"
             />
           </div>
         </>

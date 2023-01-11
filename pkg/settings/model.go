@@ -17,6 +17,7 @@ const (
 	AuthenticationMethodForwardOauth = "oauthPassThru"
 	AuthenticationMethodDigestAuth   = "digestAuth"
 	AuthenticationMethodOAuth        = "oauth2"
+	AuthenticationMethodAWS          = "aws"
 )
 
 const (
@@ -43,6 +44,18 @@ type OAuth2Settings struct {
 	EndpointParams map[string]string
 }
 
+type AWSAuthType string
+
+const (
+	AWSAuthTypeKeys AWSAuthType = "keys"
+)
+
+type AWSSettings struct {
+	AuthType AWSAuthType `json:"authType"`
+	Region   string      `json:"region"`
+	Service  string      `json:"service"`
+}
+
 type InfinitySettings struct {
 	AuthenticationMethod string
 	OAuth2Settings       OAuth2Settings
@@ -50,6 +63,9 @@ type InfinitySettings struct {
 	ApiKeyKey            string
 	ApiKeyType           string
 	ApiKeyValue          string
+	AWSSettings          AWSSettings
+	AWSAccessKey         string
+	AWSSecretKey         string
 	URL                  string
 	BasicAuthEnabled     bool
 	UserName             string
@@ -99,6 +115,7 @@ type InfinitySettingsJson struct {
 	APIKeyKey            string         `json:"apiKeyKey,omitempty"`
 	APIKeyType           string         `json:"apiKeyType,omitempty"`
 	OAuth2Settings       OAuth2Settings `json:"oauth2,omitempty"`
+	AWSSettings          AWSSettings    `json:"aws,omitempty"`
 	ForwardOauthIdentity bool           `json:"oauthPassThru,omitempty"`
 	InsecureSkipVerify   bool           `json:"tlsSkipVerify,omitempty"`
 	ServerName           string         `json:"serverName,omitempty"`
@@ -132,6 +149,7 @@ func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinityS
 		}
 		settings.ApiKeyKey = infJson.APIKeyKey
 		settings.ApiKeyType = infJson.APIKeyType
+		settings.AWSSettings = infJson.AWSSettings
 		if settings.ApiKeyType == "" {
 			settings.ApiKeyType = "header"
 		}
@@ -177,6 +195,12 @@ func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinityS
 	if val, ok := config.DecryptedSecureJSONData["bearerToken"]; ok {
 		settings.BearerToken = val
 	}
+	if val, ok := config.DecryptedSecureJSONData["awsAccessKey"]; ok {
+		settings.AWSAccessKey = val
+	}
+	if val, ok := config.DecryptedSecureJSONData["awsSecretKey"]; ok {
+		settings.AWSSecretKey = val
+	}
 	settings.CustomHeaders = GetSecrets(config, "httpHeaderName", "httpHeaderValue")
 	settings.SecureQueryFields = GetSecrets(config, "secureQueryName", "secureQueryValue")
 	settings.OAuth2Settings.EndpointParams = GetSecrets(config, "oauth2EndPointParamsName", "oauth2EndPointParamsValue")
@@ -194,7 +218,7 @@ func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinityS
 
 func GetSecrets(config backend.DataSourceInstanceSettings, secretType string, secretValue string) map[string]string {
 	headers := make(map[string]string)
-	JsonData := make(map[string]interface{})
+	JsonData := make(map[string]any)
 	if err := json.Unmarshal(config.JSONData, &JsonData); err != nil {
 		return headers
 	}

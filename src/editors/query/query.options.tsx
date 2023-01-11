@@ -11,9 +11,9 @@ import { TypeSelector } from '../../components/TypeSelector';
 import { ParseTypeEditor } from './components/ParserType';
 import { GoogleSheetsEditor } from './components/GoogleSheets';
 import { URL } from './query.url';
+import { Datasource } from './../../datasource';
 import { isDataQuery } from './../../app/utils';
 import type { EditorMode, InfinityQuery } from '../../types';
-import { Datasource } from './../../datasource';
 
 export const BasicOptions = (props: {
   mode: EditorMode;

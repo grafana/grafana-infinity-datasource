@@ -10,7 +10,7 @@ import (
 	"gopkg.in/Knetic/govaluate.v3"
 )
 
-func EvaluateInFrame(expression string, input *data.Frame) (interface{}, error) {
+func EvaluateInFrame(expression string, input *data.Frame) (any, error) {
 	if strings.TrimSpace(expression) == "" {
 		return nil, errors.New(strings.TrimSpace(fmt.Sprintf("empty/invalid expression. %s", expression)))
 	}
@@ -19,7 +19,7 @@ func EvaluateInFrame(expression string, input *data.Frame) (interface{}, error) 
 		return nil, err
 	}
 	frameLen, _ := input.RowLen()
-	parameters := map[string]interface{}{"frame": input, "recordsCount": frameLen}
+	parameters := map[string]any{"frame": input, "recordsCount": frameLen}
 	if input != nil {
 		for _, field := range input.Fields {
 			parameters[SlugifyFieldName(field.Name)] = field
@@ -31,7 +31,7 @@ func EvaluateInFrame(expression string, input *data.Frame) (interface{}, error) 
 }
 
 var expressionFunctions = map[string]govaluate.ExpressionFunction{
-	"count": func(arguments ...interface{}) (interface{}, error) {
+	"count": func(arguments ...any) (any, error) {
 		if len(arguments) < 1 {
 			return nil, errors.New("invalid arguments to count method")
 		}
@@ -41,7 +41,7 @@ var expressionFunctions = map[string]govaluate.ExpressionFunction{
 		}
 		return float64(field.Len()), nil
 	},
-	"first": func(arguments ...interface{}) (interface{}, error) {
+	"first": func(arguments ...any) (any, error) {
 		if len(arguments) < 1 {
 			return nil, errors.New("invalid arguments to first method")
 		}
@@ -63,7 +63,7 @@ var expressionFunctions = map[string]govaluate.ExpressionFunction{
 		}
 		return field.At(0), nil
 	},
-	"last": func(arguments ...interface{}) (interface{}, error) {
+	"last": func(arguments ...any) (any, error) {
 		if len(arguments) < 1 {
 			return nil, errors.New("invalid arguments to last method")
 		}
@@ -85,7 +85,7 @@ var expressionFunctions = map[string]govaluate.ExpressionFunction{
 		}
 		return nil, errors.New("unable to find first value")
 	},
-	"sum": func(arguments ...interface{}) (interface{}, error) {
+	"sum": func(arguments ...any) (any, error) {
 		if len(arguments) < 1 {
 			return nil, errors.New("invalid arguments to sum method")
 		}
@@ -102,7 +102,7 @@ var expressionFunctions = map[string]govaluate.ExpressionFunction{
 		}
 		return sum, nil
 	},
-	"min": func(arguments ...interface{}) (interface{}, error) {
+	"min": func(arguments ...any) (any, error) {
 		if len(arguments) < 1 {
 			return nil, errors.New("invalid arguments to min method")
 		}
@@ -120,7 +120,7 @@ var expressionFunctions = map[string]govaluate.ExpressionFunction{
 		}
 		return *min, nil
 	},
-	"max": func(arguments ...interface{}) (interface{}, error) {
+	"max": func(arguments ...any) (any, error) {
 		if len(arguments) < 1 {
 			return nil, errors.New("invalid arguments to max method")
 		}
@@ -138,7 +138,7 @@ var expressionFunctions = map[string]govaluate.ExpressionFunction{
 		}
 		return *max, nil
 	},
-	"mean": func(arguments ...interface{}) (interface{}, error) {
+	"mean": func(arguments ...any) (any, error) {
 		if len(arguments) < 1 {
 			return nil, errors.New("invalid arguments to mean method")
 		}
@@ -166,7 +166,7 @@ func SlugifyFieldName(input string) string {
 	return input
 }
 
-func toFloat64p(input interface{}) (*float64, bool) {
+func toFloat64p(input any) (*float64, bool) {
 	if v, ok := input.(*float64); ok {
 		return v, true
 	}

@@ -12,7 +12,7 @@ import (
 )
 
 var expressionFunctions = map[string]govaluate.ExpressionFunction{
-	"trim": func(arguments ...interface{}) (interface{}, error) {
+	"trim": func(arguments ...any) (any, error) {
 		if len(arguments) < 1 {
 			return nil, errors.New("invalid arguments to trim method")
 		}
@@ -24,7 +24,7 @@ var expressionFunctions = map[string]govaluate.ExpressionFunction{
 		}
 		return "", nil
 	},
-	"tolower": func(arguments ...interface{}) (interface{}, error) {
+	"tolower": func(arguments ...any) (any, error) {
 		if len(arguments) < 1 {
 			return nil, errors.New("invalid arguments to tolower method")
 		}
@@ -36,7 +36,7 @@ var expressionFunctions = map[string]govaluate.ExpressionFunction{
 		}
 		return "", nil
 	},
-	"toupper": func(arguments ...interface{}) (interface{}, error) {
+	"toupper": func(arguments ...any) (any, error) {
 		if len(arguments) < 1 {
 			return nil, errors.New("invalid arguments to toupper method")
 		}
@@ -48,7 +48,7 @@ var expressionFunctions = map[string]govaluate.ExpressionFunction{
 		}
 		return "", nil
 	},
-	"startswith": func(arguments ...interface{}) (interface{}, error) {
+	"startswith": func(arguments ...any) (any, error) {
 		if len(arguments) < 2 {
 			return nil, errors.New("invalid arguments to startswith method")
 		}
@@ -71,7 +71,7 @@ var expressionFunctions = map[string]govaluate.ExpressionFunction{
 		}
 		return false, nil
 	},
-	"endswith": func(arguments ...interface{}) (interface{}, error) {
+	"endswith": func(arguments ...any) (any, error) {
 		if len(arguments) < 2 {
 			return nil, errors.New("invalid arguments to endswith method")
 		}
@@ -94,7 +94,7 @@ var expressionFunctions = map[string]govaluate.ExpressionFunction{
 		}
 		return false, nil
 	},
-	"contains": func(arguments ...interface{}) (interface{}, error) {
+	"contains": func(arguments ...any) (any, error) {
 		if len(arguments) < 2 {
 			return nil, errors.New("invalid arguments to endswith method")
 		}
@@ -117,7 +117,7 @@ var expressionFunctions = map[string]govaluate.ExpressionFunction{
 		}
 		return false, nil
 	},
-	"replace": func(arguments ...interface{}) (interface{}, error) {
+	"replace": func(arguments ...any) (any, error) {
 		if len(arguments) < 3 {
 			return nil, errors.New("invalid arguments to endswith method")
 		}
@@ -148,7 +148,7 @@ var expressionFunctions = map[string]govaluate.ExpressionFunction{
 		}
 		return "", nil
 	},
-	"replace_all": func(arguments ...interface{}) (interface{}, error) {
+	"replace_all": func(arguments ...any) (any, error) {
 		if len(arguments) < 3 {
 			return nil, errors.New("invalid arguments to endswith method")
 		}
@@ -178,11 +178,11 @@ var expressionFunctions = map[string]govaluate.ExpressionFunction{
 		}
 		return "", nil
 	},
-	"guid": func(arguments ...interface{}) (interface{}, error) {
+	"guid": func(arguments ...any) (any, error) {
 		id := uuid.New()
 		return id.String(), nil
 	},
-	"uuid": func(arguments ...interface{}) (interface{}, error) {
+	"uuid": func(arguments ...any) (any, error) {
 		id := uuid.New()
 		return id.String(), nil
 	},
@@ -195,13 +195,13 @@ func GetFrameWithComputedColumns(frame *data.Frame, columns []querySrv.InfinityC
 		if strings.TrimSpace(column.Selector) == "" {
 			continue
 		}
-		out := []interface{}{}
+		out := []any{}
 		parsedExpression, err := govaluate.NewEvaluableExpressionWithFunctions(column.Selector, expressionFunctions)
 		if err != nil {
 			return frame, err
 		}
 		for i := 0; i < frameLen; i++ {
-			parameters := map[string]interface{}{"frame": frame, "null": nil, "nil": nil, "rowIndex": i, "recordsCount": frameLen}
+			parameters := map[string]any{"frame": frame, "null": nil, "nil": nil, "rowIndex": i, "recordsCount": frameLen}
 			for _, field := range frame.Fields {
 				v := framesql.GetValue(field.At(i))
 				parameters[framesql.SlugifyFieldName(field.Name)] = v

@@ -15,7 +15,7 @@ func TestEvaluateInFrame(t *testing.T) {
 		name       string
 		expression string
 		input      *data.Frame
-		want       interface{}
+		want       any
 		wantErr    error
 	}{
 		{

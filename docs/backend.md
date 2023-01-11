@@ -3,7 +3,7 @@ slug: '/wiki/backend'
 title: 'Backend Parser'
 previous_page_title: 'UQL'
 previous_page_slug: '/wiki/uql'
-next_page_title: 'Groq'
+next_page_title: 'GROQ'
 next_page_slug: '/wiki/groq'
 ---
 
