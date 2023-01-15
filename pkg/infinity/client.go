@@ -134,6 +134,7 @@ func (client *Client) req(url string, body io.Reader, settings settingsSrv.Infin
 		backend.Logger.Error("error reading response body", "url", url, "error", err.Error())
 		return nil, res.StatusCode, duration, err
 	}
+	bodyBytes = removeBOMContent(bodyBytes)
 	if CanParseAsJSON(query.Type, res.Header) {
 		var out any
 		err := json.Unmarshal(bodyBytes, &out)
@@ -143,6 +144,11 @@ func (client *Client) req(url string, body io.Reader, settings settingsSrv.Infin
 		return out, res.StatusCode, duration, err
 	}
 	return string(bodyBytes), res.StatusCode, duration, err
+}
+
+// https://stackoverflow.com/questions/31398044/got-error-invalid-character-%C3%AF-looking-for-beginning-of-value-from-json-unmar
+func removeBOMContent(input []byte) []byte {
+	return bytes.TrimPrefix(input, []byte("\xef\xbb\xbf"))
 }
 
 func (client *Client) GetResults(query querySrv.Query, requestHeaders map[string]string) (o any, statusCode int, duration time.Duration, err error) {
