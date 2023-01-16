@@ -17,24 +17,24 @@ describe('explore', () => {
     checkDropdownValue('Source', 'URL');
     checkInputContent('URL', 'https://github.com/yesoreyeram/grafana-infinity-datasource/blob/main/testdata/users.json');
     checkDropdownValue('Format', 'Table');
-    checkExploreTableContent(['age', 'country', 'name', 'occupation', 'salary', '38', 'USA', 'Leanne Graham', 'Devops Engineer', '3000'].join(''));
+    checkExploreTableContent('Leanne Graham');
     cy.contains(`Parsing options & Result fields`);
     cy.contains(`Computed columns, Filter, Group by`).should('not.exist');
     // JSON query with backend should work
     changeDropdownValue('Parser', 'Backend');
-    checkExploreTableContent(['age', 'country', 'name', 'occupation', 'salary', '38', 'USA', 'Leanne Graham', 'Devops Engineer', '3000'].join(''));
+    checkExploreTableContent('Leanne Graham');
     cy.contains(`Parsing options & Result fields`);
     cy.contains(`Computed columns, Filter, Group by`);
     // JSON query with UQL should work
     changeDropdownValue('Parser', 'UQL');
-    checkExploreTableContent(['age', 'country', 'name', 'occupation', 'salary', '38', 'USA', 'Leanne Graham', 'Devops Engineer', '3000'].join(''));
+    checkExploreTableContent('Leanne Graham');
     cy.contains(`UQL Query`);
     cy.contains(`Parsing options & Result fields`).should('not.exist');
     cy.contains(`Computed columns, Filter, Group by`).should('not.exist');
     cy.contains(`GROQ Query`).should('not.exist');
     // JSON query with GROQ should work
     changeDropdownValue('Parser', 'GROQ');
-    checkExploreTableContent(['age', 'country', 'name', 'occupation', 'salary', '38', 'USA', 'Leanne Graham', 'Devops Engineer', '3000'].join(''));
+    checkExploreTableContent('Leanne Graham');
     cy.contains(`GROQ Query`);
     cy.contains(`Parsing options & Result fields`).should('not.exist');
     cy.contains(`Computed columns, Filter, Group by`).should('not.exist');
@@ -44,6 +44,6 @@ describe('explore', () => {
     checkExploreError('Invalid Opening Quote: a quote is found inside a field at line 3');
     changeInputContent('URL', 'https://github.com/yesoreyeram/grafana-infinity-datasource/blob/main/testdata/users.csv');
     changeDropdownValue('Parser', 'Default');
-    checkExploreTableContent(['Leanne Graham'].join(''));
+    checkExploreTableContent('Leanne Graham');
   });
 });

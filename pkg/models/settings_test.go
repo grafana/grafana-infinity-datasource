@@ -1,25 +1,25 @@
-package settingsSrv_test
+package models_test
 
 import (
 	"testing"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/stretchr/testify/assert"
-	settingsSrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/settings"
+	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 )
 
 func TestLoadSettings(t *testing.T) {
 	tests := []struct {
 		name         string
 		config       backend.DataSourceInstanceSettings
-		wantSettings settingsSrv.InfinitySettings
+		wantSettings models.InfinitySettings
 		wantErr      bool
 	}{
 		{
 			name: "empty settings shouldn't throw error",
-			wantSettings: settingsSrv.InfinitySettings{
-				AuthenticationMethod: settingsSrv.AuthenticationMethodNone,
-				OAuth2Settings: settingsSrv.OAuth2Settings{
+			wantSettings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodNone,
+				OAuth2Settings: models.OAuth2Settings{
 					EndpointParams: map[string]string{},
 				},
 				CustomHeaders:     map[string]string{},
@@ -49,15 +49,15 @@ func TestLoadSettings(t *testing.T) {
 					"httpHeaderValue1":  "headervalue1",
 				},
 			},
-			wantSettings: settingsSrv.InfinitySettings{
+			wantSettings: models.InfinitySettings{
 				URL:                  "https://foo.com",
 				UserName:             "user",
 				Password:             "password",
 				TimeoutInSeconds:     60,
 				ApiKeyType:           "header",
 				BasicAuthEnabled:     false,
-				AuthenticationMethod: settingsSrv.AuthenticationMethodNone,
-				OAuth2Settings: settingsSrv.OAuth2Settings{
+				AuthenticationMethod: models.AuthenticationMethodNone,
+				OAuth2Settings: models.OAuth2Settings{
 					EndpointParams: map[string]string{},
 				},
 				CustomHeaders: map[string]string{
@@ -86,15 +86,15 @@ func TestLoadSettings(t *testing.T) {
 					"httpHeaderValue1":  "headervalue1",
 				},
 			},
-			wantSettings: settingsSrv.InfinitySettings{
+			wantSettings: models.InfinitySettings{
 				URL:                  "https://foo.com",
 				UserName:             "user",
 				Password:             "password",
 				TimeoutInSeconds:     30,
 				ApiKeyType:           "header",
 				BasicAuthEnabled:     true,
-				AuthenticationMethod: settingsSrv.AuthenticationMethodBasic,
-				OAuth2Settings: settingsSrv.OAuth2Settings{
+				AuthenticationMethod: models.AuthenticationMethodBasic,
+				OAuth2Settings: models.OAuth2Settings{
 					EndpointParams: map[string]string{},
 				},
 				CustomHeaders: map[string]string{
@@ -108,7 +108,7 @@ func TestLoadSettings(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			gotSettings, err := settingsSrv.LoadSettings(tt.config)
+			gotSettings, err := models.LoadSettings(tt.config)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("LoadSettings() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -168,10 +168,10 @@ func TestAllSettingsAgainstFrontEnd(t *testing.T) {
 			"oauth2EndPointParamsValue2": "Resource2",
 		},
 	}
-	gotSettings, err := settingsSrv.LoadSettings(config)
+	gotSettings, err := models.LoadSettings(config)
 	assert.Nil(t, err)
 	assert.NotNil(t, gotSettings)
-	assert.Equal(t, settingsSrv.InfinitySettings{
+	assert.Equal(t, models.InfinitySettings{
 		AuthenticationMethod: "oauth2",
 		ForwardOauthIdentity: true,
 		InsecureSkipVerify:   true,
@@ -182,12 +182,12 @@ func TestAllSettingsAgainstFrontEnd(t *testing.T) {
 		TLSClientKey:         "myTlsClientKey",
 		AWSAccessKey:         "awsAccessKey1",
 		AWSSecretKey:         "awsSecretKey1",
-		AWSSettings: settingsSrv.AWSSettings{
-			AuthType: settingsSrv.AWSAuthTypeKeys,
+		AWSSettings: models.AWSSettings{
+			AuthType: models.AWSAuthTypeKeys,
 			Service:  "service1",
 			Region:   "region1",
 		},
-		OAuth2Settings: settingsSrv.OAuth2Settings{
+		OAuth2Settings: models.OAuth2Settings{
 			ClientID:     "myClientID",
 			OAuth2Type:   "client_credentials",
 			ClientSecret: "myOauth2ClientSecret",
@@ -289,7 +289,7 @@ func Test_getSecrets(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := settingsSrv.GetSecrets(tt.config, "httpHeaderName", "httpHeaderValue")
+			got := models.GetSecrets(tt.config, "httpHeaderName", "httpHeaderValue")
 			assert.Equal(t, tt.want, got)
 		})
 	}

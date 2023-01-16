@@ -8,7 +8,7 @@ import type { InfinityQuery } from './../../types';
 export const InlineDataEditor = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void }) => {
   if (isDataQuery(query) && query.source === 'inline') {
     return (
-      <EditorRow label="Import data" collapsible={true} collapsed={false} title={() => 'Ideal for small size files'}>
+      <EditorRow label="Inline data" collapsible={true} collapsed={true} title={() => 'Ideal for small size files'}>
         <EditorField label="Import data" style={{ maxHeight: '160px', overflow: 'hidden' }} tooltip="Suitable for small files (less than 2MB)">
           <ImportData query={query} onChange={onChange} onRunQuery={onRunQuery} />
         </EditorField>
@@ -49,22 +49,24 @@ export const InlineDataEntry = ({ query, onChange, onRunQuery }: { query: Infini
   return <></>;
 };
 
-const ImportData = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void }) => {
+export const ImportData = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void }) => {
   if (isDataQuery(query) && query.source === 'inline') {
     return (
-      <div style={{ width: '400px' }}>
-        <FileDropzone
-          options={{ multiple: false, maxFiles: 1 }}
-          onLoad={(result) => {
-            if (typeof result === 'string' && result) {
-              onChange({ ...query, data: result });
-              onRunQuery();
-            } else {
-              throw new Error('unsupported file');
-            }
-          }}
-        />
-      </div>
+      <EditorField label="Import data" tooltip="ideal for small sized files (less than 1MB)">
+        <div style={{ width: '600px', height: '140px', overflow: 'hidden' }}>
+          <FileDropzone
+            options={{ multiple: false, maxFiles: 1 }}
+            onLoad={(result) => {
+              if (typeof result === 'string' && result) {
+                onChange({ ...query, data: result });
+                onRunQuery();
+              } else {
+                throw new Error('unsupported file');
+              }
+            }}
+          />
+        </div>
+      </EditorField>
     );
   }
   return <></>;

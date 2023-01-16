@@ -15,17 +15,17 @@ import (
 	"time"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
+	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 	querySrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/query"
-	settingsSrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/settings"
 )
 
 type Client struct {
-	Settings   settingsSrv.InfinitySettings
+	Settings   models.InfinitySettings
 	HttpClient *http.Client
 	IsMock     bool
 }
 
-func GetTLSConfigFromSettings(settings settingsSrv.InfinitySettings) (*tls.Config, error) {
+func GetTLSConfigFromSettings(settings models.InfinitySettings) (*tls.Config, error) {
 	tlsConfig := &tls.Config{
 		InsecureSkipVerify: settings.InsecureSkipVerify,
 		ServerName:         settings.ServerName,
@@ -51,7 +51,7 @@ func GetTLSConfigFromSettings(settings settingsSrv.InfinitySettings) (*tls.Confi
 	return tlsConfig, nil
 }
 
-func getBaseHTTPClient(settings settingsSrv.InfinitySettings) *http.Client {
+func getBaseHTTPClient(settings models.InfinitySettings) *http.Client {
 	tlsConfig, err := GetTLSConfigFromSettings(settings)
 	if err != nil {
 		return nil
@@ -66,14 +66,14 @@ func getBaseHTTPClient(settings settingsSrv.InfinitySettings) *http.Client {
 	}
 }
 
-func NewClient(settings settingsSrv.InfinitySettings) (client *Client, err error) {
+func NewClient(settings models.InfinitySettings) (client *Client, err error) {
 	if settings.AuthenticationMethod == "" {
-		settings.AuthenticationMethod = settingsSrv.AuthenticationMethodNone
+		settings.AuthenticationMethod = models.AuthenticationMethodNone
 		if settings.BasicAuthEnabled {
-			settings.AuthenticationMethod = settingsSrv.AuthenticationMethodBasic
+			settings.AuthenticationMethod = models.AuthenticationMethodBasic
 		}
 		if settings.ForwardOauthIdentity {
-			settings.AuthenticationMethod = settingsSrv.AuthenticationMethodForwardOauth
+			settings.AuthenticationMethod = models.AuthenticationMethodForwardOauth
 		}
 	}
 	httpClient := getBaseHTTPClient(settings)
@@ -90,7 +90,7 @@ func NewClient(settings settingsSrv.InfinitySettings) (client *Client, err error
 	}, err
 }
 
-func replaceSect(input string, settings settingsSrv.InfinitySettings, includeSect bool) string {
+func replaceSect(input string, settings models.InfinitySettings, includeSect bool) string {
 	for key, value := range settings.SecureQueryFields {
 		if includeSect {
 			input = strings.ReplaceAll(input, fmt.Sprintf("${__qs.%s}", key), value)
@@ -102,7 +102,7 @@ func replaceSect(input string, settings settingsSrv.InfinitySettings, includeSec
 	return input
 }
 
-func (client *Client) req(url string, body io.Reader, settings settingsSrv.InfinitySettings, query querySrv.Query, requestHeaders map[string]string) (obj any, statusCode int, duration time.Duration, err error) {
+func (client *Client) req(url string, body io.Reader, settings models.InfinitySettings, query querySrv.Query, requestHeaders map[string]string) (obj any, statusCode int, duration time.Duration, err error) {
 	req, _ := GetRequest(settings, body, query, requestHeaders, true)
 	startTime := time.Now()
 	if !CanAllowURL(req.URL.String(), settings.AllowedHosts) {

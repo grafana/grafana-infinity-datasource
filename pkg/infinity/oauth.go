@@ -12,11 +12,11 @@ import (
 	"golang.org/x/oauth2/clientcredentials"
 	"golang.org/x/oauth2/jwt"
 
-	settingsSrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/settings"
+	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 )
 
-func ApplyOAuthClientCredentials(httpClient *http.Client, settings settingsSrv.InfinitySettings) *http.Client {
-	if settings.AuthenticationMethod == settingsSrv.AuthenticationMethodOAuth && settings.OAuth2Settings.OAuth2Type == settingsSrv.AuthOAuthTypeClientCredentials {
+func ApplyOAuthClientCredentials(httpClient *http.Client, settings models.InfinitySettings) *http.Client {
+	if settings.AuthenticationMethod == models.AuthenticationMethodOAuth && settings.OAuth2Settings.OAuth2Type == models.AuthOAuthTypeClientCredentials {
 		oauthConfig := clientcredentials.Config{
 			ClientID:       settings.OAuth2Settings.ClientID,
 			ClientSecret:   settings.OAuth2Settings.ClientSecret,
@@ -39,8 +39,8 @@ func ApplyOAuthClientCredentials(httpClient *http.Client, settings settingsSrv.I
 	}
 	return httpClient
 }
-func ApplyOAuthJWT(httpClient *http.Client, settings settingsSrv.InfinitySettings) *http.Client {
-	if settings.AuthenticationMethod == settingsSrv.AuthenticationMethodOAuth && settings.OAuth2Settings.OAuth2Type == settingsSrv.AuthOAuthJWT {
+func ApplyOAuthJWT(httpClient *http.Client, settings models.InfinitySettings) *http.Client {
+	if settings.AuthenticationMethod == models.AuthenticationMethodOAuth && settings.OAuth2Settings.OAuth2Type == models.AuthOAuthJWT {
 		jwtConfig := jwt.Config{
 			Email:        settings.OAuth2Settings.Email,
 			TokenURL:     settings.OAuth2Settings.TokenURL,
@@ -59,19 +59,19 @@ func ApplyOAuthJWT(httpClient *http.Client, settings settingsSrv.InfinitySetting
 	}
 	return httpClient
 }
-func ApplyDigestAuth(httpClient *http.Client, settings settingsSrv.InfinitySettings) *http.Client {
-	if settings.AuthenticationMethod == settingsSrv.AuthenticationMethodDigestAuth {
+func ApplyDigestAuth(httpClient *http.Client, settings models.InfinitySettings) *http.Client {
+	if settings.AuthenticationMethod == models.AuthenticationMethodDigestAuth {
 		a := dac.NewTransport(settings.UserName, settings.Password)
 		httpClient.Transport = &a
 	}
 	return httpClient
 }
-func ApplyAWSAuth(httpClient *http.Client, settings settingsSrv.InfinitySettings) *http.Client {
-	if settings.AuthenticationMethod == settingsSrv.AuthenticationMethodAWS {
+func ApplyAWSAuth(httpClient *http.Client, settings models.InfinitySettings) *http.Client {
+	if settings.AuthenticationMethod == models.AuthenticationMethodAWS {
 		tempHttpClient := getBaseHTTPClient(settings)
 		authType := settings.AWSSettings.AuthType
 		if authType == "" {
-			authType = settingsSrv.AWSAuthTypeKeys
+			authType = models.AWSAuthTypeKeys
 		}
 		region := settings.AWSSettings.Region
 		if region == "" {

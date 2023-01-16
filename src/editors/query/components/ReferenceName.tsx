@@ -37,7 +37,7 @@ export const ReferenceNameEditor = ({
   }, [datasource]);
   if (isDataQuery(query) && query.source === 'reference') {
     return (
-      <EditorField label="Reference" tooltip={'Name of the reference field. Should match with the reference data names defined in the datasource config'}>
+      <EditorField label="Reference" horizontal={true} tooltip={'Name of the reference field. Should match with the reference data names defined in the datasource config'}>
         {loading ? (
           <InlineFormLabel width={10}>Loading..</InlineFormLabel>
         ) : error ? (

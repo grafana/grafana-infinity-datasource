@@ -1,4 +1,4 @@
-package main
+package pluginhost
 
 import (
 	"context"
@@ -8,8 +8,8 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/infinity"
+	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 	querySrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/query"
-	settingsSrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/settings"
 )
 
 // QueryData handles multiple queries and returns multiple responses.
@@ -70,7 +70,7 @@ func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient in
 				response.Error = fmt.Errorf("error getting data frame. %w", err)
 				return response
 			}
-			if frame != nil && infClient.Settings.AuthenticationMethod != settingsSrv.AuthenticationMethodNone && infClient.Settings.AuthenticationMethod != "" && len(infClient.Settings.AllowedHosts) < 1 {
+			if frame != nil && infClient.Settings.AuthenticationMethod != models.AuthenticationMethodNone && infClient.Settings.AuthenticationMethod != "" && len(infClient.Settings.AllowedHosts) < 1 {
 				frame.AppendNotices(data.Notice{
 					Text: "Datasource is missing allowed hosts/URLs. Configure it in the datasource settings page for enhanced security.",
 				})

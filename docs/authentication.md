@@ -19,6 +19,8 @@ Infinity datasource supports following authentication methods
 - OAuth passthrough
 - OAuth2 client credentials
 - OAuth2 JWT authentication
+- Azure authentication
+- AWS authentication
 
 ## No Authentication
 

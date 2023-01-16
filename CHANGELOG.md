@@ -2,6 +2,10 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
+## [ 1.4.0 ]
+
+- **Bug fixes** Fixed [a bug](https://github.com/yesoreyeram/grafana-infinity-datasource/issues/453) where BOM encoded response weren't parsed correctly
+
 ## [ 1.3.0 ]
 
 - **Auth** Added support for **AWS authentication** using AWS Access and AWS Secret key

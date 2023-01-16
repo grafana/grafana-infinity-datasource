@@ -1,4 +1,4 @@
-package main
+package pluginhost
 
 import (
 	"net/http"
@@ -8,14 +8,14 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend/instancemgmt"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/resource/httpadapter"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/infinity"
-	settingsSrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/settings"
+	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 )
 
 type PluginHost struct {
 	im instancemgmt.InstanceManager
 }
 
-func newDatasource() datasource.ServeOpts {
+func NewDatasource() datasource.ServeOpts {
 	host := &PluginHost{
 		im: datasource.NewInstanceManager(newDataSourceInstance),
 	}
@@ -33,7 +33,7 @@ type instanceSettings struct {
 func (is *instanceSettings) Dispose() {}
 
 func newDataSourceInstance(setting backend.DataSourceInstanceSettings) (instancemgmt.Instance, error) {
-	settings, err := settingsSrv.LoadSettings(setting)
+	settings, err := models.LoadSettings(setting)
 	if err != nil {
 		return nil, err
 	}

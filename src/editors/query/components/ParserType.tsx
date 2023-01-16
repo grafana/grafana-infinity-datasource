@@ -24,6 +24,7 @@ export const ParseTypeEditor = (props: { query: InfinityQuery; onChange: (value:
       <EditorField
         label="Parser"
         tooltip={query.parser !== 'backend' ? 'Try backend parser to get support for alerting, public dashboards, query caching, recorded queries and many more options' : ''}
+        horizontal={true}
         promoNode={
           query.parser !== 'backend' && query.parser !== 'uql' ? (
             <span
@@ -73,6 +74,7 @@ export const ParseTypeEditor = (props: { query: InfinityQuery; onChange: (value:
     return (
       <EditorField
         label="Parser"
+        horizontal={true}
         promoNode={
           query.parser !== 'backend' && query.parser !== 'uql' ? (
             <span
@@ -116,6 +118,7 @@ export const ParseTypeEditor = (props: { query: InfinityQuery; onChange: (value:
     return (
       <EditorField
         label="Parser"
+        horizontal={true}
         promoNode={
           query.parser !== 'backend' && query.parser !== 'uql' ? (
             <span
@@ -156,6 +159,7 @@ export const ParseTypeEditor = (props: { query: InfinityQuery; onChange: (value:
     return (
       <EditorField
         label="Parser"
+        horizontal={true}
         promoNode={
           query.parser !== 'backend' ? (
             <span

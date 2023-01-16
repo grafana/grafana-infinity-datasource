@@ -7,12 +7,12 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 	querySrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/query"
-	settingsSrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/settings"
 	"moul.io/http2curl"
 )
 
-func GetRequest(settings settingsSrv.InfinitySettings, body io.Reader, query querySrv.Query, requestHeaders map[string]string, includeSect bool) (req *http.Request, err error) {
+func GetRequest(settings models.InfinitySettings, body io.Reader, query querySrv.Query, requestHeaders map[string]string, includeSect bool) (req *http.Request, err error) {
 	url, err := GetQueryURL(settings, query, includeSect)
 	if err != nil {
 		return nil, err
@@ -34,7 +34,7 @@ func GetRequest(settings settingsSrv.InfinitySettings, body io.Reader, query que
 	return req, err
 }
 
-func GetQueryURL(settings settingsSrv.InfinitySettings, query querySrv.Query, includeSect bool) (string, error) {
+func GetQueryURL(settings models.InfinitySettings, query querySrv.Query, includeSect bool) (string, error) {
 	urlString := query.URL
 	if !strings.HasPrefix(query.URL, settings.URL) {
 		urlString = settings.URL + urlString
@@ -56,7 +56,7 @@ func GetQueryURL(settings settingsSrv.InfinitySettings, query querySrv.Query, in
 		}
 		q.Set(key, val)
 	}
-	if settings.AuthenticationMethod == settingsSrv.AuthenticationMethodApiKey && settings.ApiKeyType == settingsSrv.ApiKeyTypeQuery {
+	if settings.AuthenticationMethod == models.AuthenticationMethodApiKey && settings.ApiKeyType == models.ApiKeyTypeQuery {
 		val := dummyHeader
 		if includeSect {
 			val = settings.ApiKeyValue
@@ -96,10 +96,10 @@ func (client *Client) GetExecutedURL(query querySrv.Query) string {
 	if query.Type == querySrv.QueryTypeGROQ || query.Parser == "groq" {
 		out = append(out, "###############", "## GROQ", "###############", "", query.GROQ, "")
 	}
-	if client.Settings.AuthenticationMethod == settingsSrv.AuthenticationMethodOAuth {
+	if client.Settings.AuthenticationMethod == models.AuthenticationMethodOAuth {
 		out = append(out, "###############", "> Authentication steps not included for OAuth authentication")
 	}
-	if client.Settings.AuthenticationMethod == settingsSrv.AuthenticationMethodAWS {
+	if client.Settings.AuthenticationMethod == models.AuthenticationMethodAWS {
 		out = append(out, "###############", "> Authentication steps not included for AWS authentication")
 	}
 	return strings.Join(out, "\n")

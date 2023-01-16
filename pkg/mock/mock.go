@@ -9,7 +9,7 @@ import (
 	"os"
 
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/infinity"
-	settingsSrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/settings"
+	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 )
 
 const UPDATE_GOLDEN_DATA = false
@@ -44,7 +44,7 @@ func (rt *InfinityMocker) RoundTrip(req *http.Request) (*http.Response, error) {
 }
 
 func New(body string) *infinity.Client {
-	client, _ := infinity.NewClient(settingsSrv.InfinitySettings{})
+	client, _ := infinity.NewClient(models.InfinitySettings{})
 	client.HttpClient.Transport = &InfinityMocker{Body: body}
 	client.IsMock = true
 	return client

@@ -1,4 +1,4 @@
-package settingsSrv
+package models
 
 import (
 	"encoding/json"

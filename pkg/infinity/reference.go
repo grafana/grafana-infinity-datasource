@@ -4,11 +4,11 @@ import (
 	"errors"
 	"strings"
 
+	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 	querySrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/query"
-	settingsSrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/settings"
 )
 
-func UpdateQueryWithReferenceData(query querySrv.Query, settings settingsSrv.InfinitySettings) (querySrv.Query, error) {
+func UpdateQueryWithReferenceData(query querySrv.Query, settings models.InfinitySettings) (querySrv.Query, error) {
 	if query.Source == "reference" {
 		for _, item := range settings.ReferenceData {
 			if strings.EqualFold(item.Name, query.RefName) {

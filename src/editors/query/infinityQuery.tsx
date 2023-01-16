@@ -11,7 +11,6 @@ import { HelpLinks } from './../query.help';
 import { BasicOptions } from './query.options';
 import { UQLEditor } from './query.uql';
 import { URLEditor } from './query.url';
-import { InlineDataEditor } from './query.data';
 import { ExperimentalFeatures } from './query.experimental';
 import { isDataQuery } from './../../app/utils';
 import type { EditorMode, InfinityQuery } from './../../types';
@@ -71,7 +70,6 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
         />
         {query.type === 'series' && <SeriesEditor {...{ query, onChange }} />}
         {isDataQuery(query) && query.source !== 'inline' && showUrlOptions && <URLEditor {...{ mode, query, onChange, onRunQuery }} />}
-        {isDataQuery(query) && query.source === 'inline' && <InlineDataEditor {...{ mode, query, onChange, onRunQuery }} />}
         {canShowColumnsEditor && <QueryColumnsEditor {...{ mode, query, onChange, onRunQuery }} />}
         {canShowFilterEditor && <TableFilter {...{ query, onChange, onRunQuery }} />}
         {query.type === 'uql' && (

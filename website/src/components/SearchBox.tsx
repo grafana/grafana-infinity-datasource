@@ -172,7 +172,7 @@ const sitemap: any[] = [
     title: 'Authentication',
     slug: '/wiki/authentication',
     description: 'Various authentication methods',
-    tags: ['authentication', 'auth', 'username', 'password', 'secure', 'security', 'oauth', 'oauth2', 'api token', 'api key', 'bearer token', 'forward oauth identity', 'digest authentication'],
+    tags: ['authentication', 'auth', 'username', 'password', 'secure', 'security', 'oauth', 'oauth2', 'api token', 'api key', 'bearer token', 'forward oauth identity', 'digest authentication', 'jwt'],
   },
   {
     title: 'Azure Authentication',

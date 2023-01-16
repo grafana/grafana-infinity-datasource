@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { css } from '@emotion/css';
-import { GrafanaTheme2 } from '@grafana/data';
-import { InlineFormLabel, CodeEditor, Select, Input, useStyles2, RadioButtonGroup } from '@grafana/ui';
+import { InlineFormLabel, CodeEditor, Select, Input, RadioButtonGroup } from '@grafana/ui';
 import { EditorRow } from './../../components/extended/EditorRow';
 import { EditorField } from './../../components/extended/EditorField';
 import { Stack } from './../../components/extended/Stack';
@@ -14,7 +12,6 @@ export const URLEditor = ({ query, onChange, onRunQuery }: { query: InfinityQuer
   return isDataQuery(query) && query.source === 'url' ? (
     <EditorRow label="URL options" collapsible={true} collapsed={true} title={() => 'Method, Body, Additional headers & parameters'}>
       <Stack gap={1}>
-        <Method query={query} onChange={onChange} onRunQuery={onRunQuery} />
         <Body query={query} onChange={onChange} onRunQuery={onRunQuery} />
         <Headers query={query} onChange={onChange} onRunQuery={onRunQuery} />
         <QueryParams query={query} onChange={onChange} onRunQuery={onRunQuery} />
@@ -25,7 +22,7 @@ export const URLEditor = ({ query, onChange, onRunQuery }: { query: InfinityQuer
   );
 };
 
-const Method = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void }) => {
+export const Method = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void }) => {
   if (!(isDataQuery(query) || query.type === 'uql' || query.type === 'groq')) {
     return <></>;
   }
@@ -52,9 +49,9 @@ const Method = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChang
     return <></>;
   }
   return (
-    <EditorField label="HTTP Method">
+    <EditorField label="Method" horizontal={true}>
       <Select
-        width={18}
+        width={16}
         value={URL_METHODS.find((e) => e.value === (query.url_options.method || 'GET'))}
         defaultValue={URL_METHODS.find((e) => e.value === 'GET')}
         options={URL_METHODS}
@@ -65,7 +62,6 @@ const Method = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChang
 };
 
 export const URL = ({ query, onChange, onRunQuery, onShowUrlOptions }: { query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void; onShowUrlOptions: () => void }) => {
-  const styles = useStyles2(getStyles);
   const [url, setURL] = useState((isDataQuery(query) || query.type === 'uql' || query.type === 'groq') && query.source === 'url' ? query.url || '' : '');
   if (!(isDataQuery(query) || query.type === 'uql' || query.type === 'groq')) {
     return <></>;
@@ -78,15 +74,7 @@ export const URL = ({ query, onChange, onRunQuery, onShowUrlOptions }: { query: 
     onRunQuery();
   };
   return (
-    <EditorField
-      label="URL"
-      tooltip="Click options configure HTTP Method, Body, Additional headers and Query parameters"
-      promoNode={
-        <span title="Method, Body, Headers and Params" onClick={onShowUrlOptions} className={styles.url.promoNode}>
-          Options
-        </span>
-      }
-    >
+    <EditorField label="URL" horizontal={true}>
       <Input
         type="text"
         value={url}
@@ -251,15 +239,4 @@ const Body = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange:
   ) : (
     <></>
   );
-};
-
-const getStyles = (theme: GrafanaTheme2) => {
-  return {
-    url: {
-      promoNode: css({
-        marginLeft: '10px',
-        color: theme.colors.info.border,
-      }),
-    },
-  };
 };

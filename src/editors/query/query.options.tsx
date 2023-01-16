@@ -1,16 +1,15 @@
 import React from 'react';
 import { Button, LinkButton } from '@grafana/ui';
 import { EditorRow } from '../../components/extended/EditorRow';
-import { EditorField } from '../../components/extended/EditorField';
 import { FormatSelector } from '../../components/FormatSelector';
 import { GlobalQuerySelector } from '../../components/GlobalQuerySelector';
 import { ReferenceNameEditor } from './components/ReferenceName';
-import { InlineDataEntry } from './query.data';
+import { InlineDataEntry, ImportData } from './query.data';
 import { SourceSelector } from '../../components/SourceSelector';
 import { TypeSelector } from '../../components/TypeSelector';
 import { ParseTypeEditor } from './components/ParserType';
 import { GoogleSheetsEditor } from './components/GoogleSheets';
-import { URL } from './query.url';
+import { URL, Method } from './query.url';
 import { Datasource } from './../../datasource';
 import { isDataQuery } from './../../app/utils';
 import type { EditorMode, InfinityQuery } from '../../types';
@@ -27,43 +26,64 @@ export const BasicOptions = (props: {
 }) => {
   const { query, mode, onChange, onRunQuery, onShowUrlOptions, onShowHelp, datasource } = props;
   return (
-    <EditorRow label="Query options">
-      <TypeSelector {...props} />
-      <ParseTypeEditor {...props} />
-      {query.type !== 'global' ? <SourceSelector {...props} /> : <GlobalQuerySelector {...props} />}
-      {isDataQuery(query) && query.source === 'reference' && <ReferenceNameEditor query={query} onChange={onChange} onRunQuery={onRunQuery} datasource={datasource} />}
-      {isDataQuery(query) && query.source === 'url' && <URL query={query} onChange={onChange} onRunQuery={onRunQuery} onShowUrlOptions={onShowUrlOptions} />}
-      {query.type !== 'series' && mode !== 'variable' && query.type !== 'google-sheets' && query.type !== 'global' && <FormatSelector {...props} />}
-      {isDataQuery(query) && query.source === 'inline' && <InlineDataEntry query={query} onChange={onChange} onRunQuery={onRunQuery} />}
-      {query.type === 'google-sheets' && <GoogleSheetsEditor query={query} onChange={props.onChange} onRunQuery={props.onRunQuery} />}
-      <EditorField label="">
-        <>
+    <>
+      <EditorRow label="Query options">
+        <TypeSelector {...props} />
+        <ParseTypeEditor {...props} />
+        {query.type !== 'global' ? <SourceSelector {...props} /> : <GlobalQuerySelector {...props} />}
+        {isDataQuery(query) && query.source === 'reference' && <ReferenceNameEditor query={query} onChange={onChange} onRunQuery={onRunQuery} datasource={datasource} />}
+        {query.type !== 'series' && mode !== 'variable' && query.type !== 'google-sheets' && query.type !== 'global' && <FormatSelector {...props} />}
+        {query.type === 'google-sheets' && <GoogleSheetsEditor query={query} onChange={props.onChange} onRunQuery={props.onRunQuery} />}
+        <Button
+          variant="secondary"
+          fill="outline"
+          size="sm"
+          icon="document-info"
+          style={{ marginTop: '5px', padding: '10px', marginRight: '5px' }}
+          onClick={(e) => {
+            onShowHelp();
+            e.preventDefault();
+          }}
+        >
+          Help
+        </Button>
+        <LinkButton
+          variant="primary"
+          fill="outline"
+          size="sm"
+          style={{ marginTop: '5px', padding: '10px', marginRight: '5px' }}
+          href="https://github.com/yesoreyeram/grafana-infinity-datasource"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Github
+        </LinkButton>
+      </EditorRow>
+      {isDataQuery(query) && query.source === 'url' && (
+        <EditorRow label={'URL'}>
+          <Method query={query} onChange={onChange} onRunQuery={onRunQuery} />
+          <URL query={query} onChange={onChange} onRunQuery={onRunQuery} onShowUrlOptions={onShowUrlOptions} />
           <Button
             variant="secondary"
             fill="outline"
             size="sm"
-            icon="document-info"
-            style={{ marginTop: '18px', padding: '10px', marginRight: '10px' }}
+            icon="cog"
+            style={{ marginTop: '5px', padding: '10px', marginRight: '5px' }}
             onClick={(e) => {
-              onShowHelp();
+              onShowUrlOptions();
               e.preventDefault();
             }}
           >
-            Help
+            {query.url_options?.method === 'GET' ? 'Headers, Request params' : 'Headers, Body, Request params'}
           </Button>
-          <LinkButton
-            variant="primary"
-            fill="outline"
-            size="sm"
-            style={{ marginTop: '18px', padding: '6px 10px', marginRight: '10px' }}
-            href="https://github.com/yesoreyeram/grafana-infinity-datasource"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Github
-          </LinkButton>
-        </>
-      </EditorField>
-    </EditorRow>
+        </EditorRow>
+      )}
+      {isDataQuery(query) && query.source === 'inline' && (
+        <EditorRow label={'Inline Data'}>
+          <InlineDataEntry query={query} onChange={onChange} onRunQuery={onRunQuery} />
+          <ImportData query={query} onChange={onChange} onRunQuery={onRunQuery} />
+        </EditorRow>
+      )}
+    </>
   );
 };

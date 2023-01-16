@@ -1,4 +1,4 @@
-package main
+package pluginhost
 
 import (
 	"encoding/json"

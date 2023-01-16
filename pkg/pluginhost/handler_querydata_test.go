@@ -1,4 +1,4 @@
-package main_test
+package pluginhost_test
 
 import (
 	"context"
@@ -15,10 +15,10 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/experimental"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	main "github.com/yesoreyeram/grafana-infinity-datasource/pkg"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/infinity"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/mock"
-	settingsSrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/settings"
+	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
+	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/pluginhost"
 )
 
 func TestAuthentication(t *testing.T) {
@@ -27,10 +27,10 @@ func TestAuthentication(t *testing.T) {
 			fmt.Fprintf(w, `{ "message" : "OK" }`)
 		}))
 		defer server.Close()
-		client, err := infinity.NewClient(settingsSrv.InfinitySettings{AuthenticationMethod: settingsSrv.AuthenticationMethodApiKey})
+		client, err := infinity.NewClient(models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodApiKey})
 		require.Nil(t, err)
 		require.NotNil(t, client)
-		res := main.QueryData(context.Background(), backend.DataQuery{
+		res := pluginhost.QueryData(context.Background(), backend.DataQuery{
 			JSON: []byte(fmt.Sprintf(`{
 				"type": "json",
 				"url":  "%s",
@@ -50,16 +50,16 @@ func TestAuthentication(t *testing.T) {
 				fmt.Fprintf(w, `{ "message" : "OK" }`)
 			}))
 			defer server.Close()
-			client, err := infinity.NewClient(settingsSrv.InfinitySettings{
+			client, err := infinity.NewClient(models.InfinitySettings{
 				URL:                  server.URL,
-				AuthenticationMethod: settingsSrv.AuthenticationMethodBasic,
+				AuthenticationMethod: models.AuthenticationMethodBasic,
 				AllowedHosts:         []string{server.URL},
 				BasicAuthEnabled:     true,
 				UserName:             "infinityUser",
 				Password:             "myPassword",
 			})
 			require.Nil(t, err)
-			res := main.QueryData(context.Background(), backend.DataQuery{
+			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
 				JSON: []byte(fmt.Sprintf(`{
 					"type": "json",
 					"url":  "%s",
@@ -85,16 +85,16 @@ func TestAuthentication(t *testing.T) {
 				fmt.Fprintf(w, "UnAuthorized")
 			}))
 			defer server.Close()
-			client, err := infinity.NewClient(settingsSrv.InfinitySettings{
+			client, err := infinity.NewClient(models.InfinitySettings{
 				URL:                  server.URL,
 				AllowedHosts:         []string{server.URL},
-				AuthenticationMethod: settingsSrv.AuthenticationMethodBasic,
+				AuthenticationMethod: models.AuthenticationMethodBasic,
 				BasicAuthEnabled:     true,
 				UserName:             "infinityUser",
 				Password:             "myIncorrectPassword",
 			})
 			require.Nil(t, err)
-			res := main.QueryData(context.Background(), backend.DataQuery{
+			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
 				JSON: []byte(fmt.Sprintf(`{
 						"type": "json",
 						"url":  "%s",
@@ -118,13 +118,13 @@ func TestAuthentication(t *testing.T) {
 				fmt.Fprintf(w, `{ "message" : "OK" }`)
 			}))
 			defer server.Close()
-			client, err := infinity.NewClient(settingsSrv.InfinitySettings{
+			client, err := infinity.NewClient(models.InfinitySettings{
 				URL:                  server.URL,
 				AllowedHosts:         []string{server.URL},
 				ForwardOauthIdentity: true,
 			})
 			require.Nil(t, err)
-			res := main.QueryData(context.Background(), backend.DataQuery{
+			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
 				JSON: []byte(fmt.Sprintf(`{
 					"type": "json",
 					"url":  "%s",
@@ -142,13 +142,13 @@ func TestAuthentication(t *testing.T) {
 				fmt.Fprintf(w, `{ "message" : "OK" }`)
 			}))
 			defer server.Close()
-			client, err := infinity.NewClient(settingsSrv.InfinitySettings{
+			client, err := infinity.NewClient(models.InfinitySettings{
 				URL:                  server.URL,
 				AllowedHosts:         []string{server.URL},
 				ForwardOauthIdentity: false,
 			})
 			require.Nil(t, err)
-			res := main.QueryData(context.Background(), backend.DataQuery{
+			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
 				JSON: []byte(fmt.Sprintf(`{
 						"type": "json",
 						"url":  "%s",
@@ -175,12 +175,12 @@ func TestAuthentication(t *testing.T) {
 				_, _ = io.WriteString(w, `{"foo":"bar"}`)
 			}))
 			defer server.Close()
-			client, err := infinity.NewClient(settingsSrv.InfinitySettings{
+			client, err := infinity.NewClient(models.InfinitySettings{
 				URL:                  server.URL,
 				AllowedHosts:         []string{server.URL},
-				AuthenticationMethod: settingsSrv.AuthenticationMethodOAuth,
-				OAuth2Settings: settingsSrv.OAuth2Settings{
-					OAuth2Type:   settingsSrv.AuthOAuthTypeClientCredentials,
+				AuthenticationMethod: models.AuthenticationMethodOAuth,
+				OAuth2Settings: models.OAuth2Settings{
+					OAuth2Type:   models.AuthOAuthTypeClientCredentials,
 					TokenURL:     server.URL + "/token",
 					ClientID:     "MY_CLIENT_ID",
 					ClientSecret: "MY_CLIENT_SECRET",
@@ -188,7 +188,7 @@ func TestAuthentication(t *testing.T) {
 				},
 			})
 			require.Nil(t, err)
-			res := main.QueryData(context.Background(), backend.DataQuery{
+			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
 				JSON: []byte(fmt.Sprintf(`{
 					"type": "json",
 					"source": "url",
@@ -215,12 +215,12 @@ func TestAuthentication(t *testing.T) {
 				_, _ = io.WriteString(w, `{"foo":"bar"}`)
 			}))
 			defer server.Close()
-			client, err := infinity.NewClient(settingsSrv.InfinitySettings{
+			client, err := infinity.NewClient(models.InfinitySettings{
 				URL:                  server.URL,
 				AllowedHosts:         []string{server.URL},
-				AuthenticationMethod: settingsSrv.AuthenticationMethodOAuth,
-				OAuth2Settings: settingsSrv.OAuth2Settings{
-					OAuth2Type:   settingsSrv.AuthOAuthTypeClientCredentials,
+				AuthenticationMethod: models.AuthenticationMethodOAuth,
+				OAuth2Settings: models.OAuth2Settings{
+					OAuth2Type:   models.AuthOAuthTypeClientCredentials,
 					TokenURL:     server.URL + "/token",
 					ClientID:     "MY_CLIENT_ID",
 					ClientSecret: "MY_CLIENT_SECRET",
@@ -228,7 +228,7 @@ func TestAuthentication(t *testing.T) {
 				},
 			})
 			require.Nil(t, err)
-			res := main.QueryData(context.Background(), backend.DataQuery{
+			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
 				JSON: []byte(fmt.Sprintf(`{
 					"type": "json",
 					"source": "url",
@@ -256,14 +256,14 @@ func TestAuthentication(t *testing.T) {
 			assert.NotNil(t, server.TLS)
 			server.StartTLS()
 			defer server.Close()
-			client, err := infinity.NewClient(settingsSrv.InfinitySettings{
+			client, err := infinity.NewClient(models.InfinitySettings{
 				URL:                  server.URL,
-				AuthenticationMethod: settingsSrv.AuthenticationMethodNone,
+				AuthenticationMethod: models.AuthenticationMethodNone,
 				TLSAuthWithCACert:    true,
 				TLSCACert:            mockPEMClientCACet,
 			})
 			require.Nil(t, err)
-			res := main.QueryData(context.Background(), backend.DataQuery{
+			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
 				JSON: []byte(fmt.Sprintf(`{
 					"type": "json",
 					"url":  "%s",
@@ -288,13 +288,13 @@ func TestAuthentication(t *testing.T) {
 			assert.NotNil(t, server.TLS)
 			server.StartTLS()
 			defer server.Close()
-			client, err := infinity.NewClient(settingsSrv.InfinitySettings{
+			client, err := infinity.NewClient(models.InfinitySettings{
 				URL:                  server.URL,
-				AuthenticationMethod: settingsSrv.AuthenticationMethodNone,
+				AuthenticationMethod: models.AuthenticationMethodNone,
 				InsecureSkipVerify:   true,
 			})
 			require.Nil(t, err)
-			res := main.QueryData(context.Background(), backend.DataQuery{
+			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
 				JSON: []byte(fmt.Sprintf(`{
 					"type": "json",
 					"url":  "%s",
@@ -320,9 +320,9 @@ func TestResponseFormats(t *testing.T) {
 				fmt.Fprintf(w, `{ "foo" : "bar" }`)
 			}))
 			defer server.Close()
-			client, err := infinity.NewClient(settingsSrv.InfinitySettings{URL: server.URL})
+			client, err := infinity.NewClient(models.InfinitySettings{URL: server.URL})
 			require.Nil(t, err)
-			res := main.QueryData(context.Background(), backend.DataQuery{
+			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
 				JSON: []byte(fmt.Sprintf(`{
 					"type": "json",
 					"url":  "%s",
@@ -384,9 +384,9 @@ func TestResponseFormats(t *testing.T) {
 				  }`)
 			}))
 			defer server.Close()
-			client, err := infinity.NewClient(settingsSrv.InfinitySettings{URL: server.URL})
+			client, err := infinity.NewClient(models.InfinitySettings{URL: server.URL})
 			require.Nil(t, err)
-			res := main.QueryData(context.Background(), backend.DataQuery{
+			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
 				JSON: []byte(fmt.Sprintf(`{
 					"type": "json",
 					"url":  "%s",
@@ -420,9 +420,9 @@ func TestResponseFormats(t *testing.T) {
 			// require.Equal(t, data.FieldTypeNullableTime, res.Frames[0].Fields[2].Type())
 		})
 		t.Run("should parse the computed columns", func(t *testing.T) {
-			client, err := infinity.NewClient(settingsSrv.InfinitySettings{URL: ""})
+			client, err := infinity.NewClient(models.InfinitySettings{URL: ""})
 			require.Nil(t, err)
-			res := main.QueryData(context.Background(), backend.DataQuery{
+			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
 				JSON: []byte(`{
 					"type": "json",
 					"data":  "[{ \"Name\": \"amc ambassador dpl\", \"Miles_per_Gallon\": 15, \"Cylinders\": 8, \"Displacement\": 390, \"Horsepower\": 190, \"Weight_in_lbs\": 3850, \"Acceleration\": 8.5, \"Year\": \"1970-01-01\", \"Origin\": \"USA\" }, { \"Name\": \"citroen ds-21 pallas\", \"Miles_per_Gallon\": null, \"Cylinders\": null, \"Displacement\": 133, \"Horsepower\": 115, \"Weight_in_lbs\": 3090, \"Acceleration\": 17.5, \"Year\": \"1970-01-01\", \"Origin\": \"Europe\" }, { \"Name\": \"chevrolet hello concours (sw)\", \"Miles_per_Gallon\": null, \"Cylinders\": 8, \"Displacement\": 350, \"Horsepower\": 165, \"Weight_in_lbs\": 4142, \"Acceleration\": 11.5, \"Year\": \"1970-01-01\", \"Origin\": \"USA\" }]",
@@ -438,9 +438,9 @@ func TestResponseFormats(t *testing.T) {
 			experimental.CheckGoldenJSONResponse(t, "testdata", "backend-computed-columns", &res, mock.UPDATE_GOLDEN_DATA)
 		})
 		t.Run("should filter computed columns", func(t *testing.T) {
-			client, err := infinity.NewClient(settingsSrv.InfinitySettings{URL: ""})
+			client, err := infinity.NewClient(models.InfinitySettings{URL: ""})
 			require.Nil(t, err)
-			res := main.QueryData(context.Background(), backend.DataQuery{
+			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
 				JSON: []byte(`{
 					"type": "json",
 					"data":  "[{\"id\":0,\"name\":\"iPhone 6S\",\"description\":\"Kogi skateboard tattooed, whatever portland fingerstache coloring book mlkshk leggings flannel dreamcatcher.\",\"imageUrl\":\"http://www.icentar.me/phone/6s/images/goldbig.jpg\",\"price\":799},{\"id\":1,\"name\":\"iPhone 5S\",\"description\":\"Kogi skateboard tattooed, whatever portland fingerstache coloring book mlkshk leggings flannel dreamcatcher.\",\"imageUrl\":\"http://www.icentar.me/phone/5s/images/silverbig.png\",\"price\":349},{\"id\":2,\"name\":\"Macbook\",\"description\":\"Kogi skateboard tattooed, whatever portland fingerstache coloring book mlkshk leggings flannel dreamcatcher.\",\"imageUrl\":\"http://www.icentar.me/mac/macbook/images/pro.jpg\",\"price\":1499},{\"id\":3,\"name\":\"Macbook Air\",\"description\":\"Kogi skateboard tattooed, whatever portland fingerstache coloring book mlkshk leggings flannel dreamcatcher.\",\"imageUrl\":\"http://www.icentar.me/mac/mbair/images/air.jpg\",\"price\":999},{\"id\":4,\"name\":\"Macbook Air 2013\",\"description\":\"Kogi skateboard tattooed, whatever portland fingerstache coloring book mlkshk leggings flannel dreamcatcher.\",\"imageUrl\":\"http://www.icentar.me/mac/mbair/images/air.jpg\",\"price\":599},{\"id\":5,\"name\":\"Macbook Air 2012\",\"description\":\"Kogi skateboard tattooed, whatever portland fingerstache coloring book mlkshk leggings flannel dreamcatcher.\",\"imageUrl\":\"http://www.icentar.me/mac/mbair/images/air.jpg\",\"price\":499}]",
@@ -503,9 +503,9 @@ func TestResponseFormats(t *testing.T) {
 				  }`)
 			}))
 			defer server.Close()
-			client, err := infinity.NewClient(settingsSrv.InfinitySettings{URL: server.URL})
+			client, err := infinity.NewClient(models.InfinitySettings{URL: server.URL})
 			require.Nil(t, err)
-			res := main.QueryData(context.Background(), backend.DataQuery{
+			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
 				JSON: []byte(fmt.Sprintf(`{ 
 					"type": "json",
 					"url":  "%s",
@@ -530,9 +530,9 @@ func TestResponseFormats(t *testing.T) {
 				fmt.Fprintf(w, `{ "foo" : "bar" }`)
 			}))
 			defer server.Close()
-			client, err := infinity.NewClient(settingsSrv.InfinitySettings{URL: server.URL})
+			client, err := infinity.NewClient(models.InfinitySettings{URL: server.URL})
 			require.Nil(t, err)
-			res := main.QueryData(context.Background(), backend.DataQuery{
+			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
 				JSON: []byte(fmt.Sprintf(`{
 					"type": "graphql",
 					"url":  "%s",
@@ -556,9 +556,9 @@ func TestResponseFormats(t *testing.T) {
 				fmt.Fprintf(w, "a,b\na1,b1")
 			}))
 			defer server.Close()
-			client, err := infinity.NewClient(settingsSrv.InfinitySettings{URL: server.URL})
+			client, err := infinity.NewClient(models.InfinitySettings{URL: server.URL})
 			require.Nil(t, err)
-			res := main.QueryData(context.Background(), backend.DataQuery{
+			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
 				JSON: []byte(fmt.Sprintf(`{
 					"type": "uql",
 					"url":  "%s",
@@ -582,9 +582,9 @@ func TestResponseFormats(t *testing.T) {
 				fmt.Fprintf(w, `<xml><User name="foo"></xml>`)
 			}))
 			defer server.Close()
-			client, err := infinity.NewClient(settingsSrv.InfinitySettings{URL: server.URL})
+			client, err := infinity.NewClient(models.InfinitySettings{URL: server.URL})
 			require.Nil(t, err)
-			res := main.QueryData(context.Background(), backend.DataQuery{
+			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
 				JSON: []byte(fmt.Sprintf(`{
 					"type": "xml",
 					"url":  "%s",
@@ -608,9 +608,9 @@ func TestResponseFormats(t *testing.T) {
 				fmt.Fprintf(w, `{ "foo" : "bar" }`)
 			}))
 			defer server.Close()
-			client, err := infinity.NewClient(settingsSrv.InfinitySettings{URL: server.URL})
+			client, err := infinity.NewClient(models.InfinitySettings{URL: server.URL})
 			require.Nil(t, err)
-			res := main.QueryData(context.Background(), backend.DataQuery{
+			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
 				JSON: []byte(fmt.Sprintf(`{
 					"type": "uql",
 					"url":  "%s",
@@ -634,9 +634,9 @@ func TestResponseFormats(t *testing.T) {
 				fmt.Fprintf(w, `{ "foo" : "bar" }`)
 			}))
 			defer server.Close()
-			client, err := infinity.NewClient(settingsSrv.InfinitySettings{URL: server.URL})
+			client, err := infinity.NewClient(models.InfinitySettings{URL: server.URL})
 			require.Nil(t, err)
-			res := main.QueryData(context.Background(), backend.DataQuery{
+			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
 				JSON: []byte(fmt.Sprintf(`{
 					"type": "groq",
 					"url":  "%s",
