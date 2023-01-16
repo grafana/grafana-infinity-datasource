@@ -34,8 +34,8 @@ func TestInterPolateCombineValueMacros(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := querySrv.InterPolateMacros(tt.query, backend.TimeRange{
-				From: time.Unix(0, 1500376552001*1e6),
-				To:   time.Unix(0, 1500376552002*1e6),
+				From: time.Unix(0, 1500376552001*1e6).In(time.UTC),
+				To:   time.Unix(0, 1500376552002*1e6).In(time.UTC),
 			}, tt.pluginContext)
 			if tt.wantError != nil {
 				require.NotNil(t, err)
@@ -57,16 +57,16 @@ func TestInterPolateFromToMacros(t *testing.T) {
 	}{
 		{query: "foo", want: "foo"},
 		{query: "${__from}", want: "1500376552001"},
-		{query: "${__from:date}", want: "2017-07-18T12:15:52.001Z"},
-		{query: "${__from:date:iso}", want: "2017-07-18T12:15:52.001Z"},
-		{query: "foo ${__from:date:YYYY:MM:DD:hh:mm} bar", want: "foo 2017:07:18:12:15 bar"},
-		{query: "foo ${__to:date:YYYY-MM-DD:hh,mm} bar", want: "foo 2017-07-18:12,15 bar"},
+		{query: "${__from:date}", want: "2017-07-18T11:15:52.001Z"},
+		{query: "${__from:date:iso}", want: "2017-07-18T11:15:52.001Z"},
+		{query: "foo ${__from:date:YYYY:MM:DD:hh:mm} bar", want: "foo 2017:07:18:11:15 bar"},
+		{query: "foo ${__to:date:YYYY-MM-DD:hh,mm} bar", want: "foo 2017-07-18:11,15 bar"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := querySrv.InterPolateMacros(tt.query, backend.TimeRange{
-				From: time.Unix(0, 1500376552001*1e6),
-				To:   time.Unix(0, 1500376552002*1e6),
+				From: time.Unix(0, 1500376552001*1e6).In(time.UTC),
+				To:   time.Unix(0, 1500376552002*1e6).In(time.UTC),
 			}, tt.pluginContext)
 			if tt.wantError != nil {
 				require.NotNil(t, err)
