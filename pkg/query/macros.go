@@ -8,6 +8,7 @@ import (
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/gtime"
+	m "github.com/yesoreyeram/grafana-plugins/macros"
 )
 
 type macroFunc func(string, []string) (string, error)
@@ -92,6 +93,10 @@ func InterPolateMacros(queryString string, timeRange backend.TimeRange, pluginCo
 			}
 			queryString = strings.Replace(queryString, match[0], res, -1)
 		}
+	}
+	queryString, err := m.ApplyMacros(queryString, timeRange)
+	if err != nil {
+		return queryString, err
 	}
 	if pluginContext.User != nil {
 		queryString = strings.ReplaceAll(queryString, "${__user.name}", pluginContext.User.Name)

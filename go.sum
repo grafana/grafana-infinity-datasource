@@ -584,6 +584,8 @@ github.com/yesoreyeram/goxml2json v0.0.0-20181031222924-996d9fc8d313 h1:vp9ffMzY
 github.com/yesoreyeram/goxml2json v0.0.0-20181031222924-996d9fc8d313/go.mod h1:2wBri9DNpmznBip4s1sqf5SdolEXkGbdaZN6hl4eino=
 github.com/yesoreyeram/grafana-framer v0.0.8 h1:BE40+05mi38vmqFVvxQFCVnB1eoeodBmuh9Ls+YYq5Q=
 github.com/yesoreyeram/grafana-framer v0.0.8/go.mod h1:N1owoA9LvqThWhg0kMfn3H8b+NpKVWUI6s38hTTbLvs=
+github.com/yesoreyeram/grafana-plugins/macros v0.0.0-20230116115921-668d4e86b602 h1:D/IMfvLmAEerFgGrGx5TYim/35N1le7aWy6JFQznp/k=
+github.com/yesoreyeram/grafana-plugins/macros v0.0.0-20230116115921-668d4e86b602/go.mod h1:N4JRsd8BNUz8rq9/1pGERzX1EE445C8R6qHp6CLbnyI=
 github.com/yuin/goldmark v1.1.25/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.1.27/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.1.32/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=

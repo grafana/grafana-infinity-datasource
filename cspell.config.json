@@ -9,7 +9,6 @@
     "website/node_modules/**",
     "website/public/**",
     "try/dashboards/**",
-    "*SeriesProvider.ts",
     "testdata/**",
     "coverage/**",
     "cypress/**",

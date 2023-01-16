@@ -13,6 +13,7 @@ require (
 	github.com/stretchr/testify v1.8.1
 	github.com/xinsnake/go-http-digest-auth-client v0.6.0
 	github.com/yesoreyeram/grafana-framer v0.0.8
+	github.com/yesoreyeram/grafana-plugins/macros v0.0.0-20230116115921-668d4e86b602
 	golang.org/x/oauth2 v0.0.0-20220822191816-0ebed06d0094
 	gopkg.in/Knetic/govaluate.v3 v3.0.0
 	moul.io/http2curl v1.0.0
