@@ -5,7 +5,8 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 ## [ 1.4.0 ]
 
 - **Global variables** Support for global time variables `${__from}` and `${__to}` in backend queries
-- **Bug fixes** Fixed [a bug](https://github.com/yesoreyeram/grafana-infinity-datasource/issues/453) where BOM encoded response weren't parsed correctly
+- **Bug fix** Fixes [a bug](https://github.com/yesoreyeram/grafana-infinity-datasource/issues/509) where variables weren't interpolated with xml/html backend queries.
+- **Bug fix** Fixed [a bug](https://github.com/yesoreyeram/grafana-infinity-datasource/issues/453) where BOM encoded response weren't parsed correctly
 
 ## [ 1.3.0 ]
 

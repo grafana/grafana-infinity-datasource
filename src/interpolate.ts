@@ -63,7 +63,10 @@ export const interpolateQuery = (query: InfinityQuery, scopedVars: ScopedVars): 
     if (newQuery.type === 'json' && newQuery.parser === 'sqlite') {
       newQuery.sqlite_query = replaceVariable(newQuery.sqlite_query || '', scopedVars);
     }
-    if ((newQuery.type === 'json' || newQuery.type === 'graphql' || newQuery.type === 'csv' || newQuery.type === 'tsv') && newQuery.parser === 'backend') {
+    if (
+      (newQuery.type === 'json' || newQuery.type === 'graphql' || newQuery.type === 'csv' || newQuery.type === 'tsv' || newQuery.type === 'html' || newQuery.type === 'xml') &&
+      newQuery.parser === 'backend'
+    ) {
       newQuery.computed_columns = (newQuery.computed_columns || []).map((c) => {
         return {
           ...c,
