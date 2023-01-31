@@ -1,10 +1,12 @@
 package models_test
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 )
 
@@ -291,6 +293,81 @@ func Test_getSecrets(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := models.GetSecrets(tt.config, "httpHeaderName", "httpHeaderValue")
 			assert.Equal(t, tt.want, got)
+		})
+	}
+}
+
+func TestInfinitySettings_Validate(t *testing.T) {
+	tests := []struct {
+		name     string
+		settings models.InfinitySettings
+		wantErr  error
+	}{
+		{
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodNone},
+		},
+		{
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodNone, CustomHeaders: map[string]string{"A": "B"}},
+			wantErr:  errors.New("configure allowed hosts in the authentication section"),
+		},
+		{
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodNone, CustomHeaders: map[string]string{"A": "B", "Accept": ""}},
+			wantErr:  errors.New("configure allowed hosts in the authentication section"),
+		},
+		{
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodNone, CustomHeaders: map[string]string{"A": "B", "Content-Type": ""}},
+			wantErr:  errors.New("configure allowed hosts in the authentication section"),
+		},
+		{
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodNone, CustomHeaders: map[string]string{"A": "B", "Accept": "", "Content-Type": ""}},
+			wantErr:  errors.New("configure allowed hosts in the authentication section"),
+		},
+		{
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodNone, CustomHeaders: map[string]string{"A": "B", "C": "D"}},
+			wantErr:  errors.New("configure allowed hosts in the authentication section"),
+		},
+		{
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodBasic},
+			wantErr:  errors.New("invalid or empty password detected"),
+		},
+		{
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodBasic, Password: "123"},
+			wantErr:  errors.New("configure allowed hosts in the authentication section"),
+		},
+		{
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodApiKey},
+			wantErr:  errors.New("invalid API key specified"),
+		},
+		{
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodApiKey, ApiKeyKey: "foo"},
+			wantErr:  errors.New("invalid API key specified"),
+		},
+		{
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodApiKey, ApiKeyValue: "bar"},
+			wantErr:  errors.New("invalid API key specified"),
+		},
+		{
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodApiKey, ApiKeyKey: "foo", ApiKeyValue: "bar"},
+			wantErr:  errors.New("configure allowed hosts in the authentication section"),
+		},
+		{
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodBearerToken},
+			wantErr:  errors.New("invalid or empty bearer token detected"),
+		},
+		{
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodBearerToken, BearerToken: "foo"},
+			wantErr:  errors.New("configure allowed hosts in the authentication section"),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := tt.settings.Validate()
+			if tt.wantErr != nil {
+				require.NotNil(t, err)
+				assert.Equal(t, tt.wantErr, err)
+				return
+			}
+			require.Nil(t, err)
 		})
 	}
 }
