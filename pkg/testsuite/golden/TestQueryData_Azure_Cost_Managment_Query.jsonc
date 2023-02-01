@@ -1,0 +1,635 @@
+//  🌟 This was machine generated.  Do not edit. 🌟
+//  
+//  Frame[0] {
+//      "custom": {
+//          "query": {
+//              "refId": "",
+//              "type": "json",
+//              "format": "",
+//              "source": "url",
+//              "url": "http://127.0.0.1:3123",
+//              "url_options": {
+//                  "method": "",
+//                  "params": null,
+//                  "headers": null,
+//                  "data": "",
+//                  "body_type": "",
+//                  "body_content_type": "",
+//                  "body_form": null,
+//                  "body_graphql_query": ""
+//              },
+//              "data": "",
+//              "parser": "backend",
+//              "filterExpression": "",
+//              "summarizeExpression": "",
+//              "summarizeBy": "",
+//              "uql": "",
+//              "groq": "",
+//              "sqlite_query": "",
+//              "csv_options": {
+//                  "delimiter": "",
+//                  "skip_empty_lines": false,
+//                  "skip_lines_with_error": false,
+//                  "relax_column_count": false,
+//                  "columns": "",
+//                  "comment": ""
+//              },
+//              "json_options": {
+//                  "root_is_not_array": false,
+//                  "columnar": false
+//              },
+//              "root_selector": "properties.rows",
+//              "columns": [
+//                  {
+//                      "selector": "1",
+//                      "text": "cost",
+//                      "type": "number",
+//                      "timestampFormat": ""
+//                  },
+//                  {
+//                      "selector": "2",
+//                      "text": "timestamp",
+//                      "type": "timestamp",
+//                      "timestampFormat": "20060102"
+//                  }
+//              ],
+//              "computed_columns": [],
+//              "filters": null,
+//              "seriesCount": 0,
+//              "expression": "",
+//              "alias": "",
+//              "dataOverrides": null,
+//              "global_query_id": "",
+//              "query_mode": ""
+//          },
+//          "data": {
+//              "__payload": {
+//                  "dataSet": {
+//                      "aggregation": {
+//                          "totalCost": {
+//                              "function": "Sum",
+//                              "name": "Cost"
+//                          },
+//                          "totalCostUSD": {
+//                              "function": "Sum",
+//                              "name": "CostUSD"
+//                          }
+//                      },
+//                      "granularity": "Daily",
+//                      "sorting": [
+//                          {
+//                              "direction": "ascending",
+//                              "name": "UsageDate"
+//                          }
+//                      ]
+//                  },
+//                  "timePeriod": {
+//                      "from": "2023-01-01T00:00:00+00:00",
+//                      "to": "2023-01-31T23:59:59+00:00"
+//                  },
+//                  "timeframe": "Custom",
+//                  "type": "ActualCost"
+//              },
+//              "__url": "https://management.azure.com/subscriptions/\u003cmy-subscription-id\u003e/providers/Microsoft.CostManagement/query?api-version=2021-10-01\u0026$top=5000",
+//              "eTag": null,
+//              "id": "subscriptions/my-subscription-id/providers/Microsoft.CostManagement/query/my-query-id1",
+//              "location": null,
+//              "name": "my-query-id1",
+//              "properties": {
+//                  "columns": [
+//                      {
+//                          "name": "Cost",
+//                          "type": "Number"
+//                      },
+//                      {
+//                          "name": "CostUSD",
+//                          "type": "Number"
+//                      },
+//                      {
+//                          "name": "UsageDate",
+//                          "type": "Number"
+//                      },
+//                      {
+//                          "name": "Currency",
+//                          "type": "String"
+//                      }
+//                  ],
+//                  "nextLink": null,
+//                  "rows": [
+//                      [
+//                          0,
+//                          0,
+//                          20230101,
+//                          "USD"
+//                      ],
+//                      [
+//                          0,
+//                          0,
+//                          20230102,
+//                          "USD"
+//                      ],
+//                      [
+//                          0,
+//                          0,
+//                          20230103,
+//                          "USD"
+//                      ],
+//                      [
+//                          0,
+//                          0,
+//                          20230104,
+//                          "USD"
+//                      ],
+//                      [
+//                          0,
+//                          0,
+//                          20230105,
+//                          "USD"
+//                      ],
+//                      [
+//                          0,
+//                          0,
+//                          20230106,
+//                          "USD"
+//                      ],
+//                      [
+//                          0,
+//                          0,
+//                          20230107,
+//                          "USD"
+//                      ],
+//                      [
+//                          0,
+//                          0,
+//                          20230108,
+//                          "USD"
+//                      ],
+//                      [
+//                          0.0175,
+//                          0.0175,
+//                          20230109,
+//                          "USD"
+//                      ],
+//                      [
+//                          0.0025,
+//                          0.0025,
+//                          20230110,
+//                          "USD"
+//                      ],
+//                      [
+//                          0.0025,
+//                          0.0025,
+//                          20230111,
+//                          "USD"
+//                      ],
+//                      [
+//                          0.01015625,
+//                          0.01015625,
+//                          20230112,
+//                          "USD"
+//                      ],
+//                      [
+//                          0.01484375,
+//                          0.01484375,
+//                          20230113,
+//                          "USD"
+//                      ],
+//                      [
+//                          0,
+//                          0,
+//                          20230114,
+//                          "USD"
+//                      ],
+//                      [
+//                          0,
+//                          0,
+//                          20230115,
+//                          "USD"
+//                      ],
+//                      [
+//                          0.02,
+//                          0.02,
+//                          20230116,
+//                          "USD"
+//                      ],
+//                      [
+//                          0.0275,
+//                          0.0275,
+//                          20230117,
+//                          "USD"
+//                      ],
+//                      [
+//                          0.01,
+//                          0.01,
+//                          20230118,
+//                          "USD"
+//                      ],
+//                      [
+//                          0.035,
+//                          0.035,
+//                          20230119,
+//                          "USD"
+//                      ],
+//                      [
+//                          0.0125,
+//                          0.0125,
+//                          20230120,
+//                          "USD"
+//                      ],
+//                      [
+//                          0,
+//                          0,
+//                          20230121,
+//                          "USD"
+//                      ],
+//                      [
+//                          0,
+//                          0,
+//                          20230122,
+//                          "USD"
+//                      ],
+//                      [
+//                          0.0075,
+//                          0.0075,
+//                          20230123,
+//                          "USD"
+//                      ]
+//                  ]
+//              },
+//              "sku": null,
+//              "type": "Microsoft.CostManagement/query"
+//          },
+//          "responseCodeFromServer": 200,
+//          "duration": 123,
+//          "error": ""
+//      },
+//      "executedQueryString": "###############\n## URL\n###############\n\nhttp://127.0.0.1:3123\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' 'http://127.0.0.1:3123'"
+//  }
+//  Name: response
+//  Dimensions: 2 Fields by 23 Rows
+//  +------------------+-------------------------------+
+//  | Name: cost       | Name: timestamp               |
+//  | Labels:          | Labels:                       |
+//  | Type: []*float64 | Type: []*time.Time            |
+//  +------------------+-------------------------------+
+//  | 0                | 2023-01-01 00:00:00 +0000 UTC |
+//  | 0                | 2023-01-02 00:00:00 +0000 UTC |
+//  | 0                | 2023-01-03 00:00:00 +0000 UTC |
+//  | 0                | 2023-01-04 00:00:00 +0000 UTC |
+//  | 0                | 2023-01-05 00:00:00 +0000 UTC |
+//  | 0                | 2023-01-06 00:00:00 +0000 UTC |
+//  | 0                | 2023-01-07 00:00:00 +0000 UTC |
+//  | 0                | 2023-01-08 00:00:00 +0000 UTC |
+//  | 0.0175           | 2023-01-09 00:00:00 +0000 UTC |
+//  | ...              | ...                           |
+//  +------------------+-------------------------------+
+//  
+//  
+//  🌟 This was machine generated.  Do not edit. 🌟
+{
+  "status": 200,
+  "frames": [
+    {
+      "schema": {
+        "name": "response",
+        "meta": {
+          "custom": {
+            "query": {
+              "refId": "",
+              "type": "json",
+              "format": "",
+              "source": "url",
+              "url": "http://127.0.0.1:3123",
+              "url_options": {
+                "method": "",
+                "params": null,
+                "headers": null,
+                "data": "",
+                "body_type": "",
+                "body_content_type": "",
+                "body_form": null,
+                "body_graphql_query": ""
+              },
+              "data": "",
+              "parser": "backend",
+              "filterExpression": "",
+              "summarizeExpression": "",
+              "summarizeBy": "",
+              "uql": "",
+              "groq": "",
+              "sqlite_query": "",
+              "csv_options": {
+                "delimiter": "",
+                "skip_empty_lines": false,
+                "skip_lines_with_error": false,
+                "relax_column_count": false,
+                "columns": "",
+                "comment": ""
+              },
+              "json_options": {
+                "root_is_not_array": false,
+                "columnar": false
+              },
+              "root_selector": "properties.rows",
+              "columns": [
+                {
+                  "selector": "1",
+                  "text": "cost",
+                  "type": "number",
+                  "timestampFormat": ""
+                },
+                {
+                  "selector": "2",
+                  "text": "timestamp",
+                  "type": "timestamp",
+                  "timestampFormat": "20060102"
+                }
+              ],
+              "computed_columns": [],
+              "filters": null,
+              "seriesCount": 0,
+              "expression": "",
+              "alias": "",
+              "dataOverrides": null,
+              "global_query_id": "",
+              "query_mode": ""
+            },
+            "data": {
+              "__payload": {
+                "dataSet": {
+                  "aggregation": {
+                    "totalCost": {
+                      "function": "Sum",
+                      "name": "Cost"
+                    },
+                    "totalCostUSD": {
+                      "function": "Sum",
+                      "name": "CostUSD"
+                    }
+                  },
+                  "granularity": "Daily",
+                  "sorting": [
+                    {
+                      "direction": "ascending",
+                      "name": "UsageDate"
+                    }
+                  ]
+                },
+                "timePeriod": {
+                  "from": "2023-01-01T00:00:00+00:00",
+                  "to": "2023-01-31T23:59:59+00:00"
+                },
+                "timeframe": "Custom",
+                "type": "ActualCost"
+              },
+              "__url": "https://management.azure.com/subscriptions/\u003cmy-subscription-id\u003e/providers/Microsoft.CostManagement/query?api-version=2021-10-01\u0026$top=5000",
+              "eTag": null,
+              "id": "subscriptions/my-subscription-id/providers/Microsoft.CostManagement/query/my-query-id1",
+              "location": null,
+              "name": "my-query-id1",
+              "properties": {
+                "columns": [
+                  {
+                    "name": "Cost",
+                    "type": "Number"
+                  },
+                  {
+                    "name": "CostUSD",
+                    "type": "Number"
+                  },
+                  {
+                    "name": "UsageDate",
+                    "type": "Number"
+                  },
+                  {
+                    "name": "Currency",
+                    "type": "String"
+                  }
+                ],
+                "nextLink": null,
+                "rows": [
+                  [
+                    0,
+                    0,
+                    20230101,
+                    "USD"
+                  ],
+                  [
+                    0,
+                    0,
+                    20230102,
+                    "USD"
+                  ],
+                  [
+                    0,
+                    0,
+                    20230103,
+                    "USD"
+                  ],
+                  [
+                    0,
+                    0,
+                    20230104,
+                    "USD"
+                  ],
+                  [
+                    0,
+                    0,
+                    20230105,
+                    "USD"
+                  ],
+                  [
+                    0,
+                    0,
+                    20230106,
+                    "USD"
+                  ],
+                  [
+                    0,
+                    0,
+                    20230107,
+                    "USD"
+                  ],
+                  [
+                    0,
+                    0,
+                    20230108,
+                    "USD"
+                  ],
+                  [
+                    0.0175,
+                    0.0175,
+                    20230109,
+                    "USD"
+                  ],
+                  [
+                    0.0025,
+                    0.0025,
+                    20230110,
+                    "USD"
+                  ],
+                  [
+                    0.0025,
+                    0.0025,
+                    20230111,
+                    "USD"
+                  ],
+                  [
+                    0.01015625,
+                    0.01015625,
+                    20230112,
+                    "USD"
+                  ],
+                  [
+                    0.01484375,
+                    0.01484375,
+                    20230113,
+                    "USD"
+                  ],
+                  [
+                    0,
+                    0,
+                    20230114,
+                    "USD"
+                  ],
+                  [
+                    0,
+                    0,
+                    20230115,
+                    "USD"
+                  ],
+                  [
+                    0.02,
+                    0.02,
+                    20230116,
+                    "USD"
+                  ],
+                  [
+                    0.0275,
+                    0.0275,
+                    20230117,
+                    "USD"
+                  ],
+                  [
+                    0.01,
+                    0.01,
+                    20230118,
+                    "USD"
+                  ],
+                  [
+                    0.035,
+                    0.035,
+                    20230119,
+                    "USD"
+                  ],
+                  [
+                    0.0125,
+                    0.0125,
+                    20230120,
+                    "USD"
+                  ],
+                  [
+                    0,
+                    0,
+                    20230121,
+                    "USD"
+                  ],
+                  [
+                    0,
+                    0,
+                    20230122,
+                    "USD"
+                  ],
+                  [
+                    0.0075,
+                    0.0075,
+                    20230123,
+                    "USD"
+                  ]
+                ]
+              },
+              "sku": null,
+              "type": "Microsoft.CostManagement/query"
+            },
+            "responseCodeFromServer": 200,
+            "duration": 123,
+            "error": ""
+          },
+          "executedQueryString": "###############\n## URL\n###############\n\nhttp://127.0.0.1:3123\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' 'http://127.0.0.1:3123'"
+        },
+        "fields": [
+          {
+            "name": "cost",
+            "type": "number",
+            "typeInfo": {
+              "frame": "float64",
+              "nullable": true
+            }
+          },
+          {
+            "name": "timestamp",
+            "type": "time",
+            "typeInfo": {
+              "frame": "time.Time",
+              "nullable": true
+            }
+          }
+        ]
+      },
+      "data": {
+        "values": [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0.0175,
+            0.0025,
+            0.0025,
+            0.01015625,
+            0.01484375,
+            0,
+            0,
+            0.02,
+            0.0275,
+            0.01,
+            0.035,
+            0.0125,
+            0,
+            0,
+            0.0075
+          ],
+          [
+            1672531200000,
+            1672617600000,
+            1672704000000,
+            1672790400000,
+            1672876800000,
+            1672963200000,
+            1673049600000,
+            1673136000000,
+            1673222400000,
+            1673308800000,
+            1673395200000,
+            1673481600000,
+            1673568000000,
+            1673654400000,
+            1673740800000,
+            1673827200000,
+            1673913600000,
+            1674000000000,
+            1674086400000,
+            1674172800000,
+            1674259200000,
+            1674345600000,
+            1674432000000
+          ]
+        ]
+      }
+    }
+  ]
+}

@@ -56,14 +56,17 @@ export const QueryColumnItem = (props: QueryColumnItemProps) => {
             width={30}
             value={column.timestampFormat}
             placeholder="Auto"
+            allowCustomValue={true}
             options={[
               { value: '', label: 'Auto' },
               { value: '2006-01-02T15:04:05Z07:00', label: 'Default ISO' },
               { value: '2006-01-02', label: 'YYYY-MM-DD' },
               { value: '2006/01/02', label: 'YYYY/MM/DD' },
               { value: '2006 / 01 / 02', label: 'YYYY / MM / DD' },
+              { value: '20060102', label: 'YYYYMMDD' },
               { value: '2006-01', label: 'YYYY-MM' },
               { value: '2006/01', label: 'YYYY/MM' },
+              { value: '200601', label: 'YYYYMM' },
               { value: '2006', label: 'YYYY' },
               { value: '2006/01/02 15:04', label: 'YYYY/MM/DD HH:mm' },
               { value: '2006/01/02 15:04:05', label: 'YYYY/MM/DD HH:mm:ss' },

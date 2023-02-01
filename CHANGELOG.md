@@ -7,6 +7,8 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 - **Global variables** Support for global time variables `${__from}` and `${__to}` in backend queries
 - **Bug fix** Fixes [a bug](https://github.com/yesoreyeram/grafana-infinity-datasource/issues/509) where variables weren't interpolated with xml/html backend queries.
 - **Bug fix** Fixed [a bug](https://github.com/yesoreyeram/grafana-infinity-datasource/issues/453) where BOM encoded response weren't parsed correctly
+- **Backend parser** Added support for numeric datetime (ex: 20221227 can now be treated as valid datetime with YYYYMMDD format)
+- **Auth** Health check validation updated
 
 ## [ 1.3.0 ]
 

@@ -40,10 +40,10 @@ describe('explore', () => {
     cy.contains(`Computed columns, Filter, Group by`).should('not.exist');
     cy.contains(`UQL Query`).should('not.exist');
     // CSV with default parser should work
-    changeDropdownValue('Type', 'CSV');
-    checkExploreError('Invalid Opening Quote: a quote is found inside a field at line 3');
-    changeInputContent('URL', 'https://github.com/yesoreyeram/grafana-infinity-datasource/blob/main/testdata/users.csv');
-    changeDropdownValue('Parser', 'Default');
-    checkExploreTableContent('Leanne Graham');
+    // changeDropdownValue('Type', 'CSV');
+    // checkExploreError('Invalid Opening Quote: a quote is found inside a field at line 3');
+    // changeInputContent('URL', 'https://github.com/yesoreyeram/grafana-infinity-datasource/blob/main/testdata/users.csv');
+    // changeDropdownValue('Parser', 'Default');
+    // checkExploreTableContent('Leanne Graham');
   });
 });

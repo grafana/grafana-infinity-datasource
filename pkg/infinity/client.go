@@ -2,6 +2,7 @@ package infinity
 
 import (
 	"bytes"
+	"context"
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/json"
@@ -102,7 +103,7 @@ func replaceSect(input string, settings models.InfinitySettings, includeSect boo
 	return input
 }
 
-func (client *Client) req(url string, body io.Reader, settings models.InfinitySettings, query querySrv.Query, requestHeaders map[string]string) (obj any, statusCode int, duration time.Duration, err error) {
+func (client *Client) req(ctx context.Context, url string, body io.Reader, settings models.InfinitySettings, query querySrv.Query, requestHeaders map[string]string) (obj any, statusCode int, duration time.Duration, err error) {
 	req, _ := GetRequest(settings, body, query, requestHeaders, true)
 	startTime := time.Now()
 	if !CanAllowURL(req.URL.String(), settings.AllowedHosts) {
@@ -151,13 +152,13 @@ func removeBOMContent(input []byte) []byte {
 	return bytes.TrimPrefix(input, []byte("\xef\xbb\xbf"))
 }
 
-func (client *Client) GetResults(query querySrv.Query, requestHeaders map[string]string) (o any, statusCode int, duration time.Duration, err error) {
+func (client *Client) GetResults(ctx context.Context, query querySrv.Query, requestHeaders map[string]string) (o any, statusCode int, duration time.Duration, err error) {
 	switch strings.ToUpper(query.URLOptions.Method) {
 	case http.MethodPost:
 		body := GetQueryBody(query)
-		return client.req(query.URL, body, client.Settings, query, requestHeaders)
+		return client.req(ctx, query.URL, body, client.Settings, query, requestHeaders)
 	default:
-		return client.req(query.URL, nil, client.Settings, query, requestHeaders)
+		return client.req(ctx, query.URL, nil, client.Settings, query, requestHeaders)
 	}
 }
 

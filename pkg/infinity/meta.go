@@ -1,6 +1,7 @@
 package infinity
 
 import (
+	"context"
 	"time"
 
 	"github.com/grafana/grafana-plugin-sdk-go/data"
@@ -45,7 +46,7 @@ func WrapMetaForInlineQuery(frame *data.Frame, err error, query querySrv.Query) 
 	return frame, err
 }
 
-func WrapMetaForRemoteQuery(frame *data.Frame, err error, query querySrv.Query) (*data.Frame, error) {
+func WrapMetaForRemoteQuery(ctx context.Context, frame *data.Frame, err error, query querySrv.Query) (*data.Frame, error) {
 	meta := frame.Meta
 	if meta == nil {
 		customMeta := &CustomMeta{Query: query, Data: query.Data, ResponseCodeFromServer: 0}

@@ -1,6 +1,7 @@
 package mock_test
 
 import (
+	"context"
 	"strings"
 	"testing"
 
@@ -123,7 +124,7 @@ func TestInlineSources(t *testing.T) {
 				queryJSON = "{}"
 			}
 			bq := backend.DataQuery{JSON: []byte(queryJSON), TimeRange: tt.timeRange}
-			query, err := querySrv.LoadQuery(bq, backend.PluginContext{})
+			query, err := querySrv.LoadQuery(context.Background(), bq, backend.PluginContext{})
 			require.Nil(t, err)
 			frame, err := infinity.GetFrameForInlineSources(query)
 			if tt.wantErr != nil {
@@ -293,13 +294,13 @@ func TestRemoteSources(t *testing.T) {
 				queryJSON = "{}"
 			}
 			bq := backend.DataQuery{JSON: []byte(queryJSON), TimeRange: tt.timeRange}
-			query, err := querySrv.LoadQuery(bq, backend.PluginContext{})
+			query, err := querySrv.LoadQuery(context.Background(), bq, backend.PluginContext{})
 			require.Nil(t, err)
 			client := tt.client
 			if client == nil {
 				client = mock.New("")
 			}
-			frame, err := infinity.GetFrameForURLSources(query, *client, map[string]string{})
+			frame, err := infinity.GetFrameForURLSources(context.Background(), query, *client, map[string]string{})
 			if tt.wantErr != nil {
 				require.NotNil(t, err)
 				assert.Equal(t, tt.wantErr, err)

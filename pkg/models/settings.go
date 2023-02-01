@@ -90,7 +90,7 @@ type InfinitySettings struct {
 }
 
 func (s *InfinitySettings) Validate() error {
-	if (s.BasicAuthEnabled || s.AuthenticationMethod == AuthenticationMethodDigestAuth) && s.Password == "" {
+	if (s.BasicAuthEnabled || s.AuthenticationMethod == AuthenticationMethodBasic || s.AuthenticationMethod == AuthenticationMethodDigestAuth) && s.Password == "" {
 		return errors.New("invalid or empty password detected")
 	}
 	if s.AuthenticationMethod == AuthenticationMethodApiKey && (s.ApiKeyValue == "" || s.ApiKeyKey == "") {
@@ -99,10 +99,29 @@ func (s *InfinitySettings) Validate() error {
 	if s.AuthenticationMethod == AuthenticationMethodBearerToken && s.BearerToken == "" {
 		return errors.New("invalid or empty bearer token detected")
 	}
-	if (s.AuthenticationMethod != AuthenticationMethodNone) && len(s.AllowedHosts) < 1 {
+	if s.AuthenticationMethod != AuthenticationMethodNone && len(s.AllowedHosts) < 1 {
+		return errors.New("configure allowed hosts in the authentication section")
+	}
+	if s.HaveSecureHeaders() && len(s.AllowedHosts) < 1 {
 		return errors.New("configure allowed hosts in the authentication section")
 	}
 	return nil
+}
+
+func (s *InfinitySettings) HaveSecureHeaders() bool {
+	if len(s.CustomHeaders) > 0 {
+		for k := range s.CustomHeaders {
+			if strings.EqualFold(k, "Accept") {
+				continue
+			}
+			if strings.EqualFold(k, "Content-Type") {
+				continue
+			}
+			return true
+		}
+		return false
+	}
+	return false
 }
 
 type RefData struct {

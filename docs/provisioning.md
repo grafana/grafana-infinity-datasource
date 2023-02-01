@@ -16,12 +16,6 @@ If you need to provision via file, use the following settings for the basic use 
 ```yaml
 - name: <<YOUR DATASOURCE INSTANCE NAME>>
   type: yesoreyeram-infinity-datasource
-  access: proxy
-  isDefault: false
-  version: 1
-  jsonData:
-    tlsSkipVerify: false
-  readOnly: true
 ```
 
 ### Advanced Provisioning
@@ -31,9 +25,6 @@ If you need an advanced version of the datasource, use the following format.
 ```yaml
 - name: <<YOUR DATASOURCE INSTANCE NAME. Example -- Github>>
   type: yesoreyeram-infinity-datasource
-  access: proxy
-  isDefault: false
-  url: <<YOUR URL. can be empty>>
   basicAuth: true
   basicAuthUser: <<YOUR USER NAME. Example -- github_id>>
   jsonData:
@@ -48,8 +39,6 @@ If you need an advanced version of the datasource, use the following format.
     tlsCACert: <<Your TLS cert>>
     tlsClientCert: <<Your client certificate>>
     tlsClientKey: <<Your client key>>
-  version: 1
-  readOnly: true
 ```
 
 ### Custom headers
