@@ -27,7 +27,7 @@ export const Badges = () => {
     <p className="text-center my-4">
       {badges.map((b) => {
         return (
-          <a href={b.link} target="_blank" className="mx-2" rel="noreferrer">
+          <a key={JSON.stringify(b)} href={b.link} target="_blank" className="mx-2" rel="noreferrer">
             <img src={b.imgSrc} />
           </a>
         );

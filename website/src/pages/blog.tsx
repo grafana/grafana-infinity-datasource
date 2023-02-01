@@ -1,12 +1,11 @@
 import React from 'react';
-import { graphql } from 'gatsby';
-import { Link } from 'gatsby';
+import { graphql, Link } from 'gatsby';
 import { Layout } from './../components/Layout';
 
 export interface TemplateProps {
   data: {
     allMarkdownRemark: {
-      edges: {
+      edges: Array<{
         node: {
           excerpt: string;
           html: string;
@@ -16,7 +15,7 @@ export interface TemplateProps {
             date: string;
           };
         };
-      }[];
+      }>;
     };
   };
 }
@@ -50,7 +49,7 @@ export default function Template({ data }: TemplateProps) {
               <ul style={{ margin: '0px', listStyle: 'none', padding: '0px' }}>
                 {data.allMarkdownRemark.edges.map((p) => {
                   return (
-                    <li style={{ marginBlock: '10px', listStyle: 'none', paddingBlock: '5px' }}>
+                    <li key={JSON.stringify(p)} style={{ marginBlock: '10px', listStyle: 'none', paddingBlock: '5px' }}>
                       <Link className="link" to={p.node.frontmatter.slug}>
                         <b>{p.node.frontmatter.title}</b> - <span style={{ color: 'grey' }}>{p.node.frontmatter.date}</span>
                       </Link>

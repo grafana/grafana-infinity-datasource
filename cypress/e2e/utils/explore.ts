@@ -3,7 +3,7 @@ export const runExploreQuery = (wait = 1 * 1000) => {
   cy.wait(wait);
 };
 
-export const checkExploreTableContent = (check: string = '', wait = 1 * 1000) => {
+export const checkExploreTableContent = (check = '', wait = 1 * 1000) => {
   runExploreQuery();
   cy.contains('Query error').should('not.exist');
   cy.get(`[aria-label="Explore Table"]`).contains(check);

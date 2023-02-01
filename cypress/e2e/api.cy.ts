@@ -11,7 +11,7 @@ describe('sanity check', () => {
 });
 
 describe('test the backend response', () => {
-  const queries: { name: string; query: Partial<Extract<InfinityQuery, { parser: 'backend' }>> }[] = [
+  const queries: Array<{ name: string; query: Partial<Extract<InfinityQuery, { parser: 'backend' }>> }> = [
     {
       name: 'backend json query',
       query: {
@@ -140,7 +140,7 @@ describe('test the backend response', () => {
 });
 
 describe('test the uql response', () => {
-  const queries: { name: string; query: Partial<Extract<InfinityQuery, { parser: 'uql' }>> }[] = [
+  const queries: Array<{ name: string; query: Partial<Extract<InfinityQuery, { parser: 'uql' }>> }> = [
     {
       name: 'uql json query',
       query: {

@@ -91,6 +91,7 @@ const SearchResults = (props: { searchTerm: string }) => {
   useEffect(() => {
     const results = fuse.search(props.searchTerm);
     setResults(results);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.searchTerm]);
   return (
     <>
