@@ -1,30 +1,30 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`JSONParser Auto Columns Table 1`] = `
-Object {
-  "columns": Array [
-    Object {
+{
+  "columns": [
+    {
       "selector": "name",
       "text": "name",
       "type": "string",
     },
-    Object {
+    {
       "selector": "age",
       "text": "age",
       "type": "number",
     },
   ],
   "name": "",
-  "rows": Array [
-    Array [
+  "rows": [
+    [
       "foo",
       20,
     ],
-    Array [
+    [
       "bar",
       25,
     ],
-    Array [
+    [
       "baz",
       30,
     ],
@@ -33,38 +33,38 @@ Object {
 `;
 
 exports[`JSONParser Basic 1`] = `
-Object {
-  "columns": Array [],
+{
+  "columns": [],
   "name": "",
-  "rows": Array [],
+  "rows": [],
 }
 `;
 
 exports[`JSONParser With Columns & Root Selector 1`] = `
-Object {
-  "columns": Array [
-    Object {
+{
+  "columns": [
+    {
       "selector": "name",
       "text": "Name",
       "type": "string",
     },
-    Object {
+    {
       "selector": "age",
       "text": "Age",
       "type": "string",
     },
   ],
   "name": "",
-  "rows": Array [
-    Array [
+  "rows": [
+    [
       "foo",
       "20",
     ],
-    Array [
+    [
       "bar",
       "25",
     ],
-    Array [
+    [
       "baz",
       "30",
     ],
@@ -73,50 +73,50 @@ Object {
 `;
 
 exports[`JSONParser With Columns & Root Selector 2`] = `
-Object {
-  "columns": Array [
-    Object {
+{
+  "columns": [
+    {
       "selector": "name",
       "text": "Name",
       "type": "string",
     },
-    Object {
+    {
       "selector": "age",
       "text": "Age",
       "type": "number",
     },
-    Object {
+    {
       "selector": "year",
       "text": "Year",
       "type": "timestamp",
     },
-    Object {
+    {
       "selector": "date",
       "text": "Date",
       "type": "timestamp_epoch",
     },
   ],
   "name": "",
-  "rows": Array [
-    Array [
+  "rows": [
+    [
       "foo",
       20,
       2010-01-01T00:00:00.000Z,
       2010-01-01T00:00:00.000Z,
     ],
-    Array [
+    [
       "bar",
       25,
       2011-01-01T00:00:00.000Z,
       2011-01-01T00:00:00.000Z,
     ],
-    Array [
+    [
       "baz",
       30,
       2012-01-01T00:00:00.000Z,
       2012-01-01T00:00:00.000Z,
     ],
-    Array [
+    [
       "apple",
       32,
       2013-12-25T00:00:00.000Z,
@@ -127,20 +127,20 @@ Object {
 `;
 
 exports[`JSONParser With Columns 1`] = `
-Object {
-  "columns": Array [
-    Object {
+{
+  "columns": [
+    {
       "selector": "name",
       "text": "Name",
       "type": "string",
     },
   ],
   "name": "",
-  "rows": Array [
-    Array [
+  "rows": [
+    [
       "foo",
     ],
-    Array [
+    [
       "bar",
     ],
   ],

@@ -1,48 +1,48 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Empty Array default test 1`] = `
-Object {
-  "columns": Array [],
+{
+  "columns": [],
   "name": "",
-  "rows": Array [],
+  "rows": [],
 }
 `;
 
 exports[`Empty Object default test 1`] = `
-Object {
-  "columns": Array [],
+{
+  "columns": [],
   "name": "",
-  "rows": Array [],
+  "rows": [],
 }
 `;
 
 exports[`Nested object without array default test 1`] = `
-Object {
-  "columns": Array [
-    Object {
+{
+  "columns": [
+    {
       "selector": "foo",
       "text": "foo",
       "type": "string",
     },
-    Object {
+    {
       "selector": "bar",
       "text": "bar",
       "type": "string",
     },
-    Object {
+    {
       "selector": "baz",
       "text": "baz",
       "type": "string",
     },
-    Object {
+    {
       "selector": "gaz",
       "text": "gaz",
       "type": "string",
     },
   ],
   "name": "",
-  "rows": Array [
-    Array [
+  "rows": [
+    [
       "foo1",
       "bar1",
       "baz1",
@@ -53,23 +53,23 @@ Object {
 `;
 
 exports[`Number Array default test 1`] = `
-Object {
-  "columns": Array [
-    Object {
+{
+  "columns": [
+    {
       "selector": "value",
       "text": "value",
       "type": "number",
     },
   ],
   "name": "",
-  "rows": Array [
-    Array [
+  "rows": [
+    [
       1,
     ],
-    Array [
+    [
       2,
     ],
-    Array [
+    [
       3,
     ],
   ],
@@ -77,22 +77,22 @@ Object {
 `;
 
 exports[`Simple Object default test 1`] = `
-Object {
-  "columns": Array [
-    Object {
+{
+  "columns": [
+    {
       "selector": "firstName",
       "text": "firstName",
       "type": "string",
     },
-    Object {
+    {
       "selector": "lastName",
       "text": "lastName",
       "type": "string",
     },
   ],
   "name": "",
-  "rows": Array [
-    Array [
+  "rows": [
+    [
       "foo",
       "bar",
     ],
@@ -101,35 +101,35 @@ Object {
 `;
 
 exports[`Simple Object with number array and string array default test 1`] = `
-Object {
-  "columns": Array [
-    Object {
+{
+  "columns": [
+    {
       "selector": "firstName",
       "text": "firstName",
       "type": "string",
     },
-    Object {
+    {
       "selector": "lastName",
       "text": "lastName",
       "type": "string",
     },
-    Object {
+    {
       "selector": "users",
       "text": "users",
       "type": "string",
     },
-    Object {
+    {
       "selector": "users1",
       "text": "users1",
       "type": "string",
     },
   ],
   "name": "",
-  "rows": Array [
-    Array [
+  "rows": [
+    [
       "foo",
       "bar",
-      "[\\"foo\\",\\"bar\\"]",
+      "["foo","bar"]",
       "[1,2,3]",
     ],
   ],
@@ -137,27 +137,27 @@ Object {
 `;
 
 exports[`Simple Object with number array default test 1`] = `
-Object {
-  "columns": Array [
-    Object {
+{
+  "columns": [
+    {
       "selector": "firstName",
       "text": "firstName",
       "type": "string",
     },
-    Object {
+    {
       "selector": "lastName",
       "text": "lastName",
       "type": "string",
     },
-    Object {
+    {
       "selector": "users",
       "text": "users",
       "type": "string",
     },
   ],
   "name": "",
-  "rows": Array [
-    Array [
+  "rows": [
+    [
       "foo",
       "bar",
       "[1,2,3]",
@@ -167,34 +167,34 @@ Object {
 `;
 
 exports[`Simple Object with number array, string array, object array default test 1`] = `
-Object {
-  "columns": Array [
-    Object {
+{
+  "columns": [
+    {
       "selector": "koo",
       "text": "koo",
       "type": "string",
     },
-    Object {
+    {
       "selector": "moo",
       "text": "moo",
       "type": "string",
     },
   ],
   "name": "",
-  "rows": Array [
-    Array [
+  "rows": [
+    [
       "foo1",
       "bar1",
     ],
-    Array [
+    [
       "foo1",
       "bar1",
     ],
-    Array [
+    [
       "foo1",
       "bar1",
     ],
-    Array [
+    [
       "foo1",
       "bar1",
     ],
@@ -203,53 +203,53 @@ Object {
 `;
 
 exports[`Simple Object with string array default test 1`] = `
-Object {
-  "columns": Array [
-    Object {
+{
+  "columns": [
+    {
       "selector": "firstName",
       "text": "firstName",
       "type": "string",
     },
-    Object {
+    {
       "selector": "lastName",
       "text": "lastName",
       "type": "string",
     },
-    Object {
+    {
       "selector": "users",
       "text": "users",
       "type": "string",
     },
   ],
   "name": "",
-  "rows": Array [
-    Array [
+  "rows": [
+    [
       "foo",
       "bar",
-      "[\\"one\\",\\"two\\"]",
+      "["one","two"]",
     ],
   ],
 }
 `;
 
 exports[`String Array default test 1`] = `
-Object {
-  "columns": Array [
-    Object {
+{
+  "columns": [
+    {
       "selector": "value",
       "text": "value",
       "type": "string",
     },
   ],
   "name": "",
-  "rows": Array [
-    Array [
+  "rows": [
+    [
       "foo",
     ],
-    Array [
+    [
       "bar",
     ],
-    Array [
+    [
       "baz",
     ],
   ],
@@ -257,23 +257,23 @@ Object {
 `;
 
 exports[`String Array with duplicates default test 1`] = `
-Object {
-  "columns": Array [
-    Object {
+{
+  "columns": [
+    {
       "selector": "value",
       "text": "value",
       "type": "string",
     },
   ],
   "name": "",
-  "rows": Array [
-    Array [
+  "rows": [
+    [
       "foo",
     ],
-    Array [
+    [
       "bar",
     ],
-    Array [
+    [
       "foo",
     ],
   ],

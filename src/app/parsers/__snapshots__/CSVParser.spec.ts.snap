@@ -1,62 +1,62 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`CSVParser Auto Columns Table 1`] = `
-Object {
-  "columns": Array [
-    Object {
+{
+  "columns": [
+    {
       "selector": "year",
       "text": "year",
       "type": "string",
     },
-    Object {
+    {
       "selector": "country",
       "text": "country",
       "type": "string",
     },
-    Object {
+    {
       "selector": "population",
       "text": "population",
       "type": "string",
     },
   ],
   "name": "",
-  "rows": Array [
-    Array [
+  "rows": [
+    [
       "1990",
       "india",
       "10",
     ],
-    Array [
+    [
       "1990",
       "usa",
       "7",
     ],
-    Array [
+    [
       "1990",
       "uk",
       "5",
     ],
-    Array [
+    [
       "1992",
       "china",
       "11",
     ],
-    Array [
+    [
       "1990",
       "india",
       "11",
     ],
-    Array [
+    [
       "1990",
       "usa",
       "8",
     ],
-    Array [
+    [
       "1990",
       "uk",
       "5",
     ],
-    Array [
+    [
       "1990",
       "china",
       "12",
@@ -65,45 +65,45 @@ Object {
 }
 `;
 
-exports[`CSVParser Auto Columns Table 2`] = `Array []`;
+exports[`CSVParser Auto Columns Table 2`] = `[]`;
 
 exports[`CSVParser Basic 1`] = `
-Object {
-  "columns": Array [],
+{
+  "columns": [],
   "name": "",
-  "rows": Array [],
+  "rows": [],
 }
 `;
 
 exports[`CSVParser Parse numbers correctly 1`] = `
-Object {
-  "columns": Array [
-    Object {
+{
+  "columns": [
+    {
       "selector": "key",
       "text": "key",
       "type": "string",
     },
-    Object {
+    {
       "selector": "value",
       "text": "value",
       "type": "number",
     },
   ],
   "name": "",
-  "rows": Array [
-    Array [
+  "rows": [
+    [
       "normal number",
       123,
     ],
-    Array [
+    [
       "string number",
       123,
     ],
-    Array [
+    [
       "number with decimal",
       123.45,
     ],
-    Array [
+    [
       "number with comma",
       123456.78,
     ],
@@ -112,10 +112,10 @@ Object {
 `;
 
 exports[`CSVParser Parse numbers correctly 2`] = `
-Array [
-  Object {
-    "datapoints": Array [
-      Array [
+[
+  {
+    "datapoints": [
+      [
         123,
         1652832000000,
       ],
@@ -123,9 +123,9 @@ Array [
     "name": "",
     "target": "normal number",
   },
-  Object {
-    "datapoints": Array [
-      Array [
+  {
+    "datapoints": [
+      [
         123,
         1652832000000,
       ],
@@ -133,9 +133,9 @@ Array [
     "name": "",
     "target": "string number",
   },
-  Object {
-    "datapoints": Array [
-      Array [
+  {
+    "datapoints": [
+      [
         123.45,
         1652832000000,
       ],
@@ -143,9 +143,9 @@ Array [
     "name": "",
     "target": "number with decimal",
   },
-  Object {
-    "datapoints": Array [
-      Array [
+  {
+    "datapoints": [
+      [
         123456.78,
         1652832000000,
       ],
@@ -157,34 +157,34 @@ Array [
 `;
 
 exports[`CSVParser With Columns 1`] = `
-Object {
-  "columns": Array [
-    Object {
+{
+  "columns": [
+    {
       "selector": "country",
       "text": "Country",
       "type": "string",
     },
-    Object {
+    {
       "selector": "population",
       "text": "Population",
       "type": "number",
     },
   ],
   "name": "",
-  "rows": Array [
-    Array [
+  "rows": [
+    [
       "india",
       10,
     ],
-    Array [
+    [
       "usa",
       7,
     ],
-    Array [
+    [
       "uk",
       NaN,
     ],
-    Array [
+    [
       "china",
       11,
     ],
@@ -193,10 +193,10 @@ Object {
 `;
 
 exports[`CSVParser With Columns 2`] = `
-Array [
-  Object {
-    "datapoints": Array [
-      Array [
+[
+  {
+    "datapoints": [
+      [
         10,
         1652832000000,
       ],
@@ -204,9 +204,9 @@ Array [
     "name": "",
     "target": "india",
   },
-  Object {
-    "datapoints": Array [
-      Array [
+  {
+    "datapoints": [
+      [
         7,
         1652832000000,
       ],
@@ -214,9 +214,9 @@ Array [
     "name": "",
     "target": "usa",
   },
-  Object {
-    "datapoints": Array [
-      Array [
+  {
+    "datapoints": [
+      [
         NaN,
         1652832000000,
       ],
@@ -224,9 +224,9 @@ Array [
     "name": "",
     "target": "uk",
   },
-  Object {
-    "datapoints": Array [
-      Array [
+  {
+    "datapoints": [
+      [
         11,
         1652832000000,
       ],
@@ -238,62 +238,62 @@ Array [
 `;
 
 exports[`CSVParser With Timestamp YYYY And Aggregation 1`] = `
-Object {
-  "columns": Array [
-    Object {
+{
+  "columns": [
+    {
       "selector": "year",
       "text": "Year",
       "type": "timestamp",
     },
-    Object {
+    {
       "selector": "country",
       "text": "Country",
       "type": "string",
     },
-    Object {
+    {
       "selector": "population",
       "text": "Population",
       "type": "number",
     },
   ],
   "name": "",
-  "rows": Array [
-    Array [
+  "rows": [
+    [
       1990-01-01T00:00:00.000Z,
       "india",
       10,
     ],
-    Array [
+    [
       1990-01-01T00:00:00.000Z,
       "usa",
       7,
     ],
-    Array [
+    [
       1990-01-01T00:00:00.000Z,
       "uk",
       5,
     ],
-    Array [
+    [
       1990-01-01T00:00:00.000Z,
       "china",
       11,
     ],
-    Array [
+    [
       1990-01-01T00:00:00.000Z,
       "india",
       11,
     ],
-    Array [
+    [
       1990-01-01T00:00:00.000Z,
       "usa",
       8,
     ],
-    Array [
+    [
       1990-01-01T00:00:00.000Z,
       "uk",
       5,
     ],
-    Array [
+    [
       1990-01-01T00:00:00.000Z,
       "china",
       12,
@@ -303,14 +303,14 @@ Object {
 `;
 
 exports[`CSVParser With Timestamp YYYY And Aggregation 2`] = `
-Array [
-  Object {
-    "datapoints": Array [
-      Array [
+[
+  {
+    "datapoints": [
+      [
         10,
         631152000000,
       ],
-      Array [
+      [
         11,
         631152000000,
       ],
@@ -318,13 +318,13 @@ Array [
     "name": "",
     "target": "india",
   },
-  Object {
-    "datapoints": Array [
-      Array [
+  {
+    "datapoints": [
+      [
         7,
         631152000000,
       ],
-      Array [
+      [
         8,
         631152000000,
       ],
@@ -332,13 +332,13 @@ Array [
     "name": "",
     "target": "usa",
   },
-  Object {
-    "datapoints": Array [
-      Array [
+  {
+    "datapoints": [
+      [
         5,
         631152000000,
       ],
-      Array [
+      [
         5,
         631152000000,
       ],
@@ -346,13 +346,13 @@ Array [
     "name": "",
     "target": "uk",
   },
-  Object {
-    "datapoints": Array [
-      Array [
+  {
+    "datapoints": [
+      [
         11,
         631152000000,
       ],
-      Array [
+      [
         12,
         631152000000,
       ],
@@ -364,44 +364,44 @@ Array [
 `;
 
 exports[`geo map table 1`] = `
-Object {
-  "columns": Array [
-    Object {
+{
+  "columns": [
+    {
       "selector": "lat",
       "text": "lat",
       "type": "number",
     },
-    Object {
+    {
       "selector": "long",
       "text": "long",
       "type": "number",
     },
-    Object {
+    {
       "selector": "desc",
       "text": "desc",
       "type": "string",
     },
-    Object {
+    {
       "selector": "branches",
       "text": "branches",
       "type": "number",
     },
   ],
   "name": "A",
-  "rows": Array [
-    Array [
+  "rows": [
+    [
       51.5072,
       0.1276,
       "London",
       2,
     ],
-    Array [
+    [
       35.6897,
       139.6922,
       "Tokyo",
       3,
     ],
-    Array [
+    [
       18.9667,
       72.8333,
       "Mumbai",
