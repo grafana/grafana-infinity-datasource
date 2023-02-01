@@ -29,7 +29,7 @@ func (ds *PluginHost) QueryData(ctx context.Context, req *backend.QueryDataReque
 
 func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient infinity.Client, requestHeaders map[string]string, pluginContext backend.PluginContext) (response backend.DataResponse) {
 	//region Loading Query
-	query, err := querySrv.LoadQuery(backendQuery, pluginContext)
+	query, err := querySrv.LoadQuery(ctx, backendQuery, pluginContext)
 	if err != nil {
 		backend.Logger.Error("error un-marshaling the query", "error", err.Error())
 		response.Error = fmt.Errorf("error un-marshaling the query. %w", err)
@@ -50,7 +50,7 @@ func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient in
 			return response
 		}
 		query.URL = fmt.Sprintf("https://sheets.googleapis.com/v4/spreadsheets/%s?includeGridData=true&ranges=%s", sheetId, sheetRange)
-		frame, err := infinity.GetFrameForURLSources(query, infClient, requestHeaders)
+		frame, err := infinity.GetFrameForURLSources(ctx, query, infClient, requestHeaders)
 		if err != nil {
 			response.Frames = append(response.Frames, frame)
 			response.Error = fmt.Errorf("error getting data frame from google sheets. %w", err)
@@ -60,12 +60,12 @@ func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient in
 			response.Frames = append(response.Frames, frame)
 		}
 	default:
-		query, _ := infinity.UpdateQueryWithReferenceData(query, infClient.Settings)
+		query, _ := infinity.UpdateQueryWithReferenceData(ctx, query, infClient.Settings)
 		switch query.Source {
 		case "url":
-			frame, err := infinity.GetFrameForURLSources(query, infClient, requestHeaders)
+			frame, err := infinity.GetFrameForURLSources(ctx, query, infClient, requestHeaders)
 			if err != nil {
-				frame, _ = infinity.WrapMetaForRemoteQuery(frame, err, query)
+				frame, _ = infinity.WrapMetaForRemoteQuery(ctx, frame, err, query)
 				response.Frames = append(response.Frames, frame)
 				response.Error = fmt.Errorf("error getting data frame. %w", err)
 				return response
@@ -76,7 +76,7 @@ func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient in
 				})
 			}
 			if frame != nil {
-				frame, _ = infinity.WrapMetaForRemoteQuery(frame, nil, query)
+				frame, _ = infinity.WrapMetaForRemoteQuery(ctx, frame, nil, query)
 				response.Frames = append(response.Frames, frame)
 			}
 		case "inline":

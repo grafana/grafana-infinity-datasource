@@ -27,7 +27,8 @@ func TestQueryData(t *testing.T) {
 		}
 		server := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			filecontent, _ := readFileContent(t, "./testdata/azure/cost-management-daily.json")
-			w.Write(filecontent)
+			_, err = w.Write(filecontent)
+			require.Nil(t, err)
 		}))
 		server.Listener.Close()
 		server.Listener = l

@@ -1,6 +1,7 @@
 package query
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"regexp"
@@ -107,7 +108,7 @@ func InterPolateMacros(queryString string, timeRange backend.TimeRange, pluginCo
 }
 
 // ApplyMacros interpolates macros on a given infinity Query
-func ApplyMacros(query Query, timeRange backend.TimeRange, pluginContext backend.PluginContext) (Query, error) {
+func ApplyMacros(ctx context.Context, query Query, timeRange backend.TimeRange, pluginContext backend.PluginContext) (Query, error) {
 	url, err := InterPolateMacros(query.URL, timeRange, pluginContext)
 	if err != nil {
 		return query, fmt.Errorf("error applying macros to url field. %s", err.Error())

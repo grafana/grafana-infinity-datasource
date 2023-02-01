@@ -1,6 +1,7 @@
 package infinity_test
 
 import (
+	"context"
 	"crypto/tls"
 	"errors"
 	"fmt"
@@ -67,7 +68,7 @@ func TestInfinityClient_GetResults(t *testing.T) {
 				Settings:   tt.settings,
 				HttpClient: &http.Client{},
 			}
-			gotO, statusCode, duration, err := client.GetResults(tt.query, tt.requestHeaders)
+			gotO, statusCode, duration, err := client.GetResults(context.Background(), tt.query, tt.requestHeaders)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("GetResults() error = %v, wantErr %v", err, tt.wantErr)
 				return

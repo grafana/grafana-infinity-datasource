@@ -76,7 +76,7 @@ func (host *PluginHost) getGraphQLHandler() http.Handler {
 								},
 							},
 							Resolve: func(p graphql.ResolveParams) (any, error) {
-								res, _, _, err := client.client.GetResults(querySrv.Query{
+								res, _, _, err := client.client.GetResults(r.Context(), querySrv.Query{
 									Type: p.Args["type"].(querySrv.QueryType),
 									URL:  p.Args["url"].(string),
 								}, map[string]string{})

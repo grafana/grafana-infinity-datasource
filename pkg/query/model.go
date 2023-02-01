@@ -1,6 +1,7 @@
 package query
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"strings"
@@ -115,7 +116,7 @@ type InfinityDataOverride struct {
 	Override string   `json:"override"`
 }
 
-func ApplyDefaultsToQuery(query Query) Query {
+func ApplyDefaultsToQuery(ctx context.Context, query Query) Query {
 	if query.Type == "" {
 		query.Type = QueryTypeJSON
 		if query.Source == "" {
@@ -179,12 +180,12 @@ func ApplyDefaultsToQuery(query Query) Query {
 	return query
 }
 
-func LoadQuery(backendQuery backend.DataQuery, pluginContext backend.PluginContext) (Query, error) {
+func LoadQuery(ctx context.Context, backendQuery backend.DataQuery, pluginContext backend.PluginContext) (Query, error) {
 	var query Query
 	err := json.Unmarshal(backendQuery.JSON, &query)
 	if err != nil {
 		return query, fmt.Errorf("error while parsing the query json. %s", err.Error())
 	}
-	query = ApplyDefaultsToQuery(query)
-	return ApplyMacros(query, backendQuery.TimeRange, pluginContext)
+	query = ApplyDefaultsToQuery(ctx, query)
+	return ApplyMacros(ctx, query, backendQuery.TimeRange, pluginContext)
 }

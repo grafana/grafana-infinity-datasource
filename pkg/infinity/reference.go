@@ -1,6 +1,7 @@
 package infinity
 
 import (
+	"context"
 	"errors"
 	"strings"
 
@@ -8,7 +9,7 @@ import (
 	querySrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/query"
 )
 
-func UpdateQueryWithReferenceData(query querySrv.Query, settings models.InfinitySettings) (querySrv.Query, error) {
+func UpdateQueryWithReferenceData(ctx context.Context, query querySrv.Query, settings models.InfinitySettings) (querySrv.Query, error) {
 	if query.Source == "reference" {
 		for _, item := range settings.ReferenceData {
 			if strings.EqualFold(item.Name, query.RefName) {

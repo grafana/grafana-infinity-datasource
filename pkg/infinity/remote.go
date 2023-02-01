@@ -1,6 +1,7 @@
 package infinity
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"strings"
@@ -11,9 +12,9 @@ import (
 	querySrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/query"
 )
 
-func GetFrameForURLSources(query querySrv.Query, infClient Client, requestHeaders map[string]string) (*data.Frame, error) {
+func GetFrameForURLSources(ctx context.Context, query querySrv.Query, infClient Client, requestHeaders map[string]string) (*data.Frame, error) {
 	frame := GetDummyFrame(query)
-	urlResponseObject, statusCode, duration, err := infClient.GetResults(query, requestHeaders)
+	urlResponseObject, statusCode, duration, err := infClient.GetResults(ctx, query, requestHeaders)
 	frame.Meta.ExecutedQueryString = infClient.GetExecutedURL(query)
 	if infClient.IsMock {
 		duration = 123
