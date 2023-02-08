@@ -9,7 +9,6 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/infinity"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
-	querySrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/query"
 )
 
 // QueryData handles multiple queries and returns multiple responses.
@@ -29,7 +28,7 @@ func (ds *PluginHost) QueryData(ctx context.Context, req *backend.QueryDataReque
 
 func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient infinity.Client, requestHeaders map[string]string, pluginContext backend.PluginContext) (response backend.DataResponse) {
 	//region Loading Query
-	query, err := querySrv.LoadQuery(ctx, backendQuery, pluginContext)
+	query, err := models.LoadQuery(ctx, backendQuery, pluginContext)
 	if err != nil {
 		backend.Logger.Error("error un-marshaling the query", "error", err.Error())
 		response.Error = fmt.Errorf("error un-marshaling the query. %w", err)
@@ -38,7 +37,7 @@ func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient in
 	//endregion
 	//region Frame Builder
 	switch query.Type {
-	case querySrv.QueryTypeGSheets:
+	case models.QueryTypeGSheets:
 		sheetId := query.Spreadsheet
 		sheetName := query.SheetName
 		sheetRange := query.SheetRange

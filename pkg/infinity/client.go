@@ -17,7 +17,6 @@ import (
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
-	querySrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/query"
 )
 
 type Client struct {
@@ -103,7 +102,7 @@ func replaceSect(input string, settings models.InfinitySettings, includeSect boo
 	return input
 }
 
-func (client *Client) req(ctx context.Context, url string, body io.Reader, settings models.InfinitySettings, query querySrv.Query, requestHeaders map[string]string) (obj any, statusCode int, duration time.Duration, err error) {
+func (client *Client) req(ctx context.Context, url string, body io.Reader, settings models.InfinitySettings, query models.Query, requestHeaders map[string]string) (obj any, statusCode int, duration time.Duration, err error) {
 	req, _ := GetRequest(settings, body, query, requestHeaders, true)
 	startTime := time.Now()
 	if !CanAllowURL(req.URL.String(), settings.AllowedHosts) {
@@ -152,7 +151,7 @@ func removeBOMContent(input []byte) []byte {
 	return bytes.TrimPrefix(input, []byte("\xef\xbb\xbf"))
 }
 
-func (client *Client) GetResults(ctx context.Context, query querySrv.Query, requestHeaders map[string]string) (o any, statusCode int, duration time.Duration, err error) {
+func (client *Client) GetResults(ctx context.Context, query models.Query, requestHeaders map[string]string) (o any, statusCode int, duration time.Duration, err error) {
 	switch strings.ToUpper(query.URLOptions.Method) {
 	case http.MethodPost:
 		body := GetQueryBody(query)
@@ -162,11 +161,11 @@ func (client *Client) GetResults(ctx context.Context, query querySrv.Query, requ
 	}
 }
 
-func CanParseAsJSON(queryType querySrv.QueryType, responseHeaders http.Header) bool {
-	if queryType == querySrv.QueryTypeJSON || queryType == querySrv.QueryTypeGraphQL {
+func CanParseAsJSON(queryType models.QueryType, responseHeaders http.Header) bool {
+	if queryType == models.QueryTypeJSON || queryType == models.QueryTypeGraphQL {
 		return true
 	}
-	if queryType == querySrv.QueryTypeUQL || queryType == querySrv.QueryTypeGROQ {
+	if queryType == models.QueryTypeUQL || queryType == models.QueryTypeGROQ {
 		contentType := responseHeaders.Get(headerKeyContentType)
 		if strings.Contains(strings.ToLower(contentType), contentTypeJSON) {
 			return true
@@ -188,7 +187,7 @@ func CanAllowURL(url string, allowedHosts []string) bool {
 	return allow
 }
 
-func GetQueryBody(query querySrv.Query) io.Reader {
+func GetQueryBody(query models.Query) io.Reader {
 	var body io.Reader
 	if strings.EqualFold(query.URLOptions.Method, http.MethodPost) {
 		switch query.URLOptions.BodyType {

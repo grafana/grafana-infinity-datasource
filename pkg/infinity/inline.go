@@ -7,23 +7,23 @@ import (
 
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/yesoreyeram/grafana-framer/jsonFramer"
-	querySrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/query"
+	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 )
 
-func GetFrameForInlineSources(query querySrv.Query) (*data.Frame, error) {
+func GetFrameForInlineSources(query models.Query) (*data.Frame, error) {
 	frame := GetDummyFrame(query)
-	if query.Type == querySrv.QueryTypeGROQ || query.Type == querySrv.QueryTypeUQL {
+	if query.Type == models.QueryTypeGROQ || query.Type == models.QueryTypeUQL {
 		return frame, nil
 	}
 	if query.Parser != "backend" {
 		return frame, nil
 	}
 	switch query.Type {
-	case querySrv.QueryTypeCSV, querySrv.QueryTypeTSV:
+	case models.QueryTypeCSV, models.QueryTypeTSV:
 		return GetCSVBackendResponse(query.Data, query)
-	case querySrv.QueryTypeXML, querySrv.QueryTypeHTML:
+	case models.QueryTypeXML, models.QueryTypeHTML:
 		return GetXMLBackendResponse(query.Data, query)
-	case querySrv.QueryTypeJSON, querySrv.QueryTypeGraphQL:
+	case models.QueryTypeJSON, models.QueryTypeGraphQL:
 		columns := []jsonFramer.ColumnSelector{}
 		for _, c := range query.Columns {
 			columns = append(columns, jsonFramer.ColumnSelector{

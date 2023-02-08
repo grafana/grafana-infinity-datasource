@@ -8,10 +8,10 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/yesoreyeram/grafana-framer/jsonFramer"
-	querySrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/query"
+	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 )
 
-func GetXMLBackendResponse(inputString string, query querySrv.Query) (*data.Frame, error) {
+func GetXMLBackendResponse(inputString string, query models.Query) (*data.Frame, error) {
 	frame := GetDummyFrame(query)
 	columns := []jsonFramer.ColumnSelector{}
 	for _, c := range query.Columns {

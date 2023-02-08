@@ -9,7 +9,6 @@ import (
 	"strings"
 
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
-	querySrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/query"
 )
 
 const dummyHeader = "xxxxxxxx"
@@ -26,20 +25,20 @@ const (
 	headerKeyIdToken       = "X-ID-Token"
 )
 
-func ApplyAcceptHeader(query querySrv.Query, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
-	if query.Type == querySrv.QueryTypeJSON || query.Type == querySrv.QueryTypeGraphQL {
+func ApplyAcceptHeader(query models.Query, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
+	if query.Type == models.QueryTypeJSON || query.Type == models.QueryTypeGraphQL {
 		req.Header.Set(headerKeyAccept, `application/json;q=0.9,text/plain`)
 	}
-	if query.Type == querySrv.QueryTypeCSV {
+	if query.Type == models.QueryTypeCSV {
 		req.Header.Set(headerKeyAccept, `text/csv; charset=utf-8`)
 	}
-	if query.Type == querySrv.QueryTypeXML {
+	if query.Type == models.QueryTypeXML {
 		req.Header.Set(headerKeyAccept, `text/xml;q=0.9,text/plain`)
 	}
 	return req
 }
 
-func ApplyContentTypeHeader(query querySrv.Query, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
+func ApplyContentTypeHeader(query models.Query, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
 	if strings.ToUpper(query.URLOptions.Method) == http.MethodPost {
 		switch query.URLOptions.BodyType {
 		case "raw":
@@ -82,7 +81,7 @@ func ApplyHeadersFromSettings(settings models.InfinitySettings, req *http.Reques
 	return req
 }
 
-func ApplyHeadersFromQuery(query querySrv.Query, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
+func ApplyHeadersFromQuery(query models.Query, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
 	for _, header := range query.URLOptions.Headers {
 		value := dummyHeader
 		if includeSect {

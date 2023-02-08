@@ -5,18 +5,18 @@ import (
 	"time"
 
 	"github.com/grafana/grafana-plugin-sdk-go/data"
-	querySrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/query"
+	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 )
 
 type CustomMeta struct {
-	Query                  querySrv.Query `json:"query"`
-	Data                   any            `json:"data"`
-	ResponseCodeFromServer int            `json:"responseCodeFromServer"`
-	Duration               time.Duration  `json:"duration"`
-	Error                  string         `json:"error"`
+	Query                  models.Query  `json:"query"`
+	Data                   any           `json:"data"`
+	ResponseCodeFromServer int           `json:"responseCodeFromServer"`
+	Duration               time.Duration `json:"duration"`
+	Error                  string        `json:"error"`
 }
 
-func GetDummyFrame(query querySrv.Query) *data.Frame {
+func GetDummyFrame(query models.Query) *data.Frame {
 	frameName := query.RefID
 	if frameName == "" {
 		frameName = "response"
@@ -34,7 +34,7 @@ func GetDummyFrame(query querySrv.Query) *data.Frame {
 	return frame
 }
 
-func WrapMetaForInlineQuery(frame *data.Frame, err error, query querySrv.Query) (*data.Frame, error) {
+func WrapMetaForInlineQuery(frame *data.Frame, err error, query models.Query) (*data.Frame, error) {
 	customMeta := &CustomMeta{Query: query, Data: query.Data, ResponseCodeFromServer: 0}
 	if err != nil {
 		customMeta.Error = err.Error()
@@ -46,7 +46,7 @@ func WrapMetaForInlineQuery(frame *data.Frame, err error, query querySrv.Query) 
 	return frame, err
 }
 
-func WrapMetaForRemoteQuery(ctx context.Context, frame *data.Frame, err error, query querySrv.Query) (*data.Frame, error) {
+func WrapMetaForRemoteQuery(ctx context.Context, frame *data.Frame, err error, query models.Query) (*data.Frame, error) {
 	meta := frame.Meta
 	if meta == nil {
 		customMeta := &CustomMeta{Query: query, Data: query.Data, ResponseCodeFromServer: 0}

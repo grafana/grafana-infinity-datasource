@@ -4,7 +4,7 @@ import { Layout } from './../components/Layout';
 
 export default function GettingStarted() {
   return (
-    <Layout showSubMenu={true} title="Getting Started">
+    <Layout title="Getting Started">
       <div className="container py-4">
         <div className="accordion" id="accordionExample">
           <div className="accordion-item">

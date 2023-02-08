@@ -36,13 +36,13 @@ export default function Template({ data }: TemplateProps) {
   const { markdownRemark } = data;
   const { frontmatter, html } = markdownRemark;
   return (
-    <Layout showSubMenu={true} title={frontmatter.title}>
+    <Layout title={frontmatter.title}>
       <Helmet>
         <title>
           {frontmatter.title} - {data.site.siteMetadata.title}
         </title>
       </Helmet>
-      <div className="blog-post-container">
+      <div className="blog-post-container" data-theme="light">
         <div className="blog-post">
           <div className="container py-4">
             {frontmatter.slug && frontmatter.slug.startsWith('/blog/') && (
@@ -66,15 +66,15 @@ export default function Template({ data }: TemplateProps) {
       {(frontmatter.previous_page_title || frontmatter.next_page_title) && (
         <div id="prev-next-nav">
           <div className="container py-2">
-            <div className="row">
+            <div className="grid grid-cols-2">
               {frontmatter.previous_page_title && (
                 <div className="col-6 text-end item rounded p-2">
-                  <Link to={frontmatter.previous_page_slug}>&lt;&nbsp;&nbsp;{frontmatter.previous_page_title}</Link>
+                  <Link to={frontmatter.previous_page_slug}>&larr;&nbsp;&nbsp;{frontmatter.previous_page_title}</Link>
                 </div>
               )}
               {frontmatter.next_page_title && (
                 <div className="col-6 text-start item rounded p-2">
-                  <Link to={frontmatter.next_page_slug}>{frontmatter.next_page_title}&nbsp;&nbsp;&gt;</Link>
+                  <Link to={frontmatter.next_page_slug}>{frontmatter.next_page_title}&nbsp;&nbsp;&rarr;</Link>
                 </div>
               )}
             </div>

@@ -19,7 +19,7 @@ Custom interval macro yields a value based on the dashboard time range. You can 
 
 Number of arguments to `$__customInterval` macro have to be 3/5/7/9..
 
-**Syntax** : `$__customInterval(duration1,value1,duration2,value2,duration3,value3,duration4,value4,defaultValue)`. Duration have to be valid duration syntax like
+**Syntax** : `$__customInterval(duration1,value1,duration2,value2,duration3,value3,duration4,value4,defaultValue)`. Duration have to be valid duration syntax like `1m`, `2d` etc
 
 **Description** : If dashboardTimeRange <= duration1 returns value1, Else if dashboardTimeRange <= duration2 returns value2, Else if dashboardTimeRange <= duration3 returns value3, Else if dashboardTimeRange <= duration4 returns value4, Else returns default value.
 

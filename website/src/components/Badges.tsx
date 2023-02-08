@@ -24,7 +24,7 @@ export const Badges = () => {
     },
   ];
   return (
-    <p className="text-center my-4">
+    <p className="flex justify-center">
       {badges.map((b) => {
         return (
           <a href={b.link} target="_blank" className="mx-2" rel="noreferrer">

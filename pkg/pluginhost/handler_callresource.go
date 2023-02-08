@@ -10,7 +10,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/graphql-go/graphql"
 	"github.com/graphql-go/handler"
-	querySrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/query"
+	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 )
 
 func (host *PluginHost) getRouter() *mux.Router {
@@ -76,8 +76,8 @@ func (host *PluginHost) getGraphQLHandler() http.Handler {
 								},
 							},
 							Resolve: func(p graphql.ResolveParams) (any, error) {
-								res, _, _, err := client.client.GetResults(r.Context(), querySrv.Query{
-									Type: p.Args["type"].(querySrv.QueryType),
+								res, _, _, err := client.client.GetResults(r.Context(), models.Query{
+									Type: p.Args["type"].(models.QueryType),
 									URL:  p.Args["url"].(string),
 								}, map[string]string{})
 								return res, err

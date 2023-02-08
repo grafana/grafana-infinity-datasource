@@ -16,9 +16,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/infinity"
-	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/mock"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/pluginhost"
+	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/testsuite"
 )
 
 func TestAuthentication(t *testing.T) {
@@ -435,7 +435,7 @@ func TestResponseFormats(t *testing.T) {
 			}, *client, map[string]string{}, backend.PluginContext{})
 			require.NotNil(t, res)
 			require.Nil(t, res.Error)
-			experimental.CheckGoldenJSONResponse(t, "testdata", "backend-computed-columns", &res, mock.UPDATE_GOLDEN_DATA)
+			experimental.CheckGoldenJSONResponse(t, "testdata", "backend-computed-columns", &res, testsuite.UPDATE_GOLDEN_DATA)
 		})
 		t.Run("should filter computed columns", func(t *testing.T) {
 			client, err := infinity.NewClient(models.InfinitySettings{URL: ""})
@@ -454,7 +454,7 @@ func TestResponseFormats(t *testing.T) {
 			}, *client, map[string]string{}, backend.PluginContext{})
 			require.NotNil(t, res)
 			require.Nil(t, res.Error)
-			experimental.CheckGoldenJSONResponse(t, "testdata", "backend-filter-computed-columns", &res, mock.UPDATE_GOLDEN_DATA)
+			experimental.CheckGoldenJSONResponse(t, "testdata", "backend-filter-computed-columns", &res, testsuite.UPDATE_GOLDEN_DATA)
 		})
 	})
 	t.Run("JSON SQLite", func(t *testing.T) {

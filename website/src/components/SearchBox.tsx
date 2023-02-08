@@ -3,14 +3,26 @@ import { Link } from 'gatsby';
 import Fuse from 'fuse.js';
 import * as Dialog from '@radix-ui/react-dialog';
 import tinykeys from 'tinykeys';
+import { Icons } from './Icons';
+import { buttonVariants } from './ui/button';
 
 export const SearchBox = () => {
   const [searchPopupStatus, setSearchPopupStatus] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   useEffect(() => {
     let unsubscribe = tinykeys(window, {
-      '$mod+KeyK': () => setSearchPopupStatus(true),
-      'Control+K': () => setSearchPopupStatus(true),
+      '$mod+KeyK': (e) => {
+        setSearchPopupStatus(true);
+        e.preventDefault();
+      },
+      'Control+K': (e) => {
+        setSearchPopupStatus(true);
+        e.preventDefault();
+      },
+      '$mod+KeyF': (e) => {
+        setSearchPopupStatus(true);
+        e.preventDefault();
+      },
     });
     return () => unsubscribe();
   });
@@ -75,9 +87,12 @@ export const SearchBox = () => {
           </Dialog.Dialog>
         </span>
       )}
+
       <a onClick={() => setSearchPopupStatus(!searchPopupStatus)}>
-        <i className={`fas fa-search`} onClick={() => {}}></i>
-        <span className="px-2 small-screen-only">Search</span>
+        <div className={buttonVariants({ size: 'sm', variant: 'ghost', className: 'text-slate-700 dark:text-slate-400' })}>
+          <Icons.searchIcon className="h-5 w-5" />
+          <span className="px-2 md:hidden">Search</span>
+        </div>
       </a>
     </>
   );
@@ -89,7 +104,7 @@ const SearchResults = (props: { searchTerm: string }) => {
   });
   const [results, setResults] = useState<any[]>([]);
   useEffect(() => {
-    const results = fuse.search(props.searchTerm);
+    const results = fuse.search(props.searchTerm || 'json');
     setResults(results);
   }, [props.searchTerm]);
   return (
@@ -154,7 +169,29 @@ const sitemap: any[] = [
     title: 'Backend Parser',
     slug: '/wiki/backend',
     description: 'Infinity backend parser',
-    tags: ['backend', 'parser', 'json', 'csv', 'tsv', 'alerting', 'recorded queries', 'caching', 'public dashboards', 'summarize', 'gjson', 'jsonpath', 'calculated field', 'computed columns'],
+    tags: [
+      'backend',
+      'filter',
+      'alerting',
+      'recorded queries',
+      'query caching',
+      'public dashboards',
+      'summarize',
+      'group by',
+      'parser',
+      'json',
+      'csv',
+      'tsv',
+      'alerting',
+      'recorded queries',
+      'caching',
+      'public dashboards',
+      'summarize',
+      'gjson',
+      'jsonpath',
+      'calculated field',
+      'computed columns',
+    ],
   },
   {
     title: 'Reference data',

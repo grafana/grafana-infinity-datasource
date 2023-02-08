@@ -9,7 +9,7 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/yesoreyeram/grafana-framer/gframer"
-	querySrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/query"
+	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 )
 
 type Spreadsheet struct {
@@ -37,7 +37,7 @@ type CellData struct {
 	NullFields     []string `json:"-"`
 }
 
-func GetGoogleSheetsResponse(urlResponseObject any, query querySrv.Query) (*data.Frame, error) {
+func GetGoogleSheetsResponse(urlResponseObject any, query models.Query) (*data.Frame, error) {
 	frame := GetDummyFrame(query)
 	sheetsString, ok := urlResponseObject.(string)
 	if !ok {

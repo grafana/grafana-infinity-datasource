@@ -6,29 +6,28 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	infinity "github.com/yesoreyeram/grafana-infinity-datasource/pkg/infinity"
+	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/infinity"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
-	querySrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/query"
 )
 
 func Test_getQueryURL(t *testing.T) {
 	tests := []struct {
 		name          string
 		settings      models.InfinitySettings
-		query         querySrv.Query
+		query         models.Query
 		excludeSecret bool
 		want          string
 	}{
 		{
 			settings: models.InfinitySettings{},
-			query: querySrv.Query{
+			query: models.Query{
 				URL: "0.0.0.0",
 			},
 			want: "0.0.0.0",
 		},
 		{
 			settings: models.InfinitySettings{},
-			query: querySrv.Query{
+			query: models.Query{
 				URL: "https://foo.com?key=val",
 			},
 			want: "https://foo.com?key=val",
@@ -37,7 +36,7 @@ func Test_getQueryURL(t *testing.T) {
 			settings: models.InfinitySettings{
 				URL: "https://foo.com",
 			},
-			query: querySrv.Query{
+			query: models.Query{
 				URL: "/hello?key=val",
 			},
 			want: "https://foo.com/hello?key=val",
@@ -47,10 +46,10 @@ func Test_getQueryURL(t *testing.T) {
 			settings: models.InfinitySettings{
 				URL: "https://foo.com",
 			},
-			query: querySrv.Query{
+			query: models.Query{
 				URL: "/hello?key=val10&foo=bar",
-				URLOptions: querySrv.URLOptions{
-					Params: []querySrv.URLOptionKeyValuePair{
+				URLOptions: models.URLOptions{
+					Params: []models.URLOptionKeyValuePair{
 						{Key: "key", Value: "val11"},
 						{Key: "key2", Value: "value2"},
 					},
@@ -63,7 +62,7 @@ func Test_getQueryURL(t *testing.T) {
 			settings: models.InfinitySettings{
 				URL: "https://one.com",
 			},
-			query: querySrv.Query{
+			query: models.Query{
 				URL: "https://two.com/hello?key=val",
 			},
 			want: "https://one.comhttps://two.com/hello?key=val",
@@ -72,7 +71,7 @@ func Test_getQueryURL(t *testing.T) {
 			settings: models.InfinitySettings{
 				URL: "https://foo.com",
 			},
-			query: querySrv.Query{
+			query: models.Query{
 				URL: "https://foo.com/hello?key=val",
 			},
 			want: "https://foo.com/hello?key=val",
@@ -85,7 +84,7 @@ func Test_getQueryURL(t *testing.T) {
 					"key_two": "val_two",
 				},
 			},
-			query: querySrv.Query{
+			query: models.Query{
 				URL: "/hello?key=val&key_one=${__qs.key_one}&key_two=${__qs.key_two}&foo=bar",
 			},
 			want: "https://foo.com/hello?foo=bar&key=val&key_one=val_one&key_two=val_two",
@@ -98,7 +97,7 @@ func Test_getQueryURL(t *testing.T) {
 					"key_two": "val_two",
 				},
 			},
-			query: querySrv.Query{
+			query: models.Query{
 				URL: "/hello?key=val&foo=bar&key_one=foo",
 			},
 			want: "https://foo.com/hello?foo=bar&key=val&key_one=val_one&key_two=val_two",
@@ -116,10 +115,10 @@ func Test_getQueryURL(t *testing.T) {
 				ApiKeyValue:          "world",
 				ApiKeyType:           "query",
 			},
-			query: querySrv.Query{
+			query: models.Query{
 				URL: "/hello?key=val&foo=bar&key_one=foo",
-				URLOptions: querySrv.URLOptions{
-					Params: []querySrv.URLOptionKeyValuePair{
+				URLOptions: models.URLOptions{
+					Params: []models.URLOptionKeyValuePair{
 						{Key: "mee", Value: "too"},
 					},
 				},
@@ -139,10 +138,10 @@ func Test_getQueryURL(t *testing.T) {
 				ApiKeyValue:          "world",
 				ApiKeyType:           "query",
 			},
-			query: querySrv.Query{
+			query: models.Query{
 				URL: "/hello?key=val&foo=bar&key_one=foo",
-				URLOptions: querySrv.URLOptions{
-					Params: []querySrv.URLOptionKeyValuePair{
+				URLOptions: models.URLOptions{
+					Params: []models.URLOptionKeyValuePair{
 						{Key: "mee", Value: "too"},
 					},
 				},
@@ -165,40 +164,40 @@ func TestClient_GetExecutedURL(t *testing.T) {
 		settings models.InfinitySettings
 		url      string
 		command  string
-		query    querySrv.Query
+		query    models.Query
 	}{
 		{
-			query:   querySrv.Query{URL: "https://foo.com"},
+			query:   models.Query{URL: "https://foo.com"},
 			url:     "https://foo.com",
 			command: "curl -X 'GET' 'https://foo.com'",
 		},
 		{
 			settings: models.InfinitySettings{UserName: "hello", Password: "world", BasicAuthEnabled: true},
-			query:    querySrv.Query{URL: "https://foo.com"},
+			query:    models.Query{URL: "https://foo.com"},
 			url:      "https://foo.com",
 			command:  "curl -X 'GET' -H 'Authorization: Basic xxxxxxxx' 'https://foo.com'",
 		},
 		{
 			settings: models.InfinitySettings{AuthenticationMethod: "bearerToken", BearerToken: "world2"},
-			query:    querySrv.Query{URL: "https://foo.com"},
+			query:    models.Query{URL: "https://foo.com"},
 			url:      "https://foo.com",
 			command:  "curl -X 'GET' -H 'Authorization: Bearer xxxxxxxx' 'https://foo.com'",
 		},
 		{
 			settings: models.InfinitySettings{AuthenticationMethod: "apiKey", ApiKeyType: "header", ApiKeyKey: "hello", ApiKeyValue: "world"},
-			query:    querySrv.Query{URL: "https://foo.com"},
+			query:    models.Query{URL: "https://foo.com"},
 			url:      "https://foo.com",
 			command:  "curl -X 'GET' -H 'Hello: xxxxxxxx' 'https://foo.com'",
 		},
 		{
 			settings: models.InfinitySettings{ForwardOauthIdentity: true},
-			query:    querySrv.Query{URL: "https://foo.com"},
+			query:    models.Query{URL: "https://foo.com"},
 			url:      "https://foo.com",
 			command:  "curl -X 'GET' -H 'Authorization: xxxxxxxx' 'https://foo.com'",
 		},
 		{
 			settings: models.InfinitySettings{CustomHeaders: map[string]string{"good": "bye"}, SecureQueryFields: map[string]string{"me": "too"}},
-			query:    querySrv.Query{URL: "https://foo.com?something=${__qs.me}", Type: "json", URLOptions: querySrv.URLOptions{Method: "POST", Body: "my request body with ${__qs.me} value", Headers: []querySrv.URLOptionKeyValuePair{{Key: "hello", Value: "world"}}}},
+			query:    models.Query{URL: "https://foo.com?something=${__qs.me}", Type: "json", URLOptions: models.URLOptions{Method: "POST", Body: "my request body with ${__qs.me} value", Headers: []models.URLOptionKeyValuePair{{Key: "hello", Value: "world"}}}},
 			url:      "https://foo.com?me=xxxxxxxx&something=xxxxxxxx",
 			command:  "curl -X 'POST' -d 'my request body with ${__qs.me} value' -H 'Accept: application/json;q=0.9,text/plain' -H 'Content-Type: application/json' -H 'Good: xxxxxxxx' -H 'Hello: xxxxxxxx' 'https://foo.com?me=xxxxxxxx&something=xxxxxxxx'",
 		},

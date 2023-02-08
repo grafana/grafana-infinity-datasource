@@ -1,4 +1,4 @@
-package query_test
+package models_test
 
 import (
 	"context"
@@ -8,14 +8,14 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	querySrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/query"
+	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 )
 
 func TestLoadQuery(t *testing.T) {
 	tests := []struct {
 		name      string
 		queryJSON string
-		want      querySrv.Query
+		want      models.Query
 		wantErr   error
 	}{
 		{
@@ -66,19 +66,19 @@ func TestLoadQuery(t *testing.T) {
 				"alias" 		: "my-alias",
 				"dataOverrides" : [{"override":"ov1","operator":"op1","values":["ov1"]}]
 			}`,
-			want: querySrv.Query{
-				Type:          querySrv.QueryTypeJSON,
+			want: models.Query{
+				Type:          models.QueryTypeJSON,
 				Source:        "url",
 				GlobalQueryID: "hello",
 				URL:           "https://foo.com",
-				URLOptions: querySrv.URLOptions{
+				URLOptions: models.URLOptions{
 					Method:           http.MethodPost,
 					BodyType:         "form-data",
 					BodyContentType:  "application/xml",
 					Body:             "foo",
-					Params:           []querySrv.URLOptionKeyValuePair{{Key: "p1", Value: "pv1"}},
-					Headers:          []querySrv.URLOptionKeyValuePair{{Key: "h1", Value: "hv1"}},
-					BodyForm:         []querySrv.URLOptionKeyValuePair{{Key: "f1", Value: "fv1"}},
+					Params:           []models.URLOptionKeyValuePair{{Key: "p1", Value: "pv1"}},
+					Headers:          []models.URLOptionKeyValuePair{{Key: "h1", Value: "hv1"}},
+					BodyForm:         []models.URLOptionKeyValuePair{{Key: "f1", Value: "fv1"}},
 					BodyGraphQLQuery: "bar",
 				},
 				Data:                "my-inline-data",
@@ -88,15 +88,15 @@ func TestLoadQuery(t *testing.T) {
 				SummarizeBy:         "none",
 				FilterExpression:    "id > 3 && id < 8",
 				RootSelector:        "my-root_selector",
-				Columns:             []querySrv.InfinityColumn{{Selector: "s", Text: "t", Type: "string", TimeStampFormat: "2006"}},
-				ComputedColumns:     []querySrv.InfinityColumn{{Selector: "s1", Text: "t1"}},
-				Filters:             []querySrv.InfinityFilter{{Field: "ff1", Operator: "fo1", Value: []string{"fa1", "fb1"}}},
+				Columns:             []models.InfinityColumn{{Selector: "s", Text: "t", Type: "string", TimeStampFormat: "2006"}},
+				ComputedColumns:     []models.InfinityColumn{{Selector: "s1", Text: "t1"}},
+				Filters:             []models.InfinityFilter{{Field: "ff1", Operator: "fo1", Value: []string{"fa1", "fb1"}}},
 				Format:              "dataframe",
-				JSONOptions: querySrv.InfinityJSONOptions{
+				JSONOptions: models.InfinityJSONOptions{
 					RootIsNotArray: true,
 					ColumnNar:      true,
 				},
-				CSVOptions: querySrv.InfinityCSVOptions{
+				CSVOptions: models.InfinityCSVOptions{
 					Delimiter:          ";",
 					SkipEmptyLines:     true,
 					SkipLinesWithError: true,
@@ -110,14 +110,14 @@ func TestLoadQuery(t *testing.T) {
 				Expression:    "my-expression",
 				SeriesCount:   20,
 				Alias:         "my-alias",
-				DataOverrides: []querySrv.InfinityDataOverride{{Override: "ov1", Operator: "op1", Values: []string{"ov1"}}},
+				DataOverrides: []models.InfinityDataOverride{{Override: "ov1", Operator: "op1", Values: []string{"ov1"}}},
 			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			q := &backend.DataQuery{JSON: []byte(tt.queryJSON)}
-			got, err := querySrv.LoadQuery(context.Background(), *q, backend.PluginContext{})
+			got, err := models.LoadQuery(context.Background(), *q, backend.PluginContext{})
 			if tt.wantErr != nil {
 				require.NotNil(t, err)
 				assert.Equal(t, tt.wantErr, err)

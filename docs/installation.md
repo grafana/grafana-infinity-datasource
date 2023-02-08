@@ -2,7 +2,7 @@
 slug: '/wiki/installation'
 title: 'Installation'
 previous_page_title: 'Home'
-previous_page_slug: '/welcome'
+previous_page_slug: '/'
 next_page_title: 'Configuration'
 next_page_slug: '/wiki/configuration'
 ---

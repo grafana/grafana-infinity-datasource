@@ -88,7 +88,7 @@
     "eslint": "8.18.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-cypress": "^2.12.1",
-    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jsdoc": "^39.3.3",
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.28.0",
@@ -101,6 +101,9 @@
   },
   "resolutions": {
     "rxjs": "6.6.3",
+    "json5": "1.0.2",
+    "simple-git": "3.16.0",
+    "loader-utils": "1.4.1",
     "d3-color": "3.1.0",
     "minimist": "1.2.6",
     "underscore": "1.12.1",

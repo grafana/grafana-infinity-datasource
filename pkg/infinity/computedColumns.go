@@ -7,7 +7,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/framesql"
-	querySrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/query"
+	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 	"gopkg.in/Knetic/govaluate.v3"
 )
 
@@ -188,7 +188,7 @@ var expressionFunctions = map[string]govaluate.ExpressionFunction{
 	},
 }
 
-func GetFrameWithComputedColumns(frame *data.Frame, columns []querySrv.InfinityColumn) (*data.Frame, error) {
+func GetFrameWithComputedColumns(frame *data.Frame, columns []models.InfinityColumn) (*data.Frame, error) {
 	var err error
 	frameLen := frame.Rows()
 	for _, column := range columns {

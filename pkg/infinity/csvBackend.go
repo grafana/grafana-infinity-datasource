@@ -8,10 +8,10 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/yesoreyeram/grafana-framer/csvFramer"
 	"github.com/yesoreyeram/grafana-framer/gframer"
-	querySrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/query"
+	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 )
 
-func GetCSVBackendResponse(responseString string, query querySrv.Query) (*data.Frame, error) {
+func GetCSVBackendResponse(responseString string, query models.Query) (*data.Frame, error) {
 	frame := GetDummyFrame(query)
 	columns := []gframer.ColumnSelector{}
 	for _, c := range query.Columns {
@@ -36,7 +36,7 @@ func GetCSVBackendResponse(responseString string, query querySrv.Query) (*data.F
 	if query.CSVOptions.Columns == "-" || query.CSVOptions.Columns == "none" {
 		csvOptions.NoHeaders = true
 	}
-	if query.Type == querySrv.QueryTypeTSV {
+	if query.Type == models.QueryTypeTSV {
 		csvOptions.Delimiter = "\t"
 	}
 	newFrame, err := csvFramer.CsvStringToFrame(responseString, csvOptions)

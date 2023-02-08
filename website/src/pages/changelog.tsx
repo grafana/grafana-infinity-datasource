@@ -18,7 +18,7 @@ export const pageQuery = graphql`
 
 export default function Template({ data }: TemplateProps) {
   return (
-    <Layout showSubMenu={true} title="CHANGELOG">
+    <Layout title="CHANGELOG">
       {data.site.siteMetadata.changelog.markdown}
       <div className="blog-post-container">
         <div className="blog-post">

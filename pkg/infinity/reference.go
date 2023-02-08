@@ -6,10 +6,9 @@ import (
 	"strings"
 
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
-	querySrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/query"
 )
 
-func UpdateQueryWithReferenceData(ctx context.Context, query querySrv.Query, settings models.InfinitySettings) (querySrv.Query, error) {
+func UpdateQueryWithReferenceData(ctx context.Context, query models.Query, settings models.InfinitySettings) (models.Query, error) {
 	if query.Source == "reference" {
 		for _, item := range settings.ReferenceData {
 			if strings.EqualFold(item.Name, query.RefName) {

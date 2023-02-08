@@ -7,11 +7,11 @@ next_page_title: 'Configuration'
 next_page_slug: '/wiki/configuration'
 ---
 
-> DEPRECATED. From v0.7.8, This feature is deprecated in favour of Grafana panel library.
+> **DEPRECATED**. From v0.7.8, This feature is deprecated in favour of Grafana panel library.
 
 Working with same queries in multiple dashboards might be hard some times. To change a query, you need to update all the dashboards. So Infinity datasource gives an option to register queries globally and then allows to reuse the queries across dashboards.
 
-### Registering Query
+### Creating a global query
 
 To register a query, in the datasource instance settings perform the following actions
 
@@ -24,7 +24,7 @@ To register a query, in the datasource instance settings perform the following a
 
 You can have multiple queries registered per datasource instance.
 
-### Using Registered queries in the panel
+### Using global queries in the panel
 
 In order to use the registered query in the dashboard, you have to select `Global Query` / `global` as type. Then select the query you needed from the list.
 

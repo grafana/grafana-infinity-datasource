@@ -9,9 +9,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	infinity "github.com/yesoreyeram/grafana-infinity-datasource/pkg/infinity"
+	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/infinity"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
-	querySrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/query"
 )
 
 func TestInfinityClient_GetResults(t *testing.T) {
@@ -19,14 +18,14 @@ func TestInfinityClient_GetResults(t *testing.T) {
 		name           string
 		settings       models.InfinitySettings
 		requestHeaders map[string]string
-		query          querySrv.Query
+		query          models.Query
 		wantO          any
 		wantErr        bool
 	}{
 		{
 			name:     "should return csv when no mode specified",
 			settings: models.InfinitySettings{},
-			query: querySrv.Query{
+			query: models.Query{
 				URL:  fmt.Sprintf("%s%s", mockCSVDomain, mockCSVURL),
 				Type: "csv",
 			},
@@ -35,7 +34,7 @@ func TestInfinityClient_GetResults(t *testing.T) {
 		{
 			name:     "should return xml when no mode specified",
 			settings: models.InfinitySettings{},
-			query: querySrv.Query{
+			query: models.Query{
 				URL:  fmt.Sprintf("%s%s", mockXMLDomain, mockXMLURL),
 				Type: "xml",
 			},
@@ -46,7 +45,7 @@ func TestInfinityClient_GetResults(t *testing.T) {
 			settings: models.InfinitySettings{
 				URL: mockCSVDomain,
 			},
-			query: querySrv.Query{
+			query: models.Query{
 				URL:  mockCSVURL,
 				Type: "csv",
 			},
@@ -55,7 +54,7 @@ func TestInfinityClient_GetResults(t *testing.T) {
 		{
 			name:     "should return correct json",
 			settings: models.InfinitySettings{},
-			query: querySrv.Query{
+			query: models.Query{
 				URL:  fmt.Sprintf("%s%s", mockJSONDomain, mockJSONURL),
 				Type: "json",
 			},

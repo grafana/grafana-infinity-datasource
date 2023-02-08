@@ -9,10 +9,10 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/yesoreyeram/grafana-framer/jsonFramer"
-	querySrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/query"
+	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 )
 
-func GetFrameForURLSources(ctx context.Context, query querySrv.Query, infClient Client, requestHeaders map[string]string) (*data.Frame, error) {
+func GetFrameForURLSources(ctx context.Context, query models.Query, infClient Client, requestHeaders map[string]string) (*data.Frame, error) {
 	frame := GetDummyFrame(query)
 	urlResponseObject, statusCode, duration, err := infClient.GetResults(ctx, query, requestHeaders)
 	frame.Meta.ExecutedQueryString = infClient.GetExecutedURL(query)
@@ -29,31 +29,31 @@ func GetFrameForURLSources(ctx context.Context, query querySrv.Query, infClient 
 		}
 		return frame, err
 	}
-	if query.Type == querySrv.QueryTypeGSheets {
+	if query.Type == models.QueryTypeGSheets {
 		if frame, err = GetGoogleSheetsResponse(urlResponseObject, query); err != nil {
 			return frame, err
 		}
 	}
-	if (query.Type == querySrv.QueryTypeJSON || query.Type == querySrv.QueryTypeGraphQL) && query.Parser == "backend" {
+	if (query.Type == models.QueryTypeJSON || query.Type == models.QueryTypeGraphQL) && query.Parser == "backend" {
 		if frame, err = GetJSONBackendResponse(urlResponseObject, query); err != nil {
 			return frame, err
 		}
 	}
-	if (query.Type == querySrv.QueryTypeCSV || query.Type == querySrv.QueryTypeTSV) && query.Parser == "backend" {
+	if (query.Type == models.QueryTypeCSV || query.Type == models.QueryTypeTSV) && query.Parser == "backend" {
 		if responseString, ok := urlResponseObject.(string); ok {
 			if frame, err = GetCSVBackendResponse(responseString, query); err != nil {
 				return frame, err
 			}
 		}
 	}
-	if (query.Type == querySrv.QueryTypeXML || query.Type == querySrv.QueryTypeHTML) && query.Parser == "backend" {
+	if (query.Type == models.QueryTypeXML || query.Type == models.QueryTypeHTML) && query.Parser == "backend" {
 		if responseString, ok := urlResponseObject.(string); ok {
 			if frame, err = GetXMLBackendResponse(responseString, query); err != nil {
 				return frame, err
 			}
 		}
 	}
-	if query.Type == querySrv.QueryTypeJSON && query.Parser == "sqlite" {
+	if query.Type == models.QueryTypeJSON && query.Parser == "sqlite" {
 		sqliteQuery := query.SQLiteQuery
 		if strings.TrimSpace(sqliteQuery) == "" {
 			sqliteQuery = "SELECT * FROM input"

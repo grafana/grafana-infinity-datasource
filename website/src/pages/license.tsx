@@ -18,7 +18,7 @@ export const pageQuery = graphql`
 
 export default function Template({ data }: TemplateProps) {
   return (
-    <Layout showSubMenu={true} title="LICENSE">
+    <Layout title="LICENSE">
       <div className="blog-post-container">
         <div className="blog-post">
           <div className="container py-4 px-4">

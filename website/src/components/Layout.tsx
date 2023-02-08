@@ -2,13 +2,10 @@ import React from 'react';
 import { useStaticQuery, graphql } from 'gatsby';
 import { Helmet } from 'react-helmet';
 import { defineCustomElements as deckDeckGoHighlightElement } from '@deckdeckgo/highlight-code/dist/loader';
-import { SubMenu } from './SubMenu';
 import { Header } from './Header';
 import { Footer } from './Footer';
-import { SubHeader } from './SubHeader';
 
 interface LayoutProps {
-  showSubMenu: boolean;
   title: string;
   children?: React.ReactNode;
 }
@@ -46,15 +43,19 @@ export const Layout = (props: LayoutProps) => {
         <link rel="alternate" type="application/rss+xml" title={`RSS feed for ${data.site.siteMetadata.website}`} href="/rss.xml" />
         <title>{data.site.siteMetadata.title}</title>
       </Helmet>
-      <div>
-        <Header title={data.site.siteMetadata.title} />
-        {props.showSubMenu && <SubMenu></SubMenu>}
-        {props.title !== '' && <SubHeader title={props.title} />}
-        <main>
-          <div>{props.children}</div>
-        </main>
+
+      <div data-theme="dark">
+        <div className="min-h-screen bg-white font-sans text-slate-900 antialiased dark:bg-gray05 dark:text-slate-50">
+          <Header title={data.site.siteMetadata.title} />
+          {props.title && (
+            <section className="text-center p-10  font-bold text-3xl dark:text-black" style={{ background: 'linear-gradient(90deg,#ffc551 0%,#ff804c 155.52%)' }}>
+              <h1 className="my-10 text-[2.3rem]">{props.title}</h1>
+            </section>
+          )}
+          <main className="dark:bg-gray05 dark:text-slate-50">{props.children}</main>
+        </div>
+        <Footer />
       </div>
-      <Footer />
     </>
   );
 };

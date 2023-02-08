@@ -8,7 +8,7 @@ interface FooterMenuItemProps {
 }
 const FooterMenuitem = (props: FooterMenuItemProps) => {
   return (
-    <li className="my-2 footer-menu-item">
+    <li className="my-2">
       {props.internal ? (
         <Link to={props.to}>{props.children}</Link>
       ) : (
@@ -23,11 +23,11 @@ const FooterMenuitem = (props: FooterMenuItemProps) => {
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
   return (
-    <footer id="footer" className="footer mt-auto py-5">
+    <footer className="dark:bg-gray05 dark:text-slate-50 pb-10">
       <div className="container">
-        <div className="row">
+        <div className="grid grid-cols-5 gap-4 gap-y-10 py-6">
           <div className="col-12 col-md">
-            <h4 className="mb-4 fw-light">Setup</h4>
+            <h4 className="mb-6 font-bolder text-xl text-orange-600">Setup</h4>
             <ul className="list-unstyled">
               <FooterMenuitem to="/wiki/installation" internal={true}>
                 Installation
@@ -53,7 +53,7 @@ export const Footer = () => {
             </ul>
           </div>
           <div className="col-12 col-md">
-            <h4 className="mb-4 fw-light">
+            <h4 className="mb-6 font-bolder text-xl text-orange-600">
               <Link to="/welcome">Features</Link>
             </h4>
             <ul className="list-unstyled">
@@ -78,7 +78,7 @@ export const Footer = () => {
             </ul>
           </div>
           <div className="col-12 col-md">
-            <h4 className="mb-4 fw-light">
+            <h4 className="mb-6 font-bolder text-xl text-orange-600">
               <Link to="/community">Community</Link>
             </h4>
             <ul className="list-unstyled">
@@ -100,7 +100,7 @@ export const Footer = () => {
             </ul>
           </div>
           <div className="col-12 col-md">
-            <h4 className="mb-4 fw-light">Examples</h4>
+            <h4 className="mb-6 font-bolder text-xl text-orange-600">Examples</h4>
             <ul className="list-unstyled">
               <FooterMenuitem to="/blog" internal={true}>
                 Blog
@@ -117,7 +117,7 @@ export const Footer = () => {
             </ul>
           </div>
           <div className="col-12 col-md">
-            <h4 className="mb-4 fw-light">More from Author</h4>
+            <h4 className="mb-6 font-bolder text-xl text-orange-600">More from Author</h4>
             <ul className="list-unstyled">
               <FooterMenuitem to="https://github.com/yesoreyeram/grafana-infinity-panel" internal={false}>
                 Infinity Panel

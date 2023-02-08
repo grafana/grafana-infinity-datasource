@@ -8,11 +8,10 @@ import (
 	"strings"
 
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
-	querySrv "github.com/yesoreyeram/grafana-infinity-datasource/pkg/query"
 	"moul.io/http2curl"
 )
 
-func GetRequest(settings models.InfinitySettings, body io.Reader, query querySrv.Query, requestHeaders map[string]string, includeSect bool) (req *http.Request, err error) {
+func GetRequest(settings models.InfinitySettings, body io.Reader, query models.Query, requestHeaders map[string]string, includeSect bool) (req *http.Request, err error) {
 	url, err := GetQueryURL(settings, query, includeSect)
 	if err != nil {
 		return nil, err
@@ -34,7 +33,7 @@ func GetRequest(settings models.InfinitySettings, body io.Reader, query querySrv
 	return req, err
 }
 
-func GetQueryURL(settings models.InfinitySettings, query querySrv.Query, includeSect bool) (string, error) {
+func GetQueryURL(settings models.InfinitySettings, query models.Query, includeSect bool) (string, error) {
 	urlString := query.URL
 	if !strings.HasPrefix(query.URL, settings.URL) {
 		urlString = settings.URL + urlString
@@ -76,7 +75,7 @@ func NormalizeURL(u string) string {
 	return u
 }
 
-func (client *Client) GetExecutedURL(query querySrv.Query) string {
+func (client *Client) GetExecutedURL(query models.Query) string {
 	out := []string{}
 	if query.Source != "inline" {
 		req, err := GetRequest(client.Settings, GetQueryBody(query), query, map[string]string{}, false)
@@ -90,10 +89,10 @@ func (client *Client) GetExecutedURL(query querySrv.Query) string {
 		out = append(out, "###############", "## URL", "###############", "", req.URL.String(), "")
 		out = append(out, "###############", "## Curl Command", "###############", "", command.String())
 	}
-	if query.Type == querySrv.QueryTypeUQL || query.Parser == "uql" {
+	if query.Type == models.QueryTypeUQL || query.Parser == "uql" {
 		out = append(out, "", "###############", "## UQL", "###############", "", query.UQL)
 	}
-	if query.Type == querySrv.QueryTypeGROQ || query.Parser == "groq" {
+	if query.Type == models.QueryTypeGROQ || query.Parser == "groq" {
 		out = append(out, "###############", "## GROQ", "###############", "", query.GROQ, "")
 	}
 	if client.Settings.AuthenticationMethod == models.AuthenticationMethodOAuth {

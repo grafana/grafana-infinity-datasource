@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+$gray1: #fcfcfc;
+$gray2: #f8f8f8;
+$gray3: #f3f3f3;
+$gray4: #ededed;
+$gray11: #6f6f6f;
+$gray12: #171717;
+$cyanA2: #00c6d80d;
+$cyanA3: #02c0d518;
+$cyanA8: #00a3c0c2;
+$cyanA9: #00a1c1fa;
+$cyanA10: #0090b0f7;
+$cyanA11: #00718df3;
+
+html {
+  --brandBG: $cyanA2;
+  --scrollbarBG: $gray2;
+  --thumbBG: $gray11;
+}
+
+$BrandBG: var(--brandBG);
+
+/* offcanvas */
+html,
+body {
+  overflow-x: hidden;
+}
+
+body {
+  scrollbar-width: thin;
+  scrollbar-color: var(--thumbBG) var(--scrollbarBG);
+}
+body::-webkit-scrollbar {
+  width: 11px;
+}
+body::-webkit-scrollbar-track {
+  background: var(--scrollbarBG);
+}
+body::-webkit-scrollbar-thumb {
+  background-color: var(--thumbBG);
+  border-radius: 6px;
+  border: 3px solid var(--scrollbarBG);
+  &:hover {
+    background-color: var(--brandBG);
+  }
+}
+
+.blog-post {
+  h2,
+  h3 {
+    display: block;
+    padding-bottom: 10px;
+    margin: 20px 0px;
+  }
+  h2 {
+    font-size: x-large;
+    font-weight: bold;
+    border-bottom: 2px solid;
+  }
+  h3 {
+    font-size: large;
+    font-weight: bold;
+  }
+  p {
+    margin-block: 20px;
+  }
+  blockquote {
+    background-color: $gray12 !important;
+    padding-left: 100px;
+    p {
+      margin-left: 10px !important;
+    }
+  }
+  code {
+    color: rgb(205, 202, 202);
+    font-style: italic;
+  }
+  a,
+  a:active,
+  a:visited,
+  a:hover {
+    color: orange;
+  }
+  img {
+    width: 100%;
+    max-width: 900px;
+    border-radius: 10px;
+    filter: drop-shadow(0 0 0.1rem orange);
+  }
+  img[src*='#center'] {
+    display: block;
+    margin: auto;
+    margin-block: 30px;
+  }
+  table {
+    width: 80%;
+    max-width: 900px;
+    border: 1px solid;
+    margin: 20px auto;
+    td,
+    th {
+      border: 1px solid;
+      padding: 10px;
+    }
+  }
+  ul {
+    list-style: circle;
+    padding: 10px;
+    margin-left: 30px;
+  }
+  blockquote {
+    width: 80%;
+    display: block;
+    padding: 10px;
+    border-left: 4px solid;
+    p {
+      padding: 0;
+      margin: 0;
+    }
+  }
+}
+
+// Code highlight
+.deckgo-highlight-code-carbon {
+  display: block;
+  width: 80%;
+  max-width: 900px;
+  margin: 10px auto;
+}
