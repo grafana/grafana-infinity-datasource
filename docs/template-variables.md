@@ -13,7 +13,7 @@ Like panels, you can have your own CSV/JSON in your variable. Variable queries a
 
 ![image](https://user-images.githubusercontent.com/153843/119243000-d6323f00-bb5a-11eb-822e-99f39b32968d.png#center)
 
-> If two columns configured, first column value will be used as display text and second column will be used as value.(This will be useful when you want to have aliases for any non-user friendly IDs). If more than 2 columns returned, all the results will be flattened and returned as variable list.
+> If you want to have variables with different text than its value, then rename the columns to `__text` and `__value` respectively.
 
 ## Collection - (Legacy variable)
 

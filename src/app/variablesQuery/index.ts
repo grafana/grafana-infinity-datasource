@@ -1,3 +1,4 @@
+import { DataFrameView } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
 import { defaultsDeep, flatten } from 'lodash';
 import { DefaultInfinityQuery } from './../../constants';
@@ -12,13 +13,17 @@ import type { SelectableValue } from '@grafana/data/types';
 
 export const getTemplateVariablesFromResult = (res: any): MetricFindValue[] => {
   if (isDataFrame(res) && res.fields.length > 0) {
-    let out: MetricFindValue[] = [];
-    for (let index = 0; index < res.length; index++) {
-      let text = res.fields[0].values.get(index);
-      let value = res.fields.length === 2 ? res.fields[1].values.get(index) : text;
-      out.push({ value, text });
-    }
-    return out;
+    const view = new DataFrameView(res);
+    return (view || []).map((item) => {
+      const keys = Object.keys(item || {}) || [];
+      if (keys.length >= 2 && keys.includes('__text') && keys.includes('__value')) {
+        return { text: item['__text'], value: item['__value'] };
+      } else if (keys.length === 2) {
+        return { text: item[0], value: item[1] };
+      } else {
+        return { text: item[0], value: item[0] };
+      }
+    });
   } else if (isTableData(res) && res.columns.length > 0) {
     if (res.columns.length === 2) {
       return res.rows.map((row: string[]) => {
