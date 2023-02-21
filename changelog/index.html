@@ -4,10 +4,11 @@
 <p>Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.</p>
 <h2 id="140">[ 1.4.0 ]</h2>
 <ul>
+<li><strong>Variables</strong> Support for custom display values in variables ( using <code>__text</code> and <code>__value</code> as field names )</li>
+<li><strong>Backend parser</strong> Added support for numeric datetime (ex: 20221227 can now be treated as valid datetime with YYYYMMDD format)</li>
 <li><strong>Global variables</strong> Support for global time variables <code>${__from}</code> and <code>${__to}</code> in backend queries</li>
 <li><strong>Bug fix</strong> Fixes <a href="https://github.com/yesoreyeram/grafana-infinity-datasource/issues/509">a bug</a> where variables weren't interpolated with xml/html backend queries.</li>
 <li><strong>Bug fix</strong> Fixed <a href="https://github.com/yesoreyeram/grafana-infinity-datasource/issues/453">a bug</a> where BOM encoded response weren't parsed correctly</li>
-<li><strong>Backend parser</strong> Added support for numeric datetime (ex: 20221227 can now be treated as valid datetime with YYYYMMDD format)</li>
 <li><strong>Auth</strong> Health check validation updated</li>
 <li><strong>Docs</strong> Docs site UI update</li>
 </ul>

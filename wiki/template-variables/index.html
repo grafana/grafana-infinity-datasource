@@ -4,7 +4,7 @@
 <p>Like panels, you can have your own CSV/JSON in your variable. Variable queries are expected to return one or more columns. This will give you the ability to get your variables set from CSV/JSON/XML or any other external sources.</p>
 <p><img src="https://user-images.githubusercontent.com/153843/119243000-d6323f00-bb5a-11eb-822e-99f39b32968d.png#center" alt="image"></p>
 <blockquote>
-<p>If two columns configured, first column value will be used as display text and second column will be used as value.(This will be useful when you want to have aliases for any non-user friendly IDs). If more than 2 columns returned, all the results will be flattened and returned as variable list.</p>
+<p>If you want to have variables with different text than its value, then rename the columns to <code>__text</code> and <code>__value</code> respectively.</p>
 </blockquote>
 <h2>Collection - (Legacy variable)</h2>
 <p>List of key value pair wrapped with <code>Collection()</code>. Text/key followed by values separated by commas.</p>
