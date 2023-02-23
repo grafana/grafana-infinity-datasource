@@ -1,6 +1,6 @@
 module github.com/yesoreyeram/grafana-infinity-datasource
 
-go 1.19
+go 1.20
 
 require (
 	github.com/basgys/goxml2json v1.1.0

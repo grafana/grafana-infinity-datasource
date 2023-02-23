@@ -272,10 +272,10 @@ func TestAuthentication(t *testing.T) {
 			}, *client, map[string]string{"Authorization": "foo", "X-ID-Token": "bar"}, backend.PluginContext{})
 			require.NotNil(t, res)
 			require.NotNil(t, res.Error)
-			assert.Equal(t, fmt.Sprintf("error getting data frame. error getting response from url %s. no response received. Error: Get \"%s\": x509: certificate signed by unknown authority", server.URL, server.URL), res.Error.Error())
+			assert.Contains(t, res.Error.Error(), "x509: certificate signed by unknown authority")
 			metaData := res.Frames[0].Meta.Custom.(*infinity.CustomMeta)
 			require.NotNil(t, metaData)
-			require.Equal(t, fmt.Sprintf("error getting response from url %s. no response received. Error: Get \"%s\": x509: certificate signed by unknown authority", server.URL, server.URL), metaData.Error)
+			assert.Contains(t, metaData.Error, "x509: certificate signed by unknown authority")
 			require.Equal(t, http.StatusInternalServerError, metaData.ResponseCodeFromServer)
 		})
 		t.Run("should honour skip tls verify setting", func(t *testing.T) {

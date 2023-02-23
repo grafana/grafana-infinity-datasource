@@ -2,6 +2,10 @@
 
 Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
 
+## [ 1.4.1 ]
+
+- **Chore** Backend binaries are now compiled with Go 1.20.1
+
 ## [ 1.4.0 ]
 
 - **Variables** Support for custom display values in variables ( using `__text` and `__value` as field names )
