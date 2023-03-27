@@ -4,7 +4,9 @@ Change history of the project. All the feature updates, bug fixes, breaking chan
 
 ## [ 1.4.1 ]
 
-- **Chore** Backend binaries are now compiled with Go 1.20.1
+- **UQL** Support for `pivot` function added in UQL
+- **Chore** Backend binaries are now compiled with Go 1.20.2
+- **Chore** Updated frontend dependencies including security patches
 
 ## [ 1.4.0 ]
 

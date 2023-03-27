@@ -11,6 +11,7 @@ interface StackProps {
   wrap?: boolean;
   gap?: number;
   flexGrow?: CSSProperties['flexGrow'];
+  children?: React.ReactNode;
 }
 
 export const Stack: React.FC<StackProps> = ({ children, ...props }) => {

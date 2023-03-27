@@ -2,7 +2,7 @@ version: '3.7'
 services:
   grafana:
     container_name: yesoreyeram-infinity-datasource
-    image: grafana/grafana-enterprise:${GF_VERSION:-9.3.1}
+    image: grafana/grafana-enterprise:${GF_VERSION:-9.4.3}
     # image: grafana/grafana-enterprise:${GF_VERSION:-8.4.7}
     # image: grafana/grafana-enterprise:${GF_VERSION:-main}
     # image: grafana/grafana-enterprise:${GF_VERSION:-latest}

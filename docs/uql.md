@@ -209,6 +209,58 @@ JAPAN,1,200
 USA,2,100
 ```
 
+### pivot
+
+`pivot` is the command used to perform pivot operations over the data
+
+#### Pivot example 1
+
+```csv
+name,age,country,occupation,salary
+Leanne Graham,38,USA,Devops Engineer,3000
+Ervin Howell,27,USA,Software Engineer,2300
+Clementine Bauch,17,Canada,Student,
+Patricia Lebsack,42,UK,Software Engineer,2800
+Leanne Bell,38,USA,Senior Software Engineer,4000
+Chelsey Dietrich,32,USA,Software Engineer,3500
+```
+
+and the following query
+
+```sql
+parse-csv
+| extend "salary"=tonumber("salary")
+| pivot sum("salary"), "country", "occupation"
+```
+
+will produce
+
+```csv
+country,Devops Engineer,Software Engineer,Student,Senior Software Engineer
+USA,3000,5800,0,4000
+CANADA,0,0,0,0
+UK,0,2800,0,0
+```
+
+where as the following summarize query
+
+```sql
+parse-csv
+| extend "salary"=tonumber("salary")
+| summarize "salary"=sum("salary") by "country", "occupation"
+```
+
+will produce
+
+```csv
+country,occupation,salary
+USA,Devops Engineer,3000
+USA,Software Engineer,5800
+Canada,Student,0
+UK,Software Engineer,2800
+UK,Senior Software Engineer,4000
+```
+
 ### parse-json
 
 `parse-json` is the command to instruct the UQL to parse the response as JSON
