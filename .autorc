@@ -1,0 +1,9 @@
+{
+  "plugins": [
+    "git-tag"
+  ],
+  "owner": "yesoreyeram",
+  "repo": "grafana-infinity-datasource",
+  "name": "Sriramajeyam Sugumaran",
+  "email": "153843+yesoreyeram@users.noreply.github.com"
+}

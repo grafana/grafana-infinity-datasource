@@ -14,16 +14,16 @@ jobs:
         grafana-version: [8.4.7]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: NodeJS Setup
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: 16.18.0
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
       - name: Cache yarn cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: cache-yarn-cache
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
@@ -32,7 +32,7 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: Cache node_modules
         id: cache-node-modules
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ~/.cache/Cypress
@@ -55,24 +55,24 @@ jobs:
         run: |
           NODE_OPTIONS=--max_old_space_size=8192 yarn ci-build;
       - name: Setup Go environment
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v4
         with:
-          go-version: '1.20.1'
+          go-version: '1.20.2'
       - name: Get go cache directory path
         id: go-cache-paths
         run: echo "::set-output name=go-mod::$(go env GOMODCACHE)"
       - name: Go Mod Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ${{ steps.go-cache-paths.outputs.go-mod }}
           key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}
       - name: Test backend
-        uses: magefile/mage-action@v1
+        uses: magefile/mage-action@v2
         with:
           version: latest
           args: coverage
       - name: Build backend
-        uses: magefile/mage-action@v1
+        uses: magefile/mage-action@v2
         with:
           version: latest
           args: buildAll

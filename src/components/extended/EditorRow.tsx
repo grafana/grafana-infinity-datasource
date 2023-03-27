@@ -10,6 +10,7 @@ interface EditorRowProps {
   title?: () => string | React.ReactNode;
   collapsed?: boolean;
   dataTestId?: string;
+  children: React.ReactNode;
 }
 
 export const EditorRow: React.FC<EditorRowProps> = ({ label, collapsible, collapsed = true, title, dataTestId, children }) => {
@@ -74,7 +75,9 @@ const getStyles = (theme: GrafanaTheme2) => {
   };
 };
 
-interface EditorRowsProps {}
+interface EditorRowsProps {
+  children: React.ReactNode;
+}
 
 export const EditorRows: React.FC<EditorRowsProps> = ({ children }) => {
   return (

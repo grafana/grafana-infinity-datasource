@@ -1,4 +1,4 @@
-import { Collapse, InlineFormLabel, Input, LinkButton } from '@grafana/ui';
+import { Collapse as CollapseOriginal, InlineFormLabel, Input, LinkButton } from '@grafana/ui';
 import defaultsDeep from 'lodash/defaultsDeep';
 import React, { useState } from 'react';
 import { SecureFieldsEditor } from './../components/config/SecureFieldsEditor';
@@ -11,6 +11,8 @@ import { OpenAPIEditor } from './config/OpenAPI';
 import { ReferenceDataEditor } from './config/ReferenceData';
 import type { InfinityOptions } from './../types';
 import type { DataSourcePluginOptionsEditorProps } from '@grafana/data/types';
+
+const Collapse = CollapseOriginal as any;
 
 export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
   const { options, onOptionsChange } = props;
@@ -28,22 +30,22 @@ export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<I
   const [timeoutInSeconds, setTimeoutInSeconds] = useState(options.jsonData.timeoutInSeconds || 60);
   return (
     <>
-      <Collapse label="Authentication" isOpen={authOpen} collapsible={true} onToggle={(e) => setAuthOpen(!authOpen)}>
+      <Collapse label="Authentication" isOpen={authOpen} collapsible={true} onToggle={() => setAuthOpen(!authOpen)}>
         <div style={{ padding: '0px 10px' }}>
           <AuthEditor options={options} onOptionsChange={onOptionsChange} />
         </div>
       </Collapse>
-      <Collapse label="Headers" isOpen={headersOpen} collapsible={true} onToggle={(e) => setHeadersOpen(!headersOpen)}>
+      <Collapse label="Headers" isOpen={headersOpen} collapsible={true} onToggle={() => setHeadersOpen(!headersOpen)}>
         <div style={{ padding: '0px 10px' }}>
           <SecureFieldsEditor dataSourceConfig={options} onChange={onOptionsChange} title="Custom HTTP Header" hideTile={true} secureFieldName="httpHeaderName" secureFieldValue="httpHeaderValue" />
         </div>
       </Collapse>
-      <Collapse label="URL params" isOpen={queriesOpen} collapsible={true} onToggle={(e) => setQueriesOpen(!queriesOpen)}>
+      <Collapse label="URL params" isOpen={queriesOpen} collapsible={true} onToggle={() => setQueriesOpen(!queriesOpen)}>
         <div style={{ padding: '0px 10px' }}>
           <SecureFieldsEditor dataSourceConfig={options} onChange={onOptionsChange} title="URL Query Param" hideTile={true} secureFieldName="secureQueryName" secureFieldValue="secureQueryValue" />
         </div>
       </Collapse>
-      <Collapse label="TLS/SSL &amp; Network Settings" isOpen={tlsOpen} collapsible={true} onToggle={(e) => setTlsOpen(!tlsOpen)}>
+      <Collapse label="TLS/SSL &amp; Network Settings" isOpen={tlsOpen} collapsible={true} onToggle={() => setTlsOpen(!tlsOpen)}>
         <div style={{ padding: '1px 10px' }}>
           <div className="gf-form">
             <InlineFormLabel>Timeout in seconds</InlineFormLabel>
@@ -53,7 +55,7 @@ export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<I
               placeholder="timeout in seconds"
               min={0}
               max={300}
-              onChange={(e) => setTimeoutInSeconds(e.currentTarget.valueAsNumber)}
+              onChange={(e: any) => setTimeoutInSeconds(e.currentTarget.valueAsNumber)}
               onBlur={() => {
                 props.onOptionsChange({ ...options, jsonData: { ...options.jsonData, timeoutInSeconds } });
               }}
@@ -64,22 +66,22 @@ export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<I
           <TLSConfigEditor options={options} onOptionsChange={onOptionsChange} hideTile={true} />
         </div>
       </Collapse>
-      <Collapse label="Global Queries" isOpen={globalsOpen} collapsible={true} onToggle={(e) => setGlobalsOpen(!globalsOpen)}>
+      <Collapse label="Global Queries" isOpen={globalsOpen} collapsible={true} onToggle={() => setGlobalsOpen(!globalsOpen)}>
         <div style={{ padding: '0px 10px' }}>
           <GlobalQueryEditor options={options} onOptionsChange={onOptionsChange} />
         </div>
       </Collapse>
-      <Collapse label="Misc" isOpen={miscOpen} collapsible={true} onToggle={(e) => setMiscOpen(!miscOpen)}>
+      <Collapse label="Misc" isOpen={miscOpen} collapsible={true} onToggle={() => setMiscOpen(!miscOpen)}>
         <div style={{ padding: '0px 10px' }}>
           <URLEditor options={options} onOptionsChange={onOptionsChange} />
         </div>
       </Collapse>
-      <Collapse label="Reference Data" isOpen={referenceDataOpen} collapsible={true} onToggle={(e) => setReferenceDataOpen(!referenceDataOpen)}>
+      <Collapse label="Reference Data" isOpen={referenceDataOpen} collapsible={true} onToggle={() => setReferenceDataOpen(!referenceDataOpen)}>
         <div style={{ padding: '0px 10px' }}>
           <ReferenceDataEditor options={options} onOptionsChange={onOptionsChange} />
         </div>
       </Collapse>
-      <Collapse label="Experimental" isOpen={experimentalOpen} collapsible={true} onToggle={(e) => setExperimentalOpen(!experimentalOpen)}>
+      <Collapse label="Experimental" isOpen={experimentalOpen} collapsible={true} onToggle={() => setExperimentalOpen(!experimentalOpen)}>
         <div style={{ padding: '0px 10px' }}>
           <OpenAPIEditor options={options} onOptionsChange={onOptionsChange} />
         </div>

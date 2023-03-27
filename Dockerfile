@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM golang:1.19 AS backend
+FROM golang:1.20 AS backend
 WORKDIR /mage
 RUN git clone https://github.com/magefile/mage
 WORKDIR /mage/mage

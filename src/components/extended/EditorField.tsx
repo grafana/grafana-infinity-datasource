@@ -5,7 +5,9 @@ import { Space } from './Space';
 import { Stack } from './Stack';
 import type { GrafanaTheme2 } from '@grafana/data';
 
-export const EditorFieldGroup: React.FC<{}> = ({ children }) => {
+export const EditorFieldGroup: React.FC<{
+  children: React.ReactNode;
+}> = ({ children }) => {
   return <Stack gap={1}>{children}</Stack>;
 };
 
