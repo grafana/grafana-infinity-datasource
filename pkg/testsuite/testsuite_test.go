@@ -17,6 +17,7 @@ import (
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/infinity"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/pluginhost"
+	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/testsuite"
 )
 
 func TestQueryData(t *testing.T) {
@@ -62,7 +63,7 @@ func TestQueryData(t *testing.T) {
 		}, *client, map[string]string{}, backend.PluginContext{})
 		require.NotNil(t, res)
 		require.Nil(t, res.Error)
-		experimental.CheckGoldenJSONResponse(t, "golden", strings.ReplaceAll(t.Name(), "/", "_"), &res, updateGoldenFile)
+		experimental.CheckGoldenJSONResponse(t, "golden", strings.ReplaceAll(t.Name(), "/", "_"), &res, testsuite.UPDATE_GOLDEN_DATA)
 	})
 }
 
@@ -70,5 +71,3 @@ func readFileContent(t *testing.T, filename string) ([]byte, error) {
 	t.Helper()
 	return os.ReadFile(filename)
 }
-
-const updateGoldenFile = false

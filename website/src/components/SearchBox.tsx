@@ -157,7 +157,7 @@ const sitemap: any[] = [
     title: 'UQL',
     slug: '/wiki/uql',
     description: 'UQL',
-    tags: ['uql', 'query', 'unstructured query language', 'sql', 'jsonata', 'kusto', 'mv-expand', 'project', 'summarize', 'group by', 'aggregate', 'jsonata'],
+    tags: ['uql', 'query', 'unstructured query language', 'sql', 'jsonata', 'kusto', 'mv-expand', 'project', 'summarize', 'group by', 'aggregate', 'filter', 'group by'],
   },
   {
     title: 'GROQ',
@@ -189,6 +189,7 @@ const sitemap: any[] = [
       'summarize',
       'gjson',
       'jsonpath',
+      'jsonata',
       'calculated field',
       'computed columns',
     ],
@@ -245,7 +246,7 @@ const sitemap: any[] = [
     title: 'Provisioning',
     slug: '/wiki/provisioning',
     description: 'Grafana datasource provisioning',
-    tags: ['datasource', 'provisioning', 'configuration'],
+    tags: ['datasource', 'provisioning', 'configuration', 'provision', 'yaml'],
   },
   {
     title: 'Time formats',

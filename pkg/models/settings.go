@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"net/textproto"
 	"strings"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
@@ -111,10 +112,10 @@ func (s *InfinitySettings) Validate() error {
 func (s *InfinitySettings) HaveSecureHeaders() bool {
 	if len(s.CustomHeaders) > 0 {
 		for k := range s.CustomHeaders {
-			if strings.EqualFold(k, "Accept") {
+			if textproto.CanonicalMIMEHeaderKey(k) == "Accept" {
 				continue
 			}
-			if strings.EqualFold(k, "Content-Type") {
+			if textproto.CanonicalMIMEHeaderKey(k) == "Content-Type" {
 				continue
 			}
 			return true

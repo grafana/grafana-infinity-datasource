@@ -1,6 +1,10 @@
 //  🌟 This was machine generated.  Do not edit. 🌟
 //  
 //  Frame[0] {
+//      "typeVersion": [
+//          0,
+//          0
+//      ],
 //      "custom": {
 //          "query": {
 //              "refId": "q1",
@@ -74,6 +78,10 @@
       "schema": {
         "name": "q1",
         "meta": {
+          "typeVersion": [
+            0,
+            0
+          ],
           "custom": {
             "query": {
               "refId": "q1",

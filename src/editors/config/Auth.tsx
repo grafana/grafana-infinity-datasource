@@ -11,8 +11,8 @@ import type { DataSourcePluginOptionsEditorProps, SelectableValue } from '@grafa
 const authTypes: Array<SelectableValue<AuthType | 'others'>> = [
   { value: 'none', label: 'No Auth' },
   { value: 'basicAuth', label: 'Basic Authentication' },
+  { value: 'bearerToken', label: 'Auth Token (Bearer)' },
   { value: 'apiKey', label: 'API Key' },
-  { value: 'bearerToken', label: 'Bearer Token' },
   { value: 'digestAuth', label: 'Digest Auth' },
   { value: 'oauthPassThru', label: 'Forward OAuth' },
   { value: 'oauth2', label: 'OAuth2' },

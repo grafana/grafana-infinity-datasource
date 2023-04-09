@@ -18,4 +18,4 @@ services:
       - GF_SECURITY_ADMIN_USER=infinity
       - GF_SECURITY_ADMIN_PASSWORD=infinity
       - GF_ENTERPRISE_LICENSE_TEXT=$GF_ENTERPRISE_LICENSE_TEXT
-      - GF_FEATURE_TOGGLES_ENABLE=publicDashboards topnav
+      - GF_FEATURE_TOGGLES_ENABLE=publicDashboards topnav dataConnectionsConsole

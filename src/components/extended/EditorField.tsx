@@ -75,13 +75,14 @@ const getStyles = stylesFactory((theme: GrafanaTheme2, width?: number | string, 
   return {
     root: css({
       minWidth: theme.spacing(width ?? 0),
-      paddingInlineStart: '7px',
-      paddingInlineEnd: '5px',
-      borderLeft: `1px solid ${borderColor}`,
+      boxShadow: `0px 0px 4px 0px ${theme.colors.border.weak}`,
+      border: `1px solid ${theme.colors.border.medium}`,
+      padding: theme.spacing('8px'),
+      background: theme.colors.background.primary,
       marginRight: horizontal ? '10px' : '5px',
     }),
     label: css({
-      fontSize: 12,
+      fontSize: theme.typography.bodySmall.fontSize,
       fontWeight: theme.typography.fontWeightMedium,
       paddingLeft: '1px',
       border: horizontal ? `1px solid ${borderColor}` : '',

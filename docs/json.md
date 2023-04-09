@@ -2,7 +2,7 @@
 slug: '/wiki/json'
 title: 'JSON'
 previous_page_title: 'UQL'
-previous_page_slug: '/uql'
+previous_page_slug: '/wiki/uql'
 next_page_title: 'CSV'
 next_page_slug: '/wiki/csv'
 ---

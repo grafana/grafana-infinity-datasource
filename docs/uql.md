@@ -14,7 +14,7 @@ UQL (Unstructured query language) is advance query format in infinity datasource
 UQL is an opinionated query language designed for in-memory operations. UQL query can be formed with list of commands joined by `|`, in a line each.
 Most of the times, fields are referred within double quotes and string values are referred with single quotes. UQL was inspired by kusto query language and follows similar syntax.
 
-> UQL is still in BETA.
+> UQL is still in **beta** but used widely. If you encounter any issues with uql, create a bug [here](https://github.com/yesoreyeram/uql/issues/new).
 
 if your data looks like this,
 
@@ -145,11 +145,10 @@ parse-json
 
 wil produce the following output
 
-```csv
-a,triple,thrice,sum,diff,mul
-12,36,36,32,-8,240
-6,18,18,38,-26,192
-```
+| a   | triple | thrice | sum | diff | mul |
+| --- | ------ | ------ | --- | ---- | --- |
+| 12  | 36     | 36     | 32  | -8   | 240 |
+| 6   | 18     | 18     | 38  | -26  | 192 |
 
 To apply multiple transformations over a field, repeat them with the same field name. For example, the uql query `extend "name"=tolower("name"), "name"=trim("name")` will apply tolower function and then trim function over the name field.
 
@@ -202,16 +201,19 @@ parse-json
 
 will produce the output table like this
 
-```csv
-country,number of cities,total population
-INDIA,2,330
-JAPAN,1,200
-USA,2,100
-```
+| country | number of cities | total population |
+| ------- | ---------------- | ---------------- |
+| INDIA   | 2                | 330              |
+| JAPAN   | 1                | 200              |
+| USA     | 2                | 100              |
 
 ### pivot
 
-`pivot` is the command used to perform pivot operations over the data
+`pivot` is the command used to perform pivot operations over the data. `pivot` command accepts 3 arguments.
+
+- 1st argument is the summarization. Example: `count("id)` or `sum("salary")`
+- 2nd argument is the row field name. Example: `"country"`
+- 3rd argument is the column field name. Example: `"occupation"`
 
 #### Pivot example 1
 
@@ -235,12 +237,11 @@ parse-csv
 
 will produce
 
-```csv
-country,Devops Engineer,Software Engineer,Student,Senior Software Engineer
-USA,3000,5800,0,4000
-CANADA,0,0,0,0
-UK,0,2800,0,0
-```
+| country | Devops Engineer | Software Engineer | Student | Senior Software Engineer |
+| ------- | --------------- | ----------------- | ------- | ------------------------ |
+| USA     | 3000            | 5800              | 0       | 4000                     |
+| CANADA  | 0               | 0                 | 0       | 0                        |
+| UK      | 0               | 2800              | 0       | 0                        |
 
 where as the following summarize query
 
@@ -252,14 +253,15 @@ parse-csv
 
 will produce
 
-```csv
-country,occupation,salary
-USA,Devops Engineer,3000
-USA,Software Engineer,5800
-Canada,Student,0
-UK,Software Engineer,2800
-UK,Senior Software Engineer,4000
-```
+| country | occupation               | salary |
+| ------- | ------------------------ | ------ |
+| USA     | Devops Engineer          | 3000   |
+| USA     | Software Engineer        | 5800   |
+| Canada  | Student                  | 0      |
+| UK      | Software Engineer        | 2800   |
+| UK      | Senior Software Engineer | 4000   |
+
+so choose either `summarize` or `pivot` according to you needs
 
 ### parse-json
 

@@ -30,25 +30,27 @@ If your APIs doesn't require any authentication, select **No Authentication** me
 
 Basic authentication sends a username and password with your request. In the request Headers, the Authorization header will be sent in the `Basic <Base64 encoded username and password>` format.
 
+## Bearer Token Authentication
+
+Bearer token enable requests to authenticate using an access key, such as a JSON Web Token (JWT), personal access token. In the request Headers, the Authorization header will be sent in the `Bearer <Your API key>` format.
+
+> If you need a custom prefix instead of Bearer prefix, use API Key authentication instead with the key of **Authorization**.
+
 ## API Key Authentication
 
 With API key authentication, you can send a key-value pair to the API via request header or query parameter. API Key authentication requires following parameters
 
 | Key   | Description                                                                                                                                                                |
 | ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Key   | Key of the API token                                                                                                                                                       |
+| Key   | Key of the API token. This wll be key of the header or query parameter.                                                                                                    |
 | Value | Value of the API token                                                                                                                                                     |
 | In    | Accepts `header`/`query`. Most APIs accept API keys via headers which is preferred way of sending api keys. Sending API keys via the query parameter is not suggested way. |
+
+> Most often, users got confused with API key authentication with bearer token authentication. So just double check, you are using the correct auth mechanism.
 
 ## Digest Authentication
 
 Digest authentication enable requests to authenticate using [RFC7616 HTTP Digest Access Authentication protocol](https://www.rfc-editor.org/rfc/rfc7616.txt).
-
-## Bearer Token Authentication
-
-Bearer token enable requests to authenticate using an access key, such as a JSON Web Token (JWT), personal access token. In the request Headers, the Authorization header will be sent in the `Bearer <Your API key>` format.
-
-> If you need a custom prefix instead of Bearer prefix, use API Key authentication instead with the key of **Authorization**.
 
 ## OAuth Passthrough
 

@@ -83,15 +83,7 @@ export const TableFilter = (props: { query: InfinityQuery; onChange: (value: any
                     onChange={(e) => onFilterValueChange(index, 0, e.target.value)}
                     placeholder="Value"
                   ></input>
-                  <span
-                    className="btn btn-danger btn-small"
-                    style={{ margin: '5px' }}
-                    onClick={() => {
-                      removeFilter(index);
-                    }}
-                  >
-                    x
-                  </span>
+                  <Button variant="destructive" size="sm" style={{ marginTop: '4px' }} onClick={() => removeFilter(index)} icon="trash-alt" fill="outline"></Button>
                   <br />
                 </div>
               ))}

@@ -62,6 +62,14 @@ func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient in
 		query, _ := infinity.UpdateQueryWithReferenceData(ctx, query, infClient.Settings)
 		switch query.Source {
 		case "url":
+			if infClient.Settings.AuthenticationMethod != models.AuthenticationMethodNone && len(infClient.Settings.AllowedHosts) < 1 {
+				response.Error = errors.New("datasource is missing allowed hosts/URLs. Configure it in the datasource settings page for enhanced security")
+				return response
+			}
+			if infClient.Settings.HaveSecureHeaders() && len(infClient.Settings.AllowedHosts) < 1 {
+				response.Error = errors.New("datasource is missing allowed hosts/URLs. Configure it in the datasource settings page for enhanced security")
+				return response
+			}
 			frame, err := infinity.GetFrameForURLSources(ctx, query, infClient, requestHeaders)
 			if err != nil {
 				frame, _ = infinity.WrapMetaForRemoteQuery(ctx, frame, err, query)

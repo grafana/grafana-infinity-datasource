@@ -44,9 +44,9 @@ export const INFINITY_SOURCES: ScrapQuerySources[] = [
 export const INFINITY_COLUMN_FORMATS: Array<SelectableValue<InfinityColumnFormat>> = [
   { label: 'String', value: 'string' },
   { label: 'Number', value: 'number' },
-  { label: 'Timestamp', value: 'timestamp' },
-  { label: 'Timestamp ( UNIX ms )', value: 'timestamp_epoch' },
-  { label: 'Timestamp ( UNIX s )', value: 'timestamp_epoch_s' },
+  { label: 'Time', value: 'timestamp' },
+  { label: 'Time ( UNIX ms )', value: 'timestamp_epoch' },
+  { label: 'Time ( UNIX s )', value: 'timestamp_epoch_s' },
 ];
 
 export const variableQueryTypes: Array<SelectableValue<VariableQueryType>> = [

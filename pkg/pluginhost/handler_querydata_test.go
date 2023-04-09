@@ -38,8 +38,9 @@ func TestAuthentication(t *testing.T) {
 			}`, server.URL)),
 		}, *client, map[string]string{}, backend.PluginContext{})
 		require.NotNil(t, res)
-		require.Nil(t, res.Error)
-		require.Equal(t, "Datasource is missing allowed hosts/URLs. Configure it in the datasource settings page for enhanced security.", res.Frames[0].Meta.Notices[0].Text)
+		require.NotNil(t, res.Error)
+		require.Equal(t, "datasource is missing allowed hosts/URLs. Configure it in the datasource settings page for enhanced security", res.Error.Error())
+		require.Equal(t, 0, len(res.Frames))
 	})
 	t.Run("basic auth", func(t *testing.T) {
 		t.Run("should set basic auth headers when set the username and password", func(t *testing.T) {

@@ -19,13 +19,13 @@ export const KeyValueEditor = (props: { value: InfinityKV[]; onChange: (value: I
       <table style={{ width: '100%' }}>
         {value && value.length > 0 && (
           <thead>
-            <td width="40%" style={{ paddingInlineEnd: '10px' }}>
+            <td width="40%" style={{ padding: '10px' }}>
               Key
             </td>
-            <td width="40%" style={{ paddingInlineEnd: '10px' }}>
+            <td width="40%" style={{ padding: '10px' }}>
               Value
             </td>
-            <td width="20%" style={{ paddingInlineEnd: '10px' }}></td>
+            <td width="20%" style={{ padding: '10px' }}></td>
           </thead>
         )}
         {value &&
@@ -41,6 +41,7 @@ export const KeyValueEditor = (props: { value: InfinityKV[]; onChange: (value: I
                 <Button
                   icon="trash-alt"
                   variant="destructive"
+                  fill="outline"
                   size="sm"
                   onClick={(e) => {
                     removeItem(index);
@@ -54,6 +55,7 @@ export const KeyValueEditor = (props: { value: InfinityKV[]; onChange: (value: I
       <div style={{ width: '100%', textAlign: 'left' }}>
         <Button
           variant="secondary"
+          style={{ marginBlock: '10px' }}
           size="sm"
           onClick={(e) => {
             onChange([...(value || []), { ...defaultValue }]);

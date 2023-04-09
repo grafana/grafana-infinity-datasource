@@ -28,6 +28,10 @@ If you need an advanced version of the datasource, use the following format.
   basicAuth: true
   basicAuthUser: <<YOUR USER NAME. Example -- github_id>>
   jsonData:
+    auth_method: 'basicAuth'
+    allowedHosts:
+      - 'https://foo.com/bar'
+      - 'https://example.com'
     oauthPassThru: <<true or false>> -- false by default. Set to true if you want to pass the auth token from grafana
     tlsSkipVerify: <<true or false>> -- false by default
     tlsAuth: <<true or false>> -- false by default
@@ -40,6 +44,8 @@ If you need an advanced version of the datasource, use the following format.
     tlsClientCert: <<Your client certificate>>
     tlsClientKey: <<Your client key>>
 ```
+
+For more advanced configuration, refer **Generate provisioning yaml file** section of this document.
 
 ### Custom headers
 
@@ -61,3 +67,7 @@ secureJsonData:
 ## More examples
 
 For more examples of provisioning such as `oauth2`, etc, use provisioning section of the infinity datasource config. You will be able to generate provisioning file by manually configuring the datasource.
+
+## Generate provisioning yaml file
+
+Once can manually configure the datasource and verified it is working, you can generate the provisioning yaml file from the datasource config page itself. Look for `Provisioning Script` button at the bottom of the config page inside **more** section.

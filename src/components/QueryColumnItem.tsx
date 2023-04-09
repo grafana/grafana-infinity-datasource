@@ -40,18 +40,20 @@ export const QueryColumnItem = (props: QueryColumnItemProps) => {
     onChange({ ...query, columns });
   };
   return (
-    <>
+    <div style={{ display: 'flex' }}>
       <InlineFormLabel width={8}>{query.type === 'csv' ? 'Column Name' : 'Selector'}</InlineFormLabel>
-      <Input width={60} value={selector} placeholder={query.type === 'csv' ? 'Column Name' : 'Selector'} onChange={(e) => setSelector(e.currentTarget.value)} onBlur={onSelectorChange} />
+      <Input width={20} value={selector} placeholder={query.type === 'csv' ? 'Column Name' : 'Selector'} onChange={(e) => setSelector(e.currentTarget.value)} onBlur={onSelectorChange} />
       <InlineFormLabel width={2}>as</InlineFormLabel>
-      <Input value={text} width={30} placeholder="Title" onChange={(e) => setText(e.currentTarget.value)} onBlur={onTextChange}></Input>
+      <Input value={text} width={20} placeholder="Title" onChange={(e) => setText(e.currentTarget.value)} onBlur={onTextChange}></Input>
       <InlineFormLabel width={5}>format as</InlineFormLabel>
-      <Select width={30} value={column.type} options={INFINITY_COLUMN_FORMATS} onChange={(e) => onFormatChange(e.value as InfinityColumnFormat)} menuShouldPortal={true}></Select>
+      <Select width={24} value={column.type} options={INFINITY_COLUMN_FORMATS} onChange={(e) => onFormatChange(e.value as InfinityColumnFormat)} menuShouldPortal={true}></Select>
       {(isBackendQuery(query) || query.type === 'google-sheets') && column.type === 'timestamp' && (
         <>
-          <InlineFormLabel width={11} tooltip={'Timestamp format in golang layout. Example: 2006-01-02T15:04:05Z07:00'}>
-            Time Format (optional)
-          </InlineFormLabel>
+          <div style={{ marginLeft: '5px' }}>
+            <InlineFormLabel width={11} tooltip={'Timestamp format in golang layout. Example: 2006-01-02T15:04:05Z07:00'}>
+              Time Format (optional)
+            </InlineFormLabel>
+          </div>
           <Select
             width={30}
             value={column.timestampFormat}
@@ -90,6 +92,6 @@ export const QueryColumnItem = (props: QueryColumnItemProps) => {
           />
         </>
       )}
-    </>
+    </div>
   );
 };

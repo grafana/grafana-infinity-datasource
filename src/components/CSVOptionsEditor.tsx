@@ -4,7 +4,7 @@ import { EditorField } from './extended/EditorField';
 import type { InfinityCSVQueryOptions, InfinityQuery } from './../types';
 
 export const CSVOptionsEditor = (props: { query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void }) => {
-  const LABEL_WIDTH = 8;
+  const LABEL_WIDTH = 10;
   const { query, onChange } = props;
   if (!(query.type === 'csv' || query.type === 'tsv')) {
     return <></>;

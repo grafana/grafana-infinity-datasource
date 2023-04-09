@@ -1,8 +1,8 @@
 ---
 slug: '/wiki/node-graph'
 title: 'Node Graph'
-previous_page_title: 'Home'
-previous_page_slug: '/welcome'
+previous_page_title: 'JSON'
+previous_page_slug: '/wiki/json'
 next_page_title: 'CSV'
 next_page_slug: '/wiki/csv'
 ---

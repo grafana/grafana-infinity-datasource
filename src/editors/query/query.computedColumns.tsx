@@ -29,6 +29,7 @@ export const ComputedColumnsEditor = (props: { query: InfinityQuery; onChange: (
                     <Button
                       icon="trash-alt"
                       variant="destructive"
+                      fill="outline"
                       size="sm"
                       style={{ margin: '5px' }}
                       onClick={(e) => {

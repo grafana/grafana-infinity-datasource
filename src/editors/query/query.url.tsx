@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { InlineFormLabel, CodeEditor, Select, Input, RadioButtonGroup } from '@grafana/ui';
+import { InlineFormLabel, CodeEditor, Select, Input, RadioButtonGroup, Icon } from '@grafana/ui';
 import { EditorRow } from './../../components/extended/EditorRow';
 import { EditorField } from './../../components/extended/EditorField';
 import { Stack } from './../../components/extended/Stack';
@@ -81,7 +81,7 @@ export const URL = ({ query, onChange, onRunQuery, onShowUrlOptions }: { query: 
         placeholder={`https://github.com/yesoreyeram/grafana-infinity-datasource/blob/main/testdata/users.${
           query.type === 'graphql' || query.type === 'uql' || query.type === 'groq' ? 'json' : query.type
         }`}
-        width={80}
+        width={84}
         onChange={(e) => setURL(e.currentTarget.value)}
         onBlur={onURLChange}
         data-testid="infinity-query-url-input"
@@ -204,6 +204,7 @@ const Body = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange:
                 </div>
                 <div className="gf-form">
                   <InlineFormLabel width={15}>Body Content</InlineFormLabel>
+                  <Icon name="arrow-down" style={{ marginTop: '10px' }} />
                 </div>
                 <CodeEditor
                   language={
@@ -221,6 +222,7 @@ const Body = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange:
                   }
                   height={'200px'}
                   value={query.url_options?.data || ''}
+                  {...{ placeholder: 'Enter you' }}
                   onSave={(e) => {
                     onURLOptionsChange('data', e);
                     onRunQuery();

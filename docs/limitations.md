@@ -1,8 +1,8 @@
 ---
 slug: '/wiki/limitations'
 title: 'Limitations'
-previous_page_title: 'Home'
-previous_page_slug: '/welcome'
+previous_page_title: 'JSON'
+previous_page_slug: '/wiki/json'
 next_page_title: 'Configuration'
 next_page_slug: '/wiki/configuration'
 ---

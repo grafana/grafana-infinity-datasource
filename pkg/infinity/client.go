@@ -107,7 +107,7 @@ func (client *Client) req(ctx context.Context, url string, body io.Reader, setti
 	startTime := time.Now()
 	if !CanAllowURL(req.URL.String(), settings.AllowedHosts) {
 		backend.Logger.Error("url is not in the allowed list. make sure to match the base URL with the settings", "url", req.URL.String())
-		return nil, http.StatusUnauthorized, 0, errors.New("requested URL is not allowed. To allow this URL, update the datasource config URL -> Allowed Hosts section")
+		return nil, http.StatusUnauthorized, 0, errors.New("requested URL is not allowed. To allow this URL, update the datasource config Security -> Allowed Hosts section")
 	}
 	res, err := client.HttpClient.Do(req)
 	duration = time.Since(startTime)

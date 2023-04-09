@@ -3,6 +3,7 @@ import defaultsDeep from 'lodash/defaultsDeep';
 import React, { useState } from 'react';
 import { SecureFieldsEditor } from './../components/config/SecureFieldsEditor';
 import { AuthEditor } from './config/Auth';
+import { AllowedHostsEditor } from './config/AllowedHosts';
 import { GlobalQueryEditor } from './config/GlobalQueryEditor';
 import { ProvisioningScript } from './config/Provisioning';
 import { TLSConfigEditor } from './config/TLSConfigEditor';
@@ -17,6 +18,7 @@ const Collapse = CollapseOriginal as any;
 export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
   const { options, onOptionsChange } = props;
   const [miscOpen, setMiscOpen] = useState(false);
+  const [securityOpen, setSecurityOpen] = useState(false);
   const [tlsOpen, setTlsOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(true);
   const [headersOpen, setHeadersOpen] = useState(false);
@@ -64,6 +66,12 @@ export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<I
         </div>
         <div style={{ padding: '1px 10px' }}>
           <TLSConfigEditor options={options} onOptionsChange={onOptionsChange} hideTile={true} />
+        </div>
+      </Collapse>
+      <Collapse label="Security" isOpen={securityOpen} collapsible={true} onToggle={() => setSecurityOpen(!securityOpen)}>
+        <div style={{ padding: '0px 10px' }}>
+          <p>For the enhanced security, enter list of allowed hosts in this section. The host URLs can include path and the URLs are case sensitive</p>
+          <AllowedHostsEditor options={options} onOptionsChange={onOptionsChange} />
         </div>
       </Collapse>
       <Collapse label="Global Queries" isOpen={globalsOpen} collapsible={true} onToggle={() => setGlobalsOpen(!globalsOpen)}>

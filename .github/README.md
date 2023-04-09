@@ -38,14 +38,15 @@
   - Basic authentication
   - Bearer token authentication
   - API Key authentication
-  - Digest authentication
   - OAuth passthrough
   - OAuth2 client credentials
   - OAuth2 JWT authentication
+  - AWS/Azure/GCP authentication
+  - Digest authentication
 - Flexible data manipulation with UQL, GROQ, JSONata
+- Supports alerting, recorded queries, public dashboards, query caching
 - Utility variable functions
 - Supports for Grafana node graph panel, annotations etc
-- Supports alerting, recorded queries
 
 ## ⚙️ Download
 
