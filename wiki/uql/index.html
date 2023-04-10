@@ -5,7 +5,7 @@
 <p>UQL is an opinionated query language designed for in-memory operations. UQL query can be formed with list of commands joined by <code>|</code>, in a line each.
 Most of the times, fields are referred within double quotes and string values are referred with single quotes. UQL was inspired by kusto query language and follows similar syntax.</p>
 <blockquote>
-<p>UQL is still in BETA.</p>
+<p>UQL is still in <strong>beta</strong> but used widely. If you encounter any issues with uql, create a bug <a href="https://github.com/yesoreyeram/uql/issues/new">here</a>.</p>
 </blockquote>
 <p>if your data looks like this,</p>
 <deckgo-highlight-code language="json" terminal="carbon" theme="vscode"  >
@@ -347,11 +347,36 @@ Most of the times, fields are referred within double quotes and string values ar
 | project &quot;a&quot;, &quot;triple&quot;=sum(&quot;a&quot;,&quot;a&quot;,&quot;a&quot;),&quot;thrice&quot;=mul(&quot;a&quot;,3), sum(&quot;a&quot;,&quot;b&quot;),  diff(&quot;a&quot;,&quot;b&quot;), mul(&quot;a&quot;,&quot;b&quot;)</code>
         </deckgo-highlight-code>
 <p>wil produce the following output</p>
-<deckgo-highlight-code language="csv" terminal="carbon" theme="vscode"  >
-          <code slot="code">a,triple,thrice,sum,diff,mul
-12,36,36,32,-8,240
-6,18,18,38,-26,192</code>
-        </deckgo-highlight-code>
+<table>
+<thead>
+<tr>
+<th>a</th>
+<th>triple</th>
+<th>thrice</th>
+<th>sum</th>
+<th>diff</th>
+<th>mul</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>12</td>
+<td>36</td>
+<td>36</td>
+<td>32</td>
+<td>-8</td>
+<td>240</td>
+</tr>
+<tr>
+<td>6</td>
+<td>18</td>
+<td>18</td>
+<td>38</td>
+<td>-26</td>
+<td>192</td>
+</tr>
+</tbody>
+</table>
 <p>To apply multiple transformations over a field, repeat them with the same field name. For example, the uql query <code>extend "name"=tolower("name"), "name"=trim("name")</code> will apply tolower function and then trim function over the name field.</p>
 <p>There are few other extend/project methods also available to deal with array</p>
 <h4>pack</h4>
@@ -422,14 +447,39 @@ Most of the times, fields are referred within double quotes and string values ar
 | order by &quot;total population&quot; desc</code>
         </deckgo-highlight-code>
 <p>will produce the output table like this</p>
-<deckgo-highlight-code language="csv" terminal="carbon" theme="vscode"  >
-          <code slot="code">country,number of cities,total population
-INDIA,2,330
-JAPAN,1,200
-USA,2,100</code>
-        </deckgo-highlight-code>
+<table>
+<thead>
+<tr>
+<th>country</th>
+<th>number of cities</th>
+<th>total population</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>INDIA</td>
+<td>2</td>
+<td>330</td>
+</tr>
+<tr>
+<td>JAPAN</td>
+<td>1</td>
+<td>200</td>
+</tr>
+<tr>
+<td>USA</td>
+<td>2</td>
+<td>100</td>
+</tr>
+</tbody>
+</table>
 <h3>pivot</h3>
-<p><code>pivot</code> is the command used to perform pivot operations over the data</p>
+<p><code>pivot</code> is the command used to perform pivot operations over the data. <code>pivot</code> command accepts 3 arguments.</p>
+<ul>
+<li>1st argument is the summarization. Example: <code>count("id)</code> or <code>sum("salary")</code></li>
+<li>2nd argument is the row field name. Example: <code>"country"</code></li>
+<li>3rd argument is the column field name. Example: <code>"occupation"</code></li>
+</ul>
 <h4>Pivot example 1</h4>
 <deckgo-highlight-code language="csv" terminal="carbon" theme="vscode"  >
           <code slot="code">name,age,country,occupation,salary
@@ -447,12 +497,40 @@ Chelsey Dietrich,32,USA,Software Engineer,3500</code>
 | pivot sum(&quot;salary&quot;), &quot;country&quot;, &quot;occupation&quot;</code>
         </deckgo-highlight-code>
 <p>will produce</p>
-<deckgo-highlight-code language="csv" terminal="carbon" theme="vscode"  >
-          <code slot="code">country,Devops Engineer,Software Engineer,Student,Senior Software Engineer
-USA,3000,5800,0,4000
-CANADA,0,0,0,0
-UK,0,2800,0,0</code>
-        </deckgo-highlight-code>
+<table>
+<thead>
+<tr>
+<th>country</th>
+<th>Devops Engineer</th>
+<th>Software Engineer</th>
+<th>Student</th>
+<th>Senior Software Engineer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>USA</td>
+<td>3000</td>
+<td>5800</td>
+<td>0</td>
+<td>4000</td>
+</tr>
+<tr>
+<td>CANADA</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>UK</td>
+<td>0</td>
+<td>2800</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
 <p>where as the following summarize query</p>
 <deckgo-highlight-code language="sql" terminal="carbon" theme="vscode"  >
           <code slot="code">parse-csv
@@ -460,14 +538,43 @@ UK,0,2800,0,0</code>
 | summarize &quot;salary&quot;=sum(&quot;salary&quot;) by &quot;country&quot;, &quot;occupation&quot;</code>
         </deckgo-highlight-code>
 <p>will produce</p>
-<deckgo-highlight-code language="csv" terminal="carbon" theme="vscode"  >
-          <code slot="code">country,occupation,salary
-USA,Devops Engineer,3000
-USA,Software Engineer,5800
-Canada,Student,0
-UK,Software Engineer,2800
-UK,Senior Software Engineer,4000</code>
-        </deckgo-highlight-code>
+<table>
+<thead>
+<tr>
+<th>country</th>
+<th>occupation</th>
+<th>salary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>USA</td>
+<td>Devops Engineer</td>
+<td>3000</td>
+</tr>
+<tr>
+<td>USA</td>
+<td>Software Engineer</td>
+<td>5800</td>
+</tr>
+<tr>
+<td>Canada</td>
+<td>Student</td>
+<td>0</td>
+</tr>
+<tr>
+<td>UK</td>
+<td>Software Engineer</td>
+<td>2800</td>
+</tr>
+<tr>
+<td>UK</td>
+<td>Senior Software Engineer</td>
+<td>4000</td>
+</tr>
+</tbody>
+</table>
+<p>so choose either <code>summarize</code> or <code>pivot</code> according to you needs</p>
 <h3>parse-json</h3>
 <p><code>parse-json</code> is the command to instruct the UQL to parse the response as JSON</p>
 <h3>parse-csv</h3>
@@ -563,4 +670,4 @@ UK,Senior Software Engineer,4000</code>
 <p>JSONata support is available from 0.8.8 version</p>
 </blockquote>
 <h3>comments</h3>
-<p>Any new line that starts with <code>#</code> will be treated as comment.</p></div><div class="blog-general-footer" style="margin-block:20px"><h2>Got an inspiring story about infinity to tell?</h2><br/><p>If you have inspiring story about infinity to tell us, write<!-- --> <a class="link" href="https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/new?category=show-and-tell" target="_blank" rel="noref">here in the github discussion</a>.</p></div></div></div></div><div id="prev-next-nav"><div class="container py-2"><div class="grid grid-cols-2"><div class="col-6 text-end item rounded p-2"><a href="/grafana-infinity-datasource/wiki/configuration">←  <!-- -->Configuration</a></div><div class="col-6 text-start item rounded p-2"><a href="/grafana-infinity-datasource/wiki/json">JSON<!-- -->  →</a></div></div></div></div></main></div><footer class="dark:bg-gray05 dark:text-slate-50 pb-10"><div class="container"><div class="grid grid-cols-5 gap-4 gap-y-10 py-6"><div class="col-12 col-md"><h4 class="mb-6 font-bolder text-xl text-orange-600">Setup</h4><ul class="list-unstyled"><li class="my-2"><a href="/grafana-infinity-datasource/wiki/installation">Installation</a></li><li class="my-2"><a href="/grafana-infinity-datasource/wiki/configuration">Configuration</a></li><li class="my-2"><a href="/grafana-infinity-datasource/wiki/authentication">Authentication</a></li><li class="my-2"><a href="/grafana-infinity-datasource/wiki/provisioning">Provisioning</a></li><li class="my-2"><a href="/grafana-infinity-datasource/wiki/limitations">Limitations</a></li><li class="my-2"><a href="/grafana-infinity-datasource/changelog">Change Log</a></li><li class="my-2"><a href="/grafana-infinity-datasource/license">License</a></li></ul></div><div class="col-12 col-md"><h4 class="mb-6 font-bolder text-xl text-orange-600"><a href="/grafana-infinity-datasource/welcome">Features</a></h4><ul class="list-unstyled"><li class="my-2"><a href="/grafana-infinity-datasource/wiki/csv">CSV</a></li><li class="my-2"><a href="/grafana-infinity-datasource/wiki/json">JSON</a></li><li class="my-2"><a href="/grafana-infinity-datasource/wiki/graphql">GraphQL</a></li><li class="my-2"><a href="/grafana-infinity-datasource/wiki/xml">XML</a></li><li class="my-2"><a href="/grafana-infinity-datasource/wiki/html">HTML</a></li><li class="my-2"><a href="/grafana-infinity-datasource/wiki/template-variables">Variables</a></li></ul></div><div class="col-12 col-md"><h4 class="mb-6 font-bolder text-xl text-orange-600"><a href="/grafana-infinity-datasource/community">Community</a></h4><ul class="list-unstyled"><li class="my-2"><a href="https://github.com/yesoreyeram/grafana-infinity-datasource" target="_blank" rel="noreferrer">Contributing</a></li><li class="my-2"><a href="https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/categories/q-a" target="_blank" rel="noreferrer">FAQ</a></li><li class="my-2"><a href="https://github.com/yesoreyeram/grafana-infinity-datasource/discussions" target="_blank" rel="noreferrer">Discussions</a></li><li class="my-2"><a href="https://github.com/yesoreyeram/grafana-infinity-datasource/issues/new/choose" target="_blank" rel="noreferrer">Report Bug</a></li><li class="my-2"><a href="https://github.com/yesoreyeram/grafana-infinity-datasource/issues/new/choose" target="_blank" rel="noreferrer">Request Feature</a></li></ul></div><div class="col-12 col-md"><h4 class="mb-6 font-bolder text-xl text-orange-600">Examples</h4><ul class="list-unstyled"><li class="my-2"><a href="/grafana-infinity-datasource/blog">Blog</a></li><li class="my-2"><a href="/grafana-infinity-datasource/blog/github">Github</a></li><li class="my-2"><a href="https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/38" target="_blank" rel="noreferrer">ThingSpeak</a></li><li class="my-2"><a href="https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/categories/show-and-tell" target="_blank" rel="noreferrer">More</a></li></ul></div><div class="col-12 col-md"><h4 class="mb-6 font-bolder text-xl text-orange-600">More from Author</h4><ul class="list-unstyled"><li class="my-2"><a href="https://github.com/yesoreyeram/grafana-infinity-panel" target="_blank" rel="noreferrer">Infinity Panel</a></li><li class="my-2"><a href="https://github.com/yesoreyeram/yesoreyeram-boomtable-panel" target="_blank" rel="noreferrer">Boom Table Panel</a></li><li class="my-2"><a href="https://github.com/yesoreyeram/yesoreyeram-boomtheme-panel" target="_blank" rel="noreferrer">Boom Theme Panel</a></li><li class="my-2"><a href="https://github.com/yesoreyeram/yesoreyeram-boomsummary-panel" target="_blank" rel="noreferrer">Boom Summary Panel</a></li><li class="my-2"><a href="https://github.com/yesoreyeram/grafana-utils" target="_blank" rel="noreferrer">Grafana Utils</a></li><li class="my-2"><a href="https://github.com/yesoreyeram/grafana-vscode" target="_blank" rel="noreferrer">Grafana VS Code Plugin</a></li><li class="my-2"><a href="https://github.com/yesoreyeram/grafana-azure-dashboards" target="_blank" rel="noreferrer">Grafana Azure Dashboards</a></li></ul></div></div><div class="row text-center mt-4"><span class="muted ">Copyright © 2020-<!-- -->2023<!-- --> - Sriramajeyam Sugumaran</span></div></div></footer></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/wiki/uql/";window.___webpackCompilationHash="ef5b9c22579a17c55421";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"polyfill":["/polyfill-454b31378bae7a3c696d.js"],"app":["/app-82c44558002ace61616d.js"],"component---src-pages-404-tsx":["/component---src-pages-404-tsx-c503e13c12543be9d2c7.js"],"component---src-pages-blog-tsx":["/component---src-pages-blog-tsx-ff6c978ff93c1a3eedc7.js"],"component---src-pages-changelog-tsx":["/component---src-pages-changelog-tsx-dfdd1f20952df6eb1b28.js"],"component---src-pages-community-mdx":["/component---src-pages-community-mdx-5fd475fd6b34af2bca31.js"],"component---src-pages-getting-started-tsx":["/component---src-pages-getting-started-tsx-dd9d7c66535011a52623.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-1cb0065ad031c6bd3c27.js"],"component---src-pages-license-tsx":["/component---src-pages-license-tsx-f0fd909ef03ae0ab1e88.js"],"component---src-pages-markdown-remark-frontmatter-slug-tsx":["/component---src-pages-markdown-remark-frontmatter-slug-tsx-52ec53a2849a39b45133.js"]};/*]]>*/</script><script src="/grafana-infinity-datasource/polyfill-454b31378bae7a3c696d.js" nomodule=""></script><script src="/grafana-infinity-datasource/app-82c44558002ace61616d.js" async=""></script><script src="/grafana-infinity-datasource/framework-d53eb346755b5486224e.js" async=""></script><script src="/grafana-infinity-datasource/webpack-runtime-d026e504e9c2d81329c5.js" async=""></script></body></html>
+<p>Any new line that starts with <code>#</code> will be treated as comment.</p></div><div class="blog-general-footer" style="margin-block:20px"><h2>Got an inspiring story about infinity to tell?</h2><br/><p>If you have inspiring story about infinity to tell us, write<!-- --> <a class="link" href="https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/new?category=show-and-tell" target="_blank" rel="noref">here in the github discussion</a>.</p></div></div></div></div><div id="prev-next-nav"><div class="container py-2"><div class="grid grid-cols-2"><div class="col-6 text-end item rounded p-2"><a href="/grafana-infinity-datasource/wiki/configuration">←  <!-- -->Configuration</a></div><div class="col-6 text-start item rounded p-2"><a href="/grafana-infinity-datasource/wiki/json">JSON<!-- -->  →</a></div></div></div></div></main></div><footer class="dark:bg-gray05 dark:text-slate-50 pb-10"><div class="container"><div class="grid grid-cols-5 gap-4 gap-y-10 py-6"><div class="col-12 col-md"><h4 class="mb-6 font-bolder text-xl text-orange-600">Setup</h4><ul class="list-unstyled"><li class="my-2"><a href="/grafana-infinity-datasource/wiki/installation">Installation</a></li><li class="my-2"><a href="/grafana-infinity-datasource/wiki/configuration">Configuration</a></li><li class="my-2"><a href="/grafana-infinity-datasource/wiki/authentication">Authentication</a></li><li class="my-2"><a href="/grafana-infinity-datasource/wiki/provisioning">Provisioning</a></li><li class="my-2"><a href="/grafana-infinity-datasource/wiki/limitations">Limitations</a></li><li class="my-2"><a href="/grafana-infinity-datasource/changelog">Change Log</a></li><li class="my-2"><a href="/grafana-infinity-datasource/license">License</a></li></ul></div><div class="col-12 col-md"><h4 class="mb-6 font-bolder text-xl text-orange-600"><a href="/grafana-infinity-datasource/welcome">Features</a></h4><ul class="list-unstyled"><li class="my-2"><a href="/grafana-infinity-datasource/wiki/csv">CSV</a></li><li class="my-2"><a href="/grafana-infinity-datasource/wiki/json">JSON</a></li><li class="my-2"><a href="/grafana-infinity-datasource/wiki/graphql">GraphQL</a></li><li class="my-2"><a href="/grafana-infinity-datasource/wiki/xml">XML</a></li><li class="my-2"><a href="/grafana-infinity-datasource/wiki/html">HTML</a></li><li class="my-2"><a href="/grafana-infinity-datasource/wiki/template-variables">Variables</a></li></ul></div><div class="col-12 col-md"><h4 class="mb-6 font-bolder text-xl text-orange-600"><a href="/grafana-infinity-datasource/community">Community</a></h4><ul class="list-unstyled"><li class="my-2"><a href="https://github.com/yesoreyeram/grafana-infinity-datasource" target="_blank" rel="noreferrer">Contributing</a></li><li class="my-2"><a href="https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/categories/q-a" target="_blank" rel="noreferrer">FAQ</a></li><li class="my-2"><a href="https://github.com/yesoreyeram/grafana-infinity-datasource/discussions" target="_blank" rel="noreferrer">Discussions</a></li><li class="my-2"><a href="https://github.com/yesoreyeram/grafana-infinity-datasource/issues/new/choose" target="_blank" rel="noreferrer">Report Bug</a></li><li class="my-2"><a href="https://github.com/yesoreyeram/grafana-infinity-datasource/issues/new/choose" target="_blank" rel="noreferrer">Request Feature</a></li></ul></div><div class="col-12 col-md"><h4 class="mb-6 font-bolder text-xl text-orange-600">Examples</h4><ul class="list-unstyled"><li class="my-2"><a href="/grafana-infinity-datasource/blog">Blog</a></li><li class="my-2"><a href="/grafana-infinity-datasource/blog/github">Github</a></li><li class="my-2"><a href="https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/38" target="_blank" rel="noreferrer">ThingSpeak</a></li><li class="my-2"><a href="https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/categories/show-and-tell" target="_blank" rel="noreferrer">More</a></li></ul></div><div class="col-12 col-md"><h4 class="mb-6 font-bolder text-xl text-orange-600">More from Author</h4><ul class="list-unstyled"><li class="my-2"><a href="https://github.com/yesoreyeram/grafana-infinity-panel" target="_blank" rel="noreferrer">Infinity Panel</a></li><li class="my-2"><a href="https://github.com/yesoreyeram/yesoreyeram-boomtable-panel" target="_blank" rel="noreferrer">Boom Table Panel</a></li><li class="my-2"><a href="https://github.com/yesoreyeram/yesoreyeram-boomtheme-panel" target="_blank" rel="noreferrer">Boom Theme Panel</a></li><li class="my-2"><a href="https://github.com/yesoreyeram/yesoreyeram-boomsummary-panel" target="_blank" rel="noreferrer">Boom Summary Panel</a></li><li class="my-2"><a href="https://github.com/yesoreyeram/grafana-utils" target="_blank" rel="noreferrer">Grafana Utils</a></li><li class="my-2"><a href="https://github.com/yesoreyeram/grafana-vscode" target="_blank" rel="noreferrer">Grafana VS Code Plugin</a></li><li class="my-2"><a href="https://github.com/yesoreyeram/grafana-azure-dashboards" target="_blank" rel="noreferrer">Grafana Azure Dashboards</a></li></ul></div></div><div class="row text-center mt-4"><span class="muted ">Copyright © 2020-<!-- -->2023<!-- --> - Sriramajeyam Sugumaran</span></div></div></footer></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/wiki/uql/";window.___webpackCompilationHash="eb3597d04c2b5c1d6eca";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"polyfill":["/polyfill-454b31378bae7a3c696d.js"],"app":["/app-5783745d0337cbc8787f.js"],"component---src-pages-404-tsx":["/component---src-pages-404-tsx-c503e13c12543be9d2c7.js"],"component---src-pages-blog-tsx":["/component---src-pages-blog-tsx-ff6c978ff93c1a3eedc7.js"],"component---src-pages-changelog-tsx":["/component---src-pages-changelog-tsx-dfdd1f20952df6eb1b28.js"],"component---src-pages-community-mdx":["/component---src-pages-community-mdx-5fd475fd6b34af2bca31.js"],"component---src-pages-getting-started-tsx":["/component---src-pages-getting-started-tsx-dd9d7c66535011a52623.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-1cb0065ad031c6bd3c27.js"],"component---src-pages-license-tsx":["/component---src-pages-license-tsx-f0fd909ef03ae0ab1e88.js"],"component---src-pages-markdown-remark-frontmatter-slug-tsx":["/component---src-pages-markdown-remark-frontmatter-slug-tsx-52ec53a2849a39b45133.js"]};/*]]>*/</script><script src="/grafana-infinity-datasource/polyfill-454b31378bae7a3c696d.js" nomodule=""></script><script src="/grafana-infinity-datasource/app-5783745d0337cbc8787f.js" async=""></script><script src="/grafana-infinity-datasource/framework-d53eb346755b5486224e.js" async=""></script><script src="/grafana-infinity-datasource/webpack-runtime-d026e504e9c2d81329c5.js" async=""></script></body></html>
