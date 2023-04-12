@@ -14,6 +14,7 @@
     "@mdx-js/react": "^1.6.22",
     "@radix-ui/react-dialog": "^0.1.5",
     "@radix-ui/react-navigation-menu": "^1.1.1",
+    "@stackblitz/sdk": "^1.9.0",
     "@stitches/react": "^1.2.6",
     "class-variance-authority": "^0.4.0",
     "clsx": "^1.2.1",

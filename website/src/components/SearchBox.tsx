@@ -160,6 +160,12 @@ const sitemap: any[] = [
     tags: ['uql', 'query', 'unstructured query language', 'sql', 'jsonata', 'kusto', 'mv-expand', 'project', 'summarize', 'group by', 'aggregate', 'filter', 'group by'],
   },
   {
+    title: 'UQL Playground',
+    slug: '/uql-playground',
+    description: 'UQL playground',
+    tags: ['uql', 'playground', 'query', 'unstructured query language', 'sql', 'jsonata', 'kusto', 'mv-expand', 'project', 'summarize', 'group by', 'aggregate', 'filter', 'group by'],
+  },
+  {
     title: 'GROQ',
     slug: '/wiki/groq',
     description: 'Groq Query language',

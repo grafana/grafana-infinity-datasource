@@ -37,7 +37,7 @@ export const Header = (props: HeaderProps) => {
       <header className="sticky top-0 z-40 w-full border-b border-b-slate-200 dark:border-b-gray10  dark:bg-gray10 dark:text-slate-50">
         <div className="container mx-auto flex h-16 items-center dark:text-white">
           <div className="hidden md:flex">
-            <Link className="mr-6 flex font-bold text-l items-center space-x-2" to="/">
+            <Link className="mr-6 flex font-bold text-l text-orange-400 items-center space-x-2" to="/">
               <img src="https://raw.githubusercontent.com/yesoreyeram/grafana-infinity-datasource/main/src/img/icon.svg" width={'30px'} height={'30px'} className="mr-2" />
               {props.title}
             </Link>
@@ -91,6 +91,18 @@ export const Header = (props: HeaderProps) => {
                       <ListLink to="/wiki/limitations">Limitations</ListLink>
                     </ul>
                   </NavigationMenuContent>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <Link className="ml-3 flex items-center space-x-2" to="/uql-playground">
+                    UQL Playground
+                  </Link>
+                  {/* <NavigationMenuTrigger className="h-9">UQL</NavigationMenuTrigger>
+                  <NavigationMenuContent style={{ background: `linear-gradient(90deg,#ffc551 0%,#ff804c 155.52%)` }}>
+                    <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[700px] lg:grid-cols-[1fr_1fr_1fr_1fr] dark:text-gray-900">
+                      <ListLink to="/wiki/uql">UQL Docs</ListLink>
+                      <ListLink to="/uql-playground">UQL Playground</ListLink>
+                    </ul>
+                  </NavigationMenuContent> */}
                 </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>

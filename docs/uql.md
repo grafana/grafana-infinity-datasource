@@ -9,6 +9,8 @@ next_page_slug: '/wiki/json'
 
 ## UQL
 
+### click here for [UQL playground](/uql-playground)
+
 UQL (Unstructured query language) is advance query format in infinity datasource which will consolidate JSON, CSV, XML, GraphQL formats. UQL also provides ability to customize the results.
 
 UQL is an opinionated query language designed for in-memory operations. UQL query can be formed with list of commands joined by `|`, in a line each.
