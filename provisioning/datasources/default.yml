@@ -41,3 +41,22 @@ datasources:
               { "name": "Leanne Bell", "age": 38, "country": "USA", "occupation": "Senior Software Engineer", "salary": 4000 },
               { "name": "Chelsey Dietrich", "age": 32, "country": "USA", "occupation": "Software Engineer", "salary": 3500 }
             ]
+  - name: Postman Echo
+    uid: infinity-postman-echo
+    type: yesoreyeram-infinity-datasource
+    jsonData:
+      allowedHosts:
+        - https://postman-echo.com
+  - name: Postman Echo - Basic Auth
+    uid: infinity-postman-echo-basic-auth
+    type: yesoreyeram-infinity-datasource
+    basicAuth: true
+    basicAuthUser: 'postman'
+    jsonData:
+      allowedHosts:
+        - 'https://postman-echo.com'
+      auth_method: 'basicAuth'
+      customHealthCheckEnabled: true
+      customHealthCheckUrl: 'https://postman-echo.com/basic-auth'
+    secureJsonData:
+      basicAuthPassword: 'password'

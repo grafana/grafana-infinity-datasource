@@ -1,4 +1,4 @@
-import { InlineFormLabel } from '@grafana/ui';
+import { InlineFormLabel, TextArea } from '@grafana/ui';
 import React, { ChangeEvent, MouseEvent } from 'react';
 
 export const SecureTextArea = ({
@@ -32,7 +32,7 @@ export const SecureTextArea = ({
         </div>
       ) : (
         <div className="gf-form gf-form--grow">
-          <textarea rows={rows || 5} className="gf-form-input gf-form-textarea" onChange={onChange} onBlur={onBlur} placeholder={placeholder} />
+          <TextArea rows={rows || 5} className="gf-form-input gf-form-textarea" onChange={onChange} onBlur={onBlur} placeholder={placeholder} />
         </div>
       )}
     </div>

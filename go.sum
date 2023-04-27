@@ -267,8 +267,8 @@ github.com/gorilla/mux v1.7.3/go.mod h1:1lud6UwP+6orDFRuTfBEV8e9/aOM/c4fVVCaMa2z
 github.com/gorilla/mux v1.8.0 h1:i40aqfkR1h2SlN9hojwV5ZA91wcXFOvkdNIeFDP5koI=
 github.com/gorilla/mux v1.8.0/go.mod h1:DVbg23sWSpFRCP0SfiEN6jmj59UnW/n46BH5rLB71So=
 github.com/gorilla/websocket v0.0.0-20170926233335-4201258b820c/go.mod h1:E7qHFY5m1UJ88s3WnNqhKjPHQ0heANvMoAMk2YaljkQ=
-github.com/grafana/grafana-aws-sdk v0.11.1 h1:AxPnDMbQgzfExmJ6B0cYVarVFnMYEp5krzhROw8/y34=
-github.com/grafana/grafana-aws-sdk v0.11.1/go.mod h1:rCXLYoMpPqF90U7XqgVJ1HIAopFVF0bB3SXBVEJIm3I=
+github.com/grafana/grafana-aws-sdk v0.14.0 h1:JkpAlaHDPkd6Eu5OAsxo0/bZxqmzt9pfJ5LECkWq1TA=
+github.com/grafana/grafana-aws-sdk v0.14.0/go.mod h1:rCXLYoMpPqF90U7XqgVJ1HIAopFVF0bB3SXBVEJIm3I=
 github.com/grafana/grafana-plugin-sdk-go v0.94.0/go.mod h1:3VXz4nCv6wH5SfgB3mlW39s+c+LetqSCjFj7xxPC5+M=
 github.com/grafana/grafana-plugin-sdk-go v0.159.0 h1:tjqzTe/wz+1zzaeHpOJvBvSvZFx/bJUSHj6WA8HJqhE=
 github.com/grafana/grafana-plugin-sdk-go v0.159.0/go.mod h1:7/F3lL/w3MGuZTwu0jam5oL/4zNOQmhs2k8WZ9VlzhI=

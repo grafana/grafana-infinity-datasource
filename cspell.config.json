@@ -11,7 +11,8 @@
     "testdata/**",
     "*SeriesProvider.ts",
     "website/node_modules/**",
-    "website/public/**"
+    "website/public/**",
+    "docker-compose.yaml"
   ],
   "words": [
     "ANSIC",

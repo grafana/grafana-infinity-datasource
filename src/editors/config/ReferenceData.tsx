@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, InlineFormLabel, Input, TextArea } from '@grafana/ui';
+import { Button, Card, InlineFormLabel, Input, TextArea } from '@grafana/ui';
 import type { InfinityOptions, InfinityReferenceData } from '../../types';
 import type { DataSourcePluginOptionsEditorProps } from '@grafana/data/types';
 
@@ -26,33 +26,36 @@ export const ReferenceDataEditor = (props: DataSourcePluginOptionsEditorProps<In
     <>
       {refData.map((rd, rdi) => {
         return (
-          <>
-            <div className="gf-form">
-              <InlineFormLabel width={5} tooltip="Reference name">
-                Name
-              </InlineFormLabel>
-              <Input value={rd.name} placeholder="Name" onChange={(e) => onNameUpdate(rdi, 'name', e.currentTarget.value)} width={20} />
-              <InlineFormLabel width={5} tooltip="Reference data">
-                Data
-              </InlineFormLabel>
-              <TextArea value={rd.data} placeholder="Value" onChange={(e) => onNameUpdate(rdi, 'data', e.currentTarget.value)} rows={5} />
+          <Card key={rdi}>
+            <Card.Heading>
+              <InlineFormLabel width={5}>Name</InlineFormLabel>
+              <Input value={rd.name} placeholder="Give an unique name to your reference data" onChange={(e) => onNameUpdate(rdi, 'name', e.currentTarget.value)} />
+            </Card.Heading>
+            <Card.Description>
+              <TextArea value={rd.data} placeholder="Enter data here. either json / csv / tsv / xml / html" onChange={(e) => onNameUpdate(rdi, 'data', e.currentTarget.value)} rows={5} />
+            </Card.Description>
+            <Card.Actions>
               <Button
                 icon="trash-alt"
                 variant="destructive"
                 size="sm"
+                fill="outline"
                 onClick={(e) => {
                   onRemove(rdi);
                   e.preventDefault();
                 }}
-              />
-            </div>
-          </>
+              >
+                Delete
+              </Button>
+            </Card.Actions>
+          </Card>
         );
       })}
       <div className="gf-form">
         <Button
           variant="secondary"
           size="md"
+          icon="plus"
           onClick={(e) => {
             addReferenceData();
             e.preventDefault();

@@ -35,6 +35,18 @@ func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient in
 		return response
 	}
 	//endregion
+	args := []interface{}{}
+	args = append(args, "type", query.Type)
+	args = append(args, "source", query.Source)
+	args = append(args, "parser", query.Parser)
+	args = append(args, "uql", query.UQL)
+	args = append(args, "url", query.URL)
+	args = append(args, "root_selector", query.RootSelector)
+	args = append(args, "filterExpression", query.FilterExpression)
+	args = append(args, "summarizeExpression", query.SummarizeExpression)
+	args = append(args, "settings.AuthenticationMethod", infClient.Settings.AuthenticationMethod)
+	args = append(args, "settings.OAuth2Settings.OAuth2Type", infClient.Settings.OAuth2Settings.OAuth2Type)
+	backend.Logger.Info("performing QueryData in infinity datasource", args...)
 	//region Frame Builder
 	switch query.Type {
 	case models.QueryTypeGSheets:

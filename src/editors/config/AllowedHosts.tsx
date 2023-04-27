@@ -7,15 +7,17 @@ type AllowedHostsEditorProps = {} & DataSourcePluginOptionsEditorProps<InfinityO
 
 export const AllowedHostsEditor = ({ options, onOptionsChange }: AllowedHostsEditorProps) => {
   return (
-    <div className="gf-form">
-      <InlineFormLabel width={10} tooltip="List of allowed host names. Enter the base URL names. ex: https://foo.com">
-        Allowed hosts
-      </InlineFormLabel>
-      <TagsInput
-        placeholder="Enter the host names with domain prefix (enter key to add)"
-        tags={options.jsonData.allowedHosts || []}
-        onChange={(allowedHosts = []) => onOptionsChange({ ...options, jsonData: { ...options.jsonData, allowedHosts } })}
-      />
-    </div>
+    <>
+      <div className="gf-form">
+        <InlineFormLabel width={10} tooltip="List of allowed host names. Enter the base URL names. ex: https://foo.com">
+          Allowed hosts
+        </InlineFormLabel>
+        <TagsInput
+          placeholder="Enter the host names with domain prefix (enter key to add)"
+          tags={options.jsonData.allowedHosts || []}
+          onChange={(allowedHosts = []) => onOptionsChange({ ...options, jsonData: { ...options.jsonData, allowedHosts } })}
+        />
+      </div>
+    </>
   );
 };

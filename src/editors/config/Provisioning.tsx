@@ -28,9 +28,10 @@ export const ProvisioningScript = (props: { options: DataSourceSettings<Infinity
   return (
     <>
       <Button
+        icon="book"
         variant="secondary"
         size="md"
-        style={{ marginInlineEnd: '5px' }}
+        style={{ marginInlineEnd: '5px', color: '#d9d9d9' }}
         onClick={(e) => {
           setIsOpen(true);
           e.preventDefault();

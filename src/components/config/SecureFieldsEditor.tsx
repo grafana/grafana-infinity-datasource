@@ -1,4 +1,4 @@
-import { Button, IconButton, LegacyForms } from '@grafana/ui';
+import { Button, LegacyForms } from '@grafana/ui';
 import uniqueId from 'lodash/uniqueId';
 import React, { PureComponent } from 'react';
 import { InfinityOptions, SecureField } from './../../types';
@@ -52,9 +52,7 @@ const SecureFieldEditor = ({
         onChange={(e) => onChange({ ...secureField, value: e.target.value })}
         onBlur={onBlur}
       ></SecretFormField>
-      <Button type="button" aria-label={`Remove ${title}`} variant="secondary" size="xs" onClick={(_e) => onRemove(secureField.id)}>
-        <IconButton name="trash-alt" />
-      </Button>
+      <Button style={{ marginInlineStart: '4px' }} aria-label={`Remove ${title}`} icon="trash-alt" variant="destructive" fill="outline" onClick={(_e) => onRemove(secureField.id)} />
     </div>
   );
 };

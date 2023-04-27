@@ -69,6 +69,7 @@
     "xml2js": "^0.4.23"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.26.1",
     "@cypress/snapshot": "^2.1.7",
     "@grafana/eslint-config": "^3.0.0",
     "@grafana/toolkit": "8.5.4",

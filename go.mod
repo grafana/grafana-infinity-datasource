@@ -1,12 +1,12 @@
 module github.com/yesoreyeram/grafana-infinity-datasource
 
-go 1.19
+go 1.20
 
 require (
 	github.com/basgys/goxml2json v1.1.0
 	github.com/google/uuid v1.3.0
 	github.com/gorilla/mux v1.8.0
-	github.com/grafana/grafana-aws-sdk v0.11.1
+	github.com/grafana/grafana-aws-sdk v0.14.0
 	github.com/grafana/grafana-plugin-sdk-go v0.159.0
 	github.com/graphql-go/graphql v0.8.0
 	github.com/graphql-go/handler v0.2.3
