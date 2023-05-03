@@ -112,7 +112,7 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
             className={a.value === authType && !othersOpen ? styles.card_selected : styles.card}
             key={a.value}
             onKeyDown={(e) => {
-              if (e.keyCode == 32) {
+              if (e.keyCode === 32) {
                 if (a && a.value) {
                   a.value === 'others' ? setOthersOpen(true) : onAuthTypeChange(a.value);
                 } else {

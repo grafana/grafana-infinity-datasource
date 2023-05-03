@@ -1,5 +1,5 @@
 module.exports = {
-  "__version": "10.2.0",
+  "__version": "10.11.0",
   "sanity check": {
     "health check": {
       "1": {
@@ -15,6 +15,10 @@ module.exports = {
           "name": "A",
           "refId": "A",
           "meta": {
+            "typeVersion": [
+              0,
+              0
+            ],
             "custom": {
               "data": "[{\"name\":\"foo\",\"age\":30},{\"name\":\"bar\",\"age\":17}]",
               "duration": 0,
@@ -109,6 +113,10 @@ module.exports = {
           "name": "A",
           "refId": "A",
           "meta": {
+            "typeVersion": [
+              0,
+              0
+            ],
             "custom": {
               "data": "name,age\nfoo,30\nbar,17",
               "duration": 0,
@@ -203,6 +211,10 @@ module.exports = {
           "name": "A",
           "refId": "A",
           "meta": {
+            "typeVersion": [
+              0,
+              0
+            ],
             "custom": {
               "data": "name  age\nfoo  30\nbar 17",
               "duration": 0,
@@ -285,6 +297,10 @@ module.exports = {
           "name": "A",
           "refId": "A",
           "meta": {
+            "typeVersion": [
+              0,
+              0
+            ],
             "custom": {
               "data": "[{\"name\":\"foo\",\"age\":30},{\"name\":\"bar\",\"age\":17}]",
               "duration": 0,
@@ -379,6 +395,10 @@ module.exports = {
           "name": "A",
           "refId": "A",
           "meta": {
+            "typeVersion": [
+              0,
+              0
+            ],
             "custom": {
               "data": "<?xml version=\"1.0\" encoding=\"UTF-8\" ?> <root>   <row>     <name>foo</name>     <age>30</age>   </row>   <row>     <name>bar</name>     <age>17</age>   </row> </root>",
               "duration": 0,
@@ -460,6 +480,10 @@ module.exports = {
           "name": "A",
           "refId": "A",
           "meta": {
+            "typeVersion": [
+              0,
+              0
+            ],
             "custom": {
               "data": "<?xml version=\"1.0\" encoding=\"UTF-8\" ?> <root>   <row>     <name>foo</name>     <age>30</age>   </row>   <row>     <name>bar</name>     <age>17</age>   </row> </root>",
               "duration": 0,
@@ -567,6 +591,10 @@ module.exports = {
           "name": "A",
           "refId": "A",
           "meta": {
+            "typeVersion": [
+              0,
+              0
+            ],
             "custom": {
               "data": "<table class=\"table table-bordered table-hover table-condensed\"> <thead><tr><th title=\"Field #1\">name</th> <th title=\"Field #2\">age</th> </tr></thead> <tbody><tr> <td>foo</td> <td align=\"right\">30</td> </tr> <tr> <td>bar</td> <td align=\"right\">17</td> </tr> </tbody></table>",
               "duration": 0,
@@ -648,6 +676,10 @@ module.exports = {
           "name": "A",
           "refId": "A",
           "meta": {
+            "typeVersion": [
+              0,
+              0
+            ],
             "custom": {
               "data": "<table class=\"table table-bordered table-hover table-condensed\"> <thead><tr><th title=\"Field #1\">name</th> <th title=\"Field #2\">age</th> </tr></thead> <tbody><tr> <td>foo</td> <td align=\"right\">30</td> </tr> <tr> <td>bar</td> <td align=\"right\">17</td> </tr> </tbody></table>",
               "duration": 0,
@@ -757,6 +789,10 @@ module.exports = {
           "name": "A",
           "refId": "A",
           "meta": {
+            "typeVersion": [
+              0,
+              0
+            ],
             "custom": {
               "data": "[{\"name\":\"foo\",\"age\":30},{\"name\":\"bar\",\"age\":17}]",
               "duration": 0,
@@ -825,6 +861,10 @@ module.exports = {
           "name": "A",
           "refId": "A",
           "meta": {
+            "typeVersion": [
+              0,
+              0
+            ],
             "custom": {
               "data": "name,age\nfoo,30\nbar,17",
               "duration": 0,
@@ -893,6 +933,10 @@ module.exports = {
           "name": "A",
           "refId": "A",
           "meta": {
+            "typeVersion": [
+              0,
+              0
+            ],
             "custom": {
               "data": "name  age\nfoo  30\nbar 17",
               "duration": 0,
@@ -961,6 +1005,10 @@ module.exports = {
           "name": "A",
           "refId": "A",
           "meta": {
+            "typeVersion": [
+              0,
+              0
+            ],
             "custom": {
               "data": "[{\"name\":\"foo\",\"age\":30},{\"name\":\"bar\",\"age\":17}]",
               "duration": 0,
@@ -1029,6 +1077,10 @@ module.exports = {
           "name": "A",
           "refId": "A",
           "meta": {
+            "typeVersion": [
+              0,
+              0
+            ],
             "custom": {
               "data": "<?xml version=\"1.0\" encoding=\"UTF-8\" ?> <root>   <row>     <name>foo</name>     <age>30</age>   </row>   <row>     <name>bar</name>     <age>17</age>   </row> </root>",
               "duration": 0,
