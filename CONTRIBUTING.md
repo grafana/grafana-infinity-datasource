@@ -25,3 +25,11 @@ Once you clone the repo locally in the grafana's plugin folder. Do the following
 
 - `cd website & yarn dev` - To build and see the changes of docs website
 - `cd website & yarn build` - To build the docs website
+
+## Submitting PR
+
+If you are creating a PR, ensure to run `yarn changeset` from your branch. Provide the details accordingly. It will create `*.md` file inside `./.changeset` folder. Later during the release, based on these changesets, package version will be bumped and changelog will be generated.
+
+## Releasing & Bumping version
+
+To create a new release, execute `yarn changeset version`. This will update the Changelog and bump the version in `package.json` file. Commit those changes and then create a release tag by executing `git tag v1.4.1`. Then you can push the commit and tag by executing `git push && git push --tags`

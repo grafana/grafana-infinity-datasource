@@ -1,6 +1,18 @@
 # Change Log
 
-Change history of the project. All the feature updates, bug fixes, breaking changes will be documented here.
+## 1.5.0
+
+### Minor Changes
+
+- 152c4c3: **Config editor** Updated config editor UI
+- 152c4c3: **Health Check** Added support for custom health check
+- 152c4c3: **Chore** Backend binaries are now compiled with Go 1.20.4 which contains **security patches**
+
+### Patch Changes
+
+- 152c4c3: **Logging** Consuming `reportInteraction` from the **@grafana/runtime** library for reporting queries
+- 152c4c3: **Logging** Updated backend logging for improved debugging experience
+- 152c4c3: **Chore** Added changeset to the build/publish pipeline
 
 ## [ 1.4.1 ]
 
