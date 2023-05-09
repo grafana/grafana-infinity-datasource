@@ -4,15 +4,16 @@
 
 ### Minor Changes
 
-- 152c4c3: **Config editor** Updated config editor UI
-- 152c4c3: **Health Check** Added support for custom health check
-- 152c4c3: **Chore** Backend binaries are now compiled with Go 1.20.4 which contains **security patches**
+- **Config editor** Updated config editor UI
+- **Health Check** Added support for custom health check
+- **Chore** Backend binaries are now compiled with Go 1.20.4 which contains **security patches**
 
 ### Patch Changes
 
-- 152c4c3: **Logging** Consuming `reportInteraction` from the **@grafana/runtime** library for reporting queries
-- 152c4c3: **Logging** Updated backend logging for improved debugging experience
-- 152c4c3: **Chore** Added changeset to the build/publish pipeline
+- **Logging** Consuming `reportInteraction` from the **@grafana/runtime** library for reporting queries
+- **Logging** Updated backend logging for improved debugging experience
+- **Chore** Added changeset to the build/publish pipeline
+- **docs**: updated docs about user agent header
 
 ## [ 1.4.1 ]
 

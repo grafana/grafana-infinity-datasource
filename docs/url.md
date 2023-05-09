@@ -17,7 +17,7 @@ In the query editor, click the expand icon next the URL field to configure more 
 
 ## Variables in URL
 
-In the query URL, you can use any [grafana global variables](https://grafana.com/docs/grafana/latest/variables/variable-types/global-variables) or any dashboard variables.
+In the query URL, you can use any [grafana global variables](https://grafana.com/docs/grafana/latest/variables/variable-types/global-variables) or any dashboard variables this includes from and to timestamps of the dashboard
 
 For example,
 
@@ -39,7 +39,9 @@ You can also use Api key authentication for this purpose.
 
 ## Headers in the URL
 
-You can configure the headers required for the URL in the datasource config and also in the query headers. By default infinity datasource automatically sets two headers. Header `User-Agent : Grafana` will be set for all requests and `Content-Type : application/json`. You can override these headers in the datasource configuration page.
+You can configure the headers required for the URL in the datasource config and also in the query headers. By default infinity datasource automatically sets two headers. Header `User-Agent : Go-http-client/1.1` will be set for all requests and `Content-Type : application/json`. You can override these headers in the datasource configuration page.
+
+Note: We suggest adding secure headers only via configuration and not in query.
 
 ## Allowed Hosts
 

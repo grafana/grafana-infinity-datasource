@@ -287,8 +287,8 @@ const sitemap: any[] = [
   {
     title: 'URL',
     slug: '/wiki/url',
-    description: 'Framing URl',
-    tags: ['uql', 'headers', 'authorization', 'authentication'],
+    description: 'Framing URL with grafana global variables and macros',
+    tags: ['uql', 'headers', 'authorization', 'authentication', 'timestamp', 'from', 'to', 'timezone', 'moment', 'global variables', 'macros', 'epoch', 'unix timestamp', 'milli seconds'],
   },
   {
     title: 'Blog',
