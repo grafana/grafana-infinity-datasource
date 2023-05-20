@@ -15,6 +15,7 @@ import { ExperimentalFeatures } from './query.experimental';
 import { isDataQuery } from './../../app/utils';
 import type { EditorMode, InfinityQuery } from './../../types';
 import { Datasource } from './../../datasource';
+import { PaginationEditor } from './query.pagination';
 
 export type InfinityEditorProps = {
   query: InfinityQuery;
@@ -84,6 +85,7 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
             <GROQEditor {...{ query, onChange, onRunQuery, mode }} />
           </EditorRow>
         )}
+        {query.type === 'json' && query.parser === 'backend' && <PaginationEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />}
         {(query.type === 'json' || query.type === 'graphql' || query.type === 'csv' || query.type === 'tsv' || query.type === 'xml') && query.parser === 'backend' && (
           <ExperimentalFeatures query={query} onChange={onChange} onRunQuery={onRunQuery} />
         )}
