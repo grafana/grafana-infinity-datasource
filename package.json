@@ -4,6 +4,11 @@
   "description": "JSON, CSV, XML, GraphQL, HTML and REST API datasource for Grafana. Do infinite things with Grafana. Transform data with UQL/GROQ. Visualize data from many apis, RSS/ATOM feeds directly",
   "main": "dist/module.js",
   "scripts": {
+    "build:backend": "mage -v",
+    "build:backend:turbo": "yarn build:backend",
+    "build:frontend": "yarn build",
+    "build:frontend:turbo": "yarn build:frontend",
+    "build:turbo": "yarn turbo build:backend:turbo build:frontend:turbo",
     "dev": "grafana-toolkit plugin:dev",
     "watch": "grafana-toolkit plugin:dev --watch",
     "start": "yarn watch",
@@ -98,6 +103,7 @@
     "ts-jest": "^26.5.4",
     "ts-loader": "^8.0.18",
     "tslib": "^2.3.1",
+    "turbo": "^1.9.8",
     "typescript": "^4.7.4"
   },
   "resolutions": {
