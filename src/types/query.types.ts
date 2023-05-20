@@ -99,7 +99,36 @@ export type InfinityUQLQuery = { uql: string; format: InfinityQueryFormat } & In
 export type InfinityGROQQuerySource = InfinityQueryWithURLSource<'groq'> | InfinityQueryWithInlineSource<'groq'>;
 export type InfinityGROQQuery = { groq: string; format: InfinityQueryFormat } & InfinityGROQQuerySource & InfinityQueryBase<'groq'>;
 export type InfinityGSheetsQuery = { spreadsheet: string; sheetName?: string; range: string; columns: InfinityColumn[] } & InfinityQueryBase<'google-sheets'>;
-export type InfinityQuery = InfinityLegacyQuery | InfinityUQLQuery | InfinityGROQQuery | InfinityGSheetsQuery;
+export type PaginationType = 'none' | 'offset' | 'page' | 'cursor';
+export type PaginationParamType = 'query' | 'header' | 'body_data' | 'body_json';
+export type PaginationBase<T extends PaginationType> = { pagination_mode?: T; pagination_max_pages?: number };
+export type PaginationNone = {} & PaginationBase<'none'>;
+export type PaginationOffset = {
+  pagination_param_size_field_name?: string;
+  pagination_param_size_field_type?: PaginationParamType;
+  pagination_param_size_value?: number;
+  pagination_param_offset_field_name?: string;
+  pagination_param_offset_field_type?: PaginationParamType;
+  pagination_param_offset_value?: number;
+} & PaginationBase<'offset'>;
+export type PaginationPage = {
+  pagination_param_size_field_name?: string;
+  pagination_param_size_field_type?: PaginationParamType;
+  pagination_param_size_value?: number;
+  pagination_param_page_field_name?: string;
+  pagination_param_page_field_type?: PaginationParamType;
+  pagination_param_page_value?: number;
+} & PaginationBase<'page'>;
+export type PaginationCursor = {
+  pagination_param_size_field_name?: string;
+  pagination_param_size_field_type?: PaginationParamType;
+  pagination_param_size_value?: number;
+  pagination_param_cursor_field_name?: string;
+  pagination_param_cursor_field_type?: PaginationParamType;
+  pagination_param_cursor_extraction_path?: string;
+} & PaginationBase<'cursor'>;
+export type Pagination = PaginationNone | PaginationOffset | PaginationPage | PaginationCursor;
+export type InfinityQuery = (InfinityLegacyQuery | InfinityUQLQuery | InfinityGROQQuery | InfinityGSheetsQuery) & Pagination;
 //#endregion
 
 //#region Misc
