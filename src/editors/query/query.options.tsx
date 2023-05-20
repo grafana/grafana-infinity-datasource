@@ -30,7 +30,7 @@ export const BasicOptions = (props: {
       <EditorRow label="Query options">
         <TypeSelector {...props} />
         <ParseTypeEditor {...props} />
-        {query.type !== 'global' ? <SourceSelector {...props} /> : <GlobalQuerySelector {...props} />}
+        {query.type === 'transformations' ? <></> : query.type !== 'global' ? <SourceSelector {...props} /> : <GlobalQuerySelector {...props} />}
         {isDataQuery(query) && query.source === 'reference' && <ReferenceNameEditor query={query} onChange={onChange} onRunQuery={onRunQuery} datasource={datasource} />}
         {query.type !== 'series' && mode !== 'variable' && query.type !== 'google-sheets' && query.type !== 'global' && <FormatSelector {...props} />}
         {query.type === 'google-sheets' && <GoogleSheetsEditor query={query} onChange={props.onChange} onRunQuery={props.onRunQuery} />}

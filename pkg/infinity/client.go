@@ -16,6 +16,7 @@ import (
 	"time"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
+	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 )
 
@@ -84,10 +85,14 @@ func NewClient(settings models.InfinitySettings) (client *Client, err error) {
 	httpClient = ApplyOAuthClientCredentials(httpClient, settings)
 	httpClient = ApplyOAuthJWT(httpClient, settings)
 	httpClient = ApplyAWSAuth(httpClient, settings)
-	return &Client{
+	client = &Client{
 		Settings:   settings,
 		HttpClient: httpClient,
-	}, err
+	}
+	if settings.IsMock {
+		client.IsMock = true
+	}
+	return client, err
 }
 
 func replaceSect(input string, settings models.InfinitySettings, includeSect bool) string {
@@ -103,12 +108,15 @@ func replaceSect(input string, settings models.InfinitySettings, includeSect boo
 }
 
 func (client *Client) req(ctx context.Context, url string, body io.Reader, settings models.InfinitySettings, query models.Query, requestHeaders map[string]string) (obj any, statusCode int, duration time.Duration, err error) {
-	req, _ := GetRequest(settings, body, query, requestHeaders, true)
+	ctx, span := tracing.DefaultTracer().Start(ctx, "client.req")
+	defer span.End()
+	req, _ := GetRequest(ctx, settings, body, query, requestHeaders, true)
 	startTime := time.Now()
 	if !CanAllowURL(req.URL.String(), settings.AllowedHosts) {
 		backend.Logger.Error("url is not in the allowed list. make sure to match the base URL with the settings", "url", req.URL.String())
 		return nil, http.StatusUnauthorized, 0, errors.New("requested URL is not allowed. To allow this URL, update the datasource config Security -> Allowed Hosts section")
 	}
+	backend.Logger.Debug("yesoreyeram-infinity-datasource plugin is now requesting URL", "url", req.URL.String())
 	res, err := client.HttpClient.Do(req)
 	duration = time.Since(startTime)
 	if res != nil {

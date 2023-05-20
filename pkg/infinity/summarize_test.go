@@ -54,3 +54,7 @@ func TestGetSummaryFrame(t *testing.T) {
 		})
 	}
 }
+
+func toFP(v float64) *float64 {
+	return &v
+}

@@ -1,4 +1,4 @@
-package infinity
+package transformations
 
 import (
 	"errors"
@@ -10,6 +10,22 @@ import (
 	"gopkg.in/Knetic/govaluate.v3"
 )
 
+type FilterExpressionOptions struct {
+	Expression string `json:"expression,omitempty"`
+}
+
+func FilterExpression(input []*data.Frame, options FilterExpressionOptions) ([]*data.Frame, error) {
+	output := []*data.Frame{}
+	for _, frame := range input {
+		filteredFrame, err := ApplyFilter(frame, options.Expression)
+		if err != nil {
+			return output, errors.New("unable to apply filter")
+		}
+		output = append(output, filteredFrame)
+	}
+	return output, nil
+}
+
 func ApplyFilter(frame *data.Frame, filterExpression string) (*data.Frame, error) {
 	if strings.TrimSpace(filterExpression) == "" {
 		return frame, nil
@@ -19,7 +35,7 @@ func ApplyFilter(frame *data.Frame, filterExpression string) (*data.Frame, error
 	if err != nil {
 		return frame, err
 	}
-	parsedExpression, err := govaluate.NewEvaluableExpressionWithFunctions(filterExpression, expressionFunctions)
+	parsedExpression, err := govaluate.NewEvaluableExpressionWithFunctions(filterExpression, ExpressionFunctions)
 	if err != nil {
 		return frame, err
 	}

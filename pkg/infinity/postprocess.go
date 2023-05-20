@@ -8,16 +8,17 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
+	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/transformations"
 )
 
 func PostProcessFrame(ctx context.Context, frame *data.Frame, query models.Query) (*data.Frame, error) {
-	frame, err := GetFrameWithComputedColumns(frame, query.ComputedColumns)
+	frame, err := transformations.GetFrameWithComputedColumns(frame, query.ComputedColumns)
 	if err != nil {
 		backend.Logger.Error("error getting computed column", "error", err.Error())
 		frame.Meta.Custom = &CustomMeta{Query: query, Error: err.Error()}
 		return frame, err
 	}
-	frame, err = ApplyFilter(frame, query.FilterExpression)
+	frame, err = transformations.ApplyFilter(frame, query.FilterExpression)
 	if err != nil {
 		backend.Logger.Error("error applying filter", "error", err.Error())
 		frame.Meta.Custom = &CustomMeta{Query: query, Error: err.Error()}

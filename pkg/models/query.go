@@ -3,6 +3,7 @@ package models
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"strings"
 
@@ -12,15 +13,16 @@ import (
 type QueryType string
 
 const (
-	QueryTypeJSON    QueryType = "json"
-	QueryTypeCSV     QueryType = "csv"
-	QueryTypeTSV     QueryType = "tsv"
-	QueryTypeXML     QueryType = "xml"
-	QueryTypeGraphQL QueryType = "graphql"
-	QueryTypeHTML    QueryType = "html"
-	QueryTypeUQL     QueryType = "uql"
-	QueryTypeGROQ    QueryType = "groq"
-	QueryTypeGSheets QueryType = "google-sheets"
+	QueryTypeJSON            QueryType = "json"
+	QueryTypeCSV             QueryType = "csv"
+	QueryTypeTSV             QueryType = "tsv"
+	QueryTypeXML             QueryType = "xml"
+	QueryTypeGraphQL         QueryType = "graphql"
+	QueryTypeHTML            QueryType = "html"
+	QueryTypeUQL             QueryType = "uql"
+	QueryTypeGROQ            QueryType = "groq"
+	QueryTypeGSheets         QueryType = "google-sheets"
+	QueryTypeTransformations QueryType = "transformations"
 )
 
 type InfinityParser string
@@ -40,6 +42,7 @@ const (
 	PaginationModeOffset PaginationMode = "offset"
 	PaginationModePage   PaginationMode = "page"
 	PaginationModeCursor PaginationMode = "cursor"
+	PaginationModeList   PaginationMode = "list"
 )
 
 type PaginationParamType string
@@ -49,7 +52,32 @@ const (
 	PaginationParamTypeHeader   PaginationParamType = "header"
 	PaginationParamTypeBodyData PaginationParamType = "body_data"
 	PaginationParamTypeBodyJson PaginationParamType = "body_json"
+	PaginationParamTypeReplace  PaginationParamType = "replace"
 )
+
+type Transformation string
+
+const (
+	NoOpTransformation             Transformation = "noop"
+	LimitTransformation            Transformation = "limit"
+	FilterExpressionTransformation Transformation = "filterExpression"
+	ComputedColumnTransformation   Transformation = "computedColumn"
+)
+
+type TransformationItem struct {
+	Type     Transformation `json:"type,omitempty"`
+	Disabled bool           `json:"disabled,omitempty"`
+	Limit    struct {
+		LimitField int `json:"limitField,omitempty"`
+	} `json:"limit,omitempty"`
+	FilterExpression struct {
+		Expression string `json:"expression,omitempty"`
+	} `json:"filterExpression,omitempty"`
+	ComputedColumn struct {
+		Expression string `json:"expression,omitempty"`
+		Alias      string `json:"alias,omitempty"`
+	} `json:"computedColumn,omitempty"`
+}
 
 type Query struct {
 	RefID                              string                 `json:"refId"`
@@ -96,6 +124,10 @@ type Query struct {
 	PageParamCursorFieldName           string                 `json:"pagination_param_cursor_field_name,omitempty"`
 	PageParamCursorFieldType           PaginationParamType    `json:"pagination_param_cursor_field_type,omitempty"`
 	PageParamCursorFieldExtractionPath string                 `json:"pagination_param_cursor_extraction_path,omitempty"`
+	PageParamListFieldName             string                 `json:"pagination_param_list_field_name,omitempty"`
+	PageParamListFieldType             PaginationParamType    `json:"pagination_param_list_field_type,omitempty"`
+	PageParamListFieldValue            string                 `json:"pagination_param_list_value,omitempty"`
+	Transformations                    []TransformationItem   `json:"transformations,omitempty"`
 }
 
 type URLOptionKeyValuePair struct {
@@ -258,6 +290,11 @@ func ApplyDefaultsToQuery(ctx context.Context, query Query) Query {
 			}
 		}
 	}
+	for i, t := range query.Transformations {
+		if t.Type == "" {
+			query.Transformations[i].Type = NoOpTransformation
+		}
+	}
 	return query
 }
 
@@ -268,5 +305,8 @@ func LoadQuery(ctx context.Context, backendQuery backend.DataQuery, pluginContex
 		return query, fmt.Errorf("error while parsing the query json. %s", err.Error())
 	}
 	query = ApplyDefaultsToQuery(ctx, query)
+	if query.PageMode == PaginationModeList && strings.TrimSpace(query.PageParamListFieldName) == "" {
+		return query, errors.New("pagination_param_list_field_name cannot be empty")
+	}
 	return ApplyMacros(ctx, query, backendQuery.TimeRange, pluginContext)
 }

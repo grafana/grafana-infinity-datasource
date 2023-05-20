@@ -11,7 +11,7 @@
 //              "type": "json",
 //              "format": "",
 //              "source": "url",
-//              "url": "http://127.0.0.1:3123",
+//              "url": "http://127.0.0.1:8080",
 //              "url_options": {
 //                  "method": "",
 //                  "params": null,
@@ -267,7 +267,7 @@
 //          "duration": 123,
 //          "error": ""
 //      },
-//      "executedQueryString": "###############\n## URL\n###############\n\nhttp://127.0.0.1:3123\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' 'http://127.0.0.1:3123'"
+//      "executedQueryString": "###############\n## URL\n###############\n\nhttp://127.0.0.1:8080\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' 'http://127.0.0.1:8080'"
 //  }
 //  Name: response
 //  Dimensions: 2 Fields by 23 Rows
@@ -307,7 +307,7 @@
               "type": "json",
               "format": "",
               "source": "url",
-              "url": "http://127.0.0.1:3123",
+              "url": "http://127.0.0.1:8080",
               "url_options": {
                 "method": "",
                 "params": null,
@@ -563,7 +563,7 @@
             "duration": 123,
             "error": ""
           },
-          "executedQueryString": "###############\n## URL\n###############\n\nhttp://127.0.0.1:3123\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' 'http://127.0.0.1:3123'"
+          "executedQueryString": "###############\n## URL\n###############\n\nhttp://127.0.0.1:8080\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' 'http://127.0.0.1:8080'"
         },
         "fields": [
           {

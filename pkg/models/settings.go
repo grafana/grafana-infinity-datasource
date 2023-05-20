@@ -58,6 +58,7 @@ type AWSSettings struct {
 }
 
 type InfinitySettings struct {
+	IsMock                   bool
 	AuthenticationMethod     string
 	OAuth2Settings           OAuth2Settings
 	BearerToken              string
@@ -133,6 +134,7 @@ type RefData struct {
 }
 
 type InfinitySettingsJson struct {
+	IsMock                   bool           `json:"is_mock,omitempty"`
 	AuthenticationMethod     string         `json:"auth_method,omitempty"`
 	APIKeyKey                string         `json:"apiKeyKey,omitempty"`
 	APIKeyType               string         `json:"apiKeyType,omitempty"`
@@ -166,6 +168,7 @@ func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinityS
 		if err := json.Unmarshal(config.JSONData, &infJson); err != nil {
 			return settings, err
 		}
+		settings.IsMock = infJson.IsMock
 		settings.AuthenticationMethod = infJson.AuthenticationMethod
 		settings.OAuth2Settings = infJson.OAuth2Settings
 		if settings.AuthenticationMethod == "oauth2" && settings.OAuth2Settings.OAuth2Type == "" {

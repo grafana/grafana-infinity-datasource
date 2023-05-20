@@ -23,11 +23,13 @@ func GetFrameForInlineSources(query models.Query) (*data.Frame, error) {
 		if err != nil {
 			return frame, err
 		}
+		return PostProcessFrame(context.Background(), frame, query)
 	case models.QueryTypeXML, models.QueryTypeHTML:
 		frame, err := GetXMLBackendResponse(query.Data, query)
 		if err != nil {
 			return frame, err
 		}
+		return PostProcessFrame(context.Background(), frame, query)
 	case models.QueryTypeJSON, models.QueryTypeGraphQL:
 		columns := []jsonFramer.ColumnSelector{}
 		for _, c := range query.Columns {
@@ -49,8 +51,8 @@ func GetFrameForInlineSources(query models.Query) (*data.Frame, error) {
 		if newFrame != nil {
 			frame.Fields = append(frame.Fields, newFrame.Fields...)
 		}
+		return PostProcessFrame(context.Background(), frame, query)
 	default:
 		return frame, errors.New("unknown backend query type")
 	}
-	return PostProcessFrame(context.Background(), frame, query)
 }

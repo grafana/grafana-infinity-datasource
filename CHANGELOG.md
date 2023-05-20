@@ -1,20 +1,5 @@
 # Change Log
 
-## 1.5.0
-
-### Minor Changes
-
-- **Config editor** Updated config editor UI
-- **Health Check** Added support for custom health check
-- **Chore** Backend binaries are now compiled with Go 1.20.4 which contains **security patches**
-
-### Patch Changes
-
-- **Logging** Consuming `reportInteraction` from the **@grafana/runtime** library for reporting queries
-- **Logging** Updated backend logging for improved debugging experience
-- **Chore** Added changeset to the build/publish pipeline
-- **docs**: updated docs about user agent header
-
 ## [ 1.4.1 ]
 
 - **UQL** Support for `pivot` function added in UQL

@@ -1,4 +1,4 @@
-package infinity_test
+package transformations_test
 
 import (
 	"testing"
@@ -6,8 +6,8 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/infinity"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
+	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/transformations"
 )
 
 func TestGetFrameWithComputedColumns(t *testing.T) {
@@ -30,7 +30,7 @@ func TestGetFrameWithComputedColumns(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := infinity.GetFrameWithComputedColumns(tt.input, tt.columns)
+			got, err := transformations.GetFrameWithComputedColumns(tt.input, tt.columns)
 			require.Nil(t, err)
 			require.NotNil(t, got)
 			assert.Equal(t, tt.output, got)
