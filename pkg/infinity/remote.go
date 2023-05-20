@@ -13,6 +13,10 @@ import (
 )
 
 func GetFrameForURLSources(ctx context.Context, query models.Query, infClient Client, requestHeaders map[string]string) (*data.Frame, error) {
+	return GetFrameForURLSourcesWithPostProcessing(ctx, query, infClient, requestHeaders, true)
+}
+
+func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, query models.Query, infClient Client, requestHeaders map[string]string, postProcessingRequired bool) (*data.Frame, error) {
 	frame := GetDummyFrame(query)
 	urlResponseObject, statusCode, duration, err := infClient.GetResults(ctx, query, requestHeaders)
 	frame.Meta.ExecutedQueryString = infClient.GetExecutedURL(query)
@@ -34,23 +38,28 @@ func GetFrameForURLSources(ctx context.Context, query models.Query, infClient Cl
 			return frame, err
 		}
 	}
-	if (query.Type == models.QueryTypeJSON || query.Type == models.QueryTypeGraphQL) && query.Parser == "backend" {
-		if frame, err = GetJSONBackendResponse(urlResponseObject, query); err != nil {
-			return frame, err
-		}
-	}
-	if (query.Type == models.QueryTypeCSV || query.Type == models.QueryTypeTSV) && query.Parser == "backend" {
-		if responseString, ok := urlResponseObject.(string); ok {
-			if frame, err = GetCSVBackendResponse(responseString, query); err != nil {
+	if query.Parser == "backend" {
+		if query.Type == models.QueryTypeJSON || query.Type == models.QueryTypeGraphQL {
+			if frame, err = GetJSONBackendResponse(urlResponseObject, query); err != nil {
 				return frame, err
 			}
 		}
-	}
-	if (query.Type == models.QueryTypeXML || query.Type == models.QueryTypeHTML) && query.Parser == "backend" {
-		if responseString, ok := urlResponseObject.(string); ok {
-			if frame, err = GetXMLBackendResponse(responseString, query); err != nil {
-				return frame, err
+		if query.Type == models.QueryTypeCSV || query.Type == models.QueryTypeTSV {
+			if responseString, ok := urlResponseObject.(string); ok {
+				if frame, err = GetCSVBackendResponse(responseString, query); err != nil {
+					return frame, err
+				}
 			}
+		}
+		if query.Type == models.QueryTypeXML || query.Type == models.QueryTypeHTML {
+			if responseString, ok := urlResponseObject.(string); ok {
+				if frame, err = GetXMLBackendResponse(responseString, query); err != nil {
+					return frame, err
+				}
+			}
+		}
+		if postProcessingRequired {
+			frame, err = PostProcessFrame(ctx, frame, query)
 		}
 	}
 	if query.Type == models.QueryTypeJSON && query.Parser == "sqlite" {
