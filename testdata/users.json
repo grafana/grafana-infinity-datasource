@@ -1,44 +1,50 @@
 [
   {
-    "name": "Leanne Graham",
-    "age": 38,
-    "country": "USA",
-    "occupation": "Devops Engineer",
-    "salary": 3000
+    "Nom": Leanne Graham
+    "Age": 38
+    "Pays": USA
+    "Travail": Devops Engineer
+    "Salaire": 3000
+    "Investit":500
   },
   {
-    "name": "Ervin Howell",
-    "age": 27,
-    "country": "USA",
-    "occupation": "Software Engineer",
-    "salary": 2300
+     "Nom": Clementine Bauch
+     "Age": 17
+     "Pays": Canada
+     "Travail": Student
+     "Salaire":
+     "Investit":100
   },
   {
-    "name": "Clementine Bauch",
-    "age": 17,
-    "country": "Canada",
-    "occupation": "Student",
-    "salary": null
+     "Nom": Ervin Howell
+     "Age": 27
+     "Pays": USA
+     "Travail": Software Engineer
+     "Salaire": 2300
+     "Investit":400
   },
   {
-    "name": "Patricia Lebsack",
-    "age": 42,
-    "country": "UK",
-    "occupation": "Software Engineer",
-    "salary": 2800
+     "Nom": Patricia Lebsack
+     "Age": 42
+     "Pays": UK
+     "Travail": Software Engineer
+     "Salaire": 2800
+     "Investit":200
   },
   {
-    "name": "Leanne Bell",
-    "age": 38,
-    "country": "USA",
-    "occupation": "Senior Software Engineer",
-    "salary": 4000
+     "Nom": Leanne Bell
+     "Age": 38
+     "Pays": USA
+     "Travail": Senior Software Engineer
+     "Salaire": 4000
+     "Investit":550
   },
   {
-    "name": "Chelsey Dietrich",
-    "age": 32,
-    "country": "USA",
-    "occupation": "Software Engineer",
-    "salary": 3500
+    "Nom": Chelsey Dietrich
+    "Age": 32
+    "Pays": USA
+    "Travail": Software Engineer
+    "Salaire": 3500
+    "Investit":380
   }
 ]
