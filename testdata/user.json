@@ -1,0 +1,50 @@
+[
+  {
+    "Nom": "Leanne Graham",
+    "Age": 38,
+    "Pays": "USA",
+    "Travail": "Devops Engineer",
+    "Salaire": 3000,
+    "Investit":500
+ },
+  {
+    "Nom": "Ervin Howell",
+    "Age": 27,
+    "Pays": "USA",
+    "Travail": "Software Engineer",
+    "Salaire": 2300,
+    "Investit":400
+ },
+  {
+    "Nom": "Clementine Bauch",
+    "Age": 17,
+    "Pays": "Canada",
+    "Travail": "Student",
+    "Salaire": null,
+    "Investit":100
+ },
+  {
+    "Nom": "Patricia Lebsack",
+    "Age": 42,
+    "Pays": "UK",
+    "Travail": "Software Engineer",
+    "Salaire": 2800,
+    "Investit":200
+ },
+  {
+    "Nom": "Leanne Bell",
+    "Age": 38,
+    "Pays": "USA",
+    "Travail": "Senior Software Engineer",
+    "Salaire": 4000,
+    "Investit":550
+ },
+  { 
+    "Nom": "Chelsey Dietrich",
+    "Age": 32,
+    "Pays": "USA",
+    "Travail": "Software Engineer",
+    "Salaire": 3500,
+    "Investit":380
+  }
+]
