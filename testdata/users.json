@@ -1,10 +1,11 @@
 [
   {
-    "name": "Leanne Graham",
-    "age": 38,
-    "country": "USA",
-    "occupation": "Devops Engineer",
-    "salary": 3000
+  "Nom": Leanne Graham
+  "Age": 38
+  "Pays": USA
+  "Travail": Devops Engineer
+ "Salaire": 3000
+  "Investit":500
   },
   {
     "name": "Ervin Howell",
