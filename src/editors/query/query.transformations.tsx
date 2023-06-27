@@ -136,6 +136,7 @@ export const TransformationsEditor = (props: TransformationsEditorProps) => {
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
             {transformations.map((t, i) => (
               <div
+                key={JSON.stringify(t)}
                 style={{
                   border: `1px solid ${theme.colors.border.medium}`,
                   background: theme.colors.background.primary,
