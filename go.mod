@@ -7,7 +7,7 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/gorilla/mux v1.8.0
 	github.com/grafana/grafana-aws-sdk v0.14.0
-	github.com/grafana/grafana-plugin-sdk-go v0.162.0
+	github.com/grafana/grafana-plugin-sdk-go v0.166.0
 	github.com/graphql-go/graphql v0.8.0
 	github.com/graphql-go/handler v0.2.3
 	github.com/stretchr/testify v1.8.2

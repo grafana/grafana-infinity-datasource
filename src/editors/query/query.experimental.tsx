@@ -18,7 +18,7 @@ export const ExperimentalFeatures = ({ query, onChange, onRunQuery }: Experiment
     return <></>;
   }
   return (
-    <EditorRow label="Computed columns, Filter, Group by" collapsible={true} collapsed={false} title={() => 'beta'}>
+    <EditorRow label="Computed columns, Filter, Group by" collapsible={true} collapsed={false} title={() => ''}>
       <Stack gap={0} direction="row" wrap={true}>
         <ComputedColumnsEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />
         <Filter query={query} onChange={onChange} onRunQuery={onRunQuery} />

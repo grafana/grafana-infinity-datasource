@@ -61,6 +61,7 @@ const (
 	NoOpTransformation             Transformation = "noop"
 	LimitTransformation            Transformation = "limit"
 	FilterExpressionTransformation Transformation = "filterExpression"
+	SummarizeTransformation        Transformation = "summarize"
 	ComputedColumnTransformation   Transformation = "computedColumn"
 )
 
@@ -73,6 +74,11 @@ type TransformationItem struct {
 	FilterExpression struct {
 		Expression string `json:"expression,omitempty"`
 	} `json:"filterExpression,omitempty"`
+	Summarize struct {
+		Expression string `json:"expression,omitempty"`
+		By         string `json:"by,omitempty"`
+		Alias      string `json:"alias,omitempty"`
+	} `json:"summarize,omitempty"`
 	ComputedColumn struct {
 		Expression string `json:"expression,omitempty"`
 		Alias      string `json:"alias,omitempty"`

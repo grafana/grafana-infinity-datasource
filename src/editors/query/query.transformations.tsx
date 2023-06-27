@@ -106,6 +106,28 @@ export const TransformationsEditor = (props: TransformationsEditorProps) => {
                 </Button>
               </Card.Actions>
             </Card>
+            <Card>
+              <Card.Heading>Summarize / Group by</Card.Heading>
+              <Card.Actions>
+                <Button
+                  onClick={() => {
+                    onChange({
+                      ...query,
+                      transformations: [
+                        ...transformations,
+                        {
+                          type: 'summarize',
+                          summarize: { expression: '', by: '' },
+                        },
+                      ],
+                    });
+                    setListIsOpen(false);
+                  }}
+                >
+                  Add
+                </Button>
+              </Card.Actions>
+            </Card>
           </>
         </Drawer>
       )}
@@ -128,7 +150,10 @@ export const TransformationsEditor = (props: TransformationsEditorProps) => {
                 <div style={{ margin: theme.spacing(1, 1, 0.5, 1), display: 'flex' }}>
                   {t.type === 'limit' && (
                     <Stack direction="column" gap={1}>
-                      <h5 style={{ marginBlock: theme.spacing(0.5) }}>Limit</h5>
+                      <Stack direction="row" alignItems={'stretch'}>
+                        <h5 style={{ marginBlock: theme.spacing(0.5) }}>Limit</h5>
+                        <Button variant="secondary" fill="outline" icon="trash-alt" size="sm" onClick={() => onDeleteTransformation(i)} />
+                      </Stack>
                       <div className="gf-form">
                         <InlineLabel width={10}>Limit</InlineLabel>
                         <Input
@@ -146,7 +171,10 @@ export const TransformationsEditor = (props: TransformationsEditorProps) => {
                   )}
                   {t.type === 'filterExpression' && (
                     <Stack direction="column" gap={1}>
-                      <h5 style={{ marginBlock: theme.spacing(0.5) }}>Filter Expression</h5>
+                      <Stack direction="row" alignItems={'stretch'}>
+                        <h5 style={{ marginBlock: theme.spacing(0.5) }}>Filter Expression</h5>
+                        <Button variant="secondary" fill="outline" icon="trash-alt" size="sm" onClick={() => onDeleteTransformation(i)} />
+                      </Stack>
                       <div className="gf-form">
                         <InlineLabel width={14}>Expression</InlineLabel>
                         <Input
@@ -161,9 +189,59 @@ export const TransformationsEditor = (props: TransformationsEditorProps) => {
                       </div>
                     </Stack>
                   )}
+                  {t.type === 'summarize' && (
+                    <Stack direction="column" gap={1}>
+                      <Stack direction="row" alignItems={'stretch'}>
+                        <h5 style={{ marginBlock: theme.spacing(0.5) }}>Summarize</h5>
+                        <Button variant="secondary" fill="outline" icon="trash-alt" size="sm" onClick={() => onDeleteTransformation(i)} />
+                      </Stack>
+                      <div className="gf-form">
+                        <InlineLabel width={14}>Expression</InlineLabel>
+                        <Input
+                          width={24}
+                          value={t.summarize?.expression || ''}
+                          onChange={(e) => {
+                            if (transformations[i] && transformations[i].type === 'summarize') {
+                              updateTransformation(i, { type: 'summarize', summarize: { by: t.summarize?.by || '', alias: t.summarize?.alias || '', expression: e.currentTarget.value || '' } });
+                            }
+                          }}
+                        ></Input>
+                      </div>
+                      <div className="gf-form">
+                        <InlineLabel width={14}>By</InlineLabel>
+                        <Input
+                          width={24}
+                          value={t.summarize?.by || ''}
+                          onChange={(e) => {
+                            if (transformations[i] && transformations[i].type === 'summarize') {
+                              updateTransformation(i, {
+                                type: 'summarize',
+                                summarize: { expression: t.summarize?.expression || '', alias: t.summarize?.alias || '', by: e.currentTarget.value || '' },
+                              });
+                            }
+                          }}
+                        ></Input>
+                      </div>
+                      <div className="gf-form">
+                        <InlineLabel width={14}>Alias</InlineLabel>
+                        <Input
+                          width={24}
+                          value={t.summarize?.alias || ''}
+                          onChange={(e) => {
+                            if (transformations[i] && transformations[i].type === 'summarize') {
+                              updateTransformation(i, { type: 'summarize', summarize: { expression: t.summarize?.expression || '', by: t.summarize?.by || '', alias: e.currentTarget.value || '' } });
+                            }
+                          }}
+                        ></Input>
+                      </div>
+                    </Stack>
+                  )}
                   {t.type === 'computedColumn' && (
                     <Stack direction="column" gap={1}>
-                      <h5 style={{ marginBlock: theme.spacing(0.5) }}>Computed Column</h5>
+                      <Stack direction="row" alignItems={'stretch'}>
+                        <h5 style={{ marginBlock: theme.spacing(0.5) }}>Computed Column</h5>
+                        <Button variant="secondary" fill="outline" icon="trash-alt" size="sm" onClick={() => onDeleteTransformation(i)} />
+                      </Stack>
                       <div className="gf-form">
                         <InlineLabel width={14}>Expression</InlineLabel>
                         <Input
@@ -190,9 +268,6 @@ export const TransformationsEditor = (props: TransformationsEditorProps) => {
                       </div>
                     </Stack>
                   )}
-                </div>
-                <div style={{ textAlign: 'right', margin: '5px' }}>
-                  <Button variant="secondary" fill="outline" icon="trash-alt" size="sm" onClick={() => onDeleteTransformation(i)} />
                 </div>
               </div>
             ))}

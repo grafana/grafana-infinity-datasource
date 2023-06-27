@@ -60,6 +60,21 @@ func ApplyTransformation(query models.Query, transformation models.Transformatio
 			}
 			response.Responses[pk] = backend.DataResponse{Frames: frames, Error: err}
 		}
+	case models.SummarizeTransformation:
+		var err error
+		for pk, pr := range previousInput.Responses {
+			frames := []*data.Frame{}
+			for _, frame := range pr.Frames {
+				frame, err1 := GetSummaryFrame(frame, transformation.Summarize.Expression, transformation.Summarize.By, transformation.Summarize.Alias)
+				if err1 != nil {
+					err = errors.Join(errors.New("error applying summarize"), err1, err)
+				}
+				if frame != nil {
+					frames = append(frames, frame)
+				}
+			}
+			response.Responses[pk] = backend.DataResponse{Frames: frames, Error: err}
+		}
 	default:
 		return previousInput, nil
 	}

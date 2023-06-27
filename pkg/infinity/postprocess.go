@@ -25,7 +25,7 @@ func PostProcessFrame(ctx context.Context, frame *data.Frame, query models.Query
 		return frame, fmt.Errorf("error applying filter. %w", err)
 	}
 	if strings.TrimSpace(query.SummarizeExpression) != "" {
-		return GetSummaryFrame(frame, query.SummarizeExpression, query.SummarizeBy)
+		return transformations.GetSummaryFrame(frame, query.SummarizeExpression, query.SummarizeBy, "summary")
 	}
 	frame.Meta = &data.FrameMeta{Custom: &CustomMeta{Query: query}}
 	if err != nil {

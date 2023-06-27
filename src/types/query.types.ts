@@ -133,7 +133,7 @@ export type PaginationList = {
   pagination_param_list_value?: string;
 } & PaginationBase<'list'>;
 export type Pagination = PaginationNone | PaginationOffset | PaginationPage | PaginationCursor | PaginationList;
-export type Transformation = 'limit' | 'filterExpression' | 'computedColumn';
+export type Transformation = 'limit' | 'filterExpression' | 'summarize' | 'computedColumn';
 export type TransformationItem = {
   type: Transformation;
   disabled?: boolean;
@@ -146,6 +146,11 @@ export type TransformationItem = {
   computedColumn?: {
     expression?: string;
     alias: string;
+  };
+  summarize?: {
+    expression?: string;
+    by?: string;
+    alias?: string;
   };
 };
 export type TransformationsQuery = {

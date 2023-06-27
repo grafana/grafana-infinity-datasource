@@ -207,6 +207,12 @@ const sitemap: any[] = [
     tags: ['reference', 'reference data', 'variables', 'static data', 'inline', 'global', 'config'],
   },
   {
+    title: 'Transformations',
+    slug: '/wiki/transformations',
+    description: 'Server side transformations',
+    tags: ['transformations', 'limit', 'filter', 'calculations', 'computed columns', 'summarize', 'group by'],
+  },
+  {
     title: 'Configuration',
     slug: '/wiki/configuration',
     description: 'Grafana datasource configuration',

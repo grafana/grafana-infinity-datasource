@@ -79,7 +79,7 @@ func TestInlineSources(t *testing.T) {
 			test: func(t *testing.T, frame *data.Frame) {
 				require.NotNil(t, frame)
 				assert.Equal(t, data.NewField("Sex", nil, []*string{toSP("Male"), toSP(""), toSP("Others")}), frame.Fields[0])
-				assert.Equal(t, data.NewField("count(Sex)", nil, []*float64{toFP(2), toFP(1), toFP(1)}), frame.Fields[1])
+				assert.Equal(t, data.NewField("summary", nil, []*float64{toFP(2), toFP(1), toFP(1)}), frame.Fields[1])
 			},
 		},
 		{
