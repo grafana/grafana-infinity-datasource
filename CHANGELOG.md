@@ -1,5 +1,18 @@
 # Change Log
 
+## 2.0.0
+
+🎉 **Pagination**: Added pagination support for json type queries ( backend parser ). Refer [this github discussion](https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/601) for more details
+🎉 **Transformation**: Added support for server side transformations via transformations query type. This version supports transformations such as `limit`, `filterExpression`, `computedColumn` and `summarize`. Refer [this github discussion](https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/614) for more details
+🚀 **Health Check**: Added support for custom health check
+🚀 **Config editor**: Updated config editor UI
+🐛 **Logging**: Updated backend logging for improved debugging experience
+🐛 **docs**: updated docs about user agent header
+🐛 **Logging**: Consuming `reportInteraction` from the `@grafana/runtime` library for reporting queries
+⚙️ **Chore**: Added changeset to the build/publish pipeline
+⚙️ **Chore**: update grafana backend plugin SDK from v0.159.0 to v0.162.0
+⚙️ **Chore**: Backend binaries are now compiled with Go 1.20.4 which contains **security patches**
+
 ## [ 1.4.1 ]
 
 - **UQL** Support for `pivot` function added in UQL
