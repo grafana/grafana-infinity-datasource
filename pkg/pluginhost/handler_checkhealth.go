@@ -22,7 +22,7 @@ func (ds *PluginHost) CheckHealth(ctx context.Context, req *backend.CheckHealthR
 }
 
 func CheckHealth(ctx context.Context, ds *PluginHost, req *backend.CheckHealthRequest) (*backend.CheckHealthResult, error) {
-	client, err := getInstance(ds.im, req.PluginContext)
+	client, err := getInstance(ctx, ds.im, req.PluginContext)
 	if err != nil || client == nil || client.client == nil {
 		return &backend.CheckHealthResult{
 			Status:  backend.HealthStatusError,

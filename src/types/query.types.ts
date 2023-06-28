@@ -2,7 +2,7 @@ import { FilterOperator } from './../constants';
 import type { DataQuery, SelectableValue } from '@grafana/data';
 
 //#region Query
-export type InfinityQueryType = 'json' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'series' | 'global' | 'uql' | 'groq' | 'google-sheets';
+export type InfinityQueryType = 'json' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'series' | 'global' | 'uql' | 'groq' | 'google-sheets' | 'transformations';
 export type InfinityQuerySources = 'url' | 'inline' | 'reference' | 'random-walk' | 'expression';
 export type InfinityColumnFormat = 'string' | 'number' | 'timestamp' | 'timestamp_epoch' | 'timestamp_epoch_s';
 export type InfinityQueryFormat = 'table' | 'timeseries' | 'dataframe' | 'as-is' | 'node-graph-nodes' | 'node-graph-edges';
@@ -99,7 +99,64 @@ export type InfinityUQLQuery = { uql: string; format: InfinityQueryFormat } & In
 export type InfinityGROQQuerySource = InfinityQueryWithURLSource<'groq'> | InfinityQueryWithInlineSource<'groq'>;
 export type InfinityGROQQuery = { groq: string; format: InfinityQueryFormat } & InfinityGROQQuerySource & InfinityQueryBase<'groq'>;
 export type InfinityGSheetsQuery = { spreadsheet: string; sheetName?: string; range: string; columns: InfinityColumn[] } & InfinityQueryBase<'google-sheets'>;
-export type InfinityQuery = InfinityLegacyQuery | InfinityUQLQuery | InfinityGROQQuery | InfinityGSheetsQuery;
+export type PaginationType = 'none' | 'offset' | 'page' | 'cursor' | 'list';
+export type PaginationParamType = 'query' | 'header' | 'body_data' | 'body_json' | 'replace';
+export type PaginationBase<T extends PaginationType> = { pagination_mode?: T; pagination_max_pages?: number };
+export type PaginationNone = {} & PaginationBase<'none'>;
+export type PaginationOffset = {
+  pagination_param_size_field_name?: string;
+  pagination_param_size_field_type?: PaginationParamType;
+  pagination_param_size_value?: number;
+  pagination_param_offset_field_name?: string;
+  pagination_param_offset_field_type?: PaginationParamType;
+  pagination_param_offset_value?: number;
+} & PaginationBase<'offset'>;
+export type PaginationPage = {
+  pagination_param_size_field_name?: string;
+  pagination_param_size_field_type?: PaginationParamType;
+  pagination_param_size_value?: number;
+  pagination_param_page_field_name?: string;
+  pagination_param_page_field_type?: PaginationParamType;
+  pagination_param_page_value?: number;
+} & PaginationBase<'page'>;
+export type PaginationCursor = {
+  pagination_param_size_field_name?: string;
+  pagination_param_size_field_type?: PaginationParamType;
+  pagination_param_size_value?: number;
+  pagination_param_cursor_field_name?: string;
+  pagination_param_cursor_field_type?: PaginationParamType;
+  pagination_param_cursor_extraction_path?: string;
+} & PaginationBase<'cursor'>;
+export type PaginationList = {
+  pagination_param_list_field_name?: string;
+  pagination_param_list_field_type?: PaginationParamType;
+  pagination_param_list_value?: string;
+} & PaginationBase<'list'>;
+export type Pagination = PaginationNone | PaginationOffset | PaginationPage | PaginationCursor | PaginationList;
+export type Transformation = 'limit' | 'filterExpression' | 'summarize' | 'computedColumn';
+export type TransformationItem = {
+  type: Transformation;
+  disabled?: boolean;
+  limit?: {
+    limitField?: number;
+  };
+  filterExpression?: {
+    expression?: string;
+  };
+  computedColumn?: {
+    expression?: string;
+    alias: string;
+  };
+  summarize?: {
+    expression?: string;
+    by?: string;
+    alias?: string;
+  };
+};
+export type TransformationsQuery = {
+  transformations: TransformationItem[];
+} & InfinityQueryBase<'transformations'>;
+export type InfinityQuery = (InfinityLegacyQuery | InfinityUQLQuery | InfinityGROQQuery | InfinityGSheetsQuery | TransformationsQuery) & Pagination;
 //#endregion
 
 //#region Misc

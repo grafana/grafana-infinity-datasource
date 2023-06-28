@@ -1,6 +1,7 @@
 package pluginhost
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
@@ -46,15 +47,15 @@ func newDataSourceInstance(setting backend.DataSourceInstanceSettings) (instance
 	}, nil
 }
 
-func getInstance(im instancemgmt.InstanceManager, ctx backend.PluginContext) (*instanceSettings, error) {
-	instance, err := im.Get(ctx)
+func getInstance(ctx context.Context, im instancemgmt.InstanceManager, pCtx backend.PluginContext) (*instanceSettings, error) {
+	instance, err := im.Get(ctx, pCtx)
 	if err != nil {
 		return nil, err
 	}
 	return instance.(*instanceSettings), nil
 }
 
-func getInstanceFromRequest(im instancemgmt.InstanceManager, req *http.Request) (*instanceSettings, error) {
-	ctx := httpadapter.PluginConfigFromContext(req.Context())
-	return getInstance(im, ctx)
+func getInstanceFromRequest(ctx context.Context, im instancemgmt.InstanceManager, req *http.Request) (*instanceSettings, error) {
+	pCtx := httpadapter.PluginConfigFromContext(req.Context())
+	return getInstance(ctx, im, pCtx)
 }

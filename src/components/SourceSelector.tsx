@@ -6,7 +6,7 @@ import type { InfinityQuery, InfinityQuerySources } from './../types';
 
 export const SourceSelector = (props: { query: InfinityQuery; onChange: (e: InfinityQuery) => void; onRunQuery: () => void }) => {
   const { query, onChange, onRunQuery } = props;
-  if (query.type === 'global' || query.type === 'google-sheets') {
+  if (query.type === 'global' || query.type === 'google-sheets' || query.type === 'transformations') {
     return <></>;
   }
   const supportedSources = INFINITY_SOURCES.filter((source) => source.supported_types.includes(query.type));

@@ -1,6 +1,7 @@
 package infinity_test
 
 import (
+	"context"
 	"fmt"
 	"testing"
 
@@ -205,7 +206,7 @@ func TestClient_GetExecutedURL(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			client := &infinity.Client{Settings: tt.settings}
-			got := client.GetExecutedURL(tt.query)
+			got := client.GetExecutedURL(context.TODO(), tt.query)
 			assert.Equal(t, fmt.Sprintf("###############\n## URL\n###############\n\n%s\n\n###############\n## Curl Command\n###############\n\n%s", tt.url, tt.command), got)
 		})
 	}

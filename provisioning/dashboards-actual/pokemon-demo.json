@@ -1,0 +1,423 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_INFINITY",
+      "label": "Infinity",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "yesoreyeram-infinity-datasource",
+      "pluginName": "Infinity"
+    }
+  ],
+  "__elements": {},
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "10.1.0-55313pre"
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    },
+    {
+      "type": "datasource",
+      "id": "yesoreyeram-infinity-datasource",
+      "name": "Infinity",
+      "version": "1.4.1"
+    }
+  ],
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "${DS_INFINITY}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "10.1.0-55313pre",
+      "targets": [
+        {
+          "columns": [
+            {
+              "selector": "id",
+              "text": "",
+              "type": "string"
+            },
+            {
+              "selector": "name",
+              "text": "",
+              "type": "string"
+            },
+            {
+              "selector": "height",
+              "text": "",
+              "type": "string"
+            }
+          ],
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "${DS_INFINITY}"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "key": "Q-53139502-9f9b-4a78-8bed-c7c550c0ee7d-0",
+          "pagination_max_pages": 3,
+          "pagination_mode": "list",
+          "pagination_param_list_field_name": "{{ pokemon_name }}",
+          "pagination_param_list_field_type": "replace",
+          "pagination_param_list_value": "${pokemon_id:csv}",
+          "pagination_param_offset_field_name": "offset",
+          "pagination_param_offset_value": 0,
+          "pagination_param_size_field_name": "limit",
+          "pagination_param_size_value": 2,
+          "parser": "backend",
+          "refId": "A",
+          "root_selector": "",
+          "source": "url",
+          "type": "json",
+          "url": "https://pokeapi.co/api/v2/pokemon/{{ pokemon_name }}",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "Pokemon List fitered by variables",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "${DS_INFINITY}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 13,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "10.1.0-55313pre",
+      "targets": [
+        {
+          "columns": [
+            {
+              "selector": "name",
+              "text": "",
+              "type": "string"
+            },
+            {
+              "selector": "url",
+              "text": "",
+              "type": "string"
+            }
+          ],
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "${DS_INFINITY}"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "key": "Q-53139502-9f9b-4a78-8bed-c7c550c0ee7d-0",
+          "pagination_max_pages": 2,
+          "pagination_mode": "offset",
+          "pagination_param_list_field_name": "{{ pokemon_name }}",
+          "pagination_param_list_field_type": "replace",
+          "pagination_param_list_value": "${pokemon_id:csv}",
+          "pagination_param_offset_field_name": "offset",
+          "pagination_param_offset_value": 0,
+          "pagination_param_size_field_name": "limit",
+          "pagination_param_size_value": 1000,
+          "parser": "backend",
+          "refId": "A",
+          "root_selector": "results",
+          "source": "url",
+          "type": "json",
+          "url": "https://pokeapi.co/api/v2/pokemon",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "Pokemon List All - paginated by offset",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "${DS_INFINITY}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 6
+      },
+      "id": 3,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "10.1.0-55313pre",
+      "targets": [
+        {
+          "columns": [
+            {
+              "selector": "name",
+              "text": "",
+              "type": "string"
+            },
+            {
+              "selector": "url",
+              "text": "",
+              "type": "string"
+            }
+          ],
+          "computed_columns": [
+            {
+              "selector": "contains(name, 'aur')",
+              "text": "Does name have **aur?",
+              "type": "string"
+            }
+          ],
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "${DS_INFINITY}"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "key": "Q-53139502-9f9b-4a78-8bed-c7c550c0ee7d-0",
+          "pagination_max_pages": 2,
+          "pagination_mode": "offset",
+          "pagination_param_list_field_name": "{{ pokemon_name }}",
+          "pagination_param_list_field_type": "replace",
+          "pagination_param_list_value": "${pokemon_id:csv}",
+          "pagination_param_offset_field_name": "offset",
+          "pagination_param_offset_value": 0,
+          "pagination_param_size_field_name": "limit",
+          "pagination_param_size_value": 1000,
+          "parser": "backend",
+          "refId": "A",
+          "root_selector": "results",
+          "source": "url",
+          "summarizeBy": "Does name have **aur?",
+          "summarizeExpression": "count(name)",
+          "type": "json",
+          "url": "https://pokeapi.co/api/v2/pokemon",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "Pagination + Computed Column + Summarize",
+      "type": "table"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {},
+        "datasource": {
+          "type": "yesoreyeram-infinity-datasource",
+          "uid": "${DS_INFINITY}"
+        },
+        "definition": "Infinity- (infinity) json",
+        "hide": 0,
+        "includeAll": false,
+        "multi": true,
+        "name": "pokemon_id",
+        "options": [],
+        "query": {
+          "infinityQuery": {
+            "columns": [
+              {
+                "selector": "name",
+                "text": "",
+                "type": "string"
+              }
+            ],
+            "filters": [],
+            "format": "table",
+            "pagination_max_pages": 2,
+            "pagination_mode": "offset",
+            "pagination_param_offset_field_name": "offset",
+            "pagination_param_offset_value": 0,
+            "pagination_param_size_field_name": "limit",
+            "pagination_param_size_value": 1000,
+            "parser": "backend",
+            "refId": "variable",
+            "root_selector": "results",
+            "source": "url",
+            "type": "json",
+            "url": "https://pokeapi.co/api/v2/pokemon",
+            "url_options": {
+              "data": "",
+              "method": "GET"
+            }
+          },
+          "query": "",
+          "queryType": "infinity"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Pokemon",
+  "uid": "pokemon-demo",
+  "version": 8,
+  "weekStart": ""
+}

@@ -1,9 +1,14 @@
 {
   "name": "grafana-infinity-datasource",
-  "version": "1.4.2",
+  "version": "2.0.0",
   "description": "JSON, CSV, XML, GraphQL, HTML and REST API datasource for Grafana. Do infinite things with Grafana. Transform data with UQL/GROQ. Visualize data from many apis, RSS/ATOM feeds directly",
   "main": "dist/module.js",
   "scripts": {
+    "build:backend": "mage -v",
+    "build:backend:turbo": "yarn build:backend",
+    "build:frontend": "yarn build",
+    "build:frontend:turbo": "yarn build:frontend",
+    "build:turbo": "yarn turbo build:backend:turbo build:frontend:turbo",
     "dev": "grafana-toolkit plugin:dev",
     "watch": "grafana-toolkit plugin:dev --watch",
     "start": "yarn watch",
@@ -70,6 +75,7 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.1",
+    "@changesets/types": "^5.2.1",
     "@cypress/snapshot": "^2.1.7",
     "@grafana/eslint-config": "^3.0.0",
     "@grafana/toolkit": "8.5.4",
@@ -98,6 +104,7 @@
     "ts-jest": "^26.5.4",
     "ts-loader": "^8.0.18",
     "tslib": "^2.3.1",
+    "turbo": "^1.9.8",
     "typescript": "^4.7.4"
   },
   "resolutions": {

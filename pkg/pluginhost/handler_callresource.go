@@ -25,7 +25,7 @@ func (host *PluginHost) getRouter() *mux.Router {
 
 func (host *PluginHost) withDatasourceHandlerFunc(getHandler func(d *instanceSettings) http.HandlerFunc) func(rw http.ResponseWriter, r *http.Request) {
 	return func(rw http.ResponseWriter, r *http.Request) {
-		client, err := getInstanceFromRequest(host.im, r)
+		client, err := getInstanceFromRequest(r.Context(), host.im, r)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
@@ -37,7 +37,7 @@ func (host *PluginHost) withDatasourceHandlerFunc(getHandler func(d *instanceSet
 
 func (host *PluginHost) getGraphQLHandler() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		client, err := getInstanceFromRequest(host.im, r)
+		client, err := getInstanceFromRequest(r.Context(), host.im, r)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(err.Error())) //nolint

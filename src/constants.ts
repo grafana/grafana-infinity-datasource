@@ -25,6 +25,7 @@ export const SCRAP_QUERY_TYPES: Array<SelectableValue<InfinityQueryType>> = [
   { label: 'GROQ', value: 'groq' },
   { label: 'Series', value: 'series' },
   { label: 'Global Query', value: 'global' },
+  { label: 'Transformations', value: 'transformations' },
 ];
 export const INFINITY_RESULT_FORMATS: Array<SelectableValue<InfinityQueryFormat>> = [
   { label: 'Data Frame', value: 'dataframe' },

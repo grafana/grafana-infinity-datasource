@@ -17,7 +17,7 @@ export const isBackendQuerySupported = (
 export const isBackendQuery = (
   query: InfinityQuery
 ): query is Extract<InfinityQuery, ({ type: 'json' } | { type: 'csv' } | { type: 'tsv' } | { type: 'xml' } | { type: 'graphql' } | { type: 'html' }) & { parser: 'backend' }> =>
-  isBackendQuerySupported(query) && query.parser === 'backend';
+  query.type === 'transformations' || (isBackendQuerySupported(query) && query.parser === 'backend');
 
 export const normalizeURL = (url: string): string => {
   if (url.startsWith('https://github.com')) {

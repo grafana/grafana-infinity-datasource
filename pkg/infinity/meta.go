@@ -35,6 +35,9 @@ func GetDummyFrame(query models.Query) *data.Frame {
 }
 
 func WrapMetaForInlineQuery(frame *data.Frame, err error, query models.Query) (*data.Frame, error) {
+	if frame == nil {
+		frame = data.NewFrame(query.RefID)
+	}
 	customMeta := &CustomMeta{Query: query, Data: query.Data, ResponseCodeFromServer: 0}
 	if err != nil {
 		customMeta.Error = err.Error()
@@ -47,6 +50,9 @@ func WrapMetaForInlineQuery(frame *data.Frame, err error, query models.Query) (*
 }
 
 func WrapMetaForRemoteQuery(ctx context.Context, frame *data.Frame, err error, query models.Query) (*data.Frame, error) {
+	if frame == nil {
+		frame = data.NewFrame(query.RefID)
+	}
 	meta := frame.Meta
 	if meta == nil {
 		customMeta := &CustomMeta{Query: query, Data: query.Data, ResponseCodeFromServer: 0}

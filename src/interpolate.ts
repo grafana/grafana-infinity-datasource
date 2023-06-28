@@ -39,6 +39,9 @@ export const interpolateQuery = (query: InfinityQuery, scopedVars: ScopedVars): 
           };
         }),
       };
+      if (newQuery.pagination_mode === 'list') {
+        newQuery.pagination_param_list_value = replaceVariable(newQuery.pagination_param_list_value || '', scopedVars);
+      }
     }
     if (newQuery.source === 'inline') {
       newQuery.data = replaceVariable(newQuery.data, scopedVars);
