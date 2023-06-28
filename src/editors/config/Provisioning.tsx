@@ -1,4 +1,4 @@
-import { Button, Modal } from '@grafana/ui';
+import { Button, Modal, useTheme2 } from '@grafana/ui';
 import React, { useState } from 'react';
 import type { InfinityOptions } from './../../types';
 import type { DataSourceSettings } from '@grafana/data/types';
@@ -7,6 +7,7 @@ const YAML = require('json-to-pretty-yaml');
 export const ProvisioningScript = (props: { options: DataSourceSettings<InfinityOptions, {}> }) => {
   const { options } = props;
   const [isOpen, setIsOpen] = useState(false);
+  const theme = useTheme2();
   const getYaml = (): string => {
     try {
       let { version, secureJsonFields, database, user, password, basicAuthPassword, withCredentials, access, typeLogoUrl, accessControl, ...newOptions }: Record<string, any> = { ...options };
@@ -31,7 +32,7 @@ export const ProvisioningScript = (props: { options: DataSourceSettings<Infinity
         icon="book"
         variant="secondary"
         size="md"
-        style={{ marginInlineEnd: '5px', color: '#d9d9d9' }}
+        style={{ marginInlineEnd: '5px', color: theme.isDark ? '#d9d9d9' : '' }}
         onClick={(e) => {
           setIsOpen(true);
           e.preventDefault();

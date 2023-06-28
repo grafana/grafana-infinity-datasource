@@ -19,16 +19,17 @@ const Collapse = CollapseOriginal as any;
 
 export const MainEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions> & { setActiveTab: React.Dispatch<React.SetStateAction<string>> }) => {
   const { setActiveTab, options } = props;
+  const theme = useTheme2();
   return (
     <div
       style={{
-        backgroundImage: 'url(/public/plugins/yesoreyeram-infinity-datasource/img/homepage-bg.svg)',
-        backgroundColor: 'rgba(0,0,0,0.3)',
+        backgroundImage: theme.isDark ? 'url(/public/plugins/yesoreyeram-infinity-datasource/img/homepage-bg.svg)' : '',
+        backgroundColor: theme.isDark ? 'rgba(0,0,0,0.3)' : '',
         backgroundRepeat: 'no-repeat',
         // backgroundSize: 'cover',
         padding: '30px',
         marginBottom: '30px',
-        color: '#d9d9d9',
+        color: theme.isDark ? '#d9d9d9' : '',
       }}
     >
       <h1>👋 Welcome to Grafana Infinity Data Source!</h1>
@@ -36,7 +37,7 @@ export const MainEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
         <b>Without any additional configuration, this datasource can work.</b> Optionally, configure any of the settings you see in the left side such as Authentication if you needed.
       </p>
       <div style={{ marginBlockStart: 5 }}>
-        <Button icon="lock" variant="secondary" fill="outline" size="md" onClick={() => setActiveTab('auth')} style={{ marginInlineEnd: '5px', color: '#d9d9d9' }}>
+        <Button icon="lock" variant="primary" fill="outline" size="md" onClick={() => setActiveTab('auth')} style={{ marginInlineEnd: '5px', color: theme.isDark ? '#d9d9d9' : '' }}>
           Setup Authentication
         </Button>
         <LinkButton
@@ -46,7 +47,7 @@ export const MainEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
           target="_blank"
           href="https://yesoreyeram.github.io/grafana-infinity-datasource"
           rel="noreferrer"
-          style={{ marginInlineEnd: '5px', color: '#d9d9d9' }}
+          style={{ marginInlineEnd: '5px', color: theme.isDark ? '#d9d9d9' : '' }}
         >
           Documentation
         </LinkButton>
@@ -57,7 +58,7 @@ export const MainEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
           target="_blank"
           href="https://github.com/yesoreyeram/grafana-infinity-datasource"
           rel="noreferrer"
-          style={{ marginInlineEnd: '5px', color: '#d9d9d9' }}
+          style={{ marginInlineEnd: '5px', color: theme.isDark ? '#d9d9d9' : '' }}
         >
           Star in Github
         </LinkButton>
@@ -143,11 +144,11 @@ const config_sections: Array<{ value: string; label: string; component?: (props:
   { value: 'headers_and_params', label: 'Headers & URL params' },
   { value: 'network', label: 'Network' },
   { value: 'security', label: 'Security' },
-  { value: 'global_queries', label: 'Global queries' },
-  { value: 'reference_data', label: 'Reference data' },
-  { value: 'experimental', label: 'Experimental' },
-  { value: 'misc', label: 'Misc' },
   { value: 'health_check', label: 'Health check' },
+  { value: 'reference_data', label: 'Reference data' },
+  { value: 'global_queries', label: 'Global queries' },
+  // { value: 'experimental', label: 'Experimental' },
+  { value: 'misc', label: 'Misc' },
 ];
 
 export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
@@ -158,6 +159,7 @@ export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<I
   const styles = {
     root: css`
       display: flex;
+      margin-block-start: -20px;
       margin-block-end: ${theme.spacing('20px')};
       min-height: 300px;
     `,
@@ -167,7 +169,8 @@ export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<I
     tab: css`
       position: relative;
       cursor: pointer;
-      padding: 12px;
+      padding: 8px;
+      padding-left: 14px;
       display: block;
       opacity: 0.8;
       &:hover {
@@ -178,7 +181,8 @@ export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<I
     tab_active: css`
       position: relative;
       cursor: pointer;
-      padding: 12px;
+      padding: 8px;
+      padding-left: 14px;
       display: block;
       background: ${theme.colors.background.secondary};
       opacity: 1;

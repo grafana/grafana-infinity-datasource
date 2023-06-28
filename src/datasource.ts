@@ -12,7 +12,7 @@ import { AnnotationsEditor } from './editors/annotation.editor';
 import { interpolateQuery, interpolateVariableQuery } from './interpolate';
 import { migrateQuery } from './migrate';
 import { isBackendQuery, isDataQuery, normalizeURL } from './app/utils';
-import { reportQuery } from './utils/analytics';
+import { reportQuery, reportHealthCheck } from './utils/analytics';
 import type { InfinityInstanceSettings, InfinityOptions, InfinityQuery, MetricFindValue, VariableQuery } from './types';
 import type { DataFrame, DataQueryRequest, DataQueryResponse, ScopedVars, TimeRange } from '@grafana/data/types';
 
@@ -110,12 +110,15 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
       .then((o) => {
         switch (o?.message) {
           case 'OK':
+            reportHealthCheck({ status: 'success', message: 'OK. Settings saved', authMethod: this.instanceSettings?.jsonData?.auth_method || '' });
             return Promise.resolve({ status: 'success', message: 'OK. Settings saved' });
           default:
+            reportHealthCheck({ status: o?.status || 'success', message: o?.message || 'Settings saved' });
             return Promise.resolve({ status: o?.status || 'success', message: o?.message || 'Settings saved' });
         }
       })
       .catch((ex) => {
+        reportHealthCheck({ status: 'error', message: ex.message });
         return Promise.resolve({ status: 'error', message: ex.message });
       });
   }
