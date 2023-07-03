@@ -2,9 +2,9 @@ package infinity
 
 import (
 	"github.com/grafana/grafana-plugin-sdk-go/data"
-	"github.com/yesoreyeram/grafana-framer/csvFramer"
-	"github.com/yesoreyeram/grafana-framer/gframer"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
+	"github.com/yesoreyeram/grafana-plugins/lib/go/csvframer"
+	"github.com/yesoreyeram/grafana-plugins/lib/go/gframer"
 )
 
 func GetCSVBackendResponse(responseString string, query models.Query) (*data.Frame, error) {
@@ -18,7 +18,7 @@ func GetCSVBackendResponse(responseString string, query models.Query) (*data.Fra
 			TimeFormat: c.TimeStampFormat,
 		})
 	}
-	csvOptions := csvFramer.CSVFramerOptions{
+	csvOptions := csvframer.FramerOptions{
 		FrameName:          query.RefID,
 		Columns:            columns,
 		Comment:            query.CSVOptions.Comment,
@@ -35,7 +35,7 @@ func GetCSVBackendResponse(responseString string, query models.Query) (*data.Fra
 	if query.Type == models.QueryTypeTSV {
 		csvOptions.Delimiter = "\t"
 	}
-	newFrame, err := csvFramer.CsvStringToFrame(responseString, csvOptions)
+	newFrame, err := csvframer.ToFrame(responseString, csvOptions)
 	if newFrame != nil {
 		frame.Fields = append(frame.Fields, newFrame.Fields...)
 	}

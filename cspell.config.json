@@ -27,6 +27,7 @@
     "Collapsable",
     "compatibilitycheck",
     "countif",
+    "csvframer",
     "dataframe",
     "datapoints",
     "dataproxy",
@@ -58,6 +59,7 @@
     "ignorecase",
     "instancemgmt",
     "jsonata",
+    "jsonframer",
     "jsonpath",
     "jsonplaceholder",
     "kennethreitz",
@@ -144,6 +146,7 @@
     "vlookup",
     "vuepress",
     "xinsnake",
+    "xmlframer",
     "yesoreyeram",
     "youtube"
   ]

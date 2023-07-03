@@ -6,8 +6,8 @@ import (
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
-	"github.com/yesoreyeram/grafana-framer/jsonFramer"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
+	"github.com/yesoreyeram/grafana-plugins/lib/go/jsonframer"
 )
 
 func GetJSONBackendResponse(urlResponseObject any, query models.Query) (*data.Frame, error) {
@@ -18,16 +18,16 @@ func GetJSONBackendResponse(urlResponseObject any, query models.Query) (*data.Fr
 		frame.Meta.Custom = &CustomMeta{Query: query, Error: err.Error()}
 		return frame, fmt.Errorf("error parsing json root data")
 	}
-	columns := []jsonFramer.ColumnSelector{}
+	columns := []jsonframer.ColumnSelector{}
 	for _, c := range query.Columns {
-		columns = append(columns, jsonFramer.ColumnSelector{
+		columns = append(columns, jsonframer.ColumnSelector{
 			Selector:   c.Selector,
 			Alias:      c.Text,
 			Type:       c.Type,
 			TimeFormat: c.TimeStampFormat,
 		})
 	}
-	newFrame, err := jsonFramer.JsonStringToFrame(string(responseString), jsonFramer.JSONFramerOptions{
+	newFrame, err := jsonframer.ToFrame(string(responseString), jsonframer.FramerOptions{
 		FrameName:    query.RefID,
 		RootSelector: query.RootSelector,
 		Columns:      columns,

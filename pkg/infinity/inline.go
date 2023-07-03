@@ -5,8 +5,8 @@ import (
 	"errors"
 
 	"github.com/grafana/grafana-plugin-sdk-go/data"
-	"github.com/yesoreyeram/grafana-framer/jsonFramer"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
+	"github.com/yesoreyeram/grafana-plugins/lib/go/jsonframer"
 )
 
 func GetFrameForInlineSources(query models.Query) (*data.Frame, error) {
@@ -31,16 +31,16 @@ func GetFrameForInlineSources(query models.Query) (*data.Frame, error) {
 		}
 		return PostProcessFrame(context.Background(), frame, query)
 	case models.QueryTypeJSON, models.QueryTypeGraphQL:
-		columns := []jsonFramer.ColumnSelector{}
+		columns := []jsonframer.ColumnSelector{}
 		for _, c := range query.Columns {
-			columns = append(columns, jsonFramer.ColumnSelector{
+			columns = append(columns, jsonframer.ColumnSelector{
 				Selector:   c.Selector,
 				Alias:      c.Text,
 				Type:       c.Type,
 				TimeFormat: c.TimeStampFormat,
 			})
 		}
-		newFrame, err := jsonFramer.JsonStringToFrame(query.Data, jsonFramer.JSONFramerOptions{
+		newFrame, err := jsonframer.ToFrame(query.Data, jsonframer.FramerOptions{
 			FrameName:    query.RefID,
 			RootSelector: query.RootSelector,
 			Columns:      columns,

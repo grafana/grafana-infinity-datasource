@@ -10,7 +10,6 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/infinity"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
-	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/transformations"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/trace"
 )
@@ -35,7 +34,7 @@ func (ds *PluginHost) QueryData(ctx context.Context, req *backend.QueryDataReque
 			continue
 		}
 		if query.Type == models.QueryTypeTransformations {
-			response1, err := transformations.ApplyTransformations(query, response)
+			response1, err := infinity.ApplyTransformations(query, response)
 			if err != nil {
 				return response, err
 			}

@@ -10,9 +10,9 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
-	"github.com/yesoreyeram/grafana-framer/jsonFramer"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
-	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/transformations"
+	"github.com/yesoreyeram/grafana-plugins/lib/go/transformations"
+	"github.com/yesoreyeram/grafana-plugins/lib/go/jsonframer"
 )
 
 func GetFrameForURLSources(ctx context.Context, query models.Query, infClient Client, requestHeaders map[string]string) (*data.Frame, error) {
@@ -192,8 +192,8 @@ func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, query models.Q
 		if err != nil {
 			return frame, cursor, fmt.Errorf("error while marshaling the response object. %w", err)
 		}
-		if frame, err = jsonFramer.JsonStringToFrame(string(body), jsonFramer.JSONFramerOptions{
-			FramerType:   jsonFramer.FramerTypeSQLite3,
+		if frame, err = jsonframer.ToFrame(string(body), jsonframer.FramerOptions{
+			FramerType:   jsonframer.FramerTypeSQLite3,
 			SQLite3Query: sqliteQuery,
 			RootSelector: query.RootSelector,
 		}); err != nil {
@@ -229,7 +229,7 @@ func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, query models.Q
 		if err != nil {
 			return frame, cursor, errors.New("error while finding the cursor value")
 		}
-		cursor, err = jsonFramer.GetRootData(string(body), query.PageParamCursorFieldExtractionPath)
+		cursor, err = jsonframer.GetRootData(string(body), query.PageParamCursorFieldExtractionPath)
 		if err != nil {
 			return frame, cursor, errors.New("error while extracting the cursor value")
 		}
