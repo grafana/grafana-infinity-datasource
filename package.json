@@ -71,7 +71,7 @@
     "react-dom": "17.0.2",
     "rxjs": "6.6.3",
     "uql": "0.0.19",
-    "xml2js": "^0.4.23"
+    "xml2js": "^0.5.0"
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.1",
