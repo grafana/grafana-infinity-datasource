@@ -6375,10 +6375,10 @@ gatsby-worker@^1.25.0:
     "@babel/core" "^7.15.5"
     "@babel/runtime" "^7.15.4"
 
-gatsby@^4.4.0:
-  version "4.25.4"
-  resolved "https://registry.yarnpkg.com/gatsby/-/gatsby-4.25.4.tgz#fbbea13b36e0c0a76a72121b9eecc754c8b8b67a"
-  integrity sha512-4IGQ615FCJi/o9qTvyZeZ4Pr04y+zpmxr531/r8rcJK1fcPC3BFR8QGxCrPNxI4jST/Imu4oRYYhnja/VWBCNg==
+gatsby@^4.25.7:
+  version "4.25.7"
+  resolved "https://registry.yarnpkg.com/gatsby/-/gatsby-4.25.7.tgz#56a0c7f9e25fcf895864d88fd648f97e26dd560f"
+  integrity sha512-kspM1XokxDw2YqC2hkPKQTfWSNSq/AnY8PNYSrUM+MCsyIKFuGqSVchNonZN1g8/nCoh4jQpBYXH5Uw2Hrs6Sw==
   dependencies:
     "@babel/code-frame" "^7.14.0"
     "@babel/core" "^7.15.5"

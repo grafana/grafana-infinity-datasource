@@ -19,7 +19,7 @@
     "class-variance-authority": "^0.4.0",
     "clsx": "^1.2.1",
     "fuse.js": "^6.5.3",
-    "gatsby": "^4.4.0",
+    "gatsby": "^4.25.7",
     "gatsby-plugin-feed": "^4.4.0",
     "gatsby-plugin-mdx": "^2.5.0",
     "gatsby-plugin-postcss": "^4.4.0",
