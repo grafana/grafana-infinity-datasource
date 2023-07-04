@@ -1,0 +1,614 @@
+<channel>
+    <id type="integer">38629</id>
+    <name>Traffic Monitor</name>
+    <description>Traffic Monitor showing density of cars detected</description>
+    <latitude type="decimal">42.28</latitude>
+    <longitude type="decimal">-71.35</longitude>
+    <field1>Density of Westbound Cars</field1>
+    <field2>Density of Eastbound Cars</field2>
+    <created-at type="dateTime">2015-05-19T20:14:03Z</created-at>
+    <updated-at type="dateTime">2019-07-24T20:12:00Z</updated-at>
+    <last-entry-id type="integer">15147984</last-entry-id>
+    <feeds type="array">
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:11:13Z</created-at>
+            <entry-id type="integer">15147885</entry-id>
+            <field1>2.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:11:28Z</created-at>
+            <entry-id type="integer">15147886</entry-id>
+            <field1>8.000000</field1>
+            <field2>1.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:11:44Z</created-at>
+            <entry-id type="integer">15147887</entry-id>
+            <field1>0.000000</field1>
+            <field2>1.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:11:59Z</created-at>
+            <entry-id type="integer">15147888</entry-id>
+            <field1>0.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:12:15Z</created-at>
+            <entry-id type="integer">15147889</entry-id>
+            <field1>1.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:12:30Z</created-at>
+            <entry-id type="integer">15147890</entry-id>
+            <field1>0.000000</field1>
+            <field2>5.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:12:46Z</created-at>
+            <entry-id type="integer">15147891</entry-id>
+            <field1>0.000000</field1>
+            <field2>2.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:13:02Z</created-at>
+            <entry-id type="integer">15147892</entry-id>
+            <field1>0.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:13:17Z</created-at>
+            <entry-id type="integer">15147893</entry-id>
+            <field1>1.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:13:34Z</created-at>
+            <entry-id type="integer">15147894</entry-id>
+            <field1>2.000000</field1>
+            <field2>2.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:13:49Z</created-at>
+            <entry-id type="integer">15147895</entry-id>
+            <field1>3.000000</field1>
+            <field2>2.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:14:06Z</created-at>
+            <entry-id type="integer">15147896</entry-id>
+            <field1>8.000000</field1>
+            <field2>2.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:14:21Z</created-at>
+            <entry-id type="integer">15147897</entry-id>
+            <field1>6.000000</field1>
+            <field2>2.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:14:37Z</created-at>
+            <entry-id type="integer">15147898</entry-id>
+            <field1>0.000000</field1>
+            <field2>2.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:14:53Z</created-at>
+            <entry-id type="integer">15147899</entry-id>
+            <field1>1.000000</field1>
+            <field2>3.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:15:09Z</created-at>
+            <entry-id type="integer">15147900</entry-id>
+            <field1>2.000000</field1>
+            <field2>1.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:15:25Z</created-at>
+            <entry-id type="integer">15147901</entry-id>
+            <field1>2.000000</field1>
+            <field2>2.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:15:41Z</created-at>
+            <entry-id type="integer">15147902</entry-id>
+            <field1>0.000000</field1>
+            <field2>3.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:15:56Z</created-at>
+            <entry-id type="integer">15147903</entry-id>
+            <field1>0.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:16:11Z</created-at>
+            <entry-id type="integer">15147904</entry-id>
+            <field1>1.000000</field1>
+            <field2>2.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:16:27Z</created-at>
+            <entry-id type="integer">15147905</entry-id>
+            <field1>1.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:16:42Z</created-at>
+            <entry-id type="integer">15147906</entry-id>
+            <field1>0.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:16:57Z</created-at>
+            <entry-id type="integer">15147907</entry-id>
+            <field1>0.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:17:13Z</created-at>
+            <entry-id type="integer">15147908</entry-id>
+            <field1>0.000000</field1>
+            <field2>2.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:17:28Z</created-at>
+            <entry-id type="integer">15147909</entry-id>
+            <field1>2.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:17:44Z</created-at>
+            <entry-id type="integer">15147910</entry-id>
+            <field1>0.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:18:01Z</created-at>
+            <entry-id type="integer">15147911</entry-id>
+            <field1>0.000000</field1>
+            <field2>5.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:18:16Z</created-at>
+            <entry-id type="integer">15147912</entry-id>
+            <field1>0.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:18:31Z</created-at>
+            <entry-id type="integer">15147913</entry-id>
+            <field1>0.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:18:47Z</created-at>
+            <entry-id type="integer">15147914</entry-id>
+            <field1>0.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:19:02Z</created-at>
+            <entry-id type="integer">15147915</entry-id>
+            <field1>0.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:19:17Z</created-at>
+            <entry-id type="integer">15147916</entry-id>
+            <field1>2.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:19:32Z</created-at>
+            <entry-id type="integer">15147917</entry-id>
+            <field1>3.000000</field1>
+            <field2>2.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:19:48Z</created-at>
+            <entry-id type="integer">15147918</entry-id>
+            <field1>1.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:20:05Z</created-at>
+            <entry-id type="integer">15147919</entry-id>
+            <field1>2.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:20:20Z</created-at>
+            <entry-id type="integer">15147920</entry-id>
+            <field1>0.000000</field1>
+            <field2>1.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:20:35Z</created-at>
+            <entry-id type="integer">15147921</entry-id>
+            <field1>1.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:20:51Z</created-at>
+            <entry-id type="integer">15147922</entry-id>
+            <field1>1.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:21:07Z</created-at>
+            <entry-id type="integer">15147923</entry-id>
+            <field1>0.000000</field1>
+            <field2>2.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:21:22Z</created-at>
+            <entry-id type="integer">15147924</entry-id>
+            <field1>6.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:21:38Z</created-at>
+            <entry-id type="integer">15147925</entry-id>
+            <field1>3.000000</field1>
+            <field2>2.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:21:54Z</created-at>
+            <entry-id type="integer">15147926</entry-id>
+            <field1>0.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:22:09Z</created-at>
+            <entry-id type="integer">15147927</entry-id>
+            <field1>1.000000</field1>
+            <field2>2.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:22:24Z</created-at>
+            <entry-id type="integer">15147928</entry-id>
+            <field1>2.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:22:40Z</created-at>
+            <entry-id type="integer">15147929</entry-id>
+            <field1>4.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:22:56Z</created-at>
+            <entry-id type="integer">15147930</entry-id>
+            <field1>2.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:23:11Z</created-at>
+            <entry-id type="integer">15147931</entry-id>
+            <field1>3.000000</field1>
+            <field2>1.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:23:27Z</created-at>
+            <entry-id type="integer">15147932</entry-id>
+            <field1>1.000000</field1>
+            <field2>2.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:23:43Z</created-at>
+            <entry-id type="integer">15147933</entry-id>
+            <field1>2.000000</field1>
+            <field2>2.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:23:58Z</created-at>
+            <entry-id type="integer">15147934</entry-id>
+            <field1>0.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:24:13Z</created-at>
+            <entry-id type="integer">15147935</entry-id>
+            <field1>3.000000</field1>
+            <field2>1.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:24:28Z</created-at>
+            <entry-id type="integer">15147936</entry-id>
+            <field1>3.000000</field1>
+            <field2>2.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:24:44Z</created-at>
+            <entry-id type="integer">15147937</entry-id>
+            <field1>3.000000</field1>
+            <field2>1.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:25:00Z</created-at>
+            <entry-id type="integer">15147938</entry-id>
+            <field1>4.000000</field1>
+            <field2>3.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:25:15Z</created-at>
+            <entry-id type="integer">15147939</entry-id>
+            <field1>0.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:25:31Z</created-at>
+            <entry-id type="integer">15147940</entry-id>
+            <field1>0.000000</field1>
+            <field2>4.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:25:47Z</created-at>
+            <entry-id type="integer">15147941</entry-id>
+            <field1>0.000000</field1>
+            <field2>1.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:26:02Z</created-at>
+            <entry-id type="integer">15147942</entry-id>
+            <field1>0.000000</field1>
+            <field2>2.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:26:17Z</created-at>
+            <entry-id type="integer">15147943</entry-id>
+            <field1>2.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:26:33Z</created-at>
+            <entry-id type="integer">15147944</entry-id>
+            <field1>0.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:26:48Z</created-at>
+            <entry-id type="integer">15147945</entry-id>
+            <field1>0.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:27:03Z</created-at>
+            <entry-id type="integer">15147946</entry-id>
+            <field1>5.000000</field1>
+            <field2>2.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:27:18Z</created-at>
+            <entry-id type="integer">15147947</entry-id>
+            <field1>2.000000</field1>
+            <field2>2.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:27:34Z</created-at>
+            <entry-id type="integer">15147948</entry-id>
+            <field1>1.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:27:50Z</created-at>
+            <entry-id type="integer">15147949</entry-id>
+            <field1>8.000000</field1>
+            <field2>1.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:28:05Z</created-at>
+            <entry-id type="integer">15147950</entry-id>
+            <field1>1.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:28:21Z</created-at>
+            <entry-id type="integer">15147951</entry-id>
+            <field1>0.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:28:36Z</created-at>
+            <entry-id type="integer">15147952</entry-id>
+            <field1>0.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:28:52Z</created-at>
+            <entry-id type="integer">15147953</entry-id>
+            <field1>0.000000</field1>
+            <field2>2.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:29:07Z</created-at>
+            <entry-id type="integer">15147954</entry-id>
+            <field1>0.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:29:22Z</created-at>
+            <entry-id type="integer">15147955</entry-id>
+            <field1>0.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:29:38Z</created-at>
+            <entry-id type="integer">15147956</entry-id>
+            <field1>4.000000</field1>
+            <field2>4.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:29:53Z</created-at>
+            <entry-id type="integer">15147957</entry-id>
+            <field1>10.000000</field1>
+            <field2>5.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:30:09Z</created-at>
+            <entry-id type="integer">15147958</entry-id>
+            <field1>0.000000</field1>
+            <field2>1.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:30:24Z</created-at>
+            <entry-id type="integer">15147959</entry-id>
+            <field1>0.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:30:39Z</created-at>
+            <entry-id type="integer">15147960</entry-id>
+            <field1>1.000000</field1>
+            <field2>3.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:30:55Z</created-at>
+            <entry-id type="integer">15147961</entry-id>
+            <field1>2.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:31:10Z</created-at>
+            <entry-id type="integer">15147962</entry-id>
+            <field1>0.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:31:25Z</created-at>
+            <entry-id type="integer">15147963</entry-id>
+            <field1>2.000000</field1>
+            <field2>2.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:31:40Z</created-at>
+            <entry-id type="integer">15147964</entry-id>
+            <field1>0.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:31:56Z</created-at>
+            <entry-id type="integer">15147965</entry-id>
+            <field1>0.000000</field1>
+            <field2>1.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:32:12Z</created-at>
+            <entry-id type="integer">15147966</entry-id>
+            <field1>0.000000</field1>
+            <field2>1.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:32:28Z</created-at>
+            <entry-id type="integer">15147967</entry-id>
+            <field1>0.000000</field1>
+            <field2>3.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:32:43Z</created-at>
+            <entry-id type="integer">15147968</entry-id>
+            <field1>1.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:32:58Z</created-at>
+            <entry-id type="integer">15147969</entry-id>
+            <field1>3.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:33:14Z</created-at>
+            <entry-id type="integer">15147970</entry-id>
+            <field1>2.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:33:29Z</created-at>
+            <entry-id type="integer">15147971</entry-id>
+            <field1>3.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:33:45Z</created-at>
+            <entry-id type="integer">15147972</entry-id>
+            <field1>0.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:34:00Z</created-at>
+            <entry-id type="integer">15147973</entry-id>
+            <field1>0.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:34:15Z</created-at>
+            <entry-id type="integer">15147974</entry-id>
+            <field1>8.000000</field1>
+            <field2>1.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:34:31Z</created-at>
+            <entry-id type="integer">15147975</entry-id>
+            <field1>4.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:34:46Z</created-at>
+            <entry-id type="integer">15147976</entry-id>
+            <field1>3.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:35:01Z</created-at>
+            <entry-id type="integer">15147977</entry-id>
+            <field1>1.000000</field1>
+            <field2>1.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:35:18Z</created-at>
+            <entry-id type="integer">15147978</entry-id>
+            <field1>0.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:35:33Z</created-at>
+            <entry-id type="integer">15147979</entry-id>
+            <field1>0.000000</field1>
+            <field2>1.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:35:49Z</created-at>
+            <entry-id type="integer">15147980</entry-id>
+            <field1>0.000000</field1>
+            <field2>1.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:36:05Z</created-at>
+            <entry-id type="integer">15147981</entry-id>
+            <field1>0.000000</field1>
+            <field2>2.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:36:20Z</created-at>
+            <entry-id type="integer">15147982</entry-id>
+            <field1>0.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:36:36Z</created-at>
+            <entry-id type="integer">15147983</entry-id>
+            <field1>6.000000</field1>
+            <field2>1.000000</field2>
+        </feed>
+        <feed>
+            <created-at type="dateTime">2023-07-04T04:36:52Z</created-at>
+            <entry-id type="integer">15147984</entry-id>
+            <field1>2.000000</field1>
+            <field2>0.000000</field2>
+        </feed>
+    </feeds>
+</channel>

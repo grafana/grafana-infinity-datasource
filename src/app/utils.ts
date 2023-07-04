@@ -20,14 +20,17 @@ export const isBackendQuery = (
   query.type === 'transformations' || (isBackendQuerySupported(query) && query.parser === 'backend');
 
 export const normalizeURL = (url: string): string => {
-  if (url.startsWith('https://github.com')) {
+  if (url.startsWith('https://github.com/')) {
     return url
-      .replace('https://github.com', 'https://raw.githubusercontent.com')
+      .replace('https://github.com/', 'https://raw.githubusercontent.com/')
       .split('/')
       .filter((item, index) => {
         return !(item === 'blob' && index === 5);
       })
       .join('/');
+  }
+  if (url.startsWith('https://gitlab.com/')) {
+    return url.replace('/blob/', '/raw/');
   }
   return url;
 };

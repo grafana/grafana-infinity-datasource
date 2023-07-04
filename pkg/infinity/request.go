@@ -73,6 +73,9 @@ func NormalizeURL(u string) string {
 		u = strings.Replace(u, "https://github.com", "https://raw.githubusercontent.com", 1)
 		u = strings.Replace(u, "/blob/", "/", 1)
 	}
+	if strings.HasPrefix(u, "https://gitlab.com") && len(urlArray) > 5 && urlArray[6] == "blob" && urlArray[5] != "blob" && urlArray[4] != "blob" && urlArray[3] != "blob" {
+		u = strings.Replace(u, "/blob/", "/raw/", 1)
+	}
 	return u
 }
 
