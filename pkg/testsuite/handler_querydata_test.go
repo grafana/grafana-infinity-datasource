@@ -1,24 +1,23 @@
-package pluginhost_test
+package testsuite_test
 
 import (
 	"context"
-	"crypto/tls"
-	"crypto/x509"
 	"encoding/base64"
 	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
+	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/grafana/grafana-plugin-sdk-go/experimental"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/infinity"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/pluginhost"
-	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/testsuite"
 )
 
 func TestAuthentication(t *testing.T) {
@@ -436,7 +435,7 @@ func TestResponseFormats(t *testing.T) {
 			}, *client, map[string]string{}, backend.PluginContext{})
 			require.NotNil(t, res)
 			require.Nil(t, res.Error)
-			experimental.CheckGoldenJSONResponse(t, "testdata", "backend-computed-columns", &res, testsuite.UPDATE_GOLDEN_DATA)
+			experimental.CheckGoldenJSONResponse(t, "golden", "backend-computed-columns", &res, UPDATE_GOLDEN_DATA)
 		})
 		t.Run("should filter computed columns", func(t *testing.T) {
 			client, err := infinity.NewClient(models.InfinitySettings{URL: ""})
@@ -455,7 +454,7 @@ func TestResponseFormats(t *testing.T) {
 			}, *client, map[string]string{}, backend.PluginContext{})
 			require.NotNil(t, res)
 			require.Nil(t, res.Error)
-			experimental.CheckGoldenJSONResponse(t, "testdata", "backend-filter-computed-columns", &res, testsuite.UPDATE_GOLDEN_DATA)
+			experimental.CheckGoldenJSONResponse(t, "golden", "backend-filter-computed-columns", &res, UPDATE_GOLDEN_DATA)
 		})
 	})
 	t.Run("JSON SQLite", func(t *testing.T) {
@@ -655,34 +654,515 @@ func TestResponseFormats(t *testing.T) {
 	})
 }
 
-func getServerCertificate(serverName string) *tls.Config {
-	caPool := x509.NewCertPool()
-	if ok := caPool.AppendCertsFromPEM([]byte(mockPEMClientCACet)); !ok {
-		return nil
+func TestInlineSources(t *testing.T) {
+	tests := []struct {
+		name            string
+		queryJSON       string
+		timeRange       backend.TimeRange
+		wantErr         error
+		skipGoldenCheck bool
+		test            func(t *testing.T, frame *data.Frame)
+	}{
+		{
+			name: "should execute default query without error",
+			test: func(t *testing.T, frame *data.Frame) {
+				require.NotNil(t, frame)
+				t.Run("should have custom meta data correctly", func(t *testing.T) {
+					require.NotNil(t, frame.Meta.Custom)
+					require.Equal(t, "This feature is not available for this type of query yet", frame.Meta.ExecutedQueryString)
+				})
+			},
+		},
+		{
+			name: "should return inline uql correctly",
+			queryJSON: `{
+				"refId":					"q1",
+				"type": 					"uql",
+				"source":					"inline",
+				"format":					"table",
+				"data":						"[1,2,3]",
+				"uql":						"parse-json | count"
+			}`,
+			test: func(t *testing.T, frame *data.Frame) {
+				require.NotNil(t, frame)
+				t.Run("should have frame name correctly", func(t *testing.T) {
+					require.Equal(t, "q1", frame.Name)
+				})
+				t.Run("should have custom meta data correctly", func(t *testing.T) {
+					require.NotNil(t, frame.Meta.Custom)
+					customMeta := frame.Meta.Custom.(*infinity.CustomMeta)
+					require.NotNil(t, customMeta)
+					require.Equal(t, models.QueryTypeUQL, customMeta.Query.Type)
+					require.Equal(t, "inline", customMeta.Query.Source)
+					require.Equal(t, "table", customMeta.Query.Format)
+					require.Equal(t, "[1,2,3]", customMeta.Query.Data)
+					require.Equal(t, "parse-json | count", customMeta.Query.UQL)
+					require.Equal(t, "[1,2,3]", customMeta.Data)
+					require.Equal(t, "", customMeta.Error)
+				})
+			},
+		},
+		{
+			name: "should return backend results correctly",
+			queryJSON: `{
+				"refId":					"q1",
+				"type": 					"json",
+				"parser": 					"backend",
+				"source":					"inline",
+				"data":						"[{\"Sex\":\"Male\"},{\"Sex\":\"Male\"},{\"Sex\":null},{\"Sex\":\"Female\"},{\"Sex\":\"Others\"}]",
+				"filterExpression": 		"Sex != 'Female' && Sex != null",
+				"summarizeExpression": 		"count(Sex)",
+				"summarizeBy": 				"Sex"
+			}`,
+			skipGoldenCheck: true,
+			test: func(t *testing.T, frame *data.Frame) {
+				require.NotNil(t, frame)
+				assert.Equal(t, data.NewField("Sex", nil, []*string{toSP("Male"), toSP(""), toSP("Others")}), frame.Fields[0])
+				assert.Equal(t, data.NewField("summary", nil, []*float64{toFP(2), toFP(1), toFP(1)}), frame.Fields[1])
+			},
+		},
+		{
+			name: "should return backend results correctly with computed columns",
+			queryJSON: `{
+				"refId":					"q1",
+				"type": 					"json",
+				"parser": 					"backend",
+				"source":					"inline",
+				"data":						"[1,2,3,4,5,6]",
+				"computed_columns": 		[{"selector":"q1 == 2 ? '' : 'Male'", "text":"something"}]
+			}`,
+			skipGoldenCheck: true,
+			test: func(t *testing.T, frame *data.Frame) {
+				require.NotNil(t, frame)
+				// TODO: fix null vlues. When the selector is changed to `q1 == 2 ? null : "Male"`, it produces invalid results.
+				assert.Equal(t, data.NewField("q1", nil, []*float64{toFP(1), toFP(2), toFP(3), toFP(4), toFP(5), toFP(6)}), frame.Fields[0])
+				assert.Equal(t, data.NewField("something", nil, []*string{toSP("Male"), toSP(""), toSP("Male"), toSP("Male"), toSP("Male"), toSP("Male")}), frame.Fields[1])
+			},
+		},
+		{
+			name: "should return backend results jsonata root selector",
+			queryJSON: `{
+				"refId":					"q1",
+				"type": 					"json",
+				"parser": 					"backend",
+				"source":					"inline",
+				"data":						"{\"orders\":[{\"price\":10,\"quantity\":3},{\"price\":0.5,\"quantity\":10},{\"price\":100,\"quantity\":1}]}",
+				"root_selector": 			"$sum(orders.price)",
+				"computed_columns": 		[]
+			}`,
+			test: func(t *testing.T, frame *data.Frame) {
+				require.NotNil(t, frame)
+			},
+		},
 	}
-	return &tls.Config{ServerName: serverName, RootCAs: caPool}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			require.NotEmpty(t, tt.name)
+			queryJSON := tt.queryJSON
+			if queryJSON == "" {
+				queryJSON = "{}"
+			}
+			bq := backend.DataQuery{JSON: []byte(queryJSON), TimeRange: tt.timeRange}
+			query, err := models.LoadQuery(context.Background(), bq, backend.PluginContext{})
+			require.Nil(t, err)
+			frame, err := infinity.GetFrameForInlineSources(query)
+			if tt.wantErr != nil {
+				require.NotNil(t, err)
+				assert.Equal(t, tt.wantErr, err)
+				return
+			}
+			require.Nil(t, err)
+			if !tt.skipGoldenCheck {
+				require.NotNil(t, frame)
+				response := &backend.DataResponse{Frames: data.Frames{frame}}
+				experimental.CheckGoldenJSONResponse(t, "golden", strings.ReplaceAll(t.Name(), "TestInlineSources/", "inline/"), response, UPDATE_GOLDEN_DATA)
+			}
+			if tt.test != nil {
+				tt.test(t, frame)
+			}
+		})
+	}
 }
 
-var mockPEMClientCACet = `-----BEGIN CERTIFICATE-----
-MIID3jCCAsagAwIBAgIgfeRMmudbqVL25f2u2vfOW1D94ak+ste/pCrVBCAZemow
-DQYJKoZIhvcNAQEFBQAwfzEJMAcGA1UEBhMAMRAwDgYDVQQKDAdleGFtcGxlMRAw
-DgYDVQQLDAdleGFtcGxlMRQwEgYDVQQDDAtleGFtcGxlLmNvbTEiMCAGCSqGSIb3
-DQEJARYTaGVsbG9AbG9jYWxob3N0LmNvbTEUMBIGA1UEAwwLZXhhbXBsZS5jb20w
-HhcNMjEwNTEyMjExNDE3WhcNMzEwNTEzMjExNDE3WjBpMQkwBwYDVQQGEwAxEDAO
-BgNVBAoMB2V4YW1wbGUxEDAOBgNVBAsMB2V4YW1wbGUxFDASBgNVBAMMC2V4YW1w
-bGUuY29tMSIwIAYJKoZIhvcNAQkBFhNoZWxsb0Bsb2NhbGhvc3QuY29tMIIBIjAN
-BgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAr2Sc7JXdo94OBImxLauD20fHLAMt
-rSFzUMlPJTYalGhuUXRfT6oIr4uf3jydCHT0kkoBKSOurl230Vj8dArN5Pe/+xFM
-tgBmSCiFF7NcdvvW8VH5OmJK7j89OAt7DqIzeecqziNBTnWoxnDXbzv4EG994MEU
-BtKO8EKPFpxpa5dppN6wDzzLhV1GuhGZRo0aI/Fg4AXWMD3UX2NFHyc7VymhetFL
-enereKqQNhMghZL9x/SYkV0j4hkx3dT6t6YthJ0W1E/ATPwyCeNBdTuSVeQe5tm3
-QsLIhLf8h5vBphtGClPAdcmKpujOpraBVNk1KGE3Ij+l/sx2lHt031pzxwIDAQAB
-o1wwWjAdBgNVHQ4EFgQUjD6ckZ1Y3SA71L+kgT6JqzNWr3AwHwYDVR0jBBgwFoAU
-jD6ckZ1Y3SA71L+kgT6JqzNWr3AwGAYDVR0RBBEwD4INKi5leGFtcGxlLmNvbTAN
-BgkqhkiG9w0BAQUFAAOCAQEAQdNZna5iggoJErqNDjysHKAHd+ckLLZrDe4uM7SZ
-hk3PdO29Ez5Is0aM4ZdYm2Jl0T5PR79adC4d5wHB4GRDBk0IFZmaTZnYmoRQGa0a
-O0dRF0i35jbpWudqeKDi+dyWl05NVDC7TY9uLByqNxUgaG21/BMhxjgR4GI8vbEP
-rF3wUqxK2LawghsB7hzT/XWZmAwz56nMKasfV2Mf2UhpnkALIfeEcwuLxVdvUqsV
-kxoDsydZaDV+uf8aeQYZvvc9qvONSXWuDcU7uMr9PioXgSHwSOO8UrPbb16TOuhi
-WVZwQfmwUtNEQ3zkAYo2g4ZL/LJsmvrmEqwD7csToi/HtQ==
------END CERTIFICATE-----`
+func TestRemoteSources(t *testing.T) {
+	tests := []struct {
+		name            string
+		queryJSON       string
+		client          *infinity.Client
+		timeRange       backend.TimeRange
+		wantErr         error
+		skipGoldenCheck bool
+		test            func(t *testing.T, frame *data.Frame)
+	}{
+		{
+			name: "should execute default query without error",
+			test: func(t *testing.T, frame *data.Frame) {
+				require.NotNil(t, frame)
+				t.Run("should have custom meta data correctly", func(t *testing.T) {
+					require.NotNil(t, frame.Meta.Custom)
+					require.Equal(t, "###############\n## URL\n###############\n\nhttps://raw.githubusercontent.com/yesoreyeram/grafana-infinity-datasource/main/testdata/users.json\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' 'https://raw.githubusercontent.com/yesoreyeram/grafana-infinity-datasource/main/testdata/users.json'", frame.Meta.ExecutedQueryString)
+				})
+			},
+		},
+		{
+			name: "json query",
+			queryJSON: `{
+				"refId":					"q1",
+				"type": 					"json",
+				"source":					"url",
+				"format":					"table",
+				"url":						"http://foo"
+			}`,
+			client: New("[1,2,3]"),
+			test: func(t *testing.T, frame *data.Frame) {
+				require.NotNil(t, frame)
+				require.Equal(t, "###############\n## URL\n###############\n\nhttp://foo\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' 'http://foo'", frame.Meta.ExecutedQueryString)
+				t.Run("should have frame name correctly", func(t *testing.T) {
+					require.Equal(t, "q1", frame.Name)
+				})
+				t.Run("should have custom meta data correctly", func(t *testing.T) {
+					require.NotNil(t, frame.Meta.Custom)
+					customMeta := frame.Meta.Custom.(*infinity.CustomMeta)
+					require.NotNil(t, customMeta)
+					require.Equal(t, models.QueryTypeJSON, customMeta.Query.Type)
+					require.Equal(t, "url", customMeta.Query.Source)
+					require.Equal(t, "table", customMeta.Query.Format)
+					require.Equal(t, "http://foo", customMeta.Query.URL)
+					require.Equal(t, []any([]any{float64(1), float64(2), float64(3)}), customMeta.Data)
+					require.Equal(t, "", customMeta.Error)
+				})
+			},
+		},
+		{
+			name: "csv query",
+			queryJSON: `{
+				"refId":					"q1",
+				"type": 					"csv",
+				"source":					"url",
+				"format":					"table",
+				"url":						"http://bar"
+			}`,
+			client: New("a,b\na1,b1"),
+			test: func(t *testing.T, frame *data.Frame) {
+				require.NotNil(t, frame)
+				require.Equal(t, "###############\n## URL\n###############\n\nhttp://bar\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: text/csv; charset=utf-8' 'http://bar'", frame.Meta.ExecutedQueryString)
+				t.Run("should have frame name correctly", func(t *testing.T) {
+					require.Equal(t, "q1", frame.Name)
+				})
+				t.Run("should have custom meta data correctly", func(t *testing.T) {
+					require.NotNil(t, frame.Meta.Custom)
+					customMeta := frame.Meta.Custom.(*infinity.CustomMeta)
+					require.NotNil(t, customMeta)
+					require.Equal(t, models.QueryTypeCSV, customMeta.Query.Type)
+					require.Equal(t, "url", customMeta.Query.Source)
+					require.Equal(t, "table", customMeta.Query.Format)
+					require.Equal(t, "http://bar", customMeta.Query.URL)
+					require.Equal(t, "a,b\na1,b1", customMeta.Data)
+					require.Equal(t, "", customMeta.Error)
+				})
+			},
+		},
+		{
+			name: "uql query",
+			queryJSON: `{
+				"refId":					"q1",
+				"type": 					"uql",
+				"source":					"url",
+				"format":					"table",
+				"url":						"http://foo",
+				"uql":						"parse-json | count"
+			}`,
+			client: New("[1,2,3]"),
+			test: func(t *testing.T, frame *data.Frame) {
+				require.NotNil(t, frame)
+				require.Equal(t, "###############\n## URL\n###############\n\nhttp://foo\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' 'http://foo'\n\n###############\n## UQL\n###############\n\nparse-json | count", frame.Meta.ExecutedQueryString)
+				t.Run("should have frame name correctly", func(t *testing.T) {
+					require.Equal(t, "q1", frame.Name)
+				})
+				t.Run("should have custom meta data correctly", func(t *testing.T) {
+					require.NotNil(t, frame.Meta.Custom)
+					customMeta := frame.Meta.Custom.(*infinity.CustomMeta)
+					require.NotNil(t, customMeta)
+					require.Equal(t, models.QueryTypeUQL, customMeta.Query.Type)
+					require.Equal(t, "url", customMeta.Query.Source)
+					require.Equal(t, "table", customMeta.Query.Format)
+					require.Equal(t, "http://foo", customMeta.Query.URL)
+					require.Equal(t, "parse-json | count", customMeta.Query.UQL)
+					require.Equal(t, "[1,2,3]", customMeta.Data)
+					require.Equal(t, "", customMeta.Error)
+				})
+			},
+		},
+		{
+			name: "groq query",
+			queryJSON: `{
+				"refId":					"q1",
+				"type": 					"groq",
+				"source":					"url",
+				"format":					"table",
+				"url":						"http://foo",
+				"groq":						"*{1,2,3}"
+			}`,
+			client: New("[1,2,3]"),
+			test: func(t *testing.T, frame *data.Frame) {
+				require.NotNil(t, frame)
+				require.Equal(t, "###############\n## URL\n###############\n\nhttp://foo\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' 'http://foo'\n###############\n## GROQ\n###############\n\n*{1,2,3}\n", frame.Meta.ExecutedQueryString)
+				t.Run("should have frame name correctly", func(t *testing.T) {
+					require.Equal(t, "q1", frame.Name)
+				})
+				t.Run("should have custom meta data correctly", func(t *testing.T) {
+					require.NotNil(t, frame.Meta.Custom)
+					customMeta := frame.Meta.Custom.(*infinity.CustomMeta)
+					require.NotNil(t, customMeta)
+					require.Equal(t, models.QueryTypeGROQ, customMeta.Query.Type)
+					require.Equal(t, "url", customMeta.Query.Source)
+					require.Equal(t, "table", customMeta.Query.Format)
+					require.Equal(t, "http://foo", customMeta.Query.URL)
+					require.Equal(t, "*{1,2,3}", customMeta.Query.GROQ)
+					require.Equal(t, "[1,2,3]", customMeta.Data)
+					require.Equal(t, "", customMeta.Error)
+				})
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			require.NotEmpty(t, tt.name)
+			queryJSON := tt.queryJSON
+			if queryJSON == "" {
+				queryJSON = "{}"
+			}
+			bq := backend.DataQuery{JSON: []byte(queryJSON), TimeRange: tt.timeRange}
+			query, err := models.LoadQuery(context.Background(), bq, backend.PluginContext{})
+			require.Nil(t, err)
+			client := tt.client
+			if client == nil {
+				client = New("")
+			}
+			frame, err := infinity.GetFrameForURLSources(context.Background(), query, *client, map[string]string{})
+			if tt.wantErr != nil {
+				require.NotNil(t, err)
+				assert.Equal(t, tt.wantErr, err)
+				return
+			}
+			require.Nil(t, err)
+			if !tt.skipGoldenCheck {
+				require.NotNil(t, frame)
+				response := &backend.DataResponse{Frames: data.Frames{frame}}
+				experimental.CheckGoldenJSONResponse(t, "golden", strings.ReplaceAll(t.Name(), "TestRemoteSources/", "remote/"), response, UPDATE_GOLDEN_DATA)
+			}
+			if tt.test != nil {
+				tt.test(t, frame)
+			}
+		})
+	}
+}
+
+func TestQuery(t *testing.T) {
+	host := pluginhost.NewDatasource()
+	require.NotNil(t, host)
+	t.Run("json default url default", func(t *testing.T) {
+		server := getServerWithStaticResponse(t, `{"message":"ok"}`, false)
+		server.Start()
+		defer server.Close()
+		res, err := host.QueryData(context.Background(), &backend.QueryDataRequest{
+			PluginContext: backend.PluginContext{
+				DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{
+					JSONData:                []byte(`{"is_mock": true}`),
+					DecryptedSecureJSONData: map[string]string{},
+				},
+			},
+			Queries: []backend.DataQuery{{RefID: "A", JSON: []byte(fmt.Sprintf(`{ 
+				"type"		:	"json",
+				"source"	:	"url",
+				"url" 		: 	"%s"
+			}`, server.URL))}},
+		})
+		require.Nil(t, err)
+		require.NotNil(t, res)
+		resItem := res.Responses["A"]
+		experimental.CheckGoldenJSONResponse(t, "golden", strings.ReplaceAll(t.Name(), "TestQuery/", ""), &resItem, UPDATE_GOLDEN_DATA)
+	})
+	t.Run("csv default url default", func(t *testing.T) {
+		server := getServerWithStaticResponse(t, strings.Join([]string{`name,age`, `foo,123`, `bar,456`}, "\n"), false)
+		server.Start()
+		defer server.Close()
+		res, err := host.QueryData(context.Background(), &backend.QueryDataRequest{
+			PluginContext: backend.PluginContext{
+				DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{
+					JSONData:                []byte(`{"is_mock": true}`),
+					DecryptedSecureJSONData: map[string]string{},
+				},
+			},
+			Queries: []backend.DataQuery{{RefID: "A", JSON: []byte(fmt.Sprintf(`{ 
+				"type"		:	"csv",
+				"source"	:	"url",
+				"url" 		: 	"%s"
+			}`, server.URL))}},
+		})
+		require.Nil(t, err)
+		require.NotNil(t, res)
+		resItem := res.Responses["A"]
+		experimental.CheckGoldenJSONResponse(t, "golden", strings.ReplaceAll(t.Name(), "TestQuery/", ""), &resItem, UPDATE_GOLDEN_DATA)
+	})
+	t.Run("csv backend url default", func(t *testing.T) {
+		server := getServerWithStaticResponse(t, strings.Join([]string{`name,age`, `foo,123`, `bar,456`}, "\n"), false)
+		server.Start()
+		defer server.Close()
+		res, err := host.QueryData(context.Background(), &backend.QueryDataRequest{
+			PluginContext: backend.PluginContext{
+				DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{
+					JSONData:                []byte(`{"is_mock": true}`),
+					DecryptedSecureJSONData: map[string]string{},
+				},
+			},
+			Queries: []backend.DataQuery{{RefID: "A", JSON: []byte(fmt.Sprintf(`{ 
+				"type"		:	"csv",
+				"source"	:	"url",
+				"parser" 	: 	"backend",
+				"url" 		: 	"%s"
+			}`, server.URL))}},
+		})
+		require.Nil(t, err)
+		require.NotNil(t, res)
+		resItem := res.Responses["A"]
+		experimental.CheckGoldenJSONResponse(t, "golden", strings.ReplaceAll(t.Name(), "TestQuery/", ""), &resItem, UPDATE_GOLDEN_DATA)
+	})
+	t.Run("csv backend inline default", func(t *testing.T) {
+		res, err := host.QueryData(context.Background(), &backend.QueryDataRequest{
+			PluginContext: backend.PluginContext{
+				DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{
+					JSONData:                []byte(`{"is_mock": true}`),
+					DecryptedSecureJSONData: map[string]string{},
+				},
+			},
+			Queries: []backend.DataQuery{{RefID: "A", JSON: []byte((`{ 
+				"type"		:	"csv",
+				"source"	:	"inline",
+				"parser" 	: 	"backend",
+				"data" 		: 	"user,age\n1,1\n2,2\n3,3"
+			}`))}},
+		})
+		require.Nil(t, err)
+		require.NotNil(t, res)
+		resItem := res.Responses["A"]
+		experimental.CheckGoldenJSONResponse(t, "golden", strings.ReplaceAll(t.Name(), "TestQuery/", ""), &resItem, UPDATE_GOLDEN_DATA)
+	})
+	t.Run("xml backend url default", func(t *testing.T) {
+		server := getServerWithStaticResponse(t, `<?xml version="1.0" encoding="UTF-8" ?>
+		<users>
+			<user>
+				<name>foo</name>
+				<age>123</age>
+			</user>
+			<user>
+				<name>bar</name>
+				<age>456</age>
+			</user>
+		</users>`, false)
+		server.Start()
+		defer server.Close()
+		res, err := host.QueryData(context.Background(), &backend.QueryDataRequest{
+			PluginContext: backend.PluginContext{
+				DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{
+					JSONData:                []byte(`{"is_mock": true}`),
+					DecryptedSecureJSONData: map[string]string{},
+				},
+			},
+			Queries: []backend.DataQuery{{RefID: "A", JSON: []byte(fmt.Sprintf(`{ 
+				"type"			:	"xml",
+				"source"		:	"url",
+				"parser" 		: 	"backend",
+				"root_selector" : 	"users.user",
+				"url" 			: 	"%s"
+			}`, server.URL))}},
+		})
+		require.Nil(t, err)
+		require.NotNil(t, res)
+		resItem := res.Responses["A"]
+		experimental.CheckGoldenJSONResponse(t, "golden", strings.ReplaceAll(t.Name(), "TestQuery/", ""), &resItem, UPDATE_GOLDEN_DATA)
+	})
+	t.Run("scenario azure cost management", func(t *testing.T) {
+		server := getServerWithStaticResponse(t, "./../../testdata/misc/azure-cost-management-daily.json", true)
+		server.Start()
+		defer server.Close()
+		res, err := host.QueryData(context.Background(), &backend.QueryDataRequest{
+			PluginContext: backend.PluginContext{
+				DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{
+					JSONData:                []byte(`{"is_mock": true}`),
+					DecryptedSecureJSONData: map[string]string{},
+				},
+			},
+			Queries: []backend.DataQuery{{RefID: "A", JSON: []byte(fmt.Sprintf(`{ 
+				"type"			: "json",
+				"source"		: "url",
+				"parser"		: "backend",
+				"url"			:  "%s",
+				"root_selector" : "properties.rows",
+				"columns": [
+					{
+						"selector": "1",
+						"text": "cost",
+						"type": "number"
+					},
+					{
+						"selector": "2",
+						"text": "timestamp",
+						"timestampFormat": "20060102",
+						"type": "timestamp"
+					}
+				]
+			}`, server.URL))}},
+		})
+		require.Nil(t, err)
+		require.NotNil(t, res)
+		resItem := res.Responses["A"]
+		experimental.CheckGoldenJSONResponse(t, "golden", strings.ReplaceAll(t.Name(), "TestQuery/", ""), &resItem, UPDATE_GOLDEN_DATA)
+	})
+	t.Run("transformations limit default", func(t *testing.T) {
+		res, err := host.QueryData(context.Background(), &backend.QueryDataRequest{
+			PluginContext: backend.PluginContext{
+				DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{
+					JSONData:                []byte(`{"is_mock": true}`),
+					DecryptedSecureJSONData: map[string]string{},
+				},
+			},
+			Queries: []backend.DataQuery{
+				{
+					RefID: "A",
+					JSON: []byte((`{ 
+						"type"		:	"csv",
+						"source"	:	"inline",
+						"parser" 	: 	"backend",
+						"data" 		: 	"user,age\n1,1\n2,2\n3,3"
+					}`)),
+				},
+				{
+					RefID: "B",
+					JSON: []byte((`{ 
+						"type"		:	"csv",
+						"source"	:	"inline",
+						"parser" 	: 	"backend",
+						"data" 		: 	"user,age\n4,4\n5,5\n6,6"
+					}`)),
+				},
+				{
+					RefID: "C",
+					JSON: []byte((`{ 
+						"type"				:	"transformations",
+						"transformations" 	: 	[
+							{ "type" : "limit", "limit" : { "limitField" : 2 } }
+						]
+					}`)),
+				},
+			},
+		})
+		require.Nil(t, err)
+		require.NotNil(t, res)
+		require.Equal(t, 2, len(res.Responses))
+		for k := range res.Responses {
+			resItem := res.Responses[k]
+			experimental.CheckGoldenJSONResponse(t, "golden", strings.ReplaceAll(t.Name(), "TestQuery/", "")+"_"+k, &resItem, UPDATE_GOLDEN_DATA)
+		}
+	})
+}
