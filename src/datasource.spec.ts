@@ -5,6 +5,7 @@ import type { DataSourceInstanceSettings } from '@grafana/data/types';
 
 jest.mock('@grafana/runtime', () => ({
   ...(jest.requireActual('@grafana/runtime') as unknown as object),
+  reportInteraction: () => {},
   getTemplateSrv: () => {
     return {
       replace: (s: string) => s,
