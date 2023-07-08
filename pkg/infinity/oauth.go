@@ -23,6 +23,7 @@ func ApplyOAuthClientCredentials(httpClient *http.Client, settings models.Infini
 			TokenURL:       settings.OAuth2Settings.TokenURL,
 			Scopes:         []string{},
 			EndpointParams: url.Values{},
+			AuthStyle:      settings.OAuth2Settings.AuthStyle,
 		}
 		for _, scope := range settings.OAuth2Settings.Scopes {
 			if scope != "" {

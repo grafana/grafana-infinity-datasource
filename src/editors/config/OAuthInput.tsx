@@ -45,6 +45,34 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
       {oauth2.oauth2_type === 'client_credentials' && (
         <>
           <div className="gf-form">
+            <InlineFormLabel
+              width={10}
+              tooltip={
+                <>
+                  {`AuthStyleAutoDetect means to auto-detect which authentication style the provider wants by trying both ways and caching the successful way for the future.`}
+                  <br />
+                  <br />
+                  {`AuthStyleInParams sends the "client_id" and "client_secret" in the POST body as application/x-www-form-urlencoded parameters.`}
+                  <br />
+                  <br />
+                  {`AuthStyleInHeader sends the client_id and client_password using HTTP Basic Authorization. This is an optional style described in the OAuth2 RFC 6749 section 2.3.1.`}
+                </>
+              }
+              {...{ interactive: true }}
+            >
+              Auth Style
+            </InlineFormLabel>
+            <RadioButtonGroup
+              options={[
+                { value: 0, label: 'Auto' },
+                { value: 1, label: 'In Params' },
+                { value: 2, label: 'In Header' },
+              ]}
+              onChange={(v) => onOAuth2PropsChange('authStyle', v || 0)}
+              value={oauth2.authStyle || 0}
+            ></RadioButtonGroup>
+          </div>
+          <div className="gf-form">
             <InlineFormLabel width={10}>Client ID</InlineFormLabel>
             <Input onChange={(v) => onOAuth2PropsChange('client_id', v.currentTarget.value)} value={oauth2.client_id} width={30} placeholder={'Client ID'} />
           </div>
