@@ -1,7 +1,6 @@
 import { getTemplateSrv } from '@grafana/runtime';
 import { Datasource } from './../datasource';
 import { CSVParser, HTMLParser, JSONParser, XMLParser } from './parsers';
-import { normalizeURL } from './utils';
 import type { InfinityDataQuery } from './../types';
 
 export class InfinityProvider {
@@ -43,7 +42,6 @@ export class InfinityProvider {
     return new Promise((resolve, reject) => {
       if (this.target.source === 'url') {
         const target = this.target;
-        target.url = normalizeURL(target.url);
         this.datasource
           .postResource('proxy', target)
           .then((res) => {

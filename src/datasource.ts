@@ -11,7 +11,7 @@ import { getTemplateVariablesFromResult, LegacyVariableProvider, migrateLegacyQu
 import { AnnotationsEditor } from './editors/annotation.editor';
 import { interpolateQuery, interpolateVariableQuery } from './interpolate';
 import { migrateQuery } from './migrate';
-import { isBackendQuery, isDataQuery, normalizeURL } from './app/utils';
+import { isBackendQuery } from './app/utils';
 import { reportQuery, reportHealthCheck } from './utils/analytics';
 import type { InfinityInstanceSettings, InfinityOptions, InfinityQuery, MetricFindValue, VariableQuery } from './types';
 import type { DataFrame, DataQueryRequest, DataQueryResponse, ScopedVars, TimeRange } from '@grafana/data/types';
@@ -46,15 +46,6 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
   metricFindQuery(originalQuery: VariableQuery): Promise<MetricFindValue[]> {
     let query = migrateLegacyQuery(originalQuery);
     query = interpolateVariableQuery(query);
-    if (query.queryType === 'infinity' && isDataQuery(query.infinityQuery) && query.infinityQuery.source === 'url') {
-      query = {
-        ...query,
-        infinityQuery: {
-          ...query.infinityQuery,
-          url: normalizeURL(query.infinityQuery.url),
-        },
-      };
-    }
     return new Promise((resolve) => {
       switch (query.queryType) {
         case 'random':

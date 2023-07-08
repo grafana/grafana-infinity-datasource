@@ -1,6 +1,5 @@
 import { interpolateQuery } from './../interpolate';
 import { migrateQuery } from './../migrate';
-import { isDataQuery, normalizeURL } from './utils';
 import type { GlobalInfinityQuery, InfinityInstanceSettings, InfinityOptions, InfinityQuery } from './../types';
 import type { DataQueryRequest, DataSourceInstanceSettings, ScopedVars } from '@grafana/data/types';
 
@@ -46,13 +45,5 @@ export const getUpdatedDataRequest = (options: DataQueryRequest<InfinityQuery>, 
 };
 
 export const interpolateVariablesInQueries = (queries: InfinityQuery[], scopedVars: ScopedVars): InfinityQuery[] => {
-  return queries
-    .map((t) => migrateQuery(t))
-    .map((t) => interpolateQuery(t, scopedVars))
-    .map((t) => {
-      if (isDataQuery(t) && t.source === 'url') {
-        t.url = normalizeURL(t.url);
-      }
-      return t;
-    });
+  return queries.map((t) => migrateQuery(t)).map((t) => interpolateQuery(t, scopedVars));
 };
