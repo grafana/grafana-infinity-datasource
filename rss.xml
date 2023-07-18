@@ -1,4 +1,61 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Your Site's RSS Feed]]></title><description><![CDATA[Do infinite things with Grafana. Turn any website into beautiful grafana dashboards. Supports HTML, CSV, JSON, XML & GraphQL documents.]]></description><link>https://yesoreyeram.github.io/grafana-infinity-datasource</link><generator>GatsbyJS</generator><lastBuildDate>Wed, 12 Jul 2023 19:05:11 GMT</lastBuildDate><item><title><![CDATA[AWS Status feeds as Grafana annotations]]></title><description><![CDATA[AWS Status Feeds in Grafana In this example, we are going to see how we can use AWS status feeds as Grafana annotations. This will be useful…]]></description><link>https://yesoreyeram.github.io/grafana-infinity-datasource/blog/aws-status-feeds</link><guid isPermaLink="false">https://yesoreyeram.github.io/grafana-infinity-datasource/blog/aws-status-feeds</guid><pubDate>Fri, 28 Jan 2022 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;AWS Status Feeds in Grafana&lt;/h2&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Your Site's RSS Feed]]></title><description><![CDATA[Do infinite things with Grafana. Turn any website into beautiful grafana dashboards. Supports HTML, CSV, JSON, XML & GraphQL documents.]]></description><link>https://yesoreyeram.github.io/grafana-infinity-datasource</link><generator>GatsbyJS</generator><lastBuildDate>Tue, 18 Jul 2023 19:06:25 GMT</lastBuildDate><item><title><![CDATA[Github]]></title><description><![CDATA[Github Stats image We can leverage Github graphql API to query the github stats using this infinity plugin graphql api. Sample Query given…]]></description><link>https://yesoreyeram.github.io/grafana-infinity-datasource/blog/github</link><guid isPermaLink="false">https://yesoreyeram.github.io/grafana-infinity-datasource/blog/github</guid><pubDate>Fri, 28 Jan 2022 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;Github Stats&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/153843/93846498-1d9abf80-fc9c-11ea-90ed-4c569b088d99.png#center&quot; alt=&quot;image&quot;&gt;&lt;/p&gt;
+&lt;p&gt;We can leverage &lt;a href=&quot;https://docs.github.com/en/graphql&quot;&gt;Github graphql API&lt;/a&gt; to query the github stats using this infinity plugin graphql api.&lt;/p&gt;
+&lt;p&gt;Sample Query given in the below example. You can customize your query to bring the stats you needed.&lt;/p&gt;
+&lt;h2&gt;Query Editor&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/153843/93736996-d3510a00-fbd9-11ea-8c05-065758d66e82.png#center&quot; alt=&quot;image&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/153843/93737011-e1068f80-fbd9-11ea-8c82-ea516f83cf3d.png#center&quot; alt=&quot;image&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Query Used:&lt;/p&gt;
+&lt;deckgo-highlight-code language=&quot;graphql&quot; terminal=&quot;carbon&quot; theme=&quot;vscode&quot;  &gt;
+          &lt;code slot=&quot;code&quot;&gt;{
+  repository(owner: &amp;quot;$GithubUser&amp;quot;, name: &amp;quot;$GithubRepo&amp;quot;) {
+    issues(last: 20) {
+      edges {
+        node {
+          author {
+            login
+          }
+          state
+          title
+          url
+        }
+      }
+    }
+  }
+}&lt;/code&gt;
+        &lt;/deckgo-highlight-code&gt;
+&lt;h2&gt;Datasource Configuration&lt;/h2&gt;
+&lt;p&gt;Select &lt;strong&gt;Basic user authentication&lt;/strong&gt; mode and use your github username and PAT token as password&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/153843/93736929-b1578780-fbd9-11ea-9413-5585ff79d3a8.png#center&quot; alt=&quot;image&quot;&gt;&lt;/p&gt;
+&lt;h2&gt;Github Organization Summary example&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/153843/93846498-1d9abf80-fc9c-11ea-90ed-4c569b088d99.png#center&quot; alt=&quot;image&quot;&gt;&lt;/p&gt;
+&lt;p&gt;corresponding query used is given below&lt;/p&gt;
+&lt;deckgo-highlight-code language=&quot;graphql&quot; terminal=&quot;carbon&quot; theme=&quot;vscode&quot;  &gt;
+          &lt;code slot=&quot;code&quot;&gt;{
+  repositoryOwner(login: &amp;quot;$GithubUser&amp;quot;) {
+    repositories(first: 100) {
+      data: nodes {
+        name
+        stargazers {
+          totalCount
+        }
+        openissues: issues(states: OPEN) {
+          totalCount
+        }
+        openpr: pullRequests(states: OPEN) {
+          totalCount
+        }
+      }
+    }
+  }
+}&lt;/code&gt;
+        &lt;/deckgo-highlight-code&gt;
+&lt;p&gt;Note:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Queries are not paginated&lt;/li&gt;
+&lt;li&gt;Github rate limits apply&lt;/li&gt;
+&lt;li&gt;If you need paginated and full set of results, use grafana &lt;a href=&quot;https://grafana.com/grafana/plugins/grafana-github-datasource&quot;&gt;github stats plugin&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content:encoded></item><item><title><![CDATA[AWS Status feeds as Grafana annotations]]></title><description><![CDATA[AWS Status Feeds in Grafana In this example, we are going to see how we can use AWS status feeds as Grafana annotations. This will be useful…]]></description><link>https://yesoreyeram.github.io/grafana-infinity-datasource/blog/aws-status-feeds</link><guid isPermaLink="false">https://yesoreyeram.github.io/grafana-infinity-datasource/blog/aws-status-feeds</guid><pubDate>Fri, 28 Jan 2022 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;AWS Status Feeds in Grafana&lt;/h2&gt;
 &lt;p&gt;In this example, we are going to see how we can use AWS status feeds as Grafana annotations. This will be useful when you are dealing with any AWS outages. For this, we are going to use the &lt;a href=&quot;https://status.aws.amazon.com/rss/all.rss&quot;&gt;AWS RSS feed&lt;/a&gt;. You can find more feeds at &lt;a href=&quot;https://status.aws.amazon.com/&quot;&gt;AWS Status page&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/153843/151575227-20088546-4368-4066-a91b-64058982544b.png#center&quot; alt=&quot;image&quot;&gt;&lt;/p&gt;
 &lt;h2&gt;Connection setup&lt;/h2&gt;
@@ -60,62 +117,5 @@
 &lt;h2&gt;Note&lt;/h2&gt;
 &lt;blockquote&gt;
 &lt;p&gt;This post was originally posted in &lt;a href=&quot;https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/38&quot;&gt;github discussion&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;</content:encoded></item><item><title><![CDATA[Github]]></title><description><![CDATA[Github Stats image We can leverage Github graphql API to query the github stats using this infinity plugin graphql api. Sample Query given…]]></description><link>https://yesoreyeram.github.io/grafana-infinity-datasource/blog/github</link><guid isPermaLink="false">https://yesoreyeram.github.io/grafana-infinity-datasource/blog/github</guid><pubDate>Fri, 28 Jan 2022 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;Github Stats&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/153843/93846498-1d9abf80-fc9c-11ea-90ed-4c569b088d99.png#center&quot; alt=&quot;image&quot;&gt;&lt;/p&gt;
-&lt;p&gt;We can leverage &lt;a href=&quot;https://docs.github.com/en/graphql&quot;&gt;Github graphql API&lt;/a&gt; to query the github stats using this infinity plugin graphql api.&lt;/p&gt;
-&lt;p&gt;Sample Query given in the below example. You can customize your query to bring the stats you needed.&lt;/p&gt;
-&lt;h2&gt;Query Editor&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/153843/93736996-d3510a00-fbd9-11ea-8c05-065758d66e82.png#center&quot; alt=&quot;image&quot;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/153843/93737011-e1068f80-fbd9-11ea-8c82-ea516f83cf3d.png#center&quot; alt=&quot;image&quot;&gt;&lt;/p&gt;
-&lt;p&gt;Query Used:&lt;/p&gt;
-&lt;deckgo-highlight-code language=&quot;graphql&quot; terminal=&quot;carbon&quot; theme=&quot;vscode&quot;  &gt;
-          &lt;code slot=&quot;code&quot;&gt;{
-  repository(owner: &amp;quot;$GithubUser&amp;quot;, name: &amp;quot;$GithubRepo&amp;quot;) {
-    issues(last: 20) {
-      edges {
-        node {
-          author {
-            login
-          }
-          state
-          title
-          url
-        }
-      }
-    }
-  }
-}&lt;/code&gt;
-        &lt;/deckgo-highlight-code&gt;
-&lt;h2&gt;Datasource Configuration&lt;/h2&gt;
-&lt;p&gt;Select &lt;strong&gt;Basic user authentication&lt;/strong&gt; mode and use your github username and PAT token as password&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/153843/93736929-b1578780-fbd9-11ea-9413-5585ff79d3a8.png#center&quot; alt=&quot;image&quot;&gt;&lt;/p&gt;
-&lt;h2&gt;Github Organization Summary example&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/153843/93846498-1d9abf80-fc9c-11ea-90ed-4c569b088d99.png#center&quot; alt=&quot;image&quot;&gt;&lt;/p&gt;
-&lt;p&gt;corresponding query used is given below&lt;/p&gt;
-&lt;deckgo-highlight-code language=&quot;graphql&quot; terminal=&quot;carbon&quot; theme=&quot;vscode&quot;  &gt;
-          &lt;code slot=&quot;code&quot;&gt;{
-  repositoryOwner(login: &amp;quot;$GithubUser&amp;quot;) {
-    repositories(first: 100) {
-      data: nodes {
-        name
-        stargazers {
-          totalCount
-        }
-        openissues: issues(states: OPEN) {
-          totalCount
-        }
-        openpr: pullRequests(states: OPEN) {
-          totalCount
-        }
-      }
-    }
-  }
-}&lt;/code&gt;
-        &lt;/deckgo-highlight-code&gt;
-&lt;p&gt;Note:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Queries are not paginated&lt;/li&gt;
-&lt;li&gt;Github rate limits apply&lt;/li&gt;
-&lt;li&gt;If you need paginated and full set of results, use grafana &lt;a href=&quot;https://grafana.com/grafana/plugins/grafana-github-datasource&quot;&gt;github stats plugin&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content:encoded></item><item><title><![CDATA[Hello World]]></title><description><![CDATA[Hello world Hello world]]></description><link>https://yesoreyeram.github.io/grafana-infinity-datasource/blog/hello-world</link><guid isPermaLink="false">https://yesoreyeram.github.io/grafana-infinity-datasource/blog/hello-world</guid><pubDate>Mon, 03 Jan 2022 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;Hello world&lt;/h2&gt;
+&lt;/blockquote&gt;</content:encoded></item><item><title><![CDATA[Hello World]]></title><description><![CDATA[Hello world Hello world]]></description><link>https://yesoreyeram.github.io/grafana-infinity-datasource/blog/hello-world</link><guid isPermaLink="false">https://yesoreyeram.github.io/grafana-infinity-datasource/blog/hello-world</guid><pubDate>Mon, 03 Jan 2022 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;Hello world&lt;/h2&gt;
 &lt;p&gt;Hello world&lt;/p&gt;</content:encoded></item></channel></rss>
