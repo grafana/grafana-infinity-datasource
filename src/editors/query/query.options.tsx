@@ -39,7 +39,7 @@ export const BasicOptions = (props: {
           fill="outline"
           size="sm"
           icon="document-info"
-          style={{ marginTop: '5px', padding: '10px', marginRight: '5px' }}
+          style={{ marginTop: '10px', marginRight: '5px' }}
           onClick={(e) => {
             onShowHelp();
             e.preventDefault();
@@ -51,7 +51,7 @@ export const BasicOptions = (props: {
           variant="primary"
           fill="outline"
           size="sm"
-          style={{ marginTop: '5px', padding: '10px', marginRight: '5px' }}
+          style={{ marginTop: '10px', marginRight: '5px' }}
           href="https://github.com/yesoreyeram/grafana-infinity-datasource"
           target="_blank"
           rel="noreferrer"
@@ -68,7 +68,7 @@ export const BasicOptions = (props: {
             fill="outline"
             size="sm"
             icon="cog"
-            style={{ marginTop: '5px', padding: '10px', marginRight: '5px' }}
+            style={{ marginTop: '10px', marginRight: '5px' }}
             onClick={(e) => {
               onShowUrlOptions();
               e.preventDefault();

@@ -1,5 +1,27 @@
 # Change Log
 
+## 2.1.0
+
+🚀 **OAuth2**: Added ability to set auth style in client credentials
+
+🚀 **Macros**: Added support for macros in computed columns and filter expression when used with backend parser
+
+🚀 **URL**: Support for gitlab blob to raw URL conversion added
+
+🛡️ **Security**: Backend binaries are compiled with [golang 1.20.7](https://github.com/golang/go/issues?q=milestone%3AGo1.20.7+label%3ACherryPickApproved) which contains [security fixes](https://groups.google.com/g/golang-announce/c/2q13H6LEEx0)
+
+🐛 **UI**: Fixed a bug in query editor where buttons were rendered incorrectly
+
+🐛 **URL normalization**: Fixed a bug where some github URLs were interpolated incorrectly. Fixes [#604](https://github.com/yesoreyeram/grafana-infinity-datasource/issues/604)
+
+🐛 **Test**: Fixed a bug in tests
+
+⚙️ **Chore**: Grafana plugin SDK `grafana/grafana-plugin-sdk-go` updated to `v0.171.0` from `v0.166.0`
+
+⚙️ **Chore**: Updated backend packages
+
+⚙️ **Test** More test data/examples added
+
 ## 2.0.0
 
 🎉 **Pagination**: Added pagination support for json type queries ( backend parser ). Refer [this github discussion](https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/601) for more details
