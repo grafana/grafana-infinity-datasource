@@ -144,6 +144,11 @@ func TestApplyMacros(t *testing.T) {
 						{Key: "p3", Value: "v3_$__customInterval(1m,1 MIN)"},
 					},
 				},
+				ComputedColumns: []models.InfinityColumn{
+					{Selector: "'${__from:date:YYYY-MM-DDThh:mm:ss}' + 'Z'", Text: "from"},
+					{Selector: "'${__to:date:YYYY-MM-DDThh:mm:ss}' + 'Z'", Text: "to"},
+				},
+				FilterExpression: "${__from}",
 			},
 			want: models.Query{
 				URL:  "foo_1 MIN",
@@ -159,6 +164,11 @@ func TestApplyMacros(t *testing.T) {
 						{Key: "p3", Value: "v3_1 MIN"},
 					},
 				},
+				ComputedColumns: []models.InfinityColumn{
+					{Selector: "'2021-01-14T12:00:00' + 'Z'", Text: "from"},
+					{Selector: "'2021-01-15T12:00:00' + 'Z'", Text: "to"},
+				},
+				FilterExpression: "1610582400000",
 			},
 		},
 	}
