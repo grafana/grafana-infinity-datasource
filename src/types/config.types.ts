@@ -1,5 +1,6 @@
 import type { InfinityQuery } from './query.types';
 import type { DataSourceInstanceSettings, DataSourceJsonData } from '@grafana/data';
+import type { AuthType, APIKeyType, AWSAuthProps, OAuth2Props, InfinityReferenceData } from './config';
 
 //#region Config
 export interface GlobalInfinityQuery {
@@ -7,25 +8,7 @@ export interface GlobalInfinityQuery {
   id: string;
   query: InfinityQuery;
 }
-export type AuthType = 'none' | 'basicAuth' | 'apiKey' | 'bearerToken' | 'oauthPassThru' | 'digestAuth' | 'aws' | 'oauth2';
-export type OAuth2Type = 'client_credentials' | 'jwt' | 'others';
-export type APIKeyType = 'header' | 'query';
-export type OAuth2Props = {
-  oauth2_type?: OAuth2Type;
-  client_id?: string;
-  email?: string;
-  private_key_id?: string;
-  subject?: string;
-  token_url?: string;
-  scopes?: string[];
-  authStyle?: number;
-};
-export type AWSAuthProps = {
-  authType?: 'keys';
-  region?: string;
-  service?: string;
-};
-export type InfinityReferenceData = { name: string; data: string };
+
 export interface InfinityOptions extends DataSourceJsonData {
   auth_method?: AuthType;
   apiKeyKey?: string;

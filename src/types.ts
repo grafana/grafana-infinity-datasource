@@ -1,3 +1,4 @@
+export * from './types/config';
 export * from './types/config.types';
 export * from './types/query.types';
 export * from './types/variables.types';
