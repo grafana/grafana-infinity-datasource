@@ -19,10 +19,6 @@ export const SearchBox = () => {
         setSearchPopupStatus(true);
         e.preventDefault();
       },
-      '$mod+KeyF': (e) => {
-        setSearchPopupStatus(true);
-        e.preventDefault();
-      },
     });
     return () => unsubscribe();
   });

@@ -16,6 +16,8 @@
 
 🐛 **Test**: Fixed a bug in tests
 
+🐛 **Docs**: Removed `Cmd/Ctrl+F` key binding in the docs website in favour of native browser search
+
 ⚙️ **Chore**: Grafana plugin SDK `grafana/grafana-plugin-sdk-go` updated to `v0.171.0` from `v0.166.0`
 
 ⚙️ **Chore**: Updated backend packages
