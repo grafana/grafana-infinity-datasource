@@ -37,6 +37,15 @@ describe('utils', () => {
     expect(getValue(1.234e-2, 'number')).toStrictEqual(0.01234);
     expect(getValue(1.234e-2, 'number')).toStrictEqual(0.01234);
 
+    expect(getValue(true, 'boolean')).toStrictEqual(true);
+    expect(getValue(false, 'boolean')).toStrictEqual(false);
+    expect(getValue('true', 'boolean')).toStrictEqual(true);
+    expect(getValue('false', 'boolean')).toStrictEqual(false);
+    expect(getValue('123', 'boolean')).toStrictEqual(false);
+    expect(getValue('-123', 'boolean')).toStrictEqual(false);
+    expect(getValue(123, 'boolean')).toStrictEqual(true);
+    expect(getValue(-123, 'boolean')).toStrictEqual(false);
+
     expect(getValue('2021', 'timestamp')).toStrictEqual(new Date('2021'));
     expect(getValue('2021-SEP-20', 'timestamp')).toStrictEqual(new Date('2021-SEP-20'));
     expect(getValue('1609459200000', 'timestamp_epoch')).toStrictEqual(new Date('2021'));

@@ -5,6 +5,8 @@ const guessColumnTypeFromField = (obj: any): InfinityColumnFormat => {
   switch (typeof obj) {
     case 'number':
       return 'number';
+    case 'boolean':
+      return 'boolean';
     case 'string':
     default:
       return 'string';
@@ -52,20 +54,33 @@ export const columnarToTable = (response: any, columns: InfinityColumn[] = []) =
   return res;
 };
 
-export const getValue = (input: string | number | Date | null, type: InfinityColumnFormat, asTimestamp?: boolean) => {
+export const getValue = (input: string | boolean | number | Date | null, type: InfinityColumnFormat, asTimestamp?: boolean) => {
   switch (type) {
     case 'string':
       if (typeof input === 'number') {
         return input + '';
       }
       return input;
+    case 'boolean':
+      if (typeof input === 'boolean') {
+        return input;
+      }
+      if (typeof input === 'number') {
+        return input > 0;
+      }
+      if (typeof input === 'string') {
+        return (input + '').toLowerCase() === 'true';
+      }
+      return Boolean(!!input);
     case 'number':
       if (typeof input === 'number') {
         return input;
       } else if (typeof input === 'string' && input) {
-        return parseFloat((input + '').trim().replace(/,/g, ''));
+        let val = parseFloat((input + '').trim().replace(/,/g, ''));
+        return Number.isFinite(val) ? val : null;
       } else if (typeof input === 'object' && isArray(input) && input.length > 0) {
-        return parseFloat((input[0] + '').trim().replace(/,/g, ''));
+        let val = parseFloat((input[0] + '').trim().replace(/,/g, ''));
+        return Number.isFinite(val) ? val : null;
       } else {
         return null;
       }

@@ -11,7 +11,7 @@ require (
 	github.com/stretchr/testify v1.8.4
 	github.com/xinsnake/go-http-digest-auth-client v0.6.0
 	github.com/yesoreyeram/grafana-plugins/lib/go/csvframer v0.0.2
-	github.com/yesoreyeram/grafana-plugins/lib/go/gframer v0.0.1
+	github.com/yesoreyeram/grafana-plugins/lib/go/gframer v0.1.0
 	github.com/yesoreyeram/grafana-plugins/lib/go/jsonframer v0.0.2
 	github.com/yesoreyeram/grafana-plugins/lib/go/macros v0.0.1
 	github.com/yesoreyeram/grafana-plugins/lib/go/transformations v0.0.1
@@ -64,14 +64,14 @@ require (
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/jwalton/gchalk v1.3.0 // indirect
 	github.com/jwalton/go-supportscolor v1.2.0 // indirect
-	github.com/klauspost/compress v1.16.6 // indirect
+	github.com/klauspost/compress v1.16.7 // indirect
 	github.com/lib/pq v1.10.9 // indirect
 	github.com/magefile/mage v1.15.0 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mattetti/filebuffer v1.0.1 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.19 // indirect
-	github.com/mattn/go-runewidth v0.0.14 // indirect
+	github.com/mattn/go-runewidth v0.0.15 // indirect
 	github.com/mattn/go-sqlite3 v1.14.17 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.4 // indirect
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect

@@ -182,7 +182,7 @@ Object {
     ],
     Array [
       "uk",
-      NaN,
+      null,
     ],
     Array [
       "china",
@@ -217,7 +217,7 @@ Array [
   Object {
     "datapoints": Array [
       Array [
-        NaN,
+        null,
         1652832000000,
       ],
     ],

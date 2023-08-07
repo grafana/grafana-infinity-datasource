@@ -276,8 +276,6 @@ github.com/grafana/grafana-plugin-sdk-go v0.171.0 h1:f4W4sTgm3zJzh5EewTORMoKax4P
 github.com/grafana/grafana-plugin-sdk-go v0.171.0/go.mod h1:SvYXsAQWSuV9TtHqXZJdOFCaC8G0q02U+IHWMTKIGIQ=
 github.com/grafana/sqlds/v2 v2.3.10 h1:HWKhE0vR6LoEiE+Is8CSZOgaB//D1yqb2ntkass9Fd4=
 github.com/grafana/sqlds/v2 v2.3.10/go.mod h1:c6ibxnxRVGxV/0YkEgvy7QpQH/lyifFyV7K/14xvdIs=
-github.com/graphql-go/graphql v0.8.0 h1:JHRQMeQjofwqVvGwYnr8JnPTY0AxgVy1HpHSGPLdH0I=
-github.com/graphql-go/graphql v0.8.0/go.mod h1:nKiHzRM0qopJEwCITUuIsxk9PlVlwIiiI8pnJEhordQ=
 github.com/graphql-go/graphql v0.8.1 h1:p7/Ou/WpmulocJeEx7wjQy611rtXGQaAcXGqanuMMgc=
 github.com/graphql-go/graphql v0.8.1/go.mod h1:nKiHzRM0qopJEwCITUuIsxk9PlVlwIiiI8pnJEhordQ=
 github.com/graphql-go/handler v0.2.3 h1:CANh8WPnl5M9uA25c2GBhPqJhE53Fg0Iue/fRNla71E=
@@ -373,8 +371,8 @@ github.com/kisielk/errcheck v1.1.0/go.mod h1:EZBBE59ingxPouuu3KfxchcWSUPOHkagtvW
 github.com/kisielk/errcheck v1.5.0/go.mod h1:pFxgyoBC7bSaBwPgfKdkLd5X25qrDl4LWUI2bnpBCr8=
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=
 github.com/klauspost/compress v1.13.1/go.mod h1:8dP1Hq4DHOhN9w426knH3Rhby4rFm6D8eO+e+Dq5Gzg=
-github.com/klauspost/compress v1.16.6 h1:91SKEy4K37vkp255cJ8QesJhjyRO0hn9i9G0GoUwLsk=
-github.com/klauspost/compress v1.16.6/go.mod h1:ntbaceVETuRiXiv4DpjP66DpAtAGkEQskQzEyD//IeE=
+github.com/klauspost/compress v1.16.7 h1:2mk3MPGNzKyxErAw8YaohYh69+pa4sIQSC0fPGCFR9I=
+github.com/klauspost/compress v1.16.7/go.mod h1:ntbaceVETuRiXiv4DpjP66DpAtAGkEQskQzEyD//IeE=
 github.com/konsorten/go-windows-terminal-sequences v1.0.1/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
 github.com/konsorten/go-windows-terminal-sequences v1.0.3/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
 github.com/kr/logfmt v0.0.0-20140226030751-b84e30acd515/go.mod h1:+0opPa2QZZtGFBFZlji/RkVcI2GknAs/DXo4wKdlNEc=
@@ -414,8 +412,8 @@ github.com/mattn/go-isatty v0.0.19/go.mod h1:W+V8PltTTMOvKvAeJH7IuucS94S2C6jfK/D
 github.com/mattn/go-runewidth v0.0.2/go.mod h1:LwmH8dsx7+W8Uxz3IHJYH5QSwggIsqBzpuz5H//U1FU=
 github.com/mattn/go-runewidth v0.0.9/go.mod h1:H031xJmbD/WCDINGzjvQ9THkh0rPKHF+m2gUSrubnMI=
 github.com/mattn/go-runewidth v0.0.10/go.mod h1:RAqKPSqVFrSLVXbA8x7dzmKdmGzieGRCM46jaSJTDAk=
-github.com/mattn/go-runewidth v0.0.14 h1:+xnbZSEeDbOIg5/mE6JF0w6n9duR1l3/WmbinWVwUuU=
-github.com/mattn/go-runewidth v0.0.14/go.mod h1:Jdepj2loyihRzMpdS35Xk/zdY8IAYHsh153qUoGf23w=
+github.com/mattn/go-runewidth v0.0.15 h1:UNAjwbU9l54TA3KzvqLGxwWjHmMgBUVhBiTjelZgg3U=
+github.com/mattn/go-runewidth v0.0.15/go.mod h1:Jdepj2loyihRzMpdS35Xk/zdY8IAYHsh153qUoGf23w=
 github.com/mattn/go-sqlite3 v1.14.17 h1:mCRHCLDUBXgpKAqIKsaAaAsrAlbkeomtRFKXh2L6YIM=
 github.com/mattn/go-sqlite3 v1.14.17/go.mod h1:2eHXhiwb8IkHr+BDWZGa96P6+rkvnG63S2DGjv9HUNg=
 github.com/matttproud/golang_protobuf_extensions v1.0.1/go.mod h1:D8He9yQNgCq6Z5Ld7szi9bcBfOoFv/3dc6xSMkL2PC0=
@@ -620,8 +618,8 @@ github.com/yesoreyeram/grafana-plugins/lib/go/csvframer v0.0.2 h1:bRIge6sn+clMoD
 github.com/yesoreyeram/grafana-plugins/lib/go/csvframer v0.0.2/go.mod h1:pd4+9wxXxXF0EIPXGgHbhDKU+RyrdwQoAamnqb8xcYM=
 github.com/yesoreyeram/grafana-plugins/lib/go/framesql v0.0.1 h1:tuAmHO9KlUn3JB5B6VpvvG58h7QbGGtwVUksu42n+PU=
 github.com/yesoreyeram/grafana-plugins/lib/go/framesql v0.0.1/go.mod h1:lodSHctCORyw5UWMKBMHffGERTXry5lFjZDf+r/+xAw=
-github.com/yesoreyeram/grafana-plugins/lib/go/gframer v0.0.1 h1:WjS+Xj/QDfUrZ/XqRBTES+HN8dIsW6auJPPdREuXT14=
-github.com/yesoreyeram/grafana-plugins/lib/go/gframer v0.0.1/go.mod h1:cLt6hW9BWhMON7YyiVwFXFazIhcvb0uJgAx9Ce9g2xE=
+github.com/yesoreyeram/grafana-plugins/lib/go/gframer v0.1.0 h1:rZwV+LQgrHQWqa1ZrjzPXEKcAaljivmrXElCeBVX9e8=
+github.com/yesoreyeram/grafana-plugins/lib/go/gframer v0.1.0/go.mod h1:NjAQUJYI05pIurbQmjdITjbpPfJ4YYLmP1UBJNVFB/E=
 github.com/yesoreyeram/grafana-plugins/lib/go/jsonframer v0.0.2 h1:6NElMHU69Qg54QLdiCTGWV/LRT027uH0Rf8JwAiQA/M=
 github.com/yesoreyeram/grafana-plugins/lib/go/jsonframer v0.0.2/go.mod h1:lhhOiog3EPMyg2kNS91wUUO1Kgp5mI/uYPzLGsrbCFg=
 github.com/yesoreyeram/grafana-plugins/lib/go/macros v0.0.1 h1:qsAvs7cANjndF+zjh06OLqfI7sUFRl1IqKIxX0MB8yQ=

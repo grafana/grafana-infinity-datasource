@@ -14,7 +14,7 @@ export type GrafanaTableColumn = {
   text: string;
   type: string;
 };
-export type GrafanaTableRowItem = string | number | object | null;
+export type GrafanaTableRowItem = string | boolean | number | object | null;
 export type GrafanaTableRow = GrafanaTableRowItem[];
 export type tableResult = {
   columns: GrafanaTableColumn[];
