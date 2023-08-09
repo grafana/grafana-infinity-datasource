@@ -26,7 +26,7 @@ export const MainEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
         backgroundImage: theme.isDark ? 'url(/public/plugins/yesoreyeram-infinity-datasource/img/homepage-bg.svg)' : '',
         backgroundColor: theme.isDark ? 'rgba(0,0,0,0.3)' : '',
         backgroundRepeat: 'no-repeat',
-        // backgroundSize: 'cover',
+        backgroundSize: 'cover',
         padding: '30px',
         marginBottom: '30px',
         color: theme.isDark ? '#d9d9d9' : '',

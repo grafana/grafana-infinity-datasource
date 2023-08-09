@@ -9,10 +9,11 @@
   "annotations": true,
   "alerting": true,
   "logs": true,
+  "tracing": true,
   "info": {
     "version": "%VERSION%",
     "updated": "%TODAY%",
-    "description": "JSON API, CSV, TSV, XML, GraphQL, HTML, Google Sheets and HTTP/REST API datasource for Grafana. Do infinite things with Grafana. Transform data with UQL/GROQ. Visualize data from many apis including Amazon AWS, Microsoft Azure, Google Cloud / GCP and RSS/ATOM feeds directly",
+    "description": "JSON API, CSV, TSV, XML, GraphQL, HTML, Google Sheets and HTTP/REST API datasource for Grafana. Do infinite things with Grafana. Transform data with UQL/GROQ. Visualize data from many apis including Amazon AWS, Microsoft Azure, Google Cloud / GCP and RSS/ATOM feeds directly. Also support visualizing logs and traces.",
     "author": {
       "name": "Sriramajeyam Sugumaran",
       "url": "https://github.com/yesoreyeram"

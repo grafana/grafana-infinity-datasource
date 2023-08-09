@@ -31,6 +31,7 @@ export const INFINITY_RESULT_FORMATS: Array<SelectableValue<InfinityQueryFormat>
   { label: 'Data Frame', value: 'dataframe' },
   { label: 'Table', value: 'table' },
   { label: 'Logs', value: 'logs' },
+  { label: 'Traces', value: 'trace' },
   { label: 'Time Series', value: 'timeseries' },
   { label: 'Nodes - Node Graph', value: 'node-graph-nodes' },
   { label: 'Edges - Node Graph', value: 'node-graph-edges' },

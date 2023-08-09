@@ -157,7 +157,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
                 target.format !== 'timeseries'
               ) {
                 const df = toDataFrame(r);
-                let frame = { ...df, meta: d.meta, refId: target.refId };
+                let frame = { ...df, meta: d.meta || {}, refId: target.refId };
                 if (target.format === 'logs') {
                   let doesTimeFieldExist = false;
                   let doesBodyFieldExist = false;
@@ -174,6 +174,9 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
                     frame.meta.typeVersion = [0, 0];
                   }
                   frame.meta.preferredVisualisationType = 'logs';
+                }
+                if (target.format === 'trace') {
+                  frame.meta.preferredVisualisationType = 'trace';
                 }
                 if (error || (responseCodeFromServer && responseCodeFromServer >= 400)) {
                   frame.meta.notices = [

@@ -47,6 +47,7 @@ func WrapMetaForInlineQuery(ctx context.Context, frame *data.Frame, err error, q
 		Custom:              customMeta,
 	}
 	frame = ApplyLogMeta(frame, query)
+	frame = ApplyTraceMeta(frame, query)
 	return frame, err
 }
 
@@ -63,6 +64,7 @@ func WrapMetaForRemoteQuery(ctx context.Context, frame *data.Frame, err error, q
 		frame.Meta = &data.FrameMeta{Custom: customMeta}
 	}
 	frame = ApplyLogMeta(frame, query)
+	frame = ApplyTraceMeta(frame, query)
 	return frame, err
 }
 
@@ -89,6 +91,19 @@ func ApplyLogMeta(frame *data.Frame, query models.Query) *data.Frame {
 			frame.Meta.TypeVersion = data.FrameTypeVersion{0, 0}
 		}
 		frame.Meta.PreferredVisualization = data.VisTypeLogs
+	}
+	return frame
+}
+
+func ApplyTraceMeta(frame *data.Frame, query models.Query) *data.Frame {
+	if frame == nil {
+		frame = data.NewFrame(query.RefID)
+	}
+	if frame.Meta == nil {
+		frame.Meta = &data.FrameMeta{}
+	}
+	if query.Format == "trace" {
+		frame.Meta.PreferredVisualization = data.VisTypeTrace
 	}
 	return frame
 }

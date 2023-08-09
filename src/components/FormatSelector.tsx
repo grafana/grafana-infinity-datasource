@@ -23,7 +23,7 @@ export const FormatSelector = (props: FormatSelectorProps) => {
     if (query.type === 'json') {
       return INFINITY_RESULT_FORMATS;
     } else if (query.type === 'uql') {
-      return INFINITY_RESULT_FORMATS.filter((f) => f.value === 'table' || f.value === 'timeseries' || f.value === 'dataframe');
+      return INFINITY_RESULT_FORMATS.filter((f) => f.value === 'table' || f.value === 'timeseries' || f.value === 'logs' || f.value === 'trace' || f.value === 'dataframe');
     } else {
       return INFINITY_RESULT_FORMATS.filter((f) => f.value !== 'as-is');
     }

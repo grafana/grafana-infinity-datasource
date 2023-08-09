@@ -5,7 +5,7 @@ import type { DataQuery, SelectableValue } from '@grafana/data';
 export type InfinityQueryType = 'json' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'series' | 'global' | 'uql' | 'groq' | 'google-sheets' | 'transformations';
 export type InfinityQuerySources = 'url' | 'inline' | 'reference' | 'random-walk' | 'expression';
 export type InfinityColumnFormat = 'string' | 'number' | 'timestamp' | 'timestamp_epoch' | 'timestamp_epoch_s' | 'boolean';
-export type InfinityQueryFormat = 'table' | 'timeseries' | 'logs' | 'node-graph-nodes' | 'node-graph-edges' | 'dataframe' | 'as-is';
+export type InfinityQueryFormat = 'table' | 'timeseries' | 'logs' | 'trace' | 'node-graph-nodes' | 'node-graph-edges' | 'dataframe' | 'as-is';
 export type QueryBodyType = 'none' | 'form-data' | 'x-www-form-urlencoded' | 'raw' | 'graphql';
 export type QueryBodyContentType = 'text/plain' | 'application/json' | 'application/xml' | 'text/html' | 'application/javascript';
 export type InfinityQueryBase<T extends InfinityQueryType> = { type: T } & DataQuery;

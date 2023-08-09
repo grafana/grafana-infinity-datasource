@@ -209,6 +209,12 @@ const sitemap: any[] = [
     tags: ['transformations', 'limit', 'filter', 'calculations', 'computed columns', 'summarize', 'group by'],
   },
   {
+    title: 'Tracing',
+    slug: '/wiki/tracing',
+    description: 'Trace visualization',
+    tags: ['tracing', 'trace', 'traces', 'explore', 'correlation', 'glue', 'distributed tracing'],
+  },
+  {
     title: 'Configuration',
     slug: '/wiki/configuration',
     description: 'Grafana datasource configuration',
