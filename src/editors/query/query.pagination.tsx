@@ -32,8 +32,8 @@ export const PaginationEditor = (props: PaginationEditorProps) => {
   const { query, onChange } = props;
   return (
     <EditorRow label={'Pagination'} collapsible={true} collapsed={false} title={() => 'beta'}>
-      <Stack gap={0} direction="row" wrap={true}>
-        <Stack gap={1} wrap={false} direction="column">
+      <Stack direction="row" wrap={true}>
+        <Stack wrap={false} direction="column">
           <EditorField label="Pagination Type">
             <Select<PaginationType> width={30} value={query.pagination_mode || 'none'} options={paginationTypes} onChange={(e) => onChange({ ...query, pagination_mode: e.value || 'none' })} />
           </EditorField>

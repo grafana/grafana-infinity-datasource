@@ -75,11 +75,11 @@ const getStyles = stylesFactory((theme: GrafanaTheme2, width?: number | string, 
   return {
     root: css({
       minWidth: theme.spacing(width ?? 0),
-      boxShadow: `0px 0px 4px 0px ${theme.colors.border.weak}`,
+      // boxShadow: `0px 0px 4px 0px ${theme.colors.border.weak}`,
       border: `1px solid ${theme.colors.border.medium}`,
       padding: theme.spacing('8px'),
       background: theme.colors.background.primary,
-      marginRight: horizontal ? '10px' : '5px',
+      // marginRight: horizontal ? '10px' : '5px',
     }),
     label: css({
       fontSize: theme.typography.bodySmall.fontSize,
