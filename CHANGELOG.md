@@ -12,6 +12,8 @@
 
 🚀 **URL**: Support for gitlab blob to raw URL conversion added
 
+🚀 **URL**: Support for bitbucket blob to raw URL conversion added
+
 🚀 **Parser**: Added support for explicit boolean parsing in default and backend parsers
 
 🚀 **Config Editor**: Preview / Sample request added to some authentication types
