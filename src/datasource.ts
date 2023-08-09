@@ -158,6 +158,23 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
               ) {
                 const df = toDataFrame(r);
                 let frame = { ...df, meta: d.meta, refId: target.refId };
+                if (target.format === 'logs') {
+                  let doesTimeFieldExist = false;
+                  let doesBodyFieldExist = false;
+                  (df.fields || []).forEach((f) => {
+                    if (f.name === 'timestamp' && f.type === 'time') {
+                      doesTimeFieldExist = true;
+                    }
+                    if (f.name === 'body' && f.type === 'string') {
+                      doesBodyFieldExist = true;
+                    }
+                  });
+                  if (doesBodyFieldExist && doesTimeFieldExist) {
+                    frame.meta.type = 'log-lines';
+                    frame.meta.typeVersion = [0, 0];
+                  }
+                  frame.meta.preferredVisualisationType = 'logs';
+                }
                 if (error || (responseCodeFromServer && responseCodeFromServer >= 400)) {
                   frame.meta.notices = [
                     {

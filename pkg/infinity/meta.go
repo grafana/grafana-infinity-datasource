@@ -34,7 +34,7 @@ func GetDummyFrame(query models.Query) *data.Frame {
 	return frame
 }
 
-func WrapMetaForInlineQuery(frame *data.Frame, err error, query models.Query) (*data.Frame, error) {
+func WrapMetaForInlineQuery(ctx context.Context, frame *data.Frame, err error, query models.Query) (*data.Frame, error) {
 	if frame == nil {
 		frame = data.NewFrame(query.RefID)
 	}
@@ -46,6 +46,7 @@ func WrapMetaForInlineQuery(frame *data.Frame, err error, query models.Query) (*
 		ExecutedQueryString: "This feature is not available for this type of query yet",
 		Custom:              customMeta,
 	}
+	frame = ApplyLogMeta(frame, query)
 	return frame, err
 }
 
@@ -61,5 +62,33 @@ func WrapMetaForRemoteQuery(ctx context.Context, frame *data.Frame, err error, q
 		}
 		frame.Meta = &data.FrameMeta{Custom: customMeta}
 	}
+	frame = ApplyLogMeta(frame, query)
 	return frame, err
+}
+
+func ApplyLogMeta(frame *data.Frame, query models.Query) *data.Frame {
+	if frame == nil {
+		frame = data.NewFrame(query.RefID)
+	}
+	if frame.Meta == nil {
+		frame.Meta = &data.FrameMeta{}
+	}
+	if query.Format == "logs" {
+		doesTimeFieldExist := false
+		doesBodyFieldExist := false
+		for _, field := range frame.Fields {
+			if field.Name == "timestamp" && (field.Type() == data.FieldTypeNullableTime || field.Type() == data.FieldTypeTime) {
+				doesTimeFieldExist = true
+			}
+			if field.Name == "body" && (field.Type() == data.FieldTypeNullableString || field.Type() == data.FieldTypeString) {
+				doesBodyFieldExist = true
+			}
+		}
+		if doesTimeFieldExist && doesBodyFieldExist {
+			frame.Meta.Type = data.FrameTypeLogLines
+			frame.Meta.TypeVersion = data.FrameTypeVersion{0, 0}
+		}
+		frame.Meta.PreferredVisualization = data.VisTypeLogs
+	}
+	return frame
 }

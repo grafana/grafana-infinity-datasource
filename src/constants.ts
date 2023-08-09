@@ -30,6 +30,7 @@ export const SCRAP_QUERY_TYPES: Array<SelectableValue<InfinityQueryType>> = [
 export const INFINITY_RESULT_FORMATS: Array<SelectableValue<InfinityQueryFormat>> = [
   { label: 'Data Frame', value: 'dataframe' },
   { label: 'Table', value: 'table' },
+  { label: 'Logs', value: 'logs' },
   { label: 'Time Series', value: 'timeseries' },
   { label: 'Nodes - Node Graph', value: 'node-graph-nodes' },
   { label: 'Edges - Node Graph', value: 'node-graph-edges' },

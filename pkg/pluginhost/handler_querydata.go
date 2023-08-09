@@ -135,13 +135,13 @@ func QueryDataQuery(ctx context.Context, query models.Query, infClient infinity.
 		case "inline":
 			frame, err := infinity.GetFrameForInlineSources(query)
 			if err != nil {
-				frame, _ := infinity.WrapMetaForInlineQuery(frame, err, query)
+				frame, _ := infinity.WrapMetaForInlineQuery(ctx, frame, err, query)
 				response.Frames = append(response.Frames, frame)
 				response.Error = fmt.Errorf("error getting data frame from inline data. %w", err)
 				return response
 			}
 			if frame != nil {
-				frame, _ := infinity.WrapMetaForInlineQuery(frame, nil, query)
+				frame, _ := infinity.WrapMetaForInlineQuery(ctx, frame, nil, query)
 				response.Frames = append(response.Frames, frame)
 			}
 		default:

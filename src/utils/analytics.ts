@@ -17,7 +17,7 @@ export const reportHealthCheck = (meta: Record<string, string> = {}) => {
   reportActivity('grafana_infinity_health_check_executed', meta);
 };
 
-export const reportQuery = (queries: InfinityQuery[] = [], instance_settings?: InfinityInstanceSettings, app: string = 'unknown') => {
+export const reportQuery = (queries: InfinityQuery[] = [], instance_settings?: InfinityInstanceSettings, app = 'unknown') => {
   if (app === CoreApp.Dashboard || app === CoreApp.PanelViewer) {
     return;
   }

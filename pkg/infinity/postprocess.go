@@ -38,7 +38,7 @@ func PostProcessFrame(ctx context.Context, frame *data.Frame, query models.Query
 		return frame, err
 	}
 	if query.Source == "inline" {
-		frame, err = WrapMetaForInlineQuery(frame, err, query)
+		frame, err = WrapMetaForInlineQuery(ctx, frame, err, query)
 		if err != nil {
 			return frame, err
 		}

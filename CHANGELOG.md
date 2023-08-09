@@ -4,6 +4,8 @@
 
 🚀 **OAuth2**: Added ability to set auth style in client credentials
 
+🚀 **Logs**: Added support for visualizing data in `logs` format
+
 🚀 **Macros**: Added support for macros in computed columns and filter expression when used with backend parser
 
 🚀 **URL**: Support for gitlab blob to raw URL conversion added

@@ -8,6 +8,7 @@
   "metrics": true,
   "annotations": true,
   "alerting": true,
+  "logs": true,
   "info": {
     "version": "%VERSION%",
     "updated": "%TODAY%",
