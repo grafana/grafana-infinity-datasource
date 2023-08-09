@@ -14,6 +14,8 @@
 
 🚀 **Parser**: Added support for explicit boolean parsing in default and backend parsers
 
+🚀 **Config Editor**: Preview / Sample request added to some authentication types
+
 🛡️ **Security**: Backend binaries are compiled with golang 1.21.0 which also contains [security fixes](https://groups.google.com/g/golang-announce/c/2q13H6LEEx0) from previous versions
 
 🐛 **UI**: Fixed a bug in query editor where buttons were rendered incorrectly
