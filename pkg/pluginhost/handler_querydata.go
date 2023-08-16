@@ -132,6 +132,7 @@ func QueryDataQuery(ctx context.Context, query models.Query, infClient infinity.
 				frame, _ = infinity.WrapMetaForRemoteQuery(ctx, frame, nil, query)
 				response.Frames = append(response.Frames, frame)
 			}
+		case "azure-blob":
 		case "inline":
 			frame, err := infinity.GetFrameForInlineSources(query)
 			if err != nil {

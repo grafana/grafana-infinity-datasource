@@ -20,6 +20,7 @@ const (
 	AuthenticationMethodDigestAuth   = "digestAuth"
 	AuthenticationMethodOAuth        = "oauth2"
 	AuthenticationMethodAWS          = "aws"
+	AuthenticationMethodAzureBlob    = "azureBlob"
 )
 
 const (
@@ -93,6 +94,9 @@ type InfinitySettings struct {
 	ReferenceData            []RefData
 	CustomHealthCheckEnabled bool
 	CustomHealthCheckUrl     string
+	AzureBlobAccountUrl      string
+	AzureBlobAccountName     string
+	AzureBlobAccountKey      string
 }
 
 func (s *InfinitySettings) Validate() error {
@@ -156,6 +160,8 @@ type InfinitySettingsJson struct {
 	ReferenceData            []RefData      `json:"refData,omitempty"`
 	CustomHealthCheckEnabled bool           `json:"customHealthCheckEnabled,omitempty"`
 	CustomHealthCheckUrl     string         `json:"customHealthCheckUrl,omitempty"`
+	AzureBlobAccountUrl      string         `json:"azureBlobAccountUrl,omitempty"`
+	AzureBlobAccountName     string         `json:"azureBlobAccountName,omitempty"`
 }
 
 func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinitySettings, err error) {
@@ -205,6 +211,8 @@ func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinityS
 	settings.ReferenceData = infJson.ReferenceData
 	settings.CustomHealthCheckEnabled = infJson.CustomHealthCheckEnabled
 	settings.CustomHealthCheckUrl = infJson.CustomHealthCheckUrl
+	settings.AzureBlobAccountUrl = infJson.AzureBlobAccountUrl
+	settings.AzureBlobAccountName = infJson.AzureBlobAccountName
 	if val, ok := config.DecryptedSecureJSONData["basicAuthPassword"]; ok {
 		settings.Password = val
 	}
@@ -232,6 +240,9 @@ func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinityS
 	if val, ok := config.DecryptedSecureJSONData["awsSecretKey"]; ok {
 		settings.AWSSecretKey = val
 	}
+	if val, ok := config.DecryptedSecureJSONData["azureBlobAccountKey"]; ok {
+		settings.AzureBlobAccountKey = val
+	}
 	settings.CustomHeaders = GetSecrets(config, "httpHeaderName", "httpHeaderValue")
 	settings.SecureQueryFields = GetSecrets(config, "secureQueryName", "secureQueryValue")
 	settings.OAuth2Settings.EndpointParams = GetSecrets(config, "oauth2EndPointParamsName", "oauth2EndPointParamsValue")
@@ -243,6 +254,9 @@ func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinityS
 		if settings.ForwardOauthIdentity {
 			settings.AuthenticationMethod = AuthenticationMethodForwardOauth
 		}
+	}
+	if settings.AuthenticationMethod == AuthenticationMethodAzureBlob && settings.AzureBlobAccountUrl == "" {
+		settings.AzureBlobAccountUrl = "https://%s.blob.core.windows.net/"
 	}
 	return
 }
