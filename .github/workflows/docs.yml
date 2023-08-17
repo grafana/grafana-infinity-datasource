@@ -1,0 +1,35 @@
+name: Docs update
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/docs.yml'
+      - 'website/**'
+    branches:
+      - main
+  push:
+    paths:
+      - '.github/workflows/docs.yml'
+      - 'website/**'
+    branches:
+      - main
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: NodeJS Setup
+        uses: actions/setup-node@v3
+      - name: Build Docs
+        run: |
+          cd website;
+          yarn install --frozen-lockfile;
+          yarn build;
+      - name: Deploy Docs to github pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./website/out
