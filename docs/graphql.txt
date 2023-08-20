@@ -1,6 +1,6 @@
 1:HL["/grafana-infinity-datasource/_next/static/media/2aaf0723e720e8b9-s.p.woff2",{"as":"font","type":"font/woff2"}]
 2:HL["/grafana-infinity-datasource/_next/static/css/44d82ce54d417f02.css",{"as":"style"}]
-0:["bHYTNmMqQ6YVev-0RwuoA",[[["",{"children":["docs",{"children":[["slug","graphql","c"],{"children":["__PAGE__?{\"slug\":[\"graphql\"]}",{}]}]}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/grafana-infinity-datasource/_next/static/css/44d82ce54d417f02.css","precedence":"next"}]],"$L4"]]]]
+0:["wvpveeMszvc7NLhICW1KQ",[[["",{"children":["docs",{"children":[["slug","graphql","c"],{"children":["__PAGE__?{\"slug\":[\"graphql\"]}",{}]}]}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/grafana-infinity-datasource/_next/static/css/44d82ce54d417f02.css","precedence":"next"}]],"$L4"]]]]
 5:I{"id":4190,"chunks":["310:static/chunks/0e5ce63c-ef4c11e95cfe58be.js","965:static/chunks/965-cf0e86a1e510ae64.js","685:static/chunks/685-e9c2b3902548b227.js","565:static/chunks/565-d732410677cee51d.js","185:static/chunks/app/layout-270952261db5b1f9.js"],"name":"","async":false}
 6:I{"id":7767,"chunks":["272:static/chunks/webpack-e1be409c555a3ff9.js","971:static/chunks/fd9d1056-7fa96bc4412ca339.js","596:static/chunks/596-582349f5b7d1459d.js"],"name":"default","async":false}
 7:I{"id":7920,"chunks":["272:static/chunks/webpack-e1be409c555a3ff9.js","971:static/chunks/fd9d1056-7fa96bc4412ca339.js","596:static/chunks/596-582349f5b7d1459d.js"],"name":"default","async":false}
