@@ -23,8 +23,11 @@ pids
 provisioning/
 temp_test.go
 website/.cache/
+website/.next/
+website/.contentlayer/
 website/node_modules/
-website/public/
+website/out/
+website/next-env.d.ts
 work/
 yarn-debug.log*
 yarn-error.log*

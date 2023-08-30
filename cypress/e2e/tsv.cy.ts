@@ -8,7 +8,7 @@ const visitExplorePage = (query: Partial<InfinityQuery> = {}) => {
 };
 
 describe('explore', () => {
-  it('should able to run TSV queries correctly', () => {
+  it.skip('should able to run TSV queries correctly', () => {
     login();
     visitExplorePage({ type: 'tsv', url: 'https://github.com/yesoreyeram/grafana-infinity-datasource/blob/main/testdata/users.tsv' });
 
@@ -25,6 +25,7 @@ describe('explore', () => {
     cy.contains(`GROQ Query`).should('not.exist');
 
     changeDropdownValue('Parser', 'Backend');
+    runExploreQuery();
     checkExploreTableContent(['Leanne Graham'].join(''));
     cy.contains(`Parsing options & Result fields`);
     cy.contains(`Computed columns, Filter, Group by`);

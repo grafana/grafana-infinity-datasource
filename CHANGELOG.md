@@ -4,6 +4,8 @@
 
 🚀 **OAuth2**: Added ability to set auth style in client credentials
 
+🚀 **Azure blob storage**: Support for reading content from Azure Blog Storage
+
 🚀 **Logs**: Added support for visualizing data in `logs` format
 
 🚀 **Trace**: Added support for visualizing data in `trace` format
@@ -28,7 +30,7 @@
 
 🐛 **Docs**: Removed `Cmd/Ctrl+F` key binding in the docs website in favour of native browser search
 
-⚙️ **Chore**: Grafana plugin SDK `grafana/grafana-plugin-sdk-go` updated to `v0.171.0` from `v0.166.0`
+⚙️ **Chore**: Grafana plugin SDK `grafana/grafana-plugin-sdk-go` updated to `v0.174.0` from `v0.166.0`
 
 ⚙️ **Chore**: Updated backend packages
 
