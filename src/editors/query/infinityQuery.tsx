@@ -12,6 +12,7 @@ import { BasicOptions } from './query.options';
 import { UQLEditor } from './query.uql';
 import { URLEditor } from './query.url';
 import { ExperimentalFeatures } from './query.experimental';
+import { AzureBlobEditor } from './query.azureBlob';
 import { isDataQuery } from './../../app/utils';
 import type { EditorMode, InfinityQuery } from './../../types';
 import { Datasource } from './../../datasource';
@@ -73,6 +74,7 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
         />
         {query.type === 'series' && <SeriesEditor {...{ query, onChange }} />}
         {isDataQuery(query) && query.source !== 'inline' && showUrlOptions && <URLEditor {...{ mode, query, onChange, onRunQuery }} />}
+        {isDataQuery(query) && query.source === 'azure-blob' && <AzureBlobEditor query={query} onChange={onChange} />}
         {canShowColumnsEditor && <QueryColumnsEditor {...{ mode, query, onChange, onRunQuery }} />}
         {canShowFilterEditor && <TableFilter {...{ query, onChange, onRunQuery }} />}
         {query.type === 'uql' && (

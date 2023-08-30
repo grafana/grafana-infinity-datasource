@@ -1165,4 +1165,154 @@ func TestQuery(t *testing.T) {
 			experimental.CheckGoldenJSONResponse(t, "golden", strings.ReplaceAll(t.Name(), "TestQuery/", "")+"_"+k, &resItem, UPDATE_GOLDEN_DATA)
 		}
 	})
+	t.Run("azure blob", func(t *testing.T) {
+		t.Skip()
+		t.Run("backend", func(t *testing.T) {
+			server := getServerWithStaticResponse(t, "./../../testdata/users.json", true)
+			server.Start()
+			defer server.Close()
+			res, err := host.QueryData(context.Background(), &backend.QueryDataRequest{
+				PluginContext: backend.PluginContext{
+					DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{
+						JSONData: []byte(fmt.Sprintf(`{
+							"is_mock"				: true,
+							"auth_method"			: "azureBlob",
+							"azureBlobAccountUrl"	: "%s",
+							"azureBlobAccountName"  : "dummyaccount"
+						}`, server.URL)),
+						DecryptedSecureJSONData: map[string]string{
+							"azureBlobAccountKey": "ZmFrZQ==",
+						},
+					},
+				},
+				Queries: []backend.DataQuery{
+					{
+						RefID: "A",
+						JSON: []byte((`{ 
+							"type"				:	"json",
+							"source"			:	"azure-blob",
+							"parser" 			: 	"backend",
+							"azContainerName"	: 	"my-azContainerName",
+							"azBlobName"		: 	"folder/users.json"
+						}`)),
+					},
+				},
+			})
+			require.Nil(t, err)
+			require.NotNil(t, res)
+			require.Nil(t, res.Responses["A"].Error)
+			resItem := res.Responses["A"]
+			experimental.CheckGoldenJSONResponse(t, "golden", strings.ReplaceAll(t.Name(), "TestQuery/", ""), &resItem, UPDATE_GOLDEN_DATA)
+		})
+		t.Run("backend csv", func(t *testing.T) {
+			server := getServerWithStaticResponse(t, "./../../testdata/users.csv", true)
+			server.Start()
+			defer server.Close()
+			res, err := host.QueryData(context.Background(), &backend.QueryDataRequest{
+				PluginContext: backend.PluginContext{
+					DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{
+						JSONData: []byte(fmt.Sprintf(`{
+							"is_mock"				: true,
+							"auth_method"			: "azureBlob",
+							"azureBlobAccountUrl"	: "%s",
+							"azureBlobAccountName"  : "dummyaccount"
+						}`, server.URL)),
+						DecryptedSecureJSONData: map[string]string{
+							"azureBlobAccountKey": "ZmFrZQ==",
+						},
+					},
+				},
+				Queries: []backend.DataQuery{
+					{
+						RefID: "A",
+						JSON: []byte((`{
+							"type"				:	"csv",
+							"source"			:	"azure-blob",
+							"parser" 			: 	"backend",
+							"azContainerName"	: 	"my-azContainerName",
+							"azBlobName"		: 	"folder/users.csv"
+						}`)),
+					},
+				},
+			})
+			require.Nil(t, err)
+			require.NotNil(t, res)
+			require.Nil(t, res.Responses["A"].Error)
+			resItem := res.Responses["A"]
+			experimental.CheckGoldenJSONResponse(t, "golden", strings.ReplaceAll(t.Name(), "TestQuery/", ""), &resItem, UPDATE_GOLDEN_DATA)
+		})
+		t.Run("uql xml", func(t *testing.T) {
+			server := getServerWithStaticResponse(t, "./../../testdata/users.xml", true)
+			server.Start()
+			defer server.Close()
+			res, err := host.QueryData(context.Background(), &backend.QueryDataRequest{
+				PluginContext: backend.PluginContext{
+					DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{
+						JSONData: []byte(fmt.Sprintf(`{
+							"is_mock"				: true,
+							"auth_method"			: "azureBlob",
+							"azureBlobAccountUrl"	: "%s",
+							"azureBlobAccountName"  : "dummyaccount"
+						}`, server.URL)),
+						DecryptedSecureJSONData: map[string]string{
+							"azureBlobAccountKey": "ZmFrZQ==",
+						},
+					},
+				},
+				Queries: []backend.DataQuery{
+					{
+						RefID: "A",
+						JSON: []byte((`{
+							"type"				:	"xml",
+							"source"			:	"azure-blob",
+							"parser" 			: 	"uql",
+							"azContainerName"	: 	"my-azContainerName",
+							"azBlobName"		: 	"folder/users.xml"
+						}`)),
+					},
+				},
+			})
+			require.Nil(t, err)
+			require.NotNil(t, res)
+			require.Nil(t, res.Responses["A"].Error)
+			resItem := res.Responses["A"]
+			experimental.CheckGoldenJSONResponse(t, "golden", strings.ReplaceAll(t.Name(), "TestQuery/", ""), &resItem, UPDATE_GOLDEN_DATA)
+		})
+		t.Run("default tsv", func(t *testing.T) {
+			server := getServerWithStaticResponse(t, "./../../testdata/users.tsv", true)
+			server.Start()
+			defer server.Close()
+			res, err := host.QueryData(context.Background(), &backend.QueryDataRequest{
+				PluginContext: backend.PluginContext{
+					DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{
+						JSONData: []byte(fmt.Sprintf(`{
+							"is_mock"				: true,
+							"auth_method"			: "azureBlob",
+							"azureBlobAccountUrl"	: "%s",
+							"azureBlobAccountName"  : "dummyaccount"
+						}`, server.URL)),
+						DecryptedSecureJSONData: map[string]string{
+							"azureBlobAccountKey": "ZmFrZQ==",
+						},
+					},
+				},
+				Queries: []backend.DataQuery{
+					{
+						RefID: "A",
+						JSON: []byte((`{
+							"type"				:	"tsv",
+							"source"			:	"azure-blob",
+							"azContainerName"	: 	"my-azContainerName",
+							"azBlobName"		: 	"folder/users.tsv"
+						}`)),
+					},
+				},
+			})
+			require.Nil(t, err)
+			require.NotNil(t, res)
+			require.Nil(t, res.Responses["A"].Error)
+			resItem := res.Responses["A"]
+			experimental.CheckGoldenJSONResponse(t, "golden", strings.ReplaceAll(t.Name(), "TestQuery/", ""), &resItem, UPDATE_GOLDEN_DATA)
+		})
+	})
 }

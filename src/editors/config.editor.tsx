@@ -114,7 +114,6 @@ export const SecurityEditor = (props: DataSourcePluginOptionsEditorProps<Infinit
   const { options, onOptionsChange } = props;
   return (
     <>
-      <p>For the enhanced security, enter list of allowed hosts in this section. The host URLs can include path and the URLs are case sensitive</p>
       <AllowedHostsEditor options={options} onOptionsChange={onOptionsChange} />
     </>
   );

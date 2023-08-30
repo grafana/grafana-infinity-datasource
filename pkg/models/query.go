@@ -89,7 +89,7 @@ type Query struct {
 	RefID                              string                 `json:"refId"`
 	Type                               QueryType              `json:"type"`   // 'json' | 'json-backend' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'uql' | 'groq' | 'series' | 'global' | 'google-sheets'
 	Format                             string                 `json:"format"` // 'table' | 'timeseries' | 'logs' | 'dataframe' | 'as-is' | 'node-graph-nodes' | 'node-graph-edges'
-	Source                             string                 `json:"source"` // 'url' | 'inline' | 'reference' | 'random-walk' | 'expression'
+	Source                             string                 `json:"source"` // 'url' | 'inline' | 'azure-blob' | 'reference' | 'random-walk' | 'expression'
 	RefName                            string                 `json:"referenceName,omitempty"`
 	URL                                string                 `json:"url"`
 	URLOptions                         URLOptions             `json:"url_options"`
@@ -116,6 +116,8 @@ type Query struct {
 	Spreadsheet                        string                 `json:"spreadsheet,omitempty"`
 	SheetName                          string                 `json:"sheetName,omitempty"`
 	SheetRange                         string                 `json:"range,omitempty"`
+	AzBlobContainerName                string                 `json:"azContainerName,omitempty"`
+	AzBlobName                         string                 `json:"azBlobName,omitempty"`
 	PageMode                           PaginationMode         `json:"pagination_mode,omitempty"`
 	PageMaxPages                       int                    `json:"pagination_max_pages,omitempty"`
 	PageParamSizeFieldName             string                 `json:"pagination_param_size_field_name,omitempty"`

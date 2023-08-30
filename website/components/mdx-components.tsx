@@ -1,6 +1,9 @@
+'use client';
+
 import Image from 'next/image';
 import { useMDXComponent } from 'next-contentlayer/hooks';
 import { cn } from '@/lib/utils';
+import { ExampleAccordion } from './example-accordion';
 
 const getAnchor = (text: React.ReactNode) => {
   return text
@@ -28,7 +31,7 @@ const H3 = ({ children }: { children: string }) => {
   const anchor = getAnchor(children);
   const link = `#${anchor}`;
   return (
-    <h3 id={anchor}>
+    <h3 id={anchor} className="pb-2 font-bold">
       {children}
       <a href={link} className="anchor-link ml-2 text-orange-500">
         #
@@ -41,7 +44,7 @@ const H4 = ({ children }: { children: string }) => {
   const anchor = getAnchor(children);
   const link = `#${anchor}`;
   return (
-    <h4 id={anchor}>
+    <h4 id={anchor} className="font-bold">
       {children}
       <a href={link} className="anchor-link ml-2 text-orange-500">
         #
@@ -52,6 +55,7 @@ const H4 = ({ children }: { children: string }) => {
 
 const mdxComponents = {
   Image,
+  ExampleAccordion,
   h2: H2,
   h3: H3,
   h4: H4,

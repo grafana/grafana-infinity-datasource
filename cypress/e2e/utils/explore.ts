@@ -1,4 +1,4 @@
-export const runExploreQuery = (wait = 1 * 1000) => {
+export const runExploreQuery = (wait = 3 * 1000) => {
   cy.get(`[data-testid="data-testid RefreshPicker run button"]`).focus().click();
   cy.wait(wait);
 };

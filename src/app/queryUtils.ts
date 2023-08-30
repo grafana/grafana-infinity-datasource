@@ -18,6 +18,8 @@ export const IsValidInfinityQuery = (query: InfinityQuery): boolean => {
       return query.url !== undefined && query.url !== '';
     } else if (query.source === 'reference') {
       return query.referenceName !== undefined && query.referenceName !== '';
+    } else if (query.source === 'azure-blob') {
+      return query.azBlobName === '' || query.azContainerName === '';
     } else {
       return query.data !== undefined && query.data !== '';
     }

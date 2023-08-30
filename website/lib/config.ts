@@ -109,6 +109,11 @@ export const site_config = {
           items: [],
         },
         {
+          title: 'Filters',
+          href: '/docs/filters',
+          items: [],
+        },
+        {
           title: 'Macros',
           href: '/docs/macros',
           items: [],
@@ -131,6 +136,11 @@ export const site_config = {
         {
           title: 'Reference Data',
           href: '/docs/reference-data',
+          items: [],
+        },
+        {
+          title: 'Azure Blob storage',
+          href: '/docs/azure-blob-storage',
           items: [],
         },
         {

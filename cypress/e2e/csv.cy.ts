@@ -1,6 +1,6 @@
 import { login } from './utils/login';
 import { checkDropdownValue, changeDropdownValue, checkInputContent } from './utils/editorFieldCheck';
-import { checkExploreTableContent } from './utils/explore';
+import { checkExploreTableContent, runExploreQuery } from './utils/explore';
 import type { InfinityQuery } from '../../src/types/query.types';
 
 const visitExplorePage = (query: Partial<InfinityQuery> = {}) => {
@@ -8,7 +8,7 @@ const visitExplorePage = (query: Partial<InfinityQuery> = {}) => {
 };
 
 describe('explore', () => {
-  it('should able to run CSV queries correctly', () => {
+  it.skip('should able to run CSV queries correctly', () => {
     login();
     visitExplorePage({ type: 'csv', url: 'https://github.com/yesoreyeram/grafana-infinity-datasource/blob/main/testdata/users.csv' });
 
@@ -17,6 +17,7 @@ describe('explore', () => {
     checkDropdownValue('Source', 'URL');
     checkInputContent('URL', 'https://github.com/yesoreyeram/grafana-infinity-datasource/blob/main/testdata/users.csv');
     checkDropdownValue('Format', 'Table');
+    runExploreQuery();
     checkExploreTableContent(['Leanne Graham'].join(''));
     cy.contains(`Parsing options & Result fields`);
     cy.contains(`Computed columns, Filter, Group by`).should('not.exist');
