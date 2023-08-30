@@ -6,8 +6,12 @@ import type { DataSourcePluginOptionsEditorProps } from '@grafana/data/types';
 type AllowedHostsEditorProps = {} & DataSourcePluginOptionsEditorProps<InfinityOptions>;
 
 export const AllowedHostsEditor = ({ options, onOptionsChange }: AllowedHostsEditorProps) => {
+  if (options?.jsonData?.auth_method === 'azureBlob') {
+    return <></>;
+  }
   return (
     <>
+      <p>For the enhanced security, enter list of allowed hosts in this section. The host URLs can include path and the URLs are case sensitive</p>
       <div className="gf-form">
         <InlineFormLabel width={10} tooltip="List of allowed host names. Enter the base URL names. ex: https://foo.com">
           Allowed hosts

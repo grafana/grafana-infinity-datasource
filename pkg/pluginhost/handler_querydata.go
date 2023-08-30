@@ -105,8 +105,8 @@ func QueryDataQuery(ctx context.Context, query models.Query, infClient infinity.
 	default:
 		query, _ := infinity.UpdateQueryWithReferenceData(ctx, query, infClient.Settings)
 		switch query.Source {
-		case "url":
-			if infClient.Settings.AuthenticationMethod != models.AuthenticationMethodNone && len(infClient.Settings.AllowedHosts) < 1 {
+		case "url", "azure-blob":
+			if infClient.Settings.AuthenticationMethod != models.AuthenticationMethodAzureBlob && infClient.Settings.AuthenticationMethod != models.AuthenticationMethodNone && len(infClient.Settings.AllowedHosts) < 1 {
 				response.Error = errors.New("datasource is missing allowed hosts/URLs. Configure it in the datasource settings page for enhanced security")
 				return response
 			}
@@ -123,7 +123,7 @@ func QueryDataQuery(ctx context.Context, query models.Query, infClient infinity.
 				response.Error = fmt.Errorf("error getting data frame. %w", err)
 				return response
 			}
-			if frame != nil && infClient.Settings.AuthenticationMethod != models.AuthenticationMethodNone && infClient.Settings.AuthenticationMethod != "" && len(infClient.Settings.AllowedHosts) < 1 {
+			if frame != nil && infClient.Settings.AuthenticationMethod != models.AuthenticationMethodAzureBlob && infClient.Settings.AuthenticationMethod != models.AuthenticationMethodNone && infClient.Settings.AuthenticationMethod != "" && len(infClient.Settings.AllowedHosts) < 1 {
 				frame.AppendNotices(data.Notice{
 					Text: "Datasource is missing allowed hosts/URLs. Configure it in the datasource settings page for enhanced security.",
 				})
@@ -132,7 +132,6 @@ func QueryDataQuery(ctx context.Context, query models.Query, infClient infinity.
 				frame, _ = infinity.WrapMetaForRemoteQuery(ctx, frame, nil, query)
 				response.Frames = append(response.Frames, frame)
 			}
-		case "azure-blob":
 		case "inline":
 			frame, err := infinity.GetFrameForInlineSources(query)
 			if err != nil {

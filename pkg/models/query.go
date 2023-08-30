@@ -116,6 +116,8 @@ type Query struct {
 	Spreadsheet                        string                 `json:"spreadsheet,omitempty"`
 	SheetName                          string                 `json:"sheetName,omitempty"`
 	SheetRange                         string                 `json:"range,omitempty"`
+	AzBlobContainerName                string                 `json:"azContainerName,omitempty"`
+	AzBlobName                         string                 `json:"azBlobName,omitempty"`
 	PageMode                           PaginationMode         `json:"pagination_mode,omitempty"`
 	PageMaxPages                       int                    `json:"pagination_max_pages,omitempty"`
 	PageParamSizeFieldName             string                 `json:"pagination_param_size_field_name,omitempty"`

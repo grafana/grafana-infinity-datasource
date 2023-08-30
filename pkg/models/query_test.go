@@ -40,6 +40,8 @@ func TestLoadQuery(t *testing.T) {
 					"body_content_type" : 	"application/xml",
 					"body_graphql_query": 	"bar"
 				},
+				"azContainerName"	: "my-azContainerName",
+				"azBlobName"		: "my-azBlobName",
 				"data" 			: "my-inline-data",
 				"root_selector" : "my-root_selector",
 				"columns" 				: [{"selector":"s","text":"t","type":"string","timestampFormat":"2006"}],
@@ -82,6 +84,8 @@ func TestLoadQuery(t *testing.T) {
 					BodyGraphQLQuery: "bar",
 				},
 				Data:                "my-inline-data",
+				AzBlobContainerName: "my-azContainerName",
+				AzBlobName:          "my-azBlobName",
 				RefName:             "foo.csv",
 				Parser:              "backend",
 				SummarizeExpression: "sum(id)/10",

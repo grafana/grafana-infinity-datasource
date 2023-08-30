@@ -109,6 +109,9 @@ func (s *InfinitySettings) Validate() error {
 	if s.AuthenticationMethod == AuthenticationMethodBearerToken && s.BearerToken == "" {
 		return errors.New("invalid or empty bearer token detected")
 	}
+	if s.AuthenticationMethod == AuthenticationMethodAzureBlob {
+		return nil
+	}
 	if s.AuthenticationMethod != AuthenticationMethodNone && len(s.AllowedHosts) < 1 {
 		return errors.New("configure allowed hosts in the authentication section")
 	}

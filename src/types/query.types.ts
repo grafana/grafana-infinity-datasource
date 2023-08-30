@@ -3,7 +3,7 @@ import type { DataQuery, SelectableValue } from '@grafana/data';
 
 //#region Query
 export type InfinityQueryType = 'json' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'series' | 'global' | 'uql' | 'groq' | 'google-sheets' | 'transformations';
-export type InfinityQuerySources = 'url' | 'inline' | 'reference' | 'random-walk' | 'expression';
+export type InfinityQuerySources = 'url' | 'inline' | 'azure-blob' | 'reference' | 'random-walk' | 'expression';
 export type InfinityColumnFormat = 'string' | 'number' | 'timestamp' | 'timestamp_epoch' | 'timestamp_epoch_s' | 'boolean';
 export type InfinityQueryFormat = 'table' | 'timeseries' | 'logs' | 'trace' | 'node-graph-nodes' | 'node-graph-edges' | 'dataframe' | 'as-is';
 export type QueryBodyType = 'none' | 'form-data' | 'x-www-form-urlencoded' | 'raw' | 'graphql';
@@ -31,6 +31,11 @@ export type InfinityQueryWithURLSource<T extends InfinityQueryType> = {
   url_options: InfinityURLOptions;
 } & InfinityQueryWithSource<'url'> &
   InfinityQueryBase<T>;
+export type InfinityQueryWithAzureBlobSource<T extends InfinityQueryType> = {
+  azContainerName: string;
+  azBlobName: string;
+} & InfinityQueryWithSource<'azure-blob'> &
+  InfinityQueryBase<T>;
 export type InfinityQueryWithInlineSource<T extends InfinityQueryType> = {
   data: string;
 } & InfinityQueryWithSource<'inline'> &
@@ -42,7 +47,7 @@ export type InfinityQueryWithDataSource<T extends InfinityQueryType> = {
   columns: InfinityColumn[];
   filters?: InfinityFilter[];
   format: InfinityQueryFormat;
-} & (InfinityQueryWithURLSource<T> | InfinityQueryWithInlineSource<T> | InfinityQueryWithReferenceSource<T>) &
+} & (InfinityQueryWithURLSource<T> | InfinityQueryWithInlineSource<T> | InfinityQueryWithReferenceSource<T> | InfinityQueryWithAzureBlobSource<T>) &
   InfinityQueryBase<T>;
 export type InfinityJSONQueryOptions = {
   root_is_not_array?: boolean;
