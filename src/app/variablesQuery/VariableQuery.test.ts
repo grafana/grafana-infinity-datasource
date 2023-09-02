@@ -1,6 +1,6 @@
-import { DefaultInfinityQuery } from './../../constants';
-import { migrateLegacyQuery } from './index';
-import type { VariableQuery, VariableQueryInfinity, VariableQueryLegacy } from './../../types';
+import { DefaultInfinityQuery } from '../../constants';
+import { migrateLegacyQuery } from './migrate';
+import type { VariableQuery, VariableQueryInfinity, VariableQueryLegacy } from '../../types';
 
 describe('migrateLegacyQuery', () => {
   it('Empty Query', () => {

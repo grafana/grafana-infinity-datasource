@@ -1,6 +1,6 @@
 import { Select, TagsInput, TextArea } from '@grafana/ui';
 import React from 'react';
-import { migrateLegacyQuery } from './../app/variablesQuery';
+import { migrateLegacyQuery } from './../app/variablesQuery/migrate';
 import { variableQueryTypes } from './../constants';
 import { Datasource } from './../datasource';
 import { InfinityQueryEditor } from './query/infinityQuery';

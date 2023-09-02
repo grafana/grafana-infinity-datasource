@@ -7,6 +7,8 @@
     "dist/**",
     "provisioning/**",
     "pkg/testsuite/**",
+    "jest.config.js",
+    "jest-setup.js",
     "**/*_test.go",
     "**/testdata/**",
     "src/dashboards/**",

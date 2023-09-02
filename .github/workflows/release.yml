@@ -11,40 +11,19 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        grafana-version: [8.4.7]
+        grafana-version: [9.5.7]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
       - name: NodeJS Setup
         uses: actions/setup-node@v3
         with:
-          node-version: 16.18.0
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache yarn cache
-        uses: actions/cache@v3
-        id: cache-yarn-cache
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Cache node_modules
-        id: cache-node-modules
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cache/Cypress
-             node_modules
-          key: ${{ runner.os }}-16.18.0-nodemodules-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-16.18.0-nodemodules-
-      - name: Install dependencies
-        run: CYPRESS_CACHE_FOLDER=/home/runner/.cache/Cypress yarn install --frozen-lockfile;
-        if: |
-          steps.cache-yarn-cache.outputs.cache-hit != 'true' ||
-          steps.cache-node-modules.outputs.cache-hit != 'true'
+          node-version: 18.17.1
+          cache: yarn
+      - name: Install frontend dependencies
+        shell: bash
+        run: |
+          CYPRESS_CACHE_FOLDER=/home/runner/.cache/Cypress yarn install --immutable --prefer-offline
       - name: Audit for vulnerabilities
         run: |
           yarn audit-ci;
@@ -53,7 +32,7 @@ jobs:
           yarn spellcheck;
       - name: Build Frontend
         run: |
-          NODE_OPTIONS=--max_old_space_size=8192 yarn ci-build;
+          NODE_OPTIONS=--max_old_space_size=8192 yarn build;
       - name: Setup Go environment
         uses: actions/setup-go@v4
         with:

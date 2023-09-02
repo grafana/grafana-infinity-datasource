@@ -9,7 +9,7 @@ If you want to contribute to the plugin, you can contribute in one of the follow
 
 You need following tools in your local machine for development
 
-- NodeJS v16.0+
+- NodeJS v18.17.1
 - Go 1.20
 - Mage
 
