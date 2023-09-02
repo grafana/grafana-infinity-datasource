@@ -2,7 +2,7 @@ import { Button, LegacyForms } from '@grafana/ui';
 import uniqueId from 'lodash/uniqueId';
 import React, { PureComponent } from 'react';
 import { InfinityOptions, SecureField } from './../../types';
-import type { DataSourceSettings } from '@grafana/data/types';
+import type { DataSourceSettings } from '@grafana/data';
 
 const SecureFieldEditor = ({
   title,

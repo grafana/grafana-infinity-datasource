@@ -3,7 +3,7 @@ import { InlineFormLabel, Input, LegacyForms, LinkButton, RadioButtonGroup } fro
 import React from 'react';
 import { SecureFieldsEditor } from './../../components/config/SecureFieldsEditor';
 import type { InfinityOptions, InfinitySecureOptions, OAuth2Props, OAuth2Type } from './../../types';
-import type { DataSourcePluginOptionsEditorProps, SelectableValue } from '@grafana/data/types';
+import type { DataSourcePluginOptionsEditorProps, SelectableValue } from '@grafana/data'; // eslint-disable-line no-duplicate-imports
 
 const oAuthTypes: Array<SelectableValue<OAuth2Type>> = [
   { value: 'client_credentials', label: 'Client Credentials' },

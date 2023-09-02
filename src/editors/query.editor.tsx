@@ -5,7 +5,7 @@ import { DefaultInfinityQuery } from './../constants';
 import { Datasource } from './../datasource';
 import { InfinityQueryEditor } from './query/infinityQuery';
 import type { InfinityQuery } from './../types';
-import type { QueryEditorProps } from '@grafana/data/types';
+import type { QueryEditorProps } from '@grafana/data';
 
 export const QueryEditor = (props: QueryEditorProps<Datasource, InfinityQuery>) => {
   const { datasource, onChange, onRunQuery } = props;

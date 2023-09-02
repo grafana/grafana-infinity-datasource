@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { GuidedBasicAuthEditor } from './guided-config/GuidedBasicAuthEditor';
 import { GoogleJWTEditor } from './guided-config/GoogleJWT';
 import type { InfinityOptions } from './../../types';
-import type { DataSourceSettings, SelectableValue } from '@grafana/data/types';
+import type { DataSourceSettings, SelectableValue } from '@grafana/data';
 
 export const OthersAuthentication = (props: {
   options: DataSourceSettings<InfinityOptions, {}>;

@@ -1,6 +1,6 @@
 import { ArrayVector, MutableDataFrame, FieldType } from '@grafana/data';
 import type { InfinityCSVQuery, InfinityGraphQLQuery, InfinityHTMLQuery, InfinityJSONQuery, InfinityQuery, InfinityQueryWithDataSource, InfinityXMLQuery } from './../types';
-import type { DataFrame, Field, Labels, TableData } from '@grafana/data/types';
+import type { DataFrame, Field, Labels, TableData } from '@grafana/data'; // eslint-disable-line no-duplicate-imports
 
 export const isTableData = (res: any): res is TableData => res && res.columns;
 export const isDataFrame = (res: any): res is DataFrame => res && res.fields;

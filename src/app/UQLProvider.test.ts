@@ -1,6 +1,6 @@
 import { MutableDataFrame, FieldType } from '@grafana/data';
 import { applyUQL } from './UQLProvider';
-import type { DataFrame } from '@grafana/data/types';
+import type { DataFrame } from '@grafana/data'; // eslint-disable-line no-duplicate-imports
 
 describe('UQLProvider', () => {
   it('basic array', async () => {

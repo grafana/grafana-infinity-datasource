@@ -1,7 +1,7 @@
 import { PluginType } from '@grafana/data';
 import { DataSourceWithBackend } from '@grafana/runtime';
 import { Datasource } from './datasource';
-import type { DataSourceInstanceSettings } from '@grafana/data/types';
+import type { DataSourceInstanceSettings } from '@grafana/data'; // eslint-disable-line no-duplicate-imports
 
 jest.mock('@grafana/runtime', () => ({
   ...(jest.requireActual('@grafana/runtime') as unknown as object),
@@ -18,6 +18,7 @@ const DummyDatasource: DataSourceInstanceSettings = {
   uid: '',
   name: '',
   access: 'proxy',
+  readOnly: false,
   type: 'yesoreyeram-infinity-datasource',
   meta: {
     id: '',

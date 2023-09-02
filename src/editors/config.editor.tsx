@@ -12,7 +12,7 @@ import { URLEditor } from './config/URL';
 import { OpenAPIEditor } from './config/OpenAPI';
 import { ReferenceDataEditor } from './config/ReferenceData';
 import { CustomHealthCheckEditor } from './config/CustomHealthCheckEditor';
-import type { DataSourcePluginOptionsEditorProps } from '@grafana/data/types';
+import type { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 import type { InfinityOptions } from './../types';
 
 const Collapse = CollapseOriginal as any;

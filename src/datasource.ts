@@ -14,7 +14,7 @@ import { migrateQuery } from './migrate';
 import { isBackendQuery } from './app/utils';
 import { reportQuery, reportHealthCheck } from './utils/analytics';
 import type { InfinityInstanceSettings, InfinityOptions, InfinityQuery, MetricFindValue, VariableQuery } from './types';
-import type { DataFrame, DataQueryRequest, DataQueryResponse, ScopedVars, TimeRange } from '@grafana/data/types';
+import type { DataFrame, DataQueryRequest, DataQueryResponse, ScopedVars, TimeRange } from '@grafana/data'; // eslint-disable-line no-duplicate-imports
 
 export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOptions> {
   constructor(public instanceSettings: InfinityInstanceSettings) {

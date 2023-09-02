@@ -1,7 +1,7 @@
 import { Button, InlineFormLabel, Input, LinkButton } from '@grafana/ui';
 import React, { useState } from 'react';
 import type { InfinityOptions } from './../../../types';
-import type { DataSourceSettings } from '@grafana/data/types';
+import type { DataSourceSettings } from '@grafana/data';
 
 type GuidedBasicAuthEditorProps = {
   options: DataSourceSettings<InfinityOptions, {}>;
