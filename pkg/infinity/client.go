@@ -273,7 +273,7 @@ func GetQueryBody(query models.Query) io.Reader {
 			if query.URLOptions.BodyGraphQLVariables != "" {
 				err := json.Unmarshal([]byte(query.URLOptions.BodyGraphQLVariables), &variables)
 				if err != nil {
-					backend.Logger.Error("Error unmarshalling graphql variables", err)
+					backend.Logger.Error("Error parsing graphql variable json", err)
 				}
 			}
 			jsonData := map[string]interface{}{
