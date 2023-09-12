@@ -78,9 +78,8 @@ export const URL = ({ query, onChange, onRunQuery, onShowUrlOptions }: { query: 
       <Input
         type="text"
         value={url}
-        placeholder={`https://github.com/yesoreyeram/grafana-infinity-datasource/blob/main/testdata/users.${
-          query.type === 'graphql' || query.type === 'uql' || query.type === 'groq' ? 'json' : query.type
-        }`}
+        placeholder={`https://github.com/yesoreyeram/grafana-infinity-datasource/blob/main/testdata/users.${query.type === 'graphql' || query.type === 'uql' || query.type === 'groq' ? 'json' : query.type
+          }`}
         width={84}
         onChange={(e) => setURL(e.currentTarget.value)}
         onBlur={onURLChange}
@@ -144,6 +143,7 @@ const Body = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange:
     return <></>;
   }
   const placeholderGraphQLQuery = `{ query : { }}`;
+  const placeholderGraphQLVariables = `{ }`;
   const onURLOptionsChange = <K extends keyof InfinityURLOptions, V extends InfinityURLOptions[K]>(key: K, value: V) => {
     onChange({ ...query, url_options: { ...query.url_options, [key]: value } });
   };
@@ -183,6 +183,47 @@ const Body = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange:
                     onBlur={(e) => onURLOptionsChange('body_graphql_query', e)}
                   />
                 </EditorField>
+                <br />
+                <EditorField label='GraphQL Variables' tooltip={placeholderGraphQLVariables}>
+                  <CodeEditor
+                    language='json'
+                    height={'200px'}
+                    value={query.url_options?.body_graphql_variables || placeholderGraphQLVariables}
+                    onSave={(e) => onURLOptionsChange('body_graphql_variables', e)}
+                    onBlur={(e) => onURLOptionsChange('body_graphql_variables', e)}
+                    onEditorDidMount={(editor, monaco) => {
+                      monaco.editor.defineTheme("graphqlVariableEditorTheme", {
+                        base: "vs-dark",
+                        inherit: true,
+                        rules: [
+                          { token: "grafanaVariable", foreground: "#ff9922", fontStyle: ' italic' }
+                        ],
+                        colors: {}
+                      });
+                      monaco.editor.setTheme("graphqlVariableEditorTheme");
+                      monaco.languages.setMonarchTokensProvider("json", {
+                        tokenizer: {
+                          root: [
+                            [/@?[a-zA-Z][\w$]*/, {
+                              cases: {
+                                '@default': "string"
+                              }
+                            }],
+                            [/[{}()\[\]]/, '@brackets'],
+                            [/".*?":/, "variable"],
+                            [/["|']?\${.*}["|']?/, "grafanaVariable"],
+                            [/\d*\.|d+([eE][\-+]?\d+)?/, "number.float"],
+                            [/0[xX][0-9a-fA-F]+/,"number.hex"],
+                            [/\d+/,"number"]
+                          ],
+                        }
+                      });
+                      monaco.languages.json.jsonDefaults.setModeConfiguration({
+                        colors:true
+                      })
+                    }}
+                  />
+                </EditorField>
               </>
             )}
             {(query.url_options?.body_type === 'raw' || !query.url_options?.body_type) && (
@@ -211,14 +252,14 @@ const Body = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange:
                     query.url_options?.body_content_type === 'application/json'
                       ? 'json'
                       : query.url_options?.body_content_type === 'application/xml'
-                      ? 'xml'
-                      : query.url_options?.body_content_type === 'text/html'
-                      ? 'html'
-                      : query.url_options?.body_content_type === 'application/javascript'
-                      ? 'javascript'
-                      : query.url_options?.body_content_type === 'text/plain'
-                      ? 'text'
-                      : 'text'
+                        ? 'xml'
+                        : query.url_options?.body_content_type === 'text/html'
+                          ? 'html'
+                          : query.url_options?.body_content_type === 'application/javascript'
+                            ? 'javascript'
+                            : query.url_options?.body_content_type === 'text/plain'
+                              ? 'text'
+                              : 'text'
                   }
                   height={'200px'}
                   value={query.url_options?.data || ''}

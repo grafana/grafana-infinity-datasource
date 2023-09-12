@@ -19,7 +19,7 @@ export const interpolateQuery = (query: InfinityQuery, scopedVars: ScopedVars): 
         body_type: replaceVariable(newQuery.url_options?.body_type || '', scopedVars) as QueryBodyType,
         body_content_type: replaceVariable(newQuery.url_options?.body_content_type || '', scopedVars) as QueryBodyContentType,
         body_graphql_query: replaceVariable(newQuery.url_options?.body_graphql_query || '', scopedVars),
-        // body_graphql_variables: replaceVariable(newQuery.url_options?.body_graphql_variables || '', scopedVars),
+        body_graphql_variables: replaceVariable(newQuery.url_options?.body_graphql_variables || '', scopedVars),
         body_form: newQuery.url_options?.body_form?.map((f) => {
           return {
             ...f,
