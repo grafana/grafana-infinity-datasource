@@ -1,6 +1,6 @@
-import * as snapshot from '@cypress/snapshot';
+// import * as snapshot from '@cypress/snapshot';
 
-snapshot.register();
+// snapshot.register();
 
 /// <reference types="cypress" />
 // ***********************************************

@@ -131,7 +131,11 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
   }
   private getResults(options: DataQueryRequest<InfinityQuery>, result: DataQueryResponse): Promise<DataQueryResponse> {
     if (result && result.error) {
-      return Promise.resolve({ data: result?.data, error: result.error || 'error while getting the results. Refer grafana logs for more details', state: LoadingState.Error });
+      return Promise.resolve({
+        data: result?.data,
+        errors: [{ message: 'error while getting the results. Refer grafana logs for more details', error: 'error while getting the results. Refer grafana logs for more details' }],
+        state: LoadingState.Error,
+      });
     }
     const promises: Array<Promise<DataFrame>> = [];
     if (result && result.data) {
