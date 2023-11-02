@@ -33,12 +33,12 @@ type instanceSettings struct {
 
 func (is *instanceSettings) Dispose() {}
 
-func newDataSourceInstance(setting backend.DataSourceInstanceSettings) (instancemgmt.Instance, error) {
+func newDataSourceInstance(ctx context.Context, setting backend.DataSourceInstanceSettings) (instancemgmt.Instance, error) {
 	settings, err := models.LoadSettings(setting)
 	if err != nil {
 		return nil, err
 	}
-	client, err := infinity.NewClient(settings)
+	client, err := infinity.NewClient(ctx, settings)
 	if err != nil {
 		return nil, err
 	}

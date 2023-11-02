@@ -69,7 +69,7 @@ func getBaseHTTPClient(settings models.InfinitySettings) *http.Client {
 	}
 }
 
-func NewClient(settings models.InfinitySettings) (client *Client, err error) {
+func NewClient(ctx context.Context, settings models.InfinitySettings) (client *Client, err error) {
 	if settings.AuthenticationMethod == "" {
 		settings.AuthenticationMethod = models.AuthenticationMethodNone
 		if settings.BasicAuthEnabled {

@@ -8,7 +8,7 @@ Visualize data from JSON, CSV, XML, GraphQL and HTML endpoints.
 
 Detailed documentation and examples are available in [plugin website](https://yesoreyeram.github.io/grafana-infinity-datasource)
 
-Docs on how to use JSON API - [Docs](https://yesoreyeram.github.io/grafana-infinity-datasource/wiki/json)
+Docs on how to use JSON API - [Docs](https://yesoreyeram.github.io/grafana-infinity-datasource/docs/json)
 
 ### [Demo video](https://youtu.be/Wmgs1E9Ry-s)
 

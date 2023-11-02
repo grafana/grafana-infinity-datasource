@@ -2,6 +2,7 @@ package testsuite_test
 
 import (
 	"bytes"
+	"context"
 	"crypto/tls"
 	"crypto/x509"
 	"errors"
@@ -50,7 +51,7 @@ func (rt *InfinityMocker) RoundTrip(req *http.Request) (*http.Response, error) {
 }
 
 func New(body string) *infinity.Client {
-	client, _ := infinity.NewClient(models.InfinitySettings{})
+	client, _ := infinity.NewClient(context.TODO(), models.InfinitySettings{})
 	client.HttpClient.Transport = &InfinityMocker{Body: body}
 	client.IsMock = true
 	return client

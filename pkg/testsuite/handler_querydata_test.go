@@ -26,7 +26,7 @@ func TestAuthentication(t *testing.T) {
 			fmt.Fprintf(w, `{ "message" : "OK" }`)
 		}))
 		defer server.Close()
-		client, err := infinity.NewClient(models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodApiKey})
+		client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodApiKey})
 		require.Nil(t, err)
 		require.NotNil(t, client)
 		res := pluginhost.QueryData(context.Background(), backend.DataQuery{
@@ -50,7 +50,7 @@ func TestAuthentication(t *testing.T) {
 				fmt.Fprintf(w, `{ "message" : "OK" }`)
 			}))
 			defer server.Close()
-			client, err := infinity.NewClient(models.InfinitySettings{
+			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
 				URL:                  server.URL,
 				AuthenticationMethod: models.AuthenticationMethodBasic,
 				AllowedHosts:         []string{server.URL},
@@ -85,7 +85,7 @@ func TestAuthentication(t *testing.T) {
 				fmt.Fprintf(w, "UnAuthorized")
 			}))
 			defer server.Close()
-			client, err := infinity.NewClient(models.InfinitySettings{
+			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
 				URL:                  server.URL,
 				AllowedHosts:         []string{server.URL},
 				AuthenticationMethod: models.AuthenticationMethodBasic,
@@ -118,7 +118,7 @@ func TestAuthentication(t *testing.T) {
 				fmt.Fprintf(w, `{ "message" : "OK" }`)
 			}))
 			defer server.Close()
-			client, err := infinity.NewClient(models.InfinitySettings{
+			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
 				URL:                  server.URL,
 				AllowedHosts:         []string{server.URL},
 				ForwardOauthIdentity: true,
@@ -142,7 +142,7 @@ func TestAuthentication(t *testing.T) {
 				fmt.Fprintf(w, `{ "message" : "OK" }`)
 			}))
 			defer server.Close()
-			client, err := infinity.NewClient(models.InfinitySettings{
+			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
 				URL:                  server.URL,
 				AllowedHosts:         []string{server.URL},
 				ForwardOauthIdentity: false,
@@ -175,7 +175,7 @@ func TestAuthentication(t *testing.T) {
 				_, _ = io.WriteString(w, `{"foo":"bar"}`)
 			}))
 			defer server.Close()
-			client, err := infinity.NewClient(models.InfinitySettings{
+			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
 				URL:                  server.URL,
 				AllowedHosts:         []string{server.URL},
 				AuthenticationMethod: models.AuthenticationMethodOAuth,
@@ -215,7 +215,7 @@ func TestAuthentication(t *testing.T) {
 				_, _ = io.WriteString(w, `{"foo":"bar"}`)
 			}))
 			defer server.Close()
-			client, err := infinity.NewClient(models.InfinitySettings{
+			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
 				URL:                  server.URL,
 				AllowedHosts:         []string{server.URL},
 				AuthenticationMethod: models.AuthenticationMethodOAuth,
@@ -256,7 +256,7 @@ func TestAuthentication(t *testing.T) {
 			assert.NotNil(t, server.TLS)
 			server.StartTLS()
 			defer server.Close()
-			client, err := infinity.NewClient(models.InfinitySettings{
+			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
 				URL:                  server.URL,
 				AuthenticationMethod: models.AuthenticationMethodNone,
 				TLSAuthWithCACert:    true,
@@ -288,7 +288,7 @@ func TestAuthentication(t *testing.T) {
 			assert.NotNil(t, server.TLS)
 			server.StartTLS()
 			defer server.Close()
-			client, err := infinity.NewClient(models.InfinitySettings{
+			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
 				URL:                  server.URL,
 				AuthenticationMethod: models.AuthenticationMethodNone,
 				InsecureSkipVerify:   true,
@@ -320,7 +320,7 @@ func TestResponseFormats(t *testing.T) {
 				fmt.Fprintf(w, `{ "foo" : "bar" }`)
 			}))
 			defer server.Close()
-			client, err := infinity.NewClient(models.InfinitySettings{URL: server.URL})
+			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{URL: server.URL})
 			require.Nil(t, err)
 			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
 				JSON: []byte(fmt.Sprintf(`{
@@ -384,7 +384,7 @@ func TestResponseFormats(t *testing.T) {
 				  }`)
 			}))
 			defer server.Close()
-			client, err := infinity.NewClient(models.InfinitySettings{URL: server.URL})
+			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{URL: server.URL})
 			require.Nil(t, err)
 			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
 				JSON: []byte(fmt.Sprintf(`{
@@ -420,7 +420,7 @@ func TestResponseFormats(t *testing.T) {
 			// require.Equal(t, data.FieldTypeNullableTime, res.Frames[0].Fields[2].Type())
 		})
 		t.Run("should parse the computed columns", func(t *testing.T) {
-			client, err := infinity.NewClient(models.InfinitySettings{URL: ""})
+			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{URL: ""})
 			require.Nil(t, err)
 			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
 				JSON: []byte(`{
@@ -438,7 +438,7 @@ func TestResponseFormats(t *testing.T) {
 			experimental.CheckGoldenJSONResponse(t, "golden", "backend-computed-columns", &res, UPDATE_GOLDEN_DATA)
 		})
 		t.Run("should filter computed columns", func(t *testing.T) {
-			client, err := infinity.NewClient(models.InfinitySettings{URL: ""})
+			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{URL: ""})
 			require.Nil(t, err)
 			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
 				JSON: []byte(`{
@@ -503,7 +503,7 @@ func TestResponseFormats(t *testing.T) {
 				  }`)
 			}))
 			defer server.Close()
-			client, err := infinity.NewClient(models.InfinitySettings{URL: server.URL})
+			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{URL: server.URL})
 			require.Nil(t, err)
 			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
 				JSON: []byte(fmt.Sprintf(`{ 
@@ -530,7 +530,7 @@ func TestResponseFormats(t *testing.T) {
 				fmt.Fprintf(w, `{ "foo" : "bar" }`)
 			}))
 			defer server.Close()
-			client, err := infinity.NewClient(models.InfinitySettings{URL: server.URL})
+			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{URL: server.URL})
 			require.Nil(t, err)
 			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
 				JSON: []byte(fmt.Sprintf(`{
@@ -556,7 +556,7 @@ func TestResponseFormats(t *testing.T) {
 				fmt.Fprintf(w, "a,b\na1,b1")
 			}))
 			defer server.Close()
-			client, err := infinity.NewClient(models.InfinitySettings{URL: server.URL})
+			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{URL: server.URL})
 			require.Nil(t, err)
 			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
 				JSON: []byte(fmt.Sprintf(`{
@@ -582,7 +582,7 @@ func TestResponseFormats(t *testing.T) {
 				fmt.Fprintf(w, `<xml><User name="foo"></xml>`)
 			}))
 			defer server.Close()
-			client, err := infinity.NewClient(models.InfinitySettings{URL: server.URL})
+			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{URL: server.URL})
 			require.Nil(t, err)
 			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
 				JSON: []byte(fmt.Sprintf(`{
@@ -608,7 +608,7 @@ func TestResponseFormats(t *testing.T) {
 				fmt.Fprintf(w, `{ "foo" : "bar" }`)
 			}))
 			defer server.Close()
-			client, err := infinity.NewClient(models.InfinitySettings{URL: server.URL})
+			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{URL: server.URL})
 			require.Nil(t, err)
 			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
 				JSON: []byte(fmt.Sprintf(`{
@@ -634,7 +634,7 @@ func TestResponseFormats(t *testing.T) {
 				fmt.Fprintf(w, `{ "foo" : "bar" }`)
 			}))
 			defer server.Close()
-			client, err := infinity.NewClient(models.InfinitySettings{URL: server.URL})
+			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{URL: server.URL})
 			require.Nil(t, err)
 			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
 				JSON: []byte(fmt.Sprintf(`{

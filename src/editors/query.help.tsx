@@ -25,16 +25,16 @@ export const HelpLinks = () => {
         >
           JSON
         </Button>
-        <LinkButton size="sm" variant="secondary" fill="outline" href="https://yesoreyeram.github.io/grafana-infinity-datasource/wiki/csv" target="_blank" rel="noreferrer">
+        <LinkButton size="sm" variant="secondary" fill="outline" href="https://yesoreyeram.github.io/grafana-infinity-datasource/docs/csv" target="_blank" rel="noreferrer">
           CSV
         </LinkButton>
-        <LinkButton size="sm" variant="secondary" fill="outline" href="https://yesoreyeram.github.io/grafana-infinity-datasource/wiki/xml" target="_blank" rel="noreferrer">
+        <LinkButton size="sm" variant="secondary" fill="outline" href="https://yesoreyeram.github.io/grafana-infinity-datasource/docs/xml" target="_blank" rel="noreferrer">
           XML
         </LinkButton>
-        <LinkButton size="sm" variant="secondary" fill="outline" href="https://yesoreyeram.github.io/grafana-infinity-datasource/wiki/uql" target="_blank" rel="noreferrer">
+        <LinkButton size="sm" variant="secondary" fill="outline" href="https://yesoreyeram.github.io/grafana-infinity-datasource/docs/uql" target="_blank" rel="noreferrer">
           UQL
         </LinkButton>
-        <LinkButton size="sm" variant="secondary" fill="outline" href="https://yesoreyeram.github.io/grafana-infinity-datasource/wiki/authentication" target="_blank" rel="noreferrer">
+        <LinkButton size="sm" variant="secondary" fill="outline" href="https://yesoreyeram.github.io/grafana-infinity-datasource/docs/authentication" target="_blank" rel="noreferrer">
           Authentication
         </LinkButton>
         <LinkButton
@@ -208,7 +208,7 @@ export const HelpLinks = () => {
               </table>
             </ul>
             <br />
-            <LinkButton variant="primary" style={{ margin: '10px' }} href="https://yesoreyeram.github.io/grafana-infinity-datasource/wiki/json" target="_blank" rel="noreferrer">
+            <LinkButton variant="primary" style={{ margin: '10px' }} href="https://yesoreyeram.github.io/grafana-infinity-datasource/docs/json" target="_blank" rel="noreferrer">
               Need more help?
             </LinkButton>
           </div>

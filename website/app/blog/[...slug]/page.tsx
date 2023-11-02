@@ -12,7 +12,7 @@ interface PostProps {
 
 async function getPostFromParams(params: PostProps['params']) {
   const slug = params?.slug?.join('/');
-  const post = allBlogs.find((p: any) => p.page_slug === `${slug}`);
+  const post = allBlogs.find((p: any) => p.page_slug === `/blog/${slug}`);
   if (!post) {
     null;
   }
