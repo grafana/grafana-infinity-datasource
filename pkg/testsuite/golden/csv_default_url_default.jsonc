@@ -93,7 +93,8 @@
                 "body_type": "",
                 "body_content_type": "",
                 "body_form": null,
-                "body_graphql_query": ""
+                "body_graphql_query": "",
+                "body_graphql_variables": ""
               },
               "data": "",
               "parser": "",
