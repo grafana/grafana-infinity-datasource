@@ -144,15 +144,15 @@ type URLOptionKeyValuePair struct {
 }
 
 type URLOptions struct {
-	Method           string                  `json:"method"` // 'GET' | 'POST'
-	Params           []URLOptionKeyValuePair `json:"params"`
-	Headers          []URLOptionKeyValuePair `json:"headers"`
-	Body             string                  `json:"data"`
-	BodyType         string                  `json:"body_type"`
-	BodyContentType  string                  `json:"body_content_type"`
-	BodyForm         []URLOptionKeyValuePair `json:"body_form"`
-	BodyGraphQLQuery string                  `json:"body_graphql_query"`
-	//BodyGraphQLVariables string                  `json:"body_graphql_variables"`
+	Method               string                  `json:"method"` // 'GET' | 'POST'
+	Params               []URLOptionKeyValuePair `json:"params"`
+	Headers              []URLOptionKeyValuePair `json:"headers"`
+	Body                 string                  `json:"data"`
+	BodyType             string                  `json:"body_type"`
+	BodyContentType      string                  `json:"body_content_type"`
+	BodyForm             []URLOptionKeyValuePair `json:"body_form"`
+	BodyGraphQLQuery     string                  `json:"body_graphql_query"`
+	BodyGraphQLVariables string                  `json:"body_graphql_variables"`
 }
 
 type InfinityCSVOptions struct {
