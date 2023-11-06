@@ -269,8 +269,16 @@ func GetQueryBody(query models.Query) io.Reader {
 			}
 			body = strings.NewReader(form.Encode())
 		case "graphql":
-			jsonData := map[string]string{
-				"query": query.URLOptions.BodyGraphQLQuery,
+			var variables map[string]interface{}
+			if query.URLOptions.BodyGraphQLVariables != "" {
+				err := json.Unmarshal([]byte(query.URLOptions.BodyGraphQLVariables), &variables)
+				if err != nil {
+					backend.Logger.Error("Error parsing graphql variable json", err)
+				}
+			}
+			jsonData := map[string]interface{}{
+				"query":     query.URLOptions.BodyGraphQLQuery,
+				"variables": variables,
 			}
 			jsonValue, _ := json.Marshal(jsonData)
 			body = strings.NewReader(string(jsonValue))

@@ -20,7 +20,7 @@ export type InfinityURLOptions = {
   body_content_type?: QueryBodyContentType;
   body_form?: InfinityKV[];
   body_graphql_query?: string;
-  // body_graphql_variables?: string;
+  body_graphql_variables?: string;
 };
 export type InfinityQueryWithReferenceSource<T extends InfinityQueryType> = {
   referenceName: string;

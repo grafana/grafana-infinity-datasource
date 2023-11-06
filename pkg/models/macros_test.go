@@ -136,8 +136,9 @@ func TestApplyMacros(t *testing.T) {
 				GROQ: "GROQ_$__customInterval(1m,1 MIN)",
 				Data: "Data_$__customInterval(1m,1 MIN)",
 				URLOptions: models.URLOptions{
-					Body:             "Body_$__customInterval(1m,1 MIN)",
-					BodyGraphQLQuery: "GraphQL_$__customInterval(1m,1 MIN)",
+					Body:                 "Body_$__customInterval(1m,1 MIN)",
+					BodyGraphQLQuery:     "GraphQL_$__customInterval(1m,1 MIN)",
+					BodyGraphQLVariables: "",
 					Params: []models.URLOptionKeyValuePair{
 						{Key: "p1", Value: "v1_$__customInterval(1m,1 MIN)"},
 						{Key: "p2", Value: "v2"},

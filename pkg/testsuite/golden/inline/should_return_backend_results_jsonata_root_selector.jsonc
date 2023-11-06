@@ -98,7 +98,8 @@
                 "body_type": "",
                 "body_content_type": "",
                 "body_form": null,
-                "body_graphql_query": ""
+                "body_graphql_query": "",
+                "body_graphql_variables": ""
               },
               "data": "{\"orders\":[{\"price\":10,\"quantity\":3},{\"price\":0.5,\"quantity\":10},{\"price\":100,\"quantity\":1}]}",
               "parser": "backend",

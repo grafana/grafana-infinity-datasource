@@ -107,7 +107,8 @@
                 "body_type": "",
                 "body_content_type": "",
                 "body_form": null,
-                "body_graphql_query": ""
+                "body_graphql_query": "",
+                "body_graphql_variables": ""
               },
               "data": "[{ \"Name\": \"amc ambassador dpl\", \"Miles_per_Gallon\": 15, \"Cylinders\": 8, \"Displacement\": 390, \"Horsepower\": 190, \"Weight_in_lbs\": 3850, \"Acceleration\": 8.5, \"Year\": \"1970-01-01\", \"Origin\": \"USA\" }, { \"Name\": \"citroen ds-21 pallas\", \"Miles_per_Gallon\": null, \"Cylinders\": null, \"Displacement\": 133, \"Horsepower\": 115, \"Weight_in_lbs\": 3090, \"Acceleration\": 17.5, \"Year\": \"1970-01-01\", \"Origin\": \"Europe\" }, { \"Name\": \"chevrolet hello concours (sw)\", \"Miles_per_Gallon\": null, \"Cylinders\": 8, \"Displacement\": 350, \"Horsepower\": 165, \"Weight_in_lbs\": 4142, \"Acceleration\": 11.5, \"Year\": \"1970-01-01\", \"Origin\": \"USA\" }]",
               "parser": "backend",
