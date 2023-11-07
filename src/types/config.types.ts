@@ -26,6 +26,7 @@ export type AWSAuthProps = {
   service?: string;
 };
 export type InfinityReferenceData = { name: string; data: string };
+export type ProxyType = 'none' | 'env' | 'url';
 export interface InfinityOptions extends DataSourceJsonData {
   auth_method?: AuthType;
   apiKeyKey?: string;
@@ -38,6 +39,8 @@ export interface InfinityOptions extends DataSourceJsonData {
   tlsAuthWithCACert?: boolean;
   global_queries?: GlobalInfinityQuery[];
   timeoutInSeconds?: number;
+  proxy_type?: ProxyType;
+  proxy_url?: string;
   oauthPassThru?: boolean;
   allowedHosts?: string[];
   refData?: InfinityReferenceData[];

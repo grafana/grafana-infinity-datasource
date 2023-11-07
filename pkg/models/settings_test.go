@@ -58,6 +58,7 @@ func TestLoadSettings(t *testing.T) {
 				TimeoutInSeconds:     60,
 				ApiKeyType:           "header",
 				BasicAuthEnabled:     false,
+				ProxyType:            models.ProxyTypeEnv,
 				AuthenticationMethod: models.AuthenticationMethodNone,
 				OAuth2Settings: models.OAuth2Settings{
 					EndpointParams: map[string]string{},
@@ -96,6 +97,7 @@ func TestLoadSettings(t *testing.T) {
 				ApiKeyType:           "header",
 				BasicAuthEnabled:     true,
 				AuthenticationMethod: models.AuthenticationMethodBasic,
+				ProxyType:            models.ProxyTypeEnv,
 				OAuth2Settings: models.OAuth2Settings{
 					EndpointParams: map[string]string{},
 				},
@@ -138,6 +140,8 @@ func TestAllSettingsAgainstFrontEnd(t *testing.T) {
 			"oauth2EndPointParamsName1":"resource",
 			"oauth2EndPointParamsName2":"name",
 			"oauthPassThru": true,
+			"proxy_type" : "url",
+			"proxy_url" : "https://foo.com",
 			"allowedHosts": ["host1","host2"],
 			"customHealthCheckEnabled" : true,
 			"customHealthCheckUrl" : "https://foo-check/",
@@ -211,6 +215,8 @@ func TestAllSettingsAgainstFrontEnd(t *testing.T) {
 		ApiKeyType:               "query",
 		ApiKeyValue:              "earth",
 		URL:                      "https://foo.com",
+		ProxyType:                models.ProxyTypeUrl,
+		ProxyUrl:                 "https://foo.com",
 		AllowedHosts:             []string{"host1", "host2"},
 		UserName:                 "user",
 		Password:                 "password",

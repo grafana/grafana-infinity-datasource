@@ -4,6 +4,7 @@ import { css } from '@emotion/css';
 import { InlineFormLabel, Input, Button, LinkButton, useTheme2, Collapse as CollapseOriginal } from '@grafana/ui';
 import { SecureFieldsEditor } from './../components/config/SecureFieldsEditor';
 import { AuthEditor } from './config/Auth';
+import { ProxyEditor } from './config/ProxyEditor';
 import { AllowedHostsEditor } from './config/AllowedHosts';
 import { GlobalQueryEditor } from './config/GlobalQueryEditor';
 import { ProvisioningScript } from './config/Provisioning';
@@ -105,6 +106,7 @@ export const NetworkEditor = (props: DataSourcePluginOptionsEditorProps<Infinity
       </div>
       <div style={{ padding: '1px 10px' }}>
         <TLSConfigEditor options={options} onOptionsChange={onOptionsChange} hideTile={true} />
+        <ProxyEditor options={options} onOptionsChange={onOptionsChange} />
       </div>
     </>
   );

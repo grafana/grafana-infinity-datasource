@@ -59,9 +59,20 @@ func getBaseHTTPClient(settings models.InfinitySettings) *http.Client {
 	if err != nil {
 		return nil
 	}
-	transport := &http.Transport{
-		Proxy:           http.ProxyFromEnvironment,
-		TLSClientConfig: tlsConfig,
+	transport := &http.Transport{TLSClientConfig: tlsConfig}
+	switch settings.ProxyType {
+	case models.ProxyTypeNone:
+		backend.Logger.Debug("proxy type is set to none. Not using the proxy")
+	case models.ProxyTypeUrl:
+		backend.Logger.Debug("proxy type is set to url. Using the proxy", "proxy_url", settings.ProxyUrl)
+		u, err := url.Parse(settings.ProxyUrl)
+		if err != nil {
+			backend.Logger.Error("error parsing proxy url", "err", err.Error(), "proxy_url", settings.ProxyUrl)
+			return nil
+		}
+		transport.Proxy = http.ProxyURL(u)
+	default:
+		transport.Proxy = http.ProxyFromEnvironment
 	}
 	return &http.Client{
 		Transport: transport,
