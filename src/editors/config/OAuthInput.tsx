@@ -16,7 +16,6 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
   const { secureJsonFields } = options;
   const secureJsonData = (options.secureJsonData || {}) as InfinitySecureOptions;
   let oauth2: OAuth2Props = options?.jsonData?.oauth2 || {};
-  oauth2.oauth2_type = oauth2.oauth2_type || 'client_credentials';
   const onOAuth2PropsChange = <T extends keyof OAuth2Props, V extends OAuth2Props[T]>(key: T, value: V) => {
     onOptionsChange({ ...options, jsonData: { ...options.jsonData, oauth2: { ...oauth2, [key]: value } } });
   };
@@ -42,7 +41,7 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
         </InlineFormLabel>
         <RadioButtonGroup<OAuth2Type> options={oAuthTypes} onChange={(v) => onOAuth2PropsChange('oauth2_type', v)} value={oauth2.oauth2_type || 'client_credentials'}></RadioButtonGroup>
       </div>
-      {oauth2.oauth2_type === 'client_credentials' && (
+      {(oauth2.oauth2_type === 'client_credentials' || !oauth2?.oauth2_type) && (
         <>
           <div className="gf-form">
             <InlineFormLabel
