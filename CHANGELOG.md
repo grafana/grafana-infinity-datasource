@@ -1,5 +1,13 @@
 # Change Log
 
+## 2.2.0
+
+🚀 **Proxy**: Support for configuring per-datasource proxy url
+
+🚀 **GraphQL**: Added Support for GraphQL Variables
+
+🐛 **OAuth2**: Fixes OAuth2 configuration UI crash
+
 ## 2.1.0
 
 🚀 **OAuth2**: Added ability to set auth style in client credentials
