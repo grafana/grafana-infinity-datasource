@@ -13,7 +13,7 @@ export default function Blog() {
       <div className="flex w-full flex-col gap-4">
         {allBlogs.map((b) => (
           <div key={b.title} className="p-6 bg-slate-800 text-gray-100 border-red-200 rounded-md">
-            <Link className="text-lg font-light" href={`/${b.page_slug}`}>
+            <Link className="text-lg font-light" href={`/${b.slug}`}>
               {b.title || ''}
             </Link>
             <br />
