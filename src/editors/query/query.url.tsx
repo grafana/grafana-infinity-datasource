@@ -192,38 +192,38 @@ const Body = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange:
                     value={query.url_options?.body_graphql_variables || placeholderGraphQLVariables}
                     onSave={(e) => onURLOptionsChange('body_graphql_variables', e)}
                     onBlur={(e) => onURLOptionsChange('body_graphql_variables', e)}
-                    onEditorDidMount={(editor, monaco) => {
-                      monaco.editor.defineTheme('graphqlVariableEditorTheme', {
-                        base: 'vs-dark',
-                        inherit: true,
-                        rules: [{ token: 'grafanaVariable', foreground: '#ff9922', fontStyle: ' italic' }],
-                        colors: {},
-                      });
-                      monaco.editor.setTheme('graphqlVariableEditorTheme');
-                      monaco.languages.setMonarchTokensProvider('json', {
-                        tokenizer: {
-                          root: [
-                            [
-                              /@?[a-zA-Z][\w$]*/,
-                              {
-                                cases: {
-                                  '@default': 'string',
-                                },
-                              },
-                            ],
-                            [/[{}()\[\]]/, '@brackets'],
-                            [/".*?":/, 'variable'],
-                            [/["|']?\${.*}["|']?/, 'grafanaVariable'],
-                            [/\d*\.|d+([eE][\-+]?\d+)?/, 'number.float'],
-                            [/0[xX][0-9a-fA-F]+/, 'number.hex'],
-                            [/\d+/, 'number'],
-                          ],
-                        },
-                      });
-                      monaco.languages.json.jsonDefaults.setModeConfiguration({
-                        colors: true,
-                      });
-                    }}
+                    // onEditorDidMount={(editor, monaco) => {
+                    //   monaco.editor.defineTheme('graphqlVariableEditorTheme', {
+                    //     base: 'vs-dark',
+                    //     inherit: true,
+                    //     rules: [{ token: 'grafanaVariable', foreground: '#ff9922', fontStyle: ' italic' }],
+                    //     colors: {},
+                    //   });
+                    //   monaco.editor.setTheme('graphqlVariableEditorTheme');
+                    //   monaco.languages.setMonarchTokensProvider('json', {
+                    //     tokenizer: {
+                    //       root: [
+                    //         [
+                    //           /@?[a-zA-Z][\w$]*/,
+                    //           {
+                    //             cases: {
+                    //               '@default': 'string',
+                    //             },
+                    //           },
+                    //         ],
+                    //         [/[{}()\[\]]/, '@brackets'],
+                    //         [/".*?":/, 'variable'],
+                    //         [/["|']?\${.*}["|']?/, 'grafanaVariable'],
+                    //         [/\d*\.|d+([eE][\-+]?\d+)?/, 'number.float'],
+                    //         [/0[xX][0-9a-fA-F]+/, 'number.hex'],
+                    //         [/\d+/, 'number'],
+                    //       ],
+                    //     },
+                    //   });
+                    //   monaco.languages.json.jsonDefaults.setModeConfiguration({
+                    //     colors: true,
+                    //   });
+                    // }}
                   />
                 </EditorField>
               </>
