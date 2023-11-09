@@ -11,6 +11,7 @@
     "**/testdata/**",
     "src/dashboards/**",
     "*SeriesProvider.ts",
+    "docker/blocks/**",
     "/website/contentlayer.config.ts",
     "/website/next.config.js",
     "/website/**/*.css",
@@ -19,6 +20,7 @@
     "website/node_modules/**",
     "website/out/**",
     "website/public/**",
+    "docker-compose-debug.yaml",
     "docker-compose.yaml"
   ],
   "words": [
