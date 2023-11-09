@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.2.1
+
+⚙️ **Chore**: Added distributed tracing and contextual logging
+
+🐛 **UI** Removed graphql variable editor styling
+
 ## 2.2.0
 
 🚀 **Proxy**: Support for configuring per-datasource proxy url
