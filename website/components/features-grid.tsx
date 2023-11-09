@@ -2,7 +2,8 @@ import React from 'react';
 import SectionHeading from './home/section-heading';
 
 const uqlSample = `parse-json
-| scope "results" <br />| extend "timestamp"="series.timestamp"
+| scope "results" 
+| extend "timestamp"="series.timestamp"
 | extend "timestamp"=unixtime_milliseconds_todatetime("timestamp")
 | order by "timestamp" asc`;
 
