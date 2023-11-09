@@ -1,16 +1,20 @@
 package infinity
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
+	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 	"github.com/yesoreyeram/grafana-plugins/lib/go/jsonframer"
 )
 
-func GetJSONBackendResponse(urlResponseObject any, query models.Query) (*data.Frame, error) {
+func GetJSONBackendResponse(ctx context.Context, urlResponseObject any, query models.Query) (*data.Frame, error) {
+	_, span := tracing.DefaultTracer().Start(ctx, "GetJSONBackendResponse")
+	defer span.End()
 	frame := GetDummyFrame(query)
 	responseString, err := json.Marshal(urlResponseObject)
 	if err != nil {

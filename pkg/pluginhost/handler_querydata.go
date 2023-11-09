@@ -16,19 +16,22 @@ import (
 
 // QueryData handles multiple queries and returns multiple responses.
 func (ds *PluginHost) QueryData(ctx context.Context, req *backend.QueryDataRequest) (*backend.QueryDataResponse, error) {
+	logger := backend.Logger.FromContext(ctx)
 	ctx, span := tracing.DefaultTracer().Start(ctx, "PluginHost.QueryData")
 	defer span.End()
 	response := backend.NewQueryDataResponse()
 	client, err := getInstance(ctx, ds.im, req.PluginContext)
 	if err != nil {
-		backend.Logger.Error("error getting infinity instance", "error", err.Error())
+		span.RecordError(err)
+		logger.Error("error getting infinity instance", "error", err.Error())
 		return response, fmt.Errorf("error getting infinity instance. %w", err)
 	}
 	for _, q := range req.Queries {
 		res := backend.DataResponse{}
 		query, err := models.LoadQuery(ctx, q, req.PluginContext)
 		if err != nil {
-			backend.Logger.Error("error un-marshaling the query", "error", err.Error())
+			span.RecordError(err)
+			logger.Error("error un-marshaling the query", "error", err.Error())
 			res.Error = fmt.Errorf("error un-marshaling the query. %w", err)
 			response.Responses[q.RefID] = res
 			continue
@@ -36,6 +39,9 @@ func (ds *PluginHost) QueryData(ctx context.Context, req *backend.QueryDataReque
 		if query.Type == models.QueryTypeTransformations {
 			response1, err := infinity.ApplyTransformations(query, response)
 			if err != nil {
+				logger.Error("error applying infinity query transformation", "error", err.Error())
+				span.RecordError(err)
+				span.SetStatus(500, err.Error())
 				return response, err
 			}
 			response = response1
@@ -48,11 +54,14 @@ func (ds *PluginHost) QueryData(ctx context.Context, req *backend.QueryDataReque
 }
 
 func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient infinity.Client, requestHeaders map[string]string, pluginContext backend.PluginContext) (response backend.DataResponse) {
+	logger := backend.Logger.FromContext(ctx)
 	ctx, span := tracing.DefaultTracer().Start(ctx, "QueryData")
 	defer span.End()
 	query, err := models.LoadQuery(ctx, backendQuery, pluginContext)
 	if err != nil {
-		backend.Logger.Error("error un-marshaling the query", "error", err.Error())
+		span.RecordError(err)
+		span.SetStatus(500, err.Error())
+		logger.Error("error un-marshaling the query", "error", err.Error())
 		response.Error = fmt.Errorf("error un-marshaling the query. %w", err)
 		return response
 	}
@@ -60,6 +69,7 @@ func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient in
 }
 
 func QueryDataQuery(ctx context.Context, query models.Query, infClient infinity.Client, requestHeaders map[string]string, pluginContext backend.PluginContext) (response backend.DataResponse) {
+	logger := backend.Logger.FromContext(ctx)
 	ctx, span := tracing.DefaultTracer().Start(ctx, "QueryDataQuery", trace.WithAttributes(
 		attribute.String("type", string(query.Type)),
 		attribute.String("source", string(query.Source)),
@@ -78,7 +88,7 @@ func QueryDataQuery(ctx context.Context, query models.Query, infClient infinity.
 	args = append(args, "summarizeExpression", query.SummarizeExpression)
 	args = append(args, "settings.AuthenticationMethod", infClient.Settings.AuthenticationMethod)
 	args = append(args, "settings.OAuth2Settings.OAuth2Type", infClient.Settings.OAuth2Settings.OAuth2Type)
-	backend.Logger.Info("performing QueryData in infinity datasource", args...)
+	logger.Info("performing QueryData in infinity datasource", args...)
 	//region Frame Builder
 	switch query.Type {
 	case models.QueryTypeGSheets:
@@ -95,6 +105,8 @@ func QueryDataQuery(ctx context.Context, query models.Query, infClient infinity.
 		query.URL = fmt.Sprintf("https://sheets.googleapis.com/v4/spreadsheets/%s?includeGridData=true&ranges=%s", sheetId, sheetRange)
 		frame, err := infinity.GetFrameForURLSources(ctx, query, infClient, requestHeaders)
 		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(500, err.Error())
 			response.Frames = append(response.Frames, frame)
 			response.Error = fmt.Errorf("error getting data frame from google sheets. %w", err)
 			return response
@@ -116,10 +128,13 @@ func QueryDataQuery(ctx context.Context, query models.Query, infClient infinity.
 			}
 			frame, err := infinity.GetFrameForURLSources(ctx, query, infClient, requestHeaders)
 			if err != nil {
+				logger.Error("error while performing the infinity query", "msg", err.Error())
 				if frame != nil {
 					frame, _ = infinity.WrapMetaForRemoteQuery(ctx, frame, err, query)
 					response.Frames = append(response.Frames, frame)
 				}
+				span.RecordError(err)
+				span.SetStatus(500, err.Error())
 				response.Error = fmt.Errorf("error getting data frame. %w", err)
 				return response
 			}
@@ -133,8 +148,11 @@ func QueryDataQuery(ctx context.Context, query models.Query, infClient infinity.
 				response.Frames = append(response.Frames, frame)
 			}
 		case "inline":
-			frame, err := infinity.GetFrameForInlineSources(query)
+			frame, err := infinity.GetFrameForInlineSources(ctx, query)
 			if err != nil {
+				logger.Error("error while performing the infinity inline query", "msg", err.Error())
+				span.RecordError(err)
+				span.SetStatus(500, err.Error())
 				frame, _ := infinity.WrapMetaForInlineQuery(ctx, frame, err, query)
 				response.Frames = append(response.Frames, frame)
 				response.Error = fmt.Errorf("error getting data frame from inline data. %w", err)

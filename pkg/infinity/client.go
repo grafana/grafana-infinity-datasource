@@ -54,7 +54,7 @@ func GetTLSConfigFromSettings(settings models.InfinitySettings) (*tls.Config, er
 	return tlsConfig, nil
 }
 
-func getBaseHTTPClient(settings models.InfinitySettings) *http.Client {
+func getBaseHTTPClient(ctx context.Context, settings models.InfinitySettings) *http.Client {
 	tlsConfig, err := GetTLSConfigFromSettings(settings)
 	if err != nil {
 		return nil
@@ -81,6 +81,8 @@ func getBaseHTTPClient(settings models.InfinitySettings) *http.Client {
 }
 
 func NewClient(ctx context.Context, settings models.InfinitySettings) (client *Client, err error) {
+	_, span := tracing.DefaultTracer().Start(ctx, "NewClient")
+	defer span.End()
 	if settings.AuthenticationMethod == "" {
 		settings.AuthenticationMethod = models.AuthenticationMethodNone
 		if settings.BasicAuthEnabled {
@@ -90,14 +92,15 @@ func NewClient(ctx context.Context, settings models.InfinitySettings) (client *C
 			settings.AuthenticationMethod = models.AuthenticationMethodForwardOauth
 		}
 	}
-	httpClient := getBaseHTTPClient(settings)
+	httpClient := getBaseHTTPClient(ctx, settings)
 	if httpClient == nil {
+		span.RecordError(errors.New("invalid http client"))
 		return nil, errors.New("invalid http client")
 	}
-	httpClient = ApplyDigestAuth(httpClient, settings)
-	httpClient = ApplyOAuthClientCredentials(httpClient, settings)
-	httpClient = ApplyOAuthJWT(httpClient, settings)
-	httpClient = ApplyAWSAuth(httpClient, settings)
+	httpClient = ApplyDigestAuth(ctx, httpClient, settings)
+	httpClient = ApplyOAuthClientCredentials(ctx, httpClient, settings)
+	httpClient = ApplyOAuthJWT(ctx, httpClient, settings)
+	httpClient = ApplyAWSAuth(ctx, httpClient, settings)
 	client = &Client{
 		Settings:   settings,
 		HttpClient: httpClient,
@@ -105,6 +108,8 @@ func NewClient(ctx context.Context, settings models.InfinitySettings) (client *C
 	if settings.AuthenticationMethod == models.AuthenticationMethodAzureBlob {
 		cred, err := azblob.NewSharedKeyCredential(settings.AzureBlobAccountName, settings.AzureBlobAccountKey)
 		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(500, err.Error())
 			return nil, fmt.Errorf("invalid azure blob credentials. %s", err)
 		}
 		clientUrl := "https://%s.blob.core.windows.net/"
@@ -116,9 +121,13 @@ func NewClient(ctx context.Context, settings models.InfinitySettings) (client *C
 		}
 		azClient, err := azblob.NewClientWithSharedKeyCredential(clientUrl, cred, nil)
 		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(500, err.Error())
 			return nil, fmt.Errorf("invalid azure blob client. %s", err)
 		}
 		if azClient == nil {
+			span.RecordError(errors.New("invalid/empty azure blob client"))
+			span.SetStatus(500, "invalid/empty azure blob client")
 			return nil, errors.New("invalid/empty azure blob client")
 		}
 		client.AzureBlobClient = azClient

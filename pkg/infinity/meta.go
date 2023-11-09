@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 )
@@ -35,6 +36,8 @@ func GetDummyFrame(query models.Query) *data.Frame {
 }
 
 func WrapMetaForInlineQuery(ctx context.Context, frame *data.Frame, err error, query models.Query) (*data.Frame, error) {
+	_, span := tracing.DefaultTracer().Start(ctx, "WrapMetaForInlineQuery")
+	defer span.End()
 	if frame == nil {
 		frame = data.NewFrame(query.RefID)
 	}
@@ -46,8 +49,8 @@ func WrapMetaForInlineQuery(ctx context.Context, frame *data.Frame, err error, q
 		ExecutedQueryString: "This feature is not available for this type of query yet",
 		Custom:              customMeta,
 	}
-	frame = ApplyLogMeta(frame, query)
-	frame = ApplyTraceMeta(frame, query)
+	frame = ApplyLogMeta(ctx, frame, query)
+	frame = ApplyTraceMeta(ctx, frame, query)
 	return frame, err
 }
 
@@ -63,12 +66,14 @@ func WrapMetaForRemoteQuery(ctx context.Context, frame *data.Frame, err error, q
 		}
 		frame.Meta = &data.FrameMeta{Custom: customMeta}
 	}
-	frame = ApplyLogMeta(frame, query)
-	frame = ApplyTraceMeta(frame, query)
+	frame = ApplyLogMeta(ctx, frame, query)
+	frame = ApplyTraceMeta(ctx, frame, query)
 	return frame, err
 }
 
-func ApplyLogMeta(frame *data.Frame, query models.Query) *data.Frame {
+func ApplyLogMeta(ctx context.Context, frame *data.Frame, query models.Query) *data.Frame {
+	_, span := tracing.DefaultTracer().Start(ctx, "ApplyLogMeta")
+	defer span.End()
 	if frame == nil {
 		frame = data.NewFrame(query.RefID)
 	}
@@ -95,7 +100,9 @@ func ApplyLogMeta(frame *data.Frame, query models.Query) *data.Frame {
 	return frame
 }
 
-func ApplyTraceMeta(frame *data.Frame, query models.Query) *data.Frame {
+func ApplyTraceMeta(ctx context.Context, frame *data.Frame, query models.Query) *data.Frame {
+	_, span := tracing.DefaultTracer().Start(ctx, "ApplyLogMeta")
+	defer span.End()
 	if frame == nil {
 		frame = data.NewFrame(query.RefID)
 	}

@@ -10,8 +10,10 @@ import (
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/pluginhost"
 )
 
+const pluginID = "yesoreyeram-infinity-datasource"
+
 func main() {
-	if err := backend.SetupTracer("Infinity plugin", tracing.Opts{}); err != nil {
+	if err := backend.SetupTracer(pluginID, tracing.Opts{}); err != nil {
 		backend.Logger.Error("error setting up tracer", "error", err.Error())
 	}
 	if err := datasource.Serve(pluginhost.NewDatasource()); err != nil {

@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/grafana/grafana-aws-sdk/pkg/sigv4"
+	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	dac "github.com/xinsnake/go-http-digest-auth-client"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
@@ -15,7 +16,9 @@ import (
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 )
 
-func ApplyOAuthClientCredentials(httpClient *http.Client, settings models.InfinitySettings) *http.Client {
+func ApplyOAuthClientCredentials(ctx context.Context, httpClient *http.Client, settings models.InfinitySettings) *http.Client {
+	_, span := tracing.DefaultTracer().Start(ctx, "ApplyOAuthClientCredentials")
+	defer span.End()
 	if settings.AuthenticationMethod == models.AuthenticationMethodOAuth && settings.OAuth2Settings.OAuth2Type == models.AuthOAuthTypeClientCredentials {
 		oauthConfig := clientcredentials.Config{
 			ClientID:       settings.OAuth2Settings.ClientID,
@@ -40,7 +43,9 @@ func ApplyOAuthClientCredentials(httpClient *http.Client, settings models.Infini
 	}
 	return httpClient
 }
-func ApplyOAuthJWT(httpClient *http.Client, settings models.InfinitySettings) *http.Client {
+func ApplyOAuthJWT(ctx context.Context, httpClient *http.Client, settings models.InfinitySettings) *http.Client {
+	_, span := tracing.DefaultTracer().Start(ctx, "ApplyOAuthJWT")
+	defer span.End()
 	if settings.AuthenticationMethod == models.AuthenticationMethodOAuth && settings.OAuth2Settings.OAuth2Type == models.AuthOAuthJWT {
 		jwtConfig := jwt.Config{
 			Email:        settings.OAuth2Settings.Email,
@@ -60,16 +65,20 @@ func ApplyOAuthJWT(httpClient *http.Client, settings models.InfinitySettings) *h
 	}
 	return httpClient
 }
-func ApplyDigestAuth(httpClient *http.Client, settings models.InfinitySettings) *http.Client {
+func ApplyDigestAuth(ctx context.Context, httpClient *http.Client, settings models.InfinitySettings) *http.Client {
+	_, span := tracing.DefaultTracer().Start(ctx, "ApplyDigestAuth")
+	defer span.End()
 	if settings.AuthenticationMethod == models.AuthenticationMethodDigestAuth {
 		a := dac.NewTransport(settings.UserName, settings.Password)
 		httpClient.Transport = &a
 	}
 	return httpClient
 }
-func ApplyAWSAuth(httpClient *http.Client, settings models.InfinitySettings) *http.Client {
+func ApplyAWSAuth(ctx context.Context, httpClient *http.Client, settings models.InfinitySettings) *http.Client {
+	ctx, span := tracing.DefaultTracer().Start(ctx, "ApplyAWSAuth")
+	defer span.End()
 	if settings.AuthenticationMethod == models.AuthenticationMethodAWS {
-		tempHttpClient := getBaseHTTPClient(settings)
+		tempHttpClient := getBaseHTTPClient(ctx, settings)
 		authType := settings.AWSSettings.AuthType
 		if authType == "" {
 			authType = models.AWSAuthTypeKeys

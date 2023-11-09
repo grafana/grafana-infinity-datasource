@@ -765,7 +765,7 @@ func TestInlineSources(t *testing.T) {
 			bq := backend.DataQuery{JSON: []byte(queryJSON), TimeRange: tt.timeRange}
 			query, err := models.LoadQuery(context.Background(), bq, backend.PluginContext{})
 			require.Nil(t, err)
-			frame, err := infinity.GetFrameForInlineSources(query)
+			frame, err := infinity.GetFrameForInlineSources(context.TODO(), query)
 			if tt.wantErr != nil {
 				require.NotNil(t, err)
 				assert.Equal(t, tt.wantErr, err)

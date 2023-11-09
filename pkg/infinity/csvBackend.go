@@ -1,13 +1,18 @@
 package infinity
 
 import (
+	"context"
+
+	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 	"github.com/yesoreyeram/grafana-plugins/lib/go/csvframer"
 	"github.com/yesoreyeram/grafana-plugins/lib/go/gframer"
 )
 
-func GetCSVBackendResponse(responseString string, query models.Query) (*data.Frame, error) {
+func GetCSVBackendResponse(ctx context.Context, responseString string, query models.Query) (*data.Frame, error) {
+	_, span := tracing.DefaultTracer().Start(ctx, "GetCSVBackendResponse")
+	defer span.End()
 	frame := GetDummyFrame(query)
 	columns := []gframer.ColumnSelector{}
 	for _, c := range query.Columns {

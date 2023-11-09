@@ -8,12 +8,15 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 	"moul.io/http2curl"
 )
 
 func GetRequest(ctx context.Context, settings models.InfinitySettings, body io.Reader, query models.Query, requestHeaders map[string]string, includeSect bool) (req *http.Request, err error) {
-	url, err := GetQueryURL(settings, query, includeSect)
+	ctx, span := tracing.DefaultTracer().Start(ctx, "GetRequest")
+	defer span.End()
+	url, err := GetQueryURL(ctx, settings, query, includeSect)
 	if err != nil {
 		return nil, err
 	}
@@ -34,7 +37,9 @@ func GetRequest(ctx context.Context, settings models.InfinitySettings, body io.R
 	return req, err
 }
 
-func GetQueryURL(settings models.InfinitySettings, query models.Query, includeSect bool) (string, error) {
+func GetQueryURL(ctx context.Context, settings models.InfinitySettings, query models.Query, includeSect bool) (string, error) {
+	_, span := tracing.DefaultTracer().Start(ctx, "GetQueryURL")
+	defer span.End()
 	urlString := query.URL
 	if !strings.HasPrefix(query.URL, settings.URL) {
 		urlString = settings.URL + urlString

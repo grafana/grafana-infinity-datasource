@@ -1,13 +1,18 @@
 package infinity
 
 import (
+	"context"
+
+	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 	"github.com/yesoreyeram/grafana-plugins/lib/go/jsonframer"
 	"github.com/yesoreyeram/grafana-plugins/lib/go/xmlframer"
 )
 
-func GetXMLBackendResponse(inputString string, query models.Query) (*data.Frame, error) {
+func GetXMLBackendResponse(ctx context.Context, inputString string, query models.Query) (*data.Frame, error) {
+	_, span := tracing.DefaultTracer().Start(ctx, "GetXMLBackendResponse")
+	defer span.End()
 	frame := GetDummyFrame(query)
 	columns := []jsonframer.ColumnSelector{}
 	for _, c := range query.Columns {

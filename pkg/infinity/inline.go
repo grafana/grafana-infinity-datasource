@@ -9,7 +9,7 @@ import (
 	"github.com/yesoreyeram/grafana-plugins/lib/go/jsonframer"
 )
 
-func GetFrameForInlineSources(query models.Query) (*data.Frame, error) {
+func GetFrameForInlineSources(ctx context.Context, query models.Query) (*data.Frame, error) {
 	frame := GetDummyFrame(query)
 	if query.Type == models.QueryTypeGROQ || query.Type == models.QueryTypeUQL {
 		return frame, nil
@@ -19,17 +19,17 @@ func GetFrameForInlineSources(query models.Query) (*data.Frame, error) {
 	}
 	switch query.Type {
 	case models.QueryTypeCSV, models.QueryTypeTSV:
-		frame, err := GetCSVBackendResponse(query.Data, query)
+		frame, err := GetCSVBackendResponse(ctx, query.Data, query)
 		if err != nil {
 			return frame, err
 		}
-		return PostProcessFrame(context.Background(), frame, query)
+		return PostProcessFrame(ctx, frame, query)
 	case models.QueryTypeXML, models.QueryTypeHTML:
-		frame, err := GetXMLBackendResponse(query.Data, query)
+		frame, err := GetXMLBackendResponse(ctx, query.Data, query)
 		if err != nil {
 			return frame, err
 		}
-		return PostProcessFrame(context.Background(), frame, query)
+		return PostProcessFrame(ctx, frame, query)
 	case models.QueryTypeJSON, models.QueryTypeGraphQL:
 		columns := []jsonframer.ColumnSelector{}
 		for _, c := range query.Columns {
@@ -51,7 +51,7 @@ func GetFrameForInlineSources(query models.Query) (*data.Frame, error) {
 		if newFrame != nil {
 			frame.Fields = append(frame.Fields, newFrame.Fields...)
 		}
-		return PostProcessFrame(context.Background(), frame, query)
+		return PostProcessFrame(ctx, frame, query)
 	default:
 		return frame, errors.New("unknown backend query type")
 	}

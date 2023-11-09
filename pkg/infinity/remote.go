@@ -11,8 +11,8 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
-	"github.com/yesoreyeram/grafana-plugins/lib/go/transformations"
 	"github.com/yesoreyeram/grafana-plugins/lib/go/jsonframer"
+	"github.com/yesoreyeram/grafana-plugins/lib/go/transformations"
 )
 
 func GetFrameForURLSources(ctx context.Context, query models.Query, infClient Client, requestHeaders map[string]string) (*data.Frame, error) {
@@ -99,7 +99,7 @@ func GetPaginatedResults(ctx context.Context, query models.Query, infClient Clie
 	if err != nil {
 		return nil, err
 	}
-	return PostProcessFrame(context.Background(), mergedFrame, query)
+	return PostProcessFrame(ctx, mergedFrame, query)
 }
 
 func ApplyPaginationItemToQuery(currentQuery models.Query, fieldType models.PaginationParamType, fieldName string, fieldValue string) models.Query {
@@ -145,6 +145,8 @@ func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, query models.Q
 		duration = 123
 	}
 	if err != nil {
+		span.RecordError(err)
+		span.SetStatus(500, err.Error())
 		frame.Meta.Custom = &CustomMeta{
 			Data:                   urlResponseObject,
 			ResponseCodeFromServer: statusCode,
@@ -161,20 +163,20 @@ func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, query models.Q
 	}
 	if query.Parser == "backend" {
 		if query.Type == models.QueryTypeJSON || query.Type == models.QueryTypeGraphQL {
-			if frame, err = GetJSONBackendResponse(urlResponseObject, query); err != nil {
+			if frame, err = GetJSONBackendResponse(ctx, urlResponseObject, query); err != nil {
 				return frame, cursor, err
 			}
 		}
 		if query.Type == models.QueryTypeCSV || query.Type == models.QueryTypeTSV {
 			if responseString, ok := urlResponseObject.(string); ok {
-				if frame, err = GetCSVBackendResponse(responseString, query); err != nil {
+				if frame, err = GetCSVBackendResponse(ctx, responseString, query); err != nil {
 					return frame, cursor, err
 				}
 			}
 		}
 		if query.Type == models.QueryTypeXML || query.Type == models.QueryTypeHTML {
 			if responseString, ok := urlResponseObject.(string); ok {
-				if frame, err = GetXMLBackendResponse(responseString, query); err != nil {
+				if frame, err = GetXMLBackendResponse(ctx, responseString, query); err != nil {
 					return frame, cursor, err
 				}
 			}

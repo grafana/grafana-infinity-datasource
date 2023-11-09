@@ -11,8 +11,10 @@ import (
 
 // CheckHealth handles health checks sent from Grafana to the plugin.
 func (ds *PluginHost) CheckHealth(ctx context.Context, req *backend.CheckHealthRequest) (*backend.CheckHealthResult, error) {
+	logger := backend.Logger.FromContext(ctx)
 	healthCheckResult, err := CheckHealth(ctx, ds, req)
 	if err != nil {
+		logger.Error("received error while performing health check", "err", err.Error())
 		return &backend.CheckHealthResult{
 			Status:  backend.HealthStatusError,
 			Message: err.Error(),
@@ -22,6 +24,7 @@ func (ds *PluginHost) CheckHealth(ctx context.Context, req *backend.CheckHealthR
 }
 
 func CheckHealth(ctx context.Context, ds *PluginHost, req *backend.CheckHealthRequest) (*backend.CheckHealthResult, error) {
+	logger := backend.Logger.FromContext(ctx)
 	client, err := getInstance(ctx, ds.im, req.PluginContext)
 	if err != nil || client == nil || client.client == nil {
 		return &backend.CheckHealthResult{
@@ -37,7 +40,7 @@ func CheckHealth(ctx context.Context, ds *PluginHost, req *backend.CheckHealthRe
 	if client.client.Settings.OAuth2Settings.OAuth2Type != "" {
 		args = append(args, "OAuth2Type", client.client.Settings.OAuth2Settings.OAuth2Type)
 	}
-	backend.Logger.Info("performing CheckHealth in infinity datasource", args...)
+	logger.Info("performing CheckHealth in infinity datasource", args...)
 	if err = client.client.Settings.Validate(); err != nil {
 		return &backend.CheckHealthResult{
 			Status:  backend.HealthStatusError,
