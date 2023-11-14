@@ -3,14 +3,6 @@ datasources:
   - name: Test
     uid: TestData
     type: testdata
-  - name: Loki
-    uid: loki
-    type: loki
-    url: http://loki:3100
-  - name: Tempo
-    uid: tempo
-    type: tempo
-    url: http://tempo:3200
   - name: Infinity
     uid: Infinity
     type: yesoreyeram-infinity-datasource
@@ -68,3 +60,11 @@ datasources:
       customHealthCheckUrl: 'https://postman-echo.com/basic-auth'
     secureJsonData:
       basicAuthPassword: 'password'
+  - name: Loki
+    uid: loki
+    type: loki
+    url: http://loki:3100
+  - name: Tempo
+    uid: tempo
+    type: tempo
+    url: http://tempo:3200
