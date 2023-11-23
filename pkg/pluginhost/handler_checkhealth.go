@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
-	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 )
 
 // CheckHealth handles health checks sent from Grafana to the plugin.

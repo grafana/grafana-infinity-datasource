@@ -8,9 +8,9 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/grafana/grafana-infinity-datasource/pkg/infinity"
+	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/stretchr/testify/assert"
-	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/infinity"
-	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 )
 
 func TestInfinityClient_GetResults(t *testing.T) {

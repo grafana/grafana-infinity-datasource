@@ -78,7 +78,7 @@ export const URL = ({ query, onChange, onRunQuery, onShowUrlOptions }: { query: 
       <Input
         type="text"
         value={url}
-        placeholder={`https://github.com/yesoreyeram/grafana-infinity-datasource/blob/main/testdata/users.${
+        placeholder={`https://github.com/grafana/grafana-infinity-datasource/blob/main/testdata/users.${
           query.type === 'graphql' || query.type === 'uql' || query.type === 'groq' ? 'json' : query.type
         }`}
         width={84}

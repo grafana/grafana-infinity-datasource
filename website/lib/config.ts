@@ -1,7 +1,7 @@
 export const site_config = {
   title: 'Grafana Infinity Datasource',
   logo: {
-    url: 'https://raw.githubusercontent.com/yesoreyeram/grafana-infinity-datasource/main/src/img/icon.svg',
+    url: 'https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/src/img/icon.svg',
     alt: 'Grafana Infinity Datasource plugin logo',
   },
   mainNav: [
@@ -15,7 +15,7 @@ export const site_config = {
     },
     {
       title: 'GitHub',
-      href: 'https://github.com/yesoreyeram/grafana-infinity-datasource',
+      href: 'https://github.com/grafana/grafana-infinity-datasource',
       external: true,
     },
   ],

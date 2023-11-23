@@ -10,14 +10,14 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/grafana/grafana-infinity-datasource/pkg/infinity"
+	"github.com/grafana/grafana-infinity-datasource/pkg/models"
+	"github.com/grafana/grafana-infinity-datasource/pkg/pluginhost"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/grafana/grafana-plugin-sdk-go/experimental"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/infinity"
-	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
-	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/pluginhost"
 )
 
 func TestAuthentication(t *testing.T) {
@@ -800,7 +800,7 @@ func TestRemoteSources(t *testing.T) {
 				require.NotNil(t, frame)
 				t.Run("should have custom meta data correctly", func(t *testing.T) {
 					require.NotNil(t, frame.Meta.Custom)
-					require.Equal(t, "###############\n## URL\n###############\n\nhttps://raw.githubusercontent.com/yesoreyeram/grafana-infinity-datasource/main/testdata/users.json\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' 'https://raw.githubusercontent.com/yesoreyeram/grafana-infinity-datasource/main/testdata/users.json'", frame.Meta.ExecutedQueryString)
+					require.Equal(t, "###############\n## URL\n###############\n\nhttps://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.json\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' 'https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.json'", frame.Meta.ExecutedQueryString)
 				})
 			},
 		},

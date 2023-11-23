@@ -7,7 +7,7 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend/datasource"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 
-	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/pluginhost"
+	"github.com/grafana/grafana-infinity-datasource/pkg/pluginhost"
 )
 
 const pluginID = "yesoreyeram-infinity-datasource"

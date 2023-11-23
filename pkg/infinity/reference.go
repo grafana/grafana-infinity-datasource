@@ -5,7 +5,7 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
+	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 )
 
 func UpdateQueryWithReferenceData(ctx context.Context, query models.Query, settings models.InfinitySettings) (models.Query, error) {

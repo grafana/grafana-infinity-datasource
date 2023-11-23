@@ -11,7 +11,7 @@
 //              "type": "json",
 //              "format": "",
 //              "source": "url",
-//              "url": "https://raw.githubusercontent.com/yesoreyeram/grafana-infinity-datasource/main/testdata/users.json",
+//              "url": "https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.json",
 //              "url_options": {
 //                  "method": "",
 //                  "params": null,
@@ -20,7 +20,8 @@
 //                  "body_type": "",
 //                  "body_content_type": "",
 //                  "body_form": null,
-//                  "body_graphql_query": ""
+//                  "body_graphql_query": "",
+//                  "body_graphql_variables": ""
 //              },
 //              "data": "",
 //              "parser": "",
@@ -58,7 +59,7 @@
 //          "duration": 123,
 //          "error": ""
 //      },
-//      "executedQueryString": "###############\n## URL\n###############\n\nhttps://raw.githubusercontent.com/yesoreyeram/grafana-infinity-datasource/main/testdata/users.json\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' 'https://raw.githubusercontent.com/yesoreyeram/grafana-infinity-datasource/main/testdata/users.json'"
+//      "executedQueryString": "###############\n## URL\n###############\n\nhttps://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.json\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' 'https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.json'"
 //  }
 //  Name: response
 //  Dimensions: 0 Fields by 0 Rows
@@ -84,7 +85,7 @@
               "type": "json",
               "format": "",
               "source": "url",
-              "url": "https://raw.githubusercontent.com/yesoreyeram/grafana-infinity-datasource/main/testdata/users.json",
+              "url": "https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.json",
               "url_options": {
                 "method": "",
                 "params": null,
@@ -132,7 +133,7 @@
             "duration": 123,
             "error": ""
           },
-          "executedQueryString": "###############\n## URL\n###############\n\nhttps://raw.githubusercontent.com/yesoreyeram/grafana-infinity-datasource/main/testdata/users.json\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' 'https://raw.githubusercontent.com/yesoreyeram/grafana-infinity-datasource/main/testdata/users.json'"
+          "executedQueryString": "###############\n## URL\n###############\n\nhttps://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.json\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' 'https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.json'"
         },
         "fields": []
       },

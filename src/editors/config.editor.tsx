@@ -46,7 +46,7 @@ export const MainEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
           variant="secondary"
           size="md"
           target="_blank"
-          href="https://yesoreyeram.github.io/grafana-infinity-datasource"
+          href="https://grafana.github.io/grafana-infinity-datasource"
           rel="noreferrer"
           style={{ marginInlineEnd: '5px', color: theme.isDark ? '#d9d9d9' : '' }}
         >
@@ -57,7 +57,7 @@ export const MainEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
           variant="secondary"
           size="md"
           target="_blank"
-          href="https://github.com/yesoreyeram/grafana-infinity-datasource"
+          href="https://github.com/grafana/grafana-infinity-datasource"
           rel="noreferrer"
           style={{ marginInlineEnd: '5px', color: theme.isDark ? '#d9d9d9' : '' }}
         >

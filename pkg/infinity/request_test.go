@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/grafana/grafana-infinity-datasource/pkg/infinity"
+	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/infinity"
-	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 )
 
 func Test_getQueryURL(t *testing.T) {
@@ -218,9 +218,9 @@ func TestNormalizeURL(t *testing.T) {
 		u    string
 		want string
 	}{
-		{u: "https://github.com/yesoreyeram/grafana-infinity-datasource/blob/main/testdata/users.csv", want: "https://raw.githubusercontent.com/yesoreyeram/grafana-infinity-datasource/main/testdata/users.csv"},
-		{u: "https://github.com/yesoreyeram/grafana-infinity-datasource/blob/main/testdata/blob/users.csv", want: "https://raw.githubusercontent.com/yesoreyeram/grafana-infinity-datasource/main/testdata/blob/users.csv"},
-		{u: "https://raw.githubusercontent.com/yesoreyeram/grafana-infinity-datasource/main/testdata/users.csv", want: "https://raw.githubusercontent.com/yesoreyeram/grafana-infinity-datasource/main/testdata/users.csv"},
+		{u: "https://github.com/grafana/grafana-infinity-datasource/blob/main/testdata/users.csv", want: "https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.csv"},
+		{u: "https://github.com/grafana/grafana-infinity-datasource/blob/main/testdata/blob/users.csv", want: "https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/blob/users.csv"},
+		{u: "https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.csv", want: "https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.csv"},
 		{u: "https://foo.com/channels/38629/feed.json", want: "https://foo.com/channels/38629/feed.json"},
 		{u: "https://gitlab.com/restcountries/restcountries/-/blob/master/src/main/resources/countriesV3.json", want: "https://gitlab.com/restcountries/restcountries/-/raw/master/src/main/resources/countriesV3.json"},
 		{u: "https://bitbucket.org/yesoreyeram/test_repo/src/master/data/countries.json", want: "https://bitbucket.org/yesoreyeram/test_repo/raw/master/data/countries.json"},

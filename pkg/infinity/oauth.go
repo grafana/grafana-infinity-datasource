@@ -13,7 +13,7 @@ import (
 	"golang.org/x/oauth2/clientcredentials"
 	"golang.org/x/oauth2/jwt"
 
-	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
+	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 )
 
 func ApplyOAuthClientCredentials(ctx context.Context, httpClient *http.Client, settings models.InfinitySettings) *http.Client {

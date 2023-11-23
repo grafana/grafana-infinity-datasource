@@ -1,19 +1,19 @@
 blank_issues_enabled: false
 contact_links:
   - name: General Questions?
-    url: https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/new?category=q-a
+    url: https://github.com/grafana/grafana-infinity-datasource/discussions/new?category=q-a
     about: Use our Q&A Section in our docs to get answers for your questions
   - name: Specific API?
-    url: https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/new?category=specific-apis
-    about: Questions about specific APIs. You may have already answer here https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/categories/specific-apis
+    url: https://github.com/grafana/grafana-infinity-datasource/discussions/new?category=specific-apis
+    about: Questions about specific APIs. You may have already answer here https://github.com/grafana/grafana-infinity-datasource/discussions/categories/specific-apis
   - name: Feature Request?
-    url: https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/new?category=ideas
+    url: https://github.com/grafana/grafana-infinity-datasource/discussions/new?category=ideas
     about: Have an interesting idea to improve the plugin? Or see any killing feature is missing?
   - name: Showcase
-    url: https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/new?category=show-and-tell
+    url: https://github.com/grafana/grafana-infinity-datasource/discussions/new?category=show-and-tell
     about: Have an inspiring use-case? Use our show & tell section to share with the community.
   - name: Docs
-    url: https://yesoreyeram.github.io/grafana-infinity-datasource
+    url: https://grafana.github.io/grafana-infinity-datasource
     about: Docs
   - name: Bug in UQL?
     url: https://github.com/yesoreyeram/uql
