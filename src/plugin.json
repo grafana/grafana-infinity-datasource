@@ -15,8 +15,8 @@
     "updated": "%TODAY%",
     "description": "JSON API, CSV, TSV, XML, GraphQL, HTML, Google Sheets and HTTP/REST API datasource for Grafana. Do infinite things with Grafana. Transform data with UQL/GROQ. Visualize data from many apis including Amazon AWS, Microsoft Azure, Google Cloud / GCP and RSS/ATOM feeds directly. Also support visualizing logs and traces.",
     "author": {
-      "name": "Sriramajeyam Sugumaran",
-      "url": "https://github.com/yesoreyeram"
+      "name": "Grafana Labs",
+      "url": "https://grafana.com"
     },
     "logos": {
       "small": "img/icon.svg",
@@ -71,23 +71,23 @@
     "links": [
       {
         "name": "Docs",
-        "url": "https://yesoreyeram.github.io/grafana-infinity-datasource"
+        "url": "https://grafana.github.io/grafana-infinity-datasource"
       },
       {
         "name": "Github",
-        "url": "https://github.com/yesoreyeram/grafana-infinity-datasource"
+        "url": "https://github.com/grafana/grafana-infinity-datasource"
       },
       {
         "name": "Need Help?",
-        "url": "https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/categories/q-a"
+        "url": "https://github.com/grafana/grafana-infinity-datasource/discussions/categories/q-a"
       },
       {
         "name": "Report Bug",
-        "url": "https://github.com/yesoreyeram/grafana-infinity-datasource/issues/new/choose"
+        "url": "https://github.com/grafana/grafana-infinity-datasource/issues/new/choose"
       },
       {
         "name": "Examples",
-        "url": "https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/categories/show-and-tell"
+        "url": "https://github.com/grafana/grafana-infinity-datasource/discussions/categories/show-and-tell"
       }
     ]
   },

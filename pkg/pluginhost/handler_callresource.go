@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/graphql-go/graphql"
 	"github.com/graphql-go/handler"
-	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 )
 
 func (host *PluginHost) getRouter() *mux.Router {
@@ -72,7 +72,7 @@ func (host *PluginHost) getGraphQLHandler() http.Handler {
 								"url": &graphql.ArgumentConfig{
 									Type:         graphql.String,
 									Description:  "URL to be queried",
-									DefaultValue: "https://github.com/yesoreyeram/grafana-infinity-datasource/blob/main/testdata/users.json",
+									DefaultValue: "https://github.com/grafana/grafana-infinity-datasource/blob/main/testdata/users.json",
 								},
 							},
 							Resolve: func(p graphql.ResolveParams) (any, error) {

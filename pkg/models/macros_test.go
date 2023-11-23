@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
+	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 )
 
 func TestInterPolateCombineValueMacros(t *testing.T) {

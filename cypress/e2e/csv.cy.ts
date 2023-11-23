@@ -10,12 +10,12 @@ const visitExplorePage = (query: Partial<InfinityQuery> = {}) => {
 describe('explore', () => {
   it.skip('should able to run CSV queries correctly', () => {
     login();
-    visitExplorePage({ type: 'csv', url: 'https://github.com/yesoreyeram/grafana-infinity-datasource/blob/main/testdata/users.csv' });
+    visitExplorePage({ type: 'csv', url: 'https://github.com/grafana/grafana-infinity-datasource/blob/main/testdata/users.csv' });
 
     checkDropdownValue('Type', 'CSV');
     checkDropdownValue('Parser', 'Default');
     checkDropdownValue('Source', 'URL');
-    checkInputContent('URL', 'https://github.com/yesoreyeram/grafana-infinity-datasource/blob/main/testdata/users.csv');
+    checkInputContent('URL', 'https://github.com/grafana/grafana-infinity-datasource/blob/main/testdata/users.csv');
     checkDropdownValue('Format', 'Table');
     runExploreQuery();
     checkExploreTableContent(['Leanne Graham'].join(''));

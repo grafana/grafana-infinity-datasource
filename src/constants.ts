@@ -6,7 +6,7 @@ export const DefaultInfinityQuery: InfinityQuery = {
   type: 'json',
   source: 'url',
   format: 'table',
-  url: 'https://github.com/yesoreyeram/grafana-infinity-datasource/blob/main/testdata/users.json',
+  url: 'https://github.com/grafana/grafana-infinity-datasource/blob/main/testdata/users.json',
   url_options: { method: 'GET', data: '' },
   root_selector: '',
   columns: [],

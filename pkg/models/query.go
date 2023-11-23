@@ -199,19 +199,19 @@ func ApplyDefaultsToQuery(ctx context.Context, query Query) Query {
 		query.Data = "[]"
 	}
 	if (query.Type == QueryTypeJSON || query.Type == QueryTypeGraphQL || query.Type == QueryTypeUQL || query.Type == QueryTypeGROQ) && query.Source == "url" && query.URL == "" {
-		query.URL = "https://raw.githubusercontent.com/yesoreyeram/grafana-infinity-datasource/main/testdata/users.json"
+		query.URL = "https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.json"
 	}
 	if query.Type == QueryTypeCSV && query.Source == "url" && query.URL == "" {
-		query.URL = "https://raw.githubusercontent.com/yesoreyeram/grafana-infinity-datasource/main/testdata/users.csv"
+		query.URL = "https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.csv"
 	}
 	if query.Type == QueryTypeTSV && query.Source == "url" && query.URL == "" {
-		query.URL = "https://raw.githubusercontent.com/yesoreyeram/grafana-infinity-datasource/main/testdata/users.tsv"
+		query.URL = "https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.tsv"
 	}
 	if query.Type == QueryTypeXML && query.Source == "url" && query.URL == "" {
-		query.URL = "https://raw.githubusercontent.com/yesoreyeram/grafana-infinity-datasource/main/testdata/users.xml"
+		query.URL = "https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.xml"
 	}
 	if query.Type == QueryTypeHTML && query.Source == "url" && query.URL == "" {
-		query.URL = "https://raw.githubusercontent.com/yesoreyeram/grafana-infinity-datasource/main/testdata/users.html"
+		query.URL = "https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.html"
 	}
 	if query.Source == "url" && strings.ToUpper(query.URLOptions.Method) == "POST" {
 		if query.URLOptions.BodyType == "" {

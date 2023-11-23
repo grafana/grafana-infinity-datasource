@@ -52,7 +52,7 @@ export const BasicOptions = (props: {
           fill="outline"
           size="sm"
           style={{ marginTop: '10px', marginRight: '5px' }}
-          href="https://github.com/yesoreyeram/grafana-infinity-datasource"
+          href="https://github.com/grafana/grafana-infinity-datasource"
           target="_blank"
           rel="noreferrer"
         >

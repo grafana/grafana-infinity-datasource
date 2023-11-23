@@ -14,9 +14,9 @@ import (
 	"os"
 	"testing"
 
+	"github.com/grafana/grafana-infinity-datasource/pkg/infinity"
+	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/stretchr/testify/require"
-	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/infinity"
-	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 )
 
 const UPDATE_GOLDEN_DATA = false

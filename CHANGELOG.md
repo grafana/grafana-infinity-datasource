@@ -1,5 +1,9 @@
 # Change Log
 
+## 2.3.0
+
+🎉 Infinity datasource plugin is now officially maintained by Grafana Labs.
+
 ## 2.2.1
 
 ⚙️ **Chore**: Added distributed tracing and contextual logging
@@ -40,7 +44,7 @@
 
 🐛 **OAuth2**: Applied a fix for the UI crash when editing OAuth2 section in the config editor
 
-🐛 **URL normalization**: Fixed a bug where some github URLs were interpolated incorrectly. Fixes [#604](https://github.com/yesoreyeram/grafana-infinity-datasource/issues/604)
+🐛 **URL normalization**: Fixed a bug where some github URLs were interpolated incorrectly. Fixes [#604](https://github.com/grafana/grafana-infinity-datasource/issues/604)
 
 🐛 **Test**: Fixed a bug in tests
 
@@ -54,9 +58,9 @@
 
 ## 2.0.0
 
-🎉 **Pagination**: Added pagination support for json type queries ( backend parser ). Refer [this github discussion](https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/601) for more details
+🎉 **Pagination**: Added pagination support for json type queries ( backend parser ). Refer [this github discussion](https://github.com/grafana/grafana-infinity-datasource/discussions/601) for more details
 
-🎉 **Transformation**: Added support for server side transformations via transformations query type. This version supports transformations such as `limit`, `filterExpression`, `computedColumn` and `summarize`. Refer [this github discussion](https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/614) for more details
+🎉 **Transformation**: Added support for server side transformations via transformations query type. This version supports transformations such as `limit`, `filterExpression`, `computedColumn` and `summarize`. Refer [this github discussion](https://github.com/grafana/grafana-infinity-datasource/discussions/614) for more details
 
 🚀 **Health Check**: Added support for custom health check
 
@@ -85,8 +89,8 @@
 - **Variables** Support for custom display values in variables ( using `__text` and `__value` as field names )
 - **Backend parser** Added support for numeric datetime (ex: 20221227 can now be treated as valid datetime with YYYYMMDD format)
 - **Global variables** Support for global time variables `${__from}` and `${__to}` in backend queries
-- **Bug fix** Fixes [a bug](https://github.com/yesoreyeram/grafana-infinity-datasource/issues/509) where variables weren't interpolated with xml/html backend queries.
-- **Bug fix** Fixed [a bug](https://github.com/yesoreyeram/grafana-infinity-datasource/issues/453) where BOM encoded response weren't parsed correctly
+- **Bug fix** Fixes [a bug](https://github.com/grafana/grafana-infinity-datasource/issues/509) where variables weren't interpolated with xml/html backend queries.
+- **Bug fix** Fixed [a bug](https://github.com/grafana/grafana-infinity-datasource/issues/453) where BOM encoded response weren't parsed correctly
 - **Auth** Health check validation updated
 - **Docs** Docs site UI update
 
@@ -125,7 +129,7 @@
 ## [ 1.0.1 ]
 
 - **Macros/Variables** Global variables in queries such as `${__user.name}`,`${__user.email}` and `${__user.login}` interpolated correctly in server side
-- **Bug fix** Fixed a bug where editor crashes when using POST method in variable editor. Fixes [#413](https://github.com/yesoreyeram/grafana-infinity-datasource/issues/413)
+- **Bug fix** Fixed a bug where editor crashes when using POST method in variable editor. Fixes [#413](https://github.com/grafana/grafana-infinity-datasource/issues/413)
 
 ## [ 1.0.0 ]
 
@@ -163,7 +167,7 @@ jsonData:
 
 If the allowed hosts are not configured correctly, you will get `Datasource is missing allowed hosts/URLs. Configure it in the datasource settings page.` error when performing the query.
 
-Learn more about this breaking change in the [github discussion](https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/322)
+Learn more about this breaking change in the [github discussion](https://github.com/grafana/grafana-infinity-datasource/discussions/322)
 
 #### **Content-Type and Accept headers**
 
@@ -243,7 +247,7 @@ Minimum required grafana version for the infinity plugin is now Grafana v8.4.7. 
 - "as-is" data format added for debugging
 - comma in the numbers are now ignored and considered as number
 - variable editor, global query editor bug fixes. Previously, unable to add columns in variable editor
-- fixes [#191](https://github.com/yesoreyeram/grafana-infinity-datasource/issues/191), [#146](https://github.com/yesoreyeram/grafana-infinity-datasource/issues/146), [#210](https://github.com/yesoreyeram/grafana-infinity-datasource/issues/210)
+- fixes [#191](https://github.com/grafana/grafana-infinity-datasource/issues/191), [#146](https://github.com/grafana/grafana-infinity-datasource/issues/146), [#210](https://github.com/grafana/grafana-infinity-datasource/issues/210)
 
 ## [ 0.7.10 ]
 
@@ -292,7 +296,7 @@ Minimum required grafana version for the infinity plugin is now Grafana v8.4.7. 
 
 ## [ 0.7.1 ]
 
-- Fix for [mixed datasource mode not working in 0.7](https://github.com/yesoreyeram/grafana-infinity-datasource/issues/78)
+- Fix for [mixed datasource mode not working in 0.7](https://github.com/grafana/grafana-infinity-datasource/issues/78)
 
 ## [ 0.7.0 ]
 

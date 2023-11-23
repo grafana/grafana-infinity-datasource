@@ -41,7 +41,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   <CommandMenu />
                 </div>
                 <nav className="flex items-center">
-                  <Link href={'https://github.com/yesoreyeram/grafana-infinity-datasource'} target="_blank" className="ml-2">
+                  <Link href={'https://github.com/grafana/grafana-infinity-datasource'} target="_blank" className="ml-2">
                     <Image src="https://www.svgrepo.com/show/439171/github.svg" width={24} height={24} alt="" className="grayscale hover:grayscale-0" />
                     <span className="sr-only">GitHub</span>
                   </Link>
@@ -77,9 +77,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </main>
           <footer className="py-6 border-t-1 border-gray-700 text-center bg-gray-800">
             <div className="container flex flex-col items-center justify-between gap-4 md:flex-row">
-              <p className="text-center text-sm leading-loose text-muted-foreground w-full">
-                Created &amp; Maintained by <b>Sriram</b>
-              </p>
+              <p className="text-center text-sm leading-loose text-muted-foreground w-full">Copyright © 2023 Grafana Labs</p>
             </div>
           </footer>
         </div>

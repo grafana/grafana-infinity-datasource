@@ -176,7 +176,7 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
             Looking for more OAuth support?
             <br />
             <br />
-            <LinkButton href="https://github.com/yesoreyeram/grafana-infinity-datasource/discussions/260" target="_blank" rel="noreferrer" variant="secondary" size="md">
+            <LinkButton href="https://github.com/grafana/grafana-infinity-datasource/discussions/260" target="_blank" rel="noreferrer" variant="secondary" size="md">
               Click here to know more
             </LinkButton>
           </p>

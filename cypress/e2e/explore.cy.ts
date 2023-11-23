@@ -14,7 +14,7 @@ describe('explore', () => {
     checkDropdownValue('Type', 'JSON');
     checkDropdownValue('Parser', 'Default');
     checkDropdownValue('Source', 'URL');
-    checkInputContent('URL', 'https://github.com/yesoreyeram/grafana-infinity-datasource/blob/main/testdata/users.json');
+    checkInputContent('URL', 'https://github.com/grafana/grafana-infinity-datasource/blob/main/testdata/users.json');
     checkDropdownValue('Format', 'Table');
     runExploreQuery();
     checkExploreTableContent(['age', 'country', 'name', 'occupation', 'salary', '38', 'USA', 'Leanne Graham', 'Devops Engineer', '3000'].join(''));

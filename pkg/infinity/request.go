@@ -8,8 +8,8 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
-	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
 	"moul.io/http2curl"
 )
 

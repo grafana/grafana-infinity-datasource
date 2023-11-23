@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/yesoreyeram/grafana-infinity-datasource/pkg/models"
+	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 )
 
 const dummyHeader = "xxxxxxxx"

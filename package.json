@@ -1,6 +1,6 @@
 {
   "name": "grafana-infinity-datasource",
-  "version": "2.2.1",
+  "version": "2.3.0",
   "description": "JSON, CSV, XML, GraphQL, HTML and REST API datasource for Grafana. Do infinite things with Grafana. Transform data with UQL/GROQ. Visualize data from many apis, RSS/ATOM feeds directly",
   "main": "dist/module.js",
   "scripts": {
@@ -24,7 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yesoreyeram/grafana-infinity-datasource.git"
+    "url": "git+https://github.com/grafana/grafana-infinity-datasource.git"
   },
   "keywords": [
     "grafana",
@@ -48,12 +48,12 @@
     "rss",
     "feed"
   ],
-  "author": "Sriramajeyam Sugumaran",
+  "author": "Grafana Labs",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/yesoreyeram/grafana-infinity-datasource/issues"
+    "url": "https://github.com/grafana/grafana-infinity-datasource/issues"
   },
-  "homepage": "https://yesoreyeram.github.io/grafana-infinity-datasource",
+  "homepage": "https://grafana.github.io/grafana-infinity-datasource",
   "dependencies": {
     "@emotion/css": "^11.9.0",
     "@grafana/data": "8.4.7",

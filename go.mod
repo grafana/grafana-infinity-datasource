@@ -1,4 +1,4 @@
-module github.com/yesoreyeram/grafana-infinity-datasource
+module github.com/grafana/grafana-infinity-datasource
 
 go 1.21
 
