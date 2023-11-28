@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.3.1
+
+⚙️ **Chore**: Signed the plugin with `Grafana Labs` signature instead `Community`
+
+⚙️ **Chore**: Built and published via `drone ci` instead `github actions`
+
 ## 2.3.0
 
 🎉 Infinity datasource plugin is now officially maintained by Grafana Labs.
