@@ -2,6 +2,8 @@
 
 ## 2.3.1
 
+⚙️ **Chore**: Updated the backend dependencies
+
 ⚙️ **Chore**: Signed the plugin with `Grafana Labs` signature instead `Community`
 
 ⚙️ **Chore**: Built and published via `drone ci` instead `github actions`
