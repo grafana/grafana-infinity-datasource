@@ -43,7 +43,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
   interpolateVariablesInQueries(queries: InfinityQuery[], scopedVars: ScopedVars) {
     return interpolateVariablesInQueries(queries, scopedVars);
   }
-  metricFindQuery(originalQuery: VariableQuery): Promise<MetricFindValue[]> {
+  metricFindQuery(originalQuery: VariableQuery, options?: { scopedVars: ScopedVars }): Promise<MetricFindValue[]> {
     let query = migrateLegacyQuery(originalQuery);
     query = interpolateVariableQuery(query);
     return new Promise((resolve) => {
@@ -60,7 +60,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
         case 'infinity':
           if (query.infinityQuery) {
             let updatedQuery = migrateQuery(query.infinityQuery);
-            const request = { targets: [interpolateQuery(updatedQuery, {})] } as DataQueryRequest<InfinityQuery>;
+            const request = { targets: [interpolateQuery(updatedQuery, options?.scopedVars || {})] } as DataQueryRequest<InfinityQuery>;
             super
               .query(request)
               .toPromise()
