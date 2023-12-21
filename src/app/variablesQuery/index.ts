@@ -18,6 +18,10 @@ export const getTemplateVariablesFromResult = (res: any): MetricFindValue[] => {
       const keys = Object.keys(item || {}) || [];
       if (keys.length >= 2 && keys.includes('__text') && keys.includes('__value')) {
         return { text: item['__text'], value: item['__value'] };
+      } else if (keys.includes('__text')) {
+        return { text: item['__text'], value: item['__text'] };
+      } else if (keys.includes('__value')) {
+        return { text: item['__value'], value: item['__value'] };
       } else if (keys.length === 2) {
         return { text: item[0], value: item[1] };
       } else {
