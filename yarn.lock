@@ -6721,15 +6721,15 @@ json5@^2.2.2, json5@^2.2.3:
   resolved "https://registry.yarnpkg.com/json5/-/json5-2.2.3.tgz#78cd6f1a19bdc12b73db5ad0c61efd66c1e29283"
   integrity sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==
 
+jsonata@1.8.6:
+  version "1.8.6"
+  resolved "https://registry.yarnpkg.com/jsonata/-/jsonata-1.8.6.tgz#e5f0e6ace870a34bac881a182ca2b31227122791"
+  integrity sha512-ZH2TPYdNP2JecOl/HvrH47Xc+9imibEMQ4YqKy/F/FrM+2a6vfbGxeCX23dB9Fr6uvGwv+ghf1KxWB3iZk09wA==
+
 jsonata@2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/jsonata/-/jsonata-2.0.2.tgz#e41eb01e2aa05ac3cca3d25c04dd1ad3c4e0f723"
   integrity sha512-CpwbpFNjuuukU+tIR6Qw+fhwQQ5iZGbB/Md8CVaU7/b/SI1RlQQVgf4rIEjoiG9/jDB7C45nKKwHXWKHQxvb7w==
-
-jsonata@^1.8.6:
-  version "1.8.6"
-  resolved "https://registry.yarnpkg.com/jsonata/-/jsonata-1.8.6.tgz#e5f0e6ace870a34bac881a182ca2b31227122791"
-  integrity sha512-ZH2TPYdNP2JecOl/HvrH47Xc+9imibEMQ4YqKy/F/FrM+2a6vfbGxeCX23dB9Fr6uvGwv+ghf1KxWB3iZk09wA==
 
 jsonc-parser@^3.2.0:
   version "3.2.0"
@@ -9485,20 +9485,20 @@ uplot@1.6.24:
   resolved "https://registry.yarnpkg.com/uplot/-/uplot-1.6.24.tgz#dfa213fa7da92763261920ea972ed1a5f9f6af12"
   integrity sha512-WpH2BsrFrqxkMu+4XBvc0eCDsRBhzoq9crttYeSI0bfxpzR5YoSVzZXOKFVWcVC7sp/aDXrdDPbDZGCtck2PVg==
 
-uql@0.0.19:
-  version "0.0.19"
-  resolved "https://registry.yarnpkg.com/uql/-/uql-0.0.19.tgz#f2d5f0afd347bb3a4c7095ccc95d052f2a854edd"
-  integrity sha512-hlaca+h7QPJOS8nbWya+QfsXp5EtyGxOElkA/kfWDr20cx4PPmhaDu3uwevAlTiKZ3HRep1YgUjZa6GnHEnWCw==
+uql@0.0.20:
+  version "0.0.20"
+  resolved "https://registry.yarnpkg.com/uql/-/uql-0.0.20.tgz#34bf588d86f7b83485b22568b75ae4e66558a7f2"
+  integrity sha512-f2Y2/V4LwCiYLkA07cBcf2QKVJl328O1J9eDRp9tCKiYItFTrC7BCA/xh/0PoI0I8wQAjgZlxNURLjMt4iYl1w==
   dependencies:
     csv-parse "4.12.0"
     dayjs "^1.10.7"
     fast-xml-parser "^4.0.0-beta.8"
     js-yaml "^4.1.0"
-    jsonata "^1.8.6"
+    jsonata "1.8.6"
     lodash "^4.17.21"
     moo "^0.5.1"
     nearley "^2.20.1"
-    xml2js "0.4.23"
+    xml2js "0.6.2"
 
 uri-js@^4.2.2:
   version "4.4.1"
@@ -9882,15 +9882,7 @@ xml-utils@^1.0.2:
   resolved "https://registry.yarnpkg.com/xml-utils/-/xml-utils-1.7.0.tgz#333ce391d8918f872aaf98d2cf90f9ef9b82bd0f"
   integrity sha512-bWB489+RQQclC7A9OW8e5BzbT8Tu//jtAOvkYwewFr+Q9T9KDGvfzC1lp0pYPEQPEoPQLDkmxkepSC/2gIAZGw==
 
-xml2js@0.4.23:
-  version "0.4.23"
-  resolved "https://registry.yarnpkg.com/xml2js/-/xml2js-0.4.23.tgz#a0c69516752421eb2ac758ee4d4ccf58843eac66"
-  integrity sha512-ySPiMjM0+pLDftHgXY4By0uswI3SPKLDw/i3UXbnO8M/p28zqexCUoPmQFrYD+/1BzhGJSs2i1ERWKJAtiLrug==
-  dependencies:
-    sax ">=0.6.0"
-    xmlbuilder "~11.0.0"
-
-xml2js@^0.6.2:
+xml2js@0.6.2, xml2js@^0.6.2:
   version "0.6.2"
   resolved "https://registry.yarnpkg.com/xml2js/-/xml2js-0.6.2.tgz#dd0b630083aa09c161e25a4d0901e2b2a929b499"
   integrity sha512-T4rieHaC1EXcES0Kxxj4JWgaUQHDk+qwHcYOCFHfiwKz7tOVPLq7Hjq9dM1WCMhylqMEfP7hMcOIChvotiZegA==
