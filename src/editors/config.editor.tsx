@@ -139,7 +139,7 @@ export const MiscEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
   );
 };
 
-const config_sections: Array<{ value: string; label: string; component?: (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => JSX.Element }> = [
+const config_sections: Array<{ value: string; label: string;}> = [
   { value: 'main', label: 'Main' },
   { value: 'auth', label: 'Authentication' },
   { value: 'headers_and_params', label: 'Headers & URL params' },
