@@ -1,23 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`JSON - JSONPath With Columns 1`] = `
-Object {
-  "columns": Array [
-    Object {
+{
+  "columns": [
+    {
       "selector": "name",
       "text": "Name",
       "type": "string",
     },
   ],
   "name": "",
-  "rows": Array [
-    Array [
+  "rows": [
+    [
       "mary",
     ],
-    Array [
+    [
       "joseph",
     ],
-    Array [
+    [
       "john doe",
     ],
   ],
@@ -25,30 +25,30 @@ Object {
 `;
 
 exports[`JSON - JSONPath With multi Columns 1`] = `
-Object {
-  "columns": Array [
-    Object {
+{
+  "columns": [
+    {
       "selector": "name",
       "text": "Name",
       "type": "string",
     },
-    Object {
+    {
       "selector": "age",
       "text": "Age",
       "type": "number",
     },
   ],
   "name": "",
-  "rows": Array [
-    Array [
+  "rows": [
+    [
       "mary",
       22,
     ],
-    Array [
+    [
       "joseph",
       41,
     ],
-    Array [
+    [
       "john doe",
       21,
     ],
@@ -57,26 +57,26 @@ Object {
 `;
 
 exports[`JSON - JSONPath With multi Columns 2`] = `
-Object {
-  "columns": Array [
-    Object {
+{
+  "columns": [
+    {
       "selector": "name",
       "text": "Name",
       "type": "string",
     },
-    Object {
+    {
       "selector": "age",
       "text": "Age",
       "type": "number",
     },
   ],
   "name": "",
-  "rows": Array [
-    Array [
+  "rows": [
+    [
       "mary",
       22,
     ],
-    Array [
+    [
       "joseph",
       41,
     ],
@@ -85,32 +85,32 @@ Object {
 `;
 
 exports[`JSON - JSONPath With multi Columns 3`] = `
-Object {
-  "columns": Array [
-    Object {
+{
+  "columns": [
+    {
       "selector": "name",
       "text": "Name",
       "type": "string",
     },
-    Object {
+    {
       "selector": "age",
       "text": "Age",
       "type": "number",
     },
-    Object {
+    {
       "selector": "gender",
       "text": "Gender",
       "type": "string",
     },
   ],
   "name": "",
-  "rows": Array [
-    Array [
+  "rows": [
+    [
       "mary",
       22,
       "female",
     ],
-    Array [
+    [
       "joseph",
       41,
       "male",
