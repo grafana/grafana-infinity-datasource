@@ -9,7 +9,8 @@
     "test:ci": "jest --passWithNoTests --maxWorkers 4",
     "dev": "grafana-toolkit plugin:dev",
     "watch": "grafana-toolkit plugin:dev --watch",
-    "build": "grafana-toolkit plugin:build"
+    "build": "grafana-toolkit plugin:build",
+    "typecheck": "tsc --noEmit"
   },
   "repository": {
     "type": "git",
