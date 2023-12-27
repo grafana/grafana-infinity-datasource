@@ -1,4 +1,5 @@
 module.exports = {
-  ...require('@grafana/toolkit/src/config/prettier.plugin.config.json'),
-  printWidth: 200,
+  // Prettier configuration provided by Grafana scaffolding
+  ...require('./.config/.prettierrc.js'),
+  printWidth: 200
 };
