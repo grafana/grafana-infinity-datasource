@@ -1,5 +1,5 @@
 import { replaceTokenFromVariable } from './utils';
-import type { SelectableValue } from '@grafana/data/types';
+import type { SelectableValue } from '@grafana/data';
 
 // UnixTimeStamp(30d) --> (current timestamp +30d) in ms
 // UnixTimeStamp(-30d) --> (current timestamp -30d) in ms
