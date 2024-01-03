@@ -21,10 +21,10 @@ labels:
     - oss
     - enterprise
     - grafana cloud
-weight: 302
+weight: 22
 ---
 
-# Visualizing CSV data using Infinity
+# Visualizing CSV data
 
 ![csv example](https://user-images.githubusercontent.com/153843/92571108-9e0ff800-f27a-11ea-9fe9-9f9dcbd7125a.png#center)
 

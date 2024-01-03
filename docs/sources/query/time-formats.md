@@ -21,7 +21,7 @@ labels:
     - oss
     - enterprise
     - grafana cloud
-weight: 603
+weight: 351
 ---
 
 # Time formats

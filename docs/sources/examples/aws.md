@@ -1,8 +1,8 @@
 ---
-slug: '/aws-authentication'
-title: 'AWS Authentication'
-menuTitle: AWS Authentication
-description: AWS Authentication
+slug: '/aws'
+title: 'AWS API'
+menuTitle: AWS API
+description: AWS API
 aliases:
   - infinity
 keywords:
@@ -21,7 +21,7 @@ labels:
     - oss
     - enterprise
     - grafana cloud
-weight: 502
+weight: 8100
 ---
 
 # AWS Authentication

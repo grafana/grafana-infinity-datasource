@@ -21,7 +21,7 @@ labels:
     - oss
     - enterprise
     - grafana cloud
-weight: 651
+weight: 7101
 ---
 
 # Visualizing data in Node Graph format

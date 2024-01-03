@@ -21,10 +21,10 @@ labels:
     - oss
     - enterprise
     - grafana cloud
-weight: 301
+weight: 21
 ---
 
-# Visualizing JSON data using Infinity
+# Visualizing JSON data
 
 ![Sample JSON Query in Infinity datasource](https://user-images.githubusercontent.com/153843/189874914-6b49d3ec-2030-46ea-b14e-fdd48628345e.png#center)
 

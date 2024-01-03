@@ -1,8 +1,8 @@
 ---
-slug: '/docs/series'
-title: 'Series'
-menuTitle: Series
-description: Series
+slug: '/series'
+title: 'Mock Series'
+menuTitle: Mock Series
+description: Creating Mock time series data using Infinity
 aliases:
   - infinity
 keywords:
@@ -21,10 +21,10 @@ labels:
     - oss
     - enterprise
     - grafana cloud
-weight: 705
+weight: 7900
 ---
 
-# Mock/Simulating timeseries data
+# Creating Mock time series data using Infinity
 
 This **Expression** query type helps you to simulate/mock the timeseries data
 

@@ -21,7 +21,7 @@ labels:
     - oss
     - enterprise
     - grafana cloud
-weight: 604
+weight: 350
 ---
 
 # Macros

@@ -21,7 +21,7 @@ labels:
     - oss
     - enterprise
     - grafana cloud
-weight: 401
+weight: 301
 ---
 
 # Backend Parser

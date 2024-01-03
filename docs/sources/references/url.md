@@ -21,7 +21,7 @@ labels:
     - oss
     - enterprise
     - grafana cloud
-weight: 701
+weight: 7001
 ---
 
 # Configuring URL

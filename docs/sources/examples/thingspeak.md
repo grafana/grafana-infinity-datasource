@@ -19,7 +19,7 @@ labels:
     - oss
     - enterprise
     - grafana cloud
-weight: 8003
+weight: 8001
 ---
 
 # Visualizing data from ThingSpeak REST API

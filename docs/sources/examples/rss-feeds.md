@@ -1,7 +1,7 @@
 ---
 slug: '/aws-status-feeds'
 title: 'AWS Status feeds as Grafana annotations'
-menuTitle: AWS Status feeds
+menuTitle: RSS Status feeds (AWS status)
 description: Visualizing data from AWS Status feeds
 keywords:
   - data source
@@ -19,7 +19,7 @@ labels:
     - oss
     - enterprise
     - grafana cloud
-weight: 8001
+weight: 8003
 ---
 
 # Visualizing data from AWS Status feeds

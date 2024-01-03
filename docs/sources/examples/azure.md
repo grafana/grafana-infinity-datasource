@@ -1,8 +1,8 @@
 ---
-slug: '/azure-authentication'
-title: 'Azure Authentication'
-menuTitle: Azure Authentication
-description: Azure Authentication
+slug: '/azure'
+title: 'Azure API'
+menuTitle: Azure API
+description: Azure API
 aliases:
   - infinity
 keywords:
@@ -21,7 +21,7 @@ labels:
     - oss
     - enterprise
     - grafana cloud
-weight: 503
+weight: 8200
 ---
 
 # Azure Authentication

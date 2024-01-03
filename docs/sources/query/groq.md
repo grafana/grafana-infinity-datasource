@@ -21,7 +21,7 @@ labels:
     - oss
     - enterprise
     - grafana cloud
-weight: 403
+weight: 320
 ---
 
 # GROQ Parser

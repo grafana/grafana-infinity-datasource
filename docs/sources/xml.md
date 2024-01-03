@@ -21,10 +21,10 @@ labels:
     - oss
     - enterprise
     - grafana cloud
-weight: 304
+weight: 24
 ---
 
-# Visualizing XML data using Infinity
+# Visualizing XML data
 
 In the below example, we are going to see how to use xml response in grafana
 

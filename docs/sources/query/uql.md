@@ -21,7 +21,7 @@ labels:
     - oss
     - enterprise
     - grafana cloud
-weight: 402
+weight: 310
 ---
 
 # UQL Parser

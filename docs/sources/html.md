@@ -21,10 +21,10 @@ labels:
     - oss
     - enterprise
     - grafana cloud
-weight: 305
+weight: 25
 ---
 
-# Visualizing HTML data using Infinity
+# Visualizing HTML data
 
 In the below example, we are going to convert the HTML URL `https://grafana.com/about/team/` into grafana datasource.
 

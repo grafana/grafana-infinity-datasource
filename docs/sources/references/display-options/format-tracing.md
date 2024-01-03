@@ -21,7 +21,7 @@ labels:
     - oss
     - enterprise
     - grafana cloud
-weight: 652
+weight: 7102
 ---
 
 # Visualizing data in Tracing format

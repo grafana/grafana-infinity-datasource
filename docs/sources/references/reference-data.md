@@ -21,7 +21,7 @@ labels:
     - oss
     - enterprise
     - grafana cloud
-weight: 702
+weight: 7002
 ---
 
 # Reference data

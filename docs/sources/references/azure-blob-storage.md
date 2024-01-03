@@ -1,8 +1,8 @@
 ---
 slug: '/azure-blob-storage'
-title: 'Azure Blob Storage'
-menuTitle: Azure Blob Storage
-description: Azure Blob Storage
+title: 'Querying Azure Blob Storage'
+menuTitle: Querying Azure Blob Storage
+description: Querying data from Azure Blob Storage
 aliases:
   - infinity
 keywords:
@@ -21,10 +21,10 @@ labels:
     - oss
     - enterprise
     - grafana cloud
-weight: 704
+weight: 7004
 ---
 
-# Azure Blob Storage
+# Querying Azure Blob Storage
 
 > This feature is available only from version 2.1.0
 

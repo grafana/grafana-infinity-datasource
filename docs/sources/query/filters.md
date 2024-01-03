@@ -21,7 +21,7 @@ labels:
     - oss
     - enterprise
     - grafana cloud
-weight: 602
+weight: 360
 ---
 <!-- markdownlint-disable MD033 -->
 

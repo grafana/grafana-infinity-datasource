@@ -21,10 +21,10 @@ labels:
     - oss
     - enterprise
     - grafana cloud
-weight: 303
+weight: 23
 ---
 
-# Visualizing GraphQL data using Infinity
+# Visualizing GraphQL data
 
 With the infinity datasource, you can also scrap data from any GraphQL endpoints. This works exactly same way as JSON api. Instead of using `GET` method used by `JSON` api, this uses `POST` method with a body.
 

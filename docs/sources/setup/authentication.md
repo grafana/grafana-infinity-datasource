@@ -2,7 +2,7 @@
 slug: '/authentication'
 title: 'Authentication'
 menuTitle: Authentication
-description: Authentication
+description: Authentication options of Infinity datasource plugin
 aliases:
   - infinity
 keywords:
@@ -21,7 +21,7 @@ labels:
     - oss
     - enterprise
     - grafana cloud
-weight: 501
+weight: 231
 ---
 
 # Authentication
