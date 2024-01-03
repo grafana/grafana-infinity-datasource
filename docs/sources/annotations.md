@@ -1,11 +1,30 @@
 ---
-slug: '/docs/annotations'
+slug: '/annotations'
 title: 'Annotations'
-previous_page_title: 'Variables'
-previous_page_slug: '/docs/template-variables'
-next_page_title: 'Installation'
-next_page_slug: '/docs/installation'
+menuTitle: Annotations
+description: Annotations
+aliases:
+  - infinity
+keywords:
+  - data source
+  - infinity
+  - json
+  - graphql
+  - csv
+  - tsv
+  - xml
+  - html
+  - api
+  - rest
+labels:
+  products:
+    - oss
+    - enterprise
+    - grafana cloud
+weight: 641
 ---
+
+# Annotations
 
 ![image](https://user-images.githubusercontent.com/153843/122909970-9de67200-d34d-11eb-96d3-2c236d8a7a5d.png#center)
 

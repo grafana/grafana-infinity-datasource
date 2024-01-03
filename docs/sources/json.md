@@ -1,11 +1,30 @@
 ---
-slug: '/docs/json'
+slug: '/json'
 title: 'JSON'
-previous_page_title: 'UQL'
-previous_page_slug: '/docs/uql'
-next_page_title: 'CSV'
-next_page_slug: '/docs/csv'
+menuTitle: JSON
+description: JSON
+aliases:
+  - infinity
+keywords:
+  - data source
+  - infinity
+  - json
+  - graphql
+  - csv
+  - tsv
+  - xml
+  - html
+  - api
+  - rest
+labels:
+  products:
+    - oss
+    - enterprise
+    - grafana cloud
+weight: 301
 ---
+
+# Visualizing JSON data using Infinity
 
 ![Sample JSON Query in Infinity datasource](https://user-images.githubusercontent.com/153843/189874914-6b49d3ec-2030-46ea-b14e-fdd48628345e.png#center)
 

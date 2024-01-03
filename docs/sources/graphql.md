@@ -1,11 +1,30 @@
 ---
-slug: '/docs/graphql'
+slug: '/graphql'
 title: 'GraphQL'
-previous_page_title: 'CSV'
-previous_page_slug: '/docs/csv'
-next_page_title: 'XML'
-next_page_slug: '/docs/xml'
+menuTitle: GraphQL
+description: GraphQL
+aliases:
+  - infinity
+keywords:
+  - data source
+  - infinity
+  - json
+  - graphql
+  - csv
+  - tsv
+  - xml
+  - html
+  - api
+  - rest
+labels:
+  products:
+    - oss
+    - enterprise
+    - grafana cloud
+weight: 303
 ---
+
+# Visualizing GraphQL data using Infinity
 
 With the infinity datasource, you can also scrap data from any GraphQL endpoints. This works exactly same way as JSON api. Instead of using `GET` method used by `JSON` api, this uses `POST` method with a body.
 

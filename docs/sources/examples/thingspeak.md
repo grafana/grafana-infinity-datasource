@@ -1,17 +1,28 @@
 ---
-slug: '/blog/thingspeak'
+slug: '/thingspeak'
 title: 'Thingspeak API'
-date: '2022-01-28'
-tags:
-  - blog
-  - iot
-  - tutorial
-  - example
-  - thingspeak
+menuTitle: Thingspeak API
+description: Visualizing data from ThingSpeak API
+keywords:
+  - data source
+  - infinity
   - json
+  - graphql
   - csv
+  - tsv
   - xml
+  - html
+  - api
+  - rest
+labels:
+  products:
+    - oss
+    - enterprise
+    - grafana cloud
+weight: 8003
 ---
+
+# Visualizing data from ThingSpeak REST API
 
 In this example, we are going to visualize data from ThingSpeak API.
 

@@ -1,11 +1,30 @@
 ---
-slug: '/docs/html'
+slug: '/html'
 title: 'HTML'
-previous_page_title: 'XML'
-previous_page_slug: '/docs/xml'
-next_page_title: 'Variables'
-next_page_slug: '/docs/template-variables'
+menuTitle: HTML
+description: HTML
+aliases:
+  - infinity
+keywords:
+  - data source
+  - infinity
+  - json
+  - graphql
+  - csv
+  - tsv
+  - xml
+  - html
+  - api
+  - rest
+labels:
+  products:
+    - oss
+    - enterprise
+    - grafana cloud
+weight: 305
 ---
+
+# Visualizing HTML data using Infinity
 
 In the below example, we are going to convert the HTML URL `https://grafana.com/about/team/` into grafana datasource.
 
@@ -27,7 +46,7 @@ Example :
 - `.team__title` --> Element with the class `team__title` will be selected
 - `td:nth-child(4)` --> 4th td element within the row context will be selected. This will be useful when you element doesn't have any id or duplicate class names.
 
-### Limitations
+## Limitations
 
 - Only symmetrical data can be scrapped. (Example: `table` elements with `colspan` or `rowspan` will break the scrapping)
 - Only text element is supported. Attribute scraping not available

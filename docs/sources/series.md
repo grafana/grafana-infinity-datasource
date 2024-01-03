@@ -1,11 +1,32 @@
 ---
 slug: '/docs/series'
 title: 'Series'
-previous_page_title: 'CSV'
-previous_page_slug: '/docs/csv'
-next_page_title: 'Global Queries'
-next_page_slug: '/docs/global-queries'
+menuTitle: Series
+description: Series
+aliases:
+  - infinity
+keywords:
+  - data source
+  - infinity
+  - json
+  - graphql
+  - csv
+  - tsv
+  - xml
+  - html
+  - api
+  - rest
+labels:
+  products:
+    - oss
+    - enterprise
+    - grafana cloud
+weight: 705
 ---
+
+# Mock/Simulating timeseries data
+
+This **Expression** query type helps you to simulate/mock the timeseries data
 
 ## Expression
 

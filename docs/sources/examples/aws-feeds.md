@@ -1,15 +1,28 @@
 ---
-slug: '/blog/aws-status-feeds'
+slug: '/aws-status-feeds'
 title: 'AWS Status feeds as Grafana annotations'
-date: '2022-01-28'
-tags:
-  - blog
-  - tutorial
-  - example
-  - aws
+menuTitle: AWS Status feeds
+description: Visualizing data from AWS Status feeds
+keywords:
+  - data source
+  - infinity
+  - json
+  - graphql
+  - csv
+  - tsv
   - xml
-  - rss
+  - html
+  - api
+  - rest
+labels:
+  products:
+    - oss
+    - enterprise
+    - grafana cloud
+weight: 8001
 ---
+
+# Visualizing data from AWS Status feeds
 
 In this example, we are going to see how we can use AWS status feeds as Grafana annotations. This will be useful when you are dealing with any AWS outages. For this, we are going to use the [AWS RSS feed](https://status.aws.amazon.com/rss/all.rss). You can find more feeds at [AWS Status page](https://status.aws.amazon.com/)
 

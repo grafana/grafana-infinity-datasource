@@ -1,11 +1,30 @@
 ---
-slug: '/docs/aws-authentication'
+slug: '/aws-authentication'
 title: 'AWS Authentication'
-previous_page_title: 'Authentication'
-previous_page_slug: '/docs/authentication'
-next_page_title: 'Configuration'
-next_page_slug: '/docs/configuration'
+menuTitle: AWS Authentication
+description: AWS Authentication
+aliases:
+  - infinity
+keywords:
+  - data source
+  - infinity
+  - json
+  - graphql
+  - csv
+  - tsv
+  - xml
+  - html
+  - api
+  - rest
+labels:
+  products:
+    - oss
+    - enterprise
+    - grafana cloud
+weight: 502
 ---
+
+# AWS Authentication
 
 Support for connecting to AWS API is available from version 1.3.0
 

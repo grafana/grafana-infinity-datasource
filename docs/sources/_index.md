@@ -21,7 +21,6 @@ labels:
     - enterprise
     - grafana cloud
 weight: 100
-version: 2.3.1
 ---
 
 # Infinity data source for Grafana

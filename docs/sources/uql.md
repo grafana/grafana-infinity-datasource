@@ -1,11 +1,30 @@
 ---
-slug: '/docs/uql'
-title: 'UQL'
-previous_page_title: 'Configuration'
-previous_page_slug: '/docs/configuration'
-next_page_title: 'JSON'
-next_page_slug: '/docs/json'
+slug: '/uql'
+title: 'UQL Parser'
+menuTitle: UQL Parser
+description: UQL Parser
+aliases:
+  - infinity
+keywords:
+  - data source
+  - infinity
+  - json
+  - graphql
+  - csv
+  - tsv
+  - xml
+  - html
+  - api
+  - rest
+labels:
+  products:
+    - oss
+    - enterprise
+    - grafana cloud
+weight: 402
 ---
+
+# UQL Parser
 
 **UQL** (Unstructured query language) is advance query format in infinity datasource which will consolidate JSON, CSV, XML, GraphQL formats. UQL also provides ability to customize the results.
 
@@ -44,7 +63,7 @@ parse-json
 
 will produce four column table (id, dob, city, full name).
 
-### Basic UQL commands
+## Basic UQL commands
 
 following are the basic UQL commands. All these commands are available in all the version unless specified.
 

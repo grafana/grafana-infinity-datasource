@@ -1,23 +1,42 @@
 ---
-slug: '/docs/installation'
+slug: '/installation'
 title: 'Installation'
-previous_page_title: 'Home'
-previous_page_slug: '/'
-next_page_title: 'Configuration'
-next_page_slug: '/docs/configuration'
+menuTitle: Installation
+description: This document introduces the Infinity data source
+aliases:
+  - infinity
+keywords:
+  - data source
+  - infinity
+  - json
+  - graphql
+  - csv
+  - tsv
+  - xml
+  - html
+  - api
+  - rest
+labels:
+  products:
+    - oss
+    - enterprise
+    - grafana cloud
+weight: 101
 ---
+
+# Installing Infinity data source plugin
 
 There are multiple ways to install this plugin into your grafana instance
 
-### Install from grafana.com
+## Install from grafana.com
 
 Install the plugin from [grafana.com plugins page](https://grafana.com/grafana/plugins/yesoreyeram-infinity-datasource/?tab=installation) using the instructions provided there. With this installation, you will get the latest published version of the plugin.
 
-### Install from github
+## Install from github
 
 Download the required version of release zip file from [github](https://github.com/grafana/grafana-infinity-datasource/releases) and extract into your grafana plugin folder. Then restart Grafana.
 
-### Install using grafana-cli
+## Install using grafana-cli
 
 If you are using grafana-cli, execute the following command to install the latest published version of the plugin
 
@@ -37,7 +56,7 @@ Example:
 grafana-cli --pluginUrl https://github.com/grafana/grafana-infinity-datasource/releases/download/v2.0.0/yesoreyeram-infinity-datasource-2.0.0.zip plugins install yesoreyeram-infinity-datasource
 ```
 
-### Install using helm chart
+## Install using helm chart
 
 If you use [grafana helm chart](https://github.com/grafana/helm-charts/blob/grafana-6.32.12/charts/grafana/values.yaml#L482) to provision grafana, use the following config to install the plugin
 
@@ -60,7 +79,7 @@ plugins:
   - https://github.com/grafana/grafana-infinity-datasource/releases/download/v2.0.0/yesoreyeram-infinity-datasource-2.0.0.zip;yesoreyeram-infinity-datasource
 ```
 
-### Install using docker
+## Install using docker
 
 With docker, you can install the plugin using the following command. This will download the latest published version of the plugin from grafana plugins directory.
 

@@ -1,11 +1,30 @@
 ---
-slug: '/docs/azure-blob-storage'
+slug: '/azure-blob-storage'
 title: 'Azure Blob Storage'
-previous_page_title: 'CSV'
-previous_page_slug: '/docs/csv'
-next_page_title: 'Global Queries'
-next_page_slug: '/docs/global-queries'
+menuTitle: Azure Blob Storage
+description: Azure Blob Storage
+aliases:
+  - infinity
+keywords:
+  - data source
+  - infinity
+  - json
+  - graphql
+  - csv
+  - tsv
+  - xml
+  - html
+  - api
+  - rest
+labels:
+  products:
+    - oss
+    - enterprise
+    - grafana cloud
+weight: 704
 ---
+
+# Azure Blob Storage
 
 > This feature is available only from version 2.1.0
 

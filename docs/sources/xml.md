@@ -1,11 +1,30 @@
 ---
-slug: '/docs/xml'
+slug: '/xml'
 title: 'XML'
-previous_page_title: 'GraphQL'
-previous_page_slug: '/docs/graphql'
-next_page_title: 'HTML'
-next_page_slug: '/docs/html'
+menuTitle: XML
+description: XML
+aliases:
+  - infinity
+keywords:
+  - data source
+  - infinity
+  - json
+  - graphql
+  - csv
+  - tsv
+  - xml
+  - html
+  - api
+  - rest
+labels:
+  products:
+    - oss
+    - enterprise
+    - grafana cloud
+weight: 304
 ---
+
+# Visualizing XML data using Infinity
 
 In the below example, we are going to see how to use xml response in grafana
 
@@ -32,7 +51,7 @@ Column1 Name : Use `name` as the selector for the property `name`
 
 Column2 Age : Use `$.age` as the selector for the attribute `age`
 
-### Example 2
+## Example 2
 
 Consider the below example
 
@@ -54,7 +73,7 @@ Column1 Name : Use `_` as the selector for the property `name`. Here `_` refers 
 
 Column2 Age : Use `$.age` as the selector for the attribute `age`
 
-### Example 3
+## Example 3
 
 Consider the below example
 

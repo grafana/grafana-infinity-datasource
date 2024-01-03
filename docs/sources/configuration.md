@@ -1,11 +1,30 @@
 ---
-slug: '/docs/configuration'
+slug: '/configuration'
 title: 'Configuration'
-previous_page_title: 'Installation'
-previous_page_slug: '/docs/installation'
-next_page_title: 'Authentication'
-next_page_slug: '/docs/authentication'
+menuTitle: Configuration
+description: Configuration of Infinity datasource plugin
+aliases:
+  - infinity
+keywords:
+  - data source
+  - infinity
+  - json
+  - graphql
+  - csv
+  - tsv
+  - xml
+  - html
+  - api
+  - rest
+labels:
+  products:
+    - oss
+    - enterprise
+    - grafana cloud
+weight: 201
 ---
+
+# Configuring Infinity data source plugin
 
 Once the plugin installed, you need to create an instance of the datasource. To create an instance follow the steps
 

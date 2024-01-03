@@ -1,11 +1,30 @@
 ---
-slug: '/docs/tracing'
-title: 'Tracing'
-previous_page_title: 'Variables'
-previous_page_slug: '/docs/template-variables'
-next_page_title: 'Installation'
-next_page_slug: '/docs/installation'
+slug: '/tracing'
+title: 'Tracing format'
+menuTitle: Tracing format
+description: Tracing format
+aliases:
+  - infinity
+keywords:
+  - data source
+  - infinity
+  - json
+  - graphql
+  - csv
+  - tsv
+  - xml
+  - html
+  - api
+  - rest
+labels:
+  products:
+    - oss
+    - enterprise
+    - grafana cloud
+weight: 652
 ---
+
+# Visualizing data in Tracing format
 
 You can visualize your data in the tracing format by configuring the following
 

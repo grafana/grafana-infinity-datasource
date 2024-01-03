@@ -1,11 +1,30 @@
 ---
-slug: '/docs/backend'
+slug: '/backend'
 title: 'Backend Parser'
-previous_page_title: 'UQL'
-previous_page_slug: '/docs/uql'
-next_page_title: 'GROQ'
-next_page_slug: '/docs/groq'
+menuTitle: Backend Parser
+description: Backend Parser
+aliases:
+  - infinity
+keywords:
+  - data source
+  - infinity
+  - json
+  - graphql
+  - csv
+  - tsv
+  - xml
+  - html
+  - api
+  - rest
+labels:
+  products:
+    - oss
+    - enterprise
+    - grafana cloud
+weight: 401
 ---
+
+# Backend Parser
 
 Backend parser for infinity is introduced in version 1.0.0. Setting the parser to backend in your query editor will allow you to use features such as `alerting`, `grafana expressions` ,`recorded queries`, `enterprise query caching` and `public dashboards`.
 

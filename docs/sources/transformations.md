@@ -1,11 +1,30 @@
 ---
 slug: '/docs/transformations'
 title: 'Transformations'
-previous_page_title: 'CSV'
-previous_page_slug: '/docs/csv'
-next_page_title: 'Global Queries'
-next_page_slug: '/docs/global-queries'
+menuTitle: Transformations
+description: Transformations
+aliases:
+  - infinity
+keywords:
+  - data source
+  - infinity
+  - json
+  - graphql
+  - csv
+  - tsv
+  - xml
+  - html
+  - api
+  - rest
+labels:
+  products:
+    - oss
+    - enterprise
+    - grafana cloud
+weight: 706
 ---
+
+# Transformations
 
 Server side transformations are introduced in Infinity 2.0. You can perform basic data manipulation in the server side.
 
@@ -35,7 +54,5 @@ Appends a new column based on expression
 ### Summarize / Group by
 
 Group by results based on aggregation and dimension.
-
-## Notes
 
 > **Note**: All these transformations, are done post processing. ( once server responds with data, infinity backend client manipulates the data. ). If your API supports, such transformations on server side, use those instead of this.

@@ -1,11 +1,30 @@
 ---
-slug: '/docs/authentication'
+slug: '/authentication'
 title: 'Authentication'
-previous_page_title: 'Installation'
-previous_page_slug: '/docs/installation'
-next_page_title: 'Provisioning'
-next_page_slug: '/docs/provisioning'
+menuTitle: Authentication
+description: Authentication
+aliases:
+  - infinity
+keywords:
+  - data source
+  - infinity
+  - json
+  - graphql
+  - csv
+  - tsv
+  - xml
+  - html
+  - api
+  - rest
+labels:
+  products:
+    - oss
+    - enterprise
+    - grafana cloud
+weight: 501
 ---
+
+# Authentication
 
 Infinity datasource supports following authentication methods
 

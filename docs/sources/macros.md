@@ -1,17 +1,36 @@
 ---
-slug: '/docs/macros'
+slug: '/macros'
 title: 'Macros'
-previous_page_title: 'Variables'
-previous_page_slug: '/docs/template-variables'
-next_page_title: 'Time Formats'
-next_page_slug: '/docs/time-formats'
+menuTitle: Macros
+description: Macros
+aliases:
+  - infinity
+keywords:
+  - data source
+  - infinity
+  - json
+  - graphql
+  - csv
+  - tsv
+  - xml
+  - html
+  - api
+  - rest
+labels:
+  products:
+    - oss
+    - enterprise
+    - grafana cloud
+weight: 604
 ---
+
+# Macros
 
 Macro functions are utility functions that perform operations and yield result based on the arguments provided. You can use macro function in the query URL, Body, Inline data, UQL, GROQ fields.
 
 Following macros are available in this plugin
 
-### Custom Interval macro (`$__customInterval()`)
+## Custom Interval macro (`$__customInterval()`)
 
 Custom interval macro yields a value based on the dashboard time range. You can pass multiple condition and values to this macro. This acts like a If else condition in the programming languages.
 
@@ -34,7 +53,7 @@ More examples are given below
 | 30 days         | `$__customInterval(5m,5 MINUTES,1d,1 DAY,10d,10 days,1d)`                             | 1d                             |
 | 30 days         | `http.://foo.com?d=$__customInterval(5m,5 MINUTES,1d,1 DAY,10d,10 days,1d)&type=test` | http.://foo.com?d=1d&type=test |
 
-### Combine Values macro (`$__combineValues()`)
+## Combine Values macro (`$__combineValues()`)
 
 Combine values macro allows you to combine multiple string with prefix, suffix and in-between value. First parameter to this macro is prefix, Second param is the suffix and the third parameter is in-between value.
 

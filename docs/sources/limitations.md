@@ -1,24 +1,32 @@
 ---
-slug: '/docs/limitations'
-title: 'Limitations'
-previous_page_title: 'JSON'
-previous_page_slug: '/docs/json'
-next_page_title: 'Configuration'
-next_page_slug: '/docs/configuration'
+slug: '/limitations'
+title: 'Known Limitations'
+menuTitle: Known Limitations
+description: Known Limitations
+aliases:
+  - infinity
+keywords:
+  - data source
+  - infinity
+  - json
+  - graphql
+  - csv
+  - tsv
+  - xml
+  - html
+  - api
+  - rest
+labels:
+  products:
+    - oss
+    - enterprise
+    - grafana cloud
+weight: 9001
 ---
+
+# Known Limitations
 
 Infinity plugin have the following known limitations
 
-## Alerting, Public Dashboards, Enterprise Recorded Queries, Enterprise Query Caching support
-
-Backend features such as alerting, public dashboards, recorded queries, enterprise query caching only work from 1.0.0 of the plugin and works only when parser is set to **backend**
-
-- JSON supports all the above from 1.0.0
-- GraphQL supports all the above from 1.1.0
-- CSV supports all the above from 1.1.0
-- TSV supports all the above from 1.1.0
-- XML supports all the above from 1.2.0
-
-## Other limitations
-
-- For list of all known bugs, check [here](https://github.com/grafana/grafana-infinity-datasource/issues)
+* Backend features such as alerting, public dashboards, recorded queries, enterprise query caching only available in **backend** parsing mode
+* For list of all known bugs, check [here](https://github.com/grafana/grafana-infinity-datasource/issues)

@@ -1,17 +1,37 @@
 ---
-slug: '/docs/global-queries'
+slug: '/global-queries'
 title: 'Global Queries / Registered Queries'
-previous_page_title: 'Provisioning'
-previous_page_slug: '/docs/provisioning'
-next_page_title: 'Configuration'
-next_page_slug: '/docs/configuration'
+menuTitle: Global Queries
+description: Global Queries
+aliases:
+  - infinity
+keywords:
+  - data source
+  - infinity
+  - json
+  - graphql
+  - csv
+  - tsv
+  - xml
+  - html
+  - api
+  - rest
+labels:
+  products:
+    - oss
+    - enterprise
+    - grafana cloud
+weight: 703
 ---
+<!-- markdownlint-disable MD028 -->
+
+# Global Queries / Registered Queries
 
 > **DEPRECATED**. From v0.7.8, This feature is deprecated in favour of Grafana panel library.
 
 Working with same queries in multiple dashboards might be hard some times. To change a query, you need to update all the dashboards. So Infinity datasource gives an option to register queries globally and then allows to reuse the queries across dashboards.
 
-### Creating a global query
+## Creating a global query
 
 To register a query, in the datasource instance settings perform the following actions
 
@@ -24,13 +44,13 @@ To register a query, in the datasource instance settings perform the following a
 
 You can have multiple queries registered per datasource instance.
 
-### Using global queries in the panel
+## Using global queries in the panel
 
 In order to use the registered query in the dashboard, you have to select `Global Query` / `global` as type. Then select the query you needed from the list.
 
 ![image](https://user-images.githubusercontent.com/153843/93780923-ab38c980-fc20-11ea-9d87-078233102905.png#center)
 
-### Provision the global queries
+## Provision the global queries
 
 You can also provision the global queries in the datasource provisioning. Below example provides a sample of inline csv query provisioning
 
@@ -67,7 +87,6 @@ datasources:
     readOnly: true
 ```
 
-#### Note
+> **Note**: When using global queries, queries will be loaded from the datasource setting when loading the dashboard only. If the query changed, dashboards will get reflected only when they are reloaded. (Query refresh won't fetch the latest query).
 
-- When using global queries, queries will be loaded from the datasource setting when loading the dashboard only. If the query changed, dashboards will get reflected only when they are reloaded. (Query refresh won't fetch the latest query)
-- When provisioning, grafana variables / tokens like `${__from}` are not supported yet.
+> **Note**: When provisioning, grafana variables / tokens like `${__from}` are not supported yet.

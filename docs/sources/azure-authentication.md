@@ -1,11 +1,30 @@
 ---
-slug: '/docs/azure-authentication'
+slug: '/azure-authentication'
 title: 'Azure Authentication'
-previous_page_title: 'Authentication'
-previous_page_slug: '/docs/authentication'
-next_page_title: 'Configuration'
-next_page_slug: '/docs/configuration'
+menuTitle: Azure Authentication
+description: Azure Authentication
+aliases:
+  - infinity
+keywords:
+  - data source
+  - infinity
+  - json
+  - graphql
+  - csv
+  - tsv
+  - xml
+  - html
+  - api
+  - rest
+labels:
+  products:
+    - oss
+    - enterprise
+    - grafana cloud
+weight: 503
 ---
+
+# Azure Authentication
 
 Here are the detailed steps on how to connect Microsoft Azure APIs
 

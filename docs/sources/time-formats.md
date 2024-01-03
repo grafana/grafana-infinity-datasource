@@ -1,13 +1,30 @@
 ---
-slug: '/docs/time-formats'
+slug: '/time-formats'
 title: 'Time formats'
-previous_page_title: 'Template variables'
-previous_page_slug: '/docs/template-variables'
-next_page_title: 'Configuration'
-next_page_slug: '/docs/configuration'
+menuTitle: Time formats
+description: Time formats
+aliases:
+  - infinity
+keywords:
+  - data source
+  - infinity
+  - json
+  - graphql
+  - csv
+  - tsv
+  - xml
+  - html
+  - api
+  - rest
+labels:
+  products:
+    - oss
+    - enterprise
+    - grafana cloud
+weight: 603
 ---
 
-## Time formats
+# Time formats
 
 Timestamp fields should be one of the standard javascript date format as specified [here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/Date).
 

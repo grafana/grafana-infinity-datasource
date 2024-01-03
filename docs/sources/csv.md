@@ -1,11 +1,30 @@
 ---
-slug: '/docs/csv'
+slug: '/csv'
 title: 'CSV'
-previous_page_title: 'JSON'
-previous_page_slug: '/docs/json'
-next_page_title: 'GraphQL'
-next_page_slug: '/docs/graphql'
+menuTitle: CSV
+description: CSV
+aliases:
+  - infinity
+keywords:
+  - data source
+  - infinity
+  - json
+  - graphql
+  - csv
+  - tsv
+  - xml
+  - html
+  - api
+  - rest
+labels:
+  products:
+    - oss
+    - enterprise
+    - grafana cloud
+weight: 302
 ---
+
+# Visualizing CSV data using Infinity
 
 ![csv example](https://user-images.githubusercontent.com/153843/92571108-9e0ff800-f27a-11ea-9fe9-9f9dcbd7125a.png#center)
 

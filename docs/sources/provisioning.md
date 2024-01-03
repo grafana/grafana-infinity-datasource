@@ -1,15 +1,34 @@
 ---
-slug: '/docs/provisioning'
+slug: '/provisioning'
 title: 'Provisioning'
-previous_page_title: 'Configuration'
-previous_page_slug: '/docs/configuration'
-next_page_title: 'URL'
-next_page_slug: '/docs/url'
+menuTitle: Provisioning
+description: Provisioning
+aliases:
+  - infinity
+keywords:
+  - data source
+  - infinity
+  - json
+  - graphql
+  - csv
+  - tsv
+  - xml
+  - html
+  - api
+  - rest
+labels:
+  products:
+    - oss
+    - enterprise
+    - grafana cloud
+weight: 291
 ---
+
+# Provisioning datasources
 
 If you want to [provision](https://grafana.com/docs/grafana/latest/administration/provisioning/#provisioning-grafana) your datasources via grafana provisioning feature, use the following settings
 
-### Basic Provisioning
+## Basic Provisioning
 
 If you need to provision via file, use the following settings for the basic use cases.
 
@@ -18,7 +37,7 @@ If you need to provision via file, use the following settings for the basic use 
   type: yesoreyeram-infinity-datasource
 ```
 
-### Advanced Provisioning
+## Advanced Provisioning
 
 If you need an advanced version of the datasource, use the following format.
 
@@ -47,7 +66,7 @@ If you need an advanced version of the datasource, use the following format.
 
 For more advanced configuration, refer **Generate provisioning yaml file** section of this document.
 
-### Custom headers
+## Custom headers
 
 If you want to provision custom header, you can use the following syntax
 

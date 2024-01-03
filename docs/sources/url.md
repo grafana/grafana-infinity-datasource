@@ -1,11 +1,30 @@
 ---
-slug: '/docs/url'
+slug: '/url'
 title: 'URL'
-previous_page_title: 'Provisioning'
-previous_page_slug: '/docs/provisioning'
-next_page_title: 'Configuration'
-next_page_slug: '/docs/configuration'
+menuTitle: URL
+description: URL
+aliases:
+  - infinity
+keywords:
+  - data source
+  - infinity
+  - json
+  - graphql
+  - csv
+  - tsv
+  - xml
+  - html
+  - api
+  - rest
+labels:
+  products:
+    - oss
+    - enterprise
+    - grafana cloud
+weight: 701
 ---
+
+# Configuring URL
 
 You can enter any URL in the query URL field. URL should be a valid json / csv / graphql / xml / html endpoint.
 

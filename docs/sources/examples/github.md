@@ -1,14 +1,28 @@
 ---
-slug: '/blog/github'
+slug: '/github'
 title: 'Github GraphQL API'
-date: '2022-01-28'
-tags:
-  - blog
-  - tutorial
-  - example
-  - github
+menuTitle: Github GraphQL API
+description: Visualizing data from Github GraphQL API using Infinity
+keywords:
+  - data source
+  - infinity
+  - json
   - graphql
+  - csv
+  - tsv
+  - xml
+  - html
+  - api
+  - rest
+labels:
+  products:
+    - oss
+    - enterprise
+    - grafana cloud
+weight: 8002
 ---
+
+# Visualizing data from Github GraphQL API
 
 ![image](https://user-images.githubusercontent.com/153843/93846498-1d9abf80-fc9c-11ea-90ed-4c569b088d99.png#center)
 

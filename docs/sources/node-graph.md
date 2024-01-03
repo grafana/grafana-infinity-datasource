@@ -1,11 +1,30 @@
 ---
-slug: '/docs/node-graph'
+slug: '/node-graph'
 title: 'Node Graph'
-previous_page_title: 'JSON'
-previous_page_slug: '/docs/json'
-next_page_title: 'CSV'
-next_page_slug: '/docs/csv'
+menuTitle: Node Graph
+description: Node Graph
+aliases:
+  - infinity
+keywords:
+  - data source
+  - infinity
+  - json
+  - graphql
+  - csv
+  - tsv
+  - xml
+  - html
+  - api
+  - rest
+labels:
+  products:
+    - oss
+    - enterprise
+    - grafana cloud
+weight: 651
 ---
+
+# Visualizing data in Node Graph format
 
 You can generate Node graph panel data with `CSV`, `JSON` or `XML` feature of Infinity data source.
 
