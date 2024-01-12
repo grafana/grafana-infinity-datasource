@@ -6,11 +6,11 @@
 
 🚀 Added support for variables in the backend parser root selector
 
-🐛 Updated the grafana plugin SDK from v0.193.0 to v0.197.0
-
-🐛 Better support for variable handling when variable queries have more than 1 column.
+🐛 Better support for variable handling when variable queries have more than 1 column
 
 🐛 Fixed a bug where variable values were not passed with the nested variable queries
+
+⚙️ Updated the grafana plugin SDK from v0.193.0 to v0.197.0
 
 ⚙️ Plugin build system migrated from `@grafana/toolkit` to `@grafana/create-plugin`
 
