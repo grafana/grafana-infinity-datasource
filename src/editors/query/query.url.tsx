@@ -6,7 +6,7 @@ import { Stack } from './../../components/extended/Stack';
 import { isDataQuery } from './../../app/utils';
 import { KeyValueEditor } from './../../components/KeyValuePairEditor';
 import type { InfinityQuery, InfinityURLOptions, QueryBodyContentType, QueryBodyType } from './../../types';
-import type { SelectableValue } from '@grafana/data/types';
+import type { SelectableValue } from '@grafana/data';
 
 export const URLEditor = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void }) => {
   return isDataQuery(query) && query.source === 'url' ? (

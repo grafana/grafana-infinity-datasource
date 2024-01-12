@@ -1,7 +1,7 @@
 import { interpolateQuery } from './../interpolate';
 import { migrateQuery } from './../migrate';
 import type { GlobalInfinityQuery, InfinityInstanceSettings, InfinityOptions, InfinityQuery } from './../types';
-import type { DataQueryRequest, DataSourceInstanceSettings, ScopedVars } from '@grafana/data/types';
+import type { DataQueryRequest, DataSourceInstanceSettings, ScopedVars } from '@grafana/data';
 
 export const overrideWithGlobalQuery = (t: InfinityQuery, instanceSettings: DataSourceInstanceSettings<InfinityOptions>): InfinityQuery => {
   if (t.type === 'global' && t.global_query_id && instanceSettings.jsonData.global_queries && instanceSettings.jsonData.global_queries.length > 0) {

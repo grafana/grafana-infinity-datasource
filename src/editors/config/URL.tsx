@@ -2,7 +2,7 @@ import { Badge, InlineLabel, Input } from '@grafana/ui';
 import React, { useState } from 'react';
 import { IGNORE_URL } from './../../constants';
 import type { InfinityOptions } from './../../types';
-import type { DataSourcePluginOptionsEditorProps } from '@grafana/data/types';
+import type { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 
 export const URLEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
   const { options, onOptionsChange } = props;

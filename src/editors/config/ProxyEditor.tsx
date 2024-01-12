@@ -1,6 +1,6 @@
 import React from 'react';
 import { InlineLabel, Input, RadioButtonGroup, useTheme2 } from '@grafana/ui';
-import type { DataSourcePluginOptionsEditorProps } from '@grafana/data/types';
+import type { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 import type { InfinityOptions, ProxyType } from './../../types';
 
 type ProxyEditorProps = DataSourcePluginOptionsEditorProps<InfinityOptions>;

@@ -2,7 +2,7 @@ import { InlineFormLabel, LegacyForms, Switch, useTheme } from '@grafana/ui';
 import React from 'react';
 import { SecureTextArea } from './../../components/config/SecureTextArea';
 import type { InfinityOptions, InfinitySecureOptions } from './../../types';
-import type { DataSourcePluginOptionsEditorProps } from '@grafana/data/types';
+import type { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 
 interface TLSConfigEditorProps extends DataSourcePluginOptionsEditorProps<InfinityOptions> {
   hideTile?: boolean;

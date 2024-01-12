@@ -1,5 +1,5 @@
 import { css } from '@emotion/css';
-import { onUpdateDatasourceSecureJsonDataOption } from '@grafana/data';
+import { onUpdateDatasourceSecureJsonDataOption, DataSourcePluginOptionsEditorProps, SelectableValue } from '@grafana/data';
 import { Icon, InlineFormLabel, LegacyForms, RadioButtonGroup, Select, useTheme2 } from '@grafana/ui';
 import React, { useState } from 'react';
 import { AllowedHostsEditor } from './AllowedHosts';
@@ -7,7 +7,6 @@ import { OAuthInputsEditor } from './OAuthInput';
 import { OthersAuthentication } from './OtherAuthProviders';
 import { AWSRegions } from './../../constants';
 import type { APIKeyType, AuthType, InfinityOptions, InfinitySecureOptions } from './../../types';
-import type { DataSourcePluginOptionsEditorProps, SelectableValue } from '@grafana/data/types';
 
 const authTypes: Array<SelectableValue<AuthType | 'others'> & { logo?: string }> = [
   { value: 'none', label: 'No Auth' },

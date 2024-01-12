@@ -1,7 +1,7 @@
 import React from 'react';
 import { InlineFormLabel, InlineSwitch, RadioButtonGroup, Input, Alert } from '@grafana/ui';
 import type { InfinityOptions } from './../../types';
-import type { DataSourcePluginOptionsEditorProps } from '@grafana/data/types';
+import type { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 
 export const OpenAPIEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
   const { options, onOptionsChange } = props;
