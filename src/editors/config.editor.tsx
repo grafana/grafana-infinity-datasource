@@ -46,7 +46,7 @@ export const MainEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
           variant="secondary"
           size="md"
           target="_blank"
-          href="https://grafana.github.io/grafana-infinity-datasource"
+          href="https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource"
           rel="noreferrer"
           style={{ marginInlineEnd: '5px', color: theme.isDark ? '#d9d9d9' : '' }}
         >
@@ -139,7 +139,7 @@ export const MiscEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
   );
 };
 
-const config_sections: Array<{ value: string; label: string;}> = [
+const config_sections: Array<{ value: string; label: string }> = [
   { value: 'main', label: 'Main' },
   { value: 'auth', label: 'Authentication' },
   { value: 'headers_and_params', label: 'Headers & URL params' },

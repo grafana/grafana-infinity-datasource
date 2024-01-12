@@ -13,7 +13,7 @@ contact_links:
     url: https://github.com/grafana/grafana-infinity-datasource/discussions/new?category=show-and-tell
     about: Have an inspiring use-case? Use our show & tell section to share with the community.
   - name: Docs
-    url: https://grafana.github.io/grafana-infinity-datasource
+    url: https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource
     about: Docs
   - name: Bug in UQL?
     url: https://github.com/yesoreyeram/uql

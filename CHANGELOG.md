@@ -1,5 +1,21 @@
 # Change Log
 
+## 2.4.0
+
+🚀 Minimum supported grafana version updated to 9.5.15
+
+🚀 Added support for variables in the backend parser root selector
+
+🐛 Updated the grafana plugin SDK from v0.193.0 to v0.197.0
+
+🐛 Better support for variable handling when variable queries have more than 1 column.
+
+🐛 Fixed a bug where variable values were not passed with the nested variable queries
+
+⚙️ Plugin build system migrated from `@grafana/toolkit` to `@grafana/create-plugin`
+
+⚙️ NodeJS dev dependency updated from Node 16 to Node 18
+
 ## 2.3.1
 
 ⚙️ **Chore**: Updated the backend dependencies
