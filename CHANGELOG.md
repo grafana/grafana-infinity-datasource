@@ -26,7 +26,7 @@
 
 ## 2.3.0
 
-🎉 Infinity datasource plugin is now officially maintained by Grafana Labs.
+🎉 Infinity datasource plugin is now officially maintained by Grafana Labs
 
 ## 2.2.1
 
