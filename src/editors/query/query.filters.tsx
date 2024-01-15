@@ -6,7 +6,7 @@ import { filterOperators } from './../../app/parsers/filter';
 import { isDataQuery } from './../../app/utils';
 import { FilterOperator } from './../../constants';
 import type { InfinityFilter, InfinityQuery } from './../../types';
-import type { SelectableValue } from '@grafana/data/types';
+import type { SelectableValue } from '@grafana/data';
 
 export const TableFilter = (props: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: any }) => {
   const { query, onChange } = props;

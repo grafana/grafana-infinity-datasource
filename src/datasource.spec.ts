@@ -1,7 +1,6 @@
-import { PluginType } from '@grafana/data';
+import { PluginType, DataSourceInstanceSettings } from '@grafana/data';
 import { DataSourceWithBackend } from '@grafana/runtime';
 import { Datasource } from './datasource';
-import type { DataSourceInstanceSettings } from '@grafana/data/types';
 
 jest.mock('@grafana/runtime', () => ({
   ...(jest.requireActual('@grafana/runtime') as unknown as object),
@@ -19,6 +18,7 @@ const DummyDatasource: DataSourceInstanceSettings = {
   name: '',
   access: 'proxy',
   type: 'yesoreyeram-infinity-datasource',
+  readOnly: true,
   meta: {
     id: '',
     name: '',

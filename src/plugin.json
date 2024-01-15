@@ -71,7 +71,7 @@
     "links": [
       {
         "name": "Docs",
-        "url": "https://grafana.github.io/grafana-infinity-datasource"
+        "url": "https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource"
       },
       {
         "name": "Github",
@@ -92,8 +92,8 @@
     ]
   },
   "dependencies": {
-    "grafanaDependency": ">=8.4.7",
-    "grafanaVersion": "8.4.7",
+    "grafanaDependency": ">=9.5.15",
+    "grafanaVersion": "9.5.x",
     "plugins": []
   },
   "includes": [],

@@ -1,12 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`metricFindQuery Collection Collection 1`] = `
-Array [
-  Object {
+[
+  {
     "text": "A",
     "value": "B",
   },
-  Object {
+  {
     "text": "C",
     "value": "D",
   },
@@ -14,8 +14,8 @@ Array [
 `;
 
 exports[`metricFindQuery CollectionLookup CollectionLookup 1`] = `
-Array [
-  Object {
+[
+  {
     "text": "nonprod-server",
     "value": "nonprod-server",
   },
@@ -23,12 +23,12 @@ Array [
 `;
 
 exports[`metricFindQuery CollectionLookup CollectionLookup 2`] = `
-Array [
-  Object {
+[
+  {
     "text": "c",
     "value": "c",
   },
 ]
 `;
 
-exports[`metricFindQuery CollectionLookup CollectionLookup 3`] = `Array []`;
+exports[`metricFindQuery CollectionLookup CollectionLookup 3`] = `[]`;

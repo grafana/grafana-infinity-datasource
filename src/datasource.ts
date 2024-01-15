@@ -1,4 +1,4 @@
-import { LoadingState, toDataFrame } from '@grafana/data';
+import { LoadingState, toDataFrame, DataFrame, DataQueryRequest, DataQueryResponse, ScopedVars, TimeRange } from '@grafana/data';
 import { DataSourceWithBackend } from '@grafana/runtime';
 import { flatten, sample } from 'lodash';
 import { Observable } from 'rxjs';
@@ -14,7 +14,6 @@ import { migrateQuery } from './migrate';
 import { isBackendQuery } from './app/utils';
 import { reportQuery, reportHealthCheck } from './utils/analytics';
 import type { InfinityInstanceSettings, InfinityOptions, InfinityQuery, MetricFindValue, VariableQuery } from './types';
-import type { DataFrame, DataQueryRequest, DataQueryResponse, ScopedVars, TimeRange } from '@grafana/data/types';
 
 export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOptions> {
   constructor(public instanceSettings: InfinityInstanceSettings) {
@@ -43,7 +42,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
   interpolateVariablesInQueries(queries: InfinityQuery[], scopedVars: ScopedVars) {
     return interpolateVariablesInQueries(queries, scopedVars);
   }
-  metricFindQuery(originalQuery: VariableQuery): Promise<MetricFindValue[]> {
+  metricFindQuery(originalQuery: VariableQuery, options?: { scopedVars: ScopedVars }): Promise<MetricFindValue[]> {
     let query = migrateLegacyQuery(originalQuery);
     query = interpolateVariableQuery(query);
     return new Promise((resolve) => {
@@ -60,7 +59,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
         case 'infinity':
           if (query.infinityQuery) {
             let updatedQuery = migrateQuery(query.infinityQuery);
-            const request = { targets: [interpolateQuery(updatedQuery, {})] } as DataQueryRequest<InfinityQuery>;
+            const request = { targets: [interpolateQuery(updatedQuery, options?.scopedVars || {})] } as DataQueryRequest<InfinityQuery>;
             super
               .query(request)
               .toPromise()
@@ -128,9 +127,12 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
     }
     return true;
   }
-  private getResults(options: DataQueryRequest<InfinityQuery>, result: DataQueryResponse): Promise<DataQueryResponse> {
+  private getResults(options: DataQueryRequest<InfinityQuery>, result?: DataQueryResponse): Promise<DataQueryResponse> {
+    if (!result) {
+      return Promise.resolve({ data: [], error: new Error('error getting the results. check grafana logs for more details'), state: LoadingState.Error });
+    }
     if (result && result.error) {
-      return Promise.resolve({ data: result?.data, error: result.error || 'error while getting the results. Refer grafana logs for more details', state: LoadingState.Error });
+      return Promise.resolve({ data: result?.data, error: result.error || new Error('error while getting the results. Refer grafana logs for more details'), state: LoadingState.Error });
     }
     const promises: Array<Promise<DataFrame>> = [];
     if (result && result.data) {

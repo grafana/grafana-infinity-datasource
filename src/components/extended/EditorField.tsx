@@ -33,7 +33,7 @@ export const EditorField: React.FC<EditorFieldProps> = (props) => {
 
   // Null check for backward compatibility
   const childInputId = fieldProps?.htmlFor || ReactUtils?.getChildId(children);
-  const testId = (compType = '') => `infinity-query-field${compType ? '-' + compType : ''}-${(dataTestId || label).replace(/\ /g, '-')}`.toLowerCase();
+  const testId = (compType = '') => `infinity-query-field${compType ? '-' + compType : ''}-${(dataTestId || label).replace(/ /g, '-')}`.toLowerCase();
 
   const labelEl = (
     <>

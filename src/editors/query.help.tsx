@@ -8,7 +8,7 @@ export const HelpLinks = () => {
   return (
     <div>
       <Stack gap={1} alignItems="center">
-        <LinkButton size="sm" variant="primary" href="https://grafana.github.io/grafana-infinity-datasource/" target="_blank" rel="noreferrer">
+        <LinkButton size="sm" variant="primary" href="https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource" target="_blank" rel="noreferrer">
           Plugin Docs
         </LinkButton>
         <LinkButton size="sm" variant="secondary" fill="outline" href="https://www.youtube.com/watch?v=Wmgs1E9Ry-s" target="_blank" rel="noreferrer">
@@ -25,16 +25,16 @@ export const HelpLinks = () => {
         >
           JSON
         </Button>
-        <LinkButton size="sm" variant="secondary" fill="outline" href="https://grafana.github.io/grafana-infinity-datasource/docs/csv" target="_blank" rel="noreferrer">
+        <LinkButton size="sm" variant="secondary" fill="outline" href="https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/csv" target="_blank" rel="noreferrer">
           CSV
         </LinkButton>
-        <LinkButton size="sm" variant="secondary" fill="outline" href="https://grafana.github.io/grafana-infinity-datasource/docs/xml" target="_blank" rel="noreferrer">
+        <LinkButton size="sm" variant="secondary" fill="outline" href="https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/xml" target="_blank" rel="noreferrer">
           XML
         </LinkButton>
-        <LinkButton size="sm" variant="secondary" fill="outline" href="https://grafana.github.io/grafana-infinity-datasource/docs/uql" target="_blank" rel="noreferrer">
+        <LinkButton size="sm" variant="secondary" fill="outline" href="https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/query/uql" target="_blank" rel="noreferrer">
           UQL
         </LinkButton>
-        <LinkButton size="sm" variant="secondary" fill="outline" href="https://grafana.github.io/grafana-infinity-datasource/docs/authentication" target="_blank" rel="noreferrer">
+        <LinkButton size="sm" variant="secondary" fill="outline" href="https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/setup/authentication" target="_blank" rel="noreferrer">
           Authentication
         </LinkButton>
         <LinkButton size="sm" variant="secondary" fill="outline" href="https://github.com/grafana/grafana-infinity-datasource/discussions/categories/show-and-tell" target="_blank" rel="noreferrer">
@@ -194,7 +194,7 @@ export const HelpLinks = () => {
               </table>
             </ul>
             <br />
-            <LinkButton variant="primary" style={{ margin: '10px' }} href="https://grafana.github.io/grafana-infinity-datasource/docs/json" target="_blank" rel="noreferrer">
+            <LinkButton variant="primary" style={{ margin: '10px' }} href="https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/json" target="_blank" rel="noreferrer">
               Need more help?
             </LinkButton>
           </div>

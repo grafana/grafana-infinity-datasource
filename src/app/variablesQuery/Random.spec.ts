@@ -1,5 +1,5 @@
 import { RandomVariable } from './Random';
-import type { SelectableValue } from '@grafana/data/types';
+import type { SelectableValue } from '@grafana/data';
 
 const data: Array<[string, string, Array<SelectableValue<string>>]> = [
   [

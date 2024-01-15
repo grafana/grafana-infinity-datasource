@@ -17,7 +17,7 @@ export const EditorRow: React.FC<EditorRowProps> = ({ label, collapsible, collap
   const styles = useStyles2(getStyles);
   const theme = useTheme2();
   const [show, setShow] = useState(collapsed);
-  const testId = (compType = '') => `infinity-query-row${compType ? '-' + compType : ''}-${(dataTestId || label).replace(/\ /g, '-')}`.toLowerCase();
+  const testId = (compType = '') => `infinity-query-row${compType ? '-' + compType : ''}-${(dataTestId || label).replace(/ /g, '-')}`.toLowerCase();
   return (
     <div className={styles.root} data-testid={testId('wrapper')}>
       {collapsible && (

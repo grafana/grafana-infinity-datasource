@@ -1,27 +1,26 @@
-import { MutableDataFrame, FieldType } from '@grafana/data';
+import { MutableDataFrame, FieldType, DataFrame } from '@grafana/data';
 import { applyUQL } from './UQLProvider';
-import type { DataFrame } from '@grafana/data/types';
 
 describe('UQLProvider', () => {
   it('basic array', async () => {
     const result = await applyUQL(`parse-json | count`, `[{},{}]`, 'table', 'A');
     const expected = { name: 'A', length: 1, fields: [{ name: 'result', type: FieldType.number, values: [2] }] };
-    expect(result).toStrictEqual(new MutableDataFrame(expected));
+    expect(JSON.stringify(result)).toStrictEqual(JSON.stringify(new MutableDataFrame(expected)));
   });
   it('basic string object', async () => {
     const result = await applyUQL(`parse-json`, `["hello","world"]`, 'table', 'A');
     const expected = { name: 'A', length: 1, fields: [{ name: 'result', type: FieldType.string, values: ['hello', 'world'] }] };
-    expect(result).toStrictEqual(new MutableDataFrame(expected));
+    expect(JSON.stringify(result)).toStrictEqual(JSON.stringify(new MutableDataFrame(expected)));
   });
   it('basic object', async () => {
     const result = await applyUQL(`parse-json | project "name"`, `{ "name": "sriramajeyam","score": 12,"languages": ["tamil", "english", "sourashtra"] , "marks":[1,2] }`, 'table', 'A');
-    const expected = { name: 'A', length: 1, fields: [{ name: 'result', type: FieldType.string, values: ['sriramajeyam'] }] };
-    expect(result).toStrictEqual(new MutableDataFrame(expected));
+    const expected = { name: 'result', length: 1, fields: [{ name: 'result', type: FieldType.string, values: ['sriramajeyam'] }] };
+    expect(JSON.stringify(result)).toStrictEqual(JSON.stringify(new MutableDataFrame(expected)));
   });
   it('jsonata', async () => {
     const result = await applyUQL(`parse-json | jsonata "example.value"`, `{"example": [{ "value": 4 }, { "value": 7 }, { "value": 13 }]}`, 'table', 'A');
     const expected = { name: 'A', length: 1, fields: [{ name: 'result', type: FieldType.number, values: [4, 7, 13] }] };
-    expect(result).toStrictEqual(new MutableDataFrame(expected));
+    expect(JSON.stringify(result)).toStrictEqual(JSON.stringify(new MutableDataFrame(expected)));
   });
   it('basic array with project', async () => {
     const result = await applyUQL(

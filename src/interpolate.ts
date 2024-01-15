@@ -70,6 +70,7 @@ export const interpolateQuery = (query: InfinityQuery, scopedVars: ScopedVars): 
       (newQuery.type === 'json' || newQuery.type === 'graphql' || newQuery.type === 'csv' || newQuery.type === 'tsv' || newQuery.type === 'html' || newQuery.type === 'xml') &&
       newQuery.parser === 'backend'
     ) {
+      newQuery.root_selector = replaceVariable(newQuery.root_selector || '', scopedVars);
       newQuery.computed_columns = (newQuery.computed_columns || []).map((c) => {
         return {
           ...c,

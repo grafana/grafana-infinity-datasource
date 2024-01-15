@@ -19,7 +19,7 @@
 </p>
 
 <p align="center">
-    <a href="https://grafana.github.io/grafana-infinity-datasource">
+    <a href="https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource">
       <img src="https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/src/img/icon.svg" alt="Grafana Infinity Datasource" width=140">
     </a>
 </p>
@@ -61,11 +61,11 @@ You can download and install this grafana plugin using various options
 
 ## 🎯 Documentation
 
-For the plugin documentation, visit [plugin documentation website](https://grafana.github.io/grafana-infinity-datasource).
+For the plugin documentation, visit [plugin documentation website](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource).
 
 ## ⚡️ Useful Links
 
-- [Plugin documentation](https://grafana.github.io/grafana-infinity-datasource)
+- [Plugin documentation](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource)
 - [Demo video](https://youtu.be/Wmgs1E9Ry-s)
 
 ## 👍 Contributing
@@ -81,7 +81,7 @@ you can contribute in one of the following ways
 If you want to say **thank you** or/and support active development of `Grafana Infinity Datasource`:
 
 - Add a [GitHub Star](https://github.com/grafana/grafana-infinity-datasource) to the project.
-- Tweet about project [on your Twitter](https://twitter.com/intent/tweet?text=Checkout%20this%20cool%20%23grafana%20datasource%20%40grafanainfinity.%20%0A%0ALiterally,%20get%20your%20data%20from%20anywhere%20into%20%23grafana.%20JSON,%20CSV,%20XML,%20GraphQL,%20OAuth2,%20RSS%20feed,%20%23kubernetes,%20%23azure,%20%23aws,%20%23gcp%20and%20more%20stuff.%0A%0Ahttps%3A//grafana.github.io/grafana-infinity-datasource%0A).
+- Tweet about project [on your Twitter](https://twitter.com/intent/tweet?text=Checkout%20this%20cool%20%23grafana%20datasource%20%40grafanainfinity.%20%0A%0ALiterally,%20get%20your%20data%20from%20anywhere%20into%20%23grafana.%20JSON,%20CSV,%20XML,%20GraphQL,%20OAuth2,%20RSS%20feed,%20%23kubernetes,%20%23azure,%20%23aws,%20%23gcp%20and%20more%20stuff.%0A%0Ahttps%3A//grafana.com/docs/plugins/yesoreyeram-infinity-datasource%0A).
 - Write articles about project on [Dev.to](https://dev.to/), [Medium](https://medium.com/) or personal blog.
 
 ## ⚠️ License

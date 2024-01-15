@@ -1,9 +1,8 @@
-import { MutableDataFrame, toDataFrame, FieldType } from '@grafana/data';
+import { MutableDataFrame, toDataFrame, FieldType, DataFrame } from '@grafana/data';
 import { isArray } from 'lodash';
 import { uql } from 'uql';
 import { toTimeSeriesMany } from './utils';
 import type { InfinityQueryFormat } from './../types';
-import type { DataFrame } from '@grafana/data/types';
 
 export const sendAsDataFrame = (res: unknown, format: InfinityQueryFormat = 'table', refId: string): Promise<DataFrame | DataFrame[]> => {
   return new Promise((resolve, reject) => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Card, InlineFormLabel, Input, TextArea } from '@grafana/ui';
 import type { InfinityOptions, InfinityReferenceData } from '../../types';
-import type { DataSourcePluginOptionsEditorProps } from '@grafana/data/types';
+import type { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 
 export const ReferenceDataEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
   const { options, onOptionsChange } = props;

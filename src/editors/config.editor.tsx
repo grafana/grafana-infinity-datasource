@@ -13,7 +13,7 @@ import { URLEditor } from './config/URL';
 import { OpenAPIEditor } from './config/OpenAPI';
 import { ReferenceDataEditor } from './config/ReferenceData';
 import { CustomHealthCheckEditor } from './config/CustomHealthCheckEditor';
-import type { DataSourcePluginOptionsEditorProps } from '@grafana/data/types';
+import type { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 import type { InfinityOptions } from './../types';
 
 const Collapse = CollapseOriginal as any;
@@ -46,7 +46,7 @@ export const MainEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
           variant="secondary"
           size="md"
           target="_blank"
-          href="https://grafana.github.io/grafana-infinity-datasource"
+          href="https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource"
           rel="noreferrer"
           style={{ marginInlineEnd: '5px', color: theme.isDark ? '#d9d9d9' : '' }}
         >
@@ -139,7 +139,7 @@ export const MiscEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
   );
 };
 
-const config_sections: Array<{ value: string; label: string; component?: (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => JSX.Element }> = [
+const config_sections: Array<{ value: string; label: string }> = [
   { value: 'main', label: 'Main' },
   { value: 'auth', label: 'Authentication' },
   { value: 'headers_and_params', label: 'Headers & URL params' },

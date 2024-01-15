@@ -1,4 +1,4 @@
-import { DataFrameView } from '@grafana/data';
+import { DataFrameView, SelectableValue } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
 import { defaultsDeep, flatten } from 'lodash';
 import { DefaultInfinityQuery } from './../../constants';
@@ -9,7 +9,6 @@ import { JoinVariable } from './Join';
 import { RandomVariable } from './Random';
 import { UnixTimeStampVariable } from './UnixTimeStamp';
 import type { MetricFindValue, VariableQuery, VariableQueryInfinity } from './../../types';
-import type { SelectableValue } from '@grafana/data/types';
 
 export const getTemplateVariablesFromResult = (res: any): MetricFindValue[] => {
   if (isDataFrame(res) && res.fields.length > 0) {
@@ -18,6 +17,10 @@ export const getTemplateVariablesFromResult = (res: any): MetricFindValue[] => {
       const keys = Object.keys(item || {}) || [];
       if (keys.length >= 2 && keys.includes('__text') && keys.includes('__value')) {
         return { text: item['__text'], value: item['__value'] };
+      } else if (keys.includes('__text')) {
+        return { text: item['__text'], value: item['__text'] };
+      } else if (keys.includes('__value')) {
+        return { text: item['__value'], value: item['__value'] };
       } else if (keys.length === 2) {
         return { text: item[0], value: item[1] };
       } else {
