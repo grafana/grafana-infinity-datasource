@@ -32,3 +32,4 @@ work/
 yarn-debug.log*
 yarn-error.log*
 docker/blocks/tempo/tempo-data
+.idea
