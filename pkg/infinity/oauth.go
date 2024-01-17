@@ -8,7 +8,7 @@ import (
 
 	"github.com/grafana/grafana-aws-sdk/pkg/sigv4"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
-	dac "github.com/xinsnake/go-http-digest-auth-client"
+	dac "github.com/yesoreyeram/go-http-digest-auth-client"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
 	"golang.org/x/oauth2/jwt"

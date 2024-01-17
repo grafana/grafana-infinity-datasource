@@ -1,6 +1,6 @@
 module github.com/grafana/grafana-infinity-datasource
 
-go 1.21
+go 1.21.3
 
 require (
 	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.1.0
@@ -10,7 +10,7 @@ require (
 	github.com/graphql-go/graphql v0.8.1
 	github.com/graphql-go/handler v0.2.3
 	github.com/stretchr/testify v1.8.4
-	github.com/xinsnake/go-http-digest-auth-client v0.6.0
+	github.com/yesoreyeram/go-http-digest-auth-client v1.0.0
 	github.com/yesoreyeram/grafana-plugins/lib/go/csvframer v0.0.2
 	github.com/yesoreyeram/grafana-plugins/lib/go/gframer v0.1.0
 	github.com/yesoreyeram/grafana-plugins/lib/go/jsonframer v0.0.5
@@ -157,4 +157,3 @@ require (
 )
 
 // github.com/yesoreyeram/grafana-plugins/lib/go/gframer => /Users/sriram/Documents/grafana/dev/plugins/json/grafana-plugins/
-replace github.com/xinsnake/go-http-digest-auth-client => github.com/yesoreyeram/go-http-digest-auth-client v0.0.0-20220429010539-a10a92469231

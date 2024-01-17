@@ -563,8 +563,8 @@ github.com/urfave/cli v1.22.14/go.mod h1:X0eDS6pD6Exaclxm99NJ3FiCDRED7vIHpx2mDOH
 github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2/go.mod h1:UETIi67q53MR2AWcXfiuqkDkRtnGDLqkBTpCHuJHxtU=
 github.com/xiatechs/jsonata-go v1.8.0 h1:RZxM16WXwcSLvmmgG57zlpGAHuXMp8oLUjrO+wUBtSA=
 github.com/xiatechs/jsonata-go v1.8.0/go.mod h1:qc/5uRtTKE5mil6PncK/ogxFQyhqlI6YnxvdyAz57Xw=
-github.com/yesoreyeram/go-http-digest-auth-client v0.0.0-20220429010539-a10a92469231 h1:2hR8Je8ov/sH5cuQLLFK2YrQs5UoippCzNew8KLwoVc=
-github.com/yesoreyeram/go-http-digest-auth-client v0.0.0-20220429010539-a10a92469231/go.mod h1:Jjv6IBB7SwUdocWlfjMem5kPmdgFnVAS8x3dbo88as8=
+github.com/yesoreyeram/go-http-digest-auth-client v1.0.0 h1:aes7NmMkNMGCVQVH29PBBfPhzz5E81ITib4toEUZNH8=
+github.com/yesoreyeram/go-http-digest-auth-client v1.0.0/go.mod h1:AzfMkaONkEn3RQ4jRXshy0GyZVH82RSsbPmtSqzgEgk=
 github.com/yesoreyeram/grafana-plugins/lib/go/csvframer v0.0.2 h1:bRIge6sn+clMoDhZg0txsupbjNnX9huXsXqSmjuRxpI=
 github.com/yesoreyeram/grafana-plugins/lib/go/csvframer v0.0.2/go.mod h1:pd4+9wxXxXF0EIPXGgHbhDKU+RyrdwQoAamnqb8xcYM=
 github.com/yesoreyeram/grafana-plugins/lib/go/framesql v0.0.1 h1:tuAmHO9KlUn3JB5B6VpvvG58h7QbGGtwVUksu42n+PU=
