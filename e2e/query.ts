@@ -1,7 +1,9 @@
 import { Page, Locator } from '@playwright/test';
 import { PanelEditPage, expect } from '@grafana/plugin-e2e';
 
-export const runQuery = async (page: Page, panelEditPage: PanelEditPage, locator: Locator, query: Record<string, any>) => {
+export const runQuery = async (query: Record<string, any>, options: { page: Page; panelEditPage: PanelEditPage }) => {
+  const { page, panelEditPage } = options;
+  const locator = await panelEditPage.getQueryEditorRow('A');
   if (query.type) {
     const typeDropdown = await locator.locator(`[data-testid='infinity-query-field-wrapper-type'] input`);
     await typeDropdown.clear();
