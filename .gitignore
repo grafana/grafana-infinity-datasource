@@ -32,3 +32,8 @@ work/
 yarn-debug.log*
 yarn-error.log*
 docker/blocks/tempo/tempo-data
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
