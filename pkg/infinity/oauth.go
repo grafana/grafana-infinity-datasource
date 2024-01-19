@@ -8,7 +8,7 @@ import (
 
 	"github.com/grafana/grafana-aws-sdk/pkg/sigv4"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
-	dac "github.com/xinsnake/go-http-digest-auth-client"
+	"github.com/icholy/digest"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
 	"golang.org/x/oauth2/jwt"
@@ -69,7 +69,7 @@ func ApplyDigestAuth(ctx context.Context, httpClient *http.Client, settings mode
 	_, span := tracing.DefaultTracer().Start(ctx, "ApplyDigestAuth")
 	defer span.End()
 	if settings.AuthenticationMethod == models.AuthenticationMethodDigestAuth {
-		a := dac.NewTransport(settings.UserName, settings.Password)
+		a := digest.Transport{Username: settings.UserName, Password: settings.Password, Transport: httpClient.Transport}
 		httpClient.Transport = &a
 	}
 	return httpClient
