@@ -6,7 +6,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI, // eslint-disable-line no-undef
   retries: process.env.CI ? 2 : 0, // eslint-disable-line no-undef
   workers: process.env.CI ? 1 : undefined, // eslint-disable-line no-undef
-  reporter: 'html',
+  reporter: process.env.CI ? [['github'], ['list'], ['html', { open: 'never' }]] : [['list'], ['html', { open: 'never' }]], // eslint-disable-line no-undef
   use: {
     baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
