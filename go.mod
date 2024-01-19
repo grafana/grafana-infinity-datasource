@@ -9,8 +9,8 @@ require (
 	github.com/grafana/grafana-plugin-sdk-go v0.199.0
 	github.com/graphql-go/graphql v0.8.1
 	github.com/graphql-go/handler v0.2.3
+	github.com/icholy/digest v0.1.22
 	github.com/stretchr/testify v1.8.4
-	github.com/yesoreyeram/go-http-digest-auth-client v1.0.0
 	github.com/yesoreyeram/grafana-plugins/lib/go/csvframer v0.0.2
 	github.com/yesoreyeram/grafana-plugins/lib/go/gframer v0.1.0
 	github.com/yesoreyeram/grafana-plugins/lib/go/jsonframer v0.0.5

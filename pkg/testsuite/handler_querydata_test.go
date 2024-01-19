@@ -310,6 +310,62 @@ func TestAuthentication(t *testing.T) {
 			require.Equal(t, map[string]any(map[string]any{"message": "OK"}), metaData.Data)
 		})
 	})
+	t.Run("digest auth", func(t *testing.T) {
+		t.Run("should be ok with correct credentials", func(t *testing.T) {
+			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodDigestAuth,
+				UserName:             "foo",
+				Password:             "bar",
+				AllowedHosts:         []string{"http://httpbin.org/digest-auth"},
+			})
+			require.Nil(t, err)
+			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
+				JSON: []byte(fmt.Sprintf(`{
+					"type": "json",
+					"url":  "%s",
+					"source": "url"
+				}`, "http://httpbin.org/digest-auth/auth/foo/bar/MD5")),
+			}, *client, map[string]string{}, backend.PluginContext{})
+			require.NotNil(t, res)
+			require.Nil(t, res.Error)
+		})
+		t.Run("should fail with incorrect credentials", func(t *testing.T) {
+			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodDigestAuth,
+				UserName:             "foo",
+				Password:             "baz",
+				AllowedHosts:         []string{"http://httpbin.org/digest-auth"},
+			})
+			require.Nil(t, err)
+			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
+				JSON: []byte(fmt.Sprintf(`{
+					"type": "json",
+					"url":  "%s",
+					"source": "url"
+				}`, "http://httpbin.org/digest-auth/auth/foo/bar/MD5")),
+			}, *client, map[string]string{}, backend.PluginContext{})
+			require.NotNil(t, res.Error)
+			require.Equal(t, "error getting data frame. 401 UNAUTHORIZED", res.Error.Error())
+		})
+		t.Run("should fail with incorrect auth method", func(t *testing.T) {
+			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodBasic,
+				UserName:             "foo",
+				Password:             "bar",
+				AllowedHosts:         []string{"http://httpbin.org/digest-auth"},
+			})
+			require.Nil(t, err)
+			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
+				JSON: []byte(fmt.Sprintf(`{
+					"type": "json",
+					"url":  "%s",
+					"source": "url"
+				}`, "http://httpbin.org/digest-auth/auth/foo/bar/MD5")),
+			}, *client, map[string]string{}, backend.PluginContext{})
+			require.NotNil(t, res.Error)
+			require.Equal(t, "error getting data frame. 401 UNAUTHORIZED", res.Error.Error())
+		})
+	})
 }
 
 func TestResponseFormats(t *testing.T) {
