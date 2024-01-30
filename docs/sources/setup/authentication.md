@@ -108,7 +108,7 @@ OAuth 2.0 JWT require the following parameters
 
 ## Azure
 
-If you want to authenticate your API endpoints via Microsoft Azure authentication, refer to [Axure authentication](/docs/plugins/yesoreyeram-infinity-datasource/latest/examples/azure/).
+If you want to authenticate your API endpoints via Microsoft Azure authentication, refer to [Azure authentication](/docs/plugins/yesoreyeram-infinity-datasource/latest/examples/azure/).
 
 ## Azure Blob Storage key
 
