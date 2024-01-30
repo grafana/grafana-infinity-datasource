@@ -1,2 +1,2 @@
 # List of projects to provide to the make-docs script.
-PROJECTS = plugins/yesoreyeram-infinity-datasource
+PROJECTS := plugins/yesoreyeram-infinity-datasource
