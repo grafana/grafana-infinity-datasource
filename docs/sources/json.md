@@ -111,7 +111,7 @@ In the above json, if `$.premium_customers` is the root selector then only "john
 
 ## UQL Parser
 
-If you are looking for more JSON options like group by, order by, JSONata, field manipulation etc, then [UQL](/docs/uql) is the one you need. Following is the simple UQL command to parse
+If you are looking for more JSON options like group by, order by, JSONata, field manipulation etc, then [UQL query](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/query/uql/) is the one you need. Following is the simple UQL command to parse
 
 ```sql
 parse-json
