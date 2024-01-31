@@ -1138,6 +1138,178 @@ func TestQuery(t *testing.T) {
 		resItem := res.Responses["A"]
 		experimental.CheckGoldenJSONResponse(t, "golden", strings.ReplaceAll(t.Name(), "TestQuery/", ""), &resItem, UPDATE_GOLDEN_DATA)
 	})
+	t.Run("html", func(t *testing.T) {
+		sampleHtml := `<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Users</title>
+</head>
+<body>
+	<table class="table table-bordered table-hover table-condensed">
+		<thead>
+			<tr>
+				<th title="Field #1">name</th>
+				<th title="Field #2">age</th>
+				<th title="Field #3">country</th>
+				<th title="Field #4">occupation</th>
+				<th title="Field #5">salary</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Leanne Graham</td>
+				<td align="right">38</td>
+				<td>USA</td>
+				<td>Devops Engineer</td>
+				<td align="right">3000</td>
+			</tr>
+			<tr>
+				<td>Ervin Howell</td>
+				<td align="right">27</td>
+				<td>USA</td>
+				<td>Software Engineer</td>
+				<td align="right">2300</td>
+			</tr>
+			<tr>
+				<td>Clementine Bauch</td>
+				<td align="right">17</td>
+				<td>Canada</td>
+				<td>Student</td>
+				<td align="right"></td>
+			</tr>
+			<tr>
+				<td>Patricia Lebsack</td>
+				<td align="right">42</td>
+				<td>UK</td>
+				<td>Software Engineer</td>
+				<td align="right">2800</td>
+			</tr>
+			<tr>
+				<td>Leanne Bell</td>
+				<td align="right">38</td>
+				<td>USA</td>
+				<td>Senior Software Engineer</td>
+				<td align="right">4000</td>
+			</tr>
+			<tr>
+				<td>Chelsey Dietrich</td>
+				<td align="right">32</td>
+				<td>USA</td>
+				<td>Software Engineer</td>
+				<td align="right">3500</td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>`
+		fmt.Printf(sampleHtml)
+		server := getServerWithStaticResponse(t, "../../testdata/users.html", true)
+		server.Start()
+		defer server.Close()
+		t.Run("default url default", func(t *testing.T) {
+			res, err := host.QueryData(context.Background(), &backend.QueryDataRequest{
+				PluginContext: backend.PluginContext{
+					DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{
+						JSONData:                []byte(`{"is_mock": true}`),
+						DecryptedSecureJSONData: map[string]string{},
+					},
+				},
+				Queries: []backend.DataQuery{{RefID: "A", JSON: []byte(fmt.Sprintf(`{ 
+					"type": "html",
+					"url":  "%s",
+					"source": "url",
+					"root_selector": "tbody tr",
+					"columns": [
+						{
+							"text": "name",
+							"selector": "td:nth-child(1)",
+							"type": "string"
+						},
+						{
+							"text": "age",
+							"selector": "td:nth-child(2)",
+							"type": "number"
+						},
+						{
+							"text": "country",
+							"selector": "td:nth-child(3)",
+							"type": "string"
+						},
+						{
+							"text": "occupation",
+							"selector": "td:nth-child(4)",
+							"type": "string"
+						},
+						{
+							"text": "salary",
+							"selector": "td:nth-child(5)",
+							"type": "number"
+						}
+					]
+				}`, server.URL))}},
+			})
+			require.Nil(t, err)
+			require.NotNil(t, res)
+			resItem := res.Responses["A"]
+			experimental.CheckGoldenJSONResponse(t, "golden", strings.ReplaceAll(t.Name(), "TestQuery/html/", "html_"), &resItem, UPDATE_GOLDEN_DATA)
+		})
+		t.Run("backend url default", func(t *testing.T) {
+			res, err := host.QueryData(context.Background(), &backend.QueryDataRequest{
+				PluginContext: backend.PluginContext{
+					DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{
+						JSONData:                []byte(`{"is_mock": true}`),
+						DecryptedSecureJSONData: map[string]string{},
+					},
+				},
+				Queries: []backend.DataQuery{{RefID: "A", JSON: []byte(fmt.Sprintf(`{ 
+					"type": "html",
+					"url":  "%s",
+					"source": "url",
+					"parser": "backend",
+					"root_selector": "html.body.table.tbody.tr",
+					"columns": [
+						{
+							"selector": "td.0",
+							"text": "name",
+							"timestampFormat": "",
+							"type": "string"
+						},
+						{
+							"selector": "td.1.#content",
+							"text": "age",
+							"timestampFormat": "",
+							"type": "number"
+						},
+						{
+							"selector": "td.2",
+							"text": "country",
+							"timestampFormat": "",
+							"type": "string"
+						},
+						{
+							"selector": "td.3",
+							"text": "occupation",
+							"timestampFormat": "",
+							"type": "string"
+						},
+						{
+							"selector": "td.4.#content",
+							"text": "salary",
+							"timestampFormat": "",
+							"type": "number"
+						}
+					]
+				}`, server.URL))}},
+			})
+			require.Nil(t, err)
+			require.NotNil(t, res)
+			resItem := res.Responses["A"]
+			experimental.CheckGoldenJSONResponse(t, "golden", strings.ReplaceAll(t.Name(), "TestQuery/html/", "html_"), &resItem, UPDATE_GOLDEN_DATA)
+		})
+	})
 	t.Run("scenario azure cost management", func(t *testing.T) {
 		server := getServerWithStaticResponse(t, "./../../testdata/misc/azure-cost-management-daily.json", true)
 		server.Start()
