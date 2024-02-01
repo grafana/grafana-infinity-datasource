@@ -176,7 +176,7 @@ For TSV files, you can choose TSV as query type. This works the same way as abov
 
 ## Looking for more CSV options?
 
-If you are looking for more CSV options like group by, order by, field manipulation etc, then [UQL](/docs/uql) is the one you need. Following is the simple UQL command to parse
+If you are looking for more CSV options like group by, order by, field manipulation etc, then [UQL query](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/query/uql/) is the one you need. Following is the simple UQL command to parse
 
 ```sql
 parse-csv
