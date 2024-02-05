@@ -1138,6 +1138,111 @@ func TestQuery(t *testing.T) {
 		resItem := res.Responses["A"]
 		experimental.CheckGoldenJSONResponse(t, "golden", strings.ReplaceAll(t.Name(), "TestQuery/", ""), &resItem, UPDATE_GOLDEN_DATA)
 	})
+	t.Run("html", func(t *testing.T) {
+		server := getServerWithStaticResponse(t, "../../testdata/users.html", true)
+		server.Start()
+		defer server.Close()
+		t.Run("default url default", func(t *testing.T) {
+			res, err := host.QueryData(context.Background(), &backend.QueryDataRequest{
+				PluginContext: backend.PluginContext{
+					DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{
+						JSONData:                []byte(`{"is_mock": true}`),
+						DecryptedSecureJSONData: map[string]string{},
+					},
+				},
+				Queries: []backend.DataQuery{{RefID: "A", JSON: []byte(fmt.Sprintf(`{ 
+					"type": "html",
+					"url":  "%s",
+					"source": "url",
+					"root_selector": "tbody tr",
+					"columns": [
+						{
+							"text": "name",
+							"selector": "td:nth-child(1)",
+							"type": "string"
+						},
+						{
+							"text": "age",
+							"selector": "td:nth-child(2)",
+							"type": "number"
+						},
+						{
+							"text": "country",
+							"selector": "td:nth-child(3)",
+							"type": "string"
+						},
+						{
+							"text": "occupation",
+							"selector": "td:nth-child(4)",
+							"type": "string"
+						},
+						{
+							"text": "salary",
+							"selector": "td:nth-child(5)",
+							"type": "number"
+						}
+					]
+				}`, server.URL))}},
+			})
+			require.Nil(t, err)
+			require.NotNil(t, res)
+			resItem := res.Responses["A"]
+			experimental.CheckGoldenJSONResponse(t, "golden", strings.ReplaceAll(t.Name(), "TestQuery/html/", "html_"), &resItem, UPDATE_GOLDEN_DATA)
+		})
+		t.Run("backend url default", func(t *testing.T) {
+			res, err := host.QueryData(context.Background(), &backend.QueryDataRequest{
+				PluginContext: backend.PluginContext{
+					DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{
+						JSONData:                []byte(`{"is_mock": true}`),
+						DecryptedSecureJSONData: map[string]string{},
+					},
+				},
+				Queries: []backend.DataQuery{{RefID: "A", JSON: []byte(fmt.Sprintf(`{ 
+					"type": "html",
+					"url":  "%s",
+					"source": "url",
+					"parser": "backend",
+					"root_selector": "html.body.table.tbody.tr",
+					"columns": [
+						{
+							"selector": "td.0",
+							"text": "name",
+							"timestampFormat": "",
+							"type": "string"
+						},
+						{
+							"selector": "td.1.#content",
+							"text": "age",
+							"timestampFormat": "",
+							"type": "number"
+						},
+						{
+							"selector": "td.2",
+							"text": "country",
+							"timestampFormat": "",
+							"type": "string"
+						},
+						{
+							"selector": "td.3",
+							"text": "occupation",
+							"timestampFormat": "",
+							"type": "string"
+						},
+						{
+							"selector": "td.4.#content",
+							"text": "salary",
+							"timestampFormat": "",
+							"type": "number"
+						}
+					]
+				}`, server.URL))}},
+			})
+			require.Nil(t, err)
+			require.NotNil(t, res)
+			resItem := res.Responses["A"]
+			experimental.CheckGoldenJSONResponse(t, "golden", strings.ReplaceAll(t.Name(), "TestQuery/html/", "html_"), &resItem, UPDATE_GOLDEN_DATA)
+		})
+	})
 	t.Run("scenario azure cost management", func(t *testing.T) {
 		server := getServerWithStaticResponse(t, "./../../testdata/misc/azure-cost-management-daily.json", true)
 		server.Start()
