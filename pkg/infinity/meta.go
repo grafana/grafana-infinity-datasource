@@ -2,6 +2,8 @@ package infinity
 
 import (
 	"context"
+	"fmt"
+	"strings"
 	"time"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
@@ -65,6 +67,18 @@ func WrapMetaForRemoteQuery(ctx context.Context, frame *data.Frame, err error, q
 			customMeta.Error = err.Error()
 		}
 		frame.Meta = &data.FrameMeta{Custom: customMeta}
+	}
+	if frame.Meta.Notices == nil {
+		frame.Meta.Notices = []data.Notice{}
+	}
+	for _, h := range query.URLOptions.Headers {
+		if strings.EqualFold(h.Key, headerKeyAuthorization) {
+			frame.Meta.Notices = append(frame.Meta.Notices, data.Notice{
+				Severity: data.NoticeSeverityWarning,
+				Text:     fmt.Sprintf("for security reasons, don't include headers such as %s in the query. Instead, add them in the config where possible", h.Key),
+				Inspect:  data.InspectTypeData,
+			})
+		}
 	}
 	frame = ApplyLogMeta(ctx, frame, query)
 	frame = ApplyTraceMeta(ctx, frame, query)
