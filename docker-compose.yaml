@@ -4,7 +4,8 @@ services:
   grafana:
     container_name: yesoreyeram-infinity-datasource
     platform: linux/amd64
-    image: grafana/grafana-enterprise:${GF_VERSION:-main}
+    # image: grafana/grafana-enterprise:${GF_VERSION:-main}
+    image: grafana/grafana-enterprise:${GF_VERSION:-latest}
     ports:
       - 3000:3000/tcp
     volumes:
