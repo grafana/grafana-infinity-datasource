@@ -67,10 +67,6 @@ func ApplyContentTypeHeader(query models.Query, settings models.InfinitySettings
 
 func ApplyHeadersFromSettings(settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
 	for key, value := range settings.CustomHeaders {
-		if strings.EqualFold(key, "Host") {
-			req.Host = value
-			continue
-		}
 		val := dummyHeader
 		if includeSect {
 			val = value
@@ -87,10 +83,6 @@ func ApplyHeadersFromSettings(settings models.InfinitySettings, req *http.Reques
 
 func ApplyHeadersFromQuery(query models.Query, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
 	for _, header := range query.URLOptions.Headers {
-		if strings.EqualFold(header.Key, "Host") {
-			req.Host = header.Value
-			continue
-		}
 		value := dummyHeader
 		if includeSect {
 			value = replaceSect(header.Value, settings, includeSect)
