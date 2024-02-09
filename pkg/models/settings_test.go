@@ -368,6 +368,10 @@ func TestInfinitySettings_Validate(t *testing.T) {
 			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodBearerToken, BearerToken: "foo"},
 			wantErr:  errors.New("configure allowed hosts in the authentication section"),
 		},
+		{
+			settings: models.InfinitySettings{AllowedHosts: []string{""}},
+			wantErr:  errors.New("invalid/empty entry in the allowed host list"),
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

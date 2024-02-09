@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/textproto"
+	"net/url"
 	"strings"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
@@ -110,6 +111,14 @@ type InfinitySettings struct {
 }
 
 func (s *InfinitySettings) Validate() error {
+	for _, s := range s.AllowedHosts {
+		if strings.TrimSpace(s) == "" {
+			return fmt.Errorf("invalid/empty entry in the allowed host list")
+		}
+		if _, err := url.Parse(s); err != nil {
+			return fmt.Errorf("invalid entry in the allowed host list. entry: %s", s)
+		}
+	}
 	if (s.BasicAuthEnabled || s.AuthenticationMethod == AuthenticationMethodBasic || s.AuthenticationMethod == AuthenticationMethodDigestAuth) && s.Password == "" {
 		return errors.New("invalid or empty password detected")
 	}

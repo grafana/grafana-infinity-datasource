@@ -26,45 +26,25 @@ weight: 7101
 
 # Visualizing data in Node Graph format
 
-You can generate Node graph panel data with `CSV`, `JSON` or `XML` feature of Infinity data source.
+You can visualize your `json`/`csv` data in [Node Graph visualization](https://grafana.com/docs/grafana/latest/panels-visualizations/visualizations/node-graph) using Infinity datasource.
+
+{{< admonition type="tip" >}}
+Live Example of the Node Graph visualisation using CSV data can be found [here](https://play.grafana.org/d/infinity-node-graph/node-graph?orgId=1&editPanel=1) and the same using JSON data can be found [here](https://play.grafana.org/d/infinity-node-graph/node-graph?orgId=1&editPanel=2)
+{{< /admonition >}}
 
 ![image](https://user-images.githubusercontent.com/153843/139112671-dee6a9aa-5165-4526-bc8a-7ce36c45181e.png#center)
 
-From v0.8.0, we have out of the box support for node graph. Prior to v0.8.0, you can use "Table" format to create node graph with limited options.
+In order to visualize your data in Node Graph panel, you need two queries (one for defining nodes and another one for defining edges). You need to explicitly define the format of these queries in the **Format** field of the query (Available formats: Nodes - Node Graph, Edges - Node Graph). Read more about the node graph data structure [here](https://grafana.com/docs/grafana/latest/panels-visualizations/visualizations/node-graph/#data-api)
 
-Irrespective of the version, you need two queries to form a Node graph visualization.
+## Nodes Query
 
-1. First query which lists the nodes. Should have mandatory `id` and `title` field. This also can have additional `arc__*` fields to specify the arcs value for the node.
-2. Second query which list the edges (relations). Should have three mandatory fields namely `id`, `source` and `target`
-
-Read more about the node graph data structure [here](https://grafana.com/docs/grafana/latest/visualizations/node-graph/)
-
-## Node Graph format
-
-From v0.8.0, infinity plugin have dedicated support for node graphs. You need to create two different queries with the format of `nodes` and `edges` for each query.
-
-### Nodes
-
-Nodes query should have following fields.
-
-- id\*
-- title
-- subTitle
-- arc\_\_\*
-- detail\_\_\*
+Refer the [Grafana documentation](https://grafana.com/docs/grafana/latest/panels-visualizations/visualizations/node-graph/#nodes-data-frame-structure) to learn about the fields structure of the nodes query
 
 If you have any `arc__*` field, corresponding value (number) will be used as the nodes arc value. Note : Total value of row item should sum to 1. If you need to specify a color for the `arc__*` field, add a new field called `arc__*_color`.
 
-### Edges
+## Edges Query
 
-Edges query should have following fields.
-
-- id\*
-- source\*
-- target\*
-- detail\_\_\*
-
-works same as **Nodes**. But doesn't support `arc__*` fields.
+Refer the [Grafana documentation](https://grafana.com/docs/grafana/latest/panels-visualizations/visualizations/node-graph/#edges-data-frame-structure) to learn about the fields structure of the nodes query
 
 ## Example
 
@@ -206,3 +186,8 @@ finally, the panel json looks like this
   ]
 }
 ```
+
+## Known Limitations
+
+* This feature only supported in frontend and UQL parser
+* This feature only supported for JSON and CSV data formats
