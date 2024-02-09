@@ -1,7 +1,17 @@
 import React from 'react';
-import { InlineLabel, Input, RadioButtonGroup, useTheme2 } from '@grafana/ui';
-import type { DataSourcePluginOptionsEditorProps } from '@grafana/data';
+import { InlineLabel, Input, RadioButtonGroup, useTheme2, InlineField, Switch } from '@grafana/ui';
+import { FeatureToggles, DataSourcePluginOptionsEditorProps } from '@grafana/data';
 import type { InfinityOptions, ProxyType } from './../../types';
+import { config } from '@grafana/runtime';
+import { gte } from 'semver';
+import { css } from '@emotion/css';
+
+const styles = {
+  toggle: css`
+    margin-top: 7px;
+    margin-left: 5px;
+  `,
+};
 
 type ProxyEditorProps = DataSourcePluginOptionsEditorProps<InfinityOptions>;
 
@@ -45,6 +55,44 @@ export const ProxyEditor = (props: ProxyEditorProps) => {
           </div>
         </>
       )}
+
+      {config.featureToggles['secureSocksDSProxyEnabled' as keyof FeatureToggles] &&
+        gte(config.buildInfo.version, '10.0.0') && (
+          <>
+            <InlineField
+              label="Secure Socks Proxy"
+              tooltip={
+                <>
+                  Enable proxying the datasource connection through the secure socks proxy to a
+                  different network.
+                  See{' '}
+                  <a
+                    href="https://grafana.com/docs/grafana/next/setup-grafana/configure-grafana/proxy/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Configure a datasource connection proxy.
+                  </a>
+                </>
+              }
+            >
+              <div className={styles.toggle}>
+                <Switch
+                  value={options.jsonData.enableSecureSocksProxy}
+                  onChange={(e) => {
+                    onOptionsChange({
+                      ...options,
+                      jsonData: {
+                        ...options.jsonData,
+                        enableSecureSocksProxy: e.currentTarget.checked
+                      },
+                    });
+                  }}
+                />
+              </div>
+            </InlineField>
+          </>
+        )}
     </>
   );
 };
