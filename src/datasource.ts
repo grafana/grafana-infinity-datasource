@@ -101,6 +101,14 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
         reportHealthCheck(o, this.instanceSettings, this.meta);
         switch (o?.message) {
           case 'OK':
+            if (!(this.instanceSettings?.jsonData?.customHealthCheckEnabled && this.instanceSettings?.jsonData?.customHealthCheckUrl) && this.instanceSettings?.jsonData?.auth_method) {
+              const healthCheckMessage = [
+                'Success',
+                'Settings saved but no health checks performed',
+                'To validate the connection/credentials, you have to provide a sample URL in Health Check section',
+              ].join(`. `);
+              return Promise.resolve({ status: 'warning', message: healthCheckMessage });
+            }
             return Promise.resolve({ status: 'success', message: 'OK. Settings saved' });
           default:
             return Promise.resolve({ status: o?.status || 'success', message: o?.message || 'Settings saved' });
