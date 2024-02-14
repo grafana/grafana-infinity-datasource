@@ -45,6 +45,12 @@ This datasource can work out of the box without any additional configuration. If
 
 More details about the URL and related settings can be found in [url](/docs/url) page
 
+## Health check
+
+When you save the infinity datasource settings in the config page, By default this will just save the settings and won't perform any validation against any URLs. If you want to validate the settings such as authentication, api keys, then you must enable custom health check in the health check section of the configuration page.
+
+> Currently only HTTP GET methods are supported in the custom health check. Also custom health checks only validate the response status code HTTP 200 and doesn't perform any validation against the response content
+
 ## Proxy outgoing requests
 
 If you want your datasource to connect via proxy, set the environment appropriate environment variables. HTTP_PROXY, HTTPS_PROXY and NO_PROXY. HTTPS_PROXY takes precedence over HTTP_PROXY for https requests.

@@ -23,7 +23,8 @@ const reportActivity = (action: Report_Action, data: Record<string, any> = {}, i
     data['config_oauth2_type'] = instance_settings?.jsonData?.oauth2?.oauth2_type || 'unknown';
     data['config_global_queries_count'] = (instance_settings?.jsonData?.global_queries || []).length;
     data['config_reference_data_count'] = (instance_settings?.jsonData?.refData || []).length;
-    data['config_allowed_hosts_count'] = (instance_settings?.jsonData.allowedHosts || []).length;
+    data['config_allowed_hosts_count'] = (instance_settings?.jsonData?.allowedHosts || []).length;
+    data['config_custom_health_check_enabled'] = instance_settings?.jsonData?.customHealthCheckEnabled ? 'enabled' : 'unknown';
     reportInteraction(action, { ...data, ts: new Date().getTime() });
   } catch (ex) {
     console.error('error while reporting infinity query', ex);
