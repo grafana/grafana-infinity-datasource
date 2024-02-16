@@ -8,6 +8,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/grafana/grafana-plugin-sdk-go/backend/proxy"
+	"github.com/icholy/digest"
+	"golang.org/x/oauth2"
 	"io"
 	"mime/multipart"
 	"net/http"
@@ -54,7 +57,7 @@ func GetTLSConfigFromSettings(settings models.InfinitySettings) (*tls.Config, er
 	return tlsConfig, nil
 }
 
-func getBaseHTTPClient(ctx context.Context, settings models.InfinitySettings) *http.Client {
+func getBaseHTTPClient(_ context.Context, settings models.InfinitySettings) *http.Client {
 	tlsConfig, err := GetTLSConfigFromSettings(settings)
 	if err != nil {
 		return nil
@@ -74,6 +77,7 @@ func getBaseHTTPClient(ctx context.Context, settings models.InfinitySettings) *h
 	default:
 		transport.Proxy = http.ProxyFromEnvironment
 	}
+
 	return &http.Client{
 		Transport: transport,
 		Timeout:   time.Second * time.Duration(settings.TimeoutInSeconds),
@@ -97,14 +101,25 @@ func NewClient(ctx context.Context, settings models.InfinitySettings) (client *C
 		span.RecordError(errors.New("invalid http client"))
 		return nil, errors.New("invalid http client")
 	}
+	// TODO LND ApplyDigestAuth replaces transport with digest.Transport. We need to check if we can apply the same config for PDC
 	httpClient = ApplyDigestAuth(ctx, httpClient, settings)
+	// TODO LND ApplyOAuthClientCredentials Replaces the http client entirely. Need to check if we can configure the Transport afterwards.
 	httpClient = ApplyOAuthClientCredentials(ctx, httpClient, settings)
+	// TODO LND ApplyOAuthJWT Replaces the http client entirely
 	httpClient = ApplyOAuthJWT(ctx, httpClient, settings)
+	// TODO LND ApplyAWSAuth Replaces transport with sigv4 transport
 	httpClient = ApplyAWSAuth(ctx, httpClient, settings)
+
+	httpClient, err = ApplySecureSocksProxyConfiguration(httpClient, settings)
+	if err != nil {
+		return nil, err
+	}
+
 	client = &Client{
 		Settings:   settings,
 		HttpClient: httpClient,
 	}
+
 	if settings.AuthenticationMethod == models.AuthenticationMethodAzureBlob {
 		cred, err := azblob.NewSharedKeyCredential(settings.AzureBlobAccountName, settings.AzureBlobAccountKey)
 		if err != nil {
@@ -136,6 +151,26 @@ func NewClient(ctx context.Context, settings models.InfinitySettings) (client *C
 		client.IsMock = true
 	}
 	return client, err
+}
+
+func ApplySecureSocksProxyConfiguration(httpClient *http.Client, settings models.InfinitySettings) (*http.Client, error) {
+	t := httpClient.Transport
+	if IsDigestAuthConfigured(settings) {
+		// if we are using Digest, the Transport is 'digest.Transport' that wraps 'http.Transport'
+		t = t.(*digest.Transport).Transport
+	} else if IsOAuthCredentialsConfigured(settings) || IsOAuthJWTConfigured(settings) {
+		// if we are using Oauth, the Transport is 'oauth2.Transport' that wraps 'http.Transport'
+		t = t.(*oauth2.Transport).Base
+	}
+	// TODO LND Review if we need to do the same for sigv4
+
+	// secure socks proxy configuration - checks if enabled inside the function
+	err := proxy.New(settings.ProxyOpts.ProxyOptions).ConfigureSecureSocksHTTPProxy(t.(*http.Transport))
+	if err != nil {
+		backend.Logger.Error("error configuring secure socks proxy", "err", err.Error())
+		return nil, fmt.Errorf("error configuring secure socks proxy. %s", err)
+	}
+	return httpClient, nil
 }
 
 func replaceSect(input string, settings models.InfinitySettings, includeSect bool) string {

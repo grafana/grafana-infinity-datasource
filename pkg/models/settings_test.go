@@ -1,6 +1,7 @@
 package models_test
 
 import (
+	"context"
 	"errors"
 	"testing"
 
@@ -112,7 +113,7 @@ func TestLoadSettings(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			gotSettings, err := models.LoadSettings(tt.config)
+			gotSettings, err := models.LoadSettings(context.Background(), tt.config)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("LoadSettings() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -176,7 +177,7 @@ func TestAllSettingsAgainstFrontEnd(t *testing.T) {
 			"oauth2EndPointParamsValue2": "Resource2",
 		},
 	}
-	gotSettings, err := models.LoadSettings(config)
+	gotSettings, err := models.LoadSettings(context.Background(), config)
 	assert.Nil(t, err)
 	assert.NotNil(t, gotSettings)
 	assert.Equal(t, models.InfinitySettings{
