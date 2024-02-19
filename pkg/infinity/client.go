@@ -101,13 +101,9 @@ func NewClient(ctx context.Context, settings models.InfinitySettings) (client *C
 		span.RecordError(errors.New("invalid http client"))
 		return nil, errors.New("invalid http client")
 	}
-	// TODO LND ApplyDigestAuth replaces transport with digest.Transport. We need to check if we can apply the same config for PDC
 	httpClient = ApplyDigestAuth(ctx, httpClient, settings)
-	// TODO LND ApplyOAuthClientCredentials Replaces the http client entirely. Need to check if we can configure the Transport afterwards.
 	httpClient = ApplyOAuthClientCredentials(ctx, httpClient, settings)
-	// TODO LND ApplyOAuthJWT Replaces the http client entirely
 	httpClient = ApplyOAuthJWT(ctx, httpClient, settings)
-	// TODO LND ApplyAWSAuth Replaces transport with sigv4 transport
 	httpClient = ApplyAWSAuth(ctx, httpClient, settings)
 
 	httpClient, err = ApplySecureSocksProxyConfiguration(httpClient, settings)
@@ -162,7 +158,6 @@ func ApplySecureSocksProxyConfiguration(httpClient *http.Client, settings models
 		// if we are using Oauth, the Transport is 'oauth2.Transport' that wraps 'http.Transport'
 		t = t.(*oauth2.Transport).Base
 	}
-	// TODO LND Review if we need to do the same for sigv4
 
 	// secure socks proxy configuration - checks if enabled inside the function
 	err := proxy.New(settings.ProxyOpts.ProxyOptions).ConfigureSecureSocksHTTPProxy(t.(*http.Transport))
