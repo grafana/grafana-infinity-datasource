@@ -3,11 +3,11 @@ package models_test
 import (
 	"context"
 	"errors"
-	"github.com/grafana/grafana-plugin-sdk-go/backend/httpclient"
 	"testing"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
+	"github.com/grafana/grafana-plugin-sdk-go/backend/httpclient"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

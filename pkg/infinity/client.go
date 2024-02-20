@@ -8,9 +8,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/grafana/grafana-plugin-sdk-go/backend/proxy"
-	"github.com/icholy/digest"
-	"golang.org/x/oauth2"
 	"io"
 	"mime/multipart"
 	"net/http"
@@ -21,7 +18,10 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/storage/azblob"
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
+	"github.com/grafana/grafana-plugin-sdk-go/backend/proxy"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
+	"github.com/icholy/digest"
+	"golang.org/x/oauth2"
 )
 
 type Client struct {
