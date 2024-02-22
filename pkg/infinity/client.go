@@ -18,7 +18,10 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/storage/azblob"
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
+	"github.com/grafana/grafana-plugin-sdk-go/backend/proxy"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
+	"github.com/icholy/digest"
+	"golang.org/x/oauth2"
 )
 
 type Client struct {
@@ -54,7 +57,7 @@ func GetTLSConfigFromSettings(settings models.InfinitySettings) (*tls.Config, er
 	return tlsConfig, nil
 }
 
-func getBaseHTTPClient(ctx context.Context, settings models.InfinitySettings) *http.Client {
+func getBaseHTTPClient(_ context.Context, settings models.InfinitySettings) *http.Client {
 	tlsConfig, err := GetTLSConfigFromSettings(settings)
 	if err != nil {
 		return nil
@@ -74,6 +77,7 @@ func getBaseHTTPClient(ctx context.Context, settings models.InfinitySettings) *h
 	default:
 		transport.Proxy = http.ProxyFromEnvironment
 	}
+
 	return &http.Client{
 		Transport: transport,
 		Timeout:   time.Second * time.Duration(settings.TimeoutInSeconds),
@@ -101,10 +105,17 @@ func NewClient(ctx context.Context, settings models.InfinitySettings) (client *C
 	httpClient = ApplyOAuthClientCredentials(ctx, httpClient, settings)
 	httpClient = ApplyOAuthJWT(ctx, httpClient, settings)
 	httpClient = ApplyAWSAuth(ctx, httpClient, settings)
+
+	httpClient, err = ApplySecureSocksProxyConfiguration(httpClient, settings)
+	if err != nil {
+		return nil, err
+	}
+
 	client = &Client{
 		Settings:   settings,
 		HttpClient: httpClient,
 	}
+
 	if settings.AuthenticationMethod == models.AuthenticationMethodAzureBlob {
 		cred, err := azblob.NewSharedKeyCredential(settings.AzureBlobAccountName, settings.AzureBlobAccountKey)
 		if err != nil {
@@ -136,6 +147,25 @@ func NewClient(ctx context.Context, settings models.InfinitySettings) (client *C
 		client.IsMock = true
 	}
 	return client, err
+}
+
+func ApplySecureSocksProxyConfiguration(httpClient *http.Client, settings models.InfinitySettings) (*http.Client, error) {
+	t := httpClient.Transport
+	if IsDigestAuthConfigured(settings) {
+		// if we are using Digest, the Transport is 'digest.Transport' that wraps 'http.Transport'
+		t = t.(*digest.Transport).Transport
+	} else if IsOAuthCredentialsConfigured(settings) || IsOAuthJWTConfigured(settings) {
+		// if we are using Oauth, the Transport is 'oauth2.Transport' that wraps 'http.Transport'
+		t = t.(*oauth2.Transport).Base
+	}
+
+	// secure socks proxy configuration - checks if enabled inside the function
+	err := proxy.New(settings.ProxyOpts.ProxyOptions).ConfigureSecureSocksHTTPProxy(t.(*http.Transport))
+	if err != nil {
+		backend.Logger.Error("error configuring secure socks proxy", "err", err.Error())
+		return nil, fmt.Errorf("error configuring secure socks proxy. %s", err)
+	}
+	return httpClient, nil
 }
 
 func replaceSect(input string, settings models.InfinitySettings, includeSect bool) string {

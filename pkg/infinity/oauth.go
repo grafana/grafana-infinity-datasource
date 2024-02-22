@@ -19,7 +19,7 @@ import (
 func ApplyOAuthClientCredentials(ctx context.Context, httpClient *http.Client, settings models.InfinitySettings) *http.Client {
 	_, span := tracing.DefaultTracer().Start(ctx, "ApplyOAuthClientCredentials")
 	defer span.End()
-	if settings.AuthenticationMethod == models.AuthenticationMethodOAuth && settings.OAuth2Settings.OAuth2Type == models.AuthOAuthTypeClientCredentials {
+	if IsOAuthCredentialsConfigured(settings) {
 		oauthConfig := clientcredentials.Config{
 			ClientID:       settings.OAuth2Settings.ClientID,
 			ClientSecret:   settings.OAuth2Settings.ClientSecret,
@@ -43,10 +43,15 @@ func ApplyOAuthClientCredentials(ctx context.Context, httpClient *http.Client, s
 	}
 	return httpClient
 }
+
+func IsOAuthCredentialsConfigured(settings models.InfinitySettings) bool {
+	return settings.AuthenticationMethod == models.AuthenticationMethodOAuth && settings.OAuth2Settings.OAuth2Type == models.AuthOAuthTypeClientCredentials
+}
+
 func ApplyOAuthJWT(ctx context.Context, httpClient *http.Client, settings models.InfinitySettings) *http.Client {
 	_, span := tracing.DefaultTracer().Start(ctx, "ApplyOAuthJWT")
 	defer span.End()
-	if settings.AuthenticationMethod == models.AuthenticationMethodOAuth && settings.OAuth2Settings.OAuth2Type == models.AuthOAuthJWT {
+	if IsOAuthJWTConfigured(settings) {
 		jwtConfig := jwt.Config{
 			Email:        settings.OAuth2Settings.Email,
 			TokenURL:     settings.OAuth2Settings.TokenURL,
@@ -65,19 +70,27 @@ func ApplyOAuthJWT(ctx context.Context, httpClient *http.Client, settings models
 	}
 	return httpClient
 }
+
+func IsOAuthJWTConfigured(settings models.InfinitySettings) bool {
+	return settings.AuthenticationMethod == models.AuthenticationMethodOAuth && settings.OAuth2Settings.OAuth2Type == models.AuthOAuthJWT
+}
 func ApplyDigestAuth(ctx context.Context, httpClient *http.Client, settings models.InfinitySettings) *http.Client {
 	_, span := tracing.DefaultTracer().Start(ctx, "ApplyDigestAuth")
 	defer span.End()
-	if settings.AuthenticationMethod == models.AuthenticationMethodDigestAuth {
+	if IsDigestAuthConfigured(settings) {
 		a := digest.Transport{Username: settings.UserName, Password: settings.Password, Transport: httpClient.Transport}
 		httpClient.Transport = &a
 	}
 	return httpClient
 }
+
+func IsDigestAuthConfigured(settings models.InfinitySettings) bool {
+	return settings.AuthenticationMethod == models.AuthenticationMethodDigestAuth
+}
 func ApplyAWSAuth(ctx context.Context, httpClient *http.Client, settings models.InfinitySettings) *http.Client {
 	ctx, span := tracing.DefaultTracer().Start(ctx, "ApplyAWSAuth")
 	defer span.End()
-	if settings.AuthenticationMethod == models.AuthenticationMethodAWS {
+	if IsAwsAuthConfigured(settings) {
 		tempHttpClient := getBaseHTTPClient(ctx, settings)
 		authType := settings.AWSSettings.AuthType
 		if authType == "" {
@@ -105,4 +118,8 @@ func ApplyAWSAuth(ctx context.Context, httpClient *http.Client, settings models.
 		httpClient.Transport = rt
 	}
 	return httpClient
+}
+
+func IsAwsAuthConfigured(settings models.InfinitySettings) bool {
+	return settings.AuthenticationMethod == models.AuthenticationMethodAWS
 }

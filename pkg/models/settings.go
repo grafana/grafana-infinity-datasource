@@ -1,6 +1,7 @@
 package models
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -8,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
+	"github.com/grafana/grafana-plugin-sdk-go/backend/httpclient"
 	"golang.org/x/oauth2"
 )
 
@@ -107,6 +109,8 @@ type InfinitySettings struct {
 	AzureBlobAccountUrl      string
 	AzureBlobAccountName     string
 	AzureBlobAccountKey      string
+	// ProxyOpts is used for Secure Socks Proxy configuration
+	ProxyOpts httpclient.Options
 }
 
 func (s *InfinitySettings) Validate() error {
@@ -179,7 +183,7 @@ type InfinitySettingsJson struct {
 	AzureBlobAccountName     string         `json:"azureBlobAccountName,omitempty"`
 }
 
-func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinitySettings, err error) {
+func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings) (settings InfinitySettings, err error) {
 	settings.URL = config.URL
 	if config.URL == "__IGNORE_URL__" {
 		settings.URL = ""
@@ -278,6 +282,13 @@ func LoadSettings(config backend.DataSourceInstanceSettings) (settings InfinityS
 	if settings.AuthenticationMethod == AuthenticationMethodAzureBlob && settings.AzureBlobAccountUrl == "" {
 		settings.AzureBlobAccountUrl = "https://%s.blob.core.windows.net/"
 	}
+
+	// secure socks proxy config
+	opts, err := config.HTTPClientOptions(ctx)
+	if err != nil {
+		return settings, err
+	}
+	settings.ProxyOpts = opts
 	return
 }
 

@@ -1,11 +1,13 @@
 package models_test
 
 import (
+	"context"
 	"errors"
 	"testing"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
+	"github.com/grafana/grafana-plugin-sdk-go/backend/httpclient"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -112,11 +114,19 @@ func TestLoadSettings(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			gotSettings, err := models.LoadSettings(tt.config)
+			gotSettings, err := models.LoadSettings(context.Background(), tt.config)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("LoadSettings() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
+
+			assert.NotNil(t, gotSettings)
+
+			// settings.ProxyOpts are handled by the sdk, we just validate
+			assert.NotNil(t, gotSettings.ProxyOpts)
+
+			// and then clean it to compare with the wanted settings
+			gotSettings.ProxyOpts = httpclient.Options{}
 			assert.Equal(t, tt.wantSettings, gotSettings)
 		})
 	}
@@ -176,9 +186,16 @@ func TestAllSettingsAgainstFrontEnd(t *testing.T) {
 			"oauth2EndPointParamsValue2": "Resource2",
 		},
 	}
-	gotSettings, err := models.LoadSettings(config)
+	gotSettings, err := models.LoadSettings(context.Background(), config)
 	assert.Nil(t, err)
 	assert.NotNil(t, gotSettings)
+
+	// settings.ProxyOpts are handled by the sdk, we just validate
+	assert.NotNil(t, gotSettings.ProxyOpts)
+
+	// and then clean it to compare with the wanted settings
+	gotSettings.ProxyOpts = httpclient.Options{}
+
 	assert.Equal(t, models.InfinitySettings{
 		AuthenticationMethod: "oauth2",
 		ForwardOauthIdentity: true,

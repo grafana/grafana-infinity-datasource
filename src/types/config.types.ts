@@ -52,6 +52,7 @@ export interface InfinityOptions extends DataSourceJsonData {
   customHealthCheckUrl?: string;
   azureBlobAccountUrl?: string;
   azureBlobAccountName?: string;
+  enableSecureSocksProxy?: boolean;
 }
 
 export interface InfinitySecureOptions {

@@ -35,3 +35,7 @@ To create a new release, execute `yarn changeset version`. This will update the 
 
 - Ensure the loki docker plugin is installed `docker plugin install grafana/loki-docker-driver:2.9.1 --alias loki --grant-all-permissions`
 - Start the docker from debug file `docker compose -f docker-compose-debug.yaml up`
+
+## Testing the PDC
+
+To test the PDC functionality with Infinity, you can use the `docker compose -f docker-compose-debug.yaml up`. This debug docker compose file comes with **microsocks** proxy, PDC enabled and configured. [Provisioned datasources](./provisioning/datasources/default.yml) file also have some examples of datasource instances with secure socks proxy enabled and with different authentication mechanisms.(You can find the PDC enabled datasources with the prefix **PDC**.)
