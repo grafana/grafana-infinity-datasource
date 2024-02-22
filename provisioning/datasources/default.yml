@@ -68,3 +68,80 @@ datasources:
     uid: tempo
     type: tempo
     url: http://tempo:3200
+  - name: 🔗 PDC - No Auth
+    uid: pdc-no-auth
+    type: yesoreyeram-infinity-datasource
+    jsonData:
+      enableSecureSocksProxy: true
+      auth_method: 'none'
+      customHealthCheckEnabled: true
+      customHealthCheckUrl: 'https://jsonplaceholder.typicode.com/posts'
+  - name: 🔗 PDC - Basic Auth
+    uid: pdc-basic-auth
+    type: yesoreyeram-infinity-datasource
+    basicAuth: true
+    basicAuthUser: 'postman'
+    jsonData:
+      enableSecureSocksProxy: true
+      auth_method: 'basicAuth'
+      customHealthCheckEnabled: true
+      customHealthCheckUrl: 'https://postman-echo.com/basic-auth'
+      allowedHosts:
+        - 'https://postman-echo.com'
+    secureJsonData:
+      basicAuthPassword: 'password'
+  - name: 🔗 PDC - Bearer Auth
+    uid: pdc-bearer-auth
+    type: yesoreyeram-infinity-datasource
+    jsonData:
+      enableSecureSocksProxy: true
+      auth_method: 'bearerToken'
+      customHealthCheckEnabled: true
+      customHealthCheckUrl: 'https://httpbin.org/bearer'
+      allowedHosts:
+        - 'https://httpbin.org'
+    secureJsonData:
+      bearerToken: 'foo'
+  - name: 🔗 PDC - Digest Auth
+    uid: pdc-digest-auth
+    type: yesoreyeram-infinity-datasource
+    basicAuthUser: 'postman'
+    jsonData:
+      enableSecureSocksProxy: true
+      auth_method: 'digestAuth'
+      customHealthCheckEnabled: true
+      customHealthCheckUrl: 'https://postman-echo.com/digest-auth'
+      allowedHosts:
+        - 'https://postman-echo.com'
+    secureJsonData:
+      basicAuthPassword: 'password'
+  - name: 🔗 PDC - API Key Auth
+    uid: pdc-api-key-auth
+    type: yesoreyeram-infinity-datasource
+    jsonData:
+      enableSecureSocksProxy: true
+      auth_method: 'apiKey'
+      apiKeyKey: 'Authorization'
+      customHealthCheckEnabled: true
+      customHealthCheckUrl: 'https://postman-echo.com/basic-auth'
+      allowedHosts:
+        - 'https://postman-echo.com'
+    secureJsonData:
+      apiKeyValue: 'Basic cG9zdG1hbjpwYXNzd29yZA=='
+  - name: 🔗 PDC - OAuth2 Client Credentials
+    uid: pdc-oauth2-client-credentials
+    type: 'yesoreyeram-infinity-datasource'
+    jsonData:
+      enableSecureSocksProxy: true
+      auth_method: 'oauth2'
+      oauth2:
+        client_id: 'xxxxxxx' ## Replace xxxxxxx with actual client id
+        token_url: 'https://login.microsoftonline.com/xxxxxxx/oauth2/token' ## Replace xxxxxxx with actual tenant id
+      oauth2EndPointParamsName1: 'resource'
+      customHealthCheckEnabled: true
+      customHealthCheckUrl: 'https://management.azure.com/subscriptions?api-version=2020-01-01'
+      allowedHosts:
+        - 'https://management.azure.com/'
+    secureJsonData:
+      oauth2ClientSecret: 'xxxxxxx' ## Replace xxxxxxx with actual client secret
+      oauth2EndPointParamsValue1: 'https://management.azure.com/'
