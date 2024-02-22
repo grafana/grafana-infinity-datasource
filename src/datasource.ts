@@ -1,5 +1,5 @@
 import { LoadingState, toDataFrame, DataFrame, DataQueryRequest, DataQueryResponse, ScopedVars, TimeRange } from '@grafana/data';
-import { DataSourceWithBackend } from '@grafana/runtime';
+import { DataSourceWithBackend, HealthStatus } from '@grafana/runtime';
 import { flatten, sample } from 'lodash';
 import { Observable } from 'rxjs';
 import { applyGroq } from './app/GROQProvider';
@@ -25,7 +25,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
   query(options: DataQueryRequest<InfinityQuery>): Observable<DataQueryResponse> {
     return new Observable<DataQueryResponse>((subscriber) => {
       let request = getUpdatedDataRequest(options, this.instanceSettings);
-      reportQuery(request?.targets || [], this.instanceSettings, request?.app);
+      reportQuery(request?.targets || [], this.instanceSettings, this.meta, request?.app);
       super
         .query(request)
         .toPromise()
@@ -98,17 +98,24 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
     return super
       .testDatasource()
       .then((o) => {
+        reportHealthCheck(o, this.instanceSettings, this.meta);
         switch (o?.message) {
           case 'OK':
-            reportHealthCheck({ status: 'success', message: 'OK. Settings saved', authMethod: this.instanceSettings?.jsonData?.auth_method || '' });
+            if (!(this.instanceSettings?.jsonData?.customHealthCheckEnabled && this.instanceSettings?.jsonData?.customHealthCheckUrl) && this.instanceSettings?.jsonData?.auth_method) {
+              const healthCheckMessage = [
+                'Success',
+                'Settings saved but no health checks performed',
+                'To validate the connection/credentials, you have to provide a sample URL in Health Check section',
+              ].join(`. `);
+              return Promise.resolve({ status: 'warning', message: healthCheckMessage });
+            }
             return Promise.resolve({ status: 'success', message: 'OK. Settings saved' });
           default:
-            reportHealthCheck({ status: o?.status || 'success', message: o?.message || 'Settings saved' });
             return Promise.resolve({ status: o?.status || 'success', message: o?.message || 'Settings saved' });
         }
       })
       .catch((ex) => {
-        reportHealthCheck({ status: 'error', message: ex.message });
+        reportHealthCheck({ status: HealthStatus.Error, message: ex }, this.instanceSettings, this.meta);
         return Promise.resolve({ status: 'error', message: ex.message });
       });
   }
