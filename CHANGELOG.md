@@ -1,5 +1,13 @@
 # Change Log
 
+## 2.5.0-beta.1
+
+🚀 Updated health check messages to include details about custom health check settings
+🚀 Updated the grafana plugin SDK from v0.197.0 to v0.206.0
+🐛 Updated digest authentication backend SDK from [`github.com/xinsnake/go-http-digest-auth-client`](https://github.com/xinsnake/go-http-digest-auth-client) to [`github.com/icholy/digest`](https://github.com/icholy/digest)
+🐛 Fixed a bug where query columns editor is unusable when sandbox enabled
+🐛 Updated rudderstack analytics events
+
 ## 2.4.0
 
 🚀 Minimum supported grafana version updated to 9.5.15
