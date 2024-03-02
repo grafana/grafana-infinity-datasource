@@ -183,7 +183,12 @@ func replaceSect(input string, settings models.InfinitySettings, includeSect boo
 func (client *Client) req(ctx context.Context, url string, body io.Reader, settings models.InfinitySettings, query models.Query, requestHeaders map[string]string) (obj any, statusCode int, duration time.Duration, err error) {
 	ctx, span := tracing.DefaultTracer().Start(ctx, "client.req")
 	defer span.End()
-	req, _ := GetRequest(ctx, settings, body, query, requestHeaders, true)
+	req, err := GetRequest(ctx, settings, body, query, requestHeaders, true)
+	if err != nil {
+		backend.Logger.Error("error GetRequest", "url", url, "err", err.Error())
+		return nil, http.StatusInternalServerError, duration, fmt.Errorf("invalid request for the URL %s: %w", url, err)
+	}
+
 	startTime := time.Now()
 	if !CanAllowURL(req.URL.String(), settings.AllowedHosts) {
 		backend.Logger.Error("url is not in the allowed list. make sure to match the base URL with the settings", "url", req.URL.String())

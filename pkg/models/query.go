@@ -38,11 +38,12 @@ const (
 type PaginationMode string
 
 const (
-	PaginationModeNone   PaginationMode = "none"
-	PaginationModeOffset PaginationMode = "offset"
-	PaginationModePage   PaginationMode = "page"
-	PaginationModeCursor PaginationMode = "cursor"
-	PaginationModeList   PaginationMode = "list"
+	PaginationModeNone     PaginationMode = "none"
+	PaginationModeOffset   PaginationMode = "offset"
+	PaginationModePage     PaginationMode = "page"
+	PaginationModeCursor   PaginationMode = "cursor"
+	PaginationModeNextLink PaginationMode = "next-link"
+	PaginationModeList     PaginationMode = "list"
 )
 
 type PaginationParamType string
@@ -86,56 +87,57 @@ type TransformationItem struct {
 }
 
 type Query struct {
-	RefID                              string                 `json:"refId"`
-	Type                               QueryType              `json:"type"`   // 'json' | 'json-backend' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'uql' | 'groq' | 'series' | 'global' | 'google-sheets'
-	Format                             string                 `json:"format"` // 'table' | 'timeseries' | 'logs' | 'dataframe' | 'as-is' | 'node-graph-nodes' | 'node-graph-edges'
-	Source                             string                 `json:"source"` // 'url' | 'inline' | 'azure-blob' | 'reference' | 'random-walk' | 'expression'
-	RefName                            string                 `json:"referenceName,omitempty"`
-	URL                                string                 `json:"url"`
-	URLOptions                         URLOptions             `json:"url_options"`
-	Data                               string                 `json:"data"`
-	Parser                             InfinityParser         `json:"parser"` // 'simple' | 'backend' | 'sqlite' | 'uql' | 'groq'
-	FilterExpression                   string                 `json:"filterExpression"`
-	SummarizeExpression                string                 `json:"summarizeExpression"`
-	SummarizeBy                        string                 `json:"summarizeBy"`
-	UQL                                string                 `json:"uql"`
-	GROQ                               string                 `json:"groq"`
-	SQLiteQuery                        string                 `json:"sqlite_query"`
-	CSVOptions                         InfinityCSVOptions     `json:"csv_options"`
-	JSONOptions                        InfinityJSONOptions    `json:"json_options"`
-	RootSelector                       string                 `json:"root_selector"`
-	Columns                            []InfinityColumn       `json:"columns"`
-	ComputedColumns                    []InfinityColumn       `json:"computed_columns"`
-	Filters                            []InfinityFilter       `json:"filters"`
-	SeriesCount                        int64                  `json:"seriesCount"`
-	Expression                         string                 `json:"expression"`
-	Alias                              string                 `json:"alias"`
-	DataOverrides                      []InfinityDataOverride `json:"dataOverrides"`
-	GlobalQueryID                      string                 `json:"global_query_id"`
-	QueryMode                          string                 `json:"query_mode"`
-	Spreadsheet                        string                 `json:"spreadsheet,omitempty"`
-	SheetName                          string                 `json:"sheetName,omitempty"`
-	SheetRange                         string                 `json:"range,omitempty"`
-	AzBlobContainerName                string                 `json:"azContainerName,omitempty"`
-	AzBlobName                         string                 `json:"azBlobName,omitempty"`
-	PageMode                           PaginationMode         `json:"pagination_mode,omitempty"`
-	PageMaxPages                       int                    `json:"pagination_max_pages,omitempty"`
-	PageParamSizeFieldName             string                 `json:"pagination_param_size_field_name,omitempty"`
-	PageParamSizeFieldType             PaginationParamType    `json:"pagination_param_size_field_type,omitempty"`
-	PageParamSizeFieldVal              int                    `json:"pagination_param_size_value,omitempty"`
-	PageParamOffsetFieldName           string                 `json:"pagination_param_offset_field_name,omitempty"`
-	PageParamOffsetFieldType           PaginationParamType    `json:"pagination_param_offset_field_type,omitempty"`
-	PageParamOffsetFieldVal            int                    `json:"pagination_param_offset_value,omitempty"`
-	PageParamPageFieldName             string                 `json:"pagination_param_page_field_name,omitempty"`
-	PageParamPageFieldType             PaginationParamType    `json:"pagination_param_page_field_type,omitempty"`
-	PageParamPageFieldVal              int                    `json:"pagination_param_page_value,omitempty"`
-	PageParamCursorFieldName           string                 `json:"pagination_param_cursor_field_name,omitempty"`
-	PageParamCursorFieldType           PaginationParamType    `json:"pagination_param_cursor_field_type,omitempty"`
-	PageParamCursorFieldExtractionPath string                 `json:"pagination_param_cursor_extraction_path,omitempty"`
-	PageParamListFieldName             string                 `json:"pagination_param_list_field_name,omitempty"`
-	PageParamListFieldType             PaginationParamType    `json:"pagination_param_list_field_type,omitempty"`
-	PageParamListFieldValue            string                 `json:"pagination_param_list_value,omitempty"`
-	Transformations                    []TransformationItem   `json:"transformations,omitempty"`
+	RefID                                string                 `json:"refId"`
+	Type                                 QueryType              `json:"type"`   // 'json' | 'json-backend' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'uql' | 'groq' | 'series' | 'global' | 'google-sheets'
+	Format                               string                 `json:"format"` // 'table' | 'timeseries' | 'logs' | 'dataframe' | 'as-is' | 'node-graph-nodes' | 'node-graph-edges'
+	Source                               string                 `json:"source"` // 'url' | 'inline' | 'azure-blob' | 'reference' | 'random-walk' | 'expression'
+	RefName                              string                 `json:"referenceName,omitempty"`
+	URL                                  string                 `json:"url"`
+	URLOptions                           URLOptions             `json:"url_options"`
+	Data                                 string                 `json:"data"`
+	Parser                               InfinityParser         `json:"parser"` // 'simple' | 'backend' | 'sqlite' | 'uql' | 'groq'
+	FilterExpression                     string                 `json:"filterExpression"`
+	SummarizeExpression                  string                 `json:"summarizeExpression"`
+	SummarizeBy                          string                 `json:"summarizeBy"`
+	UQL                                  string                 `json:"uql"`
+	GROQ                                 string                 `json:"groq"`
+	SQLiteQuery                          string                 `json:"sqlite_query"`
+	CSVOptions                           InfinityCSVOptions     `json:"csv_options"`
+	JSONOptions                          InfinityJSONOptions    `json:"json_options"`
+	RootSelector                         string                 `json:"root_selector"`
+	Columns                              []InfinityColumn       `json:"columns"`
+	ComputedColumns                      []InfinityColumn       `json:"computed_columns"`
+	Filters                              []InfinityFilter       `json:"filters"`
+	SeriesCount                          int64                  `json:"seriesCount"`
+	Expression                           string                 `json:"expression"`
+	Alias                                string                 `json:"alias"`
+	DataOverrides                        []InfinityDataOverride `json:"dataOverrides"`
+	GlobalQueryID                        string                 `json:"global_query_id"`
+	QueryMode                            string                 `json:"query_mode"`
+	Spreadsheet                          string                 `json:"spreadsheet,omitempty"`
+	SheetName                            string                 `json:"sheetName,omitempty"`
+	SheetRange                           string                 `json:"range,omitempty"`
+	AzBlobContainerName                  string                 `json:"azContainerName,omitempty"`
+	AzBlobName                           string                 `json:"azBlobName,omitempty"`
+	PageMode                             PaginationMode         `json:"pagination_mode,omitempty"`
+	PageMaxPages                         int                    `json:"pagination_max_pages,omitempty"`
+	PageParamSizeFieldName               string                 `json:"pagination_param_size_field_name,omitempty"`
+	PageParamSizeFieldType               PaginationParamType    `json:"pagination_param_size_field_type,omitempty"`
+	PageParamSizeFieldVal                int                    `json:"pagination_param_size_value,omitempty"`
+	PageParamOffsetFieldName             string                 `json:"pagination_param_offset_field_name,omitempty"`
+	PageParamOffsetFieldType             PaginationParamType    `json:"pagination_param_offset_field_type,omitempty"`
+	PageParamOffsetFieldVal              int                    `json:"pagination_param_offset_value,omitempty"`
+	PageParamPageFieldName               string                 `json:"pagination_param_page_field_name,omitempty"`
+	PageParamPageFieldType               PaginationParamType    `json:"pagination_param_page_field_type,omitempty"`
+	PageParamPageFieldVal                int                    `json:"pagination_param_page_value,omitempty"`
+	PageParamCursorFieldName             string                 `json:"pagination_param_cursor_field_name,omitempty"`
+	PageParamCursorFieldType             PaginationParamType    `json:"pagination_param_cursor_field_type,omitempty"`
+	PageParamCursorFieldExtractionPath   string                 `json:"pagination_param_cursor_extraction_path,omitempty"`
+	PageParamNextLinkFieldExtractionPath string                 `json:"pagination_param_next_link_extraction_path,omitempty"`
+	PageParamListFieldName               string                 `json:"pagination_param_list_field_name,omitempty"`
+	PageParamListFieldType               PaginationParamType    `json:"pagination_param_list_field_type,omitempty"`
+	PageParamListFieldValue              string                 `json:"pagination_param_list_value,omitempty"`
+	Transformations                      []TransformationItem   `json:"transformations,omitempty"`
 }
 
 type URLOptionKeyValuePair struct {
@@ -296,6 +298,10 @@ func ApplyDefaultsToQuery(ctx context.Context, query Query) Query {
 			if query.PageParamCursorFieldType == "" {
 				query.PageParamCursorFieldType = PaginationParamTypeQuery
 			}
+		}
+		if query.PageMode == PaginationModeNextLink {
+			query.PageParamCursorFieldName = ""
+			query.PageParamCursorFieldType = ""
 		}
 	}
 	for i, t := range query.Transformations {

@@ -104,7 +104,7 @@ export type InfinityUQLQuery = { uql: string; format: InfinityQueryFormat } & In
 export type InfinityGROQQuerySource = InfinityQueryWithURLSource<'groq'> | InfinityQueryWithInlineSource<'groq'>;
 export type InfinityGROQQuery = { groq: string; format: InfinityQueryFormat } & InfinityGROQQuerySource & InfinityQueryBase<'groq'>;
 export type InfinityGSheetsQuery = { spreadsheet: string; sheetName?: string; range: string; columns: InfinityColumn[] } & InfinityQueryBase<'google-sheets'>;
-export type PaginationType = 'none' | 'offset' | 'page' | 'cursor' | 'list';
+export type PaginationType = 'none' | 'offset' | 'page' | 'cursor' | 'next-link' | 'list';
 export type PaginationParamType = 'query' | 'header' | 'body_data' | 'body_json' | 'replace';
 export type PaginationBase<T extends PaginationType> = { pagination_mode?: T; pagination_max_pages?: number };
 export type PaginationNone = {} & PaginationBase<'none'>;
@@ -132,12 +132,15 @@ export type PaginationCursor = {
   pagination_param_cursor_field_type?: PaginationParamType;
   pagination_param_cursor_extraction_path?: string;
 } & PaginationBase<'cursor'>;
+export type PaginationNextLink = {
+  pagination_param_next_link_extraction_path?: string;
+} & PaginationBase<'next-link'>;
 export type PaginationList = {
   pagination_param_list_field_name?: string;
   pagination_param_list_field_type?: PaginationParamType;
   pagination_param_list_value?: string;
 } & PaginationBase<'list'>;
-export type Pagination = PaginationNone | PaginationOffset | PaginationPage | PaginationCursor | PaginationList;
+export type Pagination = PaginationNone | PaginationOffset | PaginationPage | PaginationCursor | PaginationNextLink | PaginationList;
 export type Transformation = 'limit' | 'filterExpression' | 'summarize' | 'computedColumn';
 export type TransformationItem = {
   type: Transformation;

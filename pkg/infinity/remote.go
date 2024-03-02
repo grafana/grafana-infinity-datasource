@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log"
 	"strings"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
@@ -61,13 +62,13 @@ func GetPaginatedResults(ctx context.Context, query models.Query, infClient Clie
 			currentQuery = ApplyPaginationItemToQuery(currentQuery, query.PageParamListFieldType, query.PageParamListFieldName, strings.TrimSpace(listItem))
 			queries = append(queries, currentQuery)
 		}
-	case models.PaginationModeCursor:
+	case models.PaginationModeCursor, models.PaginationModeNextLink:
 		queries = append(queries, query)
 	default:
 		frame, _, err := GetFrameForURLSourcesWithPostProcessing(ctx, query, infClient, requestHeaders, true)
 		return frame, err
 	}
-	if query.PageMode != models.PaginationModeCursor {
+	if query.PageMode != models.PaginationModeCursor && query.PageMode != models.PaginationModeNextLink {
 		for _, currentQuery := range queries {
 			frame, _, err := GetFrameForURLSourcesWithPostProcessing(ctx, currentQuery, infClient, requestHeaders, false)
 			frames = append(frames, frame)
@@ -88,6 +89,24 @@ func GetPaginatedResults(ctx context.Context, query models.Query, infClient Clie
 			i++
 			frame, cursor, err := GetFrameForURLSourcesWithPostProcessing(ctx, currentQuery, infClient, requestHeaders, false)
 			oCursor = cursor
+			frames = append(frames, frame)
+			errs = errors.Join(errs, err)
+		}
+	} else if query.PageMode == models.PaginationModeNextLink {
+		i := 0
+		oNextLink := ""
+		for {
+			currentQuery := query
+			if i > 0 && oNextLink != "" {
+				currentQuery.URL = oNextLink
+			}
+
+			if i > query.PageMaxPages || (i > 0 && oNextLink == "") {
+				break
+			}
+			i++
+			frame, nextLink, err := GetFrameForURLSourcesWithPostProcessing(ctx, currentQuery, infClient, requestHeaders, false)
+			oNextLink = nextLink
 			frames = append(frames, frame)
 			errs = errors.Join(errs, err)
 		}
@@ -235,6 +254,23 @@ func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, query models.Q
 		if err != nil {
 			return frame, cursor, errors.New("error while extracting the cursor value")
 		}
+	} else if query.PageMode == models.PaginationModeNextLink && strings.TrimSpace(query.PageParamNextLinkFieldExtractionPath) != "" {
+		body, err := json.Marshal(urlResponseObject)
+		if err != nil {
+			return frame, cursor, errors.New("error while finding the nextLink value")
+		}
+		cursor, err = jsonframer.GetRootData(string(body), query.PageParamNextLinkFieldExtractionPath)
+		if err != nil {
+			return frame, cursor, errors.New("error while extracting the nextLink value")
+		}
+
+		var nextURL string
+
+		if err := json.Unmarshal([]byte(cursor), &nextURL); err != nil {
+			log.Fatalln("error while json decode the nextLink value:", err)
+		}
+
+		cursor = nextURL
 	}
 	return frame, cursor, nil
 }
