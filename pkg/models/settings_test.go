@@ -160,6 +160,11 @@ func TestAllSettingsAgainstFrontEnd(t *testing.T) {
 				"region" 	: "region1",
 				"service" 	: "service1"
 			},
+			"microsoft" : {
+                "cloud"      : "AzureUSGovernment",
+				"auth_type"	 : "clientsecret",
+				"tenant_id"	 : "tenant1"
+			},
 			"oauth2" : {
 				"client_id":"myClientID",
 				"email":"myEmail",
@@ -211,6 +216,11 @@ func TestAllSettingsAgainstFrontEnd(t *testing.T) {
 			AuthType: models.AWSAuthTypeKeys,
 			Service:  "service1",
 			Region:   "region1",
+		},
+		MicrosoftSettings: models.MicrosoftSettings{
+			Cloud:    models.MicrosoftCloudUSGovernment,
+			AuthType: models.MicrosoftAuthTypeClientSecret,
+			TenantID: "tenant1",
 		},
 		OAuth2Settings: models.OAuth2Settings{
 			ClientID:     "myClientID",

@@ -7,7 +7,7 @@ export interface GlobalInfinityQuery {
   id: string;
   query: InfinityQuery;
 }
-export type AuthType = 'none' | 'basicAuth' | 'apiKey' | 'bearerToken' | 'oauthPassThru' | 'digestAuth' | 'aws' | 'azureBlob' | 'oauth2';
+export type AuthType = 'none' | 'basicAuth' | 'apiKey' | 'bearerToken' | 'oauthPassThru' | 'digestAuth' | 'aws' | 'azureBlob' | 'oauth2' | 'microsoft';
 export type OAuth2Type = 'client_credentials' | 'jwt' | 'others';
 export type APIKeyType = 'header' | 'query';
 export type OAuth2Props = {
@@ -25,6 +25,14 @@ export type AWSAuthProps = {
   region?: string;
   service?: string;
 };
+
+export type MicrosoftCloudType = 'AzureCloud' | 'AzureChinaCloud' | 'AzureUSGovernment';
+export type MicrosoftAuthType = 'clientsecret' | 'msi' | 'workloadidentity';
+export type MicrosoftProps = {
+  cloud?: MicrosoftCloudType;
+  auth_type?: MicrosoftAuthType;
+  tenant_id?: string;
+};
 export type InfinityReferenceData = { name: string; data: string };
 export type ProxyType = 'none' | 'env' | 'url';
 export interface InfinityOptions extends DataSourceJsonData {
@@ -33,6 +41,7 @@ export interface InfinityOptions extends DataSourceJsonData {
   apiKeyType?: APIKeyType;
   oauth2?: OAuth2Props;
   aws?: AWSAuthProps;
+  microsoft?: MicrosoftProps;
   tlsSkipVerify?: boolean;
   tlsAuth?: boolean;
   serverName?: string;
