@@ -175,7 +175,7 @@ func TestApplyMacros(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := models.ApplyMacros(context.Background(), tt.query, backend.TimeRange{From: time.UnixMilli(1610582400000), To: time.UnixMilli(1610668800000)}, tt.pluginContext)
+			got, err := models.ApplyMacros(context.Background(), tt.query, backend.TimeRange{From: time.UnixMilli(1610582400000).UTC(), To: time.UnixMilli(1610668800000).UTC()}, tt.pluginContext)
 			if tt.wantErr != nil {
 				require.NotNil(t, err)
 				assert.Equal(t, tt.wantErr, err)
