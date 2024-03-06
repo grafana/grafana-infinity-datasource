@@ -6,8 +6,6 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.2.1
 	github.com/grafana/grafana-aws-sdk v0.23.1
 	github.com/grafana/grafana-plugin-sdk-go v0.206.0
-	github.com/graphql-go/graphql v0.8.1
-	github.com/graphql-go/handler v0.2.3
 	github.com/icholy/digest v0.1.22
 	github.com/stretchr/testify v1.8.4
 	github.com/yesoreyeram/grafana-plugins/lib/go/csvframer v0.0.2
