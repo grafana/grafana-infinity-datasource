@@ -1,10 +1,9 @@
 module github.com/grafana/grafana-infinity-datasource
 
-go 1.21.3
+go 1.22
 
 require (
 	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.2.1
-	github.com/gorilla/mux v1.8.1
 	github.com/grafana/grafana-aws-sdk v0.23.1
 	github.com/grafana/grafana-plugin-sdk-go v0.206.0
 	github.com/graphql-go/graphql v0.8.1
@@ -54,6 +53,7 @@ require (
 	github.com/google/flatbuffers v23.5.26+incompatible // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/google/uuid v1.5.0 // indirect
+	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/grafana/dataplane/sdata v0.0.7 // indirect
 	github.com/grafana/sqlds/v3 v3.2.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0 // indirect

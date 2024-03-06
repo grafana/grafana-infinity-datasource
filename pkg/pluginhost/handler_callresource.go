@@ -7,19 +7,18 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/gorilla/mux"
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/graphql-go/graphql"
 	"github.com/graphql-go/handler"
 )
 
-func (host *PluginHost) getRouter() *mux.Router {
-	router := mux.NewRouter()
+func (host *PluginHost) getRouter() *http.ServeMux {
+	router := &http.ServeMux{}
 	router.Handle("/graphql", host.getGraphQLHandler()) // NOT IN USE YET
-	router.HandleFunc("/reference-data", host.withDatasourceHandlerFunc(GetReferenceDataHandler)).Methods("GET")
-	router.HandleFunc("/open-api", host.withDatasourceHandlerFunc(GetOpenAPIHandler)).Methods("GET") // NOT IN USE YET
-	router.HandleFunc("/ping", host.withDatasourceHandlerFunc(GetPingHandler)).Methods("GET")
-	router.NotFoundHandler = http.HandlerFunc(host.withDatasourceHandlerFunc(defaultHandler))
+	router.HandleFunc("GET /reference-data", host.withDatasourceHandlerFunc(GetReferenceDataHandler))
+	router.HandleFunc("GET /open-api", host.withDatasourceHandlerFunc(GetOpenAPIHandler)) // NOT IN USE YET
+	router.HandleFunc("GET /ping", host.withDatasourceHandlerFunc(GetPingHandler))
+	router.HandleFunc("/", host.withDatasourceHandlerFunc(defaultHandler))
 	return router
 }
 
