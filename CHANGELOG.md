@@ -10,6 +10,8 @@
 
 ⚙️ **Dependencies update**: Updated backend dependencies and plugin SDK update
 
+⚙️ **Chore**: Replaced gorilla mux library with http.ServeMux from standard library
+
 ⚙️ **Chore**: Removed unused graphql and open-api resource calls
 
 ## 2.5.0-beta.1
