@@ -6,7 +6,7 @@
 
 🛡️ **Security** Backend binaries compiled with go 1.22.1 which includes [security patches](https://groups.google.com/g/golang-announce/c/5pwGVUPoMbg)
 
-⚙️ **Dependencies update**: NodeJS dev dependency updated from Node 16 to Node 20
+⚙️ **Dependencies update**: NodeJS dev dependency updated from Node 18 to Node 20
 
 ⚙️ **Dependencies update**: Updated backend dependencies and plugin SDK update
 
