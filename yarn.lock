@@ -5155,10 +5155,10 @@ fast-shallow-equal@^1.0.0:
   resolved "https://registry.yarnpkg.com/fast-shallow-equal/-/fast-shallow-equal-1.0.0.tgz#d4dcaf6472440dcefa6f88b98e3251e27f25628b"
   integrity sha512-HPtaa38cPgWvaCFmRNhlc6NG7pv6NUHqjPgVAkWGoB9mQMwYB27/K0CvOM5Czy+qpT3e8XJ6Q4aPAnzpNpzNaw==
 
-fast-xml-parser@^4.0.0-beta.8:
-  version "4.3.2"
-  resolved "https://registry.yarnpkg.com/fast-xml-parser/-/fast-xml-parser-4.3.2.tgz#761e641260706d6e13251c4ef8e3f5694d4b0d79"
-  integrity sha512-rmrXUXwbJedoXkStenj1kkljNF7ugn5ZjR9FJcwmCfcCbtOMDghPajbc+Tck6vE6F5XsDmx+Pr2le9fw8+pXBg==
+fast-xml-parser@^4.3.5:
+  version "4.3.5"
+  resolved "https://registry.yarnpkg.com/fast-xml-parser/-/fast-xml-parser-4.3.5.tgz#e2f2a2ae8377e9c3dc321b151e58f420ca7e5ccc"
+  integrity sha512-sWvP1Pl8H03B8oFJpFR3HE31HUfwtX7Rlf9BNsvdpujD4n7WMhfmu8h9wOV2u+c1k0ZilTADhPqypzx2J690ZQ==
   dependencies:
     strnum "^1.0.5"
 
@@ -6723,10 +6723,10 @@ json5@^2.2.2, json5@^2.2.3:
   resolved "https://registry.yarnpkg.com/json5/-/json5-2.2.3.tgz#78cd6f1a19bdc12b73db5ad0c61efd66c1e29283"
   integrity sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==
 
-jsonata@1.8.6:
-  version "1.8.6"
-  resolved "https://registry.yarnpkg.com/jsonata/-/jsonata-1.8.6.tgz#e5f0e6ace870a34bac881a182ca2b31227122791"
-  integrity sha512-ZH2TPYdNP2JecOl/HvrH47Xc+9imibEMQ4YqKy/F/FrM+2a6vfbGxeCX23dB9Fr6uvGwv+ghf1KxWB3iZk09wA==
+jsonata@1.8.7:
+  version "1.8.7"
+  resolved "https://registry.yarnpkg.com/jsonata/-/jsonata-1.8.7.tgz#e5cf5a4e28e3c88dd79e23282bffb7797350d035"
+  integrity sha512-tOW2/hZ+nR2bcQZs+0T62LVe5CHaNa3laFFWb/262r39utN6whJGBF7IR2Wq1QXrDbhftolk5gggW8uUJYlBTQ==
 
 jsonata@2.0.4:
   version "2.0.4"
@@ -9495,16 +9495,16 @@ uplot@1.6.24:
   resolved "https://registry.yarnpkg.com/uplot/-/uplot-1.6.24.tgz#dfa213fa7da92763261920ea972ed1a5f9f6af12"
   integrity sha512-WpH2BsrFrqxkMu+4XBvc0eCDsRBhzoq9crttYeSI0bfxpzR5YoSVzZXOKFVWcVC7sp/aDXrdDPbDZGCtck2PVg==
 
-uql@0.0.20:
-  version "0.0.20"
-  resolved "https://registry.yarnpkg.com/uql/-/uql-0.0.20.tgz#34bf588d86f7b83485b22568b75ae4e66558a7f2"
-  integrity sha512-f2Y2/V4LwCiYLkA07cBcf2QKVJl328O1J9eDRp9tCKiYItFTrC7BCA/xh/0PoI0I8wQAjgZlxNURLjMt4iYl1w==
+uql@0.0.21:
+  version "0.0.21"
+  resolved "https://registry.yarnpkg.com/uql/-/uql-0.0.21.tgz#3e8036350fa3dbf558c66283166aeb462ac33734"
+  integrity sha512-vopI8tLpZrypBxgbmXBKWx1zEX7yn+gnfXSs4yKW5rrXN7Gf5CVhUmmT+ulry+SuEPAR4DSiAz+U5JpCOcD7Ng==
   dependencies:
     csv-parse "4.12.0"
     dayjs "^1.10.7"
-    fast-xml-parser "^4.0.0-beta.8"
+    fast-xml-parser "^4.3.5"
     js-yaml "^4.1.0"
-    jsonata "1.8.6"
+    jsonata "1.8.7"
     lodash "^4.17.21"
     moo "^0.5.1"
     nearley "^2.20.1"
