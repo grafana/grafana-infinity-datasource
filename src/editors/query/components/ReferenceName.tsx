@@ -23,7 +23,7 @@ export const ReferenceNameEditor = ({
     setLoading(true);
     setError('');
     datasource
-      .getResource('/reference-data')
+      .getResource('reference-data')
       .then((res) => {
         setRefNames(res);
         setError('');
