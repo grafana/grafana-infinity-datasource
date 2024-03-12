@@ -41,7 +41,7 @@ This datasource can work out of the box without any additional configuration. If
 
 > If you specify the URL as `https://example.com/path` in your datasource config and `/my-endpoint` as your url in the query, then the final URL will be `https://example.com/path/my-endpoint`
 
-More details about the URL and related settings can be found in [url](/docs/url) page
+More details about the URL and related settings can be found in [url](/docs/plugins/yesoreyeram-infinity-datasource/latest/references/url/) page
 
 ## Health check
 
