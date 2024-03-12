@@ -18,10 +18,9 @@ keywords:
 labels:
   products:
     - oss
-    - enterprise
-    - grafana cloud
 weight: 10
 ---
+
 <!-- markdownlint-disable MD033 -->
 
 # Infinity data source plugin for Grafana

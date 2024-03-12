@@ -125,10 +125,6 @@ type InfinitySettings struct {
 	ProxyType                ProxyType
 	ProxyUrl                 string
 	AllowedHosts             []string
-	EnableOpenAPI            bool
-	OpenAPIVersion           string
-	OpenAPIUrl               string
-	OpenAPIBaseUrl           string
 	ReferenceData            []RefData
 	CustomHealthCheckEnabled bool
 	CustomHealthCheckUrl     string
@@ -199,10 +195,7 @@ type InfinitySettingsJson struct {
 	ProxyType                ProxyType         `json:"proxy_type,omitempty"`
 	ProxyUrl                 string            `json:"proxy_url,omitempty"`
 	AllowedHosts             []string          `json:"allowedHosts,omitempty"`
-	EnableOpenAPI            bool              `json:"enableOpenApi,omitempty"`
-	OpenAPIVersion           string            `json:"openApiVersion,omitempty"`
-	OpenAPIUrl               string            `json:"openApiUrl,omitempty"`
-	OpenAPIBaseUrl           string            `json:"openAPIBaseURL,omitempty"`
+
 	ReferenceData            []RefData         `json:"refData,omitempty"`
 	CustomHealthCheckEnabled bool              `json:"customHealthCheckEnabled,omitempty"`
 	CustomHealthCheckUrl     string            `json:"customHealthCheckUrl,omitempty"`
@@ -265,10 +258,6 @@ func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings
 			}
 		}
 	}
-	settings.EnableOpenAPI = infJson.EnableOpenAPI
-	settings.OpenAPIVersion = infJson.OpenAPIVersion
-	settings.OpenAPIUrl = infJson.OpenAPIUrl
-	settings.OpenAPIBaseUrl = infJson.OpenAPIBaseUrl
 	settings.ReferenceData = infJson.ReferenceData
 	settings.CustomHealthCheckEnabled = infJson.CustomHealthCheckEnabled
 	settings.CustomHealthCheckUrl = infJson.CustomHealthCheckUrl

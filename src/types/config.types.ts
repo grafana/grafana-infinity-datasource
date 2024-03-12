@@ -53,10 +53,6 @@ export interface InfinityOptions extends DataSourceJsonData {
   oauthPassThru?: boolean;
   allowedHosts?: string[];
   refData?: InfinityReferenceData[];
-  enableOpenApi?: boolean;
-  openApiVersion?: 'open-api-2.0';
-  openApiUrl?: string;
-  openAPIBaseURL?: string;
   customHealthCheckEnabled?: boolean;
   customHealthCheckUrl?: string;
   azureBlobAccountUrl?: string;
