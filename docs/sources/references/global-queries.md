@@ -19,10 +19,9 @@ keywords:
 labels:
   products:
     - oss
-    - enterprise
-    - grafana cloud
 weight: 7901
 ---
+
 <!-- markdownlint-disable MD028 -->
 
 # Global Queries / Registered Queries

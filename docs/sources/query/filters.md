@@ -19,10 +19,9 @@ keywords:
 labels:
   products:
     - oss
-    - enterprise
-    - grafana cloud
 weight: 360
 ---
+
 <!-- markdownlint-disable MD033 -->
 
 # Filtering data / Using template variables in Query

@@ -10,7 +10,6 @@ import { GlobalQueryEditor } from './config/GlobalQueryEditor';
 import { ProvisioningScript } from './config/Provisioning';
 import { TLSConfigEditor } from './config/TLSConfigEditor';
 import { URLEditor } from './config/URL';
-import { OpenAPIEditor } from './config/OpenAPI';
 import { ReferenceDataEditor } from './config/ReferenceData';
 import { CustomHealthCheckEditor } from './config/CustomHealthCheckEditor';
 import type { DataSourcePluginOptionsEditorProps } from '@grafana/data';
@@ -121,15 +120,6 @@ export const SecurityEditor = (props: DataSourcePluginOptionsEditorProps<Infinit
   );
 };
 
-export const ExperimentalEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
-  const { options, onOptionsChange } = props;
-  return (
-    <>
-      <OpenAPIEditor options={options} onOptionsChange={onOptionsChange} />
-    </>
-  );
-};
-
 export const MiscEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
   const { options, onOptionsChange } = props;
   return (
@@ -148,7 +138,6 @@ const config_sections: Array<{ value: string; label: string }> = [
   { value: 'health_check', label: 'Health check' },
   { value: 'reference_data', label: 'Reference data' },
   { value: 'global_queries', label: 'Global queries' },
-  // { value: 'experimental', label: 'Experimental' },
   { value: 'misc', label: 'Misc' },
 ];
 
@@ -229,8 +218,6 @@ export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<I
             <GlobalQueryEditor options={options} onOptionsChange={onOptionsChange} />
           ) : activeTab === 'reference_data' ? (
             <ReferenceDataEditor options={options} onOptionsChange={onOptionsChange} />
-          ) : activeTab === 'experimental' ? (
-            <ExperimentalEditor options={options} onOptionsChange={onOptionsChange} />
           ) : activeTab === 'health_check' ? (
             <CustomHealthCheckEditor options={options} onOptionsChange={onOptionsChange} />
           ) : activeTab === 'misc' ? (

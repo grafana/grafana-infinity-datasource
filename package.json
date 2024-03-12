@@ -1,6 +1,6 @@
 {
   "name": "grafana-infinity-datasource",
-  "version": "2.5.0-beta.1",
+  "version": "2.5.0",
   "description": "JSON, CSV, XML, GraphQL, HTML and REST API datasource for Grafana. Do infinite things with Grafana. Transform data with UQL/GROQ. Visualize data from many apis, RSS/ATOM feeds directly",
   "main": "dist/module.js",
   "scripts": {
@@ -53,13 +53,13 @@
     "csv-parse": "^4.12.0",
     "groq-js": "1.1.8",
     "json-to-pretty-yaml": "^1.2.2",
-    "jsonata": "2.0.2",
+    "jsonata": "2.0.4",
     "jsonpath-plus": "7.2.0",
     "lodash": "^4.17.21",
     "mathjs": "11.7.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "uql": "0.0.20",
+    "uql": "0.0.21",
     "xml2js": "^0.6.2"
   },
   "devDependencies": {
