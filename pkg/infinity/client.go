@@ -155,6 +155,9 @@ func NewClient(ctx context.Context, settings models.InfinitySettings) (client *C
 }
 
 func ApplySecureSocksProxyConfiguration(httpClient *http.Client, settings models.InfinitySettings) (*http.Client, error) {
+	if IsAwsAuthConfigured(settings) {
+		return httpClient, nil
+	}
 	t := httpClient.Transport
 	if IsDigestAuthConfigured(settings) {
 		// if we are using Digest, the Transport is 'digest.Transport' that wraps 'http.Transport'
