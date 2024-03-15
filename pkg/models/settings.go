@@ -71,6 +71,8 @@ const (
 )
 
 type InfinitySettings struct {
+	UID                      string
+	Name                     string
 	IsMock                   bool
 	AuthenticationMethod     string
 	OAuth2Settings           OAuth2Settings
@@ -120,6 +122,12 @@ func (s *InfinitySettings) Validate() error {
 		return errors.New("invalid or empty bearer token detected")
 	}
 	if s.AuthenticationMethod == AuthenticationMethodAzureBlob {
+		if strings.TrimSpace(s.AzureBlobAccountName) == "" {
+			return errors.New("invalid/empty azure blob account name")
+		}
+		if strings.TrimSpace(s.AzureBlobAccountKey) == "" {
+			return errors.New("invalid/empty azure blob key")
+		}
 		return nil
 	}
 	if s.AuthenticationMethod != AuthenticationMethodNone && len(s.AllowedHosts) < 1 {
@@ -176,6 +184,8 @@ type InfinitySettingsJson struct {
 }
 
 func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings) (settings InfinitySettings, err error) {
+	settings.UID = config.UID
+	settings.Name = config.Name
 	settings.URL = config.URL
 	if config.URL == "__IGNORE_URL__" {
 		settings.URL = ""

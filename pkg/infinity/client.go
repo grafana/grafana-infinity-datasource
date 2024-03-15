@@ -99,7 +99,8 @@ func NewClient(ctx context.Context, settings models.InfinitySettings) (client *C
 	httpClient := getBaseHTTPClient(ctx, settings)
 	if httpClient == nil {
 		span.RecordError(errors.New("invalid http client"))
-		return nil, errors.New("invalid http client")
+		backend.Logger.Error("invalid http client", "datasource uid", settings.UID, "datasource name", settings.Name)
+		return client, errors.New("invalid http client")
 	}
 	httpClient = ApplyDigestAuth(ctx, httpClient, settings)
 	httpClient = ApplyOAuthClientCredentials(ctx, httpClient, settings)
@@ -108,7 +109,8 @@ func NewClient(ctx context.Context, settings models.InfinitySettings) (client *C
 
 	httpClient, err = ApplySecureSocksProxyConfiguration(httpClient, settings)
 	if err != nil {
-		return nil, err
+		backend.Logger.Error("error applying secure socks proxy", "datasource uid", settings.UID, "datasource name", settings.Name)
+		return client, err
 	}
 
 	client = &Client{
@@ -121,7 +123,8 @@ func NewClient(ctx context.Context, settings models.InfinitySettings) (client *C
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(500, err.Error())
-			return nil, fmt.Errorf("invalid azure blob credentials. %s", err)
+			backend.Logger.Error("invalid azure blob credentials", "datasource uid", settings.UID, "datasource name", settings.Name)
+			return client, errors.New("invalid azure blob credentials")
 		}
 		clientUrl := "https://%s.blob.core.windows.net/"
 		if settings.AzureBlobAccountUrl != "" {
@@ -134,12 +137,14 @@ func NewClient(ctx context.Context, settings models.InfinitySettings) (client *C
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(500, err.Error())
-			return nil, fmt.Errorf("invalid azure blob client. %s", err)
+			backend.Logger.Error("error creating azure blob client", "datasource uid", settings.UID, "datasource name", settings.Name)
+			return client, fmt.Errorf("error creating azure blob client. %s", err)
 		}
 		if azClient == nil {
 			span.RecordError(errors.New("invalid/empty azure blob client"))
 			span.SetStatus(500, "invalid/empty azure blob client")
-			return nil, errors.New("invalid/empty azure blob client")
+			backend.Logger.Error("invalid/empty azure blob client", "datasource uid", settings.UID, "datasource name", settings.Name)
+			return client, errors.New("invalid/empty azure blob client")
 		}
 		client.AzureBlobClient = azClient
 	}
