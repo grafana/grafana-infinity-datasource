@@ -8,6 +8,8 @@ import (
 	"net/textproto"
 	"strings"
 
+	"github.com/grafana/grafana-azure-sdk-go/azcredentials"
+	"github.com/grafana/grafana-azure-sdk-go/azsettings"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/httpclient"
 	"golang.org/x/oauth2"
@@ -22,6 +24,7 @@ const (
 	AuthenticationMethodDigestAuth   = "digestAuth"
 	AuthenticationMethodOAuth        = "oauth2"
 	AuthenticationMethodAWS          = "aws"
+	AuthenticationMethodMicrosoft    = "microsoft"
 	AuthenticationMethodAzureBlob    = "azureBlob"
 )
 
@@ -62,6 +65,28 @@ type AWSSettings struct {
 	Service  string      `json:"service"`
 }
 
+type MicrosoftAuthType string
+
+const (
+	MicrosoftAuthTypeManagedIdentity  MicrosoftAuthType = azcredentials.AzureAuthManagedIdentity
+	MicrosoftAuthTypeWorkloadIdentity MicrosoftAuthType = azcredentials.AzureAuthWorkloadIdentity
+	MicrosoftAuthTypeClientSecret     MicrosoftAuthType = azcredentials.AzureAuthClientSecret
+)
+
+type MicrosoftCloudType string
+
+const (
+	MicrosoftCloudPublic       MicrosoftCloudType = azsettings.AzurePublic
+	MicrosoftCloudChina        MicrosoftCloudType = azsettings.AzureChina
+	MicrosoftCloudUSGovernment MicrosoftCloudType = azsettings.AzureUSGovernment
+)
+
+type MicrosoftSettings struct {
+	Cloud    MicrosoftCloudType `json:"cloud"`
+	AuthType MicrosoftAuthType  `json:"auth_type"`
+	TenantID string             `json:"tenant_id"`
+}
+
 type ProxyType string
 
 const (
@@ -81,6 +106,7 @@ type InfinitySettings struct {
 	AWSSettings              AWSSettings
 	AWSAccessKey             string
 	AWSSecretKey             string
+	MicrosoftSettings        MicrosoftSettings
 	URL                      string
 	BasicAuthEnabled         bool
 	UserName                 string
@@ -153,26 +179,28 @@ type RefData struct {
 }
 
 type InfinitySettingsJson struct {
-	IsMock                   bool           `json:"is_mock,omitempty"`
-	AuthenticationMethod     string         `json:"auth_method,omitempty"`
-	APIKeyKey                string         `json:"apiKeyKey,omitempty"`
-	APIKeyType               string         `json:"apiKeyType,omitempty"`
-	OAuth2Settings           OAuth2Settings `json:"oauth2,omitempty"`
-	AWSSettings              AWSSettings    `json:"aws,omitempty"`
-	ForwardOauthIdentity     bool           `json:"oauthPassThru,omitempty"`
-	InsecureSkipVerify       bool           `json:"tlsSkipVerify,omitempty"`
-	ServerName               string         `json:"serverName,omitempty"`
-	TLSClientAuth            bool           `json:"tlsAuth,omitempty"`
-	TLSAuthWithCACert        bool           `json:"tlsAuthWithCACert,omitempty"`
-	TimeoutInSeconds         int64          `json:"timeoutInSeconds,omitempty"`
-	ProxyType                ProxyType      `json:"proxy_type,omitempty"`
-	ProxyUrl                 string         `json:"proxy_url,omitempty"`
-	AllowedHosts             []string       `json:"allowedHosts,omitempty"`
-	ReferenceData            []RefData      `json:"refData,omitempty"`
-	CustomHealthCheckEnabled bool           `json:"customHealthCheckEnabled,omitempty"`
-	CustomHealthCheckUrl     string         `json:"customHealthCheckUrl,omitempty"`
-	AzureBlobAccountUrl      string         `json:"azureBlobAccountUrl,omitempty"`
-	AzureBlobAccountName     string         `json:"azureBlobAccountName,omitempty"`
+	IsMock                   bool              `json:"is_mock,omitempty"`
+	AuthenticationMethod     string            `json:"auth_method,omitempty"`
+	APIKeyKey                string            `json:"apiKeyKey,omitempty"`
+	APIKeyType               string            `json:"apiKeyType,omitempty"`
+	OAuth2Settings           OAuth2Settings    `json:"oauth2,omitempty"`
+	AWSSettings              AWSSettings       `json:"aws,omitempty"`
+	MicrosoftSettings        MicrosoftSettings `json:"microsoft,omitempty"`
+	ForwardOauthIdentity     bool              `json:"oauthPassThru,omitempty"`
+	InsecureSkipVerify       bool              `json:"tlsSkipVerify,omitempty"`
+	ServerName               string            `json:"serverName,omitempty"`
+	TLSClientAuth            bool              `json:"tlsAuth,omitempty"`
+	TLSAuthWithCACert        bool              `json:"tlsAuthWithCACert,omitempty"`
+	TimeoutInSeconds         int64             `json:"timeoutInSeconds,omitempty"`
+	ProxyType                ProxyType         `json:"proxy_type,omitempty"`
+	ProxyUrl                 string            `json:"proxy_url,omitempty"`
+	AllowedHosts             []string          `json:"allowedHosts,omitempty"`
+
+	ReferenceData            []RefData         `json:"refData,omitempty"`
+	CustomHealthCheckEnabled bool              `json:"customHealthCheckEnabled,omitempty"`
+	CustomHealthCheckUrl     string            `json:"customHealthCheckUrl,omitempty"`
+	AzureBlobAccountUrl      string            `json:"azureBlobAccountUrl,omitempty"`
+	AzureBlobAccountName     string            `json:"azureBlobAccountName,omitempty"`
 }
 
 func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings) (settings InfinitySettings, err error) {
@@ -218,6 +246,16 @@ func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings
 		}
 		if len(infJson.AllowedHosts) > 0 {
 			settings.AllowedHosts = infJson.AllowedHosts
+		}
+
+		settings.MicrosoftSettings = infJson.MicrosoftSettings
+		if settings.AuthenticationMethod == "microsoft" {
+			if settings.MicrosoftSettings.AuthType == "" {
+				settings.MicrosoftSettings.AuthType = "clientsecret"
+			}
+			if settings.MicrosoftSettings.Cloud == "" {
+				settings.MicrosoftSettings.Cloud = MicrosoftCloudPublic
+			}
 		}
 	}
 	settings.ReferenceData = infJson.ReferenceData

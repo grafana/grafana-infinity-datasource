@@ -105,6 +105,10 @@ func NewClient(ctx context.Context, settings models.InfinitySettings) (client *C
 	httpClient = ApplyOAuthClientCredentials(ctx, httpClient, settings)
 	httpClient = ApplyOAuthJWT(ctx, httpClient, settings)
 	httpClient = ApplyAWSAuth(ctx, httpClient, settings)
+	httpClient, err = ApplyAzureAuth(ctx, httpClient, settings)
+	if err != nil {
+		return nil, err
+	}
 
 	httpClient, err = ApplySecureSocksProxyConfiguration(httpClient, settings)
 	if err != nil {
@@ -159,12 +163,15 @@ func ApplySecureSocksProxyConfiguration(httpClient *http.Client, settings models
 		t = t.(*oauth2.Transport).Base
 	}
 
-	// secure socks proxy configuration - checks if enabled inside the function
-	err := proxy.New(settings.ProxyOpts.ProxyOptions).ConfigureSecureSocksHTTPProxy(t.(*http.Transport))
-	if err != nil {
-		backend.Logger.Error("error configuring secure socks proxy", "err", err.Error())
-		return nil, fmt.Errorf("error configuring secure socks proxy. %s", err)
+	if t, ok := t.(*http.Transport); ok {
+		// secure socks proxy configuration - checks if enabled inside the function
+		err := proxy.New(settings.ProxyOpts.ProxyOptions).ConfigureSecureSocksHTTPProxy(t)
+		if err != nil {
+			backend.Logger.Error("error configuring secure socks proxy", "err", err.Error())
+			return nil, fmt.Errorf("error configuring secure socks proxy. %s", err)
+		}
 	}
+
 	return httpClient, nil
 }
 
