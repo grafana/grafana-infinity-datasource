@@ -1,28 +1,46 @@
 # Change Log
 
+## 2.5.0
+
+🚀 **PDC**: Added support for [grafana private datasource connect (PDC)](https://grafana.com/docs/grafana-cloud/connect-externally-hosted/private-data-source-connect/)
+
+🛡️ **Security** Backend binaries compiled with go 1.22.1 which includes [security patches](https://groups.google.com/g/golang-announce/c/5pwGVUPoMbg)
+
+⚙️ **Dependencies update**: NodeJS dev dependency updated from Node 18 to Node 20
+
+⚙️ **Dependencies update**: Updated backend dependencies and plugin SDK update
+
+⚙️ **Chore**: Replaced gorilla mux library with http.ServeMux from standard library
+
+⚙️ **Chore**: Removed unused graphql and open-api resource calls
+
 ## 2.5.0-beta.1
 
-🚀 Updated health check messages to include details about custom health check settings
-🚀 Updated the grafana plugin SDK from v0.197.0 to v0.206.0
-🐛 Updated digest authentication backend SDK from [`github.com/xinsnake/go-http-digest-auth-client`](https://github.com/xinsnake/go-http-digest-auth-client) to [`github.com/icholy/digest`](https://github.com/icholy/digest)
-🐛 Fixed a bug where query columns editor is unusable when sandbox enabled
-🐛 Updated rudderstack analytics events
+🚀 **Chore**: Updated health check messages to include details about custom health check settings
+
+🚀 **Authentication**: Updated digest authentication backend SDK from [`github.com/xinsnake/go-http-digest-auth-client`](https://github.com/xinsnake/go-http-digest-auth-client) to [`github.com/icholy/digest`](https://github.com/icholy/digest)
+
+🐛 **Analytics**: Updated rudderstack analytics events
+
+🐛 **Bug fixes**: Fixed a bug where query columns editor is unusable when sandbox enabled
+
+⚙️ **Chore**: Updated the grafana plugin SDK from v0.197.0 to v0.206.0
 
 ## 2.4.0
 
-🚀 Minimum supported grafana version updated to 9.5.15
+🚀 **Chore**: Minimum supported grafana version updated to 9.5.15
 
-🚀 Added support for variables in the backend parser root selector
+🚀 **Variables**:Added support for variables in the backend parser root selector
 
-🐛 Better support for variable handling when variable queries have more than 1 column
+🐛 **Variables**: Better support for variable handling when variable queries have more than 1 column
 
-🐛 Fixed a bug where variable values were not passed with the nested variable queries
+🐛 **Bug fixes**: Fixed a bug where variable values were not passed with the nested variable queries
 
-⚙️ Updated the grafana plugin SDK from v0.193.0 to v0.197.0
+⚙️ **Chore**: Updated the grafana plugin SDK from v0.193.0 to v0.197.0
 
-⚙️ Plugin build system migrated from `@grafana/toolkit` to `@grafana/create-plugin`
+⚙️ **Chore**:Plugin build system migrated from `@grafana/toolkit` to `@grafana/create-plugin`
 
-⚙️ NodeJS dev dependency updated from Node 16 to Node 18
+⚙️ **Chore**: NodeJS dev dependency updated from Node 16 to Node 18
 
 ## 2.3.1
 
@@ -34,7 +52,7 @@
 
 ## 2.3.0
 
-🎉 Infinity datasource plugin is now officially maintained by Grafana Labs
+🎉 Infinity datasource plugin is now officially maintained by Grafana Labs. Read more about this in the [blog post](https://grafana.com/blog/2024/02/05/infinity-plugin-for-grafana-grafana-labs-will-now-maintain-the-versatile-data-source-plugin/)
 
 ## 2.2.1
 

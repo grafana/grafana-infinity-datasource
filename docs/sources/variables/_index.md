@@ -18,8 +18,6 @@ keywords:
 labels:
   products:
     - oss
-    - enterprise
-    - grafana cloud
 weight: 400
 ---
 
@@ -27,5 +25,5 @@ weight: 400
 
 You can create template variables using Infinity data source query with one the following options
 
-* Standard variable mode / Infinity Query
-* Legacy variable mode / Utility variables Query
+- Standard variable mode / Infinity Query
+- Legacy variable mode / Utility variables Query

@@ -18,8 +18,6 @@ keywords:
 labels:
   products:
     - oss
-    - enterprise
-    - grafana cloud
 weight: 500
 ---
 
