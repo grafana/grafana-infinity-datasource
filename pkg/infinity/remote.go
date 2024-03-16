@@ -264,13 +264,9 @@ func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, query models.Q
 			return frame, cursor, errors.New("error while extracting the nextLink value")
 		}
 
-		var nextURL string
-
-		if err := json.Unmarshal([]byte(cursor), &nextURL); err != nil {
+		if err := json.Unmarshal([]byte(cursor), &cursor); err != nil {
 			log.Fatalln("error while json decode the nextLink value:", err)
 		}
-
-		cursor = nextURL
 	}
 	return frame, cursor, nil
 }
