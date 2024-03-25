@@ -101,6 +101,9 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
         reportHealthCheck(o, this.instanceSettings, this.meta);
         switch (o?.message) {
           case 'OK':
+            if (this.instanceSettings?.jsonData?.auth_method === 'azureBlob' || this.instanceSettings?.jsonData?.auth_method === 'aws') {
+              return Promise.resolve({ status: 'success', message: 'OK. Settings saved' });
+            }
             if (!(this.instanceSettings?.jsonData?.customHealthCheckEnabled && this.instanceSettings?.jsonData?.customHealthCheckUrl) && this.instanceSettings?.jsonData?.auth_method) {
               const healthCheckMessage = [
                 'Success',

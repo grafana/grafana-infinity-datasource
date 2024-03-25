@@ -46,6 +46,10 @@ export const interpolateQuery = (query: InfinityQuery, scopedVars: ScopedVars): 
     if (newQuery.source === 'inline') {
       newQuery.data = replaceVariable(newQuery.data, scopedVars);
     }
+    if (newQuery.source === 'azure-blob') {
+      newQuery.azBlobName = replaceVariable(newQuery.azBlobName, scopedVars);
+      newQuery.azContainerName = replaceVariable(newQuery.azContainerName, scopedVars);
+    }
     if (isDataQuery(newQuery)) {
       newQuery.filters = (newQuery.filters || []).map((filter) => {
         const value = (filter.value || []).map((val) => {

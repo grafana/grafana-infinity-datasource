@@ -26,7 +26,13 @@ func (ds *PluginHost) CheckHealth(ctx context.Context, req *backend.CheckHealthR
 func CheckHealth(ctx context.Context, ds *PluginHost, req *backend.CheckHealthRequest) (*backend.CheckHealthResult, error) {
 	logger := backend.Logger.FromContext(ctx)
 	client, err := getInstance(ctx, ds.im, req.PluginContext)
-	if err != nil || client == nil || client.client == nil {
+	if err != nil {
+		return &backend.CheckHealthResult{
+			Status:  backend.HealthStatusError,
+			Message: fmt.Sprintf("error loading datasource settings. %s", err.Error()),
+		}, nil
+	}
+	if client == nil || client.client == nil {
 		return &backend.CheckHealthResult{
 			Status:  backend.HealthStatusError,
 			Message: "failed to get plugin instance",
@@ -46,6 +52,9 @@ func CheckHealth(ctx context.Context, ds *PluginHost, req *backend.CheckHealthRe
 			Status:  backend.HealthStatusError,
 			Message: fmt.Sprintf("invalid settings. %s", err.Error()),
 		}, nil
+	}
+	if client.client.Settings.AuthenticationMethod == models.AuthenticationMethodAzureBlob {
+		return checkHealthAzureBlobStorage(ctx, client)
 	}
 	if client.client.Settings.CustomHealthCheckEnabled && client.client.Settings.CustomHealthCheckUrl != "" {
 		_, statusCode, _, err := client.client.GetResults(ctx, models.Query{
@@ -79,4 +88,8 @@ func CheckHealth(ctx context.Context, ds *PluginHost, req *backend.CheckHealthRe
 		Status:  backend.HealthStatusOk,
 		Message: "OK",
 	}, nil
+}
+
+func healthCheckError(msg string) (*backend.CheckHealthResult, error) {
+	return &backend.CheckHealthResult{Status: backend.HealthStatusError, Message: msg}, nil
 }
