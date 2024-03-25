@@ -130,6 +130,15 @@ func (s *InfinitySettings) Validate() error {
 		}
 		return nil
 	}
+	if s.AuthenticationMethod == AuthenticationMethodAWS && s.AWSSettings.AuthType == AWSAuthTypeKeys {
+		if strings.TrimSpace(s.AWSAccessKey) == "" {
+			return errors.New("invalid/empty AWS access key")
+		}
+		if strings.TrimSpace(s.AWSSecretKey) == "" {
+			return errors.New("invalid/empty AWS secret key")
+		}
+		return nil
+	}
 	if s.AuthenticationMethod != AuthenticationMethodNone && len(s.AllowedHosts) < 1 {
 		return errors.New("configure allowed hosts in the authentication section")
 	}
