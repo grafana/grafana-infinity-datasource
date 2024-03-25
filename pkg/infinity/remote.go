@@ -264,6 +264,11 @@ func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, query models.Q
 			return frame, cursor, errors.New("error while extracting the nextLink value")
 		}
 
+		// if the extraction path from jsonframer.GetRootData does not match, it gives "null" as a string back.
+		if cursor == "null" {
+			return frame, "", nil
+		}
+
 		if err := json.Unmarshal([]byte(cursor), &cursor); err != nil {
 			log.Fatalln("error while json decode the nextLink value:", err)
 		}
