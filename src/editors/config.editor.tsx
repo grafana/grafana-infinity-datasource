@@ -6,6 +6,7 @@ import { SecureFieldsEditor } from './../components/config/SecureFieldsEditor';
 import { AuthEditor } from './config/Auth';
 import { ProxyEditor } from './config/ProxyEditor';
 import { AllowedHostsEditor } from './config/AllowedHosts';
+import { SecurityConfigEditor } from './config/SecurityConfigEditor';
 import { GlobalQueryEditor } from './config/GlobalQueryEditor';
 import { ProvisioningScript } from './config/Provisioning';
 import { TLSConfigEditor } from './config/TLSConfigEditor';
@@ -116,6 +117,7 @@ export const SecurityEditor = (props: DataSourcePluginOptionsEditorProps<Infinit
   return (
     <>
       <AllowedHostsEditor options={options} onOptionsChange={onOptionsChange} />
+      <SecurityConfigEditor options={options} onOptionsChange={onOptionsChange} />
     </>
   );
 };
