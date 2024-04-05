@@ -1,4 +1,4 @@
-import { LoadingState, toDataFrame, DataFrame, DataQueryRequest, DataQueryResponse, ScopedVars, TimeRange } from '@grafana/data';
+import { LoadingState, toDataFrame, DataFrame, DataQueryRequest, DataQueryResponse, ScopedVars, TimeRange, FieldType, Field, ArrayVector } from '@grafana/data';
 import { DataSourceWithBackend, HealthStatus } from '@grafana/runtime';
 import { flatten, sample } from 'lodash';
 import { Observable } from 'rxjs';
@@ -173,17 +173,38 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
                 if (target.format === 'logs') {
                   let doesTimeFieldExist = false;
                   let doesBodyFieldExist = false;
-                  (df.fields || []).forEach((f) => {
+                  let labelsFieldIndex = -1;
+                  (df.fields || []).forEach((f, fi) => {
                     if (f.name === 'timestamp' && f.type === 'time') {
                       doesTimeFieldExist = true;
                     }
                     if (f.name === 'body' && f.type === 'string') {
                       doesBodyFieldExist = true;
                     }
+                    if (f.name === 'labels' && f.type === 'string') {
+                      labelsFieldIndex = fi;
+                    }
                   });
                   if (doesBodyFieldExist && doesTimeFieldExist) {
                     frame.meta.type = 'log-lines';
                     frame.meta.typeVersion = [0, 0];
+                    if (labelsFieldIndex > -1) {
+                      let labelField = frame.fields[labelsFieldIndex];
+                      frame.fields[labelsFieldIndex] = {
+                        ...labelField,
+                        type: FieldType.other,
+                        typeInfo: { frame: 'json.RawMessage' },
+                        values: new ArrayVector(
+                          labelField?.values?.toArray().map((fv) => {
+                            try {
+                              return typeof fv === 'string' && fv && fv !== 'null' ? JSON.parse(fv) : {};
+                            } catch (ex) {
+                              return {};
+                            }
+                          })
+                        ),
+                      } as Field;
+                    }
                   }
                   frame.meta.preferredVisualisationType = 'logs';
                 }
