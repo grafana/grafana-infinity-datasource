@@ -2878,6 +2878,15 @@
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
+"@yesoreyeram/nearley@^3.0.0-beta.2":
+  version "3.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/@yesoreyeram/nearley/-/nearley-3.0.0-beta.2.tgz#e7cdf82fe7205c99b05dca1f98470b3d9c52712d"
+  integrity sha512-Ur/jT2T80SmND74eo8Di0ssr4QCs+3VfXSy4iT/q7RDQnjlhm9ZXBi7PwLAXTa8lweYtWMkdEEjAxwFC/aJchg==
+  dependencies:
+    commander "^2.19.0"
+    moo "^0.5.0"
+    randexp "0.4.6"
+
 abab@^2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/abab/-/abab-2.0.6.tgz#41b80f2c871d19686216b82309231cfd3cb3d291"
@@ -7133,7 +7142,7 @@ monaco-editor@0.34.0:
   resolved "https://registry.yarnpkg.com/monaco-editor/-/monaco-editor-0.34.0.tgz#b1749870a1f795dbfc4dc03d8e9b646ddcbeefa7"
   integrity sha512-VF+S5zG8wxfinLKLrWcl4WUizMx+LeJrG4PM/M78OhcwocpV0jiyhX/pG6Q9jIOhrb/ckYi6nHnaR5OojlOZCQ==
 
-moo@^0.5.0, moo@^0.5.1:
+moo@^0.5.0, moo@^0.5.2:
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/moo/-/moo-0.5.2.tgz#f9fe82473bc7c184b0d32e2215d3f6e67278733c"
   integrity sha512-iSAJLHYKnX41mKcJKjqvnAN9sf0LMDTXDEvFv+ffuRR9a1MIuXLjMNL6EsnDHSkKLTWNqQQ5uo61P4EbU4NU+Q==
@@ -7176,16 +7185,6 @@ natural-compare@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==
-
-nearley@^2.20.1:
-  version "2.20.1"
-  resolved "https://registry.yarnpkg.com/nearley/-/nearley-2.20.1.tgz#246cd33eff0d012faf197ff6774d7ac78acdd474"
-  integrity sha512-+Mc8UaAebFzgV+KpI5n7DasuuQCHA89dmwm7JXw3TV43ukfNQ9DnBH3Mdb2g/I4Fdxc26pwimBWvjIw0UAILSQ==
-  dependencies:
-    commander "^2.19.0"
-    moo "^0.5.0"
-    railroad-diagrams "^1.0.0"
-    randexp "0.4.6"
 
 neo-async@^2.6.2:
   version "2.6.2"
@@ -7687,11 +7686,6 @@ raf@^3.1.0, raf@^3.4.0, raf@^3.4.1:
   integrity sha512-Sq4CW4QhwOHE8ucn6J34MqtZCeWFP2aQSmrlroYgqAV1PjStIhJXxYuTgUIfkEk7zTLjmIjLmU5q+fbD1NnOJA==
   dependencies:
     performance-now "^2.1.0"
-
-railroad-diagrams@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/railroad-diagrams/-/railroad-diagrams-1.0.0.tgz#eb7e6267548ddedfb899c1b90e57374559cddb7e"
-  integrity sha512-cz93DjNeLY0idrCNOH6PviZGRN9GJhsdm9hpn1YCS879fj4W+x5IFJhhkRZcwVgMmFF7R82UA/7Oh+R8lLZg6A==
 
 randexp@0.4.6:
   version "0.4.6"
@@ -9495,19 +9489,19 @@ uplot@1.6.24:
   resolved "https://registry.yarnpkg.com/uplot/-/uplot-1.6.24.tgz#dfa213fa7da92763261920ea972ed1a5f9f6af12"
   integrity sha512-WpH2BsrFrqxkMu+4XBvc0eCDsRBhzoq9crttYeSI0bfxpzR5YoSVzZXOKFVWcVC7sp/aDXrdDPbDZGCtck2PVg==
 
-uql@0.0.21:
-  version "0.0.21"
-  resolved "https://registry.yarnpkg.com/uql/-/uql-0.0.21.tgz#3e8036350fa3dbf558c66283166aeb462ac33734"
-  integrity sha512-vopI8tLpZrypBxgbmXBKWx1zEX7yn+gnfXSs4yKW5rrXN7Gf5CVhUmmT+ulry+SuEPAR4DSiAz+U5JpCOcD7Ng==
+uql@0.0.22:
+  version "0.0.22"
+  resolved "https://registry.yarnpkg.com/uql/-/uql-0.0.22.tgz#be0f59148961332ea116776274b026a111be207b"
+  integrity sha512-zk6obQYohpzMrfon91Kq+X8XtFmk4jEeWujePSPxd6U1i2MELQgUbeHwkvNQwmYfus1HyCNxi2W68hwLf+qg4w==
   dependencies:
+    "@yesoreyeram/nearley" "^3.0.0-beta.2"
     csv-parse "4.12.0"
     dayjs "^1.10.7"
     fast-xml-parser "^4.3.5"
     js-yaml "^4.1.0"
     jsonata "1.8.7"
     lodash "^4.17.21"
-    moo "^0.5.1"
-    nearley "^2.20.1"
+    moo "^0.5.2"
     xml2js "0.6.2"
 
 uri-js@^4.2.2:
