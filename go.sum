@@ -131,6 +131,8 @@ github.com/grafana/dataplane/sdata v0.0.7 h1:CImITypIyS1jxijCR6xqKx71JnYAxcwpH9C
 github.com/grafana/dataplane/sdata v0.0.7/go.mod h1:Jvs5ddpGmn6vcxT7tCTWAZ1mgi4sbcdFt9utQx5uMAU=
 github.com/grafana/grafana-aws-sdk v0.24.0 h1:0RKCJTeIkpEUvLCTjGOK1+jYZpaE2nJaGghGLvtUsFs=
 github.com/grafana/grafana-aws-sdk v0.24.0/go.mod h1:3zghFF6edrxn0d6k6X9HpGZXDH+VfA+MwD2Pc/9X0ec=
+github.com/grafana/grafana-azure-sdk-go v1.13.0 h1:2II2kXyHsBOCWkSQBYXrhhzuZpAn+viaesz3y+AyOSM=
+github.com/grafana/grafana-azure-sdk-go v1.13.0/go.mod h1:SAlwLdEuox4vw8ZaeQwnepYXnhznnQQdstJbcw8LH68=
 github.com/grafana/grafana-plugin-sdk-go v0.220.0 h1:0UgyATMH9em+qk1YVqplzZpDSMFcRjx6YBjnl2cIe+E=
 github.com/grafana/grafana-plugin-sdk-go v0.220.0/go.mod h1:epJ5s1UeH/mzBpRrkiO8iz9xc6uuQ8f4zwdmCA4kYmo=
 github.com/grafana/sqlds/v3 v3.2.0 h1:WXuYEaFfiCvgm8kK2ixx44/zAEjFzCylA2+RF3GBqZA=
