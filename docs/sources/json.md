@@ -28,6 +28,8 @@ weight: 21
 
 Select **Type** of the query to `JSON`. You can either specify the URL of the JSON API, JSON file or can provide inline CSV.
 
+{{< docs/play title="Infinity plugin JSON demo" url="https://play.grafana.org/d/infinity-json" >}}
+
 ## Using public JSON API endpoints
 
 Below example shows about fetching data from a publicly accessible JSON URL/API endpoint.
