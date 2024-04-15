@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"os"
+	"strings"
 
 	"github.com/grafana/grafana-azure-sdk-go/azcredentials"
 	"github.com/grafana/grafana-azure-sdk-go/azhttpclient"
@@ -19,56 +19,62 @@ func ApplyAzureAuth(ctx context.Context, httpClient *http.Client, settings model
 	defer span.End()
 
 	if IsAzureAuthConfigured(settings) {
-		azSettings := &azsettings.AzureSettings{
-			Cloud:                   string(settings.MicrosoftSettings.Cloud),
-			ManagedIdentityEnabled:  true,
-			WorkloadIdentityEnabled: true,
-		}
-
-		tenantID := settings.MicrosoftSettings.TenantID
-		if tenantID == "" {
-			tenantID = os.Getenv("AZURE_TENANT_ID")
-		}
-
-		clientID := settings.OAuth2Settings.ClientID
-		if clientID == "" {
-			clientID = os.Getenv("AZURE_CLIENT_ID")
+		azSettings, err := azsettings.ReadFromEnv()
+		if err != nil {
+			return nil, err
 		}
 
 		var credentials azcredentials.AzureCredentials
 
 		switch settings.MicrosoftSettings.AuthType {
 		case models.MicrosoftAuthTypeClientSecret:
-			clientSecret := settings.OAuth2Settings.ClientSecret
-			if clientSecret == "" {
-				clientSecret = os.Getenv("AZURE_CLIENT_SECRET")
+
+			if strings.TrimSpace(settings.MicrosoftSettings.TenantID) == "" {
+				return nil, fmt.Errorf("Tenant ID %w ", models.MicrosoftRequiredForClientSecretErrHelp)
+			}
+
+			if strings.TrimSpace(settings.MicrosoftSettings.ClientID) == "" {
+				return nil, fmt.Errorf("Client ID %w ", models.MicrosoftRequiredForClientSecretErrHelp)
+			}
+
+			if strings.TrimSpace(settings.MicrosoftSettings.ClientSecret) == "" {
+				return nil, fmt.Errorf("Client secret %w ", models.MicrosoftRequiredForClientSecretErrHelp)
 			}
 
 			credentials = &azcredentials.AzureClientSecretCredentials{
 				AzureCloud:   string(settings.MicrosoftSettings.Cloud),
-				TenantId:     tenantID,
-				ClientId:     clientID,
-				ClientSecret: clientSecret,
+				TenantId:     settings.MicrosoftSettings.TenantID,
+				ClientId:     settings.MicrosoftSettings.ClientID,
+				ClientSecret: settings.MicrosoftSettings.ClientSecret,
 			}
 		case models.MicrosoftAuthTypeManagedIdentity:
-			azSettings.ManagedIdentityClientId = clientID
+			if !azSettings.ManagedIdentityEnabled {
+				return nil, fmt.Errorf("Managed Identity %w ", models.MicrosoftDisabledAuthErrHelp)
+			}
 
 			credentials = &azcredentials.AzureManagedIdentityCredentials{
-				ClientId: clientID,
+				// ClientId is optional for managed identity, because it can be inferred from the environment
+				// https://github.com/grafana/grafana-azure-sdk-go/blob/21e2891b4190eb7c255c8cd275836def8200faf8/aztokenprovider/retriever_msi.go#L20-L30
+				ClientId: settings.MicrosoftSettings.ClientID,
 			}
 		case models.MicrosoftAuthTypeWorkloadIdentity:
-			azSettings.WorkloadIdentitySettings = &azsettings.WorkloadIdentitySettings{
-				TenantId: tenantID,
-				ClientId: clientID,
+			if !azSettings.WorkloadIdentityEnabled {
+				return nil, fmt.Errorf("Workload Identity %w ", models.MicrosoftDisabledAuthErrHelp)
 			}
 
 			credentials = &azcredentials.AzureWorkloadIdentityCredentials{}
+		case models.MicrosoftAuthTypeCurrentUserIdentity:
+			if !azSettings.UserIdentityEnabled {
+				return nil, fmt.Errorf("User Identity %w ", models.MicrosoftDisabledAuthErrHelp)
+			}
+
+			credentials = &azcredentials.AadCurrentUserCredentials{}
 		default:
 			panic(fmt.Errorf("invalid auth type '%s'", settings.MicrosoftSettings.AuthType))
 		}
 
 		authOpts := azhttpclient.NewAuthOptions(azSettings)
-		authOpts.Scopes(settings.OAuth2Settings.Scopes)
+		authOpts.Scopes(settings.MicrosoftSettings.Scopes)
 
 		httpClient.Transport = azhttpclient.AzureMiddleware(authOpts, credentials).
 			CreateMiddleware(httpclient.Options{}, httpClient.Transport)

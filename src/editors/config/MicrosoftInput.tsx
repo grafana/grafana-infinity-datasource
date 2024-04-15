@@ -5,13 +5,12 @@ import type {
     InfinityOptions,
     InfinitySecureOptions,
     MicrosoftAuthType, MicrosoftCloudType,
-    MicrosoftProps,
-    OAuth2Props
+    MicrosoftProps
 } from './../../types';
 
 const microsoftCloudTypes: Array<SelectableValue<MicrosoftCloudType>> = [
   { value: 'AzureCloud', label: 'Azure' },
-    { value: 'AzureUSGovernment', label: 'Azure US Government' },
+  { value: 'AzureUSGovernment', label: 'Azure US Government' },
   { value: 'AzureChinaCloud', label: 'Azure China Cloud' },
 ];
 
@@ -19,27 +18,24 @@ const microsoftAuthTypes: Array<SelectableValue<MicrosoftAuthType>> = [
   { value: 'clientsecret', label: 'Client Secret' },
   { value: 'msi', label: 'Managed Identity' },
   { value: 'workloadidentity', label: 'Workload Identity' },
+  { value: 'currentuser', label: 'User Identity' },
 ];
 
 export const MicrosoftInputsEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
   const { options, onOptionsChange } = props;
   const { secureJsonFields } = options;
   const secureJsonData = (options.secureJsonData || {}) as InfinitySecureOptions;
-  let oauth2: OAuth2Props = options?.jsonData?.oauth2 || {};
   let microsoft: MicrosoftProps = options?.jsonData?.microsoft || {};
 
   const onMicrosoftPropsChange = <T extends keyof MicrosoftProps, V extends MicrosoftProps[T]>(key: T, value: V) => {
     onOptionsChange({ ...options, jsonData: { ...options.jsonData, microsoft: { ...microsoft, [key]: value } } });
   };
 
-  const onOAuth2PropsChange = <T extends keyof OAuth2Props, V extends OAuth2Props[T]>(key: T, value: V) => {
-    onOptionsChange({ ...options, jsonData: { ...options.jsonData, oauth2: { ...oauth2, [key]: value } } });
-  };
   const onResetClientSecret = () => {
     onOptionsChange({
       ...options,
-      secureJsonFields: { ...options.secureJsonFields, oauth2ClientSecret: false },
-      secureJsonData: { ...options.secureJsonData, oauth2ClientSecret: '' },
+      secureJsonFields: { ...options.secureJsonFields, microsoftClientSecret: false },
+      secureJsonData: { ...options.secureJsonData, microsoftClientSecret: '' },
     });
   };
   return (
@@ -55,11 +51,28 @@ export const MicrosoftInputsEditor = (props: DataSourcePluginOptionsEditorProps<
                 isClearable={false} menuShouldPortal={true}></Select>
       </div>
       <div className="gf-form">
-        <InlineFormLabel width={10} tooltip="If empty, the AZURE_TENANT_ID environemnt variables will be used">Tenant ID</InlineFormLabel>
-        <Input onChange={(v) => onMicrosoftPropsChange('tenant_id', v.currentTarget.value)} value={microsoft.tenant_id} width={60} placeholder={'Tenant ID'} />
-      </div>
-      <div className="gf-form">
-        <InlineFormLabel width={10} tooltip="Authentication Type">
+        <InlineFormLabel width={10}
+            tooltip={
+                <>
+                    {`Managed Identity, Workload Identity and User Identity requires ambient credentials. `}
+                    {`An Grafana admin has to explicit opt-in via `}
+                    <b>grafana.ini</b>
+                    {` to allow the authentication methods.`}
+                    <br/>
+                    <br/>
+                    {`For more information, please refer to the `}
+                    <a href="https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#azure" target="_blank" rel="noreferrer">Grafana documentation</a>.
+                    <br/>
+                    <br/>
+                    {`Additionally, this plugin needs to be added to the grafana.ini setting `}
+                    <a href="https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#forward_settings_to_plugins" target="_blank" rel="noreferrer">azure.forward_settings_to_plugins</a>.
+                    <pre>
+                    [azure]
+                    {`\nforward_settings_to_plugins = grafana-azure-monitor-datasource, prometheus, grafana-azure-data-explorer-datasource, mssql, yesoreyeram-infinity-datasource`}
+                    </pre>
+                </>
+            }
+            {...{interactive: true }}>
           Authentication Type
         </InlineFormLabel>
         <RadioButtonGroup<MicrosoftAuthType>
@@ -67,10 +80,20 @@ export const MicrosoftInputsEditor = (props: DataSourcePluginOptionsEditorProps<
             onChange={(v) => onMicrosoftPropsChange('auth_type', v)}
             value={microsoft.auth_type || 'clientsecret'}></RadioButtonGroup>
       </div>
-      <div className="gf-form">
-        <InlineFormLabel width={10} tooltip="If empty, the AZURE_CLIENT_ID environemnt variables will be used">Client ID</InlineFormLabel>
-        <Input onChange={(v) => onOAuth2PropsChange('client_id', v.currentTarget.value)} value={oauth2.client_id} width={60} placeholder={'Client ID'} />
-      </div>
+      {(microsoft.auth_type === 'clientsecret' || !microsoft?.auth_type) && (
+        <>
+          <div className="gf-form">
+            <InlineFormLabel width={10}>Tenant ID</InlineFormLabel>
+            <Input onChange={(v) => onMicrosoftPropsChange('tenant_id', v.currentTarget.value)} value={microsoft.tenant_id} width={60} placeholder={'Tenant ID'} />
+          </div>
+        </>
+      )}
+      {(microsoft.auth_type === 'clientsecret' || microsoft.auth_type === 'msi' || !microsoft?.auth_type) && (
+          <div className="gf-form">
+            <InlineFormLabel width={10}>Client ID</InlineFormLabel>
+            <Input onChange={(v) => onMicrosoftPropsChange('client_id', v.currentTarget.value)} value={microsoft.client_id} width={60} placeholder={'Client ID'} />
+          </div>
+      )}
       {(microsoft.auth_type === 'clientsecret' || !microsoft?.auth_type) && (
         <>
           <div className="gf-form">
@@ -78,12 +101,11 @@ export const MicrosoftInputsEditor = (props: DataSourcePluginOptionsEditorProps<
               labelWidth={10}
               inputWidth={60}
               required
-              value={secureJsonData.oauth2ClientSecret || ''}
-              isConfigured={(secureJsonFields && secureJsonFields.oauth2ClientSecret) as boolean}
+              value={secureJsonData.microsoftClientSecret || ''}
+              isConfigured={(secureJsonFields && secureJsonFields.microsoftClientSecret) as boolean}
               onReset={onResetClientSecret}
-              onChange={onUpdateDatasourceSecureJsonDataOption(props, 'oauth2ClientSecret')}
+              onChange={onUpdateDatasourceSecureJsonDataOption(props, 'microsoftClientSecret')}
               label="Client Secret"
-              tooltip="If empty, the AZURE_CLIENT_SECRET environemnt variables will be used"
               aria-label="client secret"
               placeholder="Client secret"
             />
@@ -107,8 +129,8 @@ export const MicrosoftInputsEditor = (props: DataSourcePluginOptionsEditorProps<
             {...{interactive: true }}
         >Scopes</InlineFormLabel>
         <Input
-          onChange={(v) => onOAuth2PropsChange('scopes', (v.currentTarget.value || '').split(','))}
-          value={(oauth2.scopes || []).join(',')}
+          onChange={(v) => onMicrosoftPropsChange('scopes', (v.currentTarget.value || '').split(','))}
+          value={(microsoft.scopes || []).join(',')}
           width={60}
           placeholder={'Comma separated values of scopes'}
         />

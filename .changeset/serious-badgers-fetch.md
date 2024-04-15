@@ -2,4 +2,4 @@
 'grafana-infinity-datasource': minor
 ---
 
-Add native Azure authentication
+Add native Microsoft authentication

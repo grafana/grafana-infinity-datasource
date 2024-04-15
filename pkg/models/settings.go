@@ -68,9 +68,10 @@ type AWSSettings struct {
 type MicrosoftAuthType string
 
 const (
-	MicrosoftAuthTypeManagedIdentity  MicrosoftAuthType = azcredentials.AzureAuthManagedIdentity
-	MicrosoftAuthTypeWorkloadIdentity MicrosoftAuthType = azcredentials.AzureAuthWorkloadIdentity
-	MicrosoftAuthTypeClientSecret     MicrosoftAuthType = azcredentials.AzureAuthClientSecret
+	MicrosoftAuthTypeManagedIdentity     MicrosoftAuthType = azcredentials.AzureAuthManagedIdentity
+	MicrosoftAuthTypeWorkloadIdentity    MicrosoftAuthType = azcredentials.AzureAuthWorkloadIdentity
+	MicrosoftAuthTypeClientSecret        MicrosoftAuthType = azcredentials.AzureAuthClientSecret
+	MicrosoftAuthTypeCurrentUserIdentity MicrosoftAuthType = azcredentials.AzureAuthCurrentUserIdentity
 )
 
 type MicrosoftCloudType string
@@ -81,10 +82,20 @@ const (
 	MicrosoftCloudUSGovernment MicrosoftCloudType = azsettings.AzureUSGovernment
 )
 
+var (
+	MicrosoftRequiredForClientSecretErrHelp = errors.New(` is required for Microsoft client secret authentication`)
+	MicrosoftDisabledAuthErrHelp            = errors.New(` is not enabled in the Grafana Azure settings. For more information, please refer to the Grafana documentation at 
+https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#azure. 
+Additionally, this plugin needs to be added to the grafana.ini setting azure.forward_settings_to_plugins.`)
+)
+
 type MicrosoftSettings struct {
-	Cloud    MicrosoftCloudType `json:"cloud"`
-	AuthType MicrosoftAuthType  `json:"auth_type"`
-	TenantID string             `json:"tenant_id"`
+	Cloud        MicrosoftCloudType `json:"cloud"`
+	AuthType     MicrosoftAuthType  `json:"auth_type"`
+	TenantID     string             `json:"tenant_id"`
+	ClientID     string             `json:"client_id"`
+	ClientSecret string
+	Scopes       []string `json:"scopes,omitempty"`
 }
 
 type ProxyType string
@@ -165,6 +176,42 @@ func (s *InfinitySettings) Validate() error {
 		}
 		return nil
 	}
+	if s.AuthenticationMethod == AuthenticationMethodMicrosoft {
+		azSettings, err := azsettings.ReadFromEnv()
+		if err != nil {
+			return err
+		}
+
+		switch s.MicrosoftSettings.AuthType {
+		case MicrosoftAuthTypeClientSecret:
+			if strings.TrimSpace(s.MicrosoftSettings.TenantID) == "" {
+				return fmt.Errorf("Tenant ID %w ", MicrosoftRequiredForClientSecretErrHelp)
+			}
+
+			if strings.TrimSpace(s.MicrosoftSettings.ClientID) == "" {
+				return fmt.Errorf("Client ID %w ", MicrosoftRequiredForClientSecretErrHelp)
+			}
+
+			if strings.TrimSpace(s.MicrosoftSettings.ClientSecret) == "" {
+				return fmt.Errorf("Client secret %w ", MicrosoftRequiredForClientSecretErrHelp)
+			}
+		case MicrosoftAuthTypeManagedIdentity:
+			if !azSettings.ManagedIdentityEnabled {
+				return errors.New("managed identity authentication is not enabled in Grafana config. " +
+					"Refer https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#azure")
+			}
+		case MicrosoftAuthTypeWorkloadIdentity:
+			if !azSettings.WorkloadIdentityEnabled {
+				return errors.New("workload identity authentication is not enabled in Grafana config." +
+					"Refer https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#azure")
+			}
+		case MicrosoftAuthTypeCurrentUserIdentity:
+			if !azSettings.UserIdentityEnabled {
+				return errors.New("user identity authentication is not enabled in Grafana config." +
+					"Refer https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#azure")
+			}
+		}
+	}
 	if s.AuthenticationMethod != AuthenticationMethodNone && len(s.AllowedHosts) < 1 {
 		return errors.New("configure allowed hosts in the authentication section")
 	}
@@ -212,7 +259,6 @@ type InfinitySettingsJson struct {
 	ProxyType                ProxyType         `json:"proxy_type,omitempty"`
 	ProxyUrl                 string            `json:"proxy_url,omitempty"`
 	AllowedHosts             []string          `json:"allowedHosts,omitempty"`
-
 	ReferenceData            []RefData         `json:"refData,omitempty"`
 	CustomHealthCheckEnabled bool              `json:"customHealthCheckEnabled,omitempty"`
 	CustomHealthCheckUrl     string            `json:"customHealthCheckUrl,omitempty"`
@@ -311,6 +357,9 @@ func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings
 	}
 	if val, ok := config.DecryptedSecureJSONData["azureBlobAccountKey"]; ok {
 		settings.AzureBlobAccountKey = val
+	}
+	if val, ok := config.DecryptedSecureJSONData["microsoftClientSecret"]; ok {
+		settings.MicrosoftSettings.ClientSecret = val
 	}
 	settings.CustomHeaders = GetSecrets(config, "httpHeaderName", "httpHeaderValue")
 	settings.SecureQueryFields = GetSecrets(config, "secureQueryName", "secureQueryValue")

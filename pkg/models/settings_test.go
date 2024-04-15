@@ -161,9 +161,11 @@ func TestAllSettingsAgainstFrontEnd(t *testing.T) {
 				"service" 	: "service1"
 			},
 			"microsoft" : {
-                "cloud"      : "AzureUSGovernment",
-				"auth_type"	 : "clientsecret",
-				"tenant_id"	 : "tenant1"
+				"cloud"	 	: "AzureUSGovernment",
+				"auth_type"	: "clientsecret",
+				"tenant_id"	: "tenant1",
+				"client_id"	: "myMicrosoftClientID",
+				"scopes"	: ["msscope1","msscope2"]
 			},
 			"oauth2" : {
 				"client_id":"myClientID",
@@ -186,6 +188,7 @@ func TestAllSettingsAgainstFrontEnd(t *testing.T) {
 			"awsAccessKey":               "awsAccessKey1",
 			"awsSecretKey":               "awsSecretKey1",
 			"oauth2ClientSecret":         "myOauth2ClientSecret",
+			"microsoftClientSecret":      "myMicrosoftClientSecret",
 			"oauth2JWTPrivateKey":        "myOauth2JWTPrivateKey",
 			"oauth2EndPointParamsValue1": "Resource1",
 			"oauth2EndPointParamsValue2": "Resource2",
@@ -218,9 +221,12 @@ func TestAllSettingsAgainstFrontEnd(t *testing.T) {
 			Region:   "region1",
 		},
 		MicrosoftSettings: models.MicrosoftSettings{
-			Cloud:    models.MicrosoftCloudUSGovernment,
-			AuthType: models.MicrosoftAuthTypeClientSecret,
-			TenantID: "tenant1",
+			Cloud:        models.MicrosoftCloudUSGovernment,
+			AuthType:     models.MicrosoftAuthTypeClientSecret,
+			TenantID:     "tenant1",
+			ClientID:     "myMicrosoftClientID",
+			ClientSecret: "myMicrosoftClientSecret",
+			Scopes:       []string{"msscope1", "msscope2"},
 		},
 		OAuth2Settings: models.OAuth2Settings{
 			ClientID:     "myClientID",

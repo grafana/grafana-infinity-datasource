@@ -27,11 +27,13 @@ export type AWSAuthProps = {
 };
 
 export type MicrosoftCloudType = 'AzureCloud' | 'AzureChinaCloud' | 'AzureUSGovernment';
-export type MicrosoftAuthType = 'clientsecret' | 'msi' | 'workloadidentity';
+export type MicrosoftAuthType = 'clientsecret' | 'msi' | 'workloadidentity' | 'currentuser';
 export type MicrosoftProps = {
   cloud?: MicrosoftCloudType;
   auth_type?: MicrosoftAuthType;
   tenant_id?: string;
+  client_id?: string;
+  scopes?: string[];
 };
 export type InfinityReferenceData = { name: string; data: string };
 export type ProxyType = 'none' | 'env' | 'url';
@@ -70,6 +72,7 @@ export interface InfinitySecureOptions {
   awsAccessKey?: string;
   awsSecretKey?: string;
   oauth2ClientSecret?: string;
+  microsoftClientSecret?: string;
   oauth2JWTPrivateKey?: string;
   azureBlobAccountKey?: string;
 }

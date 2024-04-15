@@ -18,7 +18,7 @@ const authTypes: Array<SelectableValue<AuthType | 'others'> & { logo?: string }>
   { value: 'oauthPassThru', label: 'Forward OAuth' },
   { value: 'oauth2', label: 'OAuth2', logo: '/public/plugins/yesoreyeram-infinity-datasource/img/oauth-2-sm.png' },
   { value: 'aws', label: 'AWS', logo: '/public/plugins/yesoreyeram-infinity-datasource/img/aws.jpg' },
-  { value: 'microsoft', label: 'Microsoft Entra ID' },
+  { value: 'microsoft', label: 'Microsoft Entra ID', logo: '/public/img/microsoft_auth_icon.svg' },
   { value: 'azureBlob', label: 'Azure Blob' },
   { value: 'others', label: 'Other Auth Providers' },
 ];
@@ -137,7 +137,7 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
               e.preventDefault();
             }}
           >
-            {a.logo ? <img src={a.logo} width={24} height={24} style={{ marginInlineEnd: '10px' }} /> : <Icon name="key-skeleton-alt" style={{ marginInlineEnd: '10px' }} />}
+            {a.logo ? <img src={a.logo} width={16} height={16} style={{ marginInlineEnd: '10px' }} /> : <Icon name="key-skeleton-alt" style={{ marginInlineEnd: '10px' }} />}
             {a.label}
           </a>
         ))}
