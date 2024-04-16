@@ -3,6 +3,13 @@ slug: '/html'
 title: 'HTML'
 menuTitle: HTML
 description: HTML
+hero:
+  title: Visualize HTML with Infinity
+  level: 1
+  width: 110
+  image: https://www.svgrepo.com/show/373669/html.svg
+  height: 110
+  description: Visualize data from your HTML pages using infinity data source plugin
 aliases:
   - infinity
 keywords:
@@ -22,7 +29,13 @@ labels:
 weight: 25
 ---
 
-# Visualizing HTML data
+{{< docs/hero-simple key="hero" >}}
+
+<hr style="margin-bottom:30px"/>
+
+## 📊 Overview
+
+<div style="margin-bottom:30px"></div>
 
 {{< admonition type="caution" >}}
 HTML query type should be used only for retrieving data from legacy systems where there are no alternative APIs exist. Instead of HTML query type, we strongly recommend to use other query types such as JSON, CSV, XML.

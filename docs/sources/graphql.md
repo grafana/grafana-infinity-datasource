@@ -3,6 +3,13 @@ slug: '/graphql'
 title: 'GraphQL'
 menuTitle: GraphQL
 description: GraphQL
+hero:
+  title: Visualize GraphQL with Infinity
+  level: 1
+  width: 110
+  image: https://www.svgrepo.com/show/353834/graphql.svg
+  height: 110
+  description: Visualize data from your GraphQL APIs using infinity data source plugin
 aliases:
   - infinity
 keywords:
@@ -22,9 +29,17 @@ labels:
 weight: 23
 ---
 
-# Visualizing GraphQL data
+{{< docs/hero-simple key="hero" >}}
+
+<hr style="margin-bottom:30px"/>
+
+## 📊 Overview
+
+<div style="margin-bottom:30px"></div>
 
 With the infinity datasource, you can also scrap data from any GraphQL endpoints. This works exactly same way as JSON api. Instead of using `GET` method used by `JSON` api, this uses `POST` method with a body.
+
+{{< docs/play title="Infinity plugin GraphQL demo" url="https://play.grafana.org/d/infinity-graphql" >}}
 
 For example, consider the below GraphQL Endpoint. This returns list of countries and their calling codes.
 
