@@ -268,7 +268,7 @@ SOURCES_plugins_grafana_jira_datasource='jira-datasource'
 SOURCES_plugins_grafana_mongodb_datasource='mongodb-datasource'
 SOURCES_plugins_grafana_oracle_datasource='oracle-datasource'
 SOURCES_plugins_grafana_splunk_datasource='splunk-datasource'
-SOURCES_plugins_yesoreyeram_infinity_datasource='infinity-datasource'
+SOURCES_plugins_yesoreyeram_infinity_datasource='infinity'
 
 VERSIONS_as_code='UNVERSIONED'
 VERSIONS_grafana_cloud='UNVERSIONED'

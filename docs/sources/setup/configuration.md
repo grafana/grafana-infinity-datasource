@@ -26,12 +26,12 @@ weight: 201
 
 Once the plugin installed, you need to create an instance of the datasource. To create an instance follow the steps
 
-- Go to `http://localhost:3000/connections/datasources` and select _Add data source_
+- Go to `http://localhost:3000/datasources` and select _Add data source_
 - Search for **Infinity** plugin
 - Give a name to your datasource
 - Save.
 
-![image](https://github.com/grafana/grafana-infinity-datasource/assets/153843/9ea9b144-da6a-4fce-8fc9-65d1abd99f11#center)
+![image](https://user-images.githubusercontent.com/153843/118472644-f4ceab00-b700-11eb-89e1-eec404755cd0.png#center)
 
 This datasource can work out of the box without any additional configuration. If you need the URL to be authenticated or pass additional headers/query/tls/timeout settings, configure the corresponding section.
 
@@ -58,11 +58,3 @@ If you want your datasource to connect via proxy, set the environment appropriat
 If you want to setup specific proxy URL for the datasource, you can configure in the datasource config network section.
 
 > proxy url specification in datasource config is available from v2.2.0
-
-## Security
-
-### Handling sensitive queries
-
-Any queries saved in the dashboard are visible to everyone who views the dashboard. Sometimes, dashboard editors might accidentally save sensitive headers such as `Authorization` in query. In such cases, Infinity warns you about such content in the query.
-
-You can customize behavior of infinity in such a way that such queries can be blocked or allowed. You can find the relevant settings under datasource configuration **Security --> Query Security** section. You can choose one of the mode from `Allow`, `Warn` and `Deny`. Currently default behavior is `Warn`.

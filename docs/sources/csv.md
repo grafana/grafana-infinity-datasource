@@ -32,8 +32,6 @@ Select **Type** of the query to `CSV`. You can either specify the URL of the CSV
 
 If your CSV doesn't have headers, you can specify them in the **CSV options** headers. Read more about the advance CSV settings like custom delimiters at below in CSV options section.
 
-{{< docs/play title="Infinity plugin CSV demo" url="https://play.grafana.org/d/infinity-csv" >}}
-
 ## CSV URL example
 
 CSV URL : `https://thingspeak.com/channels/38629/feed.csv`

@@ -26,8 +26,6 @@ weight: 23
 
 With the infinity datasource, you can also scrap data from any GraphQL endpoints. This works exactly same way as JSON api. Instead of using `GET` method used by `JSON` api, this uses `POST` method with a body.
 
-{{< docs/play title="Infinity plugin GraphQL demo" url="https://play.grafana.org/d/infinity-graphql" >}}
-
 For example, consider the below GraphQL Endpoint. This returns list of countries and their calling codes.
 
 ![image](https://user-images.githubusercontent.com/153843/93589049-2e012080-f9a4-11ea-9c08-8a02b6a98df1.png#center)

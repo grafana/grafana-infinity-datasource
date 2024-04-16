@@ -24,8 +24,6 @@ weight: 24
 
 # Visualizing XML data
 
-{{< docs/play title="Infinity plugin XML demo" url="https://play.grafana.org/d/infinity-xml" >}}
-
 In the below example, we are going to see how to use xml response in grafana
 
 ![image](https://user-images.githubusercontent.com/153843/99292060-a0716e00-2838-11eb-9af8-cf87adfd8fd5.png#center)

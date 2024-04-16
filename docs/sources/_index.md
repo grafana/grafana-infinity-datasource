@@ -31,8 +31,6 @@ weight: 10
 
 The Infinity data source plugin allows you to query and visualize data from JSON / CSV / GraphQL / XML / HTML endpoints.
 
-{{< docs/play title="Infinity plugin demo" url="https://play.grafana.org/d/infinity" >}}
-
 ## 🎯 Key Features
 
 - Get data from multiple sources into grafana
