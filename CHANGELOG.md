@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.6.1
+
+🐛 UQL dependency updated to `0.0.22` from `0.0.21`
+
+📜 [Docs website](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource) update with [play.grafana](https://play.grafana.org/d/infinity) links
+
 ## 2.6.0
 
 ⚙️ **Chore**: Upgrade grafana-plugin-sdk-go to v0.220.0
