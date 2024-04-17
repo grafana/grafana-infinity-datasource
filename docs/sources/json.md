@@ -3,6 +3,13 @@ slug: '/json'
 title: 'JSON'
 menuTitle: JSON
 description: JSON
+hero:
+  title: Visualize JSON with Infinity
+  level: 1
+  width: 110
+  image: https://www.svgrepo.com/show/373712/json.svg
+  height: 110
+  description: Visualize JSON data from your REST APIs using infinity data source plugin
 aliases:
   - infinity
 keywords:
@@ -22,9 +29,17 @@ labels:
 weight: 21
 ---
 
-# Visualizing JSON data
+{{< docs/hero-simple key="hero" >}}
+
+<hr style="margin-bottom:30px"/>
+
+## 📊 Overview
+
+<div style="margin-bottom:30px"></div>
 
 ![Sample JSON Query in Infinity datasource](https://user-images.githubusercontent.com/153843/189874914-6b49d3ec-2030-46ea-b14e-fdd48628345e.png#center)
+
+{{< docs/play title="Infinity plugin JSON demo" url="https://play.grafana.org/d/infinity-json" >}}
 
 Select **Type** of the query to `JSON`. You can either specify the URL of the JSON API, JSON file or can provide inline CSV.
 
