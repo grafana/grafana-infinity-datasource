@@ -1,5 +1,9 @@
 # Change Log
 
+## 2.6.2
+
+🚀 New settings to block/allow/warn sensitive queries in the dashboard. Read more about this in [the docs](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/setup/configuration/).
+
 ## 2.6.1
 
 🐛 UQL dependency updated to `0.0.22` from `0.0.21`

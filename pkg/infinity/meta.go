@@ -56,7 +56,7 @@ func WrapMetaForInlineQuery(ctx context.Context, frame *data.Frame, err error, q
 	return frame, err
 }
 
-func WrapMetaForRemoteQuery(ctx context.Context, frame *data.Frame, err error, query models.Query) (*data.Frame, error) {
+func WrapMetaForRemoteQuery(ctx context.Context, settings models.InfinitySettings, frame *data.Frame, err error, query models.Query) (*data.Frame, error) {
 	if frame == nil {
 		frame = data.NewFrame(query.RefID)
 	}
@@ -71,17 +71,9 @@ func WrapMetaForRemoteQuery(ctx context.Context, frame *data.Frame, err error, q
 	if frame.Meta.Notices == nil {
 		frame.Meta.Notices = []data.Notice{}
 	}
-	for _, h := range query.URLOptions.Headers {
-		if strings.EqualFold(h.Key, headerKeyAuthorization) {
-			frame.Meta.Notices = append(frame.Meta.Notices, data.Notice{
-				Severity: data.NoticeSeverityWarning,
-				Text:     fmt.Sprintf("for security reasons, don't include headers such as %s in the query. Instead, add them in the config where possible", h.Key),
-				Inspect:  data.InspectTypeData,
-			})
-		}
-	}
 	frame = ApplyLogMeta(ctx, frame, query)
 	frame = ApplyTraceMeta(ctx, frame, query)
+	frame = ApplyNotices(ctx, settings, frame, query)
 	return frame, err
 }
 
@@ -127,4 +119,31 @@ func ApplyTraceMeta(ctx context.Context, frame *data.Frame, query models.Query) 
 		frame.Meta.PreferredVisualization = data.VisTypeTrace
 	}
 	return frame
+}
+
+func ApplyNotices(ctx context.Context, settings models.InfinitySettings, frame *data.Frame, query models.Query) *data.Frame {
+	if frame.Meta == nil {
+		frame.Meta = &data.FrameMeta{}
+	}
+	if frame.Meta.Notices == nil {
+		frame.Meta.Notices = []data.Notice{}
+	}
+	if settings.UnsecuredQueryHandling == models.UnsecuredQueryHandlingWarn {
+		frame.Meta.Notices = append(frame.Meta.Notices, GetSecureHeaderWarnings(query)...)
+	}
+	return frame
+}
+
+func GetSecureHeaderWarnings(query models.Query) []data.Notice {
+	notices := []data.Notice{}
+	for _, h := range query.URLOptions.Headers {
+		if strings.EqualFold(h.Key, headerKeyAuthorization) {
+			notices = append(notices, data.Notice{
+				Severity: data.NoticeSeverityWarning,
+				Text:     fmt.Sprintf("for security reasons, don't include headers such as %s in the query. Instead, add them in the config where possible", h.Key),
+				Inspect:  data.InspectTypeData,
+			})
+		}
+	}
+	return notices
 }
