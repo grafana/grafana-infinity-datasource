@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, TextArea } from '@grafana/ui';
+import { cloneDeep } from 'lodash';
 import { EditorRow } from './../../components/extended/EditorRow';
 import { EditorField } from './../../components/extended/EditorField';
 import { Stack } from './../../components/extended/Stack';
@@ -18,12 +19,16 @@ export const QueryColumnsEditor = (props: { query: InfinityQuery; onChange: (val
     return <></>;
   }
   const onColumnAdd = () => {
-    let columns = [...(query.columns || [])];
-    const defaultColumn = { text: '', selector: '', type: 'string' };
+    const columns = cloneDeep(query.columns || []);
+    const defaultColumn = {
+      text: '',
+      selector: '',
+      type: 'string',
+    };
     onChange({ ...query, columns: [...columns, defaultColumn] });
   };
   const onColumnRemove = (index: number) => {
-    let columns = [...(query.columns || [])];
+    const columns = cloneDeep(query.columns || []);
     columns.splice(index, 1);
     onChange({ ...query, columns });
   };
