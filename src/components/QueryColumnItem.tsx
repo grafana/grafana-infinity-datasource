@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import React, { useState } from 'react';
 import { isDataQuery, isBackendQuery } from './../app/utils';
 import { INFINITY_COLUMN_FORMATS } from './../constants';
@@ -19,22 +20,22 @@ export const QueryColumnItem = (props: QueryColumnItemProps) => {
     return <></>;
   }
   const onSelectorChange = () => {
-    let columns = [...(query.columns || [])];
+    const columns = cloneDeep(query.columns || []);
     columns[index].selector = selector;
     onChange({ ...query, columns });
   };
   const onTextChange = () => {
-    let columns = [...(query.columns || [])];
+    const columns = cloneDeep(query.columns || []);
     columns[index].text = text;
     onChange({ ...query, columns });
   };
   const onTimeFormatChange = (timestampFormat: string) => {
-    let columns = [...(query.columns || [])];
+    const columns = cloneDeep(query.columns || []);
     columns[index].timestampFormat = timestampFormat;
     onChange({ ...query, columns });
   };
   const onFormatChange = (type: InfinityColumnFormat) => {
-    let columns = [...(query.columns || [])];
+    const columns = cloneDeep(query.columns || []);
     columns[index].type = type;
     onChange({ ...query, columns });
   };
