@@ -70,6 +70,14 @@ const (
 	ProxyTypeUrl  ProxyType = "url"
 )
 
+type UnsecuredQueryHandlingMode string
+
+const (
+	UnsecuredQueryHandlingAllow UnsecuredQueryHandlingMode = "allow"
+	UnsecuredQueryHandlingWarn  UnsecuredQueryHandlingMode = "warn"
+	UnsecuredQueryHandlingDeny  UnsecuredQueryHandlingMode = "deny"
+)
+
 type InfinitySettings struct {
 	UID                      string
 	Name                     string
@@ -107,6 +115,7 @@ type InfinitySettings struct {
 	AzureBlobAccountUrl      string
 	AzureBlobAccountName     string
 	AzureBlobAccountKey      string
+	UnsecuredQueryHandling   UnsecuredQueryHandlingMode
 	// ProxyOpts is used for Secure Socks Proxy configuration
 	ProxyOpts httpclient.Options
 }
@@ -184,12 +193,14 @@ type InfinitySettingsJson struct {
 	TimeoutInSeconds         int64          `json:"timeoutInSeconds,omitempty"`
 	ProxyType                ProxyType      `json:"proxy_type,omitempty"`
 	ProxyUrl                 string         `json:"proxy_url,omitempty"`
-	AllowedHosts             []string       `json:"allowedHosts,omitempty"`
 	ReferenceData            []RefData      `json:"refData,omitempty"`
 	CustomHealthCheckEnabled bool           `json:"customHealthCheckEnabled,omitempty"`
 	CustomHealthCheckUrl     string         `json:"customHealthCheckUrl,omitempty"`
 	AzureBlobAccountUrl      string         `json:"azureBlobAccountUrl,omitempty"`
 	AzureBlobAccountName     string         `json:"azureBlobAccountName,omitempty"`
+	// Security
+	AllowedHosts           []string                   `json:"allowedHosts,omitempty"`
+	UnsecuredQueryHandling UnsecuredQueryHandlingMode `json:"unsecuredQueryHandling,omitempty"`
 }
 
 func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings) (settings InfinitySettings, err error) {
@@ -234,6 +245,10 @@ func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings
 		}
 		if infJson.TimeoutInSeconds > 0 {
 			settings.TimeoutInSeconds = infJson.TimeoutInSeconds
+		}
+		settings.UnsecuredQueryHandling = infJson.UnsecuredQueryHandling
+		if settings.UnsecuredQueryHandling == "" {
+			settings.UnsecuredQueryHandling = UnsecuredQueryHandlingWarn
 		}
 		if len(infJson.AllowedHosts) > 0 {
 			settings.AllowedHosts = infJson.AllowedHosts

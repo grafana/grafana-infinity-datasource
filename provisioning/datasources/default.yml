@@ -145,3 +145,31 @@ datasources:
     secureJsonData:
       oauth2ClientSecret: 'xxxxxxx' ## Replace xxxxxxx with actual client secret
       oauth2EndPointParamsValue1: 'https://management.azure.com/'
+  - name: 🛡️ Unsecure Query Handling - default
+    type: yesoreyeram-infinity-datasource
+    uid: unsecure-query-handling-default
+  - name: 🛡️ Unsecure Query Handling - allow
+    type: yesoreyeram-infinity-datasource
+    uid: unsecure-query-handling-allow
+    jsonData:
+      unsecuredQueryHandling: allow
+  - name: 🛡️ Unsecure Query Handling - deny
+    type: yesoreyeram-infinity-datasource
+    uid: unsecure-query-handling-deny
+    jsonData:
+      unsecuredQueryHandling: deny
+  - name: 🛡️ Unsecure Query Handling - warn
+    type: yesoreyeram-infinity-datasource
+    uid: unsecure-query-handling-warn
+    jsonData:
+      unsecuredQueryHandling: warn
+  - name: 🛡️ Unsecure Query Handling - config
+    type: yesoreyeram-infinity-datasource
+    uid: unsecure-query-handling-config
+    jsonData:
+      auth_method: 'bearerToken'
+      customHealthCheckUrl: 'https://httpbin.org/bearer'
+      allowedHosts:
+        - 'https://httpbin.org'
+    secureJsonData:
+      bearerToken: 'foo'

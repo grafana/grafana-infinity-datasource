@@ -3,6 +3,13 @@ slug: '/csv'
 title: 'CSV'
 menuTitle: CSV
 description: CSV
+hero:
+  title: Visualize CSV with Infinity
+  level: 1
+  width: 110
+  image: https://www.svgrepo.com/show/375309/csv-document.svg
+  height: 110
+  description: Visualize CSV data from your REST APIs using infinity data source plugin
 aliases:
   - infinity
 keywords:
@@ -22,9 +29,17 @@ labels:
 weight: 22
 ---
 
-# Visualizing CSV data
+{{< docs/hero-simple key="hero" >}}
+
+<hr style="margin-bottom:30px"/>
+
+## 📊 Overview
+
+<div style="margin-bottom:30px"></div>
 
 ![csv example](https://user-images.githubusercontent.com/153843/92571108-9e0ff800-f27a-11ea-9fe9-9f9dcbd7125a.png#center)
+
+{{< docs/play title="Infinity plugin CSV demo" url="https://play.grafana.org/d/infinity-csv" >}}
 
 Select **Type** of the query to `CSV`. You can either specify the URL of the CSV file or can provide inline CSV.
 

@@ -1,5 +1,31 @@
 # Change Log
 
+## 2.6.3
+
+### Patch Changes
+
+🐛 update dependencies
+
+## 2.6.2
+
+🚀 New settings to block/allow/warn sensitive queries in the dashboard. Read more about this in [the docs](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/setup/configuration/).
+
+## 2.6.1
+
+🐛 UQL dependency updated to `0.0.22` from `0.0.21`
+
+📜 [Docs website](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource) update with [play.grafana](https://play.grafana.org/d/infinity) links
+
+## 2.6.0
+
+⚙️ **Chore**: Upgrade grafana-plugin-sdk-go to v0.220.0
+
+🚀 **Improvement**: Improved health check for azure blob storage connections
+
+🚀 **Feature**: Support for variables in azure blob storage container and blob name
+
+🐛 **Bug fixes**: Fixed a bug where AWS authentication doesn't work since 2.5.0-beta.1
+
 ## 2.5.0
 
 🚀 **PDC**: Added support for [grafana private datasource connect (PDC)](https://grafana.com/docs/grafana-cloud/connect-externally-hosted/private-data-source-connect/)

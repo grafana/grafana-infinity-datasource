@@ -3,6 +3,13 @@ slug: '/xml'
 title: 'XML'
 menuTitle: XML
 description: XML
+hero:
+  title: Visualize XML with Infinity
+  level: 1
+  width: 110
+  image: https://www.svgrepo.com/show/375305/xml-document.svg
+  height: 110
+  description: Visualize XML data from your REST APIs using infinity data source plugin
 aliases:
   - infinity
 keywords:
@@ -22,7 +29,15 @@ labels:
 weight: 24
 ---
 
-# Visualizing XML data
+{{< docs/hero-simple key="hero" >}}
+
+<hr style="margin-bottom:30px"/>
+
+## 📊 Overview
+
+<div style="margin-bottom:30px"></div>
+
+{{< docs/play title="Infinity plugin XML demo" url="https://play.grafana.org/d/infinity-xml" >}}
 
 In the below example, we are going to see how to use xml response in grafana
 

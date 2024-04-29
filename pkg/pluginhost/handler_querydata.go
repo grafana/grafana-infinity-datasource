@@ -126,11 +126,16 @@ func QueryDataQuery(ctx context.Context, query models.Query, infClient infinity.
 				response.Error = errors.New("datasource is missing allowed hosts/URLs. Configure it in the datasource settings page for enhanced security")
 				return response
 			}
+			if notices := infinity.GetSecureHeaderWarnings(query); infClient.Settings.UnsecuredQueryHandling == models.UnsecuredQueryHandlingDeny && len(notices) > 0 {
+				response.Error = errors.New("query contain sensitive content and denied by the unsecuredQueryHandling config")
+				response.Status = backend.StatusForbidden
+				return response
+			}
 			frame, err := infinity.GetFrameForURLSources(ctx, query, infClient, requestHeaders)
 			if err != nil {
 				logger.Error("error while performing the infinity query", "msg", err.Error())
 				if frame != nil {
-					frame, _ = infinity.WrapMetaForRemoteQuery(ctx, frame, err, query)
+					frame, _ = infinity.WrapMetaForRemoteQuery(ctx, infClient.Settings, frame, err, query)
 					response.Frames = append(response.Frames, frame)
 				}
 				span.RecordError(err)
@@ -144,7 +149,7 @@ func QueryDataQuery(ctx context.Context, query models.Query, infClient infinity.
 				})
 			}
 			if frame != nil {
-				frame, _ = infinity.WrapMetaForRemoteQuery(ctx, frame, nil, query)
+				frame, _ = infinity.WrapMetaForRemoteQuery(ctx, infClient.Settings, frame, nil, query)
 				response.Frames = append(response.Frames, frame)
 			}
 		case "inline":
