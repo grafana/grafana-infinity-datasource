@@ -98,6 +98,7 @@ type Query struct {
 	FilterExpression                   string                 `json:"filterExpression"`
 	SummarizeExpression                string                 `json:"summarizeExpression"`
 	SummarizeBy                        string                 `json:"summarizeBy"`
+	SummarizeAlias                     string                 `json:"summarizeAlias"`
 	UQL                                string                 `json:"uql"`
 	GROQ                               string                 `json:"groq"`
 	SQLiteQuery                        string                 `json:"sqlite_query"`
