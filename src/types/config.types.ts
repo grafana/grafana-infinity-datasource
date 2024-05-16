@@ -51,6 +51,7 @@ export interface InfinityOptions extends DataSourceJsonData {
   azureBlobAccountName?: string;
   unsecuredQueryHandling?: UnsecureQueryHandling;
   enableSecureSocksProxy?: boolean;
+  pathEncodedUrlsEnabled?: boolean;
 }
 
 export interface InfinitySecureOptions {

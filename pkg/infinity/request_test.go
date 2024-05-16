@@ -150,6 +150,40 @@ func Test_getQueryURL(t *testing.T) {
 			excludeSecret: true,
 			want:          "https://foo.com/xxxxxxxx/hello?foo=bar&hello=xxxxxxxx&key=val&key_one=xxxxxxxx&key_three=xxxxxxxx&key_two=xxxxxxxx&mee=too",
 		},
+		{
+			name: "should use %20 instead of ' ' for all the query parameters",
+			settings: models.InfinitySettings{
+				URL:                    "https://foo.com",
+				PathEncodedURLsEnabled: true,
+			},
+			query: models.Query{
+				URL: "/hello?key=val10&foo=bar",
+				URLOptions: models.URLOptions{
+					Params: []models.URLOptionKeyValuePair{
+						{Key: "key", Value: "val11 val12"},
+						{Key: "key2", Value: "value2 value3"},
+					},
+				},
+			},
+			want: "https://foo.com/hello?foo=bar&key=val10&key=val11%20val12&key2=value2%20value3",
+		},
+		{
+			name: "do not overwrite + that isn't a space in query parameters",
+			settings: models.InfinitySettings{
+				URL:                    "https://foo.com",
+				PathEncodedURLsEnabled: true,
+			},
+			query: models.Query{
+				URL: "/hello?key=val10&foo=bar",
+				URLOptions: models.URLOptions{
+					Params: []models.URLOptionKeyValuePair{
+						{Key: "key", Value: "val11 val+12"},
+						{Key: "key2", Value: "value2+value3"},
+					},
+				},
+			},
+			want: "https://foo.com/hello?foo=bar&key=val10&key=val11%20val%2B12&key2=value2%2Bvalue3",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
