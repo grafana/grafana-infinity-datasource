@@ -8,8 +8,8 @@ import (
 	"net/textproto"
 	"strings"
 
-	"github.com/grafana/grafana-azure-sdk-go/azcredentials"
-	"github.com/grafana/grafana-azure-sdk-go/azsettings"
+	"github.com/grafana/grafana-azure-sdk-go/v2/azcredentials"
+	"github.com/grafana/grafana-azure-sdk-go/v2/azsettings"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/httpclient"
 	"golang.org/x/oauth2"
@@ -24,7 +24,7 @@ const (
 	AuthenticationMethodDigestAuth   = "digestAuth"
 	AuthenticationMethodOAuth        = "oauth2"
 	AuthenticationMethodAWS          = "aws"
-	AuthenticationMethodMicrosoft    = "microsoft"
+	AuthenticationMethodAzure        = "azure"
 	AuthenticationMethodAzureBlob    = "azureBlob"
 )
 
@@ -65,39 +65,6 @@ type AWSSettings struct {
 	Service  string      `json:"service"`
 }
 
-type MicrosoftAuthType string
-
-const (
-	MicrosoftAuthTypeManagedIdentity     MicrosoftAuthType = azcredentials.AzureAuthManagedIdentity
-	MicrosoftAuthTypeWorkloadIdentity    MicrosoftAuthType = azcredentials.AzureAuthWorkloadIdentity
-	MicrosoftAuthTypeClientSecret        MicrosoftAuthType = azcredentials.AzureAuthClientSecret
-	MicrosoftAuthTypeCurrentUserIdentity MicrosoftAuthType = azcredentials.AzureAuthCurrentUserIdentity
-)
-
-type MicrosoftCloudType string
-
-const (
-	MicrosoftCloudPublic       MicrosoftCloudType = azsettings.AzurePublic
-	MicrosoftCloudChina        MicrosoftCloudType = azsettings.AzureChina
-	MicrosoftCloudUSGovernment MicrosoftCloudType = azsettings.AzureUSGovernment
-)
-
-var (
-	MicrosoftRequiredForClientSecretErrHelp = errors.New(` is required for Microsoft client secret authentication`)
-	MicrosoftDisabledAuthErrHelp            = errors.New(` is not enabled in the Grafana Azure settings. For more information, please refer to the Grafana documentation at 
-https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#azure. 
-Additionally, this plugin needs to be added to the grafana.ini setting azure.forward_settings_to_plugins.`)
-)
-
-type MicrosoftSettings struct {
-	Cloud        MicrosoftCloudType `json:"cloud"`
-	AuthType     MicrosoftAuthType  `json:"auth_type"`
-	TenantID     string             `json:"tenant_id"`
-	ClientID     string             `json:"client_id"`
-	ClientSecret string
-	Scopes       []string `json:"scopes,omitempty"`
-}
-
 type ProxyType string
 
 const (
@@ -127,7 +94,6 @@ type InfinitySettings struct {
 	AWSSettings              AWSSettings
 	AWSAccessKey             string
 	AWSSecretKey             string
-	MicrosoftSettings        MicrosoftSettings
 	URL                      string
 	BasicAuthEnabled         bool
 	UserName                 string
@@ -156,6 +122,9 @@ type InfinitySettings struct {
 	PathEncodedURLsEnabled   bool
 	// ProxyOpts is used for Secure Socks Proxy configuration
 	ProxyOpts httpclient.Options
+
+	RawData       map[string]interface{}
+	RawSecureData map[string]string
 }
 
 func (s *InfinitySettings) Validate() error {
@@ -186,40 +155,15 @@ func (s *InfinitySettings) Validate() error {
 		}
 		return nil
 	}
-	if s.AuthenticationMethod == AuthenticationMethodMicrosoft {
-		azSettings, err := azsettings.ReadFromEnv()
+	if s.AuthenticationMethod == AuthenticationMethodAzure {
+		_, err := azsettings.ReadFromEnv()
 		if err != nil {
 			return err
 		}
 
-		switch s.MicrosoftSettings.AuthType {
-		case MicrosoftAuthTypeClientSecret:
-			if strings.TrimSpace(s.MicrosoftSettings.TenantID) == "" {
-				return fmt.Errorf("Tenant ID %w ", MicrosoftRequiredForClientSecretErrHelp)
-			}
-
-			if strings.TrimSpace(s.MicrosoftSettings.ClientID) == "" {
-				return fmt.Errorf("Client ID %w ", MicrosoftRequiredForClientSecretErrHelp)
-			}
-
-			if strings.TrimSpace(s.MicrosoftSettings.ClientSecret) == "" {
-				return fmt.Errorf("Client secret %w ", MicrosoftRequiredForClientSecretErrHelp)
-			}
-		case MicrosoftAuthTypeManagedIdentity:
-			if !azSettings.ManagedIdentityEnabled {
-				return errors.New("managed identity authentication is not enabled in Grafana config. " +
-					"Refer https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#azure")
-			}
-		case MicrosoftAuthTypeWorkloadIdentity:
-			if !azSettings.WorkloadIdentityEnabled {
-				return errors.New("workload identity authentication is not enabled in Grafana config." +
-					"Refer https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#azure")
-			}
-		case MicrosoftAuthTypeCurrentUserIdentity:
-			if !azSettings.UserIdentityEnabled {
-				return errors.New("user identity authentication is not enabled in Grafana config." +
-					"Refer https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#azure")
-			}
+		_, err = azcredentials.FromDatasourceData(s.RawData, s.RawSecureData)
+		if err != nil {
+			return err
 		}
 	}
 	if s.AuthenticationMethod != AuthenticationMethodNone && len(s.AllowedHosts) < 1 {
@@ -253,27 +197,26 @@ type RefData struct {
 }
 
 type InfinitySettingsJson struct {
-	IsMock                   bool              `json:"is_mock,omitempty"`
-	AuthenticationMethod     string            `json:"auth_method,omitempty"`
-	APIKeyKey                string            `json:"apiKeyKey,omitempty"`
-	APIKeyType               string            `json:"apiKeyType,omitempty"`
-	OAuth2Settings           OAuth2Settings    `json:"oauth2,omitempty"`
-	AWSSettings              AWSSettings       `json:"aws,omitempty"`
-	MicrosoftSettings        MicrosoftSettings `json:"microsoft,omitempty"`
-	ForwardOauthIdentity     bool              `json:"oauthPassThru,omitempty"`
-	InsecureSkipVerify       bool              `json:"tlsSkipVerify,omitempty"`
-	ServerName               string            `json:"serverName,omitempty"`
-	TLSClientAuth            bool              `json:"tlsAuth,omitempty"`
-	TLSAuthWithCACert        bool              `json:"tlsAuthWithCACert,omitempty"`
-	TimeoutInSeconds         int64             `json:"timeoutInSeconds,omitempty"`
-	ProxyType                ProxyType         `json:"proxy_type,omitempty"`
-	ProxyUrl                 string            `json:"proxy_url,omitempty"`
-	ReferenceData            []RefData         `json:"refData,omitempty"`
-	CustomHealthCheckEnabled bool              `json:"customHealthCheckEnabled,omitempty"`
-	CustomHealthCheckUrl     string            `json:"customHealthCheckUrl,omitempty"`
-	AzureBlobAccountUrl      string            `json:"azureBlobAccountUrl,omitempty"`
-	AzureBlobAccountName     string            `json:"azureBlobAccountName,omitempty"`
-	PathEncodedURLsEnabled   bool              `json:"pathEncodedUrlsEnabled,omitempty"`
+	IsMock                   bool           `json:"is_mock,omitempty"`
+	AuthenticationMethod     string         `json:"auth_method,omitempty"`
+	APIKeyKey                string         `json:"apiKeyKey,omitempty"`
+	APIKeyType               string         `json:"apiKeyType,omitempty"`
+	OAuth2Settings           OAuth2Settings `json:"oauth2,omitempty"`
+	AWSSettings              AWSSettings    `json:"aws,omitempty"`
+	ForwardOauthIdentity     bool           `json:"oauthPassThru,omitempty"`
+	InsecureSkipVerify       bool           `json:"tlsSkipVerify,omitempty"`
+	ServerName               string         `json:"serverName,omitempty"`
+	TLSClientAuth            bool           `json:"tlsAuth,omitempty"`
+	TLSAuthWithCACert        bool           `json:"tlsAuthWithCACert,omitempty"`
+	TimeoutInSeconds         int64          `json:"timeoutInSeconds,omitempty"`
+	ProxyType                ProxyType      `json:"proxy_type,omitempty"`
+	ProxyUrl                 string         `json:"proxy_url,omitempty"`
+	ReferenceData            []RefData      `json:"refData,omitempty"`
+	CustomHealthCheckEnabled bool           `json:"customHealthCheckEnabled,omitempty"`
+	CustomHealthCheckUrl     string         `json:"customHealthCheckUrl,omitempty"`
+	AzureBlobAccountUrl      string         `json:"azureBlobAccountUrl,omitempty"`
+	AzureBlobAccountName     string         `json:"azureBlobAccountName,omitempty"`
+	PathEncodedURLsEnabled   bool           `json:"pathEncodedUrlsEnabled,omitempty"`
 	// Security
 	AllowedHosts           []string                   `json:"allowedHosts,omitempty"`
 	UnsecuredQueryHandling UnsecuredQueryHandlingMode `json:"unsecuredQueryHandling,omitempty"`
@@ -331,15 +274,14 @@ func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings
 			settings.AllowedHosts = infJson.AllowedHosts
 		}
 
-		settings.MicrosoftSettings = infJson.MicrosoftSettings
-		if settings.AuthenticationMethod == "microsoft" {
-			if settings.MicrosoftSettings.AuthType == "" {
-				settings.MicrosoftSettings.AuthType = "clientsecret"
-			}
-			if settings.MicrosoftSettings.Cloud == "" {
-				settings.MicrosoftSettings.Cloud = MicrosoftCloudPublic
-			}
+		var rawData map[string]interface{}
+
+		if err := json.Unmarshal(config.JSONData, &rawData); err != nil {
+			return settings, err
 		}
+
+		settings.RawData = rawData
+		settings.RawSecureData = config.DecryptedSecureJSONData
 	}
 	settings.ReferenceData = infJson.ReferenceData
 	settings.CustomHealthCheckEnabled = infJson.CustomHealthCheckEnabled
@@ -376,9 +318,7 @@ func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings
 	if val, ok := config.DecryptedSecureJSONData["azureBlobAccountKey"]; ok {
 		settings.AzureBlobAccountKey = val
 	}
-	if val, ok := config.DecryptedSecureJSONData["microsoftClientSecret"]; ok {
-		settings.MicrosoftSettings.ClientSecret = val
-	}
+
 	settings.CustomHeaders = GetSecrets(config, "httpHeaderName", "httpHeaderValue")
 	settings.SecureQueryFields = GetSecrets(config, "secureQueryName", "secureQueryValue")
 	settings.OAuth2Settings.EndpointParams = GetSecrets(config, "oauth2EndPointParamsName", "oauth2EndPointParamsValue")

@@ -4,7 +4,7 @@ import { Icon, InlineFormLabel, LegacyForms, RadioButtonGroup, Select, useTheme2
 import React, { useState } from 'react';
 import { AllowedHostsEditor } from './AllowedHosts';
 import { OAuthInputsEditor } from './OAuthInput';
-import { MicrosoftInputsEditor } from './MicrosoftInput';
+import { AzureInputsEditor } from './AzureInput';
 import { OthersAuthentication } from './OtherAuthProviders';
 import { AWSRegions } from './../../constants';
 import type { APIKeyType, AuthType, InfinityOptions, InfinitySecureOptions } from './../../types';
@@ -18,7 +18,7 @@ const authTypes: Array<SelectableValue<AuthType | 'others'> & { logo?: string }>
   { value: 'oauthPassThru', label: 'Forward OAuth' },
   { value: 'oauth2', label: 'OAuth2', logo: '/public/plugins/yesoreyeram-infinity-datasource/img/oauth-2-sm.png' },
   { value: 'aws', label: 'AWS', logo: '/public/plugins/yesoreyeram-infinity-datasource/img/aws.jpg' },
-  { value: 'microsoft', label: 'Microsoft Entra ID', logo: '/public/img/microsoft_auth_icon.svg' },
+  { value: 'azure', label: 'Azure', logo: '/public/img/microsoft_auth_icon.svg' },
   { value: 'azureBlob', label: 'Azure Blob' },
   { value: 'others', label: 'Other Auth Providers' },
 ];
@@ -78,7 +78,7 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
       case 'apiKey':
       case 'bearerToken':
       case 'aws':
-      case 'microsoft':
+      case 'azure':
       case 'azureBlob':
       case 'oauth2':
       case 'none':
@@ -279,7 +279,7 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
               </>
             )}
             {authType === 'oauth2' && <OAuthInputsEditor {...props} />}
-            {authType === 'microsoft' && <MicrosoftInputsEditor {...props} />}
+            {authType === 'azure' && <AzureInputsEditor {...props} />}
             {authType === 'azureBlob' && (
               <>
                 <div className="gf-form">
