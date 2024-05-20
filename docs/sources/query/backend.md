@@ -53,3 +53,5 @@ If you want to filter data, you can use filter expression. The expression should
 Backend parser also supports summarizing the fields into a metric. For example, `count(something)` or `max(some-other-thing)` or `mean([some other thing])` can be calculated from the array of data. You can also use numeric options such as `sum`,`min`,`max`,`mean`,`first` and `last`. You can also use expressions like `sum(price) / count(id)`.
 
 When specifying the field name, all special characters must be replaced with `-` and also transformed to lower case. Or the field name can also be specified within square brackets if they contain special characters. For example if the field name is `Something Else!`, then that can be specified like `min(something-else-)` or `min([Something Else!])`.
+
+You can optionally specify the alias for the summarize expression using **Summarize alias** option. If nothing specified, `summary` will be used as alias. This alias will be helpful when you want to use merge transformation with results from different queries.
