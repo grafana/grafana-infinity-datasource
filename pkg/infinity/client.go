@@ -16,12 +16,13 @@ import (
 	"time"
 
 	"github.com/Azure/azure-sdk-for-go/sdk/storage/azblob"
-	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/proxy"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"github.com/icholy/digest"
 	"golang.org/x/oauth2"
+
+	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 )
 
 type Client struct {
@@ -106,7 +107,7 @@ func NewClient(ctx context.Context, settings models.InfinitySettings) (client *C
 	httpClient = ApplyOAuthClientCredentials(ctx, httpClient, settings)
 	httpClient = ApplyOAuthJWT(ctx, httpClient, settings)
 	httpClient = ApplyAWSAuth(ctx, httpClient, settings)
-	httpClient, err = ApplyAzureAuth(ctx, httpClient, settings)
+	httpClient, err = ApplyMicrosoftAuth(ctx, httpClient, settings)
 	if err != nil {
 		return nil, err
 	}

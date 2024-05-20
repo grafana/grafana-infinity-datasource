@@ -9,13 +9,14 @@ import (
 	"github.com/grafana/grafana-azure-sdk-go/azcredentials"
 	"github.com/grafana/grafana-azure-sdk-go/azhttpclient"
 	"github.com/grafana/grafana-azure-sdk-go/azsettings"
-	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/httpclient"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
+
+	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 )
 
-func ApplyAzureAuth(ctx context.Context, httpClient *http.Client, settings models.InfinitySettings) (*http.Client, error) {
-	ctx, span := tracing.DefaultTracer().Start(ctx, "ApplyAzureAuth")
+func ApplyMicrosoftAuth(ctx context.Context, httpClient *http.Client, settings models.InfinitySettings) (*http.Client, error) {
+	ctx, span := tracing.DefaultTracer().Start(ctx, "ApplyMicrosoftAuth")
 	defer span.End()
 
 	if IsAzureAuthConfigured(settings) {
@@ -30,15 +31,15 @@ func ApplyAzureAuth(ctx context.Context, httpClient *http.Client, settings model
 		case models.MicrosoftAuthTypeClientSecret:
 
 			if strings.TrimSpace(settings.MicrosoftSettings.TenantID) == "" {
-				return nil, fmt.Errorf("Tenant ID %w ", models.MicrosoftRequiredForClientSecretErrHelp)
+				return nil, fmt.Errorf("tenant id %w ", models.MicrosoftRequiredForClientSecretErrHelp)
 			}
 
 			if strings.TrimSpace(settings.MicrosoftSettings.ClientID) == "" {
-				return nil, fmt.Errorf("Client ID %w ", models.MicrosoftRequiredForClientSecretErrHelp)
+				return nil, fmt.Errorf("client id %w ", models.MicrosoftRequiredForClientSecretErrHelp)
 			}
 
 			if strings.TrimSpace(settings.MicrosoftSettings.ClientSecret) == "" {
-				return nil, fmt.Errorf("Client secret %w ", models.MicrosoftRequiredForClientSecretErrHelp)
+				return nil, fmt.Errorf("client secret %w ", models.MicrosoftRequiredForClientSecretErrHelp)
 			}
 
 			credentials = &azcredentials.AzureClientSecretCredentials{
@@ -49,7 +50,7 @@ func ApplyAzureAuth(ctx context.Context, httpClient *http.Client, settings model
 			}
 		case models.MicrosoftAuthTypeManagedIdentity:
 			if !azSettings.ManagedIdentityEnabled {
-				return nil, fmt.Errorf("Managed Identity %w ", models.MicrosoftDisabledAuthErrHelp)
+				return nil, fmt.Errorf("managed identity %w ", models.MicrosoftDisabledAuthErrHelp)
 			}
 
 			credentials = &azcredentials.AzureManagedIdentityCredentials{
@@ -59,13 +60,13 @@ func ApplyAzureAuth(ctx context.Context, httpClient *http.Client, settings model
 			}
 		case models.MicrosoftAuthTypeWorkloadIdentity:
 			if !azSettings.WorkloadIdentityEnabled {
-				return nil, fmt.Errorf("Workload Identity %w ", models.MicrosoftDisabledAuthErrHelp)
+				return nil, fmt.Errorf("workload identity %w ", models.MicrosoftDisabledAuthErrHelp)
 			}
 
 			credentials = &azcredentials.AzureWorkloadIdentityCredentials{}
 		case models.MicrosoftAuthTypeCurrentUserIdentity:
 			if !azSettings.UserIdentityEnabled {
-				return nil, fmt.Errorf("User Identity %w ", models.MicrosoftDisabledAuthErrHelp)
+				return nil, fmt.Errorf("user identity %w ", models.MicrosoftDisabledAuthErrHelp)
 			}
 
 			credentials = &azcredentials.AadCurrentUserCredentials{}

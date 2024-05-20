@@ -253,26 +253,27 @@ type RefData struct {
 }
 
 type InfinitySettingsJson struct {
-	IsMock                   bool           `json:"is_mock,omitempty"`
-	AuthenticationMethod     string         `json:"auth_method,omitempty"`
-	APIKeyKey                string         `json:"apiKeyKey,omitempty"`
-	APIKeyType               string         `json:"apiKeyType,omitempty"`
-	OAuth2Settings           OAuth2Settings `json:"oauth2,omitempty"`
-	AWSSettings              AWSSettings    `json:"aws,omitempty"`
-	ForwardOauthIdentity     bool           `json:"oauthPassThru,omitempty"`
-	InsecureSkipVerify       bool           `json:"tlsSkipVerify,omitempty"`
-	ServerName               string         `json:"serverName,omitempty"`
-	TLSClientAuth            bool           `json:"tlsAuth,omitempty"`
-	TLSAuthWithCACert        bool           `json:"tlsAuthWithCACert,omitempty"`
-	TimeoutInSeconds         int64          `json:"timeoutInSeconds,omitempty"`
-	ProxyType                ProxyType      `json:"proxy_type,omitempty"`
-	ProxyUrl                 string         `json:"proxy_url,omitempty"`
-	ReferenceData            []RefData      `json:"refData,omitempty"`
-	CustomHealthCheckEnabled bool           `json:"customHealthCheckEnabled,omitempty"`
-	CustomHealthCheckUrl     string         `json:"customHealthCheckUrl,omitempty"`
-	AzureBlobAccountUrl      string         `json:"azureBlobAccountUrl,omitempty"`
-	AzureBlobAccountName     string         `json:"azureBlobAccountName,omitempty"`
-	PathEncodedURLsEnabled   bool           `json:"pathEncodedUrlsEnabled,omitempty"`
+	IsMock                   bool              `json:"is_mock,omitempty"`
+	AuthenticationMethod     string            `json:"auth_method,omitempty"`
+	APIKeyKey                string            `json:"apiKeyKey,omitempty"`
+	APIKeyType               string            `json:"apiKeyType,omitempty"`
+	OAuth2Settings           OAuth2Settings    `json:"oauth2,omitempty"`
+	AWSSettings              AWSSettings       `json:"aws,omitempty"`
+	MicrosoftSettings        MicrosoftSettings `json:"microsoft,omitempty"`
+	ForwardOauthIdentity     bool              `json:"oauthPassThru,omitempty"`
+	InsecureSkipVerify       bool              `json:"tlsSkipVerify,omitempty"`
+	ServerName               string            `json:"serverName,omitempty"`
+	TLSClientAuth            bool              `json:"tlsAuth,omitempty"`
+	TLSAuthWithCACert        bool              `json:"tlsAuthWithCACert,omitempty"`
+	TimeoutInSeconds         int64             `json:"timeoutInSeconds,omitempty"`
+	ProxyType                ProxyType         `json:"proxy_type,omitempty"`
+	ProxyUrl                 string            `json:"proxy_url,omitempty"`
+	ReferenceData            []RefData         `json:"refData,omitempty"`
+	CustomHealthCheckEnabled bool              `json:"customHealthCheckEnabled,omitempty"`
+	CustomHealthCheckUrl     string            `json:"customHealthCheckUrl,omitempty"`
+	AzureBlobAccountUrl      string            `json:"azureBlobAccountUrl,omitempty"`
+	AzureBlobAccountName     string            `json:"azureBlobAccountName,omitempty"`
+	PathEncodedURLsEnabled   bool              `json:"pathEncodedUrlsEnabled,omitempty"`
 	// Security
 	AllowedHosts           []string                   `json:"allowedHosts,omitempty"`
 	UnsecuredQueryHandling UnsecuredQueryHandlingMode `json:"unsecuredQueryHandling,omitempty"`
