@@ -7,9 +7,6 @@ __debug_bin
 *.pid
 *.pid.lock
 *.seed
-**/cypress/report.json
-**/cypress/screenshots
-**/cypress/videos
 artifacts/
 ci/
 coverage/
