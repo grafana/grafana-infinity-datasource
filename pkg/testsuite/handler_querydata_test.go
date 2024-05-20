@@ -768,13 +768,14 @@ func TestInlineSources(t *testing.T) {
 				"data":						"[{\"Sex\":\"Male\"},{\"Sex\":\"Male\"},{\"Sex\":null},{\"Sex\":\"Female\"},{\"Sex\":\"Others\"}]",
 				"filterExpression": 		"Sex != 'Female' && Sex != null",
 				"summarizeExpression": 		"count(Sex)",
+				"summarizeAlias": 			"Count by gender",
 				"summarizeBy": 				"Sex"
 			}`,
 			skipGoldenCheck: true,
 			test: func(t *testing.T, frame *data.Frame) {
 				require.NotNil(t, frame)
 				assert.Equal(t, data.NewField("Sex", nil, []*string{toSP("Male"), toSP(""), toSP("Others")}), frame.Fields[0])
-				assert.Equal(t, data.NewField("summary", nil, []*float64{toFP(2), toFP(1), toFP(1)}), frame.Fields[1])
+				assert.Equal(t, data.NewField("Count by gender", nil, []*float64{toFP(2), toFP(1), toFP(1)}), frame.Fields[1])
 			},
 		},
 		{

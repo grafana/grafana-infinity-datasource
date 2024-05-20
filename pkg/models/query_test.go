@@ -28,6 +28,7 @@ func TestLoadQuery(t *testing.T) {
 				"parser"		: "backend",
 				"summarizeExpression": "sum(id)/10",
 				"summarizeBy" : "none",
+				"summarizeAlias": "something",
 				"filterExpression": "id > 3 && id < 8",
 				"url"			: "https://foo.com" ,
 				"url_options"	: {
@@ -90,6 +91,7 @@ func TestLoadQuery(t *testing.T) {
 				Parser:              "backend",
 				SummarizeExpression: "sum(id)/10",
 				SummarizeBy:         "none",
+				SummarizeAlias:      "something",
 				FilterExpression:    "id > 3 && id < 8",
 				RootSelector:        "my-root_selector",
 				Columns:             []models.InfinityColumn{{Selector: "s", Text: "t", Type: "string", TimeStampFormat: "2006"}},

@@ -53,6 +53,7 @@ const Summarize = ({ query, onChange, onRunQuery }: ExperimentalFeaturesProps) =
   let isValid = true;
   const [summarizeExpression, setSummarizeExpression] = useState(isBackendQuery(query) ? query.summarizeExpression : '');
   const [summarizeBy, setSummarizeBy] = useState(isBackendQuery(query) ? query.summarizeBy : '');
+  const [summarizeAlias, setSummarizeAlias] = useState(isBackendQuery(query) ? query.summarizeAlias : '');
   if (!isBackendQuery(query)) {
     return <></>;
   }
@@ -82,6 +83,18 @@ const Summarize = ({ query, onChange, onRunQuery }: ExperimentalFeaturesProps) =
             onChange={(e) => setSummarizeBy(e.currentTarget.value)}
             onBlur={() => {
               onChange({ ...query, summarizeBy });
+              onRunQuery();
+            }}
+          />
+        </EditorField>
+        <EditorField label="Summarize Alias" optional={true} tooltip={'Alias'}>
+          <Input
+            width={50}
+            value={summarizeAlias || ''}
+            placeholder={'Example: total_salary'}
+            onChange={(e) => setSummarizeAlias(e.currentTarget.value)}
+            onBlur={() => {
+              onChange({ ...query, summarizeAlias });
               onRunQuery();
             }}
           />
