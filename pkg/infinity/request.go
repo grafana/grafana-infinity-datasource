@@ -68,7 +68,12 @@ func GetQueryURL(ctx context.Context, settings models.InfinitySettings, query mo
 		}
 		q.Set(settings.ApiKeyKey, val)
 	}
-	u.RawQuery = q.Encode()
+	if settings.PathEncodedURLsEnabled {
+		customEncoder := strings.NewReplacer("+", "%20")
+		u.RawQuery = customEncoder.Replace(q.Encode())
+	} else {
+		u.RawQuery = q.Encode()
+	}
 	return NormalizeURL(u.String()), nil
 }
 
