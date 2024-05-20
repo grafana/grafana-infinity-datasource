@@ -19,23 +19,23 @@ export const QueryColumnItem = (props: QueryColumnItemProps) => {
     return <></>;
   }
   const onSelectorChange = () => {
-    let columns = [...(query.columns || [])];
-    columns[index].selector = selector;
+    const columns = [...query.columns];
+    columns[index] = { ...columns[index], selector };
     onChange({ ...query, columns });
   };
   const onTextChange = () => {
-    let columns = [...(query.columns || [])];
-    columns[index].text = text;
+    const columns = [...query.columns];
+    columns[index] = { ...columns[index], text };
     onChange({ ...query, columns });
   };
   const onTimeFormatChange = (timestampFormat: string) => {
-    let columns = [...(query.columns || [])];
-    columns[index].timestampFormat = timestampFormat;
+    const columns = [...query.columns];
+    columns[index] = { ...columns[index], timestampFormat };
     onChange({ ...query, columns });
   };
   const onFormatChange = (type: InfinityColumnFormat) => {
-    let columns = [...(query.columns || [])];
-    columns[index].type = type;
+    const columns = [...query.columns];
+    columns[index] = { ...columns[index], type };
     onChange({ ...query, columns });
   };
   return (
