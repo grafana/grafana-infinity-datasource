@@ -23,4 +23,4 @@ weight: 500
 
 # Annotations
 
-- [Creating Annotations using infinity](./annotations.md)
+- [Creating Annotations using infinity](./annotations)
