@@ -23,7 +23,7 @@ weight: 100
 
 # Installation & Configuration
 
-- [Installation](./installation.md)
-- [Configuration](./configuration.md)
-- [Authentication Options](./authentication.md)
-- [Provisioning](./provisioning.md)
+- [Installation](./installation)
+- [Configuration](./configuration)
+- [Authentication Options](./authentication)
+- [Provisioning](./provisioning)
