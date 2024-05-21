@@ -23,9 +23,9 @@ weight: 300
 
 # Query
 
-- [Backend Parser](./backend.md)
-- [UQL Parser](./uql.md)
-- [GROQ Parser](./groq.md)
-- [Filtering data](./filters.md)
-- [Macros](./macros.md)
-- [Time formats](./time-formats.md)
+- [Backend Parser](./backend)
+- [UQL Parser](./uql)
+- [GROQ Parser](./groq)
+- [Filtering data](./filters)
+- [Macros](./macros)
+- [Time formats](./time-formats)
