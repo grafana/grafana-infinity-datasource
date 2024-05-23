@@ -1,5 +1,9 @@
 # Change Log
 
+## 2.7.1
+
+🚀 **Time macros**: Added custom time macros `${__timeFrom}` and `${__timeTo}`. Read more about this [here](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/query/macros).
+
 ## 2.7.0
 
 🚀 **URL parameters encoding**: Add support for encoding space characters in URLs with **%20** instead of **+**. (Experimental feature)

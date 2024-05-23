@@ -95,3 +95,18 @@ This macro will be more useful when combined with the multi value dashboard vari
 | server2,server3,server5 | `($__combineValues(foo:,, OR ,${server:csv}))`  | `(foo:server2 OR foo:server3 OR foo:server5)` |
 | All                     | `($__combineValues(foo:,, OR ,${server:csv}))`  | `()`                                          |
 | server2,server3,server5 | `$__combineValues(foo:,,__comma,${server:csv})` | foo:server2,foo:server3,foo:server5           |
+
+## Time Macros (`${__timeFrom}` and `${__timeTo}`)
+
+From v2.7.1, you can use time macros `${__timeFrom}` and `${__timeTo}` which will be interpolated in the backend. For example, if you have dashboard start time `2020-07-13T20:19:09.254Z`, then the macros will be interpolated as following.
+
+| Macro                                 | Output                     |
+| ------------------------------------- | -------------------------- |
+| `${__timeFrom}`                       | `1594671549254`            |
+| `${__timeFrom:date:seconds}`          | `1594671549`               |
+| `${__timeFrom:date}`                  | `2020-07-13T20:19:09.254Z` |
+| `${__timeFrom:date:iso}`              | `2020-07-13T20:19:09.254Z` |
+| `${__timeFrom:date:YYYY:MM:DD:hh:mm}` | `2020:07:13:08:19`         |
+| `${__timeFrom:date:YYYY-MM-DD}`       | `2020-07-13`               |
+
+In infinity 2.7.1+, This is the preferred time macro over [grafana global variable](https://grafana.com/docs/grafana/latest/dashboards/variables/add-template-variables/#__from-and-__to) time macros (`${__from}` and `${__to}`) due to the limitations of grafana global macros being handled in the frontend.
