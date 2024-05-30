@@ -2,9 +2,10 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 import { TableFilter } from './query.filters';
 
+// We need to freeze the object to test for mutations
 describe('TableFilter', () => {
   it('should render correct number of filters', () => {
-    const query: any = { columns: [{ text: 'name' }], filters: [{ field: 'name', operator: '', value: [''] }], type: 'csv' };
+    const query: any = Object.freeze({ columns: [{ text: 'name' }], filters: [{ field: 'name', operator: '', value: [''] }], type: 'csv' });
     const onChange = jest.fn();
     const onRunQuery = jest.fn();
     render(<TableFilter query={query} onChange={onChange} onRunQuery={onRunQuery} />);
@@ -13,7 +14,7 @@ describe('TableFilter', () => {
   });
 
   it('should add filter correctly', () => {
-    const query: any = { columns: [], filters: [], type: 'csv' };
+    const query: any = Object.freeze({ columns: [], filters: [], type: 'csv' });
     const onChange = jest.fn();
     const onRunQuery = jest.fn();
     render(<TableFilter query={query} onChange={onChange} onRunQuery={onRunQuery} />);
@@ -23,7 +24,7 @@ describe('TableFilter', () => {
   });
 
   it('should remove filter correctly', () => {
-    const query: any = { columns: [], filters: [{ field: '', operator: '', value: [''] }], type: 'csv' };
+    const query: any = Object.freeze({ columns: [], filters: [{ field: '', operator: '', value: [''] }], type: 'csv' });
     const onChange = jest.fn();
     const onRunQuery = jest.fn();
     render(<TableFilter query={query} onChange={onChange} onRunQuery={onRunQuery} />);
@@ -33,7 +34,7 @@ describe('TableFilter', () => {
   });
 
   it('should handle value change', () => {
-    const query: any = { columns: [], filters: [{ field: '', operator: '', value: [''] }], type: 'csv' };
+    const query: any = Object.freeze({ columns: [], filters: [{ field: '', operator: '', value: [''] }], type: 'csv' });
     const onChange = jest.fn();
     const onRunQuery = jest.fn();
     render(<TableFilter query={query} onChange={onChange} onRunQuery={onRunQuery} />);
