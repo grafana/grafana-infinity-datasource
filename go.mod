@@ -159,3 +159,5 @@ require (
 	modernc.org/strutil v1.2.0 // indirect
 	modernc.org/token v1.1.0 // indirect
 )
+
+replace golang.org/x/oauth2 => github.com/yesoreyeram/oauth2 v0.0.0-20240604200051-1e1fbf66b807

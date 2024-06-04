@@ -28,6 +28,8 @@ func ApplyOAuthClientCredentials(ctx context.Context, httpClient *http.Client, s
 			EndpointParams: url.Values{},
 			AuthStyle:      settings.OAuth2Settings.AuthStyle,
 		}
+		oauthConfig.CustomTokenHeaderKey = settings.OAuth2Settings.HeaderKey
+		oauthConfig.CustomTokenPrefix = settings.OAuth2Settings.TokenPrefix
 		for _, scope := range settings.OAuth2Settings.Scopes {
 			if scope != "" {
 				oauthConfig.Scopes = append(oauthConfig.Scopes, scope)
@@ -60,6 +62,8 @@ func ApplyOAuthJWT(ctx context.Context, httpClient *http.Client, settings models
 			Subject:      settings.OAuth2Settings.Subject,
 			Scopes:       []string{},
 		}
+		jwtConfig.CustomTokenHeaderKey = settings.OAuth2Settings.HeaderKey
+		jwtConfig.CustomTokenPrefix = settings.OAuth2Settings.TokenPrefix
 		for _, scope := range settings.OAuth2Settings.Scopes {
 			if scope != "" {
 				jwtConfig.Scopes = append(jwtConfig.Scopes, scope)
