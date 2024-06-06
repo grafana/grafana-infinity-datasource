@@ -37,17 +37,17 @@ export const TableFilter = (props: { query: InfinityQuery; onChange: (value: any
     onChange({ ...query, filters });
   };
   const onFilterFieldChange = (index: number, v: SelectableValue) => {
-    const filters = [...query.filters || []];
+    const filters = [...(query.filters || [])];
     filters[index] = { ...filters[index], field: v.value };
     onChange({ ...query, filters });
   };
   const onFilterOperatorChange = (index: number, v: SelectableValue) => {
-    const filters = [...query.filters || []];
+    const filters = [...(query.filters || [])];
     filters[index] = { ...filters[index], operator: v.value };
     onChange({ ...query, filters });
   };
   const onFilterValueChange = (index: number, valueIndex: number, v: string) => {
-    const filters = [...query.filters || []];
+    const filters = [...(query.filters || [])];
     filters[index] = { ...filters[index], value: filters[index].value.map((val, i) => (i === valueIndex ? v : val)) };
     onChange({ ...query, filters });
   };
