@@ -15,16 +15,13 @@ import (
 )
 
 // QueryData handles multiple queries and returns multiple responses.
-func (ds *PluginHost) QueryData(ctx context.Context, req *backend.QueryDataRequest) (*backend.QueryDataResponse, error) {
+func (ds *DataSource) QueryData(ctx context.Context, req *backend.QueryDataRequest) (*backend.QueryDataResponse, error) {
 	logger := backend.Logger.FromContext(ctx)
 	ctx, span := tracing.DefaultTracer().Start(ctx, "PluginHost.QueryData")
 	defer span.End()
 	response := backend.NewQueryDataResponse()
-	client, err := getInstance(ctx, ds.im, req.PluginContext)
-	if err != nil {
-		span.RecordError(err)
-		logger.Error("error getting infinity instance", "error", err.Error())
-		return response, fmt.Errorf("error getting infinity instance. %w", err)
+	if ds.client == nil {
+		return response, errors.New("invalid infinity client")
 	}
 	for _, q := range req.Queries {
 		res := backend.DataResponse{}
@@ -47,7 +44,7 @@ func (ds *PluginHost) QueryData(ctx context.Context, req *backend.QueryDataReque
 			response = response1
 			continue
 		}
-		res = QueryDataQuery(ctx, query, *client.client, req.Headers, req.PluginContext)
+		res = QueryDataQuery(ctx, query, *ds.client, req.Headers, req.PluginContext)
 		response.Responses[q.RefID] = res
 	}
 	return response, nil

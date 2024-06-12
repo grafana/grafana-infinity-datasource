@@ -1015,20 +1015,28 @@ func TestRemoteSources(t *testing.T) {
 	}
 }
 
-func TestQuery(t *testing.T) {
-	host := pluginhost.NewDatasource()
+func getds(t *testing.T, settings backend.DataSourceInstanceSettings) *pluginhost.DataSource {
+	t.Helper()
+	host, err := pluginhost.NewDataSourceInstance(context.Background(), settings)
+	require.Nil(t, err)
 	require.NotNil(t, host)
+	ds, ok := host.(*pluginhost.DataSource)
+	require.True(t, ok)
+	require.NotNil(t, ds)
+	return ds
+
+}
+
+func TestQuery(t *testing.T) {
 	t.Run("json default url default", func(t *testing.T) {
 		server := getServerWithStaticResponse(t, `{"message":"ok"}`, false)
 		server.Start()
 		defer server.Close()
-		res, err := host.QueryData(context.Background(), &backend.QueryDataRequest{
-			PluginContext: backend.PluginContext{
-				DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{
-					JSONData:                []byte(`{"is_mock": true}`),
-					DecryptedSecureJSONData: map[string]string{},
-				},
-			},
+		ds := getds(t, backend.DataSourceInstanceSettings{
+			JSONData:                []byte(`{"is_mock": true}`),
+			DecryptedSecureJSONData: map[string]string{},
+		})
+		res, err := ds.QueryData(context.Background(), &backend.QueryDataRequest{
 			Queries: []backend.DataQuery{{RefID: "A", JSON: []byte(fmt.Sprintf(`{ 
 				"type"		:	"json",
 				"source"	:	"url",
@@ -1044,13 +1052,11 @@ func TestQuery(t *testing.T) {
 		server := getServerWithStaticResponse(t, strings.Join([]string{`name,age`, `foo,123`, `bar,456`}, "\n"), false)
 		server.Start()
 		defer server.Close()
-		res, err := host.QueryData(context.Background(), &backend.QueryDataRequest{
-			PluginContext: backend.PluginContext{
-				DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{
-					JSONData:                []byte(`{"is_mock": true}`),
-					DecryptedSecureJSONData: map[string]string{},
-				},
-			},
+		ds := getds(t, backend.DataSourceInstanceSettings{
+			JSONData:                []byte(`{"is_mock": true}`),
+			DecryptedSecureJSONData: map[string]string{},
+		})
+		res, err := ds.QueryData(context.Background(), &backend.QueryDataRequest{
 			Queries: []backend.DataQuery{{RefID: "A", JSON: []byte(fmt.Sprintf(`{ 
 				"type"		:	"csv",
 				"source"	:	"url",
@@ -1066,13 +1072,11 @@ func TestQuery(t *testing.T) {
 		server := getServerWithStaticResponse(t, strings.Join([]string{`name,age`, `foo,123`, `bar,456`}, "\n"), false)
 		server.Start()
 		defer server.Close()
-		res, err := host.QueryData(context.Background(), &backend.QueryDataRequest{
-			PluginContext: backend.PluginContext{
-				DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{
-					JSONData:                []byte(`{"is_mock": true}`),
-					DecryptedSecureJSONData: map[string]string{},
-				},
-			},
+		ds := getds(t, backend.DataSourceInstanceSettings{
+			JSONData:                []byte(`{"is_mock": true}`),
+			DecryptedSecureJSONData: map[string]string{},
+		})
+		res, err := ds.QueryData(context.Background(), &backend.QueryDataRequest{
 			Queries: []backend.DataQuery{{RefID: "A", JSON: []byte(fmt.Sprintf(`{ 
 				"type"		:	"csv",
 				"source"	:	"url",
@@ -1086,13 +1090,11 @@ func TestQuery(t *testing.T) {
 		experimental.CheckGoldenJSONResponse(t, "golden", strings.ReplaceAll(t.Name(), "TestQuery/", ""), &resItem, UPDATE_GOLDEN_DATA)
 	})
 	t.Run("csv backend inline default", func(t *testing.T) {
-		res, err := host.QueryData(context.Background(), &backend.QueryDataRequest{
-			PluginContext: backend.PluginContext{
-				DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{
-					JSONData:                []byte(`{"is_mock": true}`),
-					DecryptedSecureJSONData: map[string]string{},
-				},
-			},
+		ds := getds(t, backend.DataSourceInstanceSettings{
+			JSONData:                []byte(`{"is_mock": true}`),
+			DecryptedSecureJSONData: map[string]string{},
+		})
+		res, err := ds.QueryData(context.Background(), &backend.QueryDataRequest{
 			Queries: []backend.DataQuery{{RefID: "A", JSON: []byte((`{ 
 				"type"		:	"csv",
 				"source"	:	"inline",
@@ -1119,13 +1121,11 @@ func TestQuery(t *testing.T) {
 		</users>`, false)
 		server.Start()
 		defer server.Close()
-		res, err := host.QueryData(context.Background(), &backend.QueryDataRequest{
-			PluginContext: backend.PluginContext{
-				DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{
-					JSONData:                []byte(`{"is_mock": true}`),
-					DecryptedSecureJSONData: map[string]string{},
-				},
-			},
+		ds := getds(t, backend.DataSourceInstanceSettings{
+			JSONData:                []byte(`{"is_mock": true}`),
+			DecryptedSecureJSONData: map[string]string{},
+		})
+		res, err := ds.QueryData(context.Background(), &backend.QueryDataRequest{
 			Queries: []backend.DataQuery{{RefID: "A", JSON: []byte(fmt.Sprintf(`{ 
 				"type"			:	"xml",
 				"source"		:	"url",
@@ -1143,14 +1143,12 @@ func TestQuery(t *testing.T) {
 		server := getServerWithStaticResponse(t, "../../testdata/users.html", true)
 		server.Start()
 		defer server.Close()
+		ds := getds(t, backend.DataSourceInstanceSettings{
+			JSONData:                []byte(`{"is_mock": true}`),
+			DecryptedSecureJSONData: map[string]string{},
+		})
 		t.Run("default url default", func(t *testing.T) {
-			res, err := host.QueryData(context.Background(), &backend.QueryDataRequest{
-				PluginContext: backend.PluginContext{
-					DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{
-						JSONData:                []byte(`{"is_mock": true}`),
-						DecryptedSecureJSONData: map[string]string{},
-					},
-				},
+			res, err := ds.QueryData(context.Background(), &backend.QueryDataRequest{
 				Queries: []backend.DataQuery{{RefID: "A", JSON: []byte(fmt.Sprintf(`{ 
 					"type": "html",
 					"url":  "%s",
@@ -1191,13 +1189,11 @@ func TestQuery(t *testing.T) {
 			experimental.CheckGoldenJSONResponse(t, "golden", strings.ReplaceAll(t.Name(), "TestQuery/html/", "html_"), &resItem, UPDATE_GOLDEN_DATA)
 		})
 		t.Run("backend url default", func(t *testing.T) {
-			res, err := host.QueryData(context.Background(), &backend.QueryDataRequest{
-				PluginContext: backend.PluginContext{
-					DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{
-						JSONData:                []byte(`{"is_mock": true}`),
-						DecryptedSecureJSONData: map[string]string{},
-					},
-				},
+			ds := getds(t, backend.DataSourceInstanceSettings{
+				JSONData:                []byte(`{"is_mock": true}`),
+				DecryptedSecureJSONData: map[string]string{},
+			})
+			res, err := ds.QueryData(context.Background(), &backend.QueryDataRequest{
 				Queries: []backend.DataQuery{{RefID: "A", JSON: []byte(fmt.Sprintf(`{ 
 					"type": "html",
 					"url":  "%s",
@@ -1248,13 +1244,11 @@ func TestQuery(t *testing.T) {
 		server := getServerWithStaticResponse(t, "./../../testdata/misc/azure-cost-management-daily.json", true)
 		server.Start()
 		defer server.Close()
-		res, err := host.QueryData(context.Background(), &backend.QueryDataRequest{
-			PluginContext: backend.PluginContext{
-				DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{
-					JSONData:                []byte(`{"is_mock": true}`),
-					DecryptedSecureJSONData: map[string]string{},
-				},
-			},
+		ds := getds(t, backend.DataSourceInstanceSettings{
+			JSONData:                []byte(`{"is_mock": true}`),
+			DecryptedSecureJSONData: map[string]string{},
+		})
+		res, err := ds.QueryData(context.Background(), &backend.QueryDataRequest{
 			Queries: []backend.DataQuery{{RefID: "A", JSON: []byte(fmt.Sprintf(`{ 
 				"type"			: "json",
 				"source"		: "url",
@@ -1282,13 +1276,11 @@ func TestQuery(t *testing.T) {
 		experimental.CheckGoldenJSONResponse(t, "golden", strings.ReplaceAll(t.Name(), "TestQuery/", ""), &resItem, UPDATE_GOLDEN_DATA)
 	})
 	t.Run("transformations limit default", func(t *testing.T) {
-		res, err := host.QueryData(context.Background(), &backend.QueryDataRequest{
-			PluginContext: backend.PluginContext{
-				DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{
-					JSONData:                []byte(`{"is_mock": true}`),
-					DecryptedSecureJSONData: map[string]string{},
-				},
-			},
+		ds := getds(t, backend.DataSourceInstanceSettings{
+			JSONData:                []byte(`{"is_mock": true}`),
+			DecryptedSecureJSONData: map[string]string{},
+		})
+		res, err := ds.QueryData(context.Background(), &backend.QueryDataRequest{
 			Queries: []backend.DataQuery{
 				{
 					RefID: "A",
@@ -1333,20 +1325,18 @@ func TestQuery(t *testing.T) {
 			server := getServerWithStaticResponse(t, "./../../testdata/users.json", true)
 			server.Start()
 			defer server.Close()
-			res, err := host.QueryData(context.Background(), &backend.QueryDataRequest{
-				PluginContext: backend.PluginContext{
-					DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{
-						JSONData: []byte(fmt.Sprintf(`{
-							"is_mock"				: true,
-							"auth_method"			: "azureBlob",
-							"azureBlobAccountUrl"	: "%s",
-							"azureBlobAccountName"  : "dummyaccount"
-						}`, server.URL)),
-						DecryptedSecureJSONData: map[string]string{
-							"azureBlobAccountKey": "ZmFrZQ==",
-						},
-					},
+			ds := getds(t, backend.DataSourceInstanceSettings{
+				JSONData: []byte(fmt.Sprintf(`{
+					"is_mock"				: true,
+					"auth_method"			: "azureBlob",
+					"azureBlobAccountUrl"	: "%s",
+					"azureBlobAccountName"  : "dummyaccount"
+				}`, server.URL)),
+				DecryptedSecureJSONData: map[string]string{
+					"azureBlobAccountKey": "ZmFrZQ==",
 				},
+			})
+			res, err := ds.QueryData(context.Background(), &backend.QueryDataRequest{
 				Queries: []backend.DataQuery{
 					{
 						RefID: "A",
@@ -1370,20 +1360,18 @@ func TestQuery(t *testing.T) {
 			server := getServerWithStaticResponse(t, "./../../testdata/users.csv", true)
 			server.Start()
 			defer server.Close()
-			res, err := host.QueryData(context.Background(), &backend.QueryDataRequest{
-				PluginContext: backend.PluginContext{
-					DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{
-						JSONData: []byte(fmt.Sprintf(`{
-							"is_mock"				: true,
-							"auth_method"			: "azureBlob",
-							"azureBlobAccountUrl"	: "%s",
-							"azureBlobAccountName"  : "dummyaccount"
-						}`, server.URL)),
-						DecryptedSecureJSONData: map[string]string{
-							"azureBlobAccountKey": "ZmFrZQ==",
-						},
-					},
+			ds := getds(t, backend.DataSourceInstanceSettings{
+				JSONData: []byte(fmt.Sprintf(`{
+					"is_mock"				: true,
+					"auth_method"			: "azureBlob",
+					"azureBlobAccountUrl"	: "%s",
+					"azureBlobAccountName"  : "dummyaccount"
+				}`, server.URL)),
+				DecryptedSecureJSONData: map[string]string{
+					"azureBlobAccountKey": "ZmFrZQ==",
 				},
+			})
+			res, err := ds.QueryData(context.Background(), &backend.QueryDataRequest{
 				Queries: []backend.DataQuery{
 					{
 						RefID: "A",
@@ -1407,20 +1395,18 @@ func TestQuery(t *testing.T) {
 			server := getServerWithStaticResponse(t, "./../../testdata/users.xml", true)
 			server.Start()
 			defer server.Close()
-			res, err := host.QueryData(context.Background(), &backend.QueryDataRequest{
-				PluginContext: backend.PluginContext{
-					DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{
-						JSONData: []byte(fmt.Sprintf(`{
-							"is_mock"				: true,
-							"auth_method"			: "azureBlob",
-							"azureBlobAccountUrl"	: "%s",
-							"azureBlobAccountName"  : "dummyaccount"
-						}`, server.URL)),
-						DecryptedSecureJSONData: map[string]string{
-							"azureBlobAccountKey": "ZmFrZQ==",
-						},
-					},
+			ds := getds(t, backend.DataSourceInstanceSettings{
+				JSONData: []byte(fmt.Sprintf(`{
+					"is_mock"				: true,
+					"auth_method"			: "azureBlob",
+					"azureBlobAccountUrl"	: "%s",
+					"azureBlobAccountName"  : "dummyaccount"
+				}`, server.URL)),
+				DecryptedSecureJSONData: map[string]string{
+					"azureBlobAccountKey": "ZmFrZQ==",
 				},
+			})
+			res, err := ds.QueryData(context.Background(), &backend.QueryDataRequest{
 				Queries: []backend.DataQuery{
 					{
 						RefID: "A",
@@ -1444,20 +1430,18 @@ func TestQuery(t *testing.T) {
 			server := getServerWithStaticResponse(t, "./../../testdata/users.tsv", true)
 			server.Start()
 			defer server.Close()
-			res, err := host.QueryData(context.Background(), &backend.QueryDataRequest{
-				PluginContext: backend.PluginContext{
-					DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{
-						JSONData: []byte(fmt.Sprintf(`{
-							"is_mock"				: true,
-							"auth_method"			: "azureBlob",
-							"azureBlobAccountUrl"	: "%s",
-							"azureBlobAccountName"  : "dummyaccount"
-						}`, server.URL)),
-						DecryptedSecureJSONData: map[string]string{
-							"azureBlobAccountKey": "ZmFrZQ==",
-						},
-					},
+			ds := getds(t, backend.DataSourceInstanceSettings{
+				JSONData: []byte(fmt.Sprintf(`{
+					"is_mock"				: true,
+					"auth_method"			: "azureBlob",
+					"azureBlobAccountUrl"	: "%s",
+					"azureBlobAccountName"  : "dummyaccount"
+				}`, server.URL)),
+				DecryptedSecureJSONData: map[string]string{
+					"azureBlobAccountKey": "ZmFrZQ==",
 				},
+			})
+			res, err := ds.QueryData(context.Background(), &backend.QueryDataRequest{
 				Queries: []backend.DataQuery{
 					{
 						RefID: "A",
