@@ -13,10 +13,10 @@ import (
 const pluginID = "yesoreyeram-infinity-datasource"
 
 func main() {
-	if err := backend.SetupTracer(pluginID, tracing.Opts{}); err != nil {
-		backend.Logger.Error("error setting up tracer", "error", err.Error())
+	dsOptions := datasource.ManageOpts{
+		TracingOpts: tracing.Opts{},
 	}
-	if err := datasource.Serve(pluginhost.NewDatasource()); err != nil {
+	if err := datasource.Manage(pluginID, pluginhost.NewDataSourceInstance, dsOptions); err != nil {
 		backend.Logger.Error("error starting infinity plugin", "error", err.Error())
 		os.Exit(1)
 	}
