@@ -254,14 +254,14 @@ const Body = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange:
                     query.url_options?.body_content_type === 'application/json'
                       ? 'json'
                       : query.url_options?.body_content_type === 'application/xml'
-                      ? 'xml'
-                      : query.url_options?.body_content_type === 'text/html'
-                      ? 'html'
-                      : query.url_options?.body_content_type === 'application/javascript'
-                      ? 'javascript'
-                      : query.url_options?.body_content_type === 'text/plain'
-                      ? 'text'
-                      : 'text'
+                        ? 'xml'
+                        : query.url_options?.body_content_type === 'text/html'
+                          ? 'html'
+                          : query.url_options?.body_content_type === 'application/javascript'
+                            ? 'javascript'
+                            : query.url_options?.body_content_type === 'text/plain'
+                              ? 'text'
+                              : 'text'
                   }
                   height={'200px'}
                   value={query.url_options?.data || ''}

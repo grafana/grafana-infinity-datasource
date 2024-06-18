@@ -31,10 +31,10 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
   const authType = props.options.jsonData.auth_method
     ? props.options.jsonData.auth_method
     : props.options.basicAuth
-    ? 'basicAuth'
-    : props.options.jsonData.oauthPassThru
-    ? 'oauthPassThru'
-    : props.options.jsonData.auth_method || 'none';
+      ? 'basicAuth'
+      : props.options.jsonData.oauthPassThru
+        ? 'oauthPassThru'
+        : props.options.jsonData.auth_method || 'none';
   const styles = {
     subheading: css`
       margin-block: 20px;

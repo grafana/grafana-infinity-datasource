@@ -1,5 +1,5 @@
-import { CoreApp, DataSourcePluginMeta } from '@grafana/data';
-import { reportInteraction, config, HealthCheckResult } from '@grafana/runtime';
+import { CoreApp, DataSourcePluginMeta, TestDataSourceResponse } from '@grafana/data';
+import { reportInteraction, config } from '@grafana/runtime';
 import { isBackendQuery } from './../app/utils';
 import { InfinityInstanceSettings, InfinityQuery } from './../types';
 
@@ -31,7 +31,7 @@ const reportActivity = (action: Report_Action, data: Record<string, any> = {}, i
   }
 };
 
-export const reportHealthCheck = (o?: Omit<HealthCheckResult, 'details'>, instance_settings?: InfinityInstanceSettings, plugin_meta?: DataSourcePluginMeta) => {
+export const reportHealthCheck = (o?: Omit<TestDataSourceResponse, 'details'>, instance_settings?: InfinityInstanceSettings, plugin_meta?: DataSourcePluginMeta) => {
   let meta: Record<string, any> = {
     plugin_healthcheck_status: o?.status || 'unknown',
     plugin_healthcheck_message: o?.message || 'unknown',

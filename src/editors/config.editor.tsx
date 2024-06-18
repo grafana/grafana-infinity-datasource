@@ -81,7 +81,7 @@ export const HeadersEditor = (props: DataSourcePluginOptionsEditorProps<Infinity
         <SecureFieldsEditor dataSourceConfig={options} onChange={onOptionsChange} title="URL Query Param" secureFieldName="secureQueryName" secureFieldValue="secureQueryValue" hideTile={true} />
       </Collapse>
       <Collapse isOpen={true} collapsible={true} label="Query Param Encoding (EXPERIMENTAL)">
-        <QueryParamEditor options={options} onOptionsChange={onOptionsChange}/>
+        <QueryParamEditor options={options} onOptionsChange={onOptionsChange} />
       </Collapse>
     </>
   );

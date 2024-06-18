@@ -8,7 +8,5 @@ const originalConfig = require('./.config/jest.config');
 module.exports = {
   // Jest configuration provided by Grafana scaffolding
   ...originalConfig,
-  transformIgnorePatterns: originalConfig.transformIgnorePatterns.map((pattern) =>
-    pattern.startsWith('node_modules') ? `../../${pattern}` : pattern
-  ),
+  transformIgnorePatterns: originalConfig.transformIgnorePatterns.map((pattern) => (pattern.startsWith('node_modules') ? `../../${pattern}` : pattern)),
 };
