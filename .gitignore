@@ -33,3 +33,4 @@ docker/blocks/tempo/tempo-data
 .idea
 .vscode/
 !.vscode/launch.json
+.eslintcache
