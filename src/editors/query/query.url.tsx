@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { usePrevious } from 'react-use';
 import { InlineFormLabel, CodeEditor, Select, Input, RadioButtonGroup, Icon } from '@grafana/ui';
 import { EditorRow } from './../../components/extended/EditorRow';
 import { EditorField } from './../../components/extended/EditorField';
 import { Stack } from './../../components/extended/Stack';
-import { isDataQuery, isInfinityQueryWithUrlSource } from './../../app/utils';
+import { isDataQuery } from './../../app/utils';
 import { KeyValueEditor } from './../../components/KeyValuePairEditor';
-import type { InfinityQuery, InfinityURLOptions, QueryBodyContentType, QueryBodyType } from './../../types';
+import type { InfinityQuery, InfinityQueryType, InfinityQueryWithURLSource, InfinityURLOptions, QueryBodyContentType, QueryBodyType } from './../../types';
 import type { SelectableValue } from '@grafana/data';
+import { usePrevious } from 'react-use';
 
 export const URLEditor = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void }) => {
   return isDataQuery(query) && query.source === 'url' ? (
@@ -62,22 +62,15 @@ export const Method = ({ query, onChange, onRunQuery }: { query: InfinityQuery; 
   );
 };
 
-export const URL = ({ query, onChange, onRunQuery, onShowUrlOptions }: { query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void; onShowUrlOptions: () => void }) => {
-  const [url, setURL] = useState(isInfinityQueryWithUrlSource(query) ? query.url || '' : '');
-  const previousQuery = usePrevious(query);
+export const URL = ({ query, onChange, onRunQuery, onShowUrlOptions }: { query: InfinityQueryWithURLSource<InfinityQueryType>; onChange: (value: InfinityQueryWithURLSource<InfinityQueryType>) => void; onRunQuery: () => void; onShowUrlOptions: () => void }) => {
+  const [url, setURL] = useState(query.url);
+  const previousUrl = usePrevious(query.url);
 
   useEffect(() => {
-    if (isInfinityQueryWithUrlSource(query) && isInfinityQueryWithUrlSource(previousQuery)) {
-      // We want to check if the URL has changed outside of component and update the state accordingly
-      if (query.url !== previousQuery.url) {
+      if (query.url !== previousUrl && query.url !== url) {
         setURL(query.url);
       }
-    }
-  }, [query, previousQuery]);
-
-  if (!isInfinityQueryWithUrlSource(query)) {
-    return <></>;
-  }
+  }, [query.url, previousUrl, url]);
 
   const onURLChange = () => {
     onChange({ ...query, url });
