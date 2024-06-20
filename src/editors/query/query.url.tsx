@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { usePrevious } from 'react-use';
 import { InlineFormLabel, CodeEditor, Select, Input, RadioButtonGroup, Icon } from '@grafana/ui';
 import { EditorRow } from './../../components/extended/EditorRow';
 import { EditorField } from './../../components/extended/EditorField';
 import { Stack } from './../../components/extended/Stack';
-import { isDataQuery } from './../../app/utils';
+import { isDataQuery, isInfinityQueryWithUrlSource } from './../../app/utils';
 import { KeyValueEditor } from './../../components/KeyValuePairEditor';
 import type { InfinityQuery, InfinityURLOptions, QueryBodyContentType, QueryBodyType } from './../../types';
 import type { SelectableValue } from '@grafana/data';
@@ -62,23 +63,26 @@ export const Method = ({ query, onChange, onRunQuery }: { query: InfinityQuery; 
 };
 
 export const URL = ({ query, onChange, onRunQuery, onShowUrlOptions }: { query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void; onShowUrlOptions: () => void }) => {
-  const [url, setURL] = useState((isDataQuery(query) || query.type === 'uql' || query.type === 'groq') && query.source === 'url' ? query.url || '' : '');
-  if (!(isDataQuery(query) || query.type === 'uql' || query.type === 'groq')) {
+  const [url, setURL] = useState(isInfinityQueryWithUrlSource(query) ? query.url || '' : '');
+  const previousQuery = usePrevious(query);
+
+  useEffect(() => {
+    if (isInfinityQueryWithUrlSource(query) && isInfinityQueryWithUrlSource(previousQuery)) {
+      // We want to check if the URL has changed outside of component and update the state accordingly
+      if (query.url !== previousQuery.url) {
+        setURL(query.url);
+      }
+    }
+  }, [query, previousQuery]);
+
+  if (!isInfinityQueryWithUrlSource(query)) {
     return <></>;
   }
-  if (query.source !== 'url') {
-    return <></>;
-  }
+
   const onURLChange = () => {
     onChange({ ...query, url });
     onRunQuery();
   };
-
-  useEffect(() => {
-    if(query.url !== url) {
-      setURL(query.url ?? '')
-    }
-  }, [query.url])
 
   return (
     <EditorField label="URL" horizontal={true}>
