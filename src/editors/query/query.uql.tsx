@@ -7,7 +7,7 @@ declare const monaco: any;
 const UQLTips: string[] = [
   '💡 While editing UQL, you can press ctrl+s/cmd+s to run the query',
   '💡 You can use `project kv()` command to transform key value pair/object into array',
-  '💡 You can use `mv-expand "colum_name"` command to expand the nested array',
+  '💡 You can use `mv-expand "column_name"` command to expand the nested array',
   '💡 You can prefix each line with # to mark that as a comment',
 ];
 
