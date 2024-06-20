@@ -1,5 +1,12 @@
 # Change Log
 
+## 2.8.0
+
+⚙️ **Chore**: backend datasource.serve method migrated to datasource.manage method
+
+🐛 **Bug fix**: Fixed a bug where filters not working in variables editor
+
+
 ## 2.7.1
 
 🚀 **Time macros**: Added custom time macros `${__timeFrom}` and `${__timeTo}`. Read more about this [here](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/query/macros).

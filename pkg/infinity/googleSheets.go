@@ -79,25 +79,25 @@ func GetGoogleSheetsResponse(urlResponseObject any, query models.Query) (*data.F
 			header := parsedCSV[0]
 			framerOptions := gframer.FramerOptions{}
 			for idx, h := range header {
-				colum := gframer.ColumnSelector{Selector: h, Alias: h}
+				column := gframer.ColumnSelector{Selector: h, Alias: h}
 				newHeader := strings.TrimSpace(h)
 				if h == "" {
 					newHeader = fmt.Sprintf("Field %d", idx+1)
 					header[idx] = newHeader
-					colum.Selector = newHeader
-					colum.Alias = newHeader
+					column.Selector = newHeader
+					column.Alias = newHeader
 				}
 				for _, col := range query.Columns {
 					if col.Selector == strings.TrimSpace(newHeader) {
-						colum.Type = col.Type
-						colum.TimeFormat = col.TimeStampFormat
+						column.Type = col.Type
+						column.TimeFormat = col.TimeStampFormat
 						if col.Text != "" {
 							header[idx] = col.Text
-							colum.Alias = col.Text
+							column.Alias = col.Text
 						}
 					}
 				}
-				framerOptions.Columns = append(framerOptions.Columns, colum)
+				framerOptions.Columns = append(framerOptions.Columns, column)
 			}
 			out := []any{}
 			for _, row := range records {
