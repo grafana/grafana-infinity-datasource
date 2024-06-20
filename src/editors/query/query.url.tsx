@@ -75,7 +75,9 @@ export const URL = ({ query, onChange, onRunQuery, onShowUrlOptions }: { query: 
   };
 
   useEffect(() => {
-    setURL(query.url ?? '')
+    if(query.url !== url) {
+      setURL(query.url ?? '')
+    }
   }, [query.url])
 
   return (
