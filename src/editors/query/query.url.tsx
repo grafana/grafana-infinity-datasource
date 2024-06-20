@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { InlineFormLabel, CodeEditor, Select, Input, RadioButtonGroup, Icon } from '@grafana/ui';
 import { EditorRow } from './../../components/extended/EditorRow';
 import { EditorField } from './../../components/extended/EditorField';
@@ -73,6 +73,11 @@ export const URL = ({ query, onChange, onRunQuery, onShowUrlOptions }: { query: 
     onChange({ ...query, url });
     onRunQuery();
   };
+
+  useEffect(() => {
+    setURL(query.url ?? '')
+  }, [query.url])
+
   return (
     <EditorField label="URL" horizontal={true}>
       <Input
