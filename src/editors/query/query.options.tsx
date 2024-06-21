@@ -62,7 +62,7 @@ export const BasicOptions = (props: {
       {isInfinityQueryWithUrlSource(query) && (
         <EditorRow label={'URL'}>
           <Method query={query} onChange={onChange} onRunQuery={onRunQuery} />
-          <URL query={query as InfinityQueryWithURLSource<InfinityQueryType> } onChange={onChange} onRunQuery={onRunQuery} onShowUrlOptions={onShowUrlOptions} />
+          <URL query={query as InfinityQueryWithURLSource<InfinityQueryType>} onChange={onChange} onRunQuery={onRunQuery} onShowUrlOptions={onShowUrlOptions} />
           <Button
             variant="secondary"
             fill="outline"

@@ -62,14 +62,24 @@ export const Method = ({ query, onChange, onRunQuery }: { query: InfinityQuery; 
   );
 };
 
-export const URL = ({ query, onChange, onRunQuery, onShowUrlOptions }: { query: InfinityQueryWithURLSource<InfinityQueryType>; onChange: (value: InfinityQueryWithURLSource<InfinityQueryType>) => void; onRunQuery: () => void; onShowUrlOptions: () => void }) => {
+export const URL = ({
+  query,
+  onChange,
+  onRunQuery,
+  onShowUrlOptions,
+}: {
+  query: InfinityQueryWithURLSource<InfinityQueryType>;
+  onChange: (value: InfinityQueryWithURLSource<InfinityQueryType>) => void;
+  onRunQuery: () => void;
+  onShowUrlOptions: () => void;
+}) => {
   const [url, setURL] = useState(query.url);
   const previousUrl = usePrevious(query.url);
 
   useEffect(() => {
-      if (query.url !== previousUrl && query.url !== url) {
-        setURL(query.url);
-      }
+    if (query.url !== previousUrl && query.url !== url) {
+      setURL(query.url);
+    }
   }, [query.url, previousUrl, url]);
 
   const onURLChange = () => {
