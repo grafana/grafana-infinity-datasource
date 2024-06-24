@@ -172,6 +172,9 @@ func (s *InfinitySettings) HaveSecureHeaders() bool {
 		}
 		return false
 	}
+	if len(s.FormPostItems) > 0 {
+		return true
+	}
 	return false
 }
 
