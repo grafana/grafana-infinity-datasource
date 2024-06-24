@@ -1,5 +1,15 @@
 import { ArrayVector, MutableDataFrame, FieldType, DataFrame, Field, Labels, TableData } from '@grafana/data';
-import type { InfinityCSVQuery, InfinityGraphQLQuery, InfinityHTMLQuery, InfinityJSONQuery, InfinityQuery, InfinityQueryWithDataSource, InfinityXMLQuery } from './../types';
+import type {
+  InfinityCSVQuery,
+  InfinityGraphQLQuery,
+  InfinityHTMLQuery,
+  InfinityJSONQuery,
+  InfinityQuery,
+  InfinityQueryWithDataSource,
+  InfinityQueryWithURLSource,
+  InfinityXMLQuery,
+  InfinityQueryType,
+} from './../types';
 
 export const isTableData = (res: any): res is TableData => res && res.columns;
 export const isDataFrame = (res: any): res is DataFrame => res && res.fields;
@@ -32,6 +42,24 @@ export const isDataQuery = (query: InfinityQuery): query is InfinityQueryWithDat
     default:
       return false;
   }
+};
+
+// We have to have query: unknown here as InfinityQuery and InfinityQueryWithURLSource<InfinityQueryType> are not compatible according to TypeScript
+export const isInfinityQueryWithUrlSource = (query: unknown): query is InfinityQueryWithURLSource<InfinityQueryType> => {
+  // We do a basic check to ensure that query is an object and has a type property
+  if (!query || typeof query !== 'object' || !('type' in query)) {
+    return false;
+  }
+
+  // we check if the query is a data query or has suitable type
+  if (isDataQuery(query as InfinityQuery) || query.type === 'uql' || query.type === 'groq') {
+    // It needs to have a source property and it should be 'url'
+    if ('source' in query) {
+      return query.source === 'url';
+    }
+  }
+
+  return false;
 };
 export const toTimeSeriesLong = (data: DataFrame[]): DataFrame[] => {
   if (!Array.isArray(data) || data.length === 0) {
