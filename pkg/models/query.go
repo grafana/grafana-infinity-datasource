@@ -99,6 +99,7 @@ type Query struct {
 	FilterExpression                     string                 `json:"filterExpression"`
 	SummarizeExpression                  string                 `json:"summarizeExpression"`
 	SummarizeBy                          string                 `json:"summarizeBy"`
+	SummarizeAlias                       string                 `json:"summarizeAlias"`
 	UQL                                  string                 `json:"uql"`
 	GROQ                                 string                 `json:"groq"`
 	SQLiteQuery                          string                 `json:"sqlite_query"`
@@ -128,12 +129,12 @@ type Query struct {
 	PageParamOffsetFieldType             PaginationParamType    `json:"pagination_param_offset_field_type,omitempty"`
 	PageParamOffsetFieldVal              int                    `json:"pagination_param_offset_value,omitempty"`
 	PageParamPageFieldName               string                 `json:"pagination_param_page_field_name,omitempty"`
-	PageParamPageFieldType               PaginationParamType    `json:"pagination_param_page_field_type,omitempty"`
+	PageParamPageFieldType              PaginationParamType    `json:"pagination_param_page_field_type,omitempty"`
 	PageParamPageFieldVal                int                    `json:"pagination_param_page_value,omitempty"`
 	PageParamCursorFieldName             string                 `json:"pagination_param_cursor_field_name,omitempty"`
 	PageParamCursorFieldType             PaginationParamType    `json:"pagination_param_cursor_field_type,omitempty"`
 	PageParamCursorFieldExtractionPath   string                 `json:"pagination_param_cursor_extraction_path,omitempty"`
-	PageParamNextLinkFieldExtractionPath string                 `json:"pagination_param_next_link_extraction_path,omitempty"`
+  PageParamNextLinkFieldExtractionPath string                 `json:"pagination_param_next_link_extraction_path,omitempty"`
 	PageParamListFieldName               string                 `json:"pagination_param_list_field_name,omitempty"`
 	PageParamListFieldType               PaginationParamType    `json:"pagination_param_list_field_type,omitempty"`
 	PageParamListFieldValue              string                 `json:"pagination_param_list_value,omitempty"`

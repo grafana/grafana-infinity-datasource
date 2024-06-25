@@ -34,8 +34,8 @@ export const QueryColumnsEditor = (props: { query: InfinityQuery; onChange: (val
           (query.type === 'json' || query.type === 'graphql' || query.type === 'csv' || query.type === 'tsv' || query.type === 'xml') && query.parser === 'uql'
             ? 'UQL'
             : (query.type === 'json' || query.type === 'graphql' || query.type === 'csv' || query.type === 'tsv') && query.parser === 'groq'
-            ? 'GROQ'
-            : 'Parsing options & Result fields'
+              ? 'GROQ'
+              : 'Parsing options & Result fields'
         }
         collapsible={true}
         collapsed={false}

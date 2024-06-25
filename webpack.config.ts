@@ -5,10 +5,10 @@ import grafanaConfig from './.config/webpack/webpack.config';
 const config = async (env: any): Promise<Configuration> => {
   const baseConfig = await grafanaConfig(env);
   const customConfig = {
-    plugins:[
+    plugins: [
       new webpack.ProvidePlugin({
         Buffer: ['buffer', 'Buffer'],
-    }),
+      }),
     ],
     module: {
       rules: [

@@ -4,7 +4,6 @@
     "node_modules/**",
     "coverage/**",
     "package.json",
-    "cypress/**",
     "dist/**",
     "provisioning/**",
     "pkg/testsuite/**",

@@ -1,11 +1,21 @@
 package pluginhost
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
+
+	"github.com/grafana/grafana-infinity-datasource/pkg/infinity"
+	"github.com/grafana/grafana-plugin-sdk-go/backend"
+	"github.com/grafana/grafana-plugin-sdk-go/backend/resource/httpadapter"
 )
 
-func (host *PluginHost) getRouter() *http.ServeMux {
+func (host *DataSource) CallResource(ctx context.Context, req *backend.CallResourceRequest, sender backend.CallResourceResponseSender) error {
+	a := httpadapter.New(host.getRouter())
+	return a.CallResource(ctx, req, sender)
+}
+
+func (host *DataSource) getRouter() *http.ServeMux {
 	router := http.NewServeMux()
 	router.HandleFunc("GET /reference-data", host.withDatasourceHandlerFunc(getReferenceDataHandler))
 	router.HandleFunc("GET /ping", host.withDatasourceHandlerFunc(getPingHandler))
@@ -13,35 +23,30 @@ func (host *PluginHost) getRouter() *http.ServeMux {
 	return router
 }
 
-func (host *PluginHost) withDatasourceHandlerFunc(getHandler func(d *instanceSettings) http.HandlerFunc) func(rw http.ResponseWriter, r *http.Request) {
+func (host *DataSource) withDatasourceHandlerFunc(getHandler func(d *infinity.Client) http.HandlerFunc) func(rw http.ResponseWriter, r *http.Request) {
 	return func(rw http.ResponseWriter, r *http.Request) {
-		client, err := getInstanceFromRequest(r.Context(), host.im, r)
-		if err != nil {
-			http.Error(rw, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		h := getHandler(client)
+		h := getHandler(host.client)
 		h.ServeHTTP(rw, r)
 	}
 }
 
-func getReferenceDataHandler(client *instanceSettings) http.HandlerFunc {
+func getReferenceDataHandler(client *infinity.Client) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		referenceKeys := []string{}
-		for _, k := range client.client.Settings.ReferenceData {
+		for _, k := range client.Settings.ReferenceData {
 			referenceKeys = append(referenceKeys, k.Name)
 		}
 		writeResponse(referenceKeys, nil, w, http.StatusOK)
 	})
 }
 
-func getPingHandler(client *instanceSettings) http.HandlerFunc {
+func getPingHandler(client *infinity.Client) http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
 		writeResponse("pong", nil, rw, http.StatusOK)
 	}
 }
 
-func defaultHandler(client *instanceSettings) http.HandlerFunc {
+func defaultHandler(client *infinity.Client) http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
 		writeResponse(map[string]any{"error": "not a known resource call"}, nil, rw, http.StatusNotFound)
 	}

@@ -32,14 +32,13 @@ func PostProcessFrame(ctx context.Context, frame *data.Frame, query models.Query
 		return frame, fmt.Errorf("error applying filter. %w", err)
 	}
 	if strings.TrimSpace(query.SummarizeExpression) != "" {
-		return transformations.GetSummaryFrame(frame, query.SummarizeExpression, query.SummarizeBy, "summary")
+		alias := query.SummarizeAlias
+		if alias == "" {
+			alias = "summary"
+		}
+		return transformations.GetSummaryFrame(frame, query.SummarizeExpression, query.SummarizeBy, alias)
 	}
 	frame.Meta = &data.FrameMeta{Custom: &CustomMeta{Query: query}}
-	if err != nil {
-		backend.Logger.Error("error getting response for query", "error", err.Error())
-		frame.Meta.Custom = &CustomMeta{Query: query, Error: err.Error()}
-		return frame, err
-	}
 	if query.Source == "inline" {
 		frame, err = WrapMetaForInlineQuery(ctx, frame, err, query)
 		if err != nil {

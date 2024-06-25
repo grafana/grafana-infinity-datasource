@@ -53,7 +53,7 @@ export type InfinityJSONQueryOptions = {
   root_is_not_array?: boolean;
   columnar?: boolean;
 };
-export type BackendParserOptions = { filterExpression?: string; summarizeExpression?: string; summarizeBy?: string; computed_columns?: InfinityColumn[] };
+export type BackendParserOptions = { filterExpression?: string; summarizeExpression?: string; summarizeAlias?: string; summarizeBy?: string; computed_columns?: InfinityColumn[] };
 export type InfinityJSONQuery = (
   | { parser?: 'simple'; json_options?: InfinityJSONQueryOptions }
   | ({ parser: 'backend' } & BackendParserOptions)

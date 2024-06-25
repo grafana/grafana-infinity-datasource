@@ -22,3 +22,6 @@ weight: 7100
 ---
 
 # Display Options
+
+- [Node Graph Format](./node-graph)
+- [Traces Format](./format-tracing)

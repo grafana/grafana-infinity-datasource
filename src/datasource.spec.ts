@@ -74,7 +74,7 @@ describe('metricFindQuery', () => {
 });
 
 describe('testDatasource', () => {
-  beforeEach(() => jest.spyOn(DataSourceWithBackend.prototype, 'testDatasource').mockResolvedValue({ message: 'OK' }));
+  beforeEach(() => jest.spyOn(DataSourceWithBackend.prototype, 'testDatasource').mockResolvedValue({ message: 'OK', status: 'success' }));
   it('should pass with the default settings', async () => {
     const ds = new Datasource({ ...DummyDatasource });
     const result = await ds.testDatasource();

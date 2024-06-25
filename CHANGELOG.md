@@ -1,20 +1,39 @@
 # Change Log
 
+## 2.8.0
+
+⚙️ **Chore**: backend datasource.serve method migrated to datasource.manage method
+
+🐛 **Bug fix**: Fixed a bug where filters not working in variables editor
+
+
+## 2.7.1
+
+🚀 **Time macros**: Added custom time macros `${__timeFrom}` and `${__timeTo}`. Read more about this [here](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/query/macros).
+
+## 2.7.0
+
+🚀 **URL parameters encoding**: Add support for encoding space characters in URLs with **%20** instead of **+**. (Experimental feature)
+
+🚀 **Feature**: Alias support for the backend summarize option
+
+🐛 **Variables Editor**: Fixed a bug where column selectors weren't working in variables editor
+
+⚙️ **Chore**: Backend binaries are now compiled with golang 1.22.3
+
 ## 2.6.3
 
-### Patch Changes
-
-🐛 update dependencies
+🐛 **Chore** update dependencies
 
 ## 2.6.2
 
-🚀 New settings to block/allow/warn sensitive queries in the dashboard. Read more about this in [the docs](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/setup/configuration/).
+🚀 **Security** New settings to block/allow/warn sensitive queries in the dashboard. Read more about this in [the docs](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/setup/configuration/).
 
 ## 2.6.1
 
-🐛 UQL dependency updated to `0.0.22` from `0.0.21`
+🐛 **Chore** UQL dependency updated to `0.0.22` from `0.0.21`
 
-📜 [Docs website](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource) update with [play.grafana](https://play.grafana.org/d/infinity) links
+📜 **Docs** [Docs website](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource) update with [play.grafana](https://play.grafana.org/d/infinity) links
 
 ## 2.6.0
 
