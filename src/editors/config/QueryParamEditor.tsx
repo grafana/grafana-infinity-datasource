@@ -10,10 +10,7 @@ export const QueryParamEditor = (props: DataSourcePluginOptionsEditorProps<Infin
     <>
       <div className="gf-form">
         <InlineLabel width={36}>Encode query parameters with %20</InlineLabel>
-        <InlineSwitch
-          value={jsonData.pathEncodedUrlsEnabled || false}
-          onChange={(e) => onOptionsChange({ ...options, jsonData: { ...jsonData, pathEncodedUrlsEnabled: e.currentTarget.checked } })}
-        />
+        <InlineSwitch value={jsonData.pathEncodedUrlsEnabled || false} onChange={(e) => onOptionsChange({ ...options, jsonData: { ...jsonData, pathEncodedUrlsEnabled: e.currentTarget.checked } })} />
       </div>
     </>
   );

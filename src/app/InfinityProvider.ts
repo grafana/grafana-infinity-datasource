@@ -4,7 +4,10 @@ import { CSVParser, HTMLParser, JSONParser, XMLParser } from './parsers';
 import type { InfinityDataQuery } from './../types';
 
 export class InfinityProvider {
-  constructor(private target: InfinityDataQuery, private datasource: Datasource) {}
+  constructor(
+    private target: InfinityDataQuery,
+    private datasource: Datasource
+  ) {}
   async formatResults(res: any) {
     const query = this.target;
     query.root_selector = getTemplateSrv().replace(query.root_selector);

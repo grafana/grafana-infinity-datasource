@@ -95,14 +95,9 @@ func InterPolateMacros(queryString string, timeRange backend.TimeRange, pluginCo
 			queryString = strings.Replace(queryString, match[0], res, -1)
 		}
 	}
-	queryString, err := m.ApplyMacros(queryString, timeRange)
+	queryString, err := m.ApplyMacros(queryString, m.Args{TimeRange: timeRange, User: pluginContext.User})
 	if err != nil {
 		return queryString, err
-	}
-	if pluginContext.User != nil {
-		queryString = strings.ReplaceAll(queryString, "${__user.name}", pluginContext.User.Name)
-		queryString = strings.ReplaceAll(queryString, "${__user.email}", pluginContext.User.Email)
-		queryString = strings.ReplaceAll(queryString, "${__user.login}", pluginContext.User.Login)
 	}
 	return strings.Trim(queryString, " "), nil
 }

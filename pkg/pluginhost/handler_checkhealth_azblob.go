@@ -5,20 +5,15 @@ import (
 	"strings"
 
 	"github.com/Azure/azure-sdk-for-go/sdk/storage/azblob/service"
+	"github.com/grafana/grafana-infinity-datasource/pkg/infinity"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 )
 
-func checkHealthAzureBlobStorage(ctx context.Context, client *instanceSettings) (*backend.CheckHealthResult, error) {
+func checkHealthAzureBlobStorage(ctx context.Context, client *infinity.Client) (*backend.CheckHealthResult, error) {
 	if client == nil {
-		return healthCheckError("invalid client")
-	}
-	if client.client == nil {
 		return healthCheckError("invalid infinity client")
 	}
-	if client.client.AzureBlobClient == nil {
-		return healthCheckError("invalid azure blob client")
-	}
-	blobServiceClient := client.client.AzureBlobClient.ServiceClient()
+	blobServiceClient := client.AzureBlobClient.ServiceClient()
 	if blobServiceClient == nil {
 		return healthCheckError("invalid azure blob service client. check storage account name and key")
 	}

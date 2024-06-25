@@ -38,18 +38,18 @@ export const TableFilter = (props: { query: InfinityQuery; onChange: (value: any
   };
   const onFilterFieldChange = (index: number, v: SelectableValue) => {
     const filters = [...(query.filters || [])];
-    filters[index].field = v.value;
+    filters[index] = { ...filters[index], field: v.value };
     onChange({ ...query, filters });
   };
   const onFilterOperatorChange = (index: number, v: SelectableValue) => {
-    query.filters = query.filters || [];
-    query.filters[index].operator = v.value;
-    onChange(query);
+    const filters = [...(query.filters || [])];
+    filters[index] = { ...filters[index], operator: v.value };
+    onChange({ ...query, filters });
   };
   const onFilterValueChange = (index: number, valueIndex: number, v: string) => {
-    query.filters = query.filters || [];
-    query.filters[index].value[valueIndex] = v;
-    onChange(query);
+    const filters = [...(query.filters || [])];
+    filters[index] = { ...filters[index], value: filters[index].value.map((val, i) => (i === valueIndex ? v : val)) };
+    onChange({ ...query, filters });
   };
   return (
     <EditorRow label="Results Filter" collapsible={true} collapsed={false} title={() => `${(query?.filters || [])?.length} Filters. Try backend/UQL filter instead.`}>
