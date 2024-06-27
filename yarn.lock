@@ -9783,10 +9783,10 @@ uplot@1.6.28:
   resolved "https://registry.yarnpkg.com/uplot/-/uplot-1.6.28.tgz#bce4fe5e65e4d3e7f2c2288ad580b4fffbbc68cc"
   integrity sha512-6AQ/Hu2ZvwF1P6PtIELdWKFml8Vvf3PUqrkVndL4A1+s/0loHwXfsk3yMwy4WGkRAt0MAMpf0uKLa9h0Yt3miw==
 
-uql@0.0.22:
-  version "0.0.22"
-  resolved "https://registry.yarnpkg.com/uql/-/uql-0.0.22.tgz#be0f59148961332ea116776274b026a111be207b"
-  integrity sha512-zk6obQYohpzMrfon91Kq+X8XtFmk4jEeWujePSPxd6U1i2MELQgUbeHwkvNQwmYfus1HyCNxi2W68hwLf+qg4w==
+uql@0.0.23:
+  version "0.0.23"
+  resolved "https://registry.yarnpkg.com/uql/-/uql-0.0.23.tgz#49dcecfd817a41aef0d3917479b4543cc874b7ad"
+  integrity sha512-1zinsKivDfbYj9x0eBUKA8BfoHuSoqyIXpGo9+KeU1Klg1ZajBggrZiTMwbBD6bzSTxNOlYN5aurLZHG4O/4rw==
   dependencies:
     "@yesoreyeram/nearley" "^3.0.0-beta.2"
     csv-parse "4.12.0"
