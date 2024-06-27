@@ -11,6 +11,7 @@ const paginationTypes: Array<SelectableValue<PaginationType>> = [
   { value: 'offset', label: 'Offset' },
   { value: 'page', label: 'Page number' },
   { value: 'cursor', label: 'Cursor' },
+  { value: 'next-link', label: 'Next Link' },
   { value: 'list', label: 'List of values' },
 ];
 
@@ -205,6 +206,23 @@ export const PaginationEditor = (props: PaginationEditorProps) => {
                 </Stack>
               </EditorField>
             </Stack>
+          </>
+        )}
+        {query.pagination_mode === 'next-link' && (
+          <>
+            <EditorField label="Next Link field">
+              <Stack>
+                <InlineLabel width={20} tooltip="selector to extract the next link">
+                  Extraction path
+                </InlineLabel>
+                <Input
+                    width={52}
+                    value={query.pagination_param_next_link_extraction_path}
+                    onChange={(e) => onChange({ ...query, pagination_param_next_link_extraction_path: e.currentTarget.value || '' })}
+                    placeholder="selector to extract the next link"
+                ></Input>
+              </Stack>
+            </EditorField>
           </>
         )}
       </Stack>
