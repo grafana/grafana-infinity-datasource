@@ -106,6 +106,10 @@ func NewClient(ctx context.Context, settings models.InfinitySettings) (client *C
 	httpClient = ApplyOAuthClientCredentials(ctx, httpClient, settings)
 	httpClient = ApplyOAuthJWT(ctx, httpClient, settings)
 	httpClient = ApplyAWSAuth(ctx, httpClient, settings)
+	httpClient, err = ApplyAzureAuth(ctx, httpClient, settings)
+	if err != nil {
+		return nil, err
+	}
 
 	httpClient, err = ApplySecureSocksProxyConfiguration(httpClient, settings)
 	if err != nil {
@@ -155,7 +159,7 @@ func NewClient(ctx context.Context, settings models.InfinitySettings) (client *C
 }
 
 func ApplySecureSocksProxyConfiguration(httpClient *http.Client, settings models.InfinitySettings) (*http.Client, error) {
-	if IsAwsAuthConfigured(settings) {
+	if IsAwsAuthConfigured(settings) || IsAzureAuthConfigured(settings) {
 		return httpClient, nil
 	}
 	t := httpClient.Transport

@@ -184,6 +184,7 @@ func TestAllSettingsAgainstFrontEnd(t *testing.T) {
 			"awsAccessKey":               "awsAccessKey1",
 			"awsSecretKey":               "awsSecretKey1",
 			"oauth2ClientSecret":         "myOauth2ClientSecret",
+			"azureClientSecret":          "myMicrosoftClientSecret",
 			"oauth2JWTPrivateKey":        "myOauth2JWTPrivateKey",
 			"oauth2EndPointParamsValue1": "Resource1",
 			"oauth2EndPointParamsValue2": "Resource2",
