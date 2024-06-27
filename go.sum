@@ -324,6 +324,8 @@ github.com/yesoreyeram/grafana-plugins/lib/go/utils v0.0.1 h1:A4C+oGjvMq8sINwXqK
 github.com/yesoreyeram/grafana-plugins/lib/go/utils v0.0.1/go.mod h1:4uhug7R1Gu7qDisf6y6p2lI+wdNbLyM0Og1wJJDDLr0=
 github.com/yesoreyeram/grafana-plugins/lib/go/xmlframer v0.0.6 h1:ZRudrWQQuizKXMWzsVhouGsvZNLFhZW3GhuUWfde+08=
 github.com/yesoreyeram/grafana-plugins/lib/go/xmlframer v0.0.6/go.mod h1:lSz0gqi4MeK3ubDlp2gAxEfAlCSRQtiZyeXndXwtOWU=
+github.com/yesoreyeram/oauth2 v0.0.0-20240604200051-1e1fbf66b807 h1:IiFeWJ/Ig4NKo5pDjAfioezT6wT9IGbGvYKmPiFXxCY=
+github.com/yesoreyeram/oauth2 v0.0.0-20240604200051-1e1fbf66b807/go.mod h1:XYTD2NtWslqkgxebSiOHnXEap4TF09sJSc7H1sXbhtI=
 github.com/yuin/goldmark v1.1.27/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.2.1/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.4.13/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5taEt/CY=
@@ -382,8 +384,6 @@ golang.org/x/net v0.0.0-20220722155237-a158d28d115b/go.mod h1:XRhObCWvk6IyKnWLug
 golang.org/x/net v0.1.0/go.mod h1:Cx3nUiGt4eDBEyega/BKRp+/AlGL8hYe7U9odMt2Cco=
 golang.org/x/net v0.25.0 h1:d/OCCoBEUq33pjydKrGQhw7IlUPI2Oylr+8qLx49kac=
 golang.org/x/net v0.25.0/go.mod h1:JkAGAh7GEvH74S6FOH42FLoXpXbE/aqXSrIQjXgsiwM=
-golang.org/x/oauth2 v0.20.0 h1:4mQdhULixXKP1rwYBW0vAijoXnkTG0BLCDRzfe1idMo=
-golang.org/x/oauth2 v0.20.0/go.mod h1:XYTD2NtWslqkgxebSiOHnXEap4TF09sJSc7H1sXbhtI=
 golang.org/x/sync v0.0.0-20190423024810-112230192c58/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
 golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
 golang.org/x/sync v0.0.0-20201020160332-67f06af15bc9/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
