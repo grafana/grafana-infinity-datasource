@@ -95,7 +95,7 @@ func NormalizeURL(u string) string {
 func (client *Client) GetExecutedURL(ctx context.Context, query models.Query) string {
 	out := []string{}
 	if query.Source != "inline" && query.Source != "azure-blob" {
-		req, err := GetRequest(ctx, client.Settings, GetQueryBody(query), query, map[string]string{}, false)
+		req, err := GetRequest(ctx, client.Settings, GetQueryBody(query, models.InfinitySettings{}), query, map[string]string{}, false)
 		if err != nil {
 			return fmt.Sprintf("error retrieving full url. %s", query.URL)
 		}

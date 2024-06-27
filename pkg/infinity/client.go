@@ -270,7 +270,7 @@ func (client *Client) GetResults(ctx context.Context, query models.Query, reques
 	}
 	switch strings.ToUpper(query.URLOptions.Method) {
 	case http.MethodPost:
-		body := GetQueryBody(query)
+		body := GetQueryBody(query, client.Settings)
 		return client.req(ctx, query.URL, body, client.Settings, query, requestHeaders)
 	default:
 		return client.req(ctx, query.URL, nil, client.Settings, query, requestHeaders)
@@ -303,7 +303,7 @@ func CanAllowURL(url string, allowedHosts []string) bool {
 	return allow
 }
 
-func GetQueryBody(query models.Query) io.Reader {
+func GetQueryBody(query models.Query, settings models.InfinitySettings) io.Reader {
 	var body io.Reader
 	if strings.EqualFold(query.URLOptions.Method, http.MethodPost) {
 		switch query.URLOptions.BodyType {
@@ -315,6 +315,9 @@ func GetQueryBody(query models.Query) io.Reader {
 			for _, f := range query.URLOptions.BodyForm {
 				_ = writer.WriteField(f.Key, f.Value)
 			}
+			for k, v := range settings.FormPostItems {
+				_ = writer.WriteField(k, v)
+			}
 			if err := writer.Close(); err != nil {
 				backend.Logger.Error("error closing the query body reader")
 				return nil
@@ -324,6 +327,9 @@ func GetQueryBody(query models.Query) io.Reader {
 			form := url.Values{}
 			for _, f := range query.URLOptions.BodyForm {
 				form.Set(f.Key, f.Value)
+			}
+			for k, v := range settings.FormPostItems {
+				form.Set(k, v)
 			}
 			body = strings.NewReader(form.Encode())
 		case "graphql":

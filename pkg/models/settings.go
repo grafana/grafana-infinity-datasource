@@ -98,6 +98,7 @@ type InfinitySettings struct {
 	ForwardOauthIdentity     bool
 	CustomHeaders            map[string]string
 	SecureQueryFields        map[string]string
+	FormPostItems            map[string]string
 	InsecureSkipVerify       bool
 	ServerName               string
 	TimeoutInSeconds         int64
@@ -170,6 +171,9 @@ func (s *InfinitySettings) HaveSecureHeaders() bool {
 			return true
 		}
 		return false
+	}
+	if len(s.FormPostItems) > 0 {
+		return true
 	}
 	return false
 }
@@ -294,6 +298,7 @@ func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings
 	}
 	settings.CustomHeaders = GetSecrets(config, "httpHeaderName", "httpHeaderValue")
 	settings.SecureQueryFields = GetSecrets(config, "secureQueryName", "secureQueryValue")
+	settings.FormPostItems = GetSecrets(config, "formPostItemName", "formPostItemValue")
 	settings.OAuth2Settings.EndpointParams = GetSecrets(config, "oauth2EndPointParamsName", "oauth2EndPointParamsValue")
 	if settings.AuthenticationMethod == "" {
 		settings.AuthenticationMethod = AuthenticationMethodNone
