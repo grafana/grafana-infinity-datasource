@@ -30,7 +30,6 @@ type InfinityParser string
 const (
 	InfinityParserSimple  InfinityParser = "simple"
 	InfinityParserBackend InfinityParser = "backend"
-	InfinityParserSQLite  InfinityParser = "sqlite"
 	InfinityParserUQL     InfinityParser = "uql"
 	InfinityParserGROQ    InfinityParser = "groq"
 )
@@ -94,14 +93,13 @@ type Query struct {
 	URL                                string                 `json:"url"`
 	URLOptions                         URLOptions             `json:"url_options"`
 	Data                               string                 `json:"data"`
-	Parser                             InfinityParser         `json:"parser"` // 'simple' | 'backend' | 'sqlite' | 'uql' | 'groq'
+	Parser                             InfinityParser         `json:"parser"` // 'simple' | 'backend' | 'uql' | 'groq'
 	FilterExpression                   string                 `json:"filterExpression"`
 	SummarizeExpression                string                 `json:"summarizeExpression"`
 	SummarizeBy                        string                 `json:"summarizeBy"`
 	SummarizeAlias                     string                 `json:"summarizeAlias"`
 	UQL                                string                 `json:"uql"`
 	GROQ                               string                 `json:"groq"`
-	SQLiteQuery                        string                 `json:"sqlite_query"`
 	CSVOptions                         InfinityCSVOptions     `json:"csv_options"`
 	JSONOptions                        InfinityJSONOptions    `json:"json_options"`
 	RootSelector                       string                 `json:"root_selector"`

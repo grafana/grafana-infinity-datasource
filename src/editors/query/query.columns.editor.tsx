@@ -9,7 +9,6 @@ import { JSONOptionsEditor } from '../../components/JSONOptionsEditor';
 import { CSVOptionsEditor } from '../../components/CSVOptionsEditor';
 import { UQLEditor } from './query.uql';
 import { GROQEditor } from './query.groq';
-import { SQLiteEditor } from './query.sqlite';
 import type { InfinityColumn, InfinityQuery } from './../../types';
 
 export const QueryColumnsEditor = (props: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void }) => {
@@ -49,9 +48,6 @@ export const QueryColumnsEditor = (props: { query: InfinityQuery; onChange: (val
               if (query.parser === 'groq') {
                 return 'GROQ Query';
               }
-              if (query.parser === 'sqlite') {
-                return 'SQLite Query';
-              }
               return `Field types, alias and selectors`;
             default:
               return 'Field types and alias';
@@ -62,8 +58,6 @@ export const QueryColumnsEditor = (props: { query: InfinityQuery; onChange: (val
           <UQLEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />
         ) : (query.type === 'json' || query.type === 'graphql') && query.parser === 'groq' ? (
           <GROQEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />
-        ) : query.type === 'json' && query.parser === 'sqlite' ? (
-          <SQLiteEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />
         ) : (
           <>
             <Stack direction="column">

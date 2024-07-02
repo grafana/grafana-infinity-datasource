@@ -57,7 +57,6 @@ export type BackendParserOptions = { filterExpression?: string; summarizeExpress
 export type InfinityJSONQuery = (
   | { parser?: 'simple'; json_options?: InfinityJSONQueryOptions }
   | ({ parser: 'backend' } & BackendParserOptions)
-  | { parser: 'sqlite'; sqlite_query?: string }
   | { parser: 'uql'; uql?: string }
   | { parser: 'groq'; groq?: string }
 ) &

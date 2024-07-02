@@ -11,8 +11,8 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
-	"github.com/yesoreyeram/grafana-plugins/lib/go/jsonframer"
-	"github.com/yesoreyeram/grafana-plugins/lib/go/transformations"
+	"github.com/grafana/infinity-libs/lib/go/jsonframer"
+	"github.com/grafana/infinity-libs/lib/go/transformations"
 )
 
 func GetFrameForURLSources(ctx context.Context, query models.Query, infClient Client, requestHeaders map[string]string) (*data.Frame, error) {
@@ -183,23 +183,6 @@ func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, query models.Q
 		}
 		if postProcessingRequired {
 			frame, err = PostProcessFrame(ctx, frame, query)
-		}
-	}
-	if query.Type == models.QueryTypeJSON && query.Parser == "sqlite" {
-		sqliteQuery := query.SQLiteQuery
-		if strings.TrimSpace(sqliteQuery) == "" {
-			sqliteQuery = "SELECT * FROM input"
-		}
-		body, err := json.Marshal(urlResponseObject)
-		if err != nil {
-			return frame, cursor, fmt.Errorf("error while marshaling the response object. %w", err)
-		}
-		if frame, err = jsonframer.ToFrame(string(body), jsonframer.FramerOptions{
-			FramerType:   jsonframer.FramerTypeSQLite3,
-			SQLite3Query: sqliteQuery,
-			RootSelector: query.RootSelector,
-		}); err != nil {
-			return frame, cursor, err
 		}
 	}
 	if frame.Meta == nil {
