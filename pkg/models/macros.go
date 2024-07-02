@@ -9,7 +9,7 @@ import (
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/gtime"
-	m "github.com/yesoreyeram/grafana-plugins/lib/go/macros"
+	m "github.com/grafana/infinity-libs/lib/go/macros"
 )
 
 type macroFunc func(string, []string) (string, error)
