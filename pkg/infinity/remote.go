@@ -147,12 +147,14 @@ func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, query models.Q
 	if err != nil {
 		span.RecordError(err)
 		span.SetStatus(500, err.Error())
+		errSource := backend.ErrorSourceFromHTTPStatus(statusCode)
 		frame.Meta.Custom = &CustomMeta{
 			Data:                   urlResponseObject,
 			ResponseCodeFromServer: statusCode,
 			Duration:               duration,
 			Query:                  query,
 			Error:                  err.Error(),
+			ErrorSource:            &errSource,
 		}
 		return frame, cursor, err
 	}

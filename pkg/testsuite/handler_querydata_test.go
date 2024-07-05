@@ -1396,3 +1396,17 @@ func TestQuery(t *testing.T) {
 		})
 	})
 }
+
+func TestError(t *testing.T) {
+	server := getServerWithStaticResponseAndResponseCode(t, "{}", false, 500)
+	server.Start()
+	defer server.Close()
+	ds := getds(t, backend.DataSourceInstanceSettings{})
+	res, err := ds.QueryData(context.Background(), &backend.QueryDataRequest{Queries: []backend.DataQuery{
+		{RefID: "A", JSON: []byte(fmt.Sprintf(`{ "source":"url" , "url":"%s/200" }`, server.URL))},
+	}})
+	require.Nil(t, err)
+	require.NotNil(t, res)
+	require.Nil(t, res.Responses["A"].Error)
+	require.Equal(t, backend.ErrorSource(""), res.Responses["A"].ErrorSource)
+}

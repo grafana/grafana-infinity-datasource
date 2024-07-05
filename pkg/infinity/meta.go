@@ -7,16 +7,18 @@ import (
 	"time"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
+	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 )
 
 type CustomMeta struct {
-	Query                  models.Query  `json:"query"`
-	Data                   any           `json:"data"`
-	ResponseCodeFromServer int           `json:"responseCodeFromServer"`
-	Duration               time.Duration `json:"duration"`
-	Error                  string        `json:"error"`
+	Query                  models.Query         `json:"query"`
+	Data                   any                  `json:"data"`
+	ResponseCodeFromServer int                  `json:"responseCodeFromServer"`
+	Duration               time.Duration        `json:"duration"`
+	Error                  string               `json:"error"`
+	ErrorSource            *backend.ErrorSource `json:"errorSource,omitempty"`
 }
 
 func GetDummyFrame(query models.Query) *data.Frame {

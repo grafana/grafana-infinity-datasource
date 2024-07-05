@@ -97,6 +97,7 @@ func QueryDataQuery(ctx context.Context, query models.Query, infClient infinity.
 		}
 		if sheetId == "" {
 			response.Error = errors.New("invalid or empty sheet ID")
+			response.ErrorSource = backend.ErrorSourceDownstream
 			return response
 		}
 		query.URL = fmt.Sprintf("https://sheets.googleapis.com/v4/spreadsheets/%s?includeGridData=true&ranges=%s", sheetId, sheetRange)
@@ -117,15 +118,18 @@ func QueryDataQuery(ctx context.Context, query models.Query, infClient infinity.
 		case "url", "azure-blob":
 			if infClient.Settings.AuthenticationMethod != models.AuthenticationMethodAzureBlob && infClient.Settings.AuthenticationMethod != models.AuthenticationMethodNone && len(infClient.Settings.AllowedHosts) < 1 {
 				response.Error = errors.New("datasource is missing allowed hosts/URLs. Configure it in the datasource settings page for enhanced security")
+				response.ErrorSource = backend.ErrorSourceDownstream
 				return response
 			}
 			if infClient.Settings.HaveSecureHeaders() && len(infClient.Settings.AllowedHosts) < 1 {
 				response.Error = errors.New("datasource is missing allowed hosts/URLs. Configure it in the datasource settings page for enhanced security")
+				response.ErrorSource = backend.ErrorSourceDownstream
 				return response
 			}
 			if notices := infinity.GetSecureHeaderWarnings(query); infClient.Settings.UnsecuredQueryHandling == models.UnsecuredQueryHandlingDeny && len(notices) > 0 {
 				response.Error = errors.New("query contain sensitive content and denied by the unsecuredQueryHandling config")
 				response.Status = backend.StatusForbidden
+				response.ErrorSource = backend.ErrorSourceDownstream
 				return response
 			}
 			frame, err := infinity.GetFrameForURLSources(ctx, query, infClient, requestHeaders)
@@ -138,6 +142,10 @@ func QueryDataQuery(ctx context.Context, query models.Query, infClient infinity.
 				span.RecordError(err)
 				span.SetStatus(500, err.Error())
 				response.Error = fmt.Errorf("error getting data frame. %w", err)
+				errSource := infinity.ErrorSourceFromFrameMeta(frame)
+				if errSource != nil {
+					response.ErrorSource = *errSource
+				}
 				return response
 			}
 			if frame != nil && infClient.Settings.AuthenticationMethod != models.AuthenticationMethodAzureBlob && infClient.Settings.AuthenticationMethod != models.AuthenticationMethodNone && infClient.Settings.AuthenticationMethod != "" && len(infClient.Settings.AllowedHosts) < 1 {
@@ -162,6 +170,10 @@ func QueryDataQuery(ctx context.Context, query models.Query, infClient infinity.
 			}
 			if frame != nil {
 				frame, _ := infinity.WrapMetaForInlineQuery(ctx, frame, nil, query)
+				errSource := infinity.ErrorSourceFromFrameMeta(frame)
+				if errSource != nil {
+					response.ErrorSource = *errSource
+				}
 				response.Frames = append(response.Frames, frame)
 			}
 		default:

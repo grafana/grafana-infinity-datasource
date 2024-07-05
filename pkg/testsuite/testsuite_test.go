@@ -59,6 +59,11 @@ func New(body string) *infinity.Client {
 
 func getServerWithStaticResponse(t *testing.T, content string, isFile bool) *httptest.Server {
 	t.Helper()
+	return getServerWithStaticResponseAndResponseCode(t, content, isFile, 200)
+}
+
+func getServerWithStaticResponseAndResponseCode(t *testing.T, content string, isFile bool, code int) *httptest.Server {
+	t.Helper()
 	server := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		default:
@@ -67,9 +72,12 @@ func getServerWithStaticResponse(t *testing.T, content string, isFile bool) *htt
 				require.Nil(t, err)
 				_, err = w.Write(filecontent)
 				require.Nil(t, err)
+				w.WriteHeader(code)
 				return
 			}
+			w.WriteHeader(code)
 			_, _ = w.Write([]byte(content))
+
 		}
 	}))
 	listener, err := net.Listen("tcp", "127.0.0.1:8080")
