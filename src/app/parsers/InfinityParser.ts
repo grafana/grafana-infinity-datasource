@@ -78,7 +78,7 @@ export class InfinityParser<T extends InfinityQuery> {
           } else if (field.name.startsWith('detail__')) {
             field.config = {
               ...field.config,
-              displayName: field.values.get(0),
+              displayName: field.name.replace('detail__', ''),
             };
           }
           return field;
