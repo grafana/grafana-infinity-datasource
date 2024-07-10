@@ -10,6 +10,7 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
+	"github.com/grafana/grafana-plugin-sdk-go/experimental/errorsource"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/trace"
 )
@@ -21,16 +22,16 @@ func (ds *DataSource) QueryData(ctx context.Context, req *backend.QueryDataReque
 	defer span.End()
 	response := backend.NewQueryDataResponse()
 	if ds.client == nil {
-		return response, errors.New("invalid infinity client")
+		return response, errorsource.PluginError(errors.New("invalid infinity client"), false)
 	}
 	for _, q := range req.Queries {
-		res := backend.DataResponse{}
 		query, err := models.LoadQuery(ctx, q, req.PluginContext)
 		if err != nil {
 			span.RecordError(err)
 			logger.Error("error un-marshaling the query", "error", err.Error())
-			res.Error = fmt.Errorf("error un-marshaling the query. %w", err)
-			response.Responses[q.RefID] = res
+			// Here we are using error source from the original error and if it does not have any source we are using the plugin error as the default source
+			errorRes := errorsource.Response(errorsource.SourceError(backend.ErrorSourcePlugin, fmt.Errorf("%s: %w", "error un-marshaling the query", err), false))
+			response.Responses[q.RefID] = errorRes
 			continue
 		}
 		if query.Type == models.QueryTypeTransformations {
@@ -39,13 +40,13 @@ func (ds *DataSource) QueryData(ctx context.Context, req *backend.QueryDataReque
 				logger.Error("error applying infinity query transformation", "error", err.Error())
 				span.RecordError(err)
 				span.SetStatus(500, err.Error())
-				return response, err
+				// We should have error source from the original error, but in a case it is not there, we are using the plugin error as the default source
+				return response, errorsource.PluginError(fmt.Errorf("%s: %w", "error applying infinity query transformation", err), false)
 			}
 			response = response1
 			continue
 		}
-		res = QueryDataQuery(ctx, query, *ds.client, req.Headers, req.PluginContext)
-		response.Responses[q.RefID] = res
+		response.Responses[q.RefID] = QueryDataQuery(ctx, query, *ds.client, req.Headers, req.PluginContext)
 	}
 	return response, nil
 }
@@ -60,6 +61,8 @@ func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient in
 		span.SetStatus(500, err.Error())
 		logger.Error("error un-marshaling the query", "error", err.Error())
 		response.Error = fmt.Errorf("error un-marshaling the query. %w", err)
+		// We should have error source from the original error, but in a case it is not there, we are using the plugin error as the default source
+		response.ErrorSource = errorsource.SourceError(backend.ErrorSourcePlugin, err, false).Source()
 		return response
 	}
 	return QueryDataQuery(ctx, query, infClient, requestHeaders, pluginContext)
@@ -96,8 +99,7 @@ func QueryDataQuery(ctx context.Context, query models.Query, infClient infinity.
 			sheetRange = sheetName + "!" + sheetRange
 		}
 		if sheetId == "" {
-			response.Error = errors.New("invalid or empty sheet ID")
-			return response
+			return errorsource.Response(errorsource.DownstreamError(errors.New("invalid or empty sheet ID"), false))
 		}
 		query.URL = fmt.Sprintf("https://sheets.googleapis.com/v4/spreadsheets/%s?includeGridData=true&ranges=%s", sheetId, sheetRange)
 		frame, err := infinity.GetFrameForURLSources(ctx, query, infClient, requestHeaders)
@@ -105,7 +107,10 @@ func QueryDataQuery(ctx context.Context, query models.Query, infClient infinity.
 			span.RecordError(err)
 			span.SetStatus(500, err.Error())
 			response.Frames = append(response.Frames, frame)
-			response.Error = fmt.Errorf("error getting data frame from google sheets. %w", err)
+			wrappedError := fmt.Errorf("%s: %w", "error getting data frame from google sheets", err)
+			response.Error = wrappedError
+			// We should have error source from the original error, but in a case it is not there, we are using the plugin error as the default source
+			response.ErrorSource = errorsource.SourceError(backend.ErrorSourcePlugin, wrappedError, false).Source()
 			return response
 		}
 		if frame != nil {
@@ -117,15 +122,18 @@ func QueryDataQuery(ctx context.Context, query models.Query, infClient infinity.
 		case "url", "azure-blob":
 			if infClient.Settings.AuthenticationMethod != models.AuthenticationMethodAzureBlob && infClient.Settings.AuthenticationMethod != models.AuthenticationMethodNone && len(infClient.Settings.AllowedHosts) < 1 {
 				response.Error = errors.New("datasource is missing allowed hosts/URLs. Configure it in the datasource settings page for enhanced security")
+				response.ErrorSource = backend.ErrorSourceDownstream
 				return response
 			}
 			if infClient.Settings.HaveSecureHeaders() && len(infClient.Settings.AllowedHosts) < 1 {
 				response.Error = errors.New("datasource is missing allowed hosts/URLs. Configure it in the datasource settings page for enhanced security")
+				response.ErrorSource = backend.ErrorSourceDownstream
 				return response
 			}
 			if notices := infinity.GetSecureHeaderWarnings(query); infClient.Settings.UnsecuredQueryHandling == models.UnsecuredQueryHandlingDeny && len(notices) > 0 {
 				response.Error = errors.New("query contain sensitive content and denied by the unsecuredQueryHandling config")
 				response.Status = backend.StatusForbidden
+				response.ErrorSource = backend.ErrorSourceDownstream
 				return response
 			}
 			frame, err := infinity.GetFrameForURLSources(ctx, query, infClient, requestHeaders)
@@ -138,6 +146,8 @@ func QueryDataQuery(ctx context.Context, query models.Query, infClient infinity.
 				span.RecordError(err)
 				span.SetStatus(500, err.Error())
 				response.Error = fmt.Errorf("error getting data frame. %w", err)
+				// We should have error source from the original error, but in a case it is not there, we are using the plugin error as the default source
+				response.ErrorSource = errorsource.SourceError(backend.ErrorSourcePlugin, err, false).Source()
 				return response
 			}
 			if frame != nil && infClient.Settings.AuthenticationMethod != models.AuthenticationMethodAzureBlob && infClient.Settings.AuthenticationMethod != models.AuthenticationMethodNone && infClient.Settings.AuthenticationMethod != "" && len(infClient.Settings.AllowedHosts) < 1 {
@@ -158,6 +168,8 @@ func QueryDataQuery(ctx context.Context, query models.Query, infClient infinity.
 				frame, _ := infinity.WrapMetaForInlineQuery(ctx, frame, err, query)
 				response.Frames = append(response.Frames, frame)
 				response.Error = fmt.Errorf("error getting data frame from inline data. %w", err)
+				// We should have error source from the original error, but in a case it is not there, we are using the plugin error as the default source
+				response.ErrorSource = errorsource.SourceError(backend.ErrorSourcePlugin, err, false).Source()
 				return response
 			}
 			if frame != nil {
