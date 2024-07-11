@@ -248,7 +248,7 @@ func (client *Client) GetResults(ctx context.Context, query models.Query, reques
 			return nil, http.StatusBadRequest, 0, errorsource.DownstreamError(errors.New("invalid/empty container name/blob name"), false)
 		}
 		if client.AzureBlobClient == nil {
-			return nil, http.StatusInternalServerError, 0, errorsource.DownstreamError(errors.New("invalid azure blob client"), false)
+			return nil, http.StatusInternalServerError, 0, errorsource.PluginError(errors.New("invalid azure blob client"), false)
 		}
 		blobDownloadResponse, err := client.AzureBlobClient.DownloadStream(ctx, strings.TrimSpace(query.AzBlobContainerName), strings.TrimSpace(query.AzBlobName), nil)
 		if err != nil {
@@ -257,7 +257,7 @@ func (client *Client) GetResults(ctx context.Context, query models.Query, reques
 		reader := blobDownloadResponse.Body
 		bodyBytes, err := io.ReadAll(reader)
 		if err != nil {
-			return nil, http.StatusInternalServerError, 0, errorsource.DownstreamError(fmt.Errorf("error reading blob content. %w", err), false)
+			return nil, http.StatusInternalServerError, 0, errorsource.PluginError(fmt.Errorf("error reading blob content. %w", err), false)
 		}
 		bodyBytes = removeBOMContent(bodyBytes)
 		if CanParseAsJSON(query.Type, http.Header{}) {
