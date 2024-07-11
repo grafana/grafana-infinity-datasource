@@ -6,6 +6,7 @@ import (
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
+	"github.com/grafana/grafana-plugin-sdk-go/experimental/errorsource"
 	"github.com/grafana/infinity-libs/lib/go/jsonframer"
 	"github.com/grafana/infinity-libs/lib/go/xmlframer"
 )
@@ -30,6 +31,9 @@ func GetXMLBackendResponse(ctx context.Context, inputString string, query models
 	})
 	if newFrame != nil {
 		frame.Fields = append(frame.Fields, newFrame.Fields...)
+	}
+	if err != nil {
+		err = errorsource.PluginError(err, false)
 	}
 	return frame, err
 }

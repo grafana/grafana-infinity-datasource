@@ -6,6 +6,7 @@ import (
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
+	"github.com/grafana/grafana-plugin-sdk-go/experimental/errorsource"
 	"github.com/grafana/infinity-libs/lib/go/transformations"
 )
 
@@ -27,7 +28,7 @@ func ApplyTransformations(query models.Query, input *backend.QueryDataResponse) 
 		}
 		response, err = ApplyTransformation(query, t, response)
 		if err != nil {
-			return response, err
+			return response, errorsource.PluginError(err, false)
 		}
 	}
 	for k := range response.Responses {
@@ -46,12 +47,12 @@ func ApplyTransformation(query models.Query, transformation models.Transformatio
 	case models.LimitTransformation:
 		for pk, pr := range input.Responses {
 			frames, err := transformations.Limit(pr.Frames, transformations.LimitOptions{LimitField: transformation.Limit.LimitField})
-			response.Responses[pk] = backend.DataResponse{Frames: frames, Error: err}
+			response.Responses[pk] = backend.DataResponse{Frames: frames, Error: err, ErrorSource: backend.ErrorSourcePlugin}
 		}
 	case models.FilterExpressionTransformation:
 		for pk, pr := range input.Responses {
 			frames, err := transformations.FilterExpression(pr.Frames, transformations.FilterExpressionOptions{Expression: transformation.FilterExpression.Expression})
-			response.Responses[pk] = backend.DataResponse{Frames: frames, Error: err}
+			response.Responses[pk] = backend.DataResponse{Frames: frames, Error: err, ErrorSource: backend.ErrorSourcePlugin}
 		}
 	case models.ComputedColumnTransformation:
 		var err error
@@ -66,7 +67,7 @@ func ApplyTransformation(query models.Query, transformation models.Transformatio
 					frames = append(frames, frame)
 				}
 			}
-			response.Responses[pk] = backend.DataResponse{Frames: frames, Error: err}
+			response.Responses[pk] = backend.DataResponse{Frames: frames, Error: err, ErrorSource: backend.ErrorSourcePlugin}
 		}
 	case models.SummarizeTransformation:
 		var err error
@@ -81,7 +82,7 @@ func ApplyTransformation(query models.Query, transformation models.Transformatio
 					frames = append(frames, frame)
 				}
 			}
-			response.Responses[pk] = backend.DataResponse{Frames: frames, Error: err}
+			response.Responses[pk] = backend.DataResponse{Frames: frames, Error: err, ErrorSource: backend.ErrorSourcePlugin}
 		}
 	default:
 		return input, nil
