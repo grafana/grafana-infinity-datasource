@@ -97,8 +97,8 @@ github.com/grafana/dataplane/sdata v0.0.7 h1:CImITypIyS1jxijCR6xqKx71JnYAxcwpH9C
 github.com/grafana/dataplane/sdata v0.0.7/go.mod h1:Jvs5ddpGmn6vcxT7tCTWAZ1mgi4sbcdFt9utQx5uMAU=
 github.com/grafana/grafana-aws-sdk v0.24.0 h1:0RKCJTeIkpEUvLCTjGOK1+jYZpaE2nJaGghGLvtUsFs=
 github.com/grafana/grafana-aws-sdk v0.24.0/go.mod h1:3zghFF6edrxn0d6k6X9HpGZXDH+VfA+MwD2Pc/9X0ec=
-github.com/grafana/grafana-plugin-sdk-go v0.231.0 h1:Qt4PBDR8b4MTUxL48EaZw1fHI1rXUNNhvTU/Nf0Ex2g=
-github.com/grafana/grafana-plugin-sdk-go v0.231.0/go.mod h1:8fJk+5J1hMkpqY/7vrXHKgAsqELWNkQvLQ5A5xCVZHk=
+github.com/grafana/grafana-plugin-sdk-go v0.239.0 h1:q/AWw+3HlgoXRnXkZuHxxSP7ujyCRRl8YIfWDW3KOAg=
+github.com/grafana/grafana-plugin-sdk-go v0.239.0/go.mod h1:GTw4Fgs9rFe0bR8zmqaTqnVEcQx+Rk5fJvWULyzigCM=
 github.com/grafana/infinity-libs/lib/go/csvframer v1.0.0 h1:PGM6BkwU1You9zFShVTtNvQcnQDabJ4jg9TLhqAdC/k=
 github.com/grafana/infinity-libs/lib/go/csvframer v1.0.0/go.mod h1:aIYewhI82TGS5x4JcvU9qLfmzEtpwoPI7k0fiZv1Wgk=
 github.com/grafana/infinity-libs/lib/go/framesql v1.0.0 h1:NqmTfpAsp1dQnJy4fbRHZuJUfxqT4tsKNbq+O5LMgEQ=
@@ -115,8 +115,6 @@ github.com/grafana/infinity-libs/lib/go/utils v1.0.0 h1:jXlKDSay/S2tdaWghc0E7DzK
 github.com/grafana/infinity-libs/lib/go/utils v1.0.0/go.mod h1:86US+G1Ujk61fibdPSEHWl+atBjXGGeibuEOMfMU2v4=
 github.com/grafana/infinity-libs/lib/go/xmlframer v1.0.0 h1:I8aMygkFiaBQUktugOIOjaigO0p/DgS94/ikr5G+WRw=
 github.com/grafana/infinity-libs/lib/go/xmlframer v1.0.0/go.mod h1:BoGuchOLtzfGGC4WGjKaV1ObgtZSCYqs2cv4+77dVEE=
-github.com/grafana/grafana-plugin-sdk-go v0.239.0 h1:q/AWw+3HlgoXRnXkZuHxxSP7ujyCRRl8YIfWDW3KOAg=
-github.com/grafana/grafana-plugin-sdk-go v0.239.0/go.mod h1:GTw4Fgs9rFe0bR8zmqaTqnVEcQx+Rk5fJvWULyzigCM=
 github.com/grafana/otel-profiling-go v0.5.1 h1:stVPKAFZSa7eGiqbYuG25VcqYksR6iWvF3YH66t4qL8=
 github.com/grafana/otel-profiling-go v0.5.1/go.mod h1:ftN/t5A/4gQI19/8MoWurBEtC6gFw8Dns1sJZ9W4Tls=
 github.com/grafana/pyroscope-go/godeltaprof v0.1.7 h1:C11j63y7gymiW8VugJ9ZW0pWfxTZugdSJyC48olk5KY=
@@ -328,9 +326,6 @@ golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACk
 golang.org/x/crypto v0.0.0-20191011191535-87dc89f01550/go.mod h1:yigFU9vqHzYiE8UmvKecakEJjdnWj3jj499lnFckfCI=
 golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9/go.mod h1:LzIPMQfyMNhhGPhUkYOs5KpL4U8rLKemX1yGLhDgUto=
 golang.org/x/crypto v0.0.0-20210921155107-089bfa567519/go.mod h1:GvvjBRRGRdwPK5ydBHafDWAxML/pGHZbMvKqRZ5+Abc=
-golang.org/x/crypto v0.23.0 h1:dIJU/v2J8Mdglj/8rJ6UUOM3Zc9zLZxVZwwxMooUSAI=
-golang.org/x/crypto v0.23.0/go.mod h1:CKFgDieR+mRhux2Lsu27y0fO304Db0wZe70UKqHu0v8=
-golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d/go.mod h1:IxCIyHEi3zRg3s0A5j5BB6A9Jmi73HwBIUl50j+osU4=
 golang.org/x/crypto v0.24.0 h1:mnl8DM0o513X8fdIkmyFE/5hTYxbwYOjDS/+rK6qpRI=
 golang.org/x/crypto v0.24.0/go.mod h1:Z1PMYSOR5nyMcyAVAIQSKCDwalqy85Aqn1x3Ws4L5DM=
 golang.org/x/exp v0.0.0-20240506185415-9bf2ced13842 h1:vr/HnozRka3pE4EsMEg1lgkXJkTFJCVUX+S/ZT6wYzM=
