@@ -46,7 +46,7 @@ func GetCSVBackendResponse(ctx context.Context, responseString string, query mod
 		frame.Fields = append(frame.Fields, newFrame.Fields...)
 	}
 	if err != nil {
-		return frame, errorsource.PluginError(err, false)
+		err = errorsource.PluginError(err, false)
 	}
 	return frame, err
 }

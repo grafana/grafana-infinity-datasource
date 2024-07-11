@@ -41,7 +41,7 @@ func GetJSONBackendResponse(ctx context.Context, urlResponseObject any, query mo
 		frame.Fields = append(frame.Fields, newFrame.Fields...)
 	}
 	if err != nil {
-		errorsource.PluginError(fmt.Errorf("error parsing json data to frame: %w", err), false)
+		err = errorsource.PluginError(fmt.Errorf("error parsing json data to frame: %w", err), false)
 	}
 	return frame, err
 }
