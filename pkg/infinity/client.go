@@ -20,6 +20,7 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/proxy"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
+	"github.com/grafana/grafana-plugin-sdk-go/experimental/errorsource"
 	"github.com/icholy/digest"
 	"golang.org/x/oauth2"
 )
@@ -195,7 +196,7 @@ func (client *Client) req(ctx context.Context, url string, body io.Reader, setti
 	startTime := time.Now()
 	if !CanAllowURL(req.URL.String(), settings.AllowedHosts) {
 		backend.Logger.Error("url is not in the allowed list. make sure to match the base URL with the settings", "url", req.URL.String())
-		return nil, http.StatusUnauthorized, 0, errors.New("requested URL is not allowed. To allow this URL, update the datasource config Security -> Allowed Hosts section")
+		return nil, http.StatusUnauthorized, 0, errorsource.DownstreamError(errors.New("requested URL is not allowed. To allow this URL, update the datasource config Security -> Allowed Hosts section"), false)
 	}
 	backend.Logger.Debug("yesoreyeram-infinity-datasource plugin is now requesting URL", "url", req.URL.String())
 	res, err := client.HttpClient.Do(req)
@@ -205,29 +206,30 @@ func (client *Client) req(ctx context.Context, url string, body io.Reader, setti
 	}
 	if err != nil && res != nil {
 		backend.Logger.Error("error getting response from server", "url", url, "method", req.Method, "error", err.Error(), "status code", res.StatusCode)
-		return nil, res.StatusCode, duration, fmt.Errorf("error getting response from %s", url)
+		return nil, res.StatusCode, duration, errorsource.SourceError(backend.ErrorSourceFromHTTPStatus(res.StatusCode), fmt.Errorf("error getting response from %s", url), false)
 	}
 	if err != nil && res == nil {
 		backend.Logger.Error("error getting response from server. no response received", "url", url, "error", err.Error())
-		return nil, http.StatusInternalServerError, duration, fmt.Errorf("error getting response from url %s. no response received. Error: %s", url, err.Error())
+		return nil, http.StatusInternalServerError, duration, errorsource.DownstreamError(fmt.Errorf("error getting response from url %s. no response received. Error: %w", url, err), false)
 	}
 	if err == nil && res == nil {
 		backend.Logger.Error("invalid response from server and also no error", "url", url, "method", req.Method)
-		return nil, http.StatusInternalServerError, duration, fmt.Errorf("invalid response received for the URL %s", url)
+		return nil, http.StatusInternalServerError, duration, errorsource.DownstreamError(fmt.Errorf("invalid response received for the URL %s", url), false)
 	}
 	if res.StatusCode >= http.StatusBadRequest {
-		return nil, res.StatusCode, duration, errors.New(res.Status)
+		return nil, res.StatusCode, duration, errorsource.SourceError(backend.ErrorSourceFromHTTPStatus(res.StatusCode), errors.New(res.Status), false)
 	}
 	bodyBytes, err := io.ReadAll(res.Body)
 	if err != nil {
 		backend.Logger.Error("error reading response body", "url", url, "error", err.Error())
-		return nil, res.StatusCode, duration, err
+		return nil, res.StatusCode, duration, errorsource.DownstreamError(err, false)
 	}
 	bodyBytes = removeBOMContent(bodyBytes)
 	if CanParseAsJSON(query.Type, res.Header) {
 		var out any
 		err := json.Unmarshal(bodyBytes, &out)
 		if err != nil {
+			err = errorsource.PluginError(err, false)
 			backend.Logger.Error("error un-marshaling JSON response", "url", url, "error", err.Error())
 		}
 		return out, res.StatusCode, duration, err
@@ -243,19 +245,19 @@ func removeBOMContent(input []byte) []byte {
 func (client *Client) GetResults(ctx context.Context, query models.Query, requestHeaders map[string]string) (o any, statusCode int, duration time.Duration, err error) {
 	if query.Source == "azure-blob" {
 		if strings.TrimSpace(query.AzBlobContainerName) == "" || strings.TrimSpace(query.AzBlobName) == "" {
-			return nil, http.StatusBadRequest, 0, errors.New("invalid/empty container name/blob name")
+			return nil, http.StatusBadRequest, 0, errorsource.DownstreamError(errors.New("invalid/empty container name/blob name"), false)
 		}
 		if client.AzureBlobClient == nil {
-			return nil, http.StatusInternalServerError, 0, errors.New("invalid azure blob client")
+			return nil, http.StatusInternalServerError, 0, errorsource.PluginError(errors.New("invalid azure blob client"), false)
 		}
 		blobDownloadResponse, err := client.AzureBlobClient.DownloadStream(ctx, strings.TrimSpace(query.AzBlobContainerName), strings.TrimSpace(query.AzBlobName), nil)
 		if err != nil {
-			return nil, http.StatusInternalServerError, 0, err
+			return nil, http.StatusInternalServerError, 0, errorsource.DownstreamError(err, false)
 		}
 		reader := blobDownloadResponse.Body
 		bodyBytes, err := io.ReadAll(reader)
 		if err != nil {
-			return nil, http.StatusInternalServerError, 0, fmt.Errorf("error reading blob content. %w", err)
+			return nil, http.StatusInternalServerError, 0, errorsource.PluginError(fmt.Errorf("error reading blob content. %w", err), false)
 		}
 		bodyBytes = removeBOMContent(bodyBytes)
 		if CanParseAsJSON(query.Type, http.Header{}) {
@@ -263,6 +265,7 @@ func (client *Client) GetResults(ctx context.Context, query models.Query, reques
 			err := json.Unmarshal(bodyBytes, &out)
 			if err != nil {
 				backend.Logger.Error("error un-marshaling blob content", "error", err.Error())
+				err = errorsource.PluginError(err, false)
 			}
 			return out, http.StatusOK, duration, err
 		}

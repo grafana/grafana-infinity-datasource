@@ -9,6 +9,7 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
+	"github.com/grafana/grafana-plugin-sdk-go/experimental/errorsource"
 	"github.com/yesoreyeram/grafana-plugins/lib/go/transformations"
 )
 
@@ -23,13 +24,13 @@ func PostProcessFrame(ctx context.Context, frame *data.Frame, query models.Query
 	if err != nil {
 		backend.Logger.Error("error getting computed column", "error", err.Error())
 		frame.Meta.Custom = &CustomMeta{Query: query, Error: err.Error()}
-		return frame, err
+		return frame, errorsource.PluginError(err, false)
 	}
 	frame, err = transformations.ApplyFilter(frame, query.FilterExpression)
 	if err != nil {
 		backend.Logger.Error("error applying filter", "error", err.Error())
 		frame.Meta.Custom = &CustomMeta{Query: query, Error: err.Error()}
-		return frame, fmt.Errorf("error applying filter. %w", err)
+		return frame, errorsource.PluginError(fmt.Errorf("error applying filter. %w", err), false)
 	}
 	if strings.TrimSpace(query.SummarizeExpression) != "" {
 		alias := query.SummarizeAlias

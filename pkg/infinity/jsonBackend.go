@@ -9,6 +9,7 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
+	"github.com/grafana/grafana-plugin-sdk-go/experimental/errorsource"
 	"github.com/yesoreyeram/grafana-plugins/lib/go/jsonframer"
 )
 
@@ -20,7 +21,7 @@ func GetJSONBackendResponse(ctx context.Context, urlResponseObject any, query mo
 	if err != nil {
 		backend.Logger.Error("error json parsing root data", "error", err.Error())
 		frame.Meta.Custom = &CustomMeta{Query: query, Error: err.Error()}
-		return frame, fmt.Errorf("error parsing json root data")
+		return frame, errorsource.PluginError(fmt.Errorf("error parsing json root data"), false)
 	}
 	columns := []jsonframer.ColumnSelector{}
 	for _, c := range query.Columns {
@@ -38,6 +39,9 @@ func GetJSONBackendResponse(ctx context.Context, urlResponseObject any, query mo
 	})
 	if newFrame != nil {
 		frame.Fields = append(frame.Fields, newFrame.Fields...)
+	}
+	if err != nil {
+		err = errorsource.PluginError(fmt.Errorf("error parsing json data to frame: %w", err), false)
 	}
 	return frame, err
 }
