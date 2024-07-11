@@ -19,6 +19,8 @@ export type OAuth2Props = {
   token_url?: string;
   scopes?: string[];
   authStyle?: number;
+  headerKey?: string;
+  tokenPrefix?: string;
 };
 export type AWSAuthProps = {
   authType?: 'keys';

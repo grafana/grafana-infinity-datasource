@@ -83,13 +83,15 @@ If your Grafana user is already authenticated via OAuth, this authentication met
 
 OAuth 2.0 client credentials require the following parameters:
 
-| Key                 | Description                                                                                       |
-| ------------------- | ------------------------------------------------------------------------------------------------- |
-| **Client ID**       | ClientID is the application's ID                                                                  |
-| **Client Secret**   | ClientSecret is the application's secret.                                                         |
-| **Token URL**       | TokenURL is the resource server's token endpoint URL. This is a constant specific to each server. |
-| **Scopes**          | Scope specifies optional requested permissions.                                                   |
-| **Endpoint params** | EndpointParams specifies additional parameters for requests to the token endpoint.                |
+| Key                     | Description                                                                                                 |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------- |
+| **Client ID**           | ClientID is the application's ID                                                                            |
+| **Client Secret**       | ClientSecret is the application's secret.                                                                   |
+| **Token URL**           | TokenURL is the resource server's token endpoint URL. This is a constant specific to each server.           |
+| **Scopes**              | Scope specifies optional requested permissions.                                                             |
+| **Endpoint params**     | EndpointParams specifies additional parameters for requests to the token endpoint.                          |
+| **Custom header key**   | (advanced) When configured, Instead of `Authorization` header this key will be used when sending the token  |
+| **Custom token prefix** | (advanced) When configured, Instead of `Bearer ` prefix, this will be used as prefix when sending the token |
 
 ## OAuth 2.0 JWT
 
@@ -103,6 +105,8 @@ OAuth 2.0 JWT require the following parameters
 | **Token URL**              | TokenURL is the endpoint required to complete the 2-legged JWT flow.                                              |
 | **Subject**                | Optional. Subject is the optional user to impersonate.                                                            |
 | **Scopes**                 | Scopes optionally specifies a list of requested permission scopes. Provide scopes as a comma separated values.    |
+| **Custom header key**      | (advanced) When configured, Instead of `Authorization` header this key will be used when sending the token        |
+| **Custom token prefix**    | (advanced) When configured, Instead of `Bearer ` prefix, this will be used as prefix when sending the token       |
 
 ## Azure
 

@@ -1,5 +1,7 @@
+import { css } from '@emotion/css';
 import { onUpdateDatasourceSecureJsonDataOption, DataSourcePluginOptionsEditorProps, SelectableValue } from '@grafana/data';
 import { InlineFormLabel, Input, LegacyForms, LinkButton, RadioButtonGroup } from '@grafana/ui';
+import { Stack } from 'components/extended/Stack';
 import React from 'react';
 import { SecureFieldsEditor } from './../../components/config/SecureFieldsEditor';
 import type { InfinityOptions, InfinitySecureOptions, OAuth2Props, OAuth2Type } from './../../types';
@@ -11,6 +13,11 @@ const oAuthTypes: Array<SelectableValue<OAuth2Type>> = [
 ];
 
 export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
+  const styles = {
+    subheading: css`
+      margin-block: 20px;
+    `,
+  };
   const { options, onOptionsChange } = props;
   const { secureJsonFields } = options;
   const secureJsonData = (options.secureJsonData || {}) as InfinitySecureOptions;
@@ -180,6 +187,25 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
             </LinkButton>
           </p>
         </div>
+      )}
+      {oauth2.oauth2_type !== 'others' && (
+        <>
+          <h5 className={styles.subheading}>Advanced OAuth2 config</h5>
+          <Stack direction="column" gap={0.5}>
+            <Stack gap={0.5}>
+              <InlineFormLabel width={10} tooltip={'Custom header key can be used to modify the header key. If provided, instead of Authorization this will be used'}>
+                Custom header key
+              </InlineFormLabel>
+              <Input onChange={(v) => onOAuth2PropsChange('headerKey', v.currentTarget.value)} value={oauth2.headerKey} width={30} placeholder={'Authorization'} />
+            </Stack>
+            <Stack gap={0.5}>
+              <InlineFormLabel width={10} tooltip={'Custom prefix to be added to the token. If empty, type will be used from token URL response. To clear the prefix, use empty space.'}>
+                Custom token prefix
+              </InlineFormLabel>
+              <Input onChange={(v) => onOAuth2PropsChange('tokenPrefix', v.currentTarget.value)} value={oauth2.tokenPrefix} width={30} placeholder={'Bearer '} />
+            </Stack>
+          </Stack>
+        </>
       )}
     </>
   );
