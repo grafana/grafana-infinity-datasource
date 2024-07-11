@@ -7,8 +7,8 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/grafana/grafana-plugin-sdk-go/experimental/errorsource"
-	"github.com/yesoreyeram/grafana-plugins/lib/go/csvframer"
-	"github.com/yesoreyeram/grafana-plugins/lib/go/gframer"
+	"github.com/grafana/infinity-libs/lib/go/csvframer"
+	"github.com/grafana/infinity-libs/lib/go/gframer"
 )
 
 func GetCSVBackendResponse(ctx context.Context, responseString string, query models.Query) (*data.Frame, error) {

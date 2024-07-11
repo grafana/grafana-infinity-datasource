@@ -10,7 +10,7 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/grafana/grafana-plugin-sdk-go/experimental/errorsource"
-	"github.com/yesoreyeram/grafana-plugins/lib/go/gframer"
+	"github.com/grafana/infinity-libs/lib/go/gframer"
 )
 
 type Spreadsheet struct {

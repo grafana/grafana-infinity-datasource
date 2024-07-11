@@ -7,8 +7,8 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/grafana/grafana-plugin-sdk-go/experimental/errorsource"
-	"github.com/yesoreyeram/grafana-plugins/lib/go/jsonframer"
-	"github.com/yesoreyeram/grafana-plugins/lib/go/xmlframer"
+	"github.com/grafana/infinity-libs/lib/go/jsonframer"
+	"github.com/grafana/infinity-libs/lib/go/xmlframer"
 )
 
 func GetXMLBackendResponse(ctx context.Context, inputString string, query models.Query) (*data.Frame, error) {

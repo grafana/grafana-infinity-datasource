@@ -6,7 +6,7 @@ import (
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
-	"github.com/yesoreyeram/grafana-plugins/lib/go/jsonframer"
+	"github.com/grafana/infinity-libs/lib/go/jsonframer"
 )
 
 func GetFrameForInlineSources(ctx context.Context, query models.Query) (*data.Frame, error) {
