@@ -2,7 +2,7 @@
 
 ## 2.9.0
 
-🚀 **UQL**:Updated uql library to [0.0.23](https://github.com/yesoreyeram/uql/blob/main/CHANGELOG.md#0023)
+🚀 **UQL**: Updated uql library to [0.0.23](https://github.com/yesoreyeram/uql/blob/main/CHANGELOG.md#0023)
 
 🚀 **Chore** Replaced backend framer libraries from [yesoreyeram/grafana-plugins](https://github.com/yesoreyeram/grafana-plugins) to [grafana/infinity-libs](https://github.com/grafana/infinity-libs)
 
