@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.9.1
+
+### Patch Changes
+
+⚙️ Update grafana/grafana-plugin-sdk-go to v0.240.0
+
 ## 2.9.0
 
 🚀 **UQL**: Updated uql library to [0.0.23](https://github.com/yesoreyeram/uql/blob/main/CHANGELOG.md#0023)
