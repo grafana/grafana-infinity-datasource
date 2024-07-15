@@ -340,7 +340,7 @@ func GetQueryBody(ctx context.Context, query models.Query) io.Reader {
 			if query.URLOptions.BodyGraphQLVariables != "" {
 				err := json.Unmarshal([]byte(query.URLOptions.BodyGraphQLVariables), &variables)
 				if err != nil {
-					backend.Logger.Error("Error parsing graphql variable json", err)
+					logger.Error("Error parsing graphql variable json", err)
 				}
 			}
 			jsonData := map[string]interface{}{

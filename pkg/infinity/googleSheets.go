@@ -44,7 +44,7 @@ func GetGoogleSheetsResponse(ctx context.Context, urlResponseObject any, query m
 	frame := GetDummyFrame(query)
 	sheetsString, ok := urlResponseObject.(string)
 	if !ok {
-		backend.Logger.Error("error getting response for query", "error", "invalid response received from google sheets")
+		logger.Error("error getting response for query", "error", "invalid response received from google sheets")
 		frame.Meta.Custom = &CustomMeta{
 			Query: query,
 			Error: "invalid response received from google sheets",
