@@ -58,7 +58,8 @@ func GetTLSConfigFromSettings(settings models.InfinitySettings) (*tls.Config, er
 	return tlsConfig, nil
 }
 
-func getBaseHTTPClient(_ context.Context, settings models.InfinitySettings) *http.Client {
+func getBaseHTTPClient(ctx context.Context, settings models.InfinitySettings) *http.Client {
+	logger := backend.Logger.FromContext(ctx)
 	tlsConfig, err := GetTLSConfigFromSettings(settings)
 	if err != nil {
 		return nil
@@ -66,12 +67,12 @@ func getBaseHTTPClient(_ context.Context, settings models.InfinitySettings) *htt
 	transport := &http.Transport{TLSClientConfig: tlsConfig}
 	switch settings.ProxyType {
 	case models.ProxyTypeNone:
-		backend.Logger.Debug("proxy type is set to none. Not using the proxy")
+		logger.Debug("proxy type is set to none. Not using the proxy")
 	case models.ProxyTypeUrl:
-		backend.Logger.Debug("proxy type is set to url. Using the proxy", "proxy_url", settings.ProxyUrl)
+		logger.Debug("proxy type is set to url. Using the proxy", "proxy_url", settings.ProxyUrl)
 		u, err := url.Parse(settings.ProxyUrl)
 		if err != nil {
-			backend.Logger.Error("error parsing proxy url", "err", err.Error(), "proxy_url", settings.ProxyUrl)
+			logger.Error("error parsing proxy url", "err", err.Error(), "proxy_url", settings.ProxyUrl)
 			return nil
 		}
 		transport.Proxy = http.ProxyURL(u)
@@ -86,6 +87,7 @@ func getBaseHTTPClient(_ context.Context, settings models.InfinitySettings) *htt
 }
 
 func NewClient(ctx context.Context, settings models.InfinitySettings) (client *Client, err error) {
+	logger := backend.Logger.FromContext(ctx)
 	_, span := tracing.DefaultTracer().Start(ctx, "NewClient")
 	defer span.End()
 	if settings.AuthenticationMethod == "" {
@@ -100,7 +102,7 @@ func NewClient(ctx context.Context, settings models.InfinitySettings) (client *C
 	httpClient := getBaseHTTPClient(ctx, settings)
 	if httpClient == nil {
 		span.RecordError(errors.New("invalid http client"))
-		backend.Logger.Error("invalid http client", "datasource uid", settings.UID, "datasource name", settings.Name)
+		logger.Error("invalid http client", "datasource uid", settings.UID, "datasource name", settings.Name)
 		return client, errors.New("invalid http client")
 	}
 	httpClient = ApplyDigestAuth(ctx, httpClient, settings)
@@ -108,9 +110,9 @@ func NewClient(ctx context.Context, settings models.InfinitySettings) (client *C
 	httpClient = ApplyOAuthJWT(ctx, httpClient, settings)
 	httpClient = ApplyAWSAuth(ctx, httpClient, settings)
 
-	httpClient, err = ApplySecureSocksProxyConfiguration(httpClient, settings)
+	httpClient, err = ApplySecureSocksProxyConfiguration(ctx, httpClient, settings)
 	if err != nil {
-		backend.Logger.Error("error applying secure socks proxy", "datasource uid", settings.UID, "datasource name", settings.Name)
+		logger.Error("error applying secure socks proxy", "datasource uid", settings.UID, "datasource name", settings.Name)
 		return client, err
 	}
 
@@ -124,7 +126,7 @@ func NewClient(ctx context.Context, settings models.InfinitySettings) (client *C
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(500, err.Error())
-			backend.Logger.Error("invalid azure blob credentials", "datasource uid", settings.UID, "datasource name", settings.Name)
+			logger.Error("invalid azure blob credentials", "datasource uid", settings.UID, "datasource name", settings.Name)
 			return client, errors.New("invalid azure blob credentials")
 		}
 		clientUrl := "https://%s.blob.core.windows.net/"
@@ -138,13 +140,13 @@ func NewClient(ctx context.Context, settings models.InfinitySettings) (client *C
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(500, err.Error())
-			backend.Logger.Error("error creating azure blob client", "datasource uid", settings.UID, "datasource name", settings.Name)
+			logger.Error("error creating azure blob client", "datasource uid", settings.UID, "datasource name", settings.Name)
 			return client, fmt.Errorf("error creating azure blob client. %s", err)
 		}
 		if azClient == nil {
 			span.RecordError(errors.New("invalid/empty azure blob client"))
 			span.SetStatus(500, "invalid/empty azure blob client")
-			backend.Logger.Error("invalid/empty azure blob client", "datasource uid", settings.UID, "datasource name", settings.Name)
+			logger.Error("invalid/empty azure blob client", "datasource uid", settings.UID, "datasource name", settings.Name)
 			return client, errors.New("invalid/empty azure blob client")
 		}
 		client.AzureBlobClient = azClient
@@ -155,7 +157,8 @@ func NewClient(ctx context.Context, settings models.InfinitySettings) (client *C
 	return client, err
 }
 
-func ApplySecureSocksProxyConfiguration(httpClient *http.Client, settings models.InfinitySettings) (*http.Client, error) {
+func ApplySecureSocksProxyConfiguration(ctx context.Context, httpClient *http.Client, settings models.InfinitySettings) (*http.Client, error) {
+	logger := backend.Logger.FromContext(ctx)
 	if IsAwsAuthConfigured(settings) {
 		return httpClient, nil
 	}
@@ -171,7 +174,7 @@ func ApplySecureSocksProxyConfiguration(httpClient *http.Client, settings models
 	// secure socks proxy configuration - checks if enabled inside the function
 	err := proxy.New(settings.ProxyOpts.ProxyOptions).ConfigureSecureSocksHTTPProxy(t.(*http.Transport))
 	if err != nil {
-		backend.Logger.Error("error configuring secure socks proxy", "err", err.Error())
+		logger.Error("error configuring secure socks proxy", "err", err.Error())
 		return nil, fmt.Errorf("error configuring secure socks proxy. %s", err)
 	}
 	return httpClient, nil
@@ -191,29 +194,30 @@ func replaceSect(input string, settings models.InfinitySettings, includeSect boo
 
 func (client *Client) req(ctx context.Context, url string, body io.Reader, settings models.InfinitySettings, query models.Query, requestHeaders map[string]string) (obj any, statusCode int, duration time.Duration, err error) {
 	ctx, span := tracing.DefaultTracer().Start(ctx, "client.req")
+	logger := backend.Logger.FromContext(ctx)
 	defer span.End()
 	req, _ := GetRequest(ctx, settings, body, query, requestHeaders, true)
 	startTime := time.Now()
 	if !CanAllowURL(req.URL.String(), settings.AllowedHosts) {
-		backend.Logger.Error("url is not in the allowed list. make sure to match the base URL with the settings", "url", req.URL.String())
+		logger.Error("url is not in the allowed list. make sure to match the base URL with the settings", "url", req.URL.String())
 		return nil, http.StatusUnauthorized, 0, errorsource.DownstreamError(errors.New("requested URL is not allowed. To allow this URL, update the datasource config Security -> Allowed Hosts section"), false)
 	}
-	backend.Logger.Debug("yesoreyeram-infinity-datasource plugin is now requesting URL", "url", req.URL.String())
+	logger.Debug("yesoreyeram-infinity-datasource plugin is now requesting URL", "url", req.URL.String())
 	res, err := client.HttpClient.Do(req)
 	duration = time.Since(startTime)
 	if res != nil {
 		defer res.Body.Close()
 	}
 	if err != nil && res != nil {
-		backend.Logger.Error("error getting response from server", "url", url, "method", req.Method, "error", err.Error(), "status code", res.StatusCode)
+		logger.Error("error getting response from server", "url", url, "method", req.Method, "error", err.Error(), "status code", res.StatusCode)
 		return nil, res.StatusCode, duration, errorsource.SourceError(backend.ErrorSourceFromHTTPStatus(res.StatusCode), fmt.Errorf("error getting response from %s", url), false)
 	}
 	if err != nil && res == nil {
-		backend.Logger.Error("error getting response from server. no response received", "url", url, "error", err.Error())
+		logger.Error("error getting response from server. no response received", "url", url, "error", err.Error())
 		return nil, http.StatusInternalServerError, duration, errorsource.DownstreamError(fmt.Errorf("error getting response from url %s. no response received. Error: %w", url, err), false)
 	}
 	if err == nil && res == nil {
-		backend.Logger.Error("invalid response from server and also no error", "url", url, "method", req.Method)
+		logger.Error("invalid response from server and also no error", "url", url, "method", req.Method)
 		return nil, http.StatusInternalServerError, duration, errorsource.DownstreamError(fmt.Errorf("invalid response received for the URL %s", url), false)
 	}
 	if res.StatusCode >= http.StatusBadRequest {
@@ -221,7 +225,7 @@ func (client *Client) req(ctx context.Context, url string, body io.Reader, setti
 	}
 	bodyBytes, err := io.ReadAll(res.Body)
 	if err != nil {
-		backend.Logger.Error("error reading response body", "url", url, "error", err.Error())
+		logger.Error("error reading response body", "url", url, "error", err.Error())
 		return nil, res.StatusCode, duration, errorsource.DownstreamError(err, false)
 	}
 	bodyBytes = removeBOMContent(bodyBytes)
@@ -230,7 +234,7 @@ func (client *Client) req(ctx context.Context, url string, body io.Reader, setti
 		err := json.Unmarshal(bodyBytes, &out)
 		if err != nil {
 			err = errorsource.PluginError(err, false)
-			backend.Logger.Error("error un-marshaling JSON response", "url", url, "error", err.Error())
+			logger.Error("error un-marshaling JSON response", "url", url, "error", err.Error())
 		}
 		return out, res.StatusCode, duration, err
 	}
@@ -243,6 +247,7 @@ func removeBOMContent(input []byte) []byte {
 }
 
 func (client *Client) GetResults(ctx context.Context, query models.Query, requestHeaders map[string]string) (o any, statusCode int, duration time.Duration, err error) {
+	logger := backend.Logger.FromContext(ctx)
 	if query.Source == "azure-blob" {
 		if strings.TrimSpace(query.AzBlobContainerName) == "" || strings.TrimSpace(query.AzBlobName) == "" {
 			return nil, http.StatusBadRequest, 0, errorsource.DownstreamError(errors.New("invalid/empty container name/blob name"), false)
@@ -264,7 +269,7 @@ func (client *Client) GetResults(ctx context.Context, query models.Query, reques
 			var out any
 			err := json.Unmarshal(bodyBytes, &out)
 			if err != nil {
-				backend.Logger.Error("error un-marshaling blob content", "error", err.Error())
+				logger.Error("error un-marshaling blob content", "error", err.Error())
 				err = errorsource.PluginError(err, false)
 			}
 			return out, http.StatusOK, duration, err
@@ -273,7 +278,7 @@ func (client *Client) GetResults(ctx context.Context, query models.Query, reques
 	}
 	switch strings.ToUpper(query.URLOptions.Method) {
 	case http.MethodPost:
-		body := GetQueryBody(query)
+		body := GetQueryBody(ctx, query)
 		return client.req(ctx, query.URL, body, client.Settings, query, requestHeaders)
 	default:
 		return client.req(ctx, query.URL, nil, client.Settings, query, requestHeaders)
@@ -306,7 +311,8 @@ func CanAllowURL(url string, allowedHosts []string) bool {
 	return allow
 }
 
-func GetQueryBody(query models.Query) io.Reader {
+func GetQueryBody(ctx context.Context, query models.Query) io.Reader {
+	logger := backend.Logger.FromContext(ctx)
 	var body io.Reader
 	if strings.EqualFold(query.URLOptions.Method, http.MethodPost) {
 		switch query.URLOptions.BodyType {
@@ -319,7 +325,7 @@ func GetQueryBody(query models.Query) io.Reader {
 				_ = writer.WriteField(f.Key, f.Value)
 			}
 			if err := writer.Close(); err != nil {
-				backend.Logger.Error("error closing the query body reader")
+				logger.Error("error closing the query body reader")
 				return nil
 			}
 			body = payload

@@ -137,6 +137,7 @@ func ApplyPaginationItemToQuery(currentQuery models.Query, fieldType models.Pagi
 
 func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, query models.Query, infClient Client, requestHeaders map[string]string, postProcessingRequired bool) (*data.Frame, string, error) {
 	ctx, span := tracing.DefaultTracer().Start(ctx, "GetFrameForURLSourcesWithPostProcessing")
+	logger := backend.Logger.FromContext(ctx)
 	defer span.End()
 	frame := GetDummyFrame(query)
 	cursor := ""
@@ -158,7 +159,7 @@ func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, query models.Q
 		return frame, cursor, err
 	}
 	if query.Type == models.QueryTypeGSheets {
-		if frame, err = GetGoogleSheetsResponse(urlResponseObject, query); err != nil {
+		if frame, err = GetGoogleSheetsResponse(ctx, urlResponseObject, query); err != nil {
 			return frame, cursor, err
 		}
 	}
@@ -200,7 +201,7 @@ func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, query models.Q
 		Duration:               duration,
 	}
 	if err != nil {
-		backend.Logger.Error("error getting response for query", "error", err.Error())
+		logger.Error("error getting response for query", "error", err.Error())
 		frame.Meta.Custom = &CustomMeta{
 			Data:                   urlResponseObject,
 			ResponseCodeFromServer: statusCode,

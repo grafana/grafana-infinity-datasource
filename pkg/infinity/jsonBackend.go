@@ -15,11 +15,12 @@ import (
 
 func GetJSONBackendResponse(ctx context.Context, urlResponseObject any, query models.Query) (*data.Frame, error) {
 	_, span := tracing.DefaultTracer().Start(ctx, "GetJSONBackendResponse")
+	logger := backend.Logger.FromContext(ctx)
 	defer span.End()
 	frame := GetDummyFrame(query)
 	responseString, err := json.Marshal(urlResponseObject)
 	if err != nil {
-		backend.Logger.Error("error json parsing root data", "error", err.Error())
+		logger.Error("error json parsing root data", "error", err.Error())
 		frame.Meta.Custom = &CustomMeta{Query: query, Error: err.Error()}
 		return frame, errorsource.PluginError(fmt.Errorf("error parsing json root data"), false)
 	}

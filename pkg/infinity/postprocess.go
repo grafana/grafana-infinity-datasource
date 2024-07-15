@@ -15,6 +15,7 @@ import (
 
 func PostProcessFrame(ctx context.Context, frame *data.Frame, query models.Query) (*data.Frame, error) {
 	ctx, span := tracing.DefaultTracer().Start(ctx, "PostProcessFrame")
+	logger := backend.Logger.FromContext(ctx)
 	defer span.End()
 	cc := []transformations.ComputedColumn{}
 	for _, c := range query.ComputedColumns {
@@ -22,13 +23,13 @@ func PostProcessFrame(ctx context.Context, frame *data.Frame, query models.Query
 	}
 	frame, err := transformations.GetFrameWithComputedColumns(frame, cc)
 	if err != nil {
-		backend.Logger.Error("error getting computed column", "error", err.Error())
+		logger.Error("error getting computed column", "error", err.Error())
 		frame.Meta.Custom = &CustomMeta{Query: query, Error: err.Error()}
 		return frame, errorsource.PluginError(err, false)
 	}
 	frame, err = transformations.ApplyFilter(frame, query.FilterExpression)
 	if err != nil {
-		backend.Logger.Error("error applying filter", "error", err.Error())
+		logger.Error("error applying filter", "error", err.Error())
 		frame.Meta.Custom = &CustomMeta{Query: query, Error: err.Error()}
 		return frame, errorsource.PluginError(fmt.Errorf("error applying filter. %w", err), false)
 	}
