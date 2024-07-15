@@ -11,8 +11,9 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
-	"github.com/yesoreyeram/grafana-plugins/lib/go/jsonframer"
-	"github.com/yesoreyeram/grafana-plugins/lib/go/transformations"
+	"github.com/grafana/grafana-plugin-sdk-go/experimental/errorsource"
+	"github.com/grafana/infinity-libs/lib/go/jsonframer"
+	"github.com/grafana/infinity-libs/lib/go/transformations"
 )
 
 func GetFrameForURLSources(ctx context.Context, query models.Query, infClient Client, requestHeaders map[string]string) (*data.Frame, error) {
@@ -136,6 +137,7 @@ func ApplyPaginationItemToQuery(currentQuery models.Query, fieldType models.Pagi
 
 func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, query models.Query, infClient Client, requestHeaders map[string]string, postProcessingRequired bool) (*data.Frame, string, error) {
 	ctx, span := tracing.DefaultTracer().Start(ctx, "GetFrameForURLSourcesWithPostProcessing")
+	logger := backend.Logger.FromContext(ctx)
 	defer span.End()
 	frame := GetDummyFrame(query)
 	cursor := ""
@@ -157,7 +159,7 @@ func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, query models.Q
 		return frame, cursor, err
 	}
 	if query.Type == models.QueryTypeGSheets {
-		if frame, err = GetGoogleSheetsResponse(urlResponseObject, query); err != nil {
+		if frame, err = GetGoogleSheetsResponse(ctx, urlResponseObject, query); err != nil {
 			return frame, cursor, err
 		}
 	}
@@ -185,23 +187,6 @@ func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, query models.Q
 			frame, err = PostProcessFrame(ctx, frame, query)
 		}
 	}
-	if query.Type == models.QueryTypeJSON && query.Parser == "sqlite" {
-		sqliteQuery := query.SQLiteQuery
-		if strings.TrimSpace(sqliteQuery) == "" {
-			sqliteQuery = "SELECT * FROM input"
-		}
-		body, err := json.Marshal(urlResponseObject)
-		if err != nil {
-			return frame, cursor, fmt.Errorf("error while marshaling the response object. %w", err)
-		}
-		if frame, err = jsonframer.ToFrame(string(body), jsonframer.FramerOptions{
-			FramerType:   jsonframer.FramerTypeSQLite3,
-			SQLite3Query: sqliteQuery,
-			RootSelector: query.RootSelector,
-		}); err != nil {
-			return frame, cursor, err
-		}
-	}
 	if frame.Meta == nil {
 		frame.Meta = &data.FrameMeta{}
 	}
@@ -216,7 +201,7 @@ func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, query models.Q
 		Duration:               duration,
 	}
 	if err != nil {
-		backend.Logger.Error("error getting response for query", "error", err.Error())
+		logger.Error("error getting response for query", "error", err.Error())
 		frame.Meta.Custom = &CustomMeta{
 			Data:                   urlResponseObject,
 			ResponseCodeFromServer: statusCode,
@@ -229,11 +214,11 @@ func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, query models.Q
 	if query.PageMode == models.PaginationModeCursor && strings.TrimSpace(query.PageParamCursorFieldExtractionPath) != "" {
 		body, err := json.Marshal(urlResponseObject)
 		if err != nil {
-			return frame, cursor, errors.New("error while finding the cursor value")
+			return frame, cursor, errorsource.PluginError(errors.New("error while finding the cursor value"), false)
 		}
 		cursor, err = jsonframer.GetRootData(string(body), query.PageParamCursorFieldExtractionPath)
 		if err != nil {
-			return frame, cursor, errors.New("error while extracting the cursor value")
+			return frame, cursor, errorsource.PluginError(errors.New("error while extracting the cursor value"), false)
 		}
 	}
 	return frame, cursor, nil

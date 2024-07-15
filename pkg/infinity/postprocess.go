@@ -9,11 +9,13 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
-	"github.com/yesoreyeram/grafana-plugins/lib/go/transformations"
+	"github.com/grafana/grafana-plugin-sdk-go/experimental/errorsource"
+	"github.com/grafana/infinity-libs/lib/go/transformations"
 )
 
 func PostProcessFrame(ctx context.Context, frame *data.Frame, query models.Query) (*data.Frame, error) {
 	ctx, span := tracing.DefaultTracer().Start(ctx, "PostProcessFrame")
+	logger := backend.Logger.FromContext(ctx)
 	defer span.End()
 	cc := []transformations.ComputedColumn{}
 	for _, c := range query.ComputedColumns {
@@ -21,15 +23,15 @@ func PostProcessFrame(ctx context.Context, frame *data.Frame, query models.Query
 	}
 	frame, err := transformations.GetFrameWithComputedColumns(frame, cc)
 	if err != nil {
-		backend.Logger.Error("error getting computed column", "error", err.Error())
+		logger.Error("error getting computed column", "error", err.Error())
 		frame.Meta.Custom = &CustomMeta{Query: query, Error: err.Error()}
-		return frame, err
+		return frame, errorsource.PluginError(err, false)
 	}
 	frame, err = transformations.ApplyFilter(frame, query.FilterExpression)
 	if err != nil {
-		backend.Logger.Error("error applying filter", "error", err.Error())
+		logger.Error("error applying filter", "error", err.Error())
 		frame.Meta.Custom = &CustomMeta{Query: query, Error: err.Error()}
-		return frame, fmt.Errorf("error applying filter. %w", err)
+		return frame, errorsource.PluginError(fmt.Errorf("error applying filter. %w", err), false)
 	}
 	if strings.TrimSpace(query.SummarizeExpression) != "" {
 		alias := query.SummarizeAlias

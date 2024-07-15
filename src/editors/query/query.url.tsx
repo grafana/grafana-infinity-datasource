@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { InlineFormLabel, CodeEditor, Select, Input, RadioButtonGroup, Icon } from '@grafana/ui';
 import { EditorRow } from './../../components/extended/EditorRow';
 import { EditorField } from './../../components/extended/EditorField';
 import { Stack } from './../../components/extended/Stack';
 import { isDataQuery } from './../../app/utils';
 import { KeyValueEditor } from './../../components/KeyValuePairEditor';
-import type { InfinityQuery, InfinityURLOptions, QueryBodyContentType, QueryBodyType } from './../../types';
+import type { InfinityQuery, InfinityQueryType, InfinityQueryWithURLSource, InfinityURLOptions, QueryBodyContentType, QueryBodyType } from './../../types';
 import type { SelectableValue } from '@grafana/data';
+import { usePrevious } from 'react-use';
 
 export const URLEditor = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void }) => {
   return isDataQuery(query) && query.source === 'url' ? (
@@ -61,18 +62,31 @@ export const Method = ({ query, onChange, onRunQuery }: { query: InfinityQuery; 
   );
 };
 
-export const URL = ({ query, onChange, onRunQuery, onShowUrlOptions }: { query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void; onShowUrlOptions: () => void }) => {
-  const [url, setURL] = useState((isDataQuery(query) || query.type === 'uql' || query.type === 'groq') && query.source === 'url' ? query.url || '' : '');
-  if (!(isDataQuery(query) || query.type === 'uql' || query.type === 'groq')) {
-    return <></>;
-  }
-  if (query.source !== 'url') {
-    return <></>;
-  }
+export const URL = ({
+  query,
+  onChange,
+  onRunQuery,
+  onShowUrlOptions,
+}: {
+  query: InfinityQueryWithURLSource<InfinityQueryType>;
+  onChange: (value: InfinityQueryWithURLSource<InfinityQueryType>) => void;
+  onRunQuery: () => void;
+  onShowUrlOptions: () => void;
+}) => {
+  const [url, setURL] = useState(query.url);
+  const previousUrl = usePrevious(query.url);
+
+  useEffect(() => {
+    if (query.url !== previousUrl && query.url !== url) {
+      setURL(query.url);
+    }
+  }, [query.url, previousUrl, url]);
+
   const onURLChange = () => {
     onChange({ ...query, url });
     onRunQuery();
   };
+
   return (
     <EditorField label="URL" horizontal={true}>
       <Input

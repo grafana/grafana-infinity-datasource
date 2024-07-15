@@ -31,7 +31,6 @@
 //              "summarizeAlias": "",
 //              "uql": "parse-json | count",
 //              "groq": "",
-//              "sqlite_query": "",
 //              "csv_options": {
 //                  "delimiter": "",
 //                  "skip_empty_lines": false,
@@ -106,7 +105,6 @@
               "summarizeAlias": "",
               "uql": "parse-json | count",
               "groq": "",
-              "sqlite_query": "",
               "csv_options": {
                 "delimiter": "",
                 "skip_empty_lines": false,

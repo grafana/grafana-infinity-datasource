@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
+	"github.com/grafana/grafana-plugin-sdk-go/experimental/errorsource"
 )
 
 type QueryType string
@@ -30,7 +31,6 @@ type InfinityParser string
 const (
 	InfinityParserSimple  InfinityParser = "simple"
 	InfinityParserBackend InfinityParser = "backend"
-	InfinityParserSQLite  InfinityParser = "sqlite"
 	InfinityParserUQL     InfinityParser = "uql"
 	InfinityParserGROQ    InfinityParser = "groq"
 )
@@ -94,14 +94,13 @@ type Query struct {
 	URL                                string                 `json:"url"`
 	URLOptions                         URLOptions             `json:"url_options"`
 	Data                               string                 `json:"data"`
-	Parser                             InfinityParser         `json:"parser"` // 'simple' | 'backend' | 'sqlite' | 'uql' | 'groq'
+	Parser                             InfinityParser         `json:"parser"` // 'simple' | 'backend' | 'uql' | 'groq'
 	FilterExpression                   string                 `json:"filterExpression"`
 	SummarizeExpression                string                 `json:"summarizeExpression"`
 	SummarizeBy                        string                 `json:"summarizeBy"`
 	SummarizeAlias                     string                 `json:"summarizeAlias"`
 	UQL                                string                 `json:"uql"`
 	GROQ                               string                 `json:"groq"`
-	SQLiteQuery                        string                 `json:"sqlite_query"`
 	CSVOptions                         InfinityCSVOptions     `json:"csv_options"`
 	JSONOptions                        InfinityJSONOptions    `json:"json_options"`
 	RootSelector                       string                 `json:"root_selector"`
@@ -311,11 +310,13 @@ func LoadQuery(ctx context.Context, backendQuery backend.DataQuery, pluginContex
 	var query Query
 	err := json.Unmarshal(backendQuery.JSON, &query)
 	if err != nil {
-		return query, fmt.Errorf("error while parsing the query json. %s", err.Error())
+		// Plugin error as the user should not have been able to send a bad query
+		return query, errorsource.PluginError(fmt.Errorf("error while parsing the query json. %w", err), false)
 	}
 	query = ApplyDefaultsToQuery(ctx, query)
 	if query.PageMode == PaginationModeList && strings.TrimSpace(query.PageParamListFieldName) == "" {
-		return query, errors.New("pagination_param_list_field_name cannot be empty")
+		// Downstream error as user input is not correct
+		return query, errorsource.DownstreamError(errors.New("pagination_param_list_field_name cannot be empty"), false)
 	}
 	return ApplyMacros(ctx, query, backendQuery.TimeRange, pluginContext)
 }
