@@ -29,7 +29,6 @@
 //              "summarizeBy": "",
 //              "uql": "parse-xml",
 //              "groq": "",
-//              "sqlite_query": "",
 //              "csv_options": {
 //                  "delimiter": "",
 //                  "skip_empty_lines": false,
@@ -105,7 +104,6 @@
               "summarizeBy": "",
               "uql": "parse-xml",
               "groq": "",
-              "sqlite_query": "",
               "csv_options": {
                 "delimiter": "",
                 "skip_empty_lines": false,

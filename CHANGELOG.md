@@ -1,11 +1,30 @@
 # Change Log
 
+## 2.9.2
+
+🚀 **Chore**: Logging improvements
+
+## 2.9.1
+
+🚀 **Chore**: Upgrade grafana-plugin-sdk-go to `v0.240.0` from `v0.239.0`
+
+## 2.9.0
+
+🚀 **UQL**: Updated uql library to [0.0.23](https://github.com/yesoreyeram/uql/blob/main/CHANGELOG.md#0023)
+
+🚀 **Chore** Replaced backend framer libraries from [yesoreyeram/grafana-plugins](https://github.com/yesoreyeram/grafana-plugins) to [grafana/infinity-libs](https://github.com/grafana/infinity-libs)
+
+⚙️ **Chore**: Add error source to error responses
+
+⚙️ **Chore**: Upgrade grafana-plugin-sdk-go to `v0.239.0` from `v0.231.0`
+
+🐛 **Bug fix**: Fix showing of correct URL when using query history
+
 ## 2.8.0
 
 ⚙️ **Chore**: backend datasource.serve method migrated to datasource.manage method
 
 🐛 **Bug fix**: Fixed a bug where filters not working in variables editor
-
 
 ## 2.7.1
 
