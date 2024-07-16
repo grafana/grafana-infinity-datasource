@@ -3,19 +3,20 @@ package infinity
 import (
 	"context"
 	"fmt"
+	"net/http"
+
 	"github.com/grafana/grafana-azure-sdk-go/v2/azcredentials"
 	"github.com/grafana/grafana-azure-sdk-go/v2/azhttpclient"
 	"github.com/grafana/grafana-azure-sdk-go/v2/azsettings"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/httpclient"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"github.com/grafana/grafana-plugin-sdk-go/data/utils/maputil"
-	"net/http"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 )
 
 func ApplyAzureAuth(ctx context.Context, httpClient *http.Client, settings models.InfinitySettings) (*http.Client, error) {
-	ctx, span := tracing.DefaultTracer().Start(ctx, "ApplyAzureAuth")
+	_, span := tracing.DefaultTracer().Start(ctx, "ApplyAzureAuth")
 	defer span.End()
 
 	if !IsAzureAuthConfigured(settings) {
