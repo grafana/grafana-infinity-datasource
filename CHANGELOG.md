@@ -1,5 +1,9 @@
 # Change Log
 
+## 2.9.2
+
+🚀 **Chore**: Logging improvements
+
 ## 2.9.1
 
 🚀 **Chore**: Upgrade grafana-plugin-sdk-go to `v0.240.0` from `v0.239.0`
