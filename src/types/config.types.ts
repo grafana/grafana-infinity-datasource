@@ -46,7 +46,6 @@ export interface InfinityOptions extends DataSourceJsonData {
   apiKeyType?: APIKeyType;
   oauth2?: OAuth2Props;
   aws?: AWSAuthProps;
-  // azureCredentials is used to align with the Grafana Azure SDK
   azureCredentials?: AzureProps;
   tlsSkipVerify?: boolean;
   tlsAuth?: boolean;
@@ -78,7 +77,6 @@ export interface InfinitySecureOptions {
   awsAccessKey?: string;
   awsSecretKey?: string;
   oauth2ClientSecret?: string;
-  // azureClientSecret is used to align with the Grafana Azure SDK
   azureClientSecret?: string;
   oauth2JWTPrivateKey?: string;
   azureBlobAccountKey?: string;

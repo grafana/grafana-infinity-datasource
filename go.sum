@@ -99,6 +99,8 @@ github.com/grafana/grafana-aws-sdk v0.24.0 h1:0RKCJTeIkpEUvLCTjGOK1+jYZpaE2nJaGg
 github.com/grafana/grafana-aws-sdk v0.24.0/go.mod h1:3zghFF6edrxn0d6k6X9HpGZXDH+VfA+MwD2Pc/9X0ec=
 github.com/grafana/grafana-azure-sdk-go/v2 v2.0.4 h1:z6amQ286IJSBctHf6c+ibJq/v0+TvmEjVkrdMNBd4uY=
 github.com/grafana/grafana-azure-sdk-go/v2 v2.0.4/go.mod h1:aKlFPE36IDa8qccRg3KbgZX3MQ5xymS3RelT4j6kkVU=
+github.com/grafana/grafana-azure-sdk-go/v2 v2.1.0 h1:lajVqTWaE96MpbjZToj7EshvqgRWOfYNkD4MbIZizaY=
+github.com/grafana/grafana-azure-sdk-go/v2 v2.1.0/go.mod h1:aKlFPE36IDa8qccRg3KbgZX3MQ5xymS3RelT4j6kkVU=
 github.com/grafana/grafana-plugin-sdk-go v0.240.0 h1:jhv2TqfBWoi5ZTksg/fdY5Mi8FDsaE8XGxjS1Rgi6nk=
 github.com/grafana/grafana-plugin-sdk-go v0.240.0/go.mod h1:GTw4Fgs9rFe0bR8zmqaTqnVEcQx+Rk5fJvWULyzigCM=
 github.com/grafana/infinity-libs/lib/go/csvframer v1.0.0 h1:PGM6BkwU1You9zFShVTtNvQcnQDabJ4jg9TLhqAdC/k=
