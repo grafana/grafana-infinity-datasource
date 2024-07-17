@@ -18,7 +18,10 @@ import (
 func TestErrors(t *testing.T) {
 	t.Run("remote url query", func(t *testing.T) {
 		t.Run("succeed with invalid server response", func(t *testing.T) {
-			server := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) { w.WriteHeader(http.StatusOK); w.Write([]byte(`{}`)) }))
+			server := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				w.WriteHeader(http.StatusOK)
+				_, _ = w.Write([]byte(`{}`))
+			}))
 			server.Start()
 			defer server.Close()
 			client, _ := infinity.NewClient(context.TODO(), models.InfinitySettings{})
@@ -29,7 +32,9 @@ func TestErrors(t *testing.T) {
 			require.Equal(t, backend.ErrorSource(""), res.ErrorSource)
 		})
 		t.Run("fail with invalid server response", func(t *testing.T) {
-			server := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) { w.WriteHeader(http.StatusForbidden) }))
+			server := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				w.WriteHeader(http.StatusForbidden)
+			}))
 			server.Start()
 			defer server.Close()
 			client, _ := infinity.NewClient(context.TODO(), models.InfinitySettings{})
@@ -42,7 +47,10 @@ func TestErrors(t *testing.T) {
 			require.Equal(t, "error while performing the infinity query. unsuccessful HTTP response. 403 Forbidden", res.Error.Error())
 		})
 		t.Run("fail with incorrect response from server", func(t *testing.T) {
-			server := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) { w.WriteHeader(http.StatusOK); w.Write([]byte(`{`)) }))
+			server := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				w.WriteHeader(http.StatusOK)
+				_, _ = w.Write([]byte(`{`))
+			}))
 			server.Start()
 			defer server.Close()
 			client, _ := infinity.NewClient(context.TODO(), models.InfinitySettings{})
@@ -55,7 +63,10 @@ func TestErrors(t *testing.T) {
 			require.Equal(t, "error while performing the infinity query. unable to parse response body as JSON. unexpected end of JSON input", res.Error.Error())
 		})
 		t.Run("fail with incorrect JSONata", func(t *testing.T) {
-			server := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) { w.WriteHeader(http.StatusOK); w.Write([]byte(`{}`)) }))
+			server := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				w.WriteHeader(http.StatusOK)
+				_, _ = w.Write([]byte(`{}`))
+			}))
 			server.Start()
 			defer server.Close()
 			client, _ := infinity.NewClient(context.TODO(), models.InfinitySettings{})
