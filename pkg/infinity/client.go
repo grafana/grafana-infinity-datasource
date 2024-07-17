@@ -208,20 +208,21 @@ func (client *Client) req(ctx context.Context, url string, body io.Reader, setti
 	if res != nil {
 		defer res.Body.Close()
 	}
-	if err != nil && res != nil {
-		logger.Error("error getting response from server", "url", url, "method", req.Method, "error", err.Error(), "status code", res.StatusCode)
-		return nil, res.StatusCode, duration, errorsource.SourceError(backend.ErrorSourceFromHTTPStatus(res.StatusCode), fmt.Errorf("error getting response from %s", url), false)
-	}
-	if err != nil && res == nil {
+	if err != nil {
+		if res != nil {
+			logger.Error("error getting response from server", "url", url, "method", req.Method, "error", err.Error(), "status code", res.StatusCode)
+			return nil, res.StatusCode, duration, errorsource.SourceError(backend.ErrorSourceDownstream, fmt.Errorf("error getting response from %s", url), false)
+		}
 		logger.Error("error getting response from server. no response received", "url", url, "error", err.Error())
 		return nil, http.StatusInternalServerError, duration, errorsource.DownstreamError(fmt.Errorf("error getting response from url %s. no response received. Error: %w", url, err), false)
 	}
-	if err == nil && res == nil {
+	if res == nil {
 		logger.Error("invalid response from server and also no error", "url", url, "method", req.Method)
 		return nil, http.StatusInternalServerError, duration, errorsource.DownstreamError(fmt.Errorf("invalid response received for the URL %s", url), false)
 	}
 	if res.StatusCode >= http.StatusBadRequest {
-		return nil, res.StatusCode, duration, errorsource.SourceError(backend.ErrorSourceFromHTTPStatus(res.StatusCode), errors.New(res.Status), false)
+		err = fmt.Errorf("%w. %s", ErrUnsuccessfulHTTPResponseStatus, res.Status)
+		return nil, res.StatusCode, duration, errorsource.DownstreamError(err, false)
 	}
 	bodyBytes, err := io.ReadAll(res.Body)
 	if err != nil {
@@ -233,7 +234,8 @@ func (client *Client) req(ctx context.Context, url string, body io.Reader, setti
 		var out any
 		err := json.Unmarshal(bodyBytes, &out)
 		if err != nil {
-			err = errorsource.PluginError(err, false)
+			err = fmt.Errorf("%w. %w", ErrParsingResponseBodyAsJson, err)
+			err = errorsource.DownstreamError(err, false)
 			logger.Error("error un-marshaling JSON response", "url", url, "error", err.Error())
 		}
 		return out, res.StatusCode, duration, err
