@@ -138,7 +138,7 @@ func QueryDataQuery(ctx context.Context, query models.Query, infClient infinity.
 			}
 			frame, err := infinity.GetFrameForURLSources(ctx, query, infClient, requestHeaders)
 			if err != nil {
-				logger.Error("error while performing the infinity query", "msg", err.Error())
+				logger.Debug("error while performing the infinity query", "msg", err.Error())
 				if frame != nil {
 					frame, _ = infinity.WrapMetaForRemoteQuery(ctx, infClient.Settings, frame, err, query)
 					response.Frames = append(response.Frames, frame)
