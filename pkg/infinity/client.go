@@ -212,6 +212,8 @@ func (client *Client) req(ctx context.Context, url string, body io.Reader, setti
 	if err != nil {
 		if res != nil {
 			logger.Error("error getting response from server", "url", url, "method", req.Method, "error", err.Error(), "status code", res.StatusCode)
+			// Infinity can query anything and users are responsible for ensuring that endpoint/auth is correct
+			// therefore any incoming error is considered downstream
 			return nil, res.StatusCode, duration, errorsource.SourceError(backend.ErrorSourceDownstream, fmt.Errorf("error getting response from %s", url), false)
 		}
 		logger.Error("error getting response from server. no response received", "url", url, "error", err.Error())
