@@ -31,6 +31,4 @@ yarn-error.log*
 docker/blocks/tempo/tempo-data
 # IDE
 .idea
-.vscode/
-!.vscode/launch.json
 .eslintcache
