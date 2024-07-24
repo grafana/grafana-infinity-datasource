@@ -202,7 +202,7 @@ func (client *Client) req(ctx context.Context, url string, body io.Reader, setti
 		logger.Error("url is not in the allowed list. make sure to match the base URL with the settings", "url", req.URL.String())
 		return nil, http.StatusUnauthorized, 0, errorsource.DownstreamError(errors.New("requested URL is not allowed. To allow this URL, update the datasource config Security -> Allowed Hosts section"), false)
 	}
-	logger.Debug("yesoreyeram-infinity-datasource plugin requesting URL", "host", req.URL.Hostname(), "url_path", req.URL.Path, "method", req.Method, "type", query.Type)
+	logger.Debug("requesting URL", "host", req.URL.Hostname(), "url_path", req.URL.Path, "method", req.Method, "type", query.Type)
 	res, err := client.HttpClient.Do(req)
 	duration = time.Since(startTime)
 	logger.Debug("yesoreyeram-infinity-datasource plugin received response", "host", req.URL.Hostname(), "url_path", req.URL.Path, "method", req.Method, "type", query.Type, "duration_ms", duration.Milliseconds())
