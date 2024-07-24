@@ -205,7 +205,7 @@ func (client *Client) req(ctx context.Context, url string, body io.Reader, setti
 	logger.Debug("requesting URL", "host", req.URL.Hostname(), "url_path", req.URL.Path, "method", req.Method, "type", query.Type)
 	res, err := client.HttpClient.Do(req)
 	duration = time.Since(startTime)
-	logger.Debug("yesoreyeram-infinity-datasource plugin received response", "host", req.URL.Hostname(), "url_path", req.URL.Path, "method", req.Method, "type", query.Type, "duration_ms", duration.Milliseconds())
+	logger.Debug("received response", "host", req.URL.Hostname(), "url_path", req.URL.Path, "method", req.Method, "type", query.Type, "duration_ms", duration.Milliseconds())
 	if res != nil {
 		defer res.Body.Close()
 	}
