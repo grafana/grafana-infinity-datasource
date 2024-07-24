@@ -3,6 +3,7 @@ package infinity
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
@@ -38,11 +39,15 @@ func GetJSONBackendResponse(ctx context.Context, urlResponseObject any, query mo
 		RootSelector: query.RootSelector,
 		Columns:      columns,
 	})
+
+	if err != nil {
+		if errors.Is(err, jsonframer.ErrInvalidRootSelector) || errors.Is(err, jsonframer.ErrInvalidJSONContent) || errors.Is(err, jsonframer.ErrInvalidJSONContent) {
+			return frame, errorsource.DownstreamError(fmt.Errorf("error converting json data to frame: %w", err), false)
+		}
+		return frame, errorsource.PluginError(fmt.Errorf("error converting json data to frame: %w", err), false)
+	}
 	if newFrame != nil {
 		frame.Fields = append(frame.Fields, newFrame.Fields...)
 	}
-	if err != nil {
-		err = errorsource.PluginError(fmt.Errorf("error parsing json data to frame: %w", err), false)
-	}
-	return frame, err
+	return frame, nil
 }
