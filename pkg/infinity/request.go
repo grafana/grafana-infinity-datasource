@@ -22,9 +22,9 @@ func GetRequest(ctx context.Context, settings models.InfinitySettings, body io.R
 	}
 	switch strings.ToUpper(query.URLOptions.Method) {
 	case http.MethodPost:
-		req, err = http.NewRequest(http.MethodPost, url, body)
+		req, err = http.NewRequestWithContext(ctx, http.MethodPost, url, body)
 	default:
-		req, err = http.NewRequest(http.MethodGet, url, nil)
+		req, err = http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	}
 	req = ApplyAcceptHeader(query, settings, req, includeSect)
 	req = ApplyContentTypeHeader(query, settings, req, includeSect)
