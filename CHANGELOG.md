@@ -1,5 +1,9 @@
 # Change Log
 
+## 2.9.3
+
+🐛 **Chore**: Updated error source capturing
+
 ## 2.9.2
 
 🚀 **Chore**: Logging improvements
