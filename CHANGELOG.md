@@ -1,5 +1,15 @@
 # Change Log
 
+## 2.9.4
+
+🐛 **Bug fix**: Fix query cancellation
+
+⚙️ **Chore**: Add vscode debugger configuration
+
+## 2.9.3
+
+🐛 **Chore**: Updated error source capturing
+
 ## 2.9.2
 
 🚀 **Chore**: Logging improvements

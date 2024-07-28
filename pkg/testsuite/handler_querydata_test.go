@@ -105,7 +105,7 @@ func TestAuthentication(t *testing.T) {
 			metaData := res.Frames[0].Meta.Custom.(*infinity.CustomMeta)
 			require.NotNil(t, res.Error)
 			require.NotNil(t, metaData)
-			require.Equal(t, "401 Unauthorized", metaData.Error)
+			require.Equal(t, "unsuccessful HTTP response. 401 Unauthorized", metaData.Error)
 			require.Equal(t, http.StatusUnauthorized, metaData.ResponseCodeFromServer)
 		})
 	})
@@ -237,7 +237,7 @@ func TestAuthentication(t *testing.T) {
 			}, *client, map[string]string{}, backend.PluginContext{})
 			require.NotNil(t, res)
 			require.NotNil(t, res.Error)
-			assert.Equal(t, fmt.Sprintf("error getting data frame. error getting response from url %s/something-else. no response received. Error: Get \"%s/something-else\": oauth2: cannot fetch token: 401 Unauthorized\nResponse: ", server.URL, server.URL), res.Error.Error())
+			assert.Equal(t, fmt.Sprintf("error while performing the infinity query. error getting response from url %s/something-else. no response received. Error: Get \"%s/something-else\": oauth2: cannot fetch token: 401 Unauthorized\nResponse: ", server.URL, server.URL), res.Error.Error())
 			metaData := res.Frames[0].Meta.Custom.(*infinity.CustomMeta)
 			require.NotNil(t, metaData)
 			require.Equal(t, http.StatusInternalServerError, metaData.ResponseCodeFromServer)
@@ -345,7 +345,7 @@ func TestAuthentication(t *testing.T) {
 				}`, "http://httpbin.org/digest-auth/auth/foo/bar/MD5")),
 			}, *client, map[string]string{}, backend.PluginContext{})
 			require.NotNil(t, res.Error)
-			require.Equal(t, "error getting data frame. 401 UNAUTHORIZED", res.Error.Error())
+			require.Equal(t, "error while performing the infinity query. unsuccessful HTTP response. 401 UNAUTHORIZED", res.Error.Error())
 		})
 		t.Run("should fail with incorrect auth method", func(t *testing.T) {
 			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
@@ -363,7 +363,7 @@ func TestAuthentication(t *testing.T) {
 				}`, "http://httpbin.org/digest-auth/auth/foo/bar/MD5")),
 			}, *client, map[string]string{}, backend.PluginContext{})
 			require.NotNil(t, res.Error)
-			require.Equal(t, "error getting data frame. 401 UNAUTHORIZED", res.Error.Error())
+			require.Equal(t, "error while performing the infinity query. unsuccessful HTTP response. 401 UNAUTHORIZED", res.Error.Error())
 		})
 	})
 }

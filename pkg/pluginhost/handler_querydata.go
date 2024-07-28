@@ -138,15 +138,12 @@ func QueryDataQuery(ctx context.Context, query models.Query, infClient infinity.
 			}
 			frame, err := infinity.GetFrameForURLSources(ctx, query, infClient, requestHeaders)
 			if err != nil {
-				logger.Error("error while performing the infinity query", "msg", err.Error())
+				logger.Debug("error while performing the infinity query", "msg", err.Error())
 				if frame != nil {
 					frame, _ = infinity.WrapMetaForRemoteQuery(ctx, infClient.Settings, frame, err, query)
 					response.Frames = append(response.Frames, frame)
 				}
-				span.RecordError(err)
-				span.SetStatus(500, err.Error())
-				response.Error = fmt.Errorf("error getting data frame. %w", err)
-				// We should have error source from the original error, but in a case it is not there, we are using the plugin error as the default source
+				response.Error = fmt.Errorf("error while performing the infinity query. %w", err)
 				response.ErrorSource = errorsource.SourceError(backend.ErrorSourcePlugin, err, false).Source()
 				return response
 			}
@@ -162,12 +159,12 @@ func QueryDataQuery(ctx context.Context, query models.Query, infClient infinity.
 		case "inline":
 			frame, err := infinity.GetFrameForInlineSources(ctx, query)
 			if err != nil {
-				logger.Error("error while performing the infinity inline query", "msg", err.Error())
+				logger.Debug("error while performing the infinity inline query", "msg", err.Error())
 				span.RecordError(err)
 				span.SetStatus(500, err.Error())
 				frame, _ := infinity.WrapMetaForInlineQuery(ctx, frame, err, query)
 				response.Frames = append(response.Frames, frame)
-				response.Error = fmt.Errorf("error getting data frame from inline data. %w", err)
+				response.Error = fmt.Errorf("error while performing the infinity inline query. %w", err)
 				// We should have error source from the original error, but in a case it is not there, we are using the plugin error as the default source
 				response.ErrorSource = errorsource.SourceError(backend.ErrorSourcePlugin, err, false).Source()
 				return response
