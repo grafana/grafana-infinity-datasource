@@ -25,6 +25,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
   query(options: DataQueryRequest<InfinityQuery>): Observable<DataQueryResponse> {
     return new Observable<DataQueryResponse>((subscriber) => {
       let request = getUpdatedDataRequest(options, this.instanceSettings);
+      // TODO: Remove or change this to be fired less often
       // reportQuery(request?.targets || [], this.instanceSettings, this.meta, request?.app);
       super
         .query(request)
