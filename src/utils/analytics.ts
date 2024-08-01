@@ -74,6 +74,8 @@ export const reportQuery = (queries: InfinityQuery[] = [], instance_settings?: I
       }
       meta['query_pagination_mode'] = query.pagination_mode || 'none';
     }
+
+    console.log('reporting query');
     reportActivity('grafana_infinity_query_executed', meta, instance_settings, plugin_meta);
   }
 };

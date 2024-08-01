@@ -12,7 +12,7 @@ import { AnnotationsEditor } from './editors/annotation.editor';
 import { interpolateQuery, interpolateVariableQuery } from './interpolate';
 import { migrateQuery } from './migrate';
 import { isBackendQuery } from './app/utils';
-import { reportQuery, reportHealthCheck } from './utils/analytics';
+import { /*reportQuery,*/ reportHealthCheck } from './utils/analytics';
 import type { InfinityInstanceSettings, InfinityOptions, InfinityQuery, MetricFindValue, VariableQuery } from './types';
 
 export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOptions> {
@@ -25,7 +25,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
   query(options: DataQueryRequest<InfinityQuery>): Observable<DataQueryResponse> {
     return new Observable<DataQueryResponse>((subscriber) => {
       let request = getUpdatedDataRequest(options, this.instanceSettings);
-      reportQuery(request?.targets || [], this.instanceSettings, this.meta, request?.app);
+      // reportQuery(request?.targets || [], this.instanceSettings, this.meta, request?.app);
       super
         .query(request)
         .toPromise()
