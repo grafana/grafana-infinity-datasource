@@ -80,6 +80,16 @@ export const HeadersEditor = (props: DataSourcePluginOptionsEditorProps<Infinity
       <Collapse isOpen={true} collapsible={true} label="URL Query Param">
         <SecureFieldsEditor dataSourceConfig={options} onChange={onOptionsChange} title="URL Query Param" secureFieldName="secureQueryName" secureFieldValue="secureQueryValue" hideTile={true} />
       </Collapse>
+      <Collapse isOpen={true} collapsible={true} label="HTTP POST form data parameter">
+        <SecureFieldsEditor
+          dataSourceConfig={options}
+          onChange={onOptionsChange}
+          title="HTTP POST form data parameter"
+          secureFieldName="formPostItemName"
+          secureFieldValue="formPostItemValue"
+          hideTile={true}
+        />
+      </Collapse>
       <Collapse isOpen={true} collapsible={true} label="Query Param Encoding (EXPERIMENTAL)">
         <QueryParamEditor options={options} onOptionsChange={onOptionsChange} />
       </Collapse>
@@ -138,7 +148,7 @@ export const MiscEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
 const config_sections: Array<{ value: string; label: string }> = [
   { value: 'main', label: 'Main' },
   { value: 'auth', label: 'Authentication' },
-  { value: 'headers_and_params', label: 'Headers & URL params' },
+  { value: 'http_options', label: 'HTTP Options' },
   { value: 'network', label: 'Network' },
   { value: 'security', label: 'Security' },
   { value: 'health_check', label: 'Health check' },
@@ -214,7 +224,7 @@ export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<I
             <MainEditor options={options} onOptionsChange={onOptionsChange} setActiveTab={setActiveTab} />
           ) : activeTab === 'auth' ? (
             <AuthEditor options={options} onOptionsChange={onOptionsChange} />
-          ) : activeTab === 'headers_and_params' ? (
+          ) : activeTab === 'http_options' ? (
             <HeadersEditor options={options} onOptionsChange={onOptionsChange} />
           ) : activeTab === 'network' ? (
             <NetworkEditor options={options} onOptionsChange={onOptionsChange} />
