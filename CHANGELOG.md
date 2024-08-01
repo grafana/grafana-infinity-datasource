@@ -1,5 +1,9 @@
 # Change Log
 
+## 2.9.5
+
+⚙️ **Chore**: Rudderstack event firing updated
+
 ## 2.9.4
 
 🐛 **Bug fix**: Fix query cancellation
