@@ -8,6 +8,8 @@ import (
 	"net/textproto"
 	"strings"
 
+	"github.com/grafana/grafana-azure-sdk-go/v2/azcredentials"
+	"github.com/grafana/grafana-azure-sdk-go/v2/azsettings"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/httpclient"
 	"golang.org/x/oauth2"
@@ -22,6 +24,7 @@ const (
 	AuthenticationMethodDigestAuth   = "digestAuth"
 	AuthenticationMethodOAuth        = "oauth2"
 	AuthenticationMethodAWS          = "aws"
+	AuthenticationMethodAzure        = "azure"
 	AuthenticationMethodAzureBlob    = "azureBlob"
 )
 
@@ -119,6 +122,9 @@ type InfinitySettings struct {
 	PathEncodedURLsEnabled   bool
 	// ProxyOpts is used for Secure Socks Proxy configuration
 	ProxyOpts httpclient.Options
+
+	RawData       map[string]interface{}
+	RawSecureData map[string]string
 }
 
 func (s *InfinitySettings) Validate() error {
@@ -148,6 +154,17 @@ func (s *InfinitySettings) Validate() error {
 			return errors.New("invalid/empty AWS secret key")
 		}
 		return nil
+	}
+	if s.AuthenticationMethod == AuthenticationMethodAzure {
+		_, err := azsettings.ReadFromEnv()
+		if err != nil {
+			return err
+		}
+
+		_, err = azcredentials.FromDatasourceData(s.RawData, s.RawSecureData)
+		if err != nil {
+			return err
+		}
 	}
 	if s.AuthenticationMethod != AuthenticationMethodNone && len(s.AllowedHosts) < 1 {
 		return errors.New("configure allowed hosts in the authentication section")
@@ -256,6 +273,15 @@ func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings
 		if len(infJson.AllowedHosts) > 0 {
 			settings.AllowedHosts = infJson.AllowedHosts
 		}
+
+		var rawData map[string]interface{}
+
+		if err := json.Unmarshal(config.JSONData, &rawData); err != nil {
+			return settings, err
+		}
+
+		settings.RawData = rawData
+		settings.RawSecureData = config.DecryptedSecureJSONData
 	}
 	settings.ReferenceData = infJson.ReferenceData
 	settings.CustomHealthCheckEnabled = infJson.CustomHealthCheckEnabled
@@ -292,6 +318,7 @@ func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings
 	if val, ok := config.DecryptedSecureJSONData["azureBlobAccountKey"]; ok {
 		settings.AzureBlobAccountKey = val
 	}
+
 	settings.CustomHeaders = GetSecrets(config, "httpHeaderName", "httpHeaderValue")
 	settings.SecureQueryFields = GetSecrets(config, "secureQueryName", "secureQueryValue")
 	settings.OAuth2Settings.EndpointParams = GetSecrets(config, "oauth2EndPointParamsName", "oauth2EndPointParamsValue")
