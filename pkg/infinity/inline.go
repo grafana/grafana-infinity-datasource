@@ -3,9 +3,11 @@ package infinity
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
+	"github.com/grafana/grafana-plugin-sdk-go/experimental/errorsource"
 	"github.com/grafana/infinity-libs/lib/go/jsonframer"
 )
 
@@ -46,6 +48,9 @@ func GetFrameForInlineSources(ctx context.Context, query models.Query) (*data.Fr
 			Columns:      columns,
 		})
 		if err != nil {
+			if errors.Is(err, jsonframer.ErrInvalidRootSelector) || errors.Is(err, jsonframer.ErrInvalidJSONContent) || errors.Is(err, jsonframer.ErrEvaluatingJSONata) {
+			return frame, errorsource.DownstreamError(fmt.Errorf("error converting json data to frame: %w", err), false)
+		}
 			return frame, err
 		}
 		if newFrame != nil {
