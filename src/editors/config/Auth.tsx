@@ -4,6 +4,7 @@ import { Icon, InlineFormLabel, LegacyForms, RadioButtonGroup, Select, useTheme2
 import React, { useState } from 'react';
 import { AllowedHostsEditor } from './AllowedHosts';
 import { OAuthInputsEditor } from './OAuthInput';
+import { AzureInputsEditor } from './AzureInput';
 import { OthersAuthentication } from './OtherAuthProviders';
 import { AWSRegions } from './../../constants';
 import type { APIKeyType, AuthType, InfinityOptions, InfinitySecureOptions } from './../../types';
@@ -17,6 +18,7 @@ const authTypes: Array<SelectableValue<AuthType | 'others'> & { logo?: string }>
   { value: 'oauthPassThru', label: 'Forward OAuth' },
   { value: 'oauth2', label: 'OAuth2', logo: '/public/plugins/yesoreyeram-infinity-datasource/img/oauth-2-sm.png' },
   { value: 'aws', label: 'AWS', logo: '/public/plugins/yesoreyeram-infinity-datasource/img/aws.jpg' },
+  { value: 'azure', label: 'Azure', logo: '/public/img/microsoft_auth_icon.svg' },
   { value: 'azureBlob', label: 'Azure Blob' },
   { value: 'others', label: 'Other Auth Providers' },
 ];
@@ -76,6 +78,7 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
       case 'apiKey':
       case 'bearerToken':
       case 'aws':
+      case 'azure':
       case 'azureBlob':
       case 'oauth2':
       case 'none':
@@ -134,7 +137,7 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
               e.preventDefault();
             }}
           >
-            {a.logo ? <img src={a.logo} width={24} height={24} style={{ marginInlineEnd: '10px' }} /> : <Icon name="key-skeleton-alt" style={{ marginInlineEnd: '10px' }} />}
+            {a.logo ? <img src={a.logo} width={16} height={16} style={{ marginInlineEnd: '10px' }} /> : <Icon name="key-skeleton-alt" style={{ marginInlineEnd: '10px' }} />}
             {a.label}
           </a>
         ))}
@@ -276,6 +279,7 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
               </>
             )}
             {authType === 'oauth2' && <OAuthInputsEditor {...props} />}
+            {authType === 'azure' && <AzureInputsEditor {...props} />}
             {authType === 'azureBlob' && (
               <>
                 <div className="gf-form">

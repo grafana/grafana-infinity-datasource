@@ -7,7 +7,7 @@ export interface GlobalInfinityQuery {
   id: string;
   query: InfinityQuery;
 }
-export type AuthType = 'none' | 'basicAuth' | 'apiKey' | 'bearerToken' | 'oauthPassThru' | 'digestAuth' | 'aws' | 'azureBlob' | 'oauth2';
+export type AuthType = 'none' | 'basicAuth' | 'apiKey' | 'bearerToken' | 'oauthPassThru' | 'digestAuth' | 'aws' | 'azureBlob' | 'oauth2' | 'azure';
 export type OAuth2Type = 'client_credentials' | 'jwt' | 'others';
 export type APIKeyType = 'header' | 'query';
 export type OAuth2Props = {
@@ -25,6 +25,18 @@ export type AWSAuthProps = {
   region?: string;
   service?: string;
 };
+
+export type AzureCloudType = 'AzureCloud' | 'AzureChinaCloud' | 'AzureUSGovernment';
+export type AzureAuthType = 'clientsecret' | 'msi' | 'workloadidentity';
+
+// the keys are used to align with the Grafana Azure SDK
+export type AzureProps = {
+  azureCloud?: AzureCloudType;
+  authType?: AzureAuthType;
+  tenantId?: string;
+  clientId?: string;
+  scopes?: string[];
+};
 export type InfinityReferenceData = { name: string; data: string };
 export type ProxyType = 'none' | 'env' | 'url';
 export type UnsecureQueryHandling = 'warn' | 'allow' | 'deny';
@@ -34,6 +46,7 @@ export interface InfinityOptions extends DataSourceJsonData {
   apiKeyType?: APIKeyType;
   oauth2?: OAuth2Props;
   aws?: AWSAuthProps;
+  azureCredentials?: AzureProps;
   tlsSkipVerify?: boolean;
   tlsAuth?: boolean;
   serverName?: string;
@@ -64,6 +77,7 @@ export interface InfinitySecureOptions {
   awsAccessKey?: string;
   awsSecretKey?: string;
   oauth2ClientSecret?: string;
+  azureClientSecret?: string;
   oauth2JWTPrivateKey?: string;
   azureBlobAccountKey?: string;
 }

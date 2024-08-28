@@ -31,15 +31,12 @@ Here are the detailed steps on how to connect Microsoft Azure APIs
 3. Note down the Client ID, Client Secret and Tenant ID
 4. Give reader/monitoring reader access to the resources/subscriptions as necessary
 5. Install the infinity plugin in Grafana and add data source for the same
-   1. Expand Authentication section and select "OAuth2"
-   2. Select "Client Credentials" as OAuth2 type
+   1. Expand Authentication section and select "Azure"
+   2. Select "Client Credentials" as Auth type
    3. Specify the Client ID
    4. Specify the Client Secret
-   5. Specify the Token URL `https://login.microsoftonline.com/<TENANT_ID>/oauth2/token`. Replace `<TENANT_ID>` with yours
-   6. Leave the Scopes section empty
-   7. Add the following Endpoint param
-      1. Key : `resource` Value: `https://management.azure.com/`
-   8. If you are using Infinity 1.0.0+, then also specify `https://management.azure.com/` as an allowed URL.
+   5. Specify the Tenant ID
+   6. If you are using Infinity 1.0.0+, then also specify `https://management.azure.com/` as an allowed URL.
 6. Click Save and Test.
 7. Click the `Explore` button
 8. Configure the query
