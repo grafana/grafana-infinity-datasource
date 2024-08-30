@@ -5,7 +5,7 @@ updates:
     schedule:
       interval: "weekly"
     allow:
-      # Keep the experimental modules up-to-date
+      # Keep the sdk modules up-to-date
       - dependency-name: "github.com/grafana/grafana-plugin-sdk-go"
         dependency-type: "all"
     commit-message:
