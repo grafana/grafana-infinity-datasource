@@ -22,29 +22,29 @@ weight: 8003
 
 # Visualizing data from AWS Status feeds
 
-In this example, we are going to see how we can use AWS status feeds as Grafana annotations. This will be useful when you are dealing with any AWS outages. For this, we are going to use the [AWS RSS feed](https://status.aws.amazon.com/rss/all.rss). You can find more feeds at [AWS Status page](https://status.aws.amazon.com/)
+In this example, we are going to see how we can use AWS status feeds as Grafana annotations. This can be be useful when you are dealing with any AWS outages. For this, we are going to use the [AWS RSS feed](https://status.aws.amazon.com/rss/all.rss). You can find more feeds at [AWS Status page](https://status.aws.amazon.com/)
 
 ![image](https://user-images.githubusercontent.com/153843/151575227-20088546-4368-4066-a91b-64058982544b.png#center)
 
 ## Connection setup
 
-[AWS status feeds](https://status.aws.amazon.com/rss/all.rss) are open and no authentication required. So, you can simple create a datasource using infinity without any additional configuration.
+[AWS status feeds](https://status.aws.amazon.com/rss/all.rss) are open and no authentication is required, so you can simply create a data source using Infinity without any additional configuration.
 
 ## Annotation setup
 
-In your dashboard, Once you create a annotation you will perform the following steps
+Once an annotation has been created in your dashboard, follow the steps below: 
 
-- Create a annotation and select your Infinity datasource
-- Select "XML" as query type, "URL" as source and Format "Data Frame"
-- Provide `https://status.aws.amazon.com/rss/all.rss` as the URL
-- You need to specify `rss.channel[0].item` as the URL. ( You can find this path from the original rss feed )
-- Create `title`, `description` as columns and provide string type
-- Create `pubDate` column and mark this as 'DateTime'
-- Finally select `guid[0]._` as string. This is your link. So you can alias this to link
+1. Create a annotation and select your Infinity data source.
+2. Select "XML" as query type, "URL" as source and Format "Data Frame".
+3. Provide `https://status.aws.amazon.com/rss/all.rss` as the URL.
+4. You need to specify `rss.channel[0].item` as the URL. You can find this path from the original RSS feed.
+5. Create `title`, `description` as columns and provide the string type.
+6. Create `pubDate` column and mark this as 'DateTime'.
+7. Select `guid[0]._` as string. This is your link, so you can alias it as "link".
 
 ![image](https://user-images.githubusercontent.com/153843/151575928-4fc9f188-7f9a-43c5-a92a-6069fe434e6a.png)
 
-Reference feed item is given below
+he reference feed item is provided below:
 
 ```xml
 <item>
@@ -58,7 +58,7 @@ Reference feed item is given below
 
 ## Table view of status items
 
-You can follow the same query procedure in your table panel to get the results as Table
+You can follow the same query procedure in your table panel to get the results as Table:
 
 ![image](https://user-images.githubusercontent.com/153843/151576874-6f4d73d2-9331-4473-a7aa-a3eae0bec880.png#center)
 
@@ -77,4 +77,4 @@ parse-xml
 
 ## More status feeds
 
-With this approach, Not only AWS status feed but you can monitor any RSS feeds also.
+With this approach, you can monitor not only AWS status feeds but also any RSS feeds. 

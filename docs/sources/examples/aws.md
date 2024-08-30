@@ -32,7 +32,7 @@ Support for connecting to AWS API is available from version 1.3.0
    1. Select **Access key - Programmatic access** as AWS Credentials type
    2. Set required permissions ( preferably CloudWatch ReadOnly Permission )
    3. Copy the access key and secret key
-2. Install the infinity plugin in Grafana and add data source for the same
+2. Install the Infinity plugin in Grafana and add data source for the same
 3. Expand Authentication section and select "AWS"
 4. Select region. Example `us-east-1`
 5. Select service. Example `monitoring`. You can find the appropriate service name [here](https://docs.aws.amazon.com/general/latest/gr/aws-service-information.html).

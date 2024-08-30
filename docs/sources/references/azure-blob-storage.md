@@ -26,11 +26,11 @@ weight: 7004
 
 > This feature is available only from version 2.1.0
 
-To retrieve docs(json/csv/tsv/xml) from Azure Blob Storage, you need to setup **Azure Blob Storage** type of authentication.
+To retrieve docs(JSON/CSV/TSV/XML) from Azure Blob Storage, you need to setup **Azure Blob Storage** type of authentication.
 
 ## Authentication
 
-To retrieve content from azure blob storage, you need to provide the following information in the configuration section.
+To retrieve content from Azure blob storage, you need to provide the following information in the configuration section.
 
 - Choose "Azure Blob Storage" as authentication type
 - Provide Azure storage account name

@@ -24,9 +24,9 @@ weight: 8200
 
 # Azure Authentication
 
-Here are the detailed steps on how to connect Microsoft Azure APIs
+Here are the detailed steps on how to connect Microsoft Azure APIs:
 
-1. Create a new service client in [azure portal](https://portal.azure.com/#view/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/~/RegisteredApps)
+1. Create a new service client in [Azure portal](https://portal.azure.com/#view/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/~/RegisteredApps)
 2. Create a client secret for the client created above
 3. Note down the Client ID, Client Secret and Tenant ID
 4. Give reader/monitoring reader access to the resources/subscriptions as necessary

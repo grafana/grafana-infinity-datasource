@@ -24,11 +24,11 @@ weight: 7003
 
 # Transformations
 
-Server side transformations are introduced in Infinity 2.0. You can perform basic data manipulation in the server side.
+Server-side transformations are introduced in Infinity 2.0. You can perform basic data manipulation in the server side.
 
-To perform server side transformations, you need to add a query type of **transformations**. Once this added, **this will perform server side transformation over all the previous infinity queries with backend parser**.
+To perform server-side transformations, you need to add a query type of **transformations**. Once this added, **this will perform server side transformation over all the previous infinity queries with backend parser**.
 
-> **Warning**: Infinity Transformations/Server side transformations, are not available neither for non infinity datasources nor infinity queries with non-backend parsers.
+> **Warning**: Infinity Transformations/Server-side transformations are available only for Infinity data sources or Infinity queries with backend parsers.
 
 ## Example
 
@@ -47,10 +47,10 @@ Filter the results based on column values in each query.
 
 ### Computed Column
 
-Appends a new column based on expression
+Appends a new column based on expression.
 
 ### Summarize / Group by
 
 Group by results based on aggregation and dimension.
 
-> **Note**: All these transformations, are done post processing. ( once server responds with data, infinity backend client manipulates the data. ). If your API supports, such transformations on server side, use those instead of this.
+> **Note**: All these transformations are done post-processing. Once server responds with data, Infinity backend client manipulates the data. If your API supports server-side transformations, use those instead of this.

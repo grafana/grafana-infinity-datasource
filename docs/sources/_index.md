@@ -8,7 +8,7 @@ hero:
   width: 110
   image: https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/src/img/icon.svg
   height: 110
-  description: The Infinity data source plugin allows you to query and visualize data from JSON / CSV / GraphQL / XML / HTML endpoints.
+  description: The Infinity data source plugin allows you to query and visualize data from JSON/CSV/GraphQL/XML/HTML endpoints.
 data-formats:
   title_class: pt-0 lh-1
   items:

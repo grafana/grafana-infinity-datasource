@@ -24,14 +24,14 @@ weight: 310
 
 # UQL Parser
 
-**UQL** (Unstructured query language) is advance query format in infinity datasource which will consolidate JSON, CSV, XML, GraphQL formats. UQL also provides ability to customize the results.
+**UQL** (Unstructured query language) is an advance query format in Infinity data source which will consolidate JSON, CSV, XML, GraphQL formats. UQL also provides ability to customize the results.
 
 **UQL** is an opinionated query language designed for in-memory operations. UQL query can be formed with list of commands joined by `|`, in a line each.
 Most of the times, fields are referred within double quotes and string values are referred with single quotes. UQL was inspired by kusto query language and follows similar syntax.
 
-> UQL is still in **beta** but used widely. If you encounter any issues with uql, create a bug [here](https://github.com/yesoreyeram/uql/issues/new).
+> UQL is still in **beta** but used widely. If you encounter any issues with UQL, create a bug [here](https://github.com/yesoreyeram/uql/issues/new).
 
-if your data looks like this,
+If your data looks like this:
 
 ```json
 [
@@ -63,7 +63,7 @@ will produce four column table (id, dob, city, full name).
 
 ## Basic UQL commands
 
-following are the basic UQL commands. All these commands are available in all the version unless specified.
+Below you will find the basic UQL commands. All these commands are available in all versions unless specified otherwise.
 
 ### project
 
@@ -76,7 +76,7 @@ parse-json
 
 ### project-away
 
-`project-away` command is exactly opposite as `project`. It just drops specific columns from the data. It doesn't support alias or dot notation selector.
+`project-away` command is exactly opposite as `project`. It just drops specific columns from the data. It does not support alias or dot notation selector.
 
 ```sql
 parse-json
@@ -292,7 +292,7 @@ so choose either `summarize` or `pivot` according to you needs
 
 ### parse-yaml
 
-`parse-yaml` is used to specify that the results are in xml format
+`parse-yaml` is used to specify that the results are in XML format
 
 ### count
 
@@ -305,7 +305,7 @@ parse-json
 
 ### limit
 
-`limit` command restricts the number of results returned. For example, below query returns only 10 results
+`limit` command restricts the number of results returned. For example, the query below returns only 10 results
 
 ```sql
 parse-json
@@ -368,7 +368,7 @@ Example: For the data `{ "a": {"name":"a1"}, "b": {"name":"b1"}, "c": {"name":"c
 | b   | `{"name":"b1"}` |
 | c   | `{"name":"c1"}` |
 
-this command can be also used with arguments
+This command can be also used with arguments
 
 Example: For the data `{ "data": { "a": {"name":"a1"}, "b": {"name":"b1"}, "c": {"name":"c1"} } }` and the query `parse-json | project kv("data")` will yield the same results
 
@@ -391,4 +391,4 @@ Like any other command, `jsonata` command can be combined/piped with multiple co
 
 ### comments
 
-Any new line that starts with `#` will be treated as comment.
+Any new line that starts with `#` will be treated as a comment.

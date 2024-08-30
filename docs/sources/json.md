@@ -45,13 +45,13 @@ Select **Type** of the query to `JSON`. You can either specify the URL of the JS
 
 ## Using public JSON API endpoints
 
-Below example shows about fetching data from a publicly accessible JSON URL/API endpoint.
+The example below shows fetching data from a publicly accessible JSON URL/API endpoint.
 
 URL : `https://jsonplaceholder.typicode.com/users`
 
 ![image](https://user-images.githubusercontent.com/153843/108413678-34314c80-7223-11eb-9cce-603134ec2d48.png#center)
 
-In the above example, the data in the URL is array. So no need to configure any additional fields except url in the panel.
+In the example above, the data in the URL is an array, so there is no need to configure any additional fields except the URL in the panel.
 
 ## Accessing nested properties of JSON data
 
@@ -59,9 +59,9 @@ URL : `https://thingspeak.com/channels/38629/feed.json`
 
 ![image](https://user-images.githubusercontent.com/153843/108415043-de5da400-7224-11eb-9295-d49fcc18464a.png#center)
 
-In the above example, data is in the `feeds` property. So the same is specified as root / rows field. But still our plugin doesn't know anything about the fields or it's types. So we are going to add the columns to make it more meaningful.
+In the above example, data is in the `feeds` property, which is specified as root/rows field. However, our plugin still doesn't recognize the fields or its types. To do so, we are going to add the columns to make it more meaningful.
 
-We are adding columns and defining their types as shown below.
+We are adding columns and defining their types as shown below:
 
 ![image](https://user-images.githubusercontent.com/153843/108427049-7dd66300-7234-11eb-8d27-cec50945a66c.png#center)
 
@@ -71,9 +71,9 @@ URL : `https://gist.githubusercontent.com/yesoreyeram/2433ce69862f452b9d0460c947
 
 ![image](https://user-images.githubusercontent.com/153843/108415716-cdf9f900-7225-11eb-8e0d-5d767104a080.png#center)
 
-In the above example, we are visualizing a json data without time field. Our JSON has only two fields aka `country` and `population`. So we asked the plugin to add a dummy time field to the data so that we can visualize them in any of the grafana's stock panel. If you closely look at the image above, you can see we specified 'format' as **timeseries**.
+In the example above, we are visualizing JSON data without time field. Our JSON has only two fields aka `country` and `population`, so we asked the plugin to add a dummy time field to the data so that we can visualize them in any of the Grafana's stock panels. If you look closely at the image above, you can see we specified 'format' as **timeseries**.
 
-For reference, JSON data from the URL is given below
+For reference, JSON data from the URL is given below:
 
 ```json
 [
@@ -86,7 +86,7 @@ For reference, JSON data from the URL is given below
 
 ## JSON Inline
 
-Instead of specifying URL, you can hardcoded JSON object. For example, you can specify the json as shown in the below example
+Instead of specifying URL, you can hardcode a JSON object. For example, you can specify the JSON as shown in the example below: 
 
 ```json
 [
@@ -97,14 +97,13 @@ Instead of specifying URL, you can hardcoded JSON object. For example, you can s
   { "country": "china", "population": 400 }
 ]
 ```
-
-You need to also specify the column names manually for display purposes.
+You also need to specify the column names manually for display purposes.
 
 ## JSONPath in root selector
 
 In the root selector, you can use the selector in JSONPath format.
 
-Note: Any root selector that starts with $ will be considered as JSONPath selector
+Note: Any root selector that starts with $ will be considered as JSONPath selector.
 
 ![image](https://user-images.githubusercontent.com/153843/100856870-ddb63c80-3483-11eb-8e3c-791c161d3cc7.png#center)
 
@@ -120,11 +119,11 @@ Example:
 }
 ```
 
-In the above json, if `$.premium_customers` is the root selector then only "john doe" will return. If `$.*` is the root selector all the three rows will be returned.
+In the above JSON, if `$.premium_customers` is the root selector then only "john doe" will return. If `$.*` is the root selector all the three rows will be returned.
 
 ## UQL Parser
 
-If you are looking for more JSON options like group by, order by, JSONata, field manipulation etc, then [UQL query](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/query/uql/) is the one you need. Following is the simple UQL command to parse
+If you are looking for more JSON options like `group by`, `order by`, JSONata, field manipulation or similar, then use [UQL query](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/query/uql/). Below you will find a UQL command:
 
 ```sql
 parse-json
@@ -140,8 +139,8 @@ If you need advanced options such as alerting/recorded queries, then use `backen
 
 ![backend parser](https://user-images.githubusercontent.com/153843/189875668-3ac061a9-c548-4bfe-abcc-6d0d7e6bdb55.png#center)
 
-when using the `backend` as parsing option, your timestamp fields needs to be ISO datetime format. Example: `2006-01-02T15:04:05Z07:00`. If they are not in the ISO timestamp format, you can specify the format using layout option. The layout needs to be in [golang time layout spec](https://www.geeksforgeeks.org/time-formatting-in-golang/).
+When using the `backend` as parsing option, your timestamp fields need to follow the ISO date/time format. Example: `2006-01-02T15:04:05Z07:00`. If they are not in the ISO timestamp format, you can specify the format using the layout option. The layout needs to be in [golang time layout spec](https://www.geeksforgeeks.org/time-formatting-in-golang/).
 
-When using `backend` parser, you also have an option to summarize the numeric fields into a single aggregated number using Summarize field. Example usage: `last(density_of_eastbound_cars) - last(density_of_westbound_cars)`. You can also use numeric options such as `sum`,`min`,`max`,`mean`,`first` and `last`.
+When using the `backend` parser, you also have an option to summarize the numeric fields into a single aggregated number using Summarize field. Example usage: `last(density_of_eastbound_cars) - last(density_of_westbound_cars)`. You can also use numeric options such as `sum`,`min`,`max`,`mean`,`first` and `last`.
 
 ![summarize option in backend parser](https://user-images.githubusercontent.com/153843/189877393-b7d83da7-0e1d-41cd-a003-814bb2963347.png#center)

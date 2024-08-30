@@ -24,7 +24,7 @@ weight: 7001
 
 # Configuring URL
 
-You can enter any URL in the query URL field. URL should be a valid json / csv / graphql / xml / html endpoint.
+You can enter any URL in the query URL field. URL should be a valid JSON/CSV/Graphql/XML/HTML endpoint.
 
 In the query editor, click the expand icon next the URL field to configure more query URL options like HTTP Method (GET/POST), additional headers and additional query strings.
 
@@ -64,4 +64,4 @@ Note: We suggest adding secure headers only via configuration and not in query.
 
 Leaving blank will allow all the hosts. This is by default.
 
-If your datasource needs to allow only certain hosts, Configure the allowed host names in the config. There can be multiple hosts allowed. Host names are case sensitive and needs to be full host name. Example : `https://en.wikipedia.org/`
+If your data source needs to allow only certain hosts, configure the allowed host names in the config. There can be multiple hosts allowed. Host names are case sensitive and needs to be full host name. Example: `https://en.wikipedia.org/`
