@@ -44,7 +44,7 @@ func GetGoogleSheetsResponse(ctx context.Context, urlResponseObject any, query m
 	frame := GetDummyFrame(query)
 	sheetsString, ok := urlResponseObject.(string)
 	if !ok {
-		logger.Error("error getting response for query", "error", "invalid response received from google sheets")
+		logger.Debug("error getting response for query", "error", "invalid response received from google sheets")
 		frame.Meta.Custom = &CustomMeta{
 			Query: query,
 			Error: "invalid response received from google sheets",
@@ -53,7 +53,7 @@ func GetGoogleSheetsResponse(ctx context.Context, urlResponseObject any, query m
 	}
 	sheet := &Spreadsheet{}
 	if err := json.Unmarshal([]byte(sheetsString), &sheet); err != nil {
-		logger.Error("error getting response for query", "error", "invalid response received from google sheets")
+		logger.Debug("error getting response for query", "error", "invalid response received from google sheets")
 		frame.Meta.Custom = &CustomMeta{
 			Query: query,
 			Error: "invalid response received from google sheets",
