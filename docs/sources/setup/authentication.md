@@ -68,7 +68,8 @@ API key authentication requires following parameters:
 | **In**    | Accepts `header`/`query`. Most APIs accept API keys via headers as a preferred way of sending API keys. Sending API keys via the query parameter is. |
 
 {{< admonition type="tip" >}}
-It is easy to confuse API key authentication with bearer token authentication. Ensure sure you are using the correct authentication mechanism.
+It's easy to confuse API key authentication with Bearer token authentication.
+Ensure sure you are using the correct authentication mechanism.
 {{< /admonition >}}
 
 ## Digest
