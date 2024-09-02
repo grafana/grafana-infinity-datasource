@@ -49,7 +49,7 @@ s5,s2,t1,3,1500,formatting,foo
 s6,s3,t2,5,2200,db,foo
 ```
 
-The following UQL query will produce a trace view:
+The following UQL query produces a trace view:
 
 ```sql
 parse-csv
