@@ -46,10 +46,10 @@ In the following example, you are going to retrieve data from [a sample HTML pag
 In the Query editor, fill the following query details:
 
 1. Select **HTML** as query type.
-2. Select **Default** (frontend) as the parser.
-3. Select **URL** as the source.
-4. Select **GET** as the HTTP method.
-5. Enter `https://github.com/grafana/grafana-infinity-datasource/blob/main/testdata/users.html` in the URL field of the query.
+1. Select **Default** (frontend) as the parser.
+1. Select **URL** as the source.
+1. Select **GET** as the HTTP method.
+1. Enter `https://github.com/grafana/grafana-infinity-datasource/blob/main/testdata/users.html` in the URL field of the query.
 
 Once the initial setup is done, you need to configure the selectors:
 
