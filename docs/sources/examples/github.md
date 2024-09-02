@@ -24,7 +24,7 @@ weight: 8002
 
 ![image](https://user-images.githubusercontent.com/153843/93846498-1d9abf80-fc9c-11ea-90ed-4c569b088d99.png#center)
 
-We can leverage [Github graphql API](https://docs.github.com/en/graphql) to query the Github stats using this infinity plugin Graphql API.
+We can use the [GitHub GraphQL API](https://docs.github.com/en/graphql) to query the GitHub stats with the Infinity plugin GraphQL API.
 
 A sample query is given in the example below, but you can customize your query to bring the stats you needed:
 
