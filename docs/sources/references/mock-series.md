@@ -24,7 +24,7 @@ weight: 7900
 
 # Creating Mock time series data using Infinity
 
-This **Expression** query type helps you to simulate/mock the timeseries data.
+This **Expression** query type helps you to simulate/mock the time series data.
 
 ## Expression
 
