@@ -65,7 +65,7 @@ will produce four column table (id, dob, city, full name).
 
 ## Basic UQL commands
 
-Below you will find the basic UQL commands. All these commands are available in all versions unless specified otherwise.
+All these commands are available in all versions unless specified otherwise.
 
 ### project
 
