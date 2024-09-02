@@ -51,7 +51,7 @@ URL : `https://jsonplaceholder.typicode.com/users`
 
 ![image](https://user-images.githubusercontent.com/153843/108413678-34314c80-7223-11eb-9cce-603134ec2d48.png#center)
 
-In the example above, the data in the URL is an array, so there is no need to configure any additional fields except the URL in the panel.
+In the preceding example, the data in the URL is an array, so there is no need to configure any additional fields except the URL in the panel.
 
 ## Accessing nested properties of JSON data
 
