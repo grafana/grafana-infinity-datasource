@@ -35,7 +35,7 @@ Working with the same queries in multiple dashboards might be hard some times. T
 To register a query, in the data source instance settings follow the steps below:
 
 1. Click **Add Global Query** button.
-2. Change the name and id of the query. Id should be unique per data source instance.
+2. Change the name and id of the query. ID should be unique per data source instance.
 3. Enter the query fields.
 4. Click `Save`.
 
@@ -51,8 +51,7 @@ In order to use the registered query in the dashboard, you have to select `Globa
 
 ## Provision the global queries
 
-You can also provision the global queries in the datas ource provisioning. Below example provides a sample of inline csv query provisioning
-
+You can also provision the global queries in the datas ource provisioning. The example below provides a sample of inline CSV query provisioning:
 ```yaml
 apiVersion: 1
 datasources:
@@ -88,4 +87,4 @@ datasources:
 
 > **Note**: When using global queries, queries will be loaded from the datasource setting when loading the dashboard only. If the query changed, dashboards will get reflected only when they are reloaded. (Query refresh won't fetch the latest query).
 
-> **Note**: When provisioning, grafana variables / tokens like `${__from}` are not supported yet.
+> **Note**: When provisioning, grafana variables/tokens like `${__from}` are not supported yet.
