@@ -92,4 +92,4 @@ Note:
 
 - Queries are not paginated
 - Github rate limits apply
-- If you need a paginated and full set of results, use Grafana [Github stats plugin](https://grafana.com/grafana/plugins/grafana-github-datasource)
+- If you need a paginated and full set of results, use Grafana [GitHub stats plugin](https://grafana.com/grafana/plugins/grafana-github-datasource)
