@@ -49,7 +49,7 @@ Here are the detailed steps on how to connect Microsoft Azure APIs:
    4. Specify `table` as format
    5. Method : GET
    6. URL : `https://management.azure.com/subscriptions?api-version=2020-01-01`
-9. Click **Run Query** to see the esults
+9. Click **Run Query** to see the results
 
 ## Config Editor
 
