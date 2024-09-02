@@ -88,7 +88,7 @@ Column2 Age: Use `$.age` as the selector for the attribute `age`.
 
 ## Example 3
 
-Consider the example below:
+Consider the following example:
 
 ```xml
 <users>
