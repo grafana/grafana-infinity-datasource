@@ -55,4 +55,8 @@ Appends a new column based on expression.
 
 Group by results based on aggregation and dimension.
 
-> **Note**: All these transformations are done post-processing. Once server responds with data, Infinity backend client manipulates the data. If your API supports server-side transformations, use those instead of this.
+{{< admonition type="note" >}}
+All these transformations are done after processing.
+After the server responds with data, the Infinity backend client manipulates the data.
+If your API supports server-side transformations, use those instead.
+{{< /admonition >}}
