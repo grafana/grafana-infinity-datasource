@@ -29,7 +29,9 @@ weight: 310
 **UQL** is an opinionated query language designed for in-memory operations. UQL query can be formed with list of commands joined by `|`, in a line each.
 Most of the times, fields are referred within double quotes and string values are referred with single quotes. UQL was inspired by kusto query language and follows similar syntax.
 
-> UQL is still in **beta** but used widely. If you encounter any issues with UQL, create a bug [here](https://github.com/yesoreyeram/uql/issues/new).
+{{< admonition type="note" }}
+UQL is still in beta but used widely. If you encounter any issues with UQL, create a bug [in GitHub](https://github.com/yesoreyeram/uql/issues/new).
+{{< /admonition >}}
 
 If your data looks like this:
 
