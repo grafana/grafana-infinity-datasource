@@ -108,7 +108,7 @@ Column1 Name: Use `_` as the selector for the property `name`. Here `_` refers t
 
 ## XML URL
 
-You can also use the hosted XML via the URL. The example shown below demonstrates how we connect XML from this [gist](https://gist.githubusercontent.com/yesoreyeram/655a362eed0f51be24e16d3f1127a31d/raw/aa58549a5cf9d06dae1204b5a09be5d651adc744/text.xml).
+You can also use the hosted XML via the URL. The following example shows how you connect XML using [a GitHub gist](https://gist.githubusercontent.com/yesoreyeram/655a362eed0f51be24e16d3f1127a31d/raw/aa58549a5cf9d06dae1204b5a09be5d651adc744/text.xml).
 
 ![image](https://user-images.githubusercontent.com/153843/99293208-39ed4f80-283a-11eb-831e-ae14d297a2f3.png#center)
 
