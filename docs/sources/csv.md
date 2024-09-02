@@ -55,7 +55,7 @@ The following example uses a CSV file from ThingSpeak traffic analysis. In the f
 
 ![image](https://user-images.githubusercontent.com/153843/108428461-8465da00-7236-11eb-8769-b1c145cbe203.png#center)
 
-Sample data from the above CSV
+Sample data from the aforementioned CSV data.
 
 ```bash
 created_at,entry_id,field1,field2
