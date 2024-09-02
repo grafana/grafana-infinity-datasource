@@ -24,7 +24,7 @@ weight: 351
 
 # Time formats
 
-Timestamp fields should be one of the standard Javascript date format as specified [here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/Date).
+Timestamp fields should be one of the standard JavaScript date format as specified int the [MDN Date documentation](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/Date).
 
 ![image](https://user-images.githubusercontent.com/153843/92720934-3d0d2080-f35d-11ea-93e3-c1ff46d4ea59.png#center)
 
