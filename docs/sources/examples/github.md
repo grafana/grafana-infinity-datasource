@@ -26,7 +26,7 @@ weight: 8002
 
 We can use the [GitHub GraphQL API](https://docs.github.com/en/graphql) to query the GitHub stats with the Infinity plugin GraphQL API.
 
-A sample query is given in the example below, but you can customize your query to bring the stats you needed:
+A sample query is provided in the example below, but you can customize your query to bring the stats you needed:
 
 ## Query Editor
 
@@ -90,6 +90,6 @@ The preceding image uses the following query:
 
 Note:
 
-- Queries are not paginated
-- Github rate limits apply
-- If you need a paginated and full set of results, use Grafana [GitHub stats plugin](https://grafana.com/grafana/plugins/grafana-github-datasource)
+- Queries aren't paginated.
+- Github rate limits apply.
+- If you need a paginated and full set of results, use Grafana [GitHub stats plugin](https://grafana.com/grafana/plugins/grafana-github-datasource).

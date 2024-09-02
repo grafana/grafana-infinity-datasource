@@ -45,7 +45,7 @@ Select **Type** of the query to `JSON`. You can either specify the URL of the JS
 
 ## Using public JSON API endpoints
 
-The following example shows fetching data from a publicly accessible JSON API endpoint.
+The following example shows how to fetch data from a publicly accessible JSON API endpoint.
 
 URL : `https://jsonplaceholder.typicode.com/users`
 
@@ -59,9 +59,9 @@ URL : `https://thingspeak.com/channels/38629/feed.json`
 
 ![image](https://user-images.githubusercontent.com/153843/108415043-de5da400-7224-11eb-9295-d49fcc18464a.png#center)
 
-In the above example, data is in the `feeds` property, which is specified as root/rows field. However, our plugin still doesn't recognize the fields or its types. To do so, we are going to add the columns to make it more meaningful.
+In the above example, data is in the `feeds` property, which is specified as root/rows field. However, the plugin still doesn't recognize the fields or its types. To do so, we're going to add the columns to make it more meaningful.
 
-We are adding columns and defining their types as shown below:
+We're adding columns and defining their types as shown below:
 
 ![image](https://user-images.githubusercontent.com/153843/108427049-7dd66300-7234-11eb-8d27-cec50945a66c.png#center)
 
@@ -71,9 +71,9 @@ URL : `https://gist.githubusercontent.com/yesoreyeram/2433ce69862f452b9d0460c947
 
 ![image](https://user-images.githubusercontent.com/153843/108415716-cdf9f900-7225-11eb-8e0d-5d767104a080.png#center)
 
-In the example above, we are visualizing JSON data without time field. Our JSON has only two fields aka `country` and `population`, so we asked the plugin to add a dummy time field to the data so that we can visualize them in any of the Grafana's stock panels. If you look closely at the image above, you can see we specified 'format' as **timeseries**.
+In the example above, we're visualizing JSON data without time field. Our JSON has only two fields aka `country` and `population`, so we asked the plugin to add a dummy time field to the data so that we can visualize them in any of the Grafana's stock panels. If you look closely at the image above, you can see we specified 'format' as **timeseries**.
 
-For reference, JSON data from the URL is given below:
+For reference, JSON data from the URL is provided below:
 
 ```json
 [
@@ -141,7 +141,7 @@ If you need advanced options such as alerting/recorded queries, then use `backen
 
 ![backend parser](https://user-images.githubusercontent.com/153843/189875668-3ac061a9-c548-4bfe-abcc-6d0d7e6bdb55.png#center)
 
-When using the `backend` as parsing option, your timestamp fields need to follow the ISO date/time format. Example: `2006-01-02T15:04:05Z07:00`. If they are not in the ISO timestamp format, you can specify the format using the layout option. The layout needs to be in [golang time layout spec](https://www.geeksforgeeks.org/time-formatting-in-golang/).
+When using the `backend` as parsing option, your timestamp fields need to follow the ISO date/time format. Example: `2006-01-02T15:04:05Z07:00`. If they're not in the ISO timestamp format, you can specify the format using the layout option. The layout needs to be in [golang time layout spec](https://www.geeksforgeeks.org/time-formatting-in-golang/).
 
 When using the `backend` parser, you also have an option to summarize the numeric fields into a single aggregated number using Summarize field. Example usage: `last(density_of_eastbound_cars) - last(density_of_westbound_cars)`. You can also use numeric options such as `sum`,`min`,`max`,`mean`,`first` and `last`.
 

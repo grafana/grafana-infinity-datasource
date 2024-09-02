@@ -45,11 +45,11 @@ Here are the detailed steps on how to connect Microsoft Azure APIs:
 8. Configure the query
    1. Specify `json` as query type
    2. Specify `url` as source
-   3. Specify `default` parser ( only applicable for Infinity 1.0.0+)
+   3. Specify `default` parser (only applicable for Infinity 1.0.0+)
    4. Specify `table` as format
    5. Method : GET
    6. URL : `https://management.azure.com/subscriptions?api-version=2020-01-01`
-9. Click Run Query and you will see the results
+9. Click **Run Query** to see the esults
 
 ## Config Editor
 

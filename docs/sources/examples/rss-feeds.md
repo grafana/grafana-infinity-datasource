@@ -23,7 +23,7 @@ weight: 8003
 # Visualizing data from AWS Status feeds
 
 In this example, you use AWS status feeds as Grafana annotations.
-This can be be useful when you are dealing with any AWS outages.
+This can be useful when you are dealing with any AWS outages.
 For this, you're going to use the [AWS RSS feed](https://status.aws.amazon.com/rss/all.rss).
 You can find more feeds at [AWS Status page](https://status.aws.amazon.com/)
 
@@ -35,7 +35,7 @@ You can find more feeds at [AWS Status page](https://status.aws.amazon.com/)
 
 ## Annotation setup
 
-Once an annotation has been created in your dashboard, follow the steps below: 
+After you've created an annotation in your dashboard, follow the steps below: 
 
 1. Create a annotation and select your Infinity data source.
 1. Select **XML** as query type, **URL** as source and Format **Data Frame**.

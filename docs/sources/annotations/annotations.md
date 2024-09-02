@@ -34,4 +34,4 @@ To create annotations, you need to specify a time field and a string field. Make
 
 ![image](https://user-images.githubusercontent.com/153843/122910054-b191d880-d34d-11eb-9077-14a3b260c333.png#center)
 
-> Annotations are supported from plugin version 0.7.4
+> Annotations are supported from plugin version 0.7.4.
