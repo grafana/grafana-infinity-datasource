@@ -121,7 +121,7 @@ Example:
 }
 ```
 
-In the above JSON, if `$.premium_customers` is the root selector then only "john doe" will return. If `$.*` is the root selector all the three rows will be returned.
+In the preceding JSON, if `$.premium_customers` is the root selector then the query returns `john doe`. If `$.*` is the root selector, the query returns all the three rows.
 
 ## UQL Parser
 
