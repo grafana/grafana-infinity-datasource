@@ -57,7 +57,7 @@ Query Used:
 
 ## Datasource Configuration
 
-Select **Basic user authentication** mode and use your Github username and PAT token as password.
+Select **Basic user authentication** mode and use your GitHub username as the username and your Personal Access Token (PAT) as the password.
 
 ![image](https://user-images.githubusercontent.com/153843/93736929-b1578780-fbd9-11ea-9413-5585ff79d3a8.png#center)
 
