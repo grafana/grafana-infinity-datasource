@@ -24,7 +24,7 @@ weight: 7001
 
 # Configuring URL
 
-You can enter any URL in the query URL field. URL should be a valid JSON/CSV/Graphql/XML/HTML endpoint.
+You can enter any URL in the query URL field. URL must be a valid JSON, CSV, GraphQL, XML, or HTML endpoint.
 
 In the query editor, click the expand icon next the URL field to configure more query URL options like HTTP Method (GET/POST), additional headers and additional query strings.
 

@@ -24,7 +24,7 @@ weight: 201
 
 # Configuring Infinity data source plugin
 
-Once the plugin is installed, you need to create an instance of the data source:
+After the plugin is installed, you need to create an instance of the data source:
 
 1. Go to `http://localhost:3000/datasources` and select **Add data source**
 2. Search for the **Infinity** plugin

@@ -32,7 +32,7 @@ Install the plugin from [grafana.com plugins page](https://grafana.com/grafana/p
 
 ## Install from github
 
-Download the required version of release zip file from [github](https://github.com/grafana/grafana-infinity-datasource/releases) and extract into your grafana plugin folder. Then, restart Grafana.
+Download the required version of release archive from [GitHub](https://github.com/grafana/grafana-infinity-datasource/releases) and extract into your Grafana plugin folder. Then, restart Grafana.
 
 ## Install using grafana-cli
 

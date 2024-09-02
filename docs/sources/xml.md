@@ -39,7 +39,7 @@ weight: 24
 
 {{< docs/play title="Infinity plugin XML demo" url="https://play.grafana.org/d/infinity-xml" >}}
 
-In the example below, we are going to use XML response in Grafana
+The following example, uses an XML response in Grafana:
 
 ![image](https://user-images.githubusercontent.com/153843/99292060-a0716e00-2838-11eb-9af8-cf87adfd8fd5.png#center)
 

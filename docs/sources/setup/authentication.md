@@ -40,7 +40,7 @@ Infinity data source supports the following authentication methods:
 
 ## No authentication
 
-If your APIs do not require any authentication, select the **No Authentication** method.
+If your APIs don't require any authentication, select the **No Authentication** method.
 
 ## Basic
 
