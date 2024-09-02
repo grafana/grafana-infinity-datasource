@@ -78,7 +78,7 @@ parse-json
 
 ### project-away
 
-`project-away` command is exactly opposite as `project`. It just drops specific columns from the data. It does not support alias or dot notation selector.
+`project-away` command is exactly opposite as `project`. It just drops specific columns from the data. It doesn't support alias or dot notation selector.
 
 ```sql
 parse-json
