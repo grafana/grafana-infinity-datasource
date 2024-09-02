@@ -199,7 +199,7 @@ func (client *Client) req(ctx context.Context, url string, body io.Reader, setti
 	req, _ := GetRequest(ctx, settings, body, query, requestHeaders, true)
 	startTime := time.Now()
 	if !CanAllowURL(req.URL.String(), settings.AllowedHosts) {
-		logger.Error("url is not in the allowed list. make sure to match the base URL with the settings", "url", req.URL.String())
+		logger.Debug("url is not in the allowed list. make sure to match the base URL with the settings", "url", req.URL.String())
 		return nil, http.StatusUnauthorized, 0, errorsource.DownstreamError(errors.New("requested URL is not allowed. To allow this URL, update the datasource config Security -> Allowed Hosts section"), false)
 	}
 	logger.Debug("requesting URL", "host", req.URL.Hostname(), "url_path", req.URL.Path, "method", req.Method, "type", query.Type)
@@ -211,7 +211,7 @@ func (client *Client) req(ctx context.Context, url string, body io.Reader, setti
 	}
 	if err != nil {
 		if res != nil {
-			logger.Error("error getting response from server", "url", url, "method", req.Method, "error", err.Error(), "status code", res.StatusCode)
+			logger.Debug("error getting response from server", "url", url, "method", req.Method, "error", err.Error(), "status code", res.StatusCode)
 			// Infinity can query anything and users are responsible for ensuring that endpoint/auth is correct
 			// therefore any incoming error is considered downstream
 			return nil, res.StatusCode, duration, errorsource.DownstreamError(fmt.Errorf("error getting response from %s", url), false)
@@ -220,11 +220,11 @@ func (client *Client) req(ctx context.Context, url string, body io.Reader, setti
 			logger.Debug("request cancelled", "url", url, "method", req.Method)
 			return nil, http.StatusInternalServerError, duration, errorsource.DownstreamError(err, false)
 		}
-		logger.Error("error getting response from server. no response received", "url", url, "error", err.Error())
+		logger.Debug("error getting response from server. no response received", "url", url, "error", err.Error())
 		return nil, http.StatusInternalServerError, duration, errorsource.DownstreamError(fmt.Errorf("error getting response from url %s. no response received. Error: %w", url, err), false)
 	}
 	if res == nil {
-		logger.Error("invalid response from server and also no error", "url", url, "method", req.Method)
+		logger.Debug("invalid response from server and also no error", "url", url, "method", req.Method)
 		return nil, http.StatusInternalServerError, duration, errorsource.DownstreamError(fmt.Errorf("invalid response received for the URL %s", url), false)
 	}
 	if res.StatusCode >= http.StatusBadRequest {
@@ -235,7 +235,7 @@ func (client *Client) req(ctx context.Context, url string, body io.Reader, setti
 	}
 	bodyBytes, err := io.ReadAll(res.Body)
 	if err != nil {
-		logger.Error("error reading response body", "url", url, "error", err.Error())
+		logger.Debug("error reading response body", "url", url, "error", err.Error())
 		return nil, res.StatusCode, duration, errorsource.DownstreamError(err, false)
 	}
 	bodyBytes = removeBOMContent(bodyBytes)
@@ -245,7 +245,7 @@ func (client *Client) req(ctx context.Context, url string, body io.Reader, setti
 		if err != nil {
 			err = fmt.Errorf("%w. %w", ErrParsingResponseBodyAsJson, err)
 			err = errorsource.DownstreamError(err, false)
-			logger.Error("error un-marshaling JSON response", "url", url, "error", err.Error())
+			logger.Debug("error un-marshaling JSON response", "url", url, "error", err.Error())
 		}
 		return out, res.StatusCode, duration, err
 	}
