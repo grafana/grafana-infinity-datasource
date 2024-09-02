@@ -112,6 +112,6 @@ You can also use the hosted XML via the URL. The example shown below demonstrate
 
 ![image](https://user-images.githubusercontent.com/153843/99293208-39ed4f80-283a-11eb-831e-ae14d297a2f3.png#center)
 
-The image below shows a sample example visualized using bar gauge panel and time series format:
+The following image shows a sample example visualized using bar gauge panel and time series format:
 
 ![image](https://user-images.githubusercontent.com/153843/99294213-a9b00a00-283b-11eb-9b8b-26842c2bc69b.png#center)
