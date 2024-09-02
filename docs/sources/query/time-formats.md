@@ -28,7 +28,7 @@ Timestamp fields should be one of the standard Javascript date format as specifi
 
 ![image](https://user-images.githubusercontent.com/153843/92720934-3d0d2080-f35d-11ea-93e3-c1ff46d4ea59.png#center)
 
-For example, the below list has different valid timestamp formats. Your time field can be one of this format:
+For example, the following list has different valid timestamp formats. Your time field can be one of this format:
 
 ```bash
 year,population
