@@ -103,7 +103,9 @@ You also need to specify the column names manually for display purposes.
 
 In the root selector, you can use the selector in JSONPath format.
 
-Note: Any root selector that starts with $ will be considered as JSONPath selector.
+{{< admonition type="note" >}}
+Any root selector that starts with `$` is considered as JSONPath selector.
+{{< /admonition >}}
 
 ![image](https://user-images.githubusercontent.com/153843/100856870-ddb63c80-3483-11eb-8e3c-791c161d3cc7.png#center)
 
