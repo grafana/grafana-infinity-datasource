@@ -38,4 +38,7 @@ Below image is the example on how to query it.
 
 ![image](https://user-images.githubusercontent.com/153843/198976089-0736c591-2a53-4aac-a58f-00f3c92797f8.png#center)
 
-> **NOTE**: We suggest to add only small size data as reference data. It is designed to support data of less than 1-10MB size in mind. Adding data of bigger size may affect the performance of Grafana and the plugin.
+{{< admonition type="note" >}}
+We suggest to add only small size data as reference data.
+It's designed to support data of less than 10 MB. Adding data of bigger size may affect the performance of Grafana and the plugin.
+{{< /admonition >}}
