@@ -93,4 +93,4 @@ Infinity plugin has the following known limitations:
 
 - Backend features such as alerting, public dashboards, recorded queries or enterprise query caching only available in **backend** parsing mode.
 - Infinity is not designed for handling a huge amount of data. When inlining the data, make sure they are small snippets less than 1MB of size.
-- For a list of all known bugs, check [here](https://github.com/grafana/grafana-infinity-datasource/issues).
+- For a list of all known bugs, check [GitHub](https://github.com/grafana/grafana-infinity-datasource/issues).
