@@ -27,9 +27,9 @@ weight: 201
 After the plugin is installed, you need to create an instance of the data source:
 
 1. Go to `http://localhost:3000/datasources` and select **Add data source**
-2. Search for the **Infinity** plugin
-3. Give a name to your datasource
-4. Save.
+1. Search for the **Infinity** plugin
+1. Give a name to your datasource
+1. Save.
 
 ![image](https://user-images.githubusercontent.com/153843/118472644-f4ceab00-b700-11eb-89e1-eec404755cd0.png#center)
 
