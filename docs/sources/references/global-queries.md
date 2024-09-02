@@ -51,7 +51,7 @@ In order to use the registered query in the dashboard, you have to select `Globa
 
 ## Provision the global queries
 
-You can also provision the global queries in the datas ource provisioning. The example below provides a sample of inline CSV query provisioning:
+You can also provision the global queries in the data source provisioning. The example below provides a sample of inline CSV query provisioning:
 ```yaml
 apiVersion: 1
 datasources:
@@ -85,7 +85,7 @@ datasources:
     readOnly: true
 ```
 
-> **Note**: When using global queries, queries will be loaded from the datasource setting when loading the dashboard only. If the query changed, dashboards will get reflected only when they are reloaded. (Query refresh won't fetch the latest query).
+> **Note**: When using global queries, queries will be loaded from the data source setting when loading the dashboard only. If the query changes, dashboards will reflect the change only when they are reloaded. (Query refresh won't fetch the latest query).
 
 {{< admonition type="note" >}}
 When provisioning, Grafana variables like `${__from}` aren't supported.
