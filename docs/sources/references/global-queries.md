@@ -35,9 +35,9 @@ Working with the same queries in multiple dashboards might be hard some times. T
 To register a query, in the data source instance settings follow the steps below:
 
 1. Click **Add Global Query** button.
-2. Change the name and id of the query. ID should be unique per data source instance.
-3. Enter the query fields.
-4. Click `Save`.
+1. Change the name and id of the query. ID should be unique per data source instance.
+1. Enter the query fields.
+1. Click **Save**.
 
 ![image](https://user-images.githubusercontent.com/153843/93780448-1635d080-fc20-11ea-8c92-d6e91dbcf003.png#center)
 
