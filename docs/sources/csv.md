@@ -109,7 +109,7 @@ If you don't specify any columns, then the Infinity plugin will try to auto gene
 
 ## CSV URL
 
-In the example below, we are going to convert the CSV URL `https://gist.githubusercontent.com/yesoreyeram/64a46b02f0bf87cb527d6270dd84ea47/raw/32ae9b1a4a0183dceb3596226b818c8f428193af/sample-with-quotes.csv` into a Grafana data source.
+In the following example, we are going to convert the CSV URL `https://gist.githubusercontent.com/yesoreyeram/64a46b02f0bf87cb527d6270dd84ea47/raw/32ae9b1a4a0183dceb3596226b818c8f428193af/sample-with-quotes.csv` into a Grafana data source.
 
 CSV data should have columns as its first line and be comma delimited. You also need to specify the column names manually for display purposes.
 
