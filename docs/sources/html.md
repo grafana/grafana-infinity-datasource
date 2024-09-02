@@ -51,7 +51,7 @@ In the Query editor, fill the following query details:
 1. Select **GET** as the HTTP method.
 1. Enter `https://github.com/grafana/grafana-infinity-datasource/blob/main/testdata/users.html` in the URL field of the query.
 
-Once the initial setup is done, you need to configure the selectors:
+After the initial setup is done, you need to configure the selectors:
 
 1. In the root selector, you need to provide the selector which will give you array of symmetrical elements. (This can potentially be rows in a table or repeating div elements with symmetrical structure). In our case, we are entering `table:nth-child(1) tbody tr` (CSS selector) as our root selector. Alternatively, you can give `tr` as selector if your HTML content has only one table. Also, if the table has any unique selectors such as ID, use that as the selector instead.
 2. From our HTML structure, we know that each row contains several div elements with each div representing a property of the user, so we need to uniquely identify the div elements corresponding to the user property.
