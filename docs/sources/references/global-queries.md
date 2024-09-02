@@ -87,4 +87,6 @@ datasources:
 
 > **Note**: When using global queries, queries will be loaded from the datasource setting when loading the dashboard only. If the query changed, dashboards will get reflected only when they are reloaded. (Query refresh won't fetch the latest query).
 
-> **Note**: When provisioning, grafana variables/tokens like `${__from}` are not supported yet.
+{{< admonition type="note" >}}
+When provisioning, Grafana variables like `${__from}` aren't supported.
+{{< /admonition >}}
