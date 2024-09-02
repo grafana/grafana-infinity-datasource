@@ -35,12 +35,12 @@ In this example, we are going to see how we can use AWS status feeds as Grafana 
 Once an annotation has been created in your dashboard, follow the steps below: 
 
 1. Create a annotation and select your Infinity data source.
-2. Select "XML" as query type, "URL" as source and Format "Data Frame".
-3. Provide `https://status.aws.amazon.com/rss/all.rss` as the URL.
-4. You need to specify `rss.channel[0].item` as the URL. You can find this path from the original RSS feed.
-5. Create `title`, `description` as columns and provide the string type.
-6. Create `pubDate` column and mark this as 'DateTime'.
-7. Select `guid[0]._` as string. This is your link, so you can alias it as "link".
+1. Select **XML** as query type, **URL** as source and Format **Data Frame**.
+1. Provide `https://status.aws.amazon.com/rss/all.rss` as the URL.
+1. You need to specify `rss.channel[0].item` as the URL. You can find this path from the original RSS feed.
+1. Create `title`, `description` as columns and provide the string type.
+1. Create `pubDate` column and mark this as 'DateTime'.
+1. Select `guid[0]._` as string. This is your link, so you can alias it as "link".
 
 ![image](https://user-images.githubusercontent.com/153843/151575928-4fc9f188-7f9a-43c5-a92a-6069fe434e6a.png)
 
