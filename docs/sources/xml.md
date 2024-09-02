@@ -98,7 +98,7 @@ Consider the following example:
   </users>
 ```
 
-In the XML eample aboce, we want to list the user's name. To do so, use the syntax below:
+If you want to get the user's name and age from the preceding XML example, use the following syntax:
 
 Rows/Root: `users.user` to select all the user objects inside user element
 
