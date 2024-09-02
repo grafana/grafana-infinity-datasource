@@ -51,7 +51,7 @@ If your CSV doesn't have headers, you can specify them in the **CSV options** he
 
 CSV URL : `https://thingspeak.com/channels/38629/feed.csv`
 
-In the example below, we are using a CSV file from ThingSpeak traffic analysis. As you can see in the screenshot, you can visualize the CSV as a table using just the URL.
+The following example uses a CSV file from ThingSpeak traffic analysis. In the following screenshot, visualizes the CSV as a table using just the URL.
 
 ![image](https://user-images.githubusercontent.com/153843/108428461-8465da00-7236-11eb-8769-b1c145cbe203.png#center)
 
