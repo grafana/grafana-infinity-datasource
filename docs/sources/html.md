@@ -41,7 +41,7 @@ weight: 25
 HTML query type should be used only for retrieving data from legacy systems where there are no alternative APIs exist. Instead of HTML query type, we strongly recommend to use other query types such as JSON, CSV, XML.
 {{< /admonition >}}
 
-In the example below, we are going to retrieve data from [this](https://github.com/grafana/grafana-infinity-datasource/blob/main/testdata/users.html) sample HTML page.
+In the following example, you are going to retrieve data from [a sample HTML page](https://github.com/grafana/grafana-infinity-datasource/blob/main/testdata/users.html).
 
 In the Query editor, fill the following query details:
 
