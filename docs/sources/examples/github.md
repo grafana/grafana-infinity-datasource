@@ -65,7 +65,7 @@ Select **Basic user authentication** mode and use your Github username and PAT t
 
 ![image](https://user-images.githubusercontent.com/153843/93846498-1d9abf80-fc9c-11ea-90ed-4c569b088d99.png#center)
 
-The query used is given below: 
+The preceding image uses the following query:
 
 ```graphql
 {
