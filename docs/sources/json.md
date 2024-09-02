@@ -45,7 +45,7 @@ Select **Type** of the query to `JSON`. You can either specify the URL of the JS
 
 ## Using public JSON API endpoints
 
-The example below shows fetching data from a publicly accessible JSON URL/API endpoint.
+The following example shows fetching data from a publicly accessible JSON API endpoint.
 
 URL : `https://jsonplaceholder.typicode.com/users`
 
