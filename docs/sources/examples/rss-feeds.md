@@ -44,7 +44,7 @@ Once an annotation has been created in your dashboard, follow the steps below:
 
 ![image](https://user-images.githubusercontent.com/153843/151575928-4fc9f188-7f9a-43c5-a92a-6069fe434e6a.png)
 
-he reference feed item is provided below:
+The following XML is a reference feed item:
 
 ```xml
 <item>
