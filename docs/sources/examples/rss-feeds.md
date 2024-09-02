@@ -22,7 +22,10 @@ weight: 8003
 
 # Visualizing data from AWS Status feeds
 
-In this example, we are going to see how we can use AWS status feeds as Grafana annotations. This can be be useful when you are dealing with any AWS outages. For this, we are going to use the [AWS RSS feed](https://status.aws.amazon.com/rss/all.rss). You can find more feeds at [AWS Status page](https://status.aws.amazon.com/)
+In this example, you use AWS status feeds as Grafana annotations.
+This can be be useful when you are dealing with any AWS outages.
+For this, you're going to use the [AWS RSS feed](https://status.aws.amazon.com/rss/all.rss).
+You can find more feeds at [AWS Status page](https://status.aws.amazon.com/)
 
 ![image](https://user-images.githubusercontent.com/153843/151575227-20088546-4368-4066-a91b-64058982544b.png#center)
 
