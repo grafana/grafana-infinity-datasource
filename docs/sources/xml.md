@@ -54,7 +54,7 @@ In the example below, we are going to use XML response in Grafana
 </users>
 ```
 
-In the XML example above, we want to list the user's name and age. To do so, use the syntax below:
+If you want to get the user's name and age from the preceding XML example, use the following syntax:
 
 Rows/Root: `users.user` to select all the user objects inside the user element.
 
