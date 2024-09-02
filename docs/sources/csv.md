@@ -130,7 +130,7 @@ usa,200,washington
 canada,100,ottawa
 ```
 
-The screenshot below shows the example of CSV inline data source:
+The following screenshot shows the example of CSV inline data source:
 
 ![image](https://user-images.githubusercontent.com/153843/92571108-9e0ff800-f27a-11ea-9fe9-9f9dcbd7125a.png#center)
 
