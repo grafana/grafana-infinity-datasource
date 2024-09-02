@@ -60,4 +60,4 @@ Typically you can retrive all the metrics without any aggregation for up to 2 ho
 
 ## Note
 
-> This post was originally posted in [this Github discussion](https://github.com/grafana/grafana-infinity-datasource/discussions/38)
+> This post was originally posted in [a GitHub discussion](https://github.com/grafana/grafana-infinity-datasource/discussions/38)
