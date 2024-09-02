@@ -28,7 +28,9 @@ Server-side transformations are introduced in Infinity 2.0. You can perform basi
 
 To perform server-side transformations, you need to add a query type of **transformations**. Once this added, **this will perform server side transformation over all the previous infinity queries with backend parser**.
 
-> **Warning**: Infinity Transformations/Server-side transformations are available only for Infinity data sources or Infinity queries with backend parsers.
+{{< admonition type="note" >}}
+Infinity Transformations/Server-side transformations are available only for Infinity data sources or Infinity queries with backend parsers.
+{{< /admonition >}}
 
 ## Example
 
