@@ -307,7 +307,8 @@ parse-json
 
 ### limit
 
-`limit` command restricts the number of results returned. For example, the query below returns only 10 results
+`limit` command restricts the number of results returned.
+For example, the following query returns only 10 results
 
 ```sql
 parse-json
