@@ -1,5 +1,15 @@
 # Change Log
 
+## 2.9.6
+
+🐛 **Bug fix**: Fix error source for invalid JSONata errors
+
+⚙️ **Chore**: Bump `github.com/grafana/grafana-plugin-sdk-go` from `0.241.0` to `0.245.0`
+⚙️ **Chore**: Update level of non-error log lines from error to debug
+⚙️ **Chore**: Bump `webpack` from `5.86.0` to `5.94.0`
+⚙️ **Chore**: Bump `webpack` from `5.86.0` to `5.94.0`
+⚙️ **Chore**: Bump `micromatch` from `4.0.7` to `4.0.8`
+
 ## 2.9.5
 
 ⚙️ **Chore**: Rudderstack event firing updated
