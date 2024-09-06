@@ -26,6 +26,7 @@ func TestLoadSettings(t *testing.T) {
 				OAuth2Settings: models.OAuth2Settings{
 					EndpointParams: map[string]string{},
 				},
+				FormPostItems:     map[string]string{},
 				CustomHeaders:     map[string]string{},
 				SecureQueryFields: map[string]string{},
 			},
@@ -45,12 +46,14 @@ func TestLoadSettings(t *testing.T) {
 				JSONData: []byte(`{ 
 					"datasource_mode"  : "advanced",
 					"secureQueryName1" : "foo",
+					"formPostItemName1"  : "hello",
 					"httpHeaderName1"  : "header1"
 				}`),
 				DecryptedSecureJSONData: map[string]string{
-					"basicAuthPassword": "password",
-					"secureQueryValue1": "bar",
-					"httpHeaderValue1":  "headervalue1",
+					"basicAuthPassword":  "password",
+					"secureQueryValue1":  "bar",
+					"formPostItemValue1": "world",
+					"httpHeaderValue1":   "headervalue1",
 				},
 			},
 			wantSettings: models.InfinitySettings{
@@ -65,6 +68,9 @@ func TestLoadSettings(t *testing.T) {
 				UnsecuredQueryHandling: models.UnsecuredQueryHandlingWarn,
 				OAuth2Settings: models.OAuth2Settings{
 					EndpointParams: map[string]string{},
+				},
+				FormPostItems: map[string]string{
+					"hello": "world",
 				},
 				CustomHeaders: map[string]string{
 					"header1": "headervalue1",
@@ -105,6 +111,7 @@ func TestLoadSettings(t *testing.T) {
 				OAuth2Settings: models.OAuth2Settings{
 					EndpointParams: map[string]string{},
 				},
+				FormPostItems: map[string]string{},
 				CustomHeaders: map[string]string{
 					"header1": "headervalue1",
 				},
@@ -144,6 +151,7 @@ func TestAllSettingsAgainstFrontEnd(t *testing.T) {
 			"apiKeyType" 	   : "query",
 			"datasource_mode"  : "advanced",
 			"secureQueryName1" : "foo",
+			"formPostItemName1": "hello",
 			"httpHeaderName1"  : "header1",
 			"timeoutInSeconds" : 30,
 			"tlsAuth"		   : true,
@@ -178,6 +186,7 @@ func TestAllSettingsAgainstFrontEnd(t *testing.T) {
 			"tlsClientKey":               "myTlsClientKey",
 			"basicAuthPassword":          "password",
 			"secureQueryValue1":          "bar",
+			"formPostItemValue1":         "world",
 			"httpHeaderValue1":           "headervalue1",
 			"apiKeyValue":                "earth",
 			"bearerToken":                "myBearerToken",
@@ -244,6 +253,9 @@ func TestAllSettingsAgainstFrontEnd(t *testing.T) {
 		CustomHealthCheckEnabled: true,
 		CustomHealthCheckUrl:     "https://foo-check/",
 		UnsecuredQueryHandling:   models.UnsecuredQueryHandlingDeny,
+		FormPostItems: map[string]string{
+			"hello": "world",
+		},
 		CustomHeaders: map[string]string{
 			"header1": "headervalue1",
 		},

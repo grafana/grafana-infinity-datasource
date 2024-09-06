@@ -60,6 +60,10 @@ You can configure the headers required for the URL in the datasource config and 
 
 Note: We suggest adding secure headers only via configuration and not in query.
 
+## Sending secure params as HTTP POST Form data
+
+When you are using HTTP POST method and one of the HTTP Form body types (**Form Data**/**X-WWW-FORM-URLENCODED**), you can pass additional secure form data via config option. The parameters set in config will be set in addition to the form parameters set in the query. You can find the settings under **HTTP Options** in the datasource config
+
 ## Allowed Hosts
 
 Leaving blank will allow all the hosts. This is by default.
