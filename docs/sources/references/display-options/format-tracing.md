@@ -24,7 +24,7 @@ weight: 7102
 
 # Visualizing data in Tracing format
 
-You can visualize your data in the tracing format by configuring the following
+You can visualize your data in the tracing format by configuring the following:
 
 - Select **Trace** as **Format**
 - Ensure you have following fields
@@ -37,7 +37,7 @@ You can visualize your data in the tracing format by configuring the following
   - `serviceName` - string
   - `operationName` - string
 
-  For example, with the following CSV data
+  For example, with the following CSV data:
 
 ```csv
 spanID,parentSpanID,traceID,startTime,duration,serviceName,operationName
@@ -49,7 +49,7 @@ s5,s2,t1,3,1500,formatting,foo
 s6,s3,t2,5,2200,db,foo
 ```
 
-and the following UQL query will produce a trace view
+The following UQL query produces a trace view:
 
 ```sql
 parse-csv

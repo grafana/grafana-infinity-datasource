@@ -8,7 +8,7 @@ hero:
   width: 110
   image: https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/src/img/icon.svg
   height: 110
-  description: The Infinity data source plugin allows you to query and visualize data from JSON / CSV / GraphQL / XML / HTML endpoints.
+  description: The Infinity data source plugin allows you to query and visualize data from JSON, CSV, GraphQL, XML, and HTML endpoints.
 data-formats:
   title_class: pt-0 lh-1
   items:
@@ -51,7 +51,7 @@ weight: 10
 
 <div style="margin-bottom:30px"></div>
 
-Universal data source plugin for pulling data from various systems into Grafana using existing REST APIs. Grafana's go-to plugin for cases when native plugin doesn’t exist yet.
+A universal data source plugin for pulling data from various systems into Grafana using existing REST APIs. Grafana's go-to plugin for cases when a native plugin doesn’t exist yet.
 
 <p align="center">
     <img src="https://user-images.githubusercontent.com/153843/189875668-3ac061a9-c548-4bfe-abcc-6d0d7e6bdb55.png" alt="Infinity datasource plugin for Grafana">
@@ -63,7 +63,7 @@ Universal data source plugin for pulling data from various systems into Grafana 
 
 <div style="margin-bottom:30px"></div>
 
-- Get data from multiple sources into grafana
+- Get data from multiple sources into Grafana
 - Flexible data manipulation with UQL, JSONata, GROQ
 - Supports various data formats such as JSON, CSV
 - Support various authentication
@@ -89,8 +89,8 @@ Universal data source plugin for pulling data from various systems into Grafana 
 
 <div style="margin-bottom:30px"></div>
 
-Infinity plugin have the following known limitations
+Infinity plugin has the following known limitations:
 
-- Backend features such as alerting, public dashboards, recorded queries, enterprise query caching only available in **backend** parsing mode
-- Infinity is not designed for handling huge amount of data. When inlining the data, make sure they are small snippets less than 1MB of size
-- For list of all known bugs, check [here](https://github.com/grafana/grafana-infinity-datasource/issues)
+- Backend features such as alerting, public dashboards, recorded queries or enterprise query caching only available in **backend** parsing mode.
+- Infinity is not designed for handling a huge amount of data. When inlining the data, make sure they are small snippets less than 1MB of size.
+- For a list of all known bugs, check [GitHub](https://github.com/grafana/grafana-infinity-datasource/issues).

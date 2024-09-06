@@ -24,7 +24,7 @@ weight: 101
 
 # Installing Infinity data source plugin
 
-There are multiple ways to install this plugin into your grafana instance
+There are multiple ways to install this plugin into your Grafana instance
 
 ## Install from grafana.com
 
@@ -32,7 +32,7 @@ Install the plugin from [grafana.com plugins page](https://grafana.com/grafana/p
 
 ## Install from github
 
-Download the required version of release zip file from [github](https://github.com/grafana/grafana-infinity-datasource/releases) and extract into your grafana plugin folder. Then restart Grafana.
+Download the required version of release archive from [GitHub](https://github.com/grafana/grafana-infinity-datasource/releases) and extract into your Grafana plugin folder. Then, restart Grafana.
 
 ## Install using grafana-cli
 
@@ -77,15 +77,15 @@ plugins:
   - https://github.com/grafana/grafana-infinity-datasource/releases/download/v2.4.0/yesoreyeram-infinity-datasource-2.4.0.zip;yesoreyeram-infinity-datasource
 ```
 
-## Install using docker
+## Install using Docker
 
-With docker, you can install the plugin using the following command. This will download the latest published version of the plugin from grafana plugins directory.
+With Docker, you can install the plugin using the following command. This will download the latest published version of the plugin from Grafana plugins directory.
 
 ```shell
 docker run -p 3000:3000 -e "GF_INSTALL_PLUGINS=yesoreyeram-infinity-datasource" grafana/grafana-enterprise:10.2.3
 ```
 
-If you need to install a custom version of the plugin with docker, use the following command.
+If you need to install a custom version of the plugin with Docker, use the following command:
 
 ```shell
 docker run -p 3000:3000 -e "GF_INSTALL_PLUGINS=https://github.com/grafana/grafana-infinity-datasource/releases/download/v2.4.0/yesoreyeram-infinity-datasource-2.4.0.zip;yesoreyeram-infinity-datasource" grafana/grafana-enterprise:10.2.3

@@ -24,9 +24,9 @@ weight: 8200
 
 # Azure Authentication
 
-Here are the detailed steps on how to connect Microsoft Azure APIs
+Here are the detailed steps on how to connect Microsoft Azure APIs:
 
-1. Create a new service client in [azure portal](https://portal.azure.com/#view/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/~/RegisteredApps)
+1. Create a new service client in [Azure portal](https://portal.azure.com/#view/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/~/RegisteredApps)
 2. Create a client secret for the client created above
 3. Note down the Client ID, Client Secret and Tenant ID
 4. Give reader/monitoring reader access to the resources/subscriptions as necessary
@@ -45,11 +45,11 @@ Here are the detailed steps on how to connect Microsoft Azure APIs
 8. Configure the query
    1. Specify `json` as query type
    2. Specify `url` as source
-   3. Specify `default` parser ( only applicable for Infinity 1.0.0+)
+   3. Specify `default` parser (only applicable for Infinity 1.0.0+)
    4. Specify `table` as format
    5. Method : GET
    6. URL : `https://management.azure.com/subscriptions?api-version=2020-01-01`
-9. Click Run Query and you will see the results
+9. Click **Run Query** to see the results
 
 ## Config Editor
 

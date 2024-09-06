@@ -24,11 +24,11 @@ weight: 351
 
 # Time formats
 
-Timestamp fields should be one of the standard javascript date format as specified [here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/Date).
+Timestamp fields should be one of the standard JavaScript date format as specified int the [MDN Date documentation](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/Date).
 
 ![image](https://user-images.githubusercontent.com/153843/92720934-3d0d2080-f35d-11ea-93e3-c1ff46d4ea59.png#center)
 
-For example, below lists various valid timestamp formats. Your time field can be one of this format.
+For example, the following list has different valid timestamp formats. Your time field can be one of this format:
 
 ```bash
 year,population
@@ -49,7 +49,7 @@ Thu Nov 23 2017 10:30:20 GMT+0000 (Greenwich Mean Time),10.1
 
 ## UNIX EPOCH Time formats
 
-If your data is in unix epoch time formats (unix milliseconds format), You can select **Timestamp ( UNIX ms )** / **timestamp_epoch** as as type. Below snippet shows some examples
+If your data is in UNIX epoch time formats (unix milliseconds format), you can select **Timestamp ( UNIX ms )** / **timestamp_epoch** as as type:
 
 ```bash
 Year,Population
@@ -59,4 +59,4 @@ Year,Population
 
 In the above example, first row represents year 2010 and second row represents 2011.
 
-Unix epoch time also supported. You can select **Timestamp ( UNIX s )** / **timestamp_epoch_s** as type if your api data is in seconds.
+UNIX epoch time also supported. You can select **Timestamp ( UNIX s )** / **timestamp_epoch_s** as type if your API data is in seconds.

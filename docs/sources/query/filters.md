@@ -28,11 +28,14 @@ weight: 360
 
 In order to filter the data in Infinity datasource, you can use the following options based on the parser you are using.
 
-> **Note**: All these filtering will happen after retrieving the content. For better performance, use the filtering at your API
+{{< admonition type="note" }}
+All filtering happens after retrieving the content.
+For better performance, use filtering provided by the API.
+{{< /admonition >}}
 
 ## Filtering with Backend Parser
 
-When using the backend parser, use the following examples for filtering your data. In most cases you will be filtering data based on single value or multiple value variable.
+When using the backend parser, use the following examples for filtering your data. In most cases, you will be filtering data based on single value or multiple value variable.
 
 ### Variable setup - single
 

@@ -24,9 +24,9 @@ weight: 8002
 
 ![image](https://user-images.githubusercontent.com/153843/93846498-1d9abf80-fc9c-11ea-90ed-4c569b088d99.png#center)
 
-We can leverage [Github graphql API](https://docs.github.com/en/graphql) to query the github stats using this infinity plugin graphql api.
+We can use the [GitHub GraphQL API](https://docs.github.com/en/graphql) to query the GitHub stats with the Infinity plugin GraphQL API.
 
-Sample Query given in the below example. You can customize your query to bring the stats you needed.
+A sample query is provided in the example below, but you can customize your query to bring the stats you needed:
 
 ## Query Editor
 
@@ -57,7 +57,7 @@ Query Used:
 
 ## Datasource Configuration
 
-Select **Basic user authentication** mode and use your github username and PAT token as password
+Select **Basic user authentication** mode and use your GitHub username as the username and your Personal Access Token (PAT) as the password.
 
 ![image](https://user-images.githubusercontent.com/153843/93736929-b1578780-fbd9-11ea-9413-5585ff79d3a8.png#center)
 
@@ -65,7 +65,7 @@ Select **Basic user authentication** mode and use your github username and PAT t
 
 ![image](https://user-images.githubusercontent.com/153843/93846498-1d9abf80-fc9c-11ea-90ed-4c569b088d99.png#center)
 
-corresponding query used is given below
+The preceding image uses the following query:
 
 ```graphql
 {
@@ -90,6 +90,6 @@ corresponding query used is given below
 
 Note:
 
-- Queries are not paginated
-- Github rate limits apply
-- If you need paginated and full set of results, use grafana [github stats plugin](https://grafana.com/grafana/plugins/grafana-github-datasource)
+- Queries aren't paginated.
+- Github rate limits apply.
+- If you need a paginated and full set of results, use Grafana [GitHub stats plugin](https://grafana.com/grafana/plugins/grafana-github-datasource).

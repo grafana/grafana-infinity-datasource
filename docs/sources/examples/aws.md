@@ -30,9 +30,9 @@ Support for connecting to AWS API is available from version 1.3.0
 
 1. Create a new service account in [AWS console](https://us-east-1.console.aws.amazon.com/iam/home#/users$new?step=details). ( AWS Console -> IAM -> Access Management -> Users -> Add users)
    1. Select **Access key - Programmatic access** as AWS Credentials type
-   2. Set required permissions ( preferably CloudWatch ReadOnly Permission )
+   2. Set required permissions (preferably CloudWatch ReadOnly Permission)
    3. Copy the access key and secret key
-2. Install the infinity plugin in Grafana and add data source for the same
+2. Install the Infinity plugin in Grafana and add data source for the same
 3. Expand Authentication section and select "AWS"
 4. Select region. Example `us-east-1`
 5. Select service. Example `monitoring`. You can find the appropriate service name [here](https://docs.aws.amazon.com/general/latest/gr/aws-service-information.html).
@@ -44,7 +44,7 @@ Support for connecting to AWS API is available from version 1.3.0
 11. Select "JSON" as Query type
 12. Optionally, Select "Backend" / "UQL" as parser.
 13. Enter the Root Selector `ListMetricsResponse.ListMetricsResult.Metrics`
-14. Click Run Query and you will see the results
+14. Click Run Query to see the results
 
 ## Config Editor
 

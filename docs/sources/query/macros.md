@@ -24,7 +24,7 @@ weight: 350
 
 # Macros
 
-Macro functions are utility functions that perform operations and yield result based on the arguments provided. You can use macro function in the query URL, Body, Inline data, UQL, GROQ fields.
+Macro functions are utility functions that perform operations and yield results based on the arguments provided. You can use macro function in the query URL, Body, Inline data, UQL, GROQ fields.
 
 Following macros are available in this plugin
 

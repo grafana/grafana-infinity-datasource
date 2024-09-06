@@ -24,7 +24,7 @@ weight: 231
 
 # Authentication
 
-Infinity data source supports following authentication methods
+Infinity data source supports the following authentication methods:
 
 - No authentication
 - Basic authentication
@@ -49,7 +49,7 @@ In the request headers, the `Authorization` header uses the `Basic <BASE64_ENCOD
 
 ## Bearer token
 
-Bearer token enable requests to authenticate using an access key, such as a JSON Web Token (JWT), personal access token.
+Bearer token enable requests to authenticate using an access key, such as a JSON Web Token (JWT) or personal access token.
 In the request headers, the `Authorization` header uses the `Bearer <API_KEY>` format.
 
 {{< admonition type="tip" >}}
@@ -68,7 +68,8 @@ API key authentication requires following parameters:
 | **In**    | Accepts `header`/`query`. Most APIs accept API keys via headers as a preferred way of sending API keys. Sending API keys via the query parameter is. |
 
 {{< admonition type="tip" >}}
-It's easy to confuse API key authentication with bearer token authentication, make sure you are using the correct authentication mechanism.
+It's easy to confuse API key authentication with Bearer token authentication.
+Ensure sure you are using the correct authentication mechanism.
 {{< /admonition >}}
 
 ## Digest
@@ -85,7 +86,7 @@ OAuth 2.0 client credentials require the following parameters:
 
 | Key                 | Description                                                                                       |
 | ------------------- | ------------------------------------------------------------------------------------------------- |
-| **Client ID**       | ClientID is the application's ID                                                                  |
+| **Client ID**       | ClientID is the application's ID.                                                                  |
 | **Client Secret**   | ClientSecret is the application's secret.                                                         |
 | **Token URL**       | TokenURL is the resource server's token endpoint URL. This is a constant specific to each server. |
 | **Scopes**          | Scope specifies optional requested permissions.                                                   |
@@ -110,10 +111,10 @@ If you want to authenticate your API endpoints via Microsoft Azure authenticatio
 
 ## Azure Blob Storage key
 
-To retrieve content from azure blob storage, you need to provide the following information
+To retrieve content from azure blob storage, you need to provide the following information:
 
-- Azure storage account name
-- Azure storage account key (either primary key or secondary key)
+- Azure storage account name.
+- Azure storage account key (either primary key or secondary key).
 
 ## AWS
 

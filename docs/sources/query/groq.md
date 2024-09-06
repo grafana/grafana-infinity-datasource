@@ -30,7 +30,7 @@ weight: 320
 
 ## Using GROQ with infinity
 
-Following example shows how to make use of GROQ inside grafana infinity datasource.
+The following example shows how to make use of GROQ inside Grafana Infinity data source.
 
 ![groq query type in grafana](https://user-images.githubusercontent.com/153843/151544429-1c039a19-75c5-4dfc-bc52-e2f74f9c8a51.png#center)
 

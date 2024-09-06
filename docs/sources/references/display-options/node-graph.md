@@ -30,7 +30,7 @@ You can generate Node graph panel data with `CSV`, `JSON` or `XML` feature of In
 
 From v0.8.0, we have out of the box support for node graph. Prior to v0.8.0, you can use "Table" format to create node graph with limited options.
 
-Irrespective of the version, you need two queries to form a Node graph visualization.
+Regardless of the version, you need two queries to form a Node graph visualization.
 
 1. First query which lists the nodes. Should have mandatory `id` and `title` field. This also can have additional `arc__*` fields to specify the arcs value for the node.
 2. Second query which list the edges (relations). Should have three mandatory fields namely `id`, `source` and `target`
