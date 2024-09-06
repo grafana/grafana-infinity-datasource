@@ -53,7 +53,7 @@ When you save the Infinity datasource settings in the config page, by default th
 
 If you want your data source to connect via proxy, set the environment appropriate environment variables. HTTP_PROXY, HTTPS_PROXY and NO_PROXY. HTTPS_PROXY takes precedence over HTTP_PROXY for https requests.
 
-> ^roxy support is available from v0.7.10
+> proxy support is available from v0.7.10
 
 If you want to setup specific proxy URL for the datasource, you can configure in the datasource config network section.
 
