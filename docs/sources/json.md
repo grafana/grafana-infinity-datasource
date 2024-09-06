@@ -71,7 +71,7 @@ URL : `https://gist.githubusercontent.com/yesoreyeram/2433ce69862f452b9d0460c947
 
 ![image](https://user-images.githubusercontent.com/153843/108415716-cdf9f900-7225-11eb-8e0d-5d767104a080.png#center)
 
-In the example above, we're visualizing JSON data without time field. Our JSON has only two fields aka `country` and `population`, so we asked the plugin to add a dummy time field to the data so that we can visualize them in any of the Grafana's stock panels. If you look closely at the image above, you can see we specified 'format' as **timeseries**.
+In the example above, we're visualizing JSON data without time field. Our JSON has only two fields aka `country` and `population`, so we asked the plugin to add a dummy time field to the data so that we can visualize them in any of the stock panels in Grafana. If you look closely at the image above, you can see we specified 'format' as **timeseries**.
 
 For reference, JSON data from the URL is provided below:
 
