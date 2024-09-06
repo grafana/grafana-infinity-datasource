@@ -38,7 +38,7 @@ For JSON, data received from the server should be in array format. If not, then 
 
 ## Computed fields
 
-Once you have some fields already and you want to compute new field based on existing columns, you can use computed fields to do. This is something similar to Grafana's `Add field from calculation -> Binary Operation` but enhanced with powerful expression language. For example `price * qty` gives the multiplication value of two columns names `price` and `qty`
+Once you have some fields already and you want to compute new field based on existing columns, you can use computed fields to do. This is something similar to the `Add field from calculation -> Binary Operation` transformation but enhanced with powerful expression language. For example `price * qty` gives the multiplication value of two columns names `price` and `qty`
 
 ![calculated fields](https://user-images.githubusercontent.com/153843/196197153-306bbf2a-bc95-4be2-b3ad-75e12c8ea404.png#center)
 
