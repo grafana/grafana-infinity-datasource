@@ -105,7 +105,7 @@ Even if your CSV file has columns, you should specify them manually, and only th
 | Selector | Column name in CSV file. Case sensitive.         |
 | Format   | Format of the column.                            |
 
-If you don't specify any columns, then the Infinity plugin will try to auto generate the columns and all the fields will be returned as string. Please note that this auto generate columns feature only works with table format.
+If you don't specify any columns, then the Infinity plugin will try to auto generate the columns and all the fields will be returned as string. This automatically generates columns feature only works with table format.
 
 ## CSV URL
 
