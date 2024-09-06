@@ -24,7 +24,7 @@ weight: 301
 
 # Backend Parser
 
-Backend parser for infinity is introduced in version 1.0.0. Setting the parser to backend in your query editor will allow you to use features such as `alerting`, `grafana expressions` ,`recorded queries`, `enterprise query caching` and `public dashboards`.
+Backend parser for infinity is introduced in version 1.0.0. Setting the parser to backend in your query editor will allow you to use features such as `alerting`, `grafana expressions` ,`recorded queries`, `enterprise query caching` and `shared dashboards`.
 
 > Support for backend parser is available for JSON from version 1.0.0.
 > Support for backend parser is available for CSV/TSV/GraphQL from version 1.1.0.
