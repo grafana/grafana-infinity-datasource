@@ -40,18 +40,10 @@ export const MainEditor = (
     >
       <h1>👋 Welcome to Grafana Infinity Data Source!</h1>
       <p style={{ marginBlockStart: 5 }}>
-        <b>Without any additional configuration, this datasource can work.</b> Optionally, configure any of the settings
-        you see in the left side such as Authentication if you needed.
+        <b>Without any additional configuration, this datasource can work.</b> Optionally, configure any of the settings you see in the left side such as Authentication if you needed.
       </p>
       <div style={{ marginBlockStart: 5 }}>
-        <Button
-          icon="lock"
-          variant="primary"
-          fill="outline"
-          size="md"
-          onClick={() => setActiveTab('auth')}
-          style={{ marginInlineEnd: '5px', color: theme.isDark ? '#d9d9d9' : '' }}
-        >
+        <Button icon="lock" variant="primary" fill="outline" size="md" onClick={() => setActiveTab('auth')} style={{ marginInlineEnd: '5px', color: theme.isDark ? '#d9d9d9' : '' }}>
           Setup Authentication
         </Button>
         <LinkButton
@@ -90,24 +82,10 @@ export const HeadersEditor = (props: DataSourcePluginOptionsEditorProps<Infinity
         <URLEditor options={options} onOptionsChange={onOptionsChange} />
       </Collapse>
       <Collapse isOpen={true} collapsible={true} label="Custom HTTP Headers">
-        <SecureFieldsEditor
-          dataSourceConfig={options}
-          onChange={onOptionsChange}
-          title="Custom HTTP Header"
-          secureFieldName="httpHeaderName"
-          secureFieldValue="httpHeaderValue"
-          hideTile={true}
-        />
+        <SecureFieldsEditor dataSourceConfig={options} onChange={onOptionsChange} title="Custom HTTP Header" secureFieldName="httpHeaderName" secureFieldValue="httpHeaderValue" hideTile={true} />
       </Collapse>
       <Collapse isOpen={true} collapsible={true} label="URL Query Param">
-        <SecureFieldsEditor
-          dataSourceConfig={options}
-          onChange={onOptionsChange}
-          title="URL Query Param"
-          secureFieldName="secureQueryName"
-          secureFieldValue="secureQueryValue"
-          hideTile={true}
-        />
+        <SecureFieldsEditor dataSourceConfig={options} onChange={onOptionsChange} title="URL Query Param" secureFieldName="secureQueryName" secureFieldValue="secureQueryValue" hideTile={true} />
       </Collapse>
       <Collapse isOpen={true} collapsible={true} label="Query Param Encoding (EXPERIMENTAL)">
         <QueryParamEditor options={options} onOptionsChange={onOptionsChange} />
@@ -223,11 +201,7 @@ export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<I
       <div className={styles.root}>
         <div className={styles.tabs}>
           {config_sections.map((tab) => (
-            <div
-              key={tab.value}
-              className={activeTab === tab.value ? styles.tab_active : styles.tab}
-              onClick={() => setActiveTab(tab.value)}
-            >
+            <div key={tab.value} className={activeTab === tab.value ? styles.tab_active : styles.tab} onClick={() => setActiveTab(tab.value)}>
               {tab.label}
             </div>
           ))}

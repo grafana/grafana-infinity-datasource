@@ -12,10 +12,7 @@ export const URLEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpti
   };
   return (
     <div className="gf-form">
-      <InlineLabel
-        tooltip="Base URL of the query. Leave blank if you want to handle it in the query editor."
-        width={20}
-      >
+      <InlineLabel tooltip="Base URL of the query. Leave blank if you want to handle it in the query editor." width={20}>
         Base URL
       </InlineLabel>
       <Input
