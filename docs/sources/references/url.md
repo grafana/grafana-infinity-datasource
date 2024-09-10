@@ -28,8 +28,6 @@ You can enter any URL in the query URL field. URL must be a valid JSON, CSV, Gra
 
 In the query editor, click the expand icon next the URL field to configure more query URL options like HTTP Method (GET/POST), additional headers and additional query strings.
 
-**Leave the URL in the datasource configuration blank.** URL in the datasource config is now deprecated. Use URL in the query editor instead.
-
 ## Variables in URL
 
 In the query URL, you can use any [grafana global variables](https://grafana.com/docs/grafana/latest/variables/variable-types/global-variables) or any dashboard variables this includes from and to timestamps of the dashboard
