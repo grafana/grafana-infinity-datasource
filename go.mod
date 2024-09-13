@@ -6,11 +6,11 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.3.1
 	github.com/grafana/grafana-aws-sdk v0.24.0
 	github.com/grafana/grafana-plugin-sdk-go v0.245.0
-	github.com/grafana/infinity-libs/lib/go/csvframer v1.0.0
+	github.com/grafana/infinity-libs/lib/go/csvframer v1.0.1
 	github.com/grafana/infinity-libs/lib/go/gframer v1.0.0
 	github.com/grafana/infinity-libs/lib/go/jsonframer v1.1.4
 	github.com/grafana/infinity-libs/lib/go/macros v1.0.0
-	github.com/grafana/infinity-libs/lib/go/transformations v1.0.0
+	github.com/grafana/infinity-libs/lib/go/transformations v1.0.1
 	github.com/grafana/infinity-libs/lib/go/xmlframer v1.0.0
 	github.com/icholy/digest v0.1.22
 	github.com/stretchr/testify v1.9.0
@@ -50,7 +50,7 @@ require (
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/mux v1.8.1 // indirect
 	github.com/grafana/dataplane/sdata v0.0.7 // indirect
-	github.com/grafana/infinity-libs/lib/go/framesql v1.0.0 // indirect
+	github.com/grafana/infinity-libs/lib/go/framesql v1.0.1 // indirect
 	github.com/grafana/infinity-libs/lib/go/utils v1.0.0 // indirect
 	github.com/grafana/otel-profiling-go v0.5.1 // indirect
 	github.com/grafana/pyroscope-go/godeltaprof v0.1.8 // indirect

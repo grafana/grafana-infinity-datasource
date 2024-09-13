@@ -2,6 +2,7 @@ package infinity
 
 import (
 	"context"
+	"errors"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
@@ -46,7 +47,11 @@ func GetCSVBackendResponse(ctx context.Context, responseString string, query mod
 		frame.Fields = append(frame.Fields, newFrame.Fields...)
 	}
 	if err != nil {
-		err = errorsource.PluginError(err, false)
+		if errors.Is(err, csvframer.ErrEmptyCsv) || errors.Is(err, csvframer.ErrReadingCsvResponse) {
+			err = errorsource.DownstreamError(err, false)
+		} else {
+			err = errorsource.PluginError(err , false)
+		}
 	}
 	return frame, err
 }
