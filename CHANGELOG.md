@@ -1,5 +1,14 @@
 # Change Log
 
+## 2.10.0
+
+🚀 **Improvement**: Remove deprecation for base URL and move it to URL, Headers & Params
+
+🐛 **Bug fix**: Fix error source for identified downstream errors
+
+⚙️ **Chore**: Bump `github.com/grafana/grafana-plugin-sdk-go` from `0.241.0` to `0.248.0`
+⚙️ **Chore**: Bump `path-to-regexp` from `1.8.0` to `1.9.0`
+
 ## 2.9.6
 
 🐛 **Bug fix**: Fix error source for invalid JSONata errors
