@@ -19,7 +19,11 @@ import { QueryParamEditor } from './config/QueryParamEditor';
 
 const Collapse = CollapseOriginal as any;
 
-export const MainEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions> & { setActiveTab: React.Dispatch<React.SetStateAction<string>> }) => {
+export const MainEditor = (
+  props: DataSourcePluginOptionsEditorProps<InfinityOptions> & {
+    setActiveTab: React.Dispatch<React.SetStateAction<string>>;
+  }
+) => {
   const { setActiveTab, options } = props;
   const theme = useTheme2();
   return (
@@ -74,6 +78,9 @@ export const HeadersEditor = (props: DataSourcePluginOptionsEditorProps<Infinity
   const { options, onOptionsChange } = props;
   return (
     <>
+      <Collapse isOpen={true} collapsible={true} label="Base URL">
+        <URLEditor options={options} onOptionsChange={onOptionsChange} />
+      </Collapse>
       <Collapse isOpen={true} collapsible={true} label="Custom HTTP Headers">
         <SecureFieldsEditor dataSourceConfig={options} onChange={onOptionsChange} title="Custom HTTP Header" secureFieldName="httpHeaderName" secureFieldValue="httpHeaderValue" hideTile={true} />
       </Collapse>
@@ -126,25 +133,15 @@ export const SecurityEditor = (props: DataSourcePluginOptionsEditorProps<Infinit
   );
 };
 
-export const MiscEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
-  const { options, onOptionsChange } = props;
-  return (
-    <>
-      <URLEditor options={options} onOptionsChange={onOptionsChange} />
-    </>
-  );
-};
-
 const config_sections: Array<{ value: string; label: string }> = [
   { value: 'main', label: 'Main' },
   { value: 'auth', label: 'Authentication' },
-  { value: 'headers_and_params', label: 'Headers & URL params' },
+  { value: 'headers_and_params', label: 'URL, Headers & Params' },
   { value: 'network', label: 'Network' },
   { value: 'security', label: 'Security' },
   { value: 'health_check', label: 'Health check' },
   { value: 'reference_data', label: 'Reference data' },
   { value: 'global_queries', label: 'Global queries' },
-  { value: 'misc', label: 'Misc' },
 ];
 
 export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
@@ -226,8 +223,6 @@ export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<I
             <ReferenceDataEditor options={options} onOptionsChange={onOptionsChange} />
           ) : activeTab === 'health_check' ? (
             <CustomHealthCheckEditor options={options} onOptionsChange={onOptionsChange} />
-          ) : activeTab === 'misc' ? (
-            <MiscEditor options={options} onOptionsChange={onOptionsChange} />
           ) : (
             <AuthEditor options={options} onOptionsChange={onOptionsChange} />
           )}

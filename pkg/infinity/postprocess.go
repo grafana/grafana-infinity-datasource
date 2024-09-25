@@ -2,6 +2,7 @@ package infinity
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"strings"
 
@@ -10,24 +11,25 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/grafana/grafana-plugin-sdk-go/experimental/errorsource"
-	"github.com/grafana/infinity-libs/lib/go/transformations"
+	"github.com/grafana/infinity-libs/lib/go/framesql"
+	t "github.com/grafana/infinity-libs/lib/go/transformations"
 )
 
 func PostProcessFrame(ctx context.Context, frame *data.Frame, query models.Query) (*data.Frame, error) {
 	ctx, span := tracing.DefaultTracer().Start(ctx, "PostProcessFrame")
 	logger := backend.Logger.FromContext(ctx)
 	defer span.End()
-	cc := []transformations.ComputedColumn{}
+	cc := []t.ComputedColumn{}
 	for _, c := range query.ComputedColumns {
-		cc = append(cc, transformations.ComputedColumn{Selector: c.Selector, Text: c.Text})
+		cc = append(cc, t.ComputedColumn{Selector: c.Selector, Text: c.Text})
 	}
-	frame, err := transformations.GetFrameWithComputedColumns(frame, cc)
+	frame, err := t.GetFrameWithComputedColumns(frame, cc)
 	if err != nil {
 		logger.Error("error getting computed column", "error", err.Error())
 		frame.Meta.Custom = &CustomMeta{Query: query, Error: err.Error()}
 		return frame, errorsource.PluginError(err, false)
 	}
-	frame, err = transformations.ApplyFilter(frame, query.FilterExpression)
+	frame, err = t.ApplyFilter(frame, query.FilterExpression)
 	if err != nil {
 		logger.Error("error applying filter", "error", err.Error())
 		frame.Meta.Custom = &CustomMeta{Query: query, Error: err.Error()}
@@ -38,7 +40,11 @@ func PostProcessFrame(ctx context.Context, frame *data.Frame, query models.Query
 		if alias == "" {
 			alias = "summary"
 		}
-		return transformations.GetSummaryFrame(frame, query.SummarizeExpression, query.SummarizeBy, alias)
+		summaryFrame, err := t.GetSummaryFrame(frame, query.SummarizeExpression, query.SummarizeBy, alias)
+		if err != nil {
+			err = addErrorSourceToTransformError(err)
+		}
+		return summaryFrame, err
 	}
 	frame.Meta = &data.FrameMeta{Custom: &CustomMeta{Query: query}}
 	if query.Source == "inline" {
@@ -53,4 +59,24 @@ func PostProcessFrame(ctx context.Context, frame *data.Frame, query models.Query
 		}
 	}
 	return frame, nil
+}
+
+func addErrorSourceToTransformError(err error) error {
+	downstreamErrors := []error{
+		t.ErrSummarizeByFieldNotFound, 
+		t.ErrNotUniqueFieldNames, 
+		t.ErrEvaluatingFilterExpression, 
+		t.ErrMergeTransformationNoFrameSupplied, 
+		t.ErrMergeTransformationDifferentFields, 
+		t.ErrMergeTransformationDifferentFieldNames, 
+		t.ErrMergeTransformationDifferentFieldTypes, 
+		framesql.ErrEmptySummarizeExpression,
+	}
+	
+	for _, e := range downstreamErrors {
+		if errors.Is(err, e) {
+			return errorsource.DownstreamError(err, false)
+		}
+	}
+	return errorsource.PluginError(err, false)
 }

@@ -1,4 +1,4 @@
-import { Badge, InlineLabel, Input } from '@grafana/ui';
+import { InlineLabel, Input } from '@grafana/ui';
 import React, { useState } from 'react';
 import { IGNORE_URL } from './../../constants';
 import type { InfinityOptions } from './../../types';
@@ -22,9 +22,6 @@ export const URLEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpti
         onChange={(e) => setUrl(e.currentTarget.value || '')}
         onBlur={onURLChange}
       />
-      <div style={{ marginInlineStart: '5px' }}>
-        <Badge text="Deprecated field. Use full URL in the query editor instead." color="blue" className="gf-form-label text-info" />
-      </div>
     </div>
   );
 };
