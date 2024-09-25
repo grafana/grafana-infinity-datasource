@@ -75,7 +75,7 @@ A universal data source plugin for pulling data from various systems into Grafan
   - OAuth2 JWT authentication
   - AWS/Azure/GCP authentication
   - Digest authentication
-- Supports alerting, recorded queries, public dashboards, query caching
+- Supports alerting, recorded queries, shared dashboards, query caching
 - Utility variable functions
 - Supports for Grafana node graph panel, annotations etc
 
@@ -91,6 +91,6 @@ A universal data source plugin for pulling data from various systems into Grafan
 
 Infinity plugin has the following known limitations:
 
-- Backend features such as alerting, public dashboards, recorded queries or enterprise query caching only available in **backend** parsing mode.
+- Backend features such as alerting, shared dashboards, recorded queries or enterprise query caching only available in **backend** parsing mode.
 - Infinity is not designed for handling a huge amount of data. When inlining the data, make sure they are small snippets less than 1MB of size.
 - For a list of all known bugs, check [GitHub](https://github.com/grafana/grafana-infinity-datasource/issues).
