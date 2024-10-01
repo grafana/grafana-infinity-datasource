@@ -2,10 +2,12 @@ package infinity
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"net/url"
 	"strings"
 
+	"github.com/grafana/grafana-aws-sdk/pkg/awsds"
 	"github.com/grafana/grafana-aws-sdk/pkg/sigv4"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"github.com/icholy/digest"
@@ -87,7 +89,7 @@ func ApplyDigestAuth(ctx context.Context, httpClient *http.Client, settings mode
 func IsDigestAuthConfigured(settings models.InfinitySettings) bool {
 	return settings.AuthenticationMethod == models.AuthenticationMethodDigestAuth
 }
-func ApplyAWSAuth(ctx context.Context, httpClient *http.Client, settings models.InfinitySettings) *http.Client {
+func ApplyAWSAuth(ctx context.Context, httpClient *http.Client, settings models.InfinitySettings) (*http.Client, error) {
 	ctx, span := tracing.DefaultTracer().Start(ctx, "ApplyAWSAuth")
 	defer span.End()
 	if IsAwsAuthConfigured(settings) {
@@ -111,13 +113,18 @@ func ApplyAWSAuth(ctx context.Context, httpClient *http.Client, settings models.
 			AccessKey: settings.AWSAccessKey,
 			SecretKey: settings.AWSSecretKey,
 		}
-		rt, _ := sigv4.New(conf, sigv4.RoundTripperFunc(func(req *http.Request) (*http.Response, error) {
+		authSettings, found := awsds.ReadAuthSettingsFromContext(ctx)
+		if !found {
+			return nil, errors.New("AWS auth settings not found in context")
+		}
+
+		rt, _ := sigv4.New(conf, *authSettings, sigv4.RoundTripperFunc(func(req *http.Request) (*http.Response, error) {
 			req.Header.Add("Accept", "application/json")
 			return tempHttpClient.Do(req)
 		}))
 		httpClient.Transport = rt
 	}
-	return httpClient
+	return httpClient, nil
 }
 
 func IsAwsAuthConfigured(settings models.InfinitySettings) bool {
