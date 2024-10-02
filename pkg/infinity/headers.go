@@ -141,7 +141,7 @@ func ApplyForwardedOAuthIdentity(requestHeaders map[string]string, settings mode
 			token = getQueryReqHeader(requestHeaders, HeaderKeyIdToken)
 		}
 		req.Header.Add(HeaderKeyAuthorization, authHeader)
-		if token != "" {
+		if token != "" && token != dummyHeader {
 			req.Header.Add(HeaderKeyIdToken, token)
 		}
 	}
