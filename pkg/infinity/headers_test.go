@@ -15,33 +15,33 @@ func TestGetQueryReqHeader(t *testing.T) {
 		{
 			name: "Authorization header exact match",
 			requestHeaders: map[string]string{
-				headerKeyAuthorization: "Bearer token",
+				HeaderKeyAuthorization: "Bearer token",
 			},
-			headerName: headerKeyAuthorization,
+			headerName: HeaderKeyAuthorization,
 			expected:   "Bearer token",
 		},
 		{
 			name: "Authorization header case insensitive match",
 			requestHeaders: map[string]string{
-				strings.ToLower(headerKeyAuthorization): "Bearer token",
+				strings.ToLower(HeaderKeyAuthorization): "Bearer token",
 			},
-			headerName: headerKeyAuthorization,
+			headerName: HeaderKeyAuthorization,
 			expected:   "Bearer token",
 		},
 		{
 			name: "X-Id-Token header exact match",
 			requestHeaders: map[string]string{
-				headerKeyIdToken: "some-id-token",
+				HeaderKeyIdToken: "some-id-token",
 			},
-			headerName: headerKeyIdToken,
+			headerName: HeaderKeyIdToken,
 			expected:   "some-id-token",
 		},
 		{
 			name: "X-Id-Token header case insensitive match",
 			requestHeaders: map[string]string{
-				strings.ToLower(headerKeyIdToken): "some-id-token",
+				strings.ToLower(HeaderKeyIdToken): "some-id-token",
 			},
-			headerName: headerKeyIdToken,
+			headerName: HeaderKeyIdToken,
 			expected:   "some-id-token",
 		},
 		{
@@ -49,7 +49,7 @@ func TestGetQueryReqHeader(t *testing.T) {
 			requestHeaders: map[string]string{
 				"X-ID-Token": "some-id-token",
 			},
-			headerName: headerKeyIdToken,
+			headerName: HeaderKeyIdToken,
 			expected:   "some-id-token",
 		},
 	}

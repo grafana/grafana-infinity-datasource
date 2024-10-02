@@ -21,8 +21,8 @@ const (
 const (
 	headerKeyAccept        = "Accept"
 	headerKeyContentType   = "Content-Type"
-	headerKeyAuthorization = "Authorization"
-	headerKeyIdToken       = "X-Id-Token"
+	HeaderKeyAuthorization = "Authorization"
+	HeaderKeyIdToken       = "X-Id-Token"
 )
 
 func ApplyAcceptHeader(query models.Query, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
@@ -103,7 +103,7 @@ func ApplyBasicAuth(settings models.InfinitySettings, req *http.Request, include
 		if includeSect {
 			basicAuthHeader = "Basic " + base64.StdEncoding.EncodeToString([]byte(settings.UserName+":"+settings.Password))
 		}
-		req.Header.Set(headerKeyAuthorization, basicAuthHeader)
+		req.Header.Set(HeaderKeyAuthorization, basicAuthHeader)
 	}
 	return req
 }
@@ -114,7 +114,7 @@ func ApplyBearerToken(settings models.InfinitySettings, req *http.Request, inclu
 		if includeSect {
 			bearerAuthHeader = fmt.Sprintf("Bearer %s", settings.BearerToken)
 		}
-		req.Header.Add(headerKeyAuthorization, bearerAuthHeader)
+		req.Header.Add(HeaderKeyAuthorization, bearerAuthHeader)
 	}
 	return req
 }
@@ -137,22 +137,20 @@ func ApplyForwardedOAuthIdentity(requestHeaders map[string]string, settings mode
 		authHeader := dummyHeader
 		token := dummyHeader
 		if includeSect {
-			authHeader = getQueryReqHeader(requestHeaders, headerKeyAuthorization)
-			token = getQueryReqHeader(requestHeaders, headerKeyIdToken)
+			authHeader = getQueryReqHeader(requestHeaders, HeaderKeyAuthorization)
+			token = getQueryReqHeader(requestHeaders, HeaderKeyIdToken)
 		}
-		req.Header.Add(headerKeyAuthorization, authHeader)
-		if requestHeaders[headerKeyIdToken] != "" {
-			req.Header.Add(headerKeyIdToken, token)
+		req.Header.Add(HeaderKeyAuthorization, authHeader)
+		if token != "" {
+			req.Header.Add(HeaderKeyIdToken, token)
 		}
 	}
 	return req
 }
 
 func getQueryReqHeader(requestHeaders map[string]string, headerName string) string {
-	headerNameCI := strings.ToLower(headerName)
-
 	for name, value := range requestHeaders {
-		if strings.ToLower(name) == headerNameCI {
+		if strings.EqualFold(headerName, name) {
 			return value
 		}
 	}
