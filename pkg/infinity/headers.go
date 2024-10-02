@@ -22,7 +22,7 @@ const (
 	headerKeyAccept        = "Accept"
 	headerKeyContentType   = "Content-Type"
 	headerKeyAuthorization = "Authorization"
-	headerKeyIdToken       = "X-ID-Token"
+	headerKeyIdToken       = "X-Id-Token"
 )
 
 func ApplyAcceptHeader(query models.Query, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
@@ -137,8 +137,8 @@ func ApplyForwardedOAuthIdentity(requestHeaders map[string]string, settings mode
 		authHeader := dummyHeader
 		token := dummyHeader
 		if includeSect {
-			authHeader = requestHeaders[headerKeyAuthorization]
-			token = requestHeaders[headerKeyIdToken]
+			authHeader = getQueryReqHeader(requestHeaders, headerKeyAuthorization)
+			token = getQueryReqHeader(requestHeaders, headerKeyIdToken)
 		}
 		req.Header.Add(headerKeyAuthorization, authHeader)
 		if requestHeaders[headerKeyIdToken] != "" {
@@ -146,4 +146,17 @@ func ApplyForwardedOAuthIdentity(requestHeaders map[string]string, settings mode
 		}
 	}
 	return req
+}
+
+
+func getQueryReqHeader(requestHeaders map[string]string, headerName string) string {
+	headerNameCI := strings.ToLower(headerName)
+
+	for name, value := range requestHeaders {
+		if strings.ToLower(name) == headerNameCI {
+			return value
+		}
+	}
+
+	return ""
 }
