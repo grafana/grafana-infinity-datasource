@@ -45,8 +45,8 @@ func TestAuthentication(t *testing.T) {
 		t.Run("should set basic auth headers when set the username and password", func(t *testing.T) {
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				assert.Equal(t, http.MethodGet, r.Method)
-				assert.Equal(t, "Basic "+base64.StdEncoding.EncodeToString([]byte("infinityUser:myPassword")), r.Header.Get("Authorization"))
-				assert.Equal(t, "", r.Header.Get("X-ID-Token"))
+				assert.Equal(t, "Basic "+base64.StdEncoding.EncodeToString([]byte("infinityUser:myPassword")), r.Header.Get(infinity.HeaderKeyAuthorization))
+				assert.Equal(t, "", r.Header.Get(infinity.HeaderKeyIdToken))
 				fmt.Fprintf(w, `{ "message" : "OK" }`)
 			}))
 			defer server.Close()
@@ -76,8 +76,8 @@ func TestAuthentication(t *testing.T) {
 		t.Run("should return error when incorrect credentials set", func(t *testing.T) {
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				assert.Equal(t, http.MethodGet, r.Method)
-				assert.Equal(t, "", r.Header.Get("X-ID-Token"))
-				if r.Header.Get("Authorization") == "Basic "+base64.StdEncoding.EncodeToString([]byte("infinityUser:myPassword")) {
+				assert.Equal(t, "", r.Header.Get(infinity.HeaderKeyIdToken))
+				if r.Header.Get(infinity.HeaderKeyAuthorization) == "Basic "+base64.StdEncoding.EncodeToString([]byte("infinityUser:myPassword")) {
 					fmt.Fprintf(w, "OK")
 					return
 				}
@@ -113,8 +113,8 @@ func TestAuthentication(t *testing.T) {
 		t.Run("should forward the oauth headers when forward oauth identity is set", func(t *testing.T) {
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				assert.Equal(t, http.MethodGet, r.Method)
-				assert.Equal(t, "foo", r.Header.Get("Authorization"))
-				assert.Equal(t, "bar", r.Header.Get("X-ID-Token"))
+				assert.Equal(t, "foo", r.Header.Get(infinity.HeaderKeyAuthorization))
+				assert.Equal(t, "bar", r.Header.Get(infinity.HeaderKeyIdToken))
 				fmt.Fprintf(w, `{ "message" : "OK" }`)
 			}))
 			defer server.Close()
@@ -137,8 +137,8 @@ func TestAuthentication(t *testing.T) {
 		t.Run("should not forward the oauth headers when forward oauth identity is not set", func(t *testing.T) {
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				assert.Equal(t, http.MethodGet, r.Method)
-				assert.Equal(t, "", r.Header.Get("Authorization"))
-				assert.Equal(t, "", r.Header.Get("X-ID-Token"))
+				assert.Equal(t, "", r.Header.Get(infinity.HeaderKeyAuthorization))
+				assert.Equal(t, "", r.Header.Get(infinity.HeaderKeyIdToken))
 				fmt.Fprintf(w, `{ "message" : "OK" }`)
 			}))
 			defer server.Close()
@@ -207,7 +207,7 @@ func TestAuthentication(t *testing.T) {
 					w.WriteHeader(http.StatusUnauthorized)
 					return
 				}
-				if r.Header.Get("Authorization") != "Bearer foo" {
+				if r.Header.Get(infinity.HeaderKeyAuthorization) != "Bearer foo" {
 					w.WriteHeader(http.StatusUnauthorized)
 					return
 				}
@@ -249,7 +249,7 @@ func TestAuthentication(t *testing.T) {
 		t.Run("should error when CA cert verification failed", func(t *testing.T) {
 			server := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				assert.Equal(t, http.MethodGet, r.Method)
-				assert.Equal(t, "", r.Header.Get("X-ID-Token"))
+				assert.Equal(t, "", r.Header.Get(infinity.HeaderKeyIdToken))
 				fmt.Fprintf(w, `{ "message" : "OK" }`)
 			}))
 			server.TLS = getServerCertificate(server.URL)
@@ -281,7 +281,7 @@ func TestAuthentication(t *testing.T) {
 		t.Run("should honour skip tls verify setting", func(t *testing.T) {
 			server := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				assert.Equal(t, http.MethodGet, r.Method)
-				assert.Equal(t, "", r.Header.Get("X-ID-Token"))
+				assert.Equal(t, "", r.Header.Get(infinity.HeaderKeyIdToken))
 				fmt.Fprintf(w, `{ "message" : "OK" }`)
 			}))
 			server.TLS = getServerCertificate(server.URL)

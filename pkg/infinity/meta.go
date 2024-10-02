@@ -139,7 +139,7 @@ func ApplyNotices(ctx context.Context, settings models.InfinitySettings, frame *
 func GetSecureHeaderWarnings(query models.Query) []data.Notice {
 	notices := []data.Notice{}
 	for _, h := range query.URLOptions.Headers {
-		if strings.EqualFold(h.Key, headerKeyAuthorization) {
+		if strings.EqualFold(h.Key, HeaderKeyAuthorization) {
 			notices = append(notices, data.Notice{
 				Severity: data.NoticeSeverityWarning,
 				Text:     fmt.Sprintf("for security reasons, don't include headers such as %s in the query. Instead, add them in the config where possible", h.Key),
