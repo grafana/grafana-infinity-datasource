@@ -148,7 +148,6 @@ func ApplyForwardedOAuthIdentity(requestHeaders map[string]string, settings mode
 	return req
 }
 
-
 func getQueryReqHeader(requestHeaders map[string]string, headerName string) string {
 	headerNameCI := strings.ToLower(headerName)
 
