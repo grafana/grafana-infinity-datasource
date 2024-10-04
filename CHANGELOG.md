@@ -1,5 +1,15 @@
 # Change Log
 
+## 2.11.0
+
+### Minor Changes
+
+🚀 Remove base URL deprecation
+
+### Patch Changes
+
+🐛 Fix forward oauth for x-id-token header
+
 ## 2.10.0
 
 🚀 **Improvement**: Remove deprecation for base URL and move it to URL, Headers & Params
