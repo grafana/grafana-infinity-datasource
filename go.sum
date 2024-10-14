@@ -97,8 +97,8 @@ github.com/grafana/dataplane/sdata v0.0.7 h1:CImITypIyS1jxijCR6xqKx71JnYAxcwpH9C
 github.com/grafana/dataplane/sdata v0.0.7/go.mod h1:Jvs5ddpGmn6vcxT7tCTWAZ1mgi4sbcdFt9utQx5uMAU=
 github.com/grafana/grafana-aws-sdk v0.24.0 h1:0RKCJTeIkpEUvLCTjGOK1+jYZpaE2nJaGghGLvtUsFs=
 github.com/grafana/grafana-aws-sdk v0.24.0/go.mod h1:3zghFF6edrxn0d6k6X9HpGZXDH+VfA+MwD2Pc/9X0ec=
-github.com/grafana/grafana-plugin-sdk-go v0.248.0 h1:wXseE6exRWfjUlqDr/ArocK1EPm8x/mhBdtL0AlIa5M=
-github.com/grafana/grafana-plugin-sdk-go v0.248.0/go.mod h1:sEi0wRVTvpxyB0KaMNbhPM74OnDMwVpah97usm6QXEM=
+github.com/grafana/grafana-plugin-sdk-go v0.252.0 h1:GEnMZOQl+yN96Cg9EPZAcPRKI65LeYvryAQzkYckES0=
+github.com/grafana/grafana-plugin-sdk-go v0.252.0/go.mod h1:gCGN9kHY3KeX4qyni3+Kead38Q+85pYOrsDcxZp6AIk=
 github.com/grafana/infinity-libs/lib/go/csvframer v1.0.1 h1:SBL+Ix6E1Ec6QPdAkq/yhyqvicV5wyWlHKB0bH8jjIA=
 github.com/grafana/infinity-libs/lib/go/csvframer v1.0.1/go.mod h1:gVqJA9np8h1RpZYemoVouIe/b3m2lUc5HVAbdM7K8sM=
 github.com/grafana/infinity-libs/lib/go/framesql v1.0.2 h1:fWTC2tG9nKx8xp9V/IXfeEC7auMEBTE/FxysEeKC1fg=
@@ -348,8 +348,8 @@ golang.org/x/net v0.0.0-20220722155237-a158d28d115b/go.mod h1:XRhObCWvk6IyKnWLug
 golang.org/x/net v0.1.0/go.mod h1:Cx3nUiGt4eDBEyega/BKRp+/AlGL8hYe7U9odMt2Cco=
 golang.org/x/net v0.29.0 h1:5ORfpBpCs4HzDYoodCDBbwHzdR5UrLBZ3sOnUJmFoHo=
 golang.org/x/net v0.29.0/go.mod h1:gLkgy8jTGERgjzMic6DS9+SP0ajcu6Xu3Orq/SpETg0=
-golang.org/x/oauth2 v0.22.0 h1:BzDx2FehcG7jJwgWLELCdmLuxk2i+x9UDpSiss2u0ZA=
-golang.org/x/oauth2 v0.22.0/go.mod h1:XYTD2NtWslqkgxebSiOHnXEap4TF09sJSc7H1sXbhtI=
+golang.org/x/oauth2 v0.23.0 h1:PbgcYx2W7i4LvjJWEbf0ngHV6qJYr86PkAV3bXdLEbs=
+golang.org/x/oauth2 v0.23.0/go.mod h1:XYTD2NtWslqkgxebSiOHnXEap4TF09sJSc7H1sXbhtI=
 golang.org/x/sync v0.0.0-20190423024810-112230192c58/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
 golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
 golang.org/x/sync v0.0.0-20201020160332-67f06af15bc9/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
