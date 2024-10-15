@@ -33,7 +33,8 @@ func PostProcessFrame(ctx context.Context, frame *data.Frame, query models.Query
 	if err != nil {
 		logger.Error("error applying filter", "error", err.Error())
 		frame.Meta.Custom = &CustomMeta{Query: query, Error: err.Error()}
-		return frame, errorsource.PluginError(fmt.Errorf("error applying filter. %w", err), false)
+		err = addErrorSourceToTransformError(fmt.Errorf("error applying filter. %w", err))
+		return frame, err
 	}
 	if strings.TrimSpace(query.SummarizeExpression) != "" {
 		alias := query.SummarizeAlias
@@ -69,8 +70,10 @@ func addErrorSourceToTransformError(err error) error {
 		t.ErrMergeTransformationNoFrameSupplied, 
 		t.ErrMergeTransformationDifferentFields, 
 		t.ErrMergeTransformationDifferentFieldNames, 
-		t.ErrMergeTransformationDifferentFieldTypes, 
+		t.ErrMergeTransformationDifferentFieldTypes,
+		t.ErrInvalidFilterExpression,
 		framesql.ErrEmptySummarizeExpression,
+		framesql.ErrExpressionNotFoundInFields,
 	}
 	
 	for _, e := range downstreamErrors {

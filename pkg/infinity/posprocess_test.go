@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
+	"github.com/grafana/infinity-libs/lib/go/framesql"
 	"github.com/grafana/infinity-libs/lib/go/transformations"
 	"github.com/stretchr/testify/require"
 )
@@ -30,6 +31,16 @@ tests := []struct {
 		{
 			name:            "Downstream error joined - ErrNotUniqueFieldNames",
 			inputError:      errors.Join(transformations.ErrNotUniqueFieldNames, fmt.Errorf("some random error")),
+			isDownstream:    true,
+		},
+		{
+			name:            "Downstream error joined - ErrExpressionNotFoundInFields",
+			inputError:      errors.Join(framesql.ErrExpressionNotFoundInFields, fmt.Errorf("some random error")),
+			isDownstream:    true,
+		},
+				{
+			name:            "Downstream error joined - ErrInvalidFilterExpression",
+			inputError:      errors.Join(transformations.ErrInvalidFilterExpression, fmt.Errorf("some random error")),
 			isDownstream:    true,
 		},
 		{
