@@ -5,7 +5,7 @@ go 1.22.1
 require (
 	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.3.1
 	github.com/grafana/grafana-aws-sdk v0.31.2
-	github.com/grafana/grafana-plugin-sdk-go v0.251.0
+	github.com/grafana/grafana-plugin-sdk-go v0.252.0
 	github.com/grafana/infinity-libs/lib/go/csvframer v1.0.1
 	github.com/grafana/infinity-libs/lib/go/framesql v1.0.1
 	github.com/grafana/infinity-libs/lib/go/gframer v1.0.0
