@@ -1,5 +1,12 @@
 # Change Log
 
+## 2.11.1
+
+🐛 **Bug fix**: Fix downstream errors for ErrExpressionNotFoundInFields and ErrInvalidFilterExpression
+
+⚙️ **Chore**: Bump `github.com/grafana/grafana-plugin-sdk-go` from `0.248.0` to `0.255.0`
+⚙️ **Chore**: Bump `jsonpath-plus` to `10.0.1`
+
 ## 2.11.0
 
 ### Minor Changes
