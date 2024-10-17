@@ -2,7 +2,6 @@ package infinity
 
 import (
 	"context"
-	"errors"
 	"net/http"
 	"net/url"
 	"strings"
@@ -89,7 +88,7 @@ func ApplyDigestAuth(ctx context.Context, httpClient *http.Client, settings mode
 func IsDigestAuthConfigured(settings models.InfinitySettings) bool {
 	return settings.AuthenticationMethod == models.AuthenticationMethodDigestAuth
 }
-func ApplyAWSAuth(ctx context.Context, httpClient *http.Client, settings models.InfinitySettings) (*http.Client, error) {
+func ApplyAWSAuth(ctx context.Context, httpClient *http.Client, settings models.InfinitySettings) *http.Client {
 	ctx, span := tracing.DefaultTracer().Start(ctx, "ApplyAWSAuth")
 	defer span.End()
 	if IsAwsAuthConfigured(settings) {
@@ -113,18 +112,15 @@ func ApplyAWSAuth(ctx context.Context, httpClient *http.Client, settings models.
 			AccessKey: settings.AWSAccessKey,
 			SecretKey: settings.AWSSecretKey,
 		}
-		authSettings, found := awsds.ReadAuthSettingsFromContext(ctx)
-		if !found {
-			return nil, errors.New("AWS auth settings not found in context")
-		}
 
+		authSettings := awsds.ReadAuthSettings(ctx)
 		rt, _ := sigv4.New(conf, *authSettings, sigv4.RoundTripperFunc(func(req *http.Request) (*http.Response, error) {
 			req.Header.Add("Accept", "application/json")
 			return tempHttpClient.Do(req)
 		}))
 		httpClient.Transport = rt
 	}
-	return httpClient, nil
+	return httpClient
 }
 
 func IsAwsAuthConfigured(settings models.InfinitySettings) bool {

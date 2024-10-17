@@ -108,12 +108,8 @@ func NewClient(ctx context.Context, settings models.InfinitySettings) (client *C
 	httpClient = ApplyDigestAuth(ctx, httpClient, settings)
 	httpClient = ApplyOAuthClientCredentials(ctx, httpClient, settings)
 	httpClient = ApplyOAuthJWT(ctx, httpClient, settings)
-	httpClient, err = ApplyAWSAuth(ctx, httpClient, settings)
-	if err != nil {
-		logger.Error("error applying aws auth", "datasource uid", settings.UID, "datasource name", settings.Name)
-		return client, err
-	}
-	
+	httpClient = ApplyAWSAuth(ctx, httpClient, settings)
+
 	httpClient, err = ApplySecureSocksProxyConfiguration(ctx, httpClient, settings)
 	if err != nil {
 		logger.Error("error applying secure socks proxy", "datasource uid", settings.UID, "datasource name", settings.Name)
