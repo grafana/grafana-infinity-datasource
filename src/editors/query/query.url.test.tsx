@@ -1,7 +1,7 @@
 import React from 'react';
 import { URL } from './query.url';
 import { screen, render } from '@testing-library/react';
-import { InfinityQuery } from 'types';
+import { InfinityQueryType, InfinityQueryWithURLSource } from 'types';
 
 describe('URL', () => {
   it('should show changed URL', () => {
@@ -9,7 +9,7 @@ describe('URL', () => {
       url: 'https://example1.com',
       type: 'json',
       source: 'url',
-    } as InfinityQuery;
+    } as InfinityQueryWithURLSource<InfinityQueryType>;
 
     const props = {
       query: mockQuery1,
@@ -25,7 +25,7 @@ describe('URL', () => {
       url: 'https://example2.com',
       type: 'json',
       source: 'url',
-    } as InfinityQuery;
+    } as InfinityQueryWithURLSource<InfinityQueryType>;
 
     rerender(<URL {...props} query={mockQuery2} />);
     expect(screen.getByDisplayValue('https://example2.com')).toBeInTheDocument();
