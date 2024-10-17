@@ -6,6 +6,7 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/grafana/grafana-aws-sdk/pkg/awsds"
 	"github.com/grafana/grafana-aws-sdk/pkg/sigv4"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"github.com/icholy/digest"
@@ -111,7 +112,9 @@ func ApplyAWSAuth(ctx context.Context, httpClient *http.Client, settings models.
 			AccessKey: settings.AWSAccessKey,
 			SecretKey: settings.AWSSecretKey,
 		}
-		rt, _ := sigv4.New(conf, sigv4.RoundTripperFunc(func(req *http.Request) (*http.Response, error) {
+
+		authSettings := awsds.ReadAuthSettings(ctx)
+		rt, _ := sigv4.New(conf, *authSettings, sigv4.RoundTripperFunc(func(req *http.Request) (*http.Response, error) {
 			req.Header.Add("Accept", "application/json")
 			return tempHttpClient.Do(req)
 		}))
