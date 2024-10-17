@@ -56,7 +56,7 @@ export class JSONParser extends InfinityParser<InfinityJSONQuery | InfinityGraph
           JSONPath({
             path: rootSelect,
             json: JSONResponse,
-            preventEval: true,
+            eval: false,
           })
         );
       } else {
