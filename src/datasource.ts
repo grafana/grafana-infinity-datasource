@@ -67,7 +67,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
               .then((res) => {
                 this.getResults(request, res)
                   .then((r) => {
-                    if (r && r.data && r.data) {
+                    if (r?.data) {
                       resolve(getTemplateVariablesFromResult(r.data[0]) as MetricFindValue[]);
                     } else {
                       resolve([]);
