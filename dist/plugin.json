@@ -1,0 +1,101 @@
+{
+  "$schema": "https://raw.githubusercontent.com/grafana/grafana/main/docs/sources/developers/plugins/plugin.schema.json",
+  "name": "Infinity",
+  "id": "yesoreyeram-infinity-datasource",
+  "type": "datasource",
+  "executable": "gpx_infinity",
+  "backend": true,
+  "metrics": true,
+  "annotations": true,
+  "alerting": true,
+  "logs": true,
+  "tracing": true,
+  "info": {
+    "version": "2.11.2",
+    "updated": "2024-10-29",
+    "description": "JSON API, CSV, TSV, XML, GraphQL, HTML, Google Sheets and HTTP/REST API datasource for Grafana. Do infinite things with Grafana. Transform data with UQL/GROQ. Visualize data from many apis including Amazon AWS, Microsoft Azure, Google Cloud / GCP and RSS/ATOM feeds directly. Also support visualizing logs and traces.",
+    "author": {
+      "name": "Grafana Labs",
+      "url": "https://grafana.com"
+    },
+    "logos": {
+      "small": "img/icon.svg",
+      "large": "img/icon.svg"
+    },
+    "keywords": [
+      "atom",
+      "aws",
+      "azure",
+      "csv",
+      "feed",
+      "gcp",
+      "google cloud",
+      "grafana",
+      "graphql",
+      "groq",
+      "html",
+      "inline",
+      "json api",
+      "json",
+      "node graph",
+      "random walk",
+      "rest api",
+      "rss feed",
+      "rss",
+      "scraping",
+      "simple-json",
+      "soap",
+      "transformations",
+      "uql",
+      "url",
+      "xml"
+    ],
+    "screenshots": [
+      {
+        "name": "features",
+        "path": "img/slide-features.png"
+      },
+      {
+        "name": "rest-api",
+        "path": "img/slide-rest-api.png"
+      },
+      {
+        "name": "variables",
+        "path": "img/slide-variables.png"
+      },
+      {
+        "name": "series",
+        "path": "img/slide-series.png"
+      }
+    ],
+    "links": [
+      {
+        "name": "Docs",
+        "url": "https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource"
+      },
+      {
+        "name": "Github",
+        "url": "https://github.com/grafana/grafana-infinity-datasource"
+      },
+      {
+        "name": "Need Help?",
+        "url": "https://github.com/grafana/grafana-infinity-datasource/discussions/categories/q-a"
+      },
+      {
+        "name": "Report Bug",
+        "url": "https://github.com/grafana/grafana-infinity-datasource/issues/new/choose"
+      },
+      {
+        "name": "Examples",
+        "url": "https://github.com/grafana/grafana-infinity-datasource/discussions/categories/show-and-tell"
+      }
+    ]
+  },
+  "dependencies": {
+    "grafanaDependency": ">=9.5.15",
+    "grafanaVersion": "9.5.x",
+    "plugins": []
+  },
+  "includes": [],
+  "routes": []
+}
