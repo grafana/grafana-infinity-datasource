@@ -1,21 +1,26 @@
 # Change Log
 
+## 2.11.2
+
+⚙️ **Chore**: Updated backend plugin SDK `github.com/grafana/grafana-plugin-sdk-go` from `0.255.0` to `0.258.0`
+
+⚙️ **Chore**: Updated frontend dependency `jsonpath-plus` from `10.0.1` to `10.1.0`
+
+⚙️ **Chore**: Updated frontend indirect dependency `uplot` to `1.6.31`
+
 ## 2.11.1
 
 🐛 **Bug fix**: Fix downstream errors for ErrExpressionNotFoundInFields and ErrInvalidFilterExpression
 
 ⚙️ **Chore**: Bump `github.com/grafana/grafana-plugin-sdk-go` from `0.248.0` to `0.255.0`
+
 ⚙️ **Chore**: Bump `jsonpath-plus` to `10.0.1`
 
 ## 2.11.0
 
-### Minor Changes
+🚀 **Improvement**: Remove base URL deprecation
 
-🚀 Remove base URL deprecation
-
-### Patch Changes
-
-🐛 Fix forward oauth for x-id-token header
+🐛 **Bug fix**: Fix forward oauth for x-id-token header
 
 ## 2.10.0
 
@@ -24,6 +29,7 @@
 🐛 **Bug fix**: Fix error source for identified downstream errors
 
 ⚙️ **Chore**: Bump `github.com/grafana/grafana-plugin-sdk-go` from `0.241.0` to `0.248.0`
+
 ⚙️ **Chore**: Bump `path-to-regexp` from `1.8.0` to `1.9.0`
 
 ## 2.9.6
@@ -31,9 +37,13 @@
 🐛 **Bug fix**: Fix error source for invalid JSONata errors
 
 ⚙️ **Chore**: Bump `github.com/grafana/grafana-plugin-sdk-go` from `0.241.0` to `0.245.0`
+
 ⚙️ **Chore**: Update level of non-error log lines from error to debug
+
 ⚙️ **Chore**: Bump `webpack` from `5.86.0` to `5.94.0`
+
 ⚙️ **Chore**: Bump `webpack` from `5.86.0` to `5.94.0`
+
 ⚙️ **Chore**: Bump `micromatch` from `4.0.7` to `4.0.8`
 
 ## 2.9.5

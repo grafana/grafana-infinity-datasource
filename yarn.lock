@@ -6883,10 +6883,10 @@ jsonfile@^6.0.1:
   optionalDependencies:
     graceful-fs "^4.1.6"
 
-jsonpath-plus@10.0.1:
-  version "10.0.1"
-  resolved "https://registry.yarnpkg.com/jsonpath-plus/-/jsonpath-plus-10.0.1.tgz#a61f4dc6c7489955af0872b0956cc42fbbacb5ab"
-  integrity sha512-30DeH2QD4nL1IpDLPIFz09G5XyLvh+oNMUI2Zxf4tbrlsVHs0e3VPnwpOnSTFb4yM0dfQK2WGKLsSaAS8V62rw==
+jsonpath-plus@10.1.0:
+  version "10.1.0"
+  resolved "https://registry.yarnpkg.com/jsonpath-plus/-/jsonpath-plus-10.1.0.tgz#e8724c721ac60ff2db667066131b1a2c992ffcf0"
+  integrity sha512-gHfV1IYqH8uJHYVTs8BJX1XKy2/rR93+f8QQi0xhx95aCiXn1ettYAd5T+7FU6wfqyDoX/wy0pm/fL3jOKJ9Lg==
   dependencies:
     "@jsep-plugin/assignment" "^1.2.1"
     "@jsep-plugin/regex" "^1.0.3"
@@ -9805,10 +9805,10 @@ update-browserslist-db@^1.0.16:
     escalade "^3.1.2"
     picocolors "^1.0.1"
 
-uplot@1.6.28:
-  version "1.6.28"
-  resolved "https://registry.yarnpkg.com/uplot/-/uplot-1.6.28.tgz#bce4fe5e65e4d3e7f2c2288ad580b4fffbbc68cc"
-  integrity sha512-6AQ/Hu2ZvwF1P6PtIELdWKFml8Vvf3PUqrkVndL4A1+s/0loHwXfsk3yMwy4WGkRAt0MAMpf0uKLa9h0Yt3miw==
+uplot@1.6.28, uplot@1.6.31:
+  version "1.6.31"
+  resolved "https://registry.yarnpkg.com/uplot/-/uplot-1.6.31.tgz#092a4b586590e9794b679e1df885a15584b03698"
+  integrity sha512-sQZqSwVCbJGnFB4IQjQYopzj5CoTZJ4Br1fG/xdONimqgHmsacvCjNesdGDypNKFbrhLGIeshYhy89FxPF+H+w==
 
 uql@0.0.23:
   version "0.0.23"

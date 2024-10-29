@@ -5,7 +5,7 @@ go 1.22.1
 require (
 	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.3.1
 	github.com/grafana/grafana-aws-sdk v0.31.2
-	github.com/grafana/grafana-plugin-sdk-go v0.255.0
+	github.com/grafana/grafana-plugin-sdk-go v0.258.0
 	github.com/grafana/infinity-libs/lib/go/csvframer v1.0.1
 	github.com/grafana/infinity-libs/lib/go/framesql v1.0.2
 	github.com/grafana/infinity-libs/lib/go/gframer v1.0.0
@@ -34,7 +34,7 @@ require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/cheekybits/genny v1.0.0 // indirect
 	github.com/chromedp/cdproto v0.0.0-20240810084448-b931b754e476 // indirect
-	github.com/cpuguy83/go-md2man/v2 v2.0.4 // indirect
+	github.com/cpuguy83/go-md2man/v2 v2.0.5 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/elazarl/goproxy v0.0.0-20240726154733-8b0c20506380 // indirect
 	github.com/fatih/color v1.17.0 // indirect
@@ -91,7 +91,7 @@ require (
 	github.com/perimeterx/marshmallow v1.1.5 // indirect
 	github.com/pierrec/lz4/v4 v4.1.21 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/prometheus/client_golang v1.20.4 // indirect
+	github.com/prometheus/client_golang v1.20.5 // indirect
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/common v0.60.0 // indirect
 	github.com/prometheus/procfs v0.15.1 // indirect
@@ -105,12 +105,12 @@ require (
 	github.com/unknwon/bra v0.0.0-20200517080246-1e3013ecaff8 // indirect
 	github.com/unknwon/com v1.0.1 // indirect
 	github.com/unknwon/log v0.0.0-20200308114134-929b1006e34a // indirect
-	github.com/urfave/cli v1.22.15 // indirect
+	github.com/urfave/cli v1.22.16 // indirect
 	github.com/xiatechs/jsonata-go v1.8.7 // indirect
 	github.com/zeebo/xxh3 v1.0.2 // indirect
-	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.53.0 // indirect
-	go.opentelemetry.io/contrib/instrumentation/net/http/httptrace/otelhttptrace v0.53.0 // indirect
-	go.opentelemetry.io/contrib/propagators/jaeger v1.29.0 // indirect
+	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.56.0 // indirect
+	go.opentelemetry.io/contrib/instrumentation/net/http/httptrace/otelhttptrace v0.56.0 // indirect
+	go.opentelemetry.io/contrib/propagators/jaeger v1.31.0 // indirect
 	go.opentelemetry.io/contrib/samplers/jaegerremote v0.25.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.31.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc v1.31.0 // indirect
