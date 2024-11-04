@@ -1,5 +1,5 @@
 ---
-slug: '/docs/transformations'
+slug: '/transformations'
 title: 'Transformations'
 menuTitle: Transformations
 description: Transformations
