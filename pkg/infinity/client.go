@@ -196,7 +196,13 @@ func (client *Client) req(ctx context.Context, url string, body io.Reader, setti
 	ctx, span := tracing.DefaultTracer().Start(ctx, "client.req")
 	logger := backend.Logger.FromContext(ctx)
 	defer span.End()
-	req, _ := GetRequest(ctx, settings, body, query, requestHeaders, true)
+	req, err := GetRequest(ctx, settings, body, query, requestHeaders, true)
+	if err != nil {
+		return nil, http.StatusInternalServerError, 0, errorsource.DownstreamError(fmt.Errorf("error preparing request. %w", err), false)
+	}
+	if req == nil {
+		return nil, http.StatusInternalServerError, 0, errorsource.DownstreamError(errors.New("error preparing request. invalid request constructed"), false)
+	}
 	startTime := time.Now()
 	if !CanAllowURL(req.URL.String(), settings.AllowedHosts) {
 		logger.Debug("url is not in the allowed list. make sure to match the base URL with the settings", "url", req.URL.String())
