@@ -257,6 +257,7 @@ func TestNormalizeURL(t *testing.T) {
 		{u: "https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.csv", want: "https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.csv"},
 		{u: "https://foo.com/channels/38629/feed.json", want: "https://foo.com/channels/38629/feed.json"},
 		{u: "https://gitlab.com/restcountries/restcountries/-/blob/master/src/main/resources/countriesV3.json", want: "https://gitlab.com/restcountries/restcountries/-/raw/master/src/main/resources/countriesV3.json"},
+		{u: "https://gitlab.com/api/v4/projects", want: "https://gitlab.com/api/v4/projects"},
 		{u: "https://bitbucket.org/yesoreyeram/test_repo/src/master/data/countries.json", want: "https://bitbucket.org/yesoreyeram/test_repo/raw/master/data/countries.json"},
 	}
 	for _, tt := range tests {
