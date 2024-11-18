@@ -63,7 +63,7 @@
     "groq-js": "1.1.8",
     "json-to-pretty-yaml": "^1.2.2",
     "jsonata": "2.0.4",
-    "jsonpath-plus": "10.1.0",
+    "jsonpath-plus": "10.2.0",
     "lodash": "^4.17.21",
     "mathjs": "11.7.0",
     "react": "18.2.0",
