@@ -1,5 +1,13 @@
 # Change Log
 
+## 2.11.3
+
+🐛 **Bug fix**: Fixes the panic when preparing the request throws error
+
+🐛 **Bug fix**: Fixed a bug where gitlab urls were normalized incorrectly
+
+⚙️ **Chore**: Updated `jsonpath-plus` to `10.2.0`
+
 ## 2.11.2
 
 ⚙️ **Chore**: Updated backend plugin SDK `github.com/grafana/grafana-plugin-sdk-go` from `0.255.0` to `0.258.0`
