@@ -6,7 +6,7 @@
 
 🐛 **Bug fix**: Fixed a bug where gitlab urls were normalized incorrectly
 
-⚙️ **Chore**: Updated `jsonpath-plus` to 10.2.0
+⚙️ **Chore**: Updated `jsonpath-plus` to `10.2.0`
 
 ## 2.11.2
 
