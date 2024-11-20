@@ -9,7 +9,6 @@ import (
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/infinity"
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
-	"github.com/grafana/grafana-infinity-datasource/pkg/pluginhost"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/infinity-libs/lib/go/jsonframer"
 	"github.com/stretchr/testify/require"
@@ -25,7 +24,7 @@ func TestErrors(t *testing.T) {
 			server.Start()
 			defer server.Close()
 			client, _ := infinity.NewClient(context.TODO(), models.InfinitySettings{})
-			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
+			res := queryData(t, context.Background(), backend.DataQuery{
 				JSON: []byte(fmt.Sprintf(`{ "url":  "%s" }`, server.URL)),
 			}, *client, map[string]string{}, backend.PluginContext{})
 			require.Nil(t, res.Error)
@@ -38,7 +37,7 @@ func TestErrors(t *testing.T) {
 			server.Start()
 			defer server.Close()
 			client, _ := infinity.NewClient(context.TODO(), models.InfinitySettings{})
-			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
+			res := queryData(t, context.Background(), backend.DataQuery{
 				JSON: []byte(fmt.Sprintf(`{ "url":  "%s" }`, server.URL)),
 			}, *client, map[string]string{}, backend.PluginContext{})
 			require.NotNil(t, res.Error)
@@ -54,7 +53,7 @@ func TestErrors(t *testing.T) {
 			server.Start()
 			defer server.Close()
 			client, _ := infinity.NewClient(context.TODO(), models.InfinitySettings{})
-			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
+			res := queryData(t, context.Background(), backend.DataQuery{
 				JSON: []byte(fmt.Sprintf(`{ "url":  "%s" }`, server.URL)),
 			}, *client, map[string]string{}, backend.PluginContext{})
 			require.NotNil(t, res.Error)
@@ -70,7 +69,7 @@ func TestErrors(t *testing.T) {
 			server.Start()
 			defer server.Close()
 			client, _ := infinity.NewClient(context.TODO(), models.InfinitySettings{})
-			res := pluginhost.QueryData(context.Background(), backend.DataQuery{
+			res := queryData(t, context.Background(), backend.DataQuery{
 				JSON: []byte(fmt.Sprintf(`{ "url":  "%s", "parser": "backend", "root_selector": "foo bar baz"}`, server.URL)),
 			}, *client, map[string]string{}, backend.PluginContext{})
 			require.NotNil(t, res.Error)
