@@ -1,6 +1,5 @@
-import { updateDatasourcePluginJsonDataOption, DataSourcePluginOptionsEditorProps, DataSourceSettings } from '@grafana/data';
-import { Button, Drawer, InlineFormLabel, Input, LegacyForms } from '@grafana/ui';
-import { set } from 'lodash';
+import { DataSourcePluginOptionsEditorProps, DataSourceSettings } from '@grafana/data';
+import { Button, Drawer, InlineFormLabel, Input, Stack } from '@grafana/ui';
 import React, { useState } from 'react';
 import { InfinityQueryEditor } from './../query/infinityQuery';
 import { Datasource } from './../../datasource';
@@ -20,7 +19,6 @@ const DefaultGlobalQuery: InfinityQuery = {
 export const GlobalQueryEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
   const { options, onOptionsChange } = props;
   const { jsonData } = options;
-  const { FormField } = LegacyForms;
 
   const onJsonDataChange = <T extends keyof InfinityOptions, V extends InfinityOptions[T]>(key: T, value: V) => {
     onOptionsChange({ ...options, jsonData: { ...jsonData, [key]: value } });
@@ -40,6 +38,7 @@ export const GlobalQueryEditor = (props: DataSourcePluginOptionsEditorProps<Infi
     ];
     onJsonDataChange('global_queries', global_queries);
   };
+
   const deleteGlobalQuery = (index: number) => {
     if (jsonData.global_queries && jsonData.global_queries.length > 0) {
       let global_queries = [...(jsonData.global_queries || [])];
@@ -50,62 +49,42 @@ export const GlobalQueryEditor = (props: DataSourcePluginOptionsEditorProps<Infi
 
   return (
     <>
-      {options.jsonData.global_queries &&
-        options.jsonData.global_queries.map((q: GlobalInfinityQuery, index: number) => (
-          <>
-            <div className="gf-form-inline">
-              <div className="gf-form">
-                <FormField
-                  label="Query Name"
-                  name="name"
-                  labelWidth={8}
-                  disabled
-                  value={q.name || ''}
-                  onChange={(e) => {
-                    set(options, `jsonData.global_queries[${index}].name`, e.target.value);
-                    updateDatasourcePluginJsonDataOption(props, 'global_queries', options.jsonData.global_queries);
-                  }}
-                ></FormField>
-                <FormField
-                  label="Query ID"
-                  name="id"
-                  labelWidth={5}
-                  disabled
-                  value={q.id || ''}
-                  onChange={(e) => {
-                    set(options, `jsonData.global_queries[${index}].id`, e.target.value);
-                    updateDatasourcePluginJsonDataOption(props, 'global_queries', options.jsonData.global_queries);
-                  }}
-                ></FormField>
-                <GlobalQuery
-                  options={options}
-                  query={q}
-                  onUpdate={(q: GlobalInfinityQuery) => {
-                    onJsonDataChange(
-                      'global_queries',
-                      (jsonData.global_queries || []).map((query, i) => {
-                        return i === index ? q : query;
-                      })
-                    );
-                  }}
-                />
-                <Button
-                  icon="trash-alt"
-                  variant="destructive"
-                  size="sm"
-                  style={{ margin: '5px' }}
-                  onClick={(e) => {
-                    deleteGlobalQuery(index);
-                    e.preventDefault();
-                  }}
-                >
-                  Delete
-                </Button>
-              </div>
-            </div>
-          </>
-        ))}
-      <Button variant="secondary" icon="plus" type="button" onClick={addGlobalQuery}>
+      <Stack direction="column">
+        {options.jsonData.global_queries &&
+          options.jsonData.global_queries.map((q: GlobalInfinityQuery, index: number) => (
+            <Stack key={index}>
+              <InlineFormLabel width={8}>Query Name</InlineFormLabel>
+              <Input value={q.name || ''} disabled />
+              <InlineFormLabel width={8}>Query ID</InlineFormLabel>
+              <Input value={q.id || ''} disabled />
+              <GlobalQuery
+                options={options}
+                query={q}
+                onUpdate={(q: GlobalInfinityQuery) => {
+                  onJsonDataChange(
+                    'global_queries',
+                    (jsonData.global_queries || []).map((query, i) => {
+                      return i === index ? q : query;
+                    })
+                  );
+                }}
+              />
+              <Button
+                icon="trash-alt"
+                variant="destructive"
+                size="sm"
+                style={{ margin: '5px' }}
+                onClick={(e) => {
+                  deleteGlobalQuery(index);
+                  e.preventDefault();
+                }}
+              >
+                Delete
+              </Button>
+            </Stack>
+          ))}
+      </Stack>
+      <Button variant="secondary" icon="plus" type="button" onClick={addGlobalQuery} style={{ marginTop: '10px' }}>
         Add Global Query
       </Button>
     </>
@@ -135,8 +114,7 @@ const GlobalQuery = (props: { query: GlobalInfinityQuery; onUpdate: (query: Glob
         <Drawer
           onClose={() => setPopupState(false)}
           title={`Global Query (${id})`}
-          expandable
-          width="70%"
+          size="lg"
           subtitle={
             <>
               <div className="muted">{name}</div>
@@ -144,31 +122,27 @@ const GlobalQuery = (props: { query: GlobalInfinityQuery; onUpdate: (query: Glob
             </>
           }
         >
-          <div className="gf-form">
-            <InlineFormLabel width={8} className="query-keyword">
-              Name
-            </InlineFormLabel>
-            <Input value={name} onChange={(e) => setName(e.currentTarget.value)} onBlur={() => onUpdate({ ...query, name })}></Input>
-          </div>
-          <div className="gf-form">
-            <InlineFormLabel width={8} className="query-keyword">
-              ID
-            </InlineFormLabel>
-            <Input value={id} onChange={(e) => setId(e.currentTarget.value)} onBlur={() => onUpdate({ ...query, id })}></Input>
-          </div>
-          <InfinityQueryEditor
-            query={query.query}
-            onChange={(newQuery: InfinityQuery) => onUpdate({ ...query, query: newQuery })}
-            onRunQuery={() => {}}
-            instanceSettings={options}
-            mode="global"
-            datasource={{} as Datasource}
-          />
-          <div className="gf-form">
+          <Stack direction="column">
+            <Stack>
+              <InlineFormLabel width={8}>Name</InlineFormLabel>
+              <Input value={name} onChange={(e) => setName(e.currentTarget.value)} onBlur={() => onUpdate({ ...query, name })}></Input>
+            </Stack>
+            <Stack>
+              <InlineFormLabel width={8}>ID</InlineFormLabel>
+              <Input value={id} onChange={(e) => setId(e.currentTarget.value)} onBlur={() => onUpdate({ ...query, id })}></Input>
+            </Stack>
+            <InfinityQueryEditor
+              query={query.query}
+              onChange={(newQuery: InfinityQuery) => onUpdate({ ...query, query: newQuery })}
+              onRunQuery={() => {}}
+              instanceSettings={options}
+              mode="global"
+              datasource={{} as Datasource}
+            />
             <Button variant="primary" onClick={() => setPopupState(false)}>
               Update
             </Button>
-          </div>
+          </Stack>
         </Drawer>
       )}
     </>
