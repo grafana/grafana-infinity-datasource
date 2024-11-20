@@ -9,11 +9,12 @@ import (
 	"strings"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
+	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"moul.io/http2curl"
 )
 
-func GetRequest(ctx context.Context, settings models.InfinitySettings, body io.Reader, query models.Query, requestHeaders map[string]string, includeSect bool) (req *http.Request, err error) {
+func GetRequest(ctx context.Context, settings models.InfinitySettings, body io.Reader, query models.Query, requestHeaders map[string]string, includeSect bool, pCtx *backend.PluginContext) (req *http.Request, err error) {
 	ctx, span := tracing.DefaultTracer().Start(ctx, "GetRequest")
 	defer span.End()
 	url, err := GetQueryURL(ctx, settings, query, includeSect)
@@ -34,7 +35,7 @@ func GetRequest(ctx context.Context, settings models.InfinitySettings, body io.R
 	req = ApplyBearerToken(settings, req, includeSect)
 	req = ApplyApiKeyAuth(settings, req, includeSect)
 	req = ApplyForwardedOAuthIdentity(requestHeaders, settings, req, includeSect)
-	req = ApplyGrafanaHeaders(requestHeaders, settings, req) // Add Grafana headers if enabled
+	req = ApplyGrafanaHeaders(settings, req, pCtx)
 	return req, err
 }
 
@@ -96,7 +97,7 @@ func NormalizeURL(u string) string {
 func (client *Client) GetExecutedURL(ctx context.Context, query models.Query) string {
 	out := []string{}
 	if query.Source != "inline" && query.Source != "azure-blob" {
-		req, err := GetRequest(ctx, client.Settings, GetQueryBody(ctx, query), query, map[string]string{}, false)
+		req, err := GetRequest(ctx, client.Settings, GetQueryBody(ctx, query), query, map[string]string{}, false, nil)
 		if err != nil {
 			return fmt.Sprintf("error retrieving full url. %s", query.URL)
 		}
@@ -126,16 +127,15 @@ func (client *Client) GetExecutedURL(ctx context.Context, query models.Query) st
 }
 
 // ApplyGrafanaHeaders adds Grafana-specific headers if enabled in settings
-func ApplyGrafanaHeaders(requestHeaders map[string]string, settings models.InfinitySettings, req *http.Request) *http.Request {
-	if settings.SendUserHeader {
-		if user, exists := requestHeaders["X-Grafana-User"]; exists {
-			req.Header.Set("X-Grafana-User", user)
-		}
+func ApplyGrafanaHeaders(settings models.InfinitySettings, req *http.Request, pCtx *backend.PluginContext) *http.Request {
+	if pCtx == nil {
+		return req
 	}
-	if settings.SendDatasourceIDHeader {
-		if dsID, exists := requestHeaders["X-Grafana-Datasource-Id"]; exists {
-			req.Header.Set("X-Grafana-Datasource-Id", dsID)
-		}
+	if settings.SendUserHeader && pCtx.User != nil {
+		req.Header.Set("X-Grafana-User", pCtx.User.Login)
+	}
+	if settings.SendDatasourceIDHeader && pCtx.DataSourceInstanceSettings != nil {
+		req.Header.Set("X-Grafana-Datasource-Id", fmt.Sprintf("%d", pCtx.DataSourceInstanceSettings.ID))
 	}
 	return req
 }

@@ -58,7 +58,7 @@ func CheckHealth(ctx context.Context, client *infinity.Client, req *backend.Chec
 			URLOptions: models.URLOptions{
 				Method: http.MethodGet,
 			},
-		}, req.Headers)
+		}, req.Headers, &backend.PluginContext{})
 		if err != nil {
 			return &backend.CheckHealthResult{
 				Status:  backend.HealthStatusError,
