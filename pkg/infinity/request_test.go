@@ -3,6 +3,7 @@ package infinity_test
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"testing"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/infinity"
@@ -193,6 +194,98 @@ func Test_getQueryURL(t *testing.T) {
 		})
 	}
 }
+
+func Test_ApplyGrafanaHeaders(t *testing.T) {
+	tests := []struct {
+		name           string
+		settings       models.InfinitySettings
+		requestHeaders map[string]string
+		want           map[string]string
+	}{
+		{
+			name: "should set both headers when enabled and headers exist",
+			settings: models.InfinitySettings{
+				SendUserHeader:         true,
+				SendDatasourceIDHeader: true,
+			},
+			requestHeaders: map[string]string{
+				"X-Grafana-User":          "testuser",
+				"X-Grafana-Datasource-Id": "123",
+			},
+			want: map[string]string{
+				"X-Grafana-User":          "testuser",
+				"X-Grafana-Datasource-Id": "123",
+			},
+		},
+		{
+			name: "should not set headers when disabled",
+			settings: models.InfinitySettings{
+				SendUserHeader:         false,
+				SendDatasourceIDHeader: false,
+			},
+			requestHeaders: map[string]string{
+				"X-Grafana-User":          "testuser",
+				"X-Grafana-Datasource-Id": "123",
+			},
+			want: map[string]string{},
+		},
+		{
+			name: "should not set headers when enabled but headers don't exist",
+			settings: models.InfinitySettings{
+				SendUserHeader:         true,
+				SendDatasourceIDHeader: true,
+			},
+			requestHeaders: map[string]string{},
+			want:           map[string]string{},
+		},
+		{
+			name: "should set only user header when only user header is enabled",
+			settings: models.InfinitySettings{
+				SendUserHeader:         true,
+				SendDatasourceIDHeader: false,
+			},
+			requestHeaders: map[string]string{
+				"X-Grafana-User":          "testuser",
+				"X-Grafana-Datasource-Id": "123",
+			},
+			want: map[string]string{
+				"X-Grafana-User": "testuser",
+			},
+		},
+		{
+			name: "should set only datasource ID header when only datasource ID header is enabled",
+			settings: models.InfinitySettings{
+				SendUserHeader:         false,
+				SendDatasourceIDHeader: true,
+			},
+			requestHeaders: map[string]string{
+				"X-Grafana-User":          "testuser",
+				"X-Grafana-Datasource-Id": "123",
+			},
+			want: map[string]string{
+				"X-Grafana-Datasource-Id": "123",
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			req, _ := http.NewRequest("GET", "http://example.com", nil)
+			req = infinity.ApplyGrafanaHeaders(tt.requestHeaders, tt.settings, req)
+
+			// Check if headers match expected values
+			for key, value := range tt.want {
+				assert.Equal(t, value, req.Header.Get(key))
+			}
+
+			// Check if no extra headers were set
+			for key := range req.Header {
+				_, exists := tt.want[key]
+				assert.True(t, exists, "Unexpected header found: %s", key)
+			}
+		})
+	}
+}
+
 func TestClient_GetExecutedURL(t *testing.T) {
 	tests := []struct {
 		name     string
