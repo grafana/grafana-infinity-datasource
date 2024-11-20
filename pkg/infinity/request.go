@@ -135,7 +135,7 @@ func ApplyGrafanaHeaders(settings models.InfinitySettings, req *http.Request, pC
 		req.Header.Set("X-Grafana-User", pCtx.User.Login)
 	}
 	if settings.SendDatasourceIDHeader && pCtx.DataSourceInstanceSettings != nil {
-		req.Header.Set("X-Grafana-Datasource-Id", fmt.Sprintf("%d", pCtx.DataSourceInstanceSettings.ID))
+		req.Header.Set("X-Grafana-Datasource-UID", pCtx.DataSourceInstanceSettings.UID)
 	}
 	return req
 }

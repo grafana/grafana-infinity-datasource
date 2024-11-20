@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import React, { useState } from 'react';
 import defaultsDeep from 'lodash/defaultsDeep';
 import { css } from '@emotion/css';
 import { InlineFormLabel, Input, Button, LinkButton, useTheme2, Collapse as CollapseOriginal, Switch } from '@grafana/ui';
@@ -112,7 +113,7 @@ export const HeadersEditor = (props: DataSourcePluginOptionsEditorProps<Infinity
               });
             }}
           />
-          <div className="gf-form-help-text">When enabled, sends the current datasource ID as X-Grafana-Datasource-Id header</div>
+          <div className="gf-form-help-text">When enabled, sends the current datasource UID as X-Grafana-Datasource-UID header</div>
         </div>
         <SecureFieldsEditor dataSourceConfig={options} onChange={onOptionsChange} title="Custom HTTP Header" secureFieldName="httpHeaderName" secureFieldValue="httpHeaderValue" hideTile={true} />
       </Collapse>

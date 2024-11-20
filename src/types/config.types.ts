@@ -53,7 +53,7 @@ export interface InfinityOptions extends DataSourceJsonData {
   enableSecureSocksProxy?: boolean;
   pathEncodedUrlsEnabled?: boolean;
   send_user_header?: boolean; // Add support for sending X-Grafana-User header
-  send_datasource_id_header?: boolean; // Add support for sending X-Grafana-Datasource-Id header
+  send_datasource_id_header?: boolean; // Add support for sending X-Grafana-Datasource-UID header
 }
 
 export interface InfinitySecureOptions {

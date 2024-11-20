@@ -41,7 +41,7 @@ func TestApplyGrafanaHeaders(t *testing.T) {
 				},
 			},
 			want: map[string]string{
-				"X-Grafana-Datasource-Id": "123",
+				"X-Grafana-Datasource-UID": "123",
 			},
 		},
 		{
@@ -59,8 +59,8 @@ func TestApplyGrafanaHeaders(t *testing.T) {
 				},
 			},
 			want: map[string]string{
-				"X-Grafana-User":          "testuser",
-				"X-Grafana-Datasource-Id": "123",
+				"X-Grafana-User":           "testuser",
+				"X-Grafana-Datasource-UID": "123",
 			},
 		},
 		{
