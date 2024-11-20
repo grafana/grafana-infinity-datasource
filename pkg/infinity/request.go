@@ -34,6 +34,7 @@ func GetRequest(ctx context.Context, settings models.InfinitySettings, body io.R
 	req = ApplyBearerToken(settings, req, includeSect)
 	req = ApplyApiKeyAuth(settings, req, includeSect)
 	req = ApplyForwardedOAuthIdentity(requestHeaders, settings, req, includeSect)
+	req = ApplyGrafanaHeaders(requestHeaders, settings, req) // Add Grafana headers if enabled
 	return req, err
 }
 
@@ -122,4 +123,19 @@ func (client *Client) GetExecutedURL(ctx context.Context, query models.Query) st
 		out = append(out, "###############", "> Authentication steps not included for azure blob authentication")
 	}
 	return strings.Join(out, "\n")
+}
+
+// ApplyGrafanaHeaders adds Grafana-specific headers if enabled in settings
+func ApplyGrafanaHeaders(requestHeaders map[string]string, settings models.InfinitySettings, req *http.Request) *http.Request {
+	if settings.SendUserHeader {
+		if user, exists := requestHeaders["X-Grafana-User"]; exists {
+			req.Header.Set("X-Grafana-User", user)
+		}
+	}
+	if settings.SendDatasourceIDHeader {
+		if dsID, exists := requestHeaders["X-Grafana-Datasource-Id"]; exists {
+			req.Header.Set("X-Grafana-Datasource-Id", dsID)
+		}
+	}
+	return req
 }
