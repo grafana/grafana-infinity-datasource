@@ -25,7 +25,7 @@ func (ds *DataSource) QueryData(ctx context.Context, req *backend.QueryDataReque
 		return response, errorsource.PluginError(errors.New("invalid infinity client"), false)
 	}
 	for _, q := range req.Queries {
-		query, err := models.LoadQuery(ctx, q, req.PluginContext)
+		query, err := models.LoadQuery(ctx, q, req.PluginContext, ds.client.Settings)
 		if err != nil {
 			span.RecordError(err)
 			logger.Error("error un-marshaling the query", "error", err.Error())
@@ -55,7 +55,7 @@ func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient in
 	logger := backend.Logger.FromContext(ctx)
 	ctx, span := tracing.DefaultTracer().Start(ctx, "QueryData")
 	defer span.End()
-	query, err := models.LoadQuery(ctx, backendQuery, pluginContext)
+	query, err := models.LoadQuery(ctx, backendQuery, pluginContext, infClient.Settings)
 	if err != nil {
 		span.RecordError(err)
 		span.SetStatus(500, err.Error())
