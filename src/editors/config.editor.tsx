@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import React, { useState } from 'react';
 import defaultsDeep from 'lodash/defaultsDeep';
 import { css } from '@emotion/css';
 import { InlineFormLabel, Input, Button, LinkButton, useTheme2, Collapse as CollapseOriginal, Switch } from '@grafana/ui';
