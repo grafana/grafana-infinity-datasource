@@ -83,7 +83,7 @@ export const HeadersEditor = (props: DataSourcePluginOptionsEditorProps<Infinity
       </Collapse>
       <Collapse isOpen={true} collapsible={true} label="Custom HTTP Headers">
         <div className="gf-form" style={{ marginBottom: '10px' }}>
-          <InlineFormLabel width={10}>Send User Header</InlineFormLabel>
+          <InlineFormLabel width={20}>Send User Header</InlineFormLabel>
           <Switch
             value={options.jsonData.send_user_header || false}
             onChange={(e) => {
@@ -99,7 +99,7 @@ export const HeadersEditor = (props: DataSourcePluginOptionsEditorProps<Infinity
           <div className="gf-form-help-text">When enabled, sends the current Grafana user as X-Grafana-User header</div>
         </div>
         <div className="gf-form" style={{ marginBottom: '10px' }}>
-          <InlineFormLabel width={10}>Send Datasource ID Header</InlineFormLabel>
+          <InlineFormLabel width={20}>Send Datasource ID Header</InlineFormLabel>
           <Switch
             value={options.jsonData.send_datasource_id_header || false}
             onChange={(e) => {
