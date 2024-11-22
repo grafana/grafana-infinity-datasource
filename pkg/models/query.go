@@ -303,8 +303,7 @@ func LoadQuery(ctx context.Context, backendQuery backend.DataQuery, pluginContex
 	var query Query
 	err := json.Unmarshal(backendQuery.JSON, &query)
 	if err != nil {
-		// Plugin error as the user should not have been able to send a bad query
-		return query, errorsource.PluginError(fmt.Errorf("error while parsing the query json. %w", err), false)
+		return query, errorsource.DownstreamError(fmt.Errorf("error while parsing the query json. %w", err), false)
 	}
 	query = ApplyDefaultsToQuery(ctx, query, settings)
 	if query.PageMode == PaginationModeList && strings.TrimSpace(query.PageParamListFieldName) == "" {
