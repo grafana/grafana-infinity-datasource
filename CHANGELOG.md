@@ -1,5 +1,13 @@
 # Change Log
 
+## 2.11.4
+
+🐛 **Bug fix**: Fixed error source for invalid queries
+
+🐛 **Bug fix**: Fixed a bug where base url not working as expected when there is no url in the query. Fixes [#908](https://github.com/grafana/grafana-infinity-datasource/issues/908)
+
+⚙️ **Chore**: Migrate legacy forms component in global queries editor
+
 ## 2.11.3
 
 🐛 **Bug fix**: Fixes the panic when preparing the request throws error
