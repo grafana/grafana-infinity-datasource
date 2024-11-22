@@ -25,7 +25,7 @@ func (ds *DataSource) QueryData(ctx context.Context, req *backend.QueryDataReque
 		return response, errorsource.PluginError(errors.New("invalid infinity client"), false)
 	}
 	for _, q := range req.Queries {
-		query, err := models.LoadQuery(ctx, q, req.PluginContext)
+		query, err := models.LoadQuery(ctx, q, req.PluginContext, ds.client.Settings)
 		if err != nil {
 			span.RecordError(err)
 			logger.Error("error un-marshaling the query", "error", err.Error())
@@ -49,23 +49,6 @@ func (ds *DataSource) QueryData(ctx context.Context, req *backend.QueryDataReque
 		response.Responses[q.RefID] = QueryDataQuery(ctx, query, *ds.client, req.Headers, req.PluginContext)
 	}
 	return response, nil
-}
-
-func QueryData(ctx context.Context, backendQuery backend.DataQuery, infClient infinity.Client, requestHeaders map[string]string, pluginContext backend.PluginContext) (response backend.DataResponse) {
-	logger := backend.Logger.FromContext(ctx)
-	ctx, span := tracing.DefaultTracer().Start(ctx, "QueryData")
-	defer span.End()
-	query, err := models.LoadQuery(ctx, backendQuery, pluginContext)
-	if err != nil {
-		span.RecordError(err)
-		span.SetStatus(500, err.Error())
-		logger.Error("error un-marshaling the query", "error", err.Error())
-		response.Error = fmt.Errorf("error un-marshaling the query. %w", err)
-		// We should have error source from the original error, but in a case it is not there, we are using the plugin error as the default source
-		response.ErrorSource = errorsource.SourceError(backend.ErrorSourcePlugin, err, false).Source()
-		return response
-	}
-	return QueryDataQuery(ctx, query, infClient, requestHeaders, pluginContext)
 }
 
 func QueryDataQuery(ctx context.Context, query models.Query, infClient infinity.Client, requestHeaders map[string]string, pluginContext backend.PluginContext) (response backend.DataResponse) {

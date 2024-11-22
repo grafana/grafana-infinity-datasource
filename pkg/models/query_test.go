@@ -15,6 +15,7 @@ func TestLoadQuery(t *testing.T) {
 	tests := []struct {
 		name      string
 		queryJSON string
+		settings  models.InfinitySettings
 		want      models.Query
 		wantErr   error
 	}{
@@ -121,7 +122,7 @@ func TestLoadQuery(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			q := &backend.DataQuery{JSON: []byte(tt.queryJSON)}
-			got, err := models.LoadQuery(context.Background(), *q, backend.PluginContext{})
+			got, err := models.LoadQuery(context.Background(), *q, backend.PluginContext{}, tt.settings)
 			if tt.wantErr != nil {
 				require.NotNil(t, err)
 				assert.Equal(t, tt.wantErr, err)

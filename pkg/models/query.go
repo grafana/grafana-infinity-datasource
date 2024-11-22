@@ -188,7 +188,7 @@ type InfinityDataOverride struct {
 	Override string   `json:"override"`
 }
 
-func ApplyDefaultsToQuery(ctx context.Context, query Query) Query {
+func ApplyDefaultsToQuery(ctx context.Context, query Query, settings InfinitySettings) Query {
 	if query.Type == "" {
 		query.Type = QueryTypeJSON
 		if query.Source == "" {
@@ -198,20 +198,13 @@ func ApplyDefaultsToQuery(ctx context.Context, query Query) Query {
 	if query.Type == QueryTypeJSON && query.Source == "inline" && query.Data == "" {
 		query.Data = "[]"
 	}
-	if (query.Type == QueryTypeJSON || query.Type == QueryTypeGraphQL || query.Type == QueryTypeUQL || query.Type == QueryTypeGROQ) && query.Source == "url" && query.URL == "" {
-		query.URL = "https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.json"
-	}
-	if query.Type == QueryTypeCSV && query.Source == "url" && query.URL == "" {
-		query.URL = "https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.csv"
-	}
-	if query.Type == QueryTypeTSV && query.Source == "url" && query.URL == "" {
-		query.URL = "https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.tsv"
-	}
-	if query.Type == QueryTypeXML && query.Source == "url" && query.URL == "" {
-		query.URL = "https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.xml"
-	}
-	if query.Type == QueryTypeHTML && query.Source == "url" && query.URL == "" {
-		query.URL = "https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.html"
+	if query.Source == "url" && query.URL == "" && strings.TrimSpace(settings.URL) == "" {
+		switch query.Type {
+		case QueryTypeJSON, QueryTypeCSV, QueryTypeTSV, QueryTypeXML, QueryTypeHTML:
+			query.URL = fmt.Sprintf("https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.%s", strings.ToLower(string(query.Type)))
+		case QueryTypeGraphQL, QueryTypeUQL, QueryTypeGROQ:
+			query.URL = "https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.json"
+		}
 	}
 	if query.Source == "url" && strings.ToUpper(query.URLOptions.Method) == "POST" {
 		if query.URLOptions.BodyType == "" {
@@ -306,14 +299,13 @@ func ApplyDefaultsToQuery(ctx context.Context, query Query) Query {
 	return query
 }
 
-func LoadQuery(ctx context.Context, backendQuery backend.DataQuery, pluginContext backend.PluginContext) (Query, error) {
+func LoadQuery(ctx context.Context, backendQuery backend.DataQuery, pluginContext backend.PluginContext, settings InfinitySettings) (Query, error) {
 	var query Query
 	err := json.Unmarshal(backendQuery.JSON, &query)
 	if err != nil {
-		// Plugin error as the user should not have been able to send a bad query
-		return query, errorsource.PluginError(fmt.Errorf("error while parsing the query json. %w", err), false)
+		return query, errorsource.DownstreamError(fmt.Errorf("error while parsing the query json. %w", err), false)
 	}
-	query = ApplyDefaultsToQuery(ctx, query)
+	query = ApplyDefaultsToQuery(ctx, query, settings)
 	if query.PageMode == PaginationModeList && strings.TrimSpace(query.PageParamListFieldName) == "" {
 		// Downstream error as user input is not correct
 		return query, errorsource.DownstreamError(errors.New("pagination_param_list_field_name cannot be empty"), false)
