@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/grafana/grafana-infinity-datasource/pkg/dataplane"
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
@@ -59,23 +60,38 @@ func PostProcessFrame(ctx context.Context, frame *data.Frame, query models.Query
 			return wFrame, err
 		}
 	}
+	if query.Parser != models.InfinityParserBackend {
+		return frame, nil
+	}
+	if frame.Meta == nil {
+		frame.Meta = &data.FrameMeta{}
+	}
+	if dataplane.IsNumericWideFrame(frame) {
+		frame.Meta.Type = data.FrameTypeNumericWide
+		frame.Meta.TypeVersion = data.FrameTypeVersion{0, 1}
+		return frame, nil
+	}
+	if dataplane.IsNumericLongFrame(frame) {
+		frame.Meta.Type = data.FrameTypeNumericLong
+		frame.Meta.TypeVersion = data.FrameTypeVersion{0, 1}
+		return frame, nil
+	}
 	return frame, nil
 }
 
 func addErrorSourceToTransformError(err error) error {
 	downstreamErrors := []error{
-		t.ErrSummarizeByFieldNotFound, 
-		t.ErrNotUniqueFieldNames, 
-		t.ErrEvaluatingFilterExpression, 
-		t.ErrMergeTransformationNoFrameSupplied, 
-		t.ErrMergeTransformationDifferentFields, 
-		t.ErrMergeTransformationDifferentFieldNames, 
+		t.ErrSummarizeByFieldNotFound,
+		t.ErrNotUniqueFieldNames,
+		t.ErrEvaluatingFilterExpression,
+		t.ErrMergeTransformationNoFrameSupplied,
+		t.ErrMergeTransformationDifferentFields,
+		t.ErrMergeTransformationDifferentFieldNames,
 		t.ErrMergeTransformationDifferentFieldTypes,
 		t.ErrInvalidFilterExpression,
 		framesql.ErrEmptySummarizeExpression,
 		framesql.ErrExpressionNotFoundInFields,
 	}
-	
 	for _, e := range downstreamErrors {
 		if errors.Is(err, e) {
 			return errorsource.DownstreamError(err, false)
