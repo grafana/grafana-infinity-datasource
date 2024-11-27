@@ -1,0 +1,177 @@
+//  🌟 This was machine generated.  Do not edit. 🌟
+//  
+//  Frame[0] {
+//      "typeVersion": [
+//          0,
+//          0
+//      ],
+//      "custom": {
+//          "query": {
+//              "refId": "",
+//              "type": "csv",
+//              "format": "",
+//              "source": "url",
+//              "url": "http://127.0.0.1:8080",
+//              "url_options": {
+//                  "method": "",
+//                  "params": null,
+//                  "headers": null,
+//                  "data": "",
+//                  "body_type": "",
+//                  "body_content_type": "",
+//                  "body_form": null,
+//                  "body_graphql_query": "",
+//                  "body_graphql_variables": ""
+//              },
+//              "data": "",
+//              "parser": "backend",
+//              "filterExpression": "",
+//              "summarizeExpression": "",
+//              "summarizeBy": "",
+//              "summarizeAlias": "",
+//              "uql": "",
+//              "groq": "",
+//              "csv_options": {
+//                  "delimiter": "",
+//                  "skip_empty_lines": false,
+//                  "skip_lines_with_error": false,
+//                  "relax_column_count": false,
+//                  "columns": "",
+//                  "comment": ""
+//              },
+//              "json_options": {
+//                  "root_is_not_array": false,
+//                  "columnar": false
+//              },
+//              "root_selector": "",
+//              "columns": [],
+//              "computed_columns": [],
+//              "filters": null,
+//              "seriesCount": 0,
+//              "expression": "",
+//              "alias": "",
+//              "dataOverrides": null,
+//              "global_query_id": "",
+//              "query_mode": ""
+//          },
+//          "data": "name,age\nfoo,123\nbar,456",
+//          "responseCodeFromServer": 200,
+//          "duration": 123,
+//          "error": ""
+//      },
+//      "executedQueryString": "###############\n## URL\n###############\n\nhttp://127.0.0.1:8080\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: text/csv; charset=utf-8' -H 'Accept-Encoding: gzip' 'http://127.0.0.1:8080'"
+//  }
+//  Name: response
+//  Dimensions: 2 Fields by 2 Rows
+//  +-----------------+-----------------+
+//  | Name: age       | Name: name      |
+//  | Labels:         | Labels:         |
+//  | Type: []*string | Type: []*string |
+//  +-----------------+-----------------+
+//  | 123             | foo             |
+//  | 456             | bar             |
+//  +-----------------+-----------------+
+//  
+//  
+//  🌟 This was machine generated.  Do not edit. 🌟
+{
+  "status": 200,
+  "frames": [
+    {
+      "schema": {
+        "name": "response",
+        "meta": {
+          "typeVersion": [
+            0,
+            0
+          ],
+          "custom": {
+            "query": {
+              "refId": "",
+              "type": "csv",
+              "format": "",
+              "source": "url",
+              "url": "http://127.0.0.1:8080",
+              "url_options": {
+                "method": "",
+                "params": null,
+                "headers": null,
+                "data": "",
+                "body_type": "",
+                "body_content_type": "",
+                "body_form": null,
+                "body_graphql_query": "",
+                "body_graphql_variables": ""
+              },
+              "data": "",
+              "parser": "backend",
+              "filterExpression": "",
+              "summarizeExpression": "",
+              "summarizeBy": "",
+              "summarizeAlias": "",
+              "uql": "",
+              "groq": "",
+              "csv_options": {
+                "delimiter": "",
+                "skip_empty_lines": false,
+                "skip_lines_with_error": false,
+                "relax_column_count": false,
+                "columns": "",
+                "comment": ""
+              },
+              "json_options": {
+                "root_is_not_array": false,
+                "columnar": false
+              },
+              "root_selector": "",
+              "columns": [],
+              "computed_columns": [],
+              "filters": null,
+              "seriesCount": 0,
+              "expression": "",
+              "alias": "",
+              "dataOverrides": null,
+              "global_query_id": "",
+              "query_mode": ""
+            },
+            "data": "name,age\nfoo,123\nbar,456",
+            "responseCodeFromServer": 200,
+            "duration": 123,
+            "error": ""
+          },
+          "executedQueryString": "###############\n## URL\n###############\n\nhttp://127.0.0.1:8080\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: text/csv; charset=utf-8' -H 'Accept-Encoding: gzip' 'http://127.0.0.1:8080'"
+        },
+        "fields": [
+          {
+            "name": "age",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          }
+        ]
+      },
+      "data": {
+        "values": [
+          [
+            "123",
+            "456"
+          ],
+          [
+            "foo",
+            "bar"
+          ]
+        ]
+      }
+    }
+  ]
+}

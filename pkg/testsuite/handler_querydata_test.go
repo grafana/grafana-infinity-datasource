@@ -1403,3 +1403,27 @@ func TestQuery(t *testing.T) {
 		})
 	})
 }
+
+func TestResponseEncoding(t *testing.T) {
+	t.Run("testing gzip compressed content", func(t *testing.T) {
+		server := getServerWithGZipCompressedResponse(t, strings.Join([]string{`name,age`, `foo,123`, `bar,456`}, "\n"))
+		server.Start()
+		defer server.Close()
+		ds := getds(t, backend.DataSourceInstanceSettings{
+			JSONData:                []byte(`{"is_mock": true}`),
+			DecryptedSecureJSONData: map[string]string{},
+		})
+		res, err := ds.QueryData(context.Background(), &backend.QueryDataRequest{
+			Queries: []backend.DataQuery{{RefID: "A", JSON: []byte(fmt.Sprintf(`{ 
+				"type"		:	"csv",
+				"source"	:	"url",
+				"parser" 	: 	"backend",
+				"url" 		: 	"%s"
+			}`, server.URL))}},
+		})
+		require.Nil(t, err)
+		require.NotNil(t, res)
+		resItem := res.Responses["A"]
+		experimental.CheckGoldenJSONResponse(t, "golden", strings.ReplaceAll(t.Name(), "TestResponseEncoding/", ""), &resItem, UPDATE_GOLDEN_DATA)
+	})
+}
