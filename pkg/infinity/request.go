@@ -28,6 +28,7 @@ func GetRequest(ctx context.Context, settings models.InfinitySettings, body io.R
 	}
 	req = ApplyAcceptHeader(query, settings, req, includeSect)
 	req = ApplyContentTypeHeader(query, settings, req, includeSect)
+	req = ApplyAcceptEncodingHeader(query, settings, req, includeSect)
 	req = ApplyHeadersFromSettings(settings, req, includeSect)
 	req = ApplyHeadersFromQuery(query, settings, req, includeSect)
 	req = ApplyBasicAuth(settings, req, includeSect)

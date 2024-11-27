@@ -59,7 +59,7 @@
 //          "duration": 123,
 //          "error": ""
 //      },
-//      "executedQueryString": "###############\n## URL\n###############\n\nhttp://127.0.0.1:8080\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: text/csv; charset=utf-8' 'http://127.0.0.1:8080'"
+//      "executedQueryString": "###############\n## URL\n###############\n\nhttp://127.0.0.1:8080\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: text/csv; charset=utf-8' -H 'Accept-Encoding: gzip' 'http://127.0.0.1:8080'"
 //  }
 //  Name: response
 //  Dimensions: 2 Fields by 2 Rows
@@ -139,7 +139,7 @@
             "duration": 123,
             "error": ""
           },
-          "executedQueryString": "###############\n## URL\n###############\n\nhttp://127.0.0.1:8080\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: text/csv; charset=utf-8' 'http://127.0.0.1:8080'"
+          "executedQueryString": "###############\n## URL\n###############\n\nhttp://127.0.0.1:8080\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: text/csv; charset=utf-8' -H 'Accept-Encoding: gzip' 'http://127.0.0.1:8080'"
         },
         "fields": [
           {

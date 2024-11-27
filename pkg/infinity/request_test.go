@@ -204,37 +204,37 @@ func TestClient_GetExecutedURL(t *testing.T) {
 		{
 			query:   models.Query{URL: "https://foo.com"},
 			url:     "https://foo.com",
-			command: "curl -X 'GET' 'https://foo.com'",
+			command: "curl -X 'GET' -H 'Accept-Encoding: gzip' 'https://foo.com'",
 		},
 		{
 			settings: models.InfinitySettings{UserName: "hello", Password: "world", BasicAuthEnabled: true},
 			query:    models.Query{URL: "https://foo.com"},
 			url:      "https://foo.com",
-			command:  "curl -X 'GET' -H 'Authorization: Basic xxxxxxxx' 'https://foo.com'",
+			command:  "curl -X 'GET' -H 'Accept-Encoding: gzip' -H 'Authorization: Basic xxxxxxxx' 'https://foo.com'",
 		},
 		{
 			settings: models.InfinitySettings{AuthenticationMethod: "bearerToken", BearerToken: "world2"},
 			query:    models.Query{URL: "https://foo.com"},
 			url:      "https://foo.com",
-			command:  "curl -X 'GET' -H 'Authorization: Bearer xxxxxxxx' 'https://foo.com'",
+			command:  "curl -X 'GET' -H 'Accept-Encoding: gzip' -H 'Authorization: Bearer xxxxxxxx' 'https://foo.com'",
 		},
 		{
 			settings: models.InfinitySettings{AuthenticationMethod: "apiKey", ApiKeyType: "header", ApiKeyKey: "hello", ApiKeyValue: "world"},
 			query:    models.Query{URL: "https://foo.com"},
 			url:      "https://foo.com",
-			command:  "curl -X 'GET' -H 'Hello: xxxxxxxx' 'https://foo.com'",
+			command:  "curl -X 'GET' -H 'Accept-Encoding: gzip' -H 'Hello: xxxxxxxx' 'https://foo.com'",
 		},
 		{
 			settings: models.InfinitySettings{ForwardOauthIdentity: true},
 			query:    models.Query{URL: "https://foo.com"},
 			url:      "https://foo.com",
-			command:  "curl -X 'GET' -H 'Authorization: xxxxxxxx' 'https://foo.com'",
+			command:  "curl -X 'GET' -H 'Accept-Encoding: gzip' -H 'Authorization: xxxxxxxx' 'https://foo.com'",
 		},
 		{
 			settings: models.InfinitySettings{CustomHeaders: map[string]string{"good": "bye"}, SecureQueryFields: map[string]string{"me": "too"}},
 			query:    models.Query{URL: "https://foo.com?something=${__qs.me}", Type: "json", URLOptions: models.URLOptions{Method: "POST", Body: "my request body with ${__qs.me} value", Headers: []models.URLOptionKeyValuePair{{Key: "hello", Value: "world"}}}},
 			url:      "https://foo.com?me=xxxxxxxx&something=xxxxxxxx",
-			command:  "curl -X 'POST' -d 'my request body with ${__qs.me} value' -H 'Accept: application/json;q=0.9,text/plain' -H 'Content-Type: application/json' -H 'Good: xxxxxxxx' -H 'Hello: xxxxxxxx' 'https://foo.com?me=xxxxxxxx&something=xxxxxxxx'",
+			command:  "curl -X 'POST' -d 'my request body with ${__qs.me} value' -H 'Accept: application/json;q=0.9,text/plain' -H 'Accept-Encoding: gzip' -H 'Content-Type: application/json' -H 'Good: xxxxxxxx' -H 'Hello: xxxxxxxx' 'https://foo.com?me=xxxxxxxx&something=xxxxxxxx'",
 		},
 	}
 	for _, tt := range tests {

@@ -798,7 +798,7 @@ func TestRemoteSources(t *testing.T) {
 				require.NotNil(t, frame)
 				t.Run("should have custom meta data correctly", func(t *testing.T) {
 					require.NotNil(t, frame.Meta.Custom)
-					require.Equal(t, "###############\n## URL\n###############\n\nhttps://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.json\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' 'https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.json'", frame.Meta.ExecutedQueryString)
+					require.Equal(t, "###############\n## URL\n###############\n\nhttps://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.json\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' -H 'Accept-Encoding: gzip' 'https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.json'", frame.Meta.ExecutedQueryString)
 				})
 			},
 		},
@@ -814,7 +814,7 @@ func TestRemoteSources(t *testing.T) {
 			client: New("[1,2,3]"),
 			test: func(t *testing.T, frame *data.Frame) {
 				require.NotNil(t, frame)
-				require.Equal(t, "###############\n## URL\n###############\n\nhttp://foo\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' 'http://foo'", frame.Meta.ExecutedQueryString)
+				require.Equal(t, "###############\n## URL\n###############\n\nhttp://foo\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' -H 'Accept-Encoding: gzip' 'http://foo'", frame.Meta.ExecutedQueryString)
 				t.Run("should have frame name correctly", func(t *testing.T) {
 					require.Equal(t, "q1", frame.Name)
 				})
@@ -843,7 +843,7 @@ func TestRemoteSources(t *testing.T) {
 			client: New("a,b\na1,b1"),
 			test: func(t *testing.T, frame *data.Frame) {
 				require.NotNil(t, frame)
-				require.Equal(t, "###############\n## URL\n###############\n\nhttp://bar\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: text/csv; charset=utf-8' 'http://bar'", frame.Meta.ExecutedQueryString)
+				require.Equal(t, "###############\n## URL\n###############\n\nhttp://bar\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: text/csv; charset=utf-8' -H 'Accept-Encoding: gzip' 'http://bar'", frame.Meta.ExecutedQueryString)
 				t.Run("should have frame name correctly", func(t *testing.T) {
 					require.Equal(t, "q1", frame.Name)
 				})
@@ -873,7 +873,7 @@ func TestRemoteSources(t *testing.T) {
 			client: New("[1,2,3]"),
 			test: func(t *testing.T, frame *data.Frame) {
 				require.NotNil(t, frame)
-				require.Equal(t, "###############\n## URL\n###############\n\nhttp://foo\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' 'http://foo'\n\n###############\n## UQL\n###############\n\nparse-json | count", frame.Meta.ExecutedQueryString)
+				require.Equal(t, "###############\n## URL\n###############\n\nhttp://foo\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept-Encoding: gzip' 'http://foo'\n\n###############\n## UQL\n###############\n\nparse-json | count", frame.Meta.ExecutedQueryString)
 				t.Run("should have frame name correctly", func(t *testing.T) {
 					require.Equal(t, "q1", frame.Name)
 				})
@@ -904,7 +904,7 @@ func TestRemoteSources(t *testing.T) {
 			client: New("[1,2,3]"),
 			test: func(t *testing.T, frame *data.Frame) {
 				require.NotNil(t, frame)
-				require.Equal(t, "###############\n## URL\n###############\n\nhttp://foo\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' 'http://foo'\n###############\n## GROQ\n###############\n\n*{1,2,3}\n", frame.Meta.ExecutedQueryString)
+				require.Equal(t, "###############\n## URL\n###############\n\nhttp://foo\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept-Encoding: gzip' 'http://foo'\n###############\n## GROQ\n###############\n\n*{1,2,3}\n", frame.Meta.ExecutedQueryString)
 				t.Run("should have frame name correctly", func(t *testing.T) {
 					require.Equal(t, "q1", frame.Name)
 				})
