@@ -19,10 +19,11 @@ const (
 )
 
 const (
-	headerKeyAccept        = "Accept"
-	headerKeyContentType   = "Content-Type"
-	HeaderKeyAuthorization = "Authorization"
-	HeaderKeyIdToken       = "X-Id-Token"
+	headerKeyAccept         = "Accept"
+	headerKeyContentType    = "Content-Type"
+	headerKeyAcceptEncoding = "Accept-Encoding"
+	HeaderKeyAuthorization  = "Authorization"
+	HeaderKeyIdToken        = "X-Id-Token"
 )
 
 func ApplyAcceptHeader(query models.Query, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
@@ -62,6 +63,11 @@ func ApplyContentTypeHeader(query models.Query, settings models.InfinitySettings
 			req.Header.Set(headerKeyContentType, contentTypeJSON)
 		}
 	}
+	return req
+}
+
+func ApplyAcceptEncodingHeader(query models.Query, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
+	req.Header.Set(headerKeyAcceptEncoding, "gzip")
 	return req
 }
 

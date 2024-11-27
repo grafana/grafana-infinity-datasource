@@ -59,7 +59,7 @@
 //          "duration": 123,
 //          "error": ""
 //      },
-//      "executedQueryString": "###############\n## URL\n###############\n\nhttp://foo\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' 'http://foo'\n###############\n## GROQ\n###############\n\n*{1,2,3}\n"
+//      "executedQueryString": "###############\n## URL\n###############\n\nhttp://foo\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept-Encoding: gzip' 'http://foo'\n###############\n## GROQ\n###############\n\n*{1,2,3}\n"
 //  }
 //  Name: q1
 //  Dimensions: 0 Fields by 0 Rows
@@ -133,7 +133,7 @@
             "duration": 123,
             "error": ""
           },
-          "executedQueryString": "###############\n## URL\n###############\n\nhttp://foo\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' 'http://foo'\n###############\n## GROQ\n###############\n\n*{1,2,3}\n"
+          "executedQueryString": "###############\n## URL\n###############\n\nhttp://foo\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept-Encoding: gzip' 'http://foo'\n###############\n## GROQ\n###############\n\n*{1,2,3}\n"
         },
         "fields": []
       },

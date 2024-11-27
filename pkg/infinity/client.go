@@ -2,6 +2,7 @@ package infinity
 
 import (
 	"bytes"
+	"compress/gzip"
 	"context"
 	"crypto/tls"
 	"crypto/x509"
@@ -239,7 +240,7 @@ func (client *Client) req(ctx context.Context, url string, body io.Reader, setti
 		// therefore any incoming error is considered downstream
 		return nil, res.StatusCode, duration, errorsource.DownstreamError(err, false)
 	}
-	bodyBytes, err := io.ReadAll(res.Body)
+	bodyBytes, err := getBodyBytes(res)
 	if err != nil {
 		logger.Debug("error reading response body", "url", url, "error", err.Error())
 		return nil, res.StatusCode, duration, errorsource.DownstreamError(err, false)
@@ -256,6 +257,18 @@ func (client *Client) req(ctx context.Context, url string, body io.Reader, setti
 		return out, res.StatusCode, duration, err
 	}
 	return string(bodyBytes), res.StatusCode, duration, err
+}
+
+func getBodyBytes(res *http.Response) ([]byte, error) {
+	if strings.EqualFold(res.Header.Get("Content-Encoding"), "gzip") {
+		reader, err := gzip.NewReader(res.Body)
+		if err != nil {
+			return nil, err
+		}
+		defer reader.Close()
+		return io.ReadAll(reader)
+	}
+	return io.ReadAll(res.Body)
 }
 
 // https://stackoverflow.com/questions/31398044/got-error-invalid-character-%C3%AF-looking-for-beginning-of-value-from-json-unmar
