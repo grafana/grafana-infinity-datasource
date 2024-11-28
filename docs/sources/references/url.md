@@ -58,6 +58,24 @@ You can configure the headers required for the URL in the datasource config and 
 
 Note: We suggest adding secure headers only via configuration and not in query.
 
+### Forwarding Grafana Headers via settings
+
+From Infinity plugin version 2.12.0, You will be able to forward grafana headers to the outgoing requests via **Custom HTTP Headers** from the datasource settings page. In the datasource custom headers settings section, you can add any number of custom headers with their own values. The values can include following macros which will be interpolated into actual value from the request context.
+
+| Macro name            | Description                                                         |
+| --------------------- | ------------------------------------------------------------------- |
+| `${__org.id}`         | This will be replaced by grafana org id where the request came from |
+| `${__plugin.id}`      | This will be replaced by the plugin id                              |
+| `${__plugin.version}` | This will be replaced by the plugin version                         |
+| `${__ds.uid}`         | This will be replaced by the datasource uid                         |
+| `${__ds.name}`        | This will be replaced by the datasource name                        |
+| `${__ds.id}`          | This will be replaced by the datasource id (deprecated)             |
+| `${__user.login}`     | This will be replaced by the user login id                          |
+| `${__user.email}`     | This will be replaced by the user login email                       |
+| `${__user.name}`      | This will be replaced by the user name                              |
+
+> Note: Certain macros such as `${__user.login}` won't be available in the context of alerts, recorded queries, public dashboards etc.
+
 ## Allowed Hosts
 
 Leaving blank will allow all the hosts. This is by default.
