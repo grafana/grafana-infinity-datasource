@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
+	"github.com/grafana/grafana-plugin-sdk-go/backend"
 )
 
 const dummyHeader = "xxxxxxxx"
@@ -65,17 +66,15 @@ func ApplyContentTypeHeader(query models.Query, settings models.InfinitySettings
 	return req
 }
 
-func ApplyHeadersFromSettings(settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
+func ApplyHeadersFromSettings(pCtx *backend.PluginContext, requestHeaders map[string]string, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
 	for key, value := range settings.CustomHeaders {
-		val := dummyHeader
+		headerValue := dummyHeader
 		if includeSect {
-			val = value
+			headerValue = value
 		}
+		headerValue = interpolateGrafanaMetaDataMacros(headerValue, pCtx)
 		if key != "" {
-			req.Header.Add(key, val)
-			if strings.EqualFold(key, headerKeyAccept) || strings.EqualFold(key, headerKeyContentType) {
-				req.Header.Set(key, val)
-			}
+			req.Header.Set(key, headerValue)
 		}
 	}
 	return req
