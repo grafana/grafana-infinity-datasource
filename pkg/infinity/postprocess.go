@@ -66,12 +66,12 @@ func PostProcessFrame(ctx context.Context, frame *data.Frame, query models.Query
 	if frame.Meta == nil {
 		frame.Meta = &data.FrameMeta{}
 	}
-	if dataplane.IsNumericWideFrame(frame) {
+	if dataplane.CanBeNumericWide(frame) {
 		frame.Meta.Type = data.FrameTypeNumericWide
 		frame.Meta.TypeVersion = data.FrameTypeVersion{0, 1}
 		return frame, nil
 	}
-	if dataplane.IsNumericLongFrame(frame) {
+	if dataplane.CanBeNumericLong(frame) {
 		frame.Meta.Type = data.FrameTypeNumericLong
 		frame.Meta.TypeVersion = data.FrameTypeVersion{0, 1}
 		return frame, nil
