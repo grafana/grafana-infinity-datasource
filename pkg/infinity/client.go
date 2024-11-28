@@ -192,11 +192,11 @@ func replaceSect(input string, settings models.InfinitySettings, includeSect boo
 	return input
 }
 
-func (client *Client) req(ctx context.Context, url string, body io.Reader, settings models.InfinitySettings, query models.Query, requestHeaders map[string]string) (obj any, statusCode int, duration time.Duration, err error) {
+func (client *Client) req(ctx context.Context, url string, body io.Reader, settings models.InfinitySettings, query models.Query, requestHeaders map[string]string, pCtx *backend.PluginContext) (obj any, statusCode int, duration time.Duration, err error) {
 	ctx, span := tracing.DefaultTracer().Start(ctx, "client.req")
 	logger := backend.Logger.FromContext(ctx)
 	defer span.End()
-	req, err := GetRequest(ctx, settings, body, query, requestHeaders, true)
+	req, err := GetRequest(ctx, settings, body, query, requestHeaders, true, pCtx)
 	if err != nil {
 		return nil, http.StatusInternalServerError, 0, errorsource.DownstreamError(fmt.Errorf("error preparing request. %w", err), false)
 	}
@@ -263,7 +263,7 @@ func removeBOMContent(input []byte) []byte {
 	return bytes.TrimPrefix(input, []byte("\xef\xbb\xbf"))
 }
 
-func (client *Client) GetResults(ctx context.Context, query models.Query, requestHeaders map[string]string) (o any, statusCode int, duration time.Duration, err error) {
+func (client *Client) GetResults(ctx context.Context, query models.Query, requestHeaders map[string]string, pCtx *backend.PluginContext) (o any, statusCode int, duration time.Duration, err error) {
 	logger := backend.Logger.FromContext(ctx)
 	if query.Source == "azure-blob" {
 		if strings.TrimSpace(query.AzBlobContainerName) == "" || strings.TrimSpace(query.AzBlobName) == "" {
@@ -296,9 +296,9 @@ func (client *Client) GetResults(ctx context.Context, query models.Query, reques
 	switch strings.ToUpper(query.URLOptions.Method) {
 	case http.MethodPost:
 		body := GetQueryBody(ctx, query)
-		return client.req(ctx, query.URL, body, client.Settings, query, requestHeaders)
+		return client.req(ctx, query.URL, body, client.Settings, query, requestHeaders, pCtx)
 	default:
-		return client.req(ctx, query.URL, nil, client.Settings, query, requestHeaders)
+		return client.req(ctx, query.URL, nil, client.Settings, query, requestHeaders, pCtx)
 	}
 }
 

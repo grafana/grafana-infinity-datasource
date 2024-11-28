@@ -85,7 +85,7 @@ func QueryDataQuery(ctx context.Context, query models.Query, infClient infinity.
 			return errorsource.Response(errorsource.DownstreamError(errors.New("invalid or empty sheet ID"), false))
 		}
 		query.URL = fmt.Sprintf("https://sheets.googleapis.com/v4/spreadsheets/%s?includeGridData=true&ranges=%s", sheetId, sheetRange)
-		frame, err := infinity.GetFrameForURLSources(ctx, query, infClient, requestHeaders)
+		frame, err := infinity.GetFrameForURLSources(ctx, query, infClient, requestHeaders, &pluginContext)
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(500, err.Error())
@@ -119,7 +119,7 @@ func QueryDataQuery(ctx context.Context, query models.Query, infClient infinity.
 				response.ErrorSource = backend.ErrorSourceDownstream
 				return response
 			}
-			frame, err := infinity.GetFrameForURLSources(ctx, query, infClient, requestHeaders)
+			frame, err := infinity.GetFrameForURLSources(ctx, query, infClient, requestHeaders, &pluginContext)
 			if err != nil {
 				logger.Debug("error while performing the infinity query", "msg", err.Error())
 				if frame != nil {

@@ -937,7 +937,8 @@ func TestRemoteSources(t *testing.T) {
 			if client == nil {
 				client = New("")
 			}
-			frame, err := infinity.GetFrameForURLSources(context.Background(), query, *client, map[string]string{})
+
+			frame, err := infinity.GetFrameForURLSources(context.Background(), query, *client, map[string]string{}, &backend.PluginContext{})
 			if tt.wantErr != nil {
 				require.NotNil(t, err)
 				assert.Equal(t, tt.wantErr, err)
