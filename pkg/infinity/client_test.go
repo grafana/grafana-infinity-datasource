@@ -69,7 +69,7 @@ func TestInfinityClient_GetResults(t *testing.T) {
 				HttpClient: &http.Client{},
 			}
 			pluginContext := &backend.PluginContext{}
-			gotO, statusCode, duration, err := client.GetResults(context.Background(), tt.query, tt.requestHeaders, pluginContext)
+			gotO, statusCode, duration, err := client.GetResults(context.Background(), pluginContext, tt.query, tt.requestHeaders)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("GetResults() error = %v, wantErr %v", err, tt.wantErr)
 				return

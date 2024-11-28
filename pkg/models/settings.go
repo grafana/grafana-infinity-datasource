@@ -117,8 +117,6 @@ type InfinitySettings struct {
 	AzureBlobAccountKey      string
 	UnsecuredQueryHandling   UnsecuredQueryHandlingMode
 	PathEncodedURLsEnabled   bool
-	SendUserHeader           bool
-	SendDatasourceIDHeader   bool
 	// ProxyOpts is used for Secure Socks Proxy configuration
 	ProxyOpts httpclient.Options
 }
@@ -202,8 +200,6 @@ type InfinitySettingsJson struct {
 	AzureBlobAccountUrl      string         `json:"azureBlobAccountUrl,omitempty"`
 	AzureBlobAccountName     string         `json:"azureBlobAccountName,omitempty"`
 	PathEncodedURLsEnabled   bool           `json:"pathEncodedUrlsEnabled,omitempty"`
-	SendUserHeader           bool           `json:"send_user_header,omitempty"`
-	SendDatasourceIDHeader   bool           `json:"send_datasource_id_header,omitempty"`
 	// Security
 	AllowedHosts           []string                   `json:"allowedHosts,omitempty"`
 	UnsecuredQueryHandling UnsecuredQueryHandlingMode `json:"unsecuredQueryHandling,omitempty"`
@@ -247,8 +243,6 @@ func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings
 		settings.ProxyType = infJson.ProxyType
 		settings.ProxyUrl = infJson.ProxyUrl
 		settings.PathEncodedURLsEnabled = infJson.PathEncodedURLsEnabled
-		settings.SendUserHeader = infJson.SendUserHeader
-		settings.SendDatasourceIDHeader = infJson.SendDatasourceIDHeader
 		if settings.ProxyType == "" {
 			settings.ProxyType = ProxyTypeEnv
 		}

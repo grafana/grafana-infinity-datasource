@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
+	"github.com/grafana/grafana-plugin-sdk-go/backend"
 )
 
 const dummyHeader = "xxxxxxxx"
@@ -65,17 +66,30 @@ func ApplyContentTypeHeader(query models.Query, settings models.InfinitySettings
 	return req
 }
 
-func ApplyHeadersFromSettings(settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
+func ApplyHeadersFromSettings(pCtx *backend.PluginContext, requestHeaders map[string]string, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
 	for key, value := range settings.CustomHeaders {
-		val := dummyHeader
+		headerValue := dummyHeader
 		if includeSect {
-			val = value
+			headerValue = value
+		}
+		if pCtx != nil {
+			headerValue = strings.ReplaceAll(headerValue, "${__org.id}", fmt.Sprintf("%d", pCtx.OrgID))
+			headerValue = strings.ReplaceAll(headerValue, "${__plugin.id}", pCtx.PluginID)
+			headerValue = strings.ReplaceAll(headerValue, "${__plugin.version}", pCtx.PluginVersion)
+			if pCtx.DataSourceInstanceSettings != nil {
+				headerValue = strings.ReplaceAll(headerValue, "${__ds.uid}", pCtx.DataSourceInstanceSettings.UID)
+				headerValue = strings.ReplaceAll(headerValue, "${__ds.name}", pCtx.DataSourceInstanceSettings.Name)
+				headerValue = strings.ReplaceAll(headerValue, "${__ds.id}", fmt.Sprintf("%d", pCtx.DataSourceInstanceSettings.ID))
+			}
+			if pCtx.User != nil {
+				headerValue = strings.ReplaceAll(headerValue, "${__user.login}", pCtx.User.Login)
+				headerValue = strings.ReplaceAll(headerValue, "${__user.email}", pCtx.User.Email)
+				headerValue = strings.ReplaceAll(headerValue, "${__user.name}", pCtx.User.Name)
+				// headerValue = strings.ReplaceAll(headerValue, "${__user.role}", pCtx.User.Role)
+			}
 		}
 		if key != "" {
-			req.Header.Add(key, val)
-			if strings.EqualFold(key, headerKeyAccept) || strings.EqualFold(key, headerKeyContentType) {
-				req.Header.Set(key, val)
-			}
+			req.Header.Set(key, headerValue)
 		}
 	}
 	return req

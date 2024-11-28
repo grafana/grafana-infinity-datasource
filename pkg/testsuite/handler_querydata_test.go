@@ -24,7 +24,7 @@ func queryData(t *testing.T, ctx context.Context, backendQuery backend.DataQuery
 	t.Helper()
 	query, err := models.LoadQuery(ctx, backendQuery, pluginContext, infClient.Settings)
 	require.Nil(t, err)
-	return pluginhost.QueryDataQuery(ctx, query, infClient, requestHeaders, pluginContext)
+	return pluginhost.QueryDataQuery(ctx, pluginContext, query, infClient, requestHeaders)
 }
 
 func TestAuthentication(t *testing.T) {
@@ -938,7 +938,7 @@ func TestRemoteSources(t *testing.T) {
 				client = New("")
 			}
 
-			frame, err := infinity.GetFrameForURLSources(context.Background(), query, *client, map[string]string{}, &backend.PluginContext{})
+			frame, err := infinity.GetFrameForURLSources(context.Background(), &backend.PluginContext{}, query, *client, map[string]string{})
 			if tt.wantErr != nil {
 				require.NotNil(t, err)
 				assert.Equal(t, tt.wantErr, err)

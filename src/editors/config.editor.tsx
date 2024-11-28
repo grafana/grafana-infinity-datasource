@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import defaultsDeep from 'lodash/defaultsDeep';
 import { css } from '@emotion/css';
-import { InlineFormLabel, Input, Button, LinkButton, useTheme2, Collapse as CollapseOriginal, Switch } from '@grafana/ui';
+import { InlineFormLabel, Input, Button, LinkButton, useTheme2, Collapse as CollapseOriginal } from '@grafana/ui';
 import { SecureFieldsEditor } from './../components/config/SecureFieldsEditor';
 import { AuthEditor } from './config/Auth';
 import { ProxyEditor } from './config/ProxyEditor';
@@ -82,38 +82,6 @@ export const HeadersEditor = (props: DataSourcePluginOptionsEditorProps<Infinity
         <URLEditor options={options} onOptionsChange={onOptionsChange} />
       </Collapse>
       <Collapse isOpen={true} collapsible={true} label="Custom HTTP Headers">
-        <div className="gf-form" style={{ marginBottom: '10px' }}>
-          <InlineFormLabel width={20}>Send User Header</InlineFormLabel>
-          <Switch
-            value={options.jsonData.send_user_header || false}
-            onChange={(e) => {
-              onOptionsChange({
-                ...options,
-                jsonData: {
-                  ...options.jsonData,
-                  send_user_header: e.currentTarget.checked,
-                },
-              });
-            }}
-          />
-          <div className="gf-form-help-text">When enabled, sends the current Grafana user as X-Grafana-User header</div>
-        </div>
-        <div className="gf-form" style={{ marginBottom: '10px' }}>
-          <InlineFormLabel width={20}>Send Datasource ID Header</InlineFormLabel>
-          <Switch
-            value={options.jsonData.send_datasource_id_header || false}
-            onChange={(e) => {
-              onOptionsChange({
-                ...options,
-                jsonData: {
-                  ...options.jsonData,
-                  send_datasource_id_header: e.currentTarget.checked,
-                },
-              });
-            }}
-          />
-          <div className="gf-form-help-text">When enabled, sends the current datasource UID as X-Grafana-Datasource-UID header</div>
-        </div>
         <SecureFieldsEditor dataSourceConfig={options} onChange={onOptionsChange} title="Custom HTTP Header" secureFieldName="httpHeaderName" secureFieldValue="httpHeaderValue" hideTile={true} />
       </Collapse>
       <Collapse isOpen={true} collapsible={true} label="URL Query Param">

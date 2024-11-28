@@ -3,6 +3,7 @@ package infinity_test
 import (
 	"context"
 	"fmt"
+	"io"
 	"net/http"
 	"testing"
 
@@ -269,123 +270,50 @@ func TestNormalizeURL(t *testing.T) {
 	}
 }
 
-func TestApplyGrafanaHeaders(t *testing.T) {
+func TestGetRequest(t *testing.T) {
 	tests := []struct {
-		name     string
-		settings models.InfinitySettings
-		pCtx     *backend.PluginContext
-		want     map[string]string
+		name           string
+		pCtx           *backend.PluginContext
+		settings       models.InfinitySettings
+		body           io.Reader
+		query          models.Query
+		requestHeaders map[string]string
+		wantReq        http.Request
+		wantErr        error
 	}{
 		{
-			name: "should add user header when enabled",
-			settings: models.InfinitySettings{
-				SendUserHeader: true,
-			},
-			pCtx: &backend.PluginContext{
-				User: &backend.User{
-					Login: "testuser",
-				},
-			},
-			want: map[string]string{
-				"X-Grafana-User": "testuser",
-			},
+			name:    "shouldn't interpolate grafana values from query",
+			pCtx:    &backend.PluginContext{PluginID: "hello"},
+			query:   models.Query{URLOptions: models.URLOptions{Headers: []models.URLOptionKeyValuePair{{Key: "Something", Value: "${__plugin.id"}}}},
+			wantReq: http.Request{Header: http.Header{"Something": []string{"${__plugin.id"}}},
 		},
 		{
-			name: "should add datasource id header when enabled",
-			settings: models.InfinitySettings{
-				SendDatasourceIDHeader: true,
-			},
-			pCtx: &backend.PluginContext{
-				DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{
-					UID: "123",
-				},
-			},
-			want: map[string]string{
-				"X-Grafana-Datasource-UID": "123",
-			},
+			name:     "should forward grafana headers correctly when set in the custom header settings",
+			pCtx:     &backend.PluginContext{PluginID: "hello"},
+			settings: models.InfinitySettings{CustomHeaders: map[string]string{"Something": "${__plugin.id}"}},
+			wantReq:  http.Request{Header: http.Header{"Something": []string{"hello"}}},
 		},
 		{
-			name: "should add both headers when both enabled",
-			settings: models.InfinitySettings{
-				SendUserHeader:         true,
-				SendDatasourceIDHeader: true,
-			},
-			pCtx: &backend.PluginContext{
-				User: &backend.User{
-					Login: "testuser",
-				},
-				DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{
-					UID: "123",
-				},
-			},
-			want: map[string]string{
-				"X-Grafana-User":           "testuser",
-				"X-Grafana-Datasource-UID": "123",
-			},
-		},
-		{
-			name: "should not add headers when disabled",
-			settings: models.InfinitySettings{
-				SendUserHeader:         false,
-				SendDatasourceIDHeader: false,
-			},
-			pCtx: &backend.PluginContext{
-				User: &backend.User{
-					Login: "testuser",
-				},
-				DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{
-					UID: "123",
-				},
-			},
-			want: map[string]string{},
-		},
-		{
-			name: "should handle nil plugin context",
-			settings: models.InfinitySettings{
-				SendUserHeader:         true,
-				SendDatasourceIDHeader: true,
-			},
-			pCtx: nil,
-			want: map[string]string{},
-		},
-		{
-			name: "should handle nil user when user header enabled",
-			settings: models.InfinitySettings{
-				SendUserHeader: true,
-			},
-			pCtx: &backend.PluginContext{
-				User: nil,
-				DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{
-					UID: "123",
-				},
-			},
-			want: map[string]string{},
-		},
-		{
-			name: "should handle nil datasource settings when datasource header enabled",
-			settings: models.InfinitySettings{
-				SendDatasourceIDHeader: true,
-			},
-			pCtx: &backend.PluginContext{
-				User:                       &backend.User{Login: "testuser"},
-				DataSourceInstanceSettings: nil,
-			},
-			want: map[string]string{},
+			name:     "should override values from settings compared to query",
+			pCtx:     &backend.PluginContext{PluginID: "hello"},
+			query:    models.Query{URLOptions: models.URLOptions{Headers: []models.URLOptionKeyValuePair{{Key: "Something", Value: "Some Value"}}}},
+			settings: models.InfinitySettings{CustomHeaders: map[string]string{"Something": "${__plugin.id}"}},
+			wantReq:  http.Request{Header: http.Header{"Something": []string{"hello"}}},
 		},
 	}
-
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			req, _ := http.NewRequest("GET", "http://example.com", nil)
-			got := infinity.ApplyGrafanaHeaders(tt.settings, req, tt.pCtx)
-
-			// Verify each expected header
-			for k, v := range tt.want {
-				require.Equal(t, v, got.Header.Get(k))
+			gotReq, err := infinity.GetRequest(context.TODO(), tt.pCtx, tt.settings, tt.body, tt.query, tt.requestHeaders, true)
+			if tt.wantErr != nil {
+				require.NotNil(t, err)
+				assert.Equal(t, tt.wantErr, err)
+				return
 			}
-
-			// Verify no unexpected headers
-			require.Equal(t, len(tt.want), len(got.Header))
+			require.NotNil(t, gotReq)
+			assert.Equal(t, len(tt.wantReq.Header), len(gotReq.Header))
+			for k := range tt.wantReq.Header {
+				require.Equal(t, tt.wantReq.Header.Get(k), gotReq.Header.Get(k))
+			}
 		})
 	}
 }

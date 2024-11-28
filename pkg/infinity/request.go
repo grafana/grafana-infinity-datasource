@@ -14,7 +14,7 @@ import (
 	"moul.io/http2curl"
 )
 
-func GetRequest(ctx context.Context, settings models.InfinitySettings, body io.Reader, query models.Query, requestHeaders map[string]string, includeSect bool, pCtx *backend.PluginContext) (req *http.Request, err error) {
+func GetRequest(ctx context.Context, pCtx *backend.PluginContext, settings models.InfinitySettings, body io.Reader, query models.Query, requestHeaders map[string]string, includeSect bool) (req *http.Request, err error) {
 	ctx, span := tracing.DefaultTracer().Start(ctx, "GetRequest")
 	defer span.End()
 	url, err := GetQueryURL(ctx, settings, query, includeSect)
@@ -29,13 +29,12 @@ func GetRequest(ctx context.Context, settings models.InfinitySettings, body io.R
 	}
 	req = ApplyAcceptHeader(query, settings, req, includeSect)
 	req = ApplyContentTypeHeader(query, settings, req, includeSect)
-	req = ApplyHeadersFromSettings(settings, req, includeSect)
 	req = ApplyHeadersFromQuery(query, settings, req, includeSect)
+	req = ApplyHeadersFromSettings(pCtx, requestHeaders, settings, req, includeSect)
 	req = ApplyBasicAuth(settings, req, includeSect)
 	req = ApplyBearerToken(settings, req, includeSect)
 	req = ApplyApiKeyAuth(settings, req, includeSect)
 	req = ApplyForwardedOAuthIdentity(requestHeaders, settings, req, includeSect)
-	req = ApplyGrafanaHeaders(settings, req, pCtx)
 	return req, err
 }
 
@@ -97,7 +96,7 @@ func NormalizeURL(u string) string {
 func (client *Client) GetExecutedURL(ctx context.Context, query models.Query) string {
 	out := []string{}
 	if query.Source != "inline" && query.Source != "azure-blob" {
-		req, err := GetRequest(ctx, client.Settings, GetQueryBody(ctx, query), query, map[string]string{}, false, nil)
+		req, err := GetRequest(ctx, nil, client.Settings, GetQueryBody(ctx, query), query, map[string]string{}, false)
 		if err != nil {
 			return fmt.Sprintf("error retrieving full url. %s", query.URL)
 		}
@@ -124,18 +123,4 @@ func (client *Client) GetExecutedURL(ctx context.Context, query models.Query) st
 		out = append(out, "###############", "> Authentication steps not included for azure blob authentication")
 	}
 	return strings.Join(out, "\n")
-}
-
-// ApplyGrafanaHeaders adds Grafana-specific headers if enabled in settings
-func ApplyGrafanaHeaders(settings models.InfinitySettings, req *http.Request, pCtx *backend.PluginContext) *http.Request {
-	if pCtx == nil {
-		return req
-	}
-	if settings.SendUserHeader && pCtx.User != nil {
-		req.Header.Set("X-Grafana-User", pCtx.User.Login)
-	}
-	if settings.SendDatasourceIDHeader && pCtx.DataSourceInstanceSettings != nil {
-		req.Header.Set("X-Grafana-Datasource-UID", pCtx.DataSourceInstanceSettings.UID)
-	}
-	return req
 }
