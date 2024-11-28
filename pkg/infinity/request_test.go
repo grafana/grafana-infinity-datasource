@@ -14,11 +14,12 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func Test_getQueryURL(t *testing.T) {
+func TestGetQueryURL(t *testing.T) {
 	tests := []struct {
 		name          string
 		settings      models.InfinitySettings
 		query         models.Query
+		pCtx          *backend.PluginContext
 		excludeSecret bool
 		want          string
 	}{
@@ -187,10 +188,20 @@ func Test_getQueryURL(t *testing.T) {
 			},
 			want: "https://foo.com/hello?foo=bar&key=val10&key=val11%20val%2B12&key2=value2%2Bvalue3",
 		},
+		{
+			name:     "should respect override from settings",
+			pCtx:     &backend.PluginContext{User: &backend.User{Login: "testuser"}},
+			settings: models.InfinitySettings{SecureQueryFields: map[string]string{"X-Grafana-User": "${__user.login}"}},
+			query: models.Query{
+				URL:        "http://foo.com",
+				URLOptions: models.URLOptions{Params: []models.URLOptionKeyValuePair{{Key: "X-Grafana-User", Value: "fake-user"}}},
+			},
+			want: "http://foo.com?X-Grafana-User=testuser",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			u, err := infinity.GetQueryURL(context.TODO(), tt.settings, tt.query, !tt.excludeSecret)
+			u, err := infinity.GetQueryURL(context.TODO(), tt.pCtx, tt.settings, tt.query, !tt.excludeSecret)
 			assert.Equal(t, err, nil)
 			assert.Equal(t, tt.want, u)
 		})

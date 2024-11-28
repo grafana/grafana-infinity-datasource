@@ -72,22 +72,7 @@ func ApplyHeadersFromSettings(pCtx *backend.PluginContext, requestHeaders map[st
 		if includeSect {
 			headerValue = value
 		}
-		if pCtx != nil {
-			headerValue = strings.ReplaceAll(headerValue, "${__org.id}", fmt.Sprintf("%d", pCtx.OrgID))
-			headerValue = strings.ReplaceAll(headerValue, "${__plugin.id}", pCtx.PluginID)
-			headerValue = strings.ReplaceAll(headerValue, "${__plugin.version}", pCtx.PluginVersion)
-			if pCtx.DataSourceInstanceSettings != nil {
-				headerValue = strings.ReplaceAll(headerValue, "${__ds.uid}", pCtx.DataSourceInstanceSettings.UID)
-				headerValue = strings.ReplaceAll(headerValue, "${__ds.name}", pCtx.DataSourceInstanceSettings.Name)
-				headerValue = strings.ReplaceAll(headerValue, "${__ds.id}", fmt.Sprintf("%d", pCtx.DataSourceInstanceSettings.ID))
-			}
-			if pCtx.User != nil {
-				headerValue = strings.ReplaceAll(headerValue, "${__user.login}", pCtx.User.Login)
-				headerValue = strings.ReplaceAll(headerValue, "${__user.email}", pCtx.User.Email)
-				headerValue = strings.ReplaceAll(headerValue, "${__user.name}", pCtx.User.Name)
-				// headerValue = strings.ReplaceAll(headerValue, "${__user.role}", pCtx.User.Role)
-			}
-		}
+		headerValue = interpolateGrafanaMetaDataMacros(headerValue, pCtx)
 		if key != "" {
 			req.Header.Set(key, headerValue)
 		}

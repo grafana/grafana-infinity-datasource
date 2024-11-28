@@ -17,7 +17,7 @@ import (
 func GetRequest(ctx context.Context, pCtx *backend.PluginContext, settings models.InfinitySettings, body io.Reader, query models.Query, requestHeaders map[string]string, includeSect bool) (req *http.Request, err error) {
 	ctx, span := tracing.DefaultTracer().Start(ctx, "GetRequest")
 	defer span.End()
-	url, err := GetQueryURL(ctx, settings, query, includeSect)
+	url, err := GetQueryURL(ctx, pCtx, settings, query, includeSect)
 	if err != nil {
 		return nil, err
 	}
@@ -38,7 +38,7 @@ func GetRequest(ctx context.Context, pCtx *backend.PluginContext, settings model
 	return req, err
 }
 
-func GetQueryURL(ctx context.Context, settings models.InfinitySettings, query models.Query, includeSect bool) (string, error) {
+func GetQueryURL(ctx context.Context, pCtx *backend.PluginContext, settings models.InfinitySettings, query models.Query, includeSect bool) (string, error) {
 	_, span := tracing.DefaultTracer().Start(ctx, "GetQueryURL")
 	defer span.End()
 	urlString := query.URL
@@ -60,6 +60,7 @@ func GetQueryURL(ctx context.Context, settings models.InfinitySettings, query mo
 		if includeSect {
 			val = value
 		}
+		val = interpolateGrafanaMetaDataMacros(val, pCtx)
 		q.Set(key, val)
 	}
 	if settings.AuthenticationMethod == models.AuthenticationMethodApiKey && settings.ApiKeyType == models.ApiKeyTypeQuery {
@@ -123,4 +124,23 @@ func (client *Client) GetExecutedURL(ctx context.Context, query models.Query) st
 		out = append(out, "###############", "> Authentication steps not included for azure blob authentication")
 	}
 	return strings.Join(out, "\n")
+}
+
+func interpolateGrafanaMetaDataMacros(value string, pCtx *backend.PluginContext) string {
+	if pCtx != nil {
+		value = strings.ReplaceAll(value, "${__org.id}", fmt.Sprintf("%d", pCtx.OrgID))
+		value = strings.ReplaceAll(value, "${__plugin.id}", pCtx.PluginID)
+		value = strings.ReplaceAll(value, "${__plugin.version}", pCtx.PluginVersion)
+		if pCtx.DataSourceInstanceSettings != nil {
+			value = strings.ReplaceAll(value, "${__ds.uid}", pCtx.DataSourceInstanceSettings.UID)
+			value = strings.ReplaceAll(value, "${__ds.name}", pCtx.DataSourceInstanceSettings.Name)
+			value = strings.ReplaceAll(value, "${__ds.id}", fmt.Sprintf("%d", pCtx.DataSourceInstanceSettings.ID))
+		}
+		if pCtx.User != nil {
+			value = strings.ReplaceAll(value, "${__user.login}", pCtx.User.Login)
+			value = strings.ReplaceAll(value, "${__user.email}", pCtx.User.Email)
+			value = strings.ReplaceAll(value, "${__user.name}", pCtx.User.Name)
+		}
+	}
+	return value
 }
