@@ -310,7 +310,7 @@ func LoadQuery(ctx context.Context, backendQuery backend.DataQuery, pluginContex
 }
 
 func GetPaginationMaxPagesValue(pCtx *backend.PluginContext, query Query) int {
-	maxPages := 1
+	maxPages := 5
 	if query.PageMaxPages <= 0 {
 		maxPages = 1
 	}
@@ -319,9 +319,10 @@ func GetPaginationMaxPagesValue(pCtx *backend.PluginContext, query Query) int {
 	}
 	maxPageFromEnv := getSettingsFromEnvironment(pCtx, "pagination_max_pages")
 	if maxPageFromEnvValue, err := strconv.Atoi(maxPageFromEnv); err == nil && maxPageFromEnvValue > 0 {
-		if query.PageMaxPages >= maxPageFromEnvValue {
-			maxPages = maxPageFromEnvValue
-		}
+		maxPages = maxPageFromEnvValue
+	}
+	if query.PageMaxPages <= maxPages && query.PageMaxPages > 0 {
+		return query.PageMaxPages
 	}
 	return maxPages
 }

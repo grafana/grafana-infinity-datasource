@@ -164,6 +164,12 @@ func TestGetPaginationMaxPagesValue(t *testing.T) {
 			want:    10,
 		},
 		{
+			name:    "should respect query page max if the value is lesser than environment variable",
+			query:   models.Query{PageMaxPages: 6},
+			envVars: map[string]string{"GF_PLUGIN_PAGINATION_MAX_PAGES": "8"},
+			want:    6,
+		},
+		{
 			name:    "should respect GF_PLUGIN_YESOREYERAM-INFINITY-DATASOURCE_PAGINATION_MAX_PAGES key",
 			query:   models.Query{PageMaxPages: 100},
 			pCtx:    &backend.PluginContext{PluginID: "yesoreyeram-infinity-datasource"},
