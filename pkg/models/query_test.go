@@ -134,3 +134,64 @@ func TestLoadQuery(t *testing.T) {
 		})
 	}
 }
+
+func TestGetPaginationMaxPagesValue(t *testing.T) {
+	tests := []struct {
+		name    string
+		pCtx    *backend.PluginContext
+		envVars map[string]string
+		query   models.Query
+		want    int
+	}{
+		{
+			name: "should return 1 if no defaults set",
+			want: 1,
+		},
+		{
+			name:  "should return 1 if negative values set in query",
+			query: models.Query{PageMaxPages: -5},
+			want:  1,
+		},
+		{
+			name:  "should return 5 if higher values set",
+			query: models.Query{PageMaxPages: 100},
+			want:  5,
+		},
+		{
+			name:    "should respect GF_PLUGIN_pagination_max_pages key",
+			query:   models.Query{PageMaxPages: 100},
+			envVars: map[string]string{"GF_PLUGIN_PAGINATION_MAX_PAGES": "10"},
+			want:    10,
+		},
+		{
+			name:    "should respect GF_PLUGIN_YESOREYERAM-INFINITY-DATASOURCE_PAGINATION_MAX_PAGES key",
+			query:   models.Query{PageMaxPages: 100},
+			pCtx:    &backend.PluginContext{PluginID: "yesoreyeram-infinity-datasource"},
+			envVars: map[string]string{"GF_PLUGIN_PAGINATION_MAX_PAGES": "10", "GF_PLUGIN_YESOREYERAM-INFINITY-DATASOURCE_PAGINATION_MAX_PAGES": "6"},
+			want:    6,
+		},
+		{
+			name:    "should respect GF_DS_XYZ_PAGINATION_MAX_PAGES key",
+			query:   models.Query{PageMaxPages: 100},
+			pCtx:    &backend.PluginContext{PluginID: "yesoreyeram-infinity-datasource", DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{UID: "xyz"}},
+			envVars: map[string]string{"GF_PLUGIN_PAGINATION_MAX_PAGES": "10", "GF_PLUGIN_YESOREYERAM-INFINITY-DATASOURCE_PAGINATION_MAX_PAGES": "6", "GF_DS_XYZ_PAGINATION_MAX_PAGES": "7", "GF_DS_ABC_PAGINATION_MAX_PAGES": "8"},
+			want:    7,
+		},
+		{
+			name:    "should respect case sensitive ds uid",
+			query:   models.Query{PageMaxPages: 100},
+			pCtx:    &backend.PluginContext{PluginID: "yesoreyeram-infinity-datasource", DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{UID: "xyz"}},
+			envVars: map[string]string{"GF_PLUGIN_PAGINATION_MAX_PAGES": "10", "GF_PLUGIN_YESOREYERAM-INFINITY-DATASOURCE_PAGINATION_MAX_PAGES": "6", "GF_DS_XYZ_PAGINATION_MAX_PAGES": "7", "GF_DS_xyz_PAGINATION_MAX_PAGES": "77", "GF_DS_ABC_PAGINATION_MAX_PAGES": "8"},
+			want:    77,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			for k, v := range tt.envVars {
+				t.Setenv(k, v)
+			}
+			got := models.GetPaginationMaxPagesValue(tt.pCtx, tt.query)
+			require.Equal(t, tt.want, got)
+		})
+	}
+}
