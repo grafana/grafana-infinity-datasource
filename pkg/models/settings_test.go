@@ -339,23 +339,23 @@ func TestInfinitySettings_Validate(t *testing.T) {
 		},
 		{
 			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodNone, CustomHeaders: map[string]string{"A": "B"}},
-			wantErr:  errors.New("configure allowed hosts in the authentication section"),
+			wantErr:  models.ErrMissingAllowedHosts,
 		},
 		{
 			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodNone, CustomHeaders: map[string]string{"A": "B", "Accept": ""}},
-			wantErr:  errors.New("configure allowed hosts in the authentication section"),
+			wantErr:  models.ErrMissingAllowedHosts,
 		},
 		{
 			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodNone, CustomHeaders: map[string]string{"A": "B", "Content-Type": ""}},
-			wantErr:  errors.New("configure allowed hosts in the authentication section"),
+			wantErr:  models.ErrMissingAllowedHosts,
 		},
 		{
 			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodNone, CustomHeaders: map[string]string{"A": "B", "Accept": "", "Content-Type": ""}},
-			wantErr:  errors.New("configure allowed hosts in the authentication section"),
+			wantErr:  models.ErrMissingAllowedHosts,
 		},
 		{
 			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodNone, CustomHeaders: map[string]string{"A": "B", "C": "D"}},
-			wantErr:  errors.New("configure allowed hosts in the authentication section"),
+			wantErr:  models.ErrMissingAllowedHosts,
 		},
 		{
 			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodBasic},
@@ -363,7 +363,7 @@ func TestInfinitySettings_Validate(t *testing.T) {
 		},
 		{
 			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodBasic, Password: "123"},
-			wantErr:  errors.New("configure allowed hosts in the authentication section"),
+			wantErr:  models.ErrMissingAllowedHosts,
 		},
 		{
 			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodApiKey},
@@ -379,7 +379,7 @@ func TestInfinitySettings_Validate(t *testing.T) {
 		},
 		{
 			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodApiKey, ApiKeyKey: "foo", ApiKeyValue: "bar"},
-			wantErr:  errors.New("configure allowed hosts in the authentication section"),
+			wantErr:  models.ErrMissingAllowedHosts,
 		},
 		{
 			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodBearerToken},
@@ -387,7 +387,22 @@ func TestInfinitySettings_Validate(t *testing.T) {
 		},
 		{
 			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodBearerToken, BearerToken: "foo"},
-			wantErr:  errors.New("configure allowed hosts in the authentication section"),
+			wantErr:  models.ErrMissingAllowedHosts,
+		},
+		{
+			settings: models.InfinitySettings{SecureQueryFields: map[string]string{"foo": "bar"}},
+			wantErr:  models.ErrMissingAllowedHosts,
+		},
+		{
+			settings: models.InfinitySettings{URL: "https://foo"},
+		},
+		{
+			settings: models.InfinitySettings{TLSClientAuth: true},
+			wantErr:  models.ErrMissingAllowedHosts,
+		},
+		{
+			settings: models.InfinitySettings{TLSClientAuth: true},
+			wantErr:  models.ErrMissingAllowedHosts,
 		},
 	}
 	for _, tt := range tests {

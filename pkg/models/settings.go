@@ -149,16 +149,26 @@ func (s *InfinitySettings) Validate() error {
 		}
 		return nil
 	}
-	if s.AuthenticationMethod != AuthenticationMethodNone && len(s.AllowedHosts) < 1 {
-		return errors.New("configure allowed hosts in the authentication section")
-	}
-	if s.HaveSecureHeaders() && len(s.AllowedHosts) < 1 {
-		return errors.New("configure allowed hosts in the authentication section")
+	if s.DoesAllowedHostsRequired() && len(s.AllowedHosts) < 1 {
+		return ErrMissingAllowedHosts
 	}
 	return nil
 }
 
-func (s *InfinitySettings) HaveSecureHeaders() bool {
+func (s *InfinitySettings) DoesAllowedHostsRequired() bool {
+	// If base url is configured, there is no need for allowed hosts
+	if strings.TrimSpace(s.URL) != "" {
+		return false
+	}
+	// If there is specific authentication mechanism (except none and azure blob), then allowed hosts required
+	if s.AuthenticationMethod != AuthenticationMethodNone && s.AuthenticationMethod != AuthenticationMethodAzureBlob {
+		return true
+	}
+	// If there are any TLS specific settings enabled, then allowed hosts required
+	if s.TLSAuthWithCACert || s.TLSClientAuth {
+		return true
+	}
+	// If there are custom headers (not generic headers such as Accept, Content Type etc), then allowed hosts required
 	if len(s.CustomHeaders) > 0 {
 		for k := range s.CustomHeaders {
 			if textproto.CanonicalMIMEHeaderKey(k) == "Accept" {
@@ -169,7 +179,10 @@ func (s *InfinitySettings) HaveSecureHeaders() bool {
 			}
 			return true
 		}
-		return false
+	}
+	// If there are custom query parameters, then allowed hosts required
+	if len(s.SecureQueryFields) > 0 {
+		return true
 	}
 	return false
 }

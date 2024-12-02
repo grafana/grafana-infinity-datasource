@@ -234,7 +234,7 @@ func (client *Client) req(ctx context.Context, url string, body io.Reader, setti
 		return nil, http.StatusInternalServerError, duration, errorsource.DownstreamError(fmt.Errorf("invalid response received for the URL %s", url), false)
 	}
 	if res.StatusCode >= http.StatusBadRequest {
-		err = fmt.Errorf("%w. %s", ErrUnsuccessfulHTTPResponseStatus, res.Status)
+		err = fmt.Errorf("%w. %s", models.ErrUnsuccessfulHTTPResponseStatus, res.Status)
 		// Infinity can query anything and users are responsible for ensuring that endpoint/auth is correct
 		// therefore any incoming error is considered downstream
 		return nil, res.StatusCode, duration, errorsource.DownstreamError(err, false)
@@ -249,7 +249,7 @@ func (client *Client) req(ctx context.Context, url string, body io.Reader, setti
 		var out any
 		err := json.Unmarshal(bodyBytes, &out)
 		if err != nil {
-			err = fmt.Errorf("%w. %w", ErrParsingResponseBodyAsJson, err)
+			err = fmt.Errorf("%w. %w", models.ErrParsingResponseBodyAsJson, err)
 			err = errorsource.DownstreamError(err, false)
 			logger.Debug("error un-marshaling JSON response", "url", url, "error", err.Error())
 		}
