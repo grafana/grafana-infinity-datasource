@@ -11,6 +11,7 @@ import { HelpLinks } from './../query.help';
 import { BasicOptions } from './query.options';
 import { UQLEditor } from './query.uql';
 import { URLEditor } from './query.url';
+import { UnistoreEditor } from './query.unistore';
 import { ExperimentalFeatures } from './query.experimental';
 import { AzureBlobEditor } from './query.azureBlob';
 import { isDataQuery } from './../../app/utils';
@@ -72,9 +73,11 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
           onShowHelp={() => setShowHelp(!showHelp)}
           datasource={datasource}
         />
-        {query.type === 'series' && <SeriesEditor {...{ query, onChange }} />}
+        {query.type === 'series' && query.source !== 'unistore' && <SeriesEditor {...{ query, onChange }} />}
         {isDataQuery(query) && query.source !== 'inline' && showUrlOptions && <URLEditor {...{ mode, query, onChange, onRunQuery }} />}
         {isDataQuery(query) && query.source === 'azure-blob' && <AzureBlobEditor query={query} onChange={onChange} />}
+        {isDataQuery(query) && query.source === 'unistore' && <UnistoreEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />}
+        {query.type === 'series' && query.source === 'unistore' && <UnistoreEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />}
         {canShowColumnsEditor && <QueryColumnsEditor {...{ mode, query, onChange, onRunQuery }} />}
         {canShowFilterEditor && <TableFilter {...{ query, onChange, onRunQuery }} />}
         {query.type === 'uql' && (
