@@ -10,6 +10,7 @@ import type {
   InfinityXMLQuery,
   InfinityQueryType,
 } from './../types';
+import { getBackendSrv } from '@grafana/runtime';
 
 export const isTableData = (res: any): res is TableData => res && res.columns;
 export const isDataFrame = (res: any): res is DataFrame => res && res.fields;
@@ -298,4 +299,23 @@ export const toTimeSeriesMany = (data: DataFrame[]): DataFrame[] => {
     }
   }
   return result;
+};
+
+export const fetchDatasets = async (type: string): Promise<string[]> => {
+  let url = '/apis/file.grafana.app/v0alpha1/files';
+  if (type === 'series') {
+    url = '/apis/dataset.grafana.app/v0alpha1/datasets';
+  }
+  const datasets = await getBackendSrv().get(url);
+
+  if (!('items' in datasets)) {
+    return [];
+  }
+
+  if (type === 'series') {
+    return datasets.items.map((item: any) => item.metadata?.name);
+  }
+
+  //hack in filter - unistore returns an array of objects, we know the first object is the dataset
+  return datasets.items.filter((item: any) => item.spec?.info[0]?.type === type).map((item: any) => item.metadata?.name);
 };

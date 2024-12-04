@@ -102,7 +102,7 @@ func QueryDataQuery(ctx context.Context, query models.Query, infClient infinity.
 	default:
 		query, _ := infinity.UpdateQueryWithReferenceData(ctx, query, infClient.Settings)
 		switch query.Source {
-		case "url", "azure-blob":
+		case "url", "azure-blob", "unistore":
 			if infClient.Settings.AuthenticationMethod != models.AuthenticationMethodAzureBlob && infClient.Settings.AuthenticationMethod != models.AuthenticationMethodNone && len(infClient.Settings.AllowedHosts) < 1 {
 				response.Error = errors.New("datasource is missing allowed hosts/URLs. Configure it in the datasource settings page for enhanced security")
 				response.ErrorSource = backend.ErrorSourceDownstream
@@ -120,6 +120,10 @@ func QueryDataQuery(ctx context.Context, query models.Query, infClient infinity.
 				return response
 			}
 			frame, err := infinity.GetFrameForURLSources(ctx, query, infClient, requestHeaders)
+			if query.Type == "series" && query.Source == "unistore" {
+				response.Frames = append(response.Frames, frame)
+				return response
+			}
 			if err != nil {
 				logger.Debug("error while performing the infinity query", "msg", err.Error())
 				if frame != nil {

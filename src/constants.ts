@@ -42,6 +42,7 @@ export const INFINITY_SOURCES: ScrapQuerySources[] = [
   { label: 'Inline', value: 'inline', supported_types: ['csv', 'tsv', 'json', 'xml', 'uql', 'groq'] },
   { label: 'Reference', value: 'reference', supported_types: ['csv', 'tsv', 'json', 'xml', 'uql', 'groq'] },
   { label: 'Azure Blob', value: 'azure-blob', supported_types: ['csv', 'tsv', 'json', 'xml', 'uql', 'groq'] },
+  { label: 'Unified Storage', value: 'unistore', supported_types: ['csv', 'json', 'xml', 'series'] },
   { label: 'Random Walk', value: 'random-walk', supported_types: ['series'] },
   { label: 'Expression', value: 'expression', supported_types: ['series'] },
 ];

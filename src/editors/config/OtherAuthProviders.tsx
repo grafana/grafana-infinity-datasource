@@ -4,6 +4,7 @@ import { GuidedBasicAuthEditor } from './guided-config/GuidedBasicAuthEditor';
 import { GoogleJWTEditor } from './guided-config/GoogleJWT';
 import type { InfinityOptions } from './../../types';
 import type { DataSourceSettings, SelectableValue } from '@grafana/data';
+import { config } from '@grafana/runtime';
 
 export const OthersAuthentication = (props: {
   options: DataSourceSettings<InfinityOptions, {}>;
@@ -15,12 +16,15 @@ export const OthersAuthentication = (props: {
   const providers: Array<SelectableValue<string>> = [
     { label: 'Github', value: 'github' },
     { label: 'Google JWT', value: 'google-jwt' },
+    { label: 'Unified Storage', value: 'unistore' },
   ];
   const { options, onOptionsChange, isOpen, onClose } = props;
   const onChange = (o: DataSourceSettings<InfinityOptions, {}>) => {
+    console.log(o);
     onOptionsChange(o);
     onClose();
   };
+
   return (
     <>
       <Modal title="Other Authentication" isOpen={isOpen} onDismiss={onClose}>
@@ -44,6 +48,20 @@ export const OthersAuthentication = (props: {
           />
         )}
         {provider === 'google-jwt' && <GoogleJWTEditor options={options} onChange={onChange} />}
+        {provider === 'unistore' && (
+          <GuidedBasicAuthEditor
+            options={options}
+            onChange={onChange}
+            provider="Unified Storage"
+            allowedHosts={[config.appUrl]}
+            usernameLabel="Username"
+            usernamePlaceholder="Username"
+            usernameTooltip="Basic auth username"
+            passwordLabel="Password"
+            passwordPlaceholder="Password"
+            passwordTooltip="Basic auth password"
+          />
+        )}
       </Modal>
     </>
   );

@@ -292,6 +292,71 @@ func (client *Client) GetResults(ctx context.Context, query models.Query, reques
 			return out, http.StatusOK, duration, err
 		}
 		return string(bodyBytes), http.StatusOK, 0, nil
+	} else if query.Source == "unistore" {
+		// unistore can either pull an entire file (not desired) or a dataframe series
+		if query.Type != "series" {
+			actualType := query.Type
+			query.URL = fmt.Sprintf("%sapis/file.grafana.app/v0alpha1/namespaces/default/files/%s/data", client.Settings.AllowedHosts[0], query.Dataset)
+			//hack because we always return a json that contains a string of json/csv data
+			query.Type = "json"
+			urlResponseObject, statusCode, duration, err := client.req(ctx, query.URL, nil, client.Settings, query, requestHeaders)
+			if err != nil {
+				return urlResponseObject, statusCode, duration, err
+			}
+
+			if dataMap, ok := urlResponseObject.(map[string]interface{}); ok {
+				if spec, ok := dataMap["spec"].(map[string]interface{}); ok {
+					if dataArray, ok := spec["data"].([]interface{}); ok {
+						// Assuming the "data" array has at least one element
+						if dataObj, ok := dataArray[0].(map[string]interface{}); ok {
+							if contents, ok := dataObj["Contents"].(string); ok {
+								if actualType == "json" {
+									var jsonData interface{}
+									err := json.Unmarshal([]byte(contents), &jsonData)
+									if err != nil {
+										logger.Error("error un-marshaling blob content", "error", err.Error())
+										err = errorsource.PluginError(err, false)
+										return contents, statusCode, duration, err
+									}
+
+									return jsonData, statusCode, duration, nil
+								}
+
+								return contents, statusCode, duration, nil
+							}
+						}
+					}
+				}
+			}
+
+			logger.Error("error un-marshaling blob content", "error", err.Error())
+			err = errorsource.PluginError(err, false)
+			return urlResponseObject, statusCode, duration, err
+		} else {
+			query.URL = fmt.Sprintf("%sapis/dataset.grafana.app/v0alpha1/namespaces/default/datasets/%s/data", client.Settings.AllowedHosts[0], query.Dataset)
+			//hack because we always return a json that contains the series
+			query.Type = "json"
+
+			urlResponseObject, statusCode, duration, err := client.req(ctx, query.URL, nil, client.Settings, query, requestHeaders)
+			if err != nil {
+				return urlResponseObject, statusCode, duration, err
+			}
+
+			if dataMap, ok := urlResponseObject.(map[string]interface{}); ok {
+				if spec, ok := dataMap["spec"].(map[string]interface{}); ok {
+					if dataArray, ok := spec["data"].([]interface{}); ok {
+						// Assuming the "data" array has at least one element
+						if dataframe, ok := dataArray[0].(map[string]interface{}); ok {
+							return dataframe, statusCode, duration, nil
+						}
+					}
+				}
+			}
+
+			logger.Error("error un-marshaling blob content", "error", err.Error())
+			err = errorsource.PluginError(err, false)
+			return urlResponseObject, statusCode, duration, err
+		}
 	}
 	switch strings.ToUpper(query.URLOptions.Method) {
 	case http.MethodPost:
