@@ -153,10 +153,13 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
         const responseCodeFromServer = d.meta?.custom?.responseCodeFromServer;
         const error = d.meta?.custom?.error;
         if (isBackendQuery(target)) {
+          d = this.processJSONFieldsInFrame(d);
           promises.push(Promise.resolve(d));
         } else if (target.type === 'google-sheets') {
+          d = this.processJSONFieldsInFrame(d);
           promises.push(Promise.resolve(d));
         } else if (target.type === 'transformations') {
+          d = this.processJSONFieldsInFrame(d);
           promises.push(Promise.resolve(d));
         } else {
           promises.push(
@@ -202,7 +205,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
                 if (target.format === 'node-graph-edges' || target.format === 'node-graph-nodes') {
                   frame.meta.preferredVisualisationType = 'nodeGraph';
                 }
-                return frame;
+                return this.processJSONFieldsInFrame(frame);
               }
               return r;
             })
@@ -262,5 +265,23 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
           break;
       }
     });
+  };
+
+  private processJSONFieldsInFrame = (d: any) => {
+    let fields = (d?.fields || [])?.map((dv: any) => {
+      if (dv?.typeInfo?.frame === 'json.RawMessage') {
+        let values = dv?.values?.map((v: any) => {
+          try {
+            return typeof v === 'string' && v !== null && v !== undefined ? JSON.parse(v) : null;
+          } catch (ex) {
+            console.error(ex, v);
+            return v;
+          }
+        });
+        return { ...dv, values };
+      }
+      return dv;
+    });
+    return { ...d, fields };
   };
 }

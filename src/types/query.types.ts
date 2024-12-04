@@ -1,10 +1,11 @@
 import { FilterOperator } from './../constants';
-import type { DataQuery, SelectableValue } from '@grafana/data';
+import type { SelectableValue } from '@grafana/data';
+import type { DataQuery } from '@grafana/schema';
 
 //#region Query
 export type InfinityQueryType = 'json' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'series' | 'global' | 'uql' | 'groq' | 'google-sheets' | 'transformations';
 export type InfinityQuerySources = 'url' | 'inline' | 'azure-blob' | 'reference' | 'random-walk' | 'expression';
-export type InfinityColumnFormat = 'string' | 'number' | 'timestamp' | 'timestamp_epoch' | 'timestamp_epoch_s' | 'boolean';
+export type InfinityColumnFormat = 'string' | 'number' | 'timestamp' | 'timestamp_epoch' | 'timestamp_epoch_s' | 'boolean' | 'json';
 export type InfinityQueryFormat = 'table' | 'timeseries' | 'logs' | 'trace' | 'node-graph-nodes' | 'node-graph-edges' | 'dataframe' | 'as-is';
 export type QueryBodyType = 'none' | 'form-data' | 'x-www-form-urlencoded' | 'raw' | 'graphql';
 export type QueryBodyContentType = 'text/plain' | 'application/json' | 'application/xml' | 'text/html' | 'application/javascript';

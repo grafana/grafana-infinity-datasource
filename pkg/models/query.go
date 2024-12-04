@@ -172,7 +172,7 @@ type InfinityJSONOptions struct {
 type InfinityColumn struct {
 	Selector        string `json:"selector"`
 	Text            string `json:"text"`
-	Type            string `json:"type"` // "string" | "number" | "timestamp" | "timestamp_epoch" | "timestamp_epoch_s" | "boolean"
+	Type            string `json:"type"` // "string" | "number" | "timestamp" | "timestamp_epoch" | "timestamp_epoch_s" | "boolean" | "json"
 	TimeStampFormat string `json:"timestampFormat"`
 }
 

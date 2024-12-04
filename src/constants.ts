@@ -52,6 +52,7 @@ export const INFINITY_COLUMN_FORMATS: Array<SelectableValue<InfinityColumnFormat
   { label: 'Time ( UNIX ms )', value: 'timestamp_epoch' },
   { label: 'Time ( UNIX s )', value: 'timestamp_epoch_s' },
   { label: 'Boolean', value: 'boolean' },
+  { label: 'JSON', value: 'json' },
 ];
 
 export const variableQueryTypes: Array<SelectableValue<VariableQueryType>> = [
