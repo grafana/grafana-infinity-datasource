@@ -41,7 +41,7 @@ func TestInterPolateCombineValueMacros(t *testing.T) {
 			}, tt.pluginContext)
 			if tt.wantError != nil {
 				require.NotNil(t, err)
-				require.Equal(t, tt.wantError, err)
+				assert.Equal(t, tt.wantError.Error(), err.Error())
 				return
 			}
 			require.Nil(t, err)
@@ -84,7 +84,7 @@ func TestInterPolateFromToMacros(t *testing.T) {
 			got, err := models.InterPolateMacros(tt.query, *tr, tt.pluginContext)
 			if tt.wantError != nil {
 				require.NotNil(t, err)
-				require.Equal(t, tt.wantError, err)
+				assert.Equal(t, tt.wantError.Error(), err.Error())
 				return
 			}
 			require.Nil(t, err)
@@ -126,7 +126,7 @@ func TestInterPolateCustomIntervalMacros(t *testing.T) {
 			got, err := models.InterPolateMacros(tt.query, backend.TimeRange{From: time.UnixMilli(from), To: time.UnixMilli(to)}, tt.pluginContext)
 			if tt.wantError != nil {
 				require.NotNil(t, err)
-				require.Equal(t, tt.wantError, err)
+				assert.Equal(t, tt.wantError.Error(), err.Error())
 				return
 			}
 			require.Nil(t, err)

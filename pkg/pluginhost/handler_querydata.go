@@ -9,7 +9,6 @@ import (
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
-	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/grafana/grafana-plugin-sdk-go/experimental/errorsource"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/trace"
@@ -103,13 +102,8 @@ func QueryDataQuery(ctx context.Context, query models.Query, infClient infinity.
 		query, _ := infinity.UpdateQueryWithReferenceData(ctx, query, infClient.Settings)
 		switch query.Source {
 		case "url", "azure-blob":
-			if infClient.Settings.AuthenticationMethod != models.AuthenticationMethodAzureBlob && infClient.Settings.AuthenticationMethod != models.AuthenticationMethodNone && len(infClient.Settings.AllowedHosts) < 1 {
-				response.Error = errors.New("datasource is missing allowed hosts/URLs. Configure it in the datasource settings page for enhanced security")
-				response.ErrorSource = backend.ErrorSourceDownstream
-				return response
-			}
-			if infClient.Settings.HaveSecureHeaders() && len(infClient.Settings.AllowedHosts) < 1 {
-				response.Error = errors.New("datasource is missing allowed hosts/URLs. Configure it in the datasource settings page for enhanced security")
+			if infClient.Settings.DoesAllowedHostsRequired() && len(infClient.Settings.AllowedHosts) < 1 {
+				response.Error = models.ErrMissingAllowedHosts
 				response.ErrorSource = backend.ErrorSourceDownstream
 				return response
 			}
@@ -129,11 +123,6 @@ func QueryDataQuery(ctx context.Context, query models.Query, infClient infinity.
 				response.Error = fmt.Errorf("error while performing the infinity query. %w", err)
 				response.ErrorSource = errorsource.SourceError(backend.ErrorSourcePlugin, err, false).Source()
 				return response
-			}
-			if frame != nil && infClient.Settings.AuthenticationMethod != models.AuthenticationMethodAzureBlob && infClient.Settings.AuthenticationMethod != models.AuthenticationMethodNone && infClient.Settings.AuthenticationMethod != "" && len(infClient.Settings.AllowedHosts) < 1 {
-				frame.AppendNotices(data.Notice{
-					Text: "Datasource is missing allowed hosts/URLs. Configure it in the datasource settings page for enhanced security.",
-				})
 			}
 			if frame != nil {
 				frame, _ = infinity.WrapMetaForRemoteQuery(ctx, infClient.Settings, frame, nil, query)
