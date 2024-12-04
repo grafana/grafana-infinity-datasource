@@ -2,7 +2,6 @@ package models
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"regexp"
 	"strings"
@@ -38,7 +37,7 @@ func InterPolateMacros(queryString string, timeRange backend.TimeRange, pluginCo
 	macros := map[string]macroFunc{
 		"combineValues": func(query string, args []string) (string, error) {
 			if len(args) <= 3 {
-				return query, errorsource.DownstreamError(errors.New("insufficient arguments to combineValues macro"), false)
+				return query, errorsource.DownstreamError(&macroError{macroName: "combineValues"}, false)
 			}
 			if len(args) == 4 && args[3] == "*" {
 				return "", nil
@@ -57,7 +56,7 @@ func InterPolateMacros(queryString string, timeRange backend.TimeRange, pluginCo
 		},
 		"customInterval": func(query string, args []string) (string, error) {
 			if len(args) == 0 {
-				return query, errorsource.DownstreamError(errors.New("insufficient arguments to customInterval macro"), false)
+				return query, errorsource.DownstreamError(&macroError{macroName: "customInterval"}, false)
 			}
 			for argI := range args {
 				if argI == len(args)-1 {
@@ -66,7 +65,7 @@ func InterPolateMacros(queryString string, timeRange backend.TimeRange, pluginCo
 				if argI%2 != 0 {
 					duration, err := gtime.ParseDuration(args[argI-1])
 					if err != nil {
-						return query, errorsource.DownstreamError(errors.New("invalid customInterval macro"), false)
+						return query, errorsource.DownstreamError(&macroError{message: "invalid macro", macroName: "customInterval"}, false)
 					}
 					if timeRangeInMilliSeconds <= duration.Milliseconds() {
 						return args[argI], nil
@@ -107,44 +106,44 @@ func InterPolateMacros(queryString string, timeRange backend.TimeRange, pluginCo
 func ApplyMacros(ctx context.Context, query Query, timeRange backend.TimeRange, pluginContext backend.PluginContext) (Query, error) {
 	url, err := InterPolateMacros(query.URL, timeRange, pluginContext)
 	if err != nil {
-		return query, fmt.Errorf("error applying macros to url field. %s", err.Error())
+		return query, &macroError{message: err.Error(), field: "url"}
 	}
 	query.URL = url
 
 	uql, err := InterPolateMacros(query.UQL, timeRange, pluginContext)
 	if err != nil {
-		return query, fmt.Errorf("error applying macros to uql field. %s", err.Error())
+		return query, &macroError{message: err.Error(), field: "uql"}
 	}
 	query.UQL = uql
 
 	groq, err := InterPolateMacros(query.GROQ, timeRange, pluginContext)
 	if err != nil {
-		return query, fmt.Errorf("error applying macros to uql field. %s", err.Error())
+		return query, &macroError{message: err.Error(), field: "groq"}
 	}
 	query.GROQ = groq
 
 	data, err := InterPolateMacros(query.Data, timeRange, pluginContext)
 	if err != nil {
-		return query, fmt.Errorf("error applying macros to data field. %s", err.Error())
+		return query, &macroError{message: err.Error(), field: "data"}
 	}
 	query.Data = data
 
 	body, err := InterPolateMacros(query.URLOptions.Body, timeRange, pluginContext)
 	if err != nil {
-		return query, fmt.Errorf("error applying macros to body data field. %s", err.Error())
+		return query, &macroError{message: err.Error(), field: "body data"}
 	}
 	query.URLOptions.Body = body
 
 	graphqlQuery, err := InterPolateMacros(query.URLOptions.BodyGraphQLQuery, timeRange, pluginContext)
 	if err != nil {
-		return query, fmt.Errorf("error applying macros to body graphql query field. %s", err.Error())
+		return query, &macroError{message: err.Error(), field: "body graphql"}
 	}
 	query.URLOptions.BodyGraphQLQuery = graphqlQuery
 
 	for idx, p := range query.URLOptions.Params {
 		up, err := InterPolateMacros(p.Value, timeRange, pluginContext)
 		if err != nil {
-			return query, fmt.Errorf("error applying macros to url parameter field %s. %s", p.Key, err.Error())
+			return query, &macroError{message: err.Error(), field: "url parameter", secondaryMessage: " " + p.Key}
 		}
 		query.URLOptions.Params[idx].Value = up
 	}
@@ -152,14 +151,14 @@ func ApplyMacros(ctx context.Context, query Query, timeRange backend.TimeRange, 
 	for idx, cc := range query.ComputedColumns {
 		up, err := InterPolateMacros(cc.Selector, timeRange, pluginContext)
 		if err != nil {
-			return query, fmt.Errorf("error applying macros to computed column %s (alias: %s). %s", cc.Selector, cc.Text, err.Error())
+			return query, &macroError{message: err.Error(), field: "computed column", secondaryMessage: fmt.Sprintf(" %s (alias: %s)", cc.Selector, cc.Text)}
 		}
 		query.ComputedColumns[idx].Selector = up
 	}
 
 	exp, err := InterPolateMacros(query.FilterExpression, timeRange, pluginContext)
 	if err != nil {
-		return query, fmt.Errorf("error applying macros to filter expression. %s", err.Error())
+		return query, &macroError{message: err.Error(), field: "filter expression"}
 	}
 	query.FilterExpression = exp
 

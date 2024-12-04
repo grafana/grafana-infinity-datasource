@@ -3,7 +3,6 @@ package models
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/textproto"
 	"strings"
@@ -123,29 +122,29 @@ type InfinitySettings struct {
 
 func (s *InfinitySettings) Validate() error {
 	if (s.BasicAuthEnabled || s.AuthenticationMethod == AuthenticationMethodBasic || s.AuthenticationMethod == AuthenticationMethodDigestAuth) && s.Password == "" {
-		return errors.New("invalid or empty password detected")
+		return &ConfigValidationError{Field: "password"}
 	}
 	if s.AuthenticationMethod == AuthenticationMethodApiKey && (s.ApiKeyValue == "" || s.ApiKeyKey == "") {
-		return errors.New("invalid API key specified")
+		return &ConfigValidationError{Field: "API key"}
 	}
 	if s.AuthenticationMethod == AuthenticationMethodBearerToken && s.BearerToken == "" {
-		return errors.New("invalid or empty bearer token detected")
+		return &ConfigValidationError{Field: "Bearer token"}
 	}
 	if s.AuthenticationMethod == AuthenticationMethodAzureBlob {
 		if strings.TrimSpace(s.AzureBlobAccountName) == "" {
-			return errors.New("invalid/empty azure blob account name")
+			return &ConfigValidationError{Field: "Azure blob account name"}
 		}
 		if strings.TrimSpace(s.AzureBlobAccountKey) == "" {
-			return errors.New("invalid/empty azure blob key")
+			return &ConfigValidationError{Field: "Azure blob key"}
 		}
 		return nil
 	}
 	if s.AuthenticationMethod == AuthenticationMethodAWS && s.AWSSettings.AuthType == AWSAuthTypeKeys {
 		if strings.TrimSpace(s.AWSAccessKey) == "" {
-			return errors.New("invalid/empty AWS access key")
+			return &ConfigValidationError{Field: "AWS access key"}
 		}
 		if strings.TrimSpace(s.AWSSecretKey) == "" {
-			return errors.New("invalid/empty AWS secret key")
+			return &ConfigValidationError{Field: "AWS secret key"}
 		}
 		return nil
 	}
@@ -161,7 +160,7 @@ func (s *InfinitySettings) DoesAllowedHostsRequired() bool {
 		return false
 	}
 	// If there is specific authentication mechanism (except none and azure blob), then allowed hosts required
-	if s.AuthenticationMethod != AuthenticationMethodNone && s.AuthenticationMethod != AuthenticationMethodAzureBlob {
+	if s.AuthenticationMethod != "" && s.AuthenticationMethod != AuthenticationMethodNone && s.AuthenticationMethod != AuthenticationMethodAzureBlob {
 		return true
 	}
 	// If there are any TLS specific settings enabled, then allowed hosts required

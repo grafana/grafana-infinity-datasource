@@ -3,7 +3,6 @@ package models
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"strings"
 
@@ -303,12 +302,12 @@ func LoadQuery(ctx context.Context, backendQuery backend.DataQuery, pluginContex
 	var query Query
 	err := json.Unmarshal(backendQuery.JSON, &query)
 	if err != nil {
-		return query, errorsource.DownstreamError(fmt.Errorf("error while parsing the query json. %w", err), false)
+		return query, errorsource.DownstreamError(&queryParsingError{message: "error while parsing the query json", err: err}, false)
 	}
 	query = ApplyDefaultsToQuery(ctx, query, settings)
 	if query.PageMode == PaginationModeList && strings.TrimSpace(query.PageParamListFieldName) == "" {
 		// Downstream error as user input is not correct
-		return query, errorsource.DownstreamError(errors.New("pagination_param_list_field_name cannot be empty"), false)
+		return query, errorsource.DownstreamError(ErrEmptyPaginationListFieldName, false)
 	}
 	return ApplyMacros(ctx, query, backendQuery.TimeRange, pluginContext)
 }

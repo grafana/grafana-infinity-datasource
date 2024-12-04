@@ -2,7 +2,6 @@ package models_test
 
 import (
 	"context"
-	"errors"
 	"testing"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
@@ -335,73 +334,95 @@ func TestInfinitySettings_Validate(t *testing.T) {
 		wantErr  error
 	}{
 		{
+			name:     "should not error when custom settings",
+			settings: models.InfinitySettings{},
+		},
+		{
+			name:     "Should not error when no authentication method specified",
 			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodNone},
 		},
 		{
+			name:     "Should error when missing allowed hosts with custom headers",
 			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodNone, CustomHeaders: map[string]string{"A": "B"}},
 			wantErr:  models.ErrMissingAllowedHosts,
 		},
 		{
+			name:     "Should error when missing allowed hosts with custom headers and empty Accept",
 			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodNone, CustomHeaders: map[string]string{"A": "B", "Accept": ""}},
 			wantErr:  models.ErrMissingAllowedHosts,
 		},
 		{
+			name:     "Should error when missing allowed hosts with custom headers and empty Content-Type",
 			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodNone, CustomHeaders: map[string]string{"A": "B", "Content-Type": ""}},
 			wantErr:  models.ErrMissingAllowedHosts,
 		},
 		{
+			name:     "Should error when missing allowed hosts with custom headers and empty Accept and Content-Type",
 			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodNone, CustomHeaders: map[string]string{"A": "B", "Accept": "", "Content-Type": ""}},
 			wantErr:  models.ErrMissingAllowedHosts,
 		},
 		{
+			name:     "Should error when missing allowed hosts with multiple custom headers",
 			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodNone, CustomHeaders: map[string]string{"A": "B", "C": "D"}},
 			wantErr:  models.ErrMissingAllowedHosts,
 		},
 		{
+			name:     "Should error basic authentication without password",
 			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodBasic},
-			wantErr:  errors.New("invalid or empty password detected"),
+			wantErr:  &models.ConfigValidationError{Field: "password"},
 		},
 		{
+			name:     "Should error basic authentication with password but missing allowed hosts",
 			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodBasic, Password: "123"},
 			wantErr:  models.ErrMissingAllowedHosts,
 		},
 		{
+			name:     "Should error when API key authentication without key",
 			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodApiKey},
-			wantErr:  errors.New("invalid API key specified"),
+			wantErr:  &models.ConfigValidationError{Field: "API key"},
 		},
 		{
+			name:     "Should error when API key authentication with key but without value",
 			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodApiKey, ApiKeyKey: "foo"},
-			wantErr:  errors.New("invalid API key specified"),
+			wantErr:  &models.ConfigValidationError{Field: "API key"},
 		},
 		{
+			name:     "Should error when API key authentication with value but without key",
 			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodApiKey, ApiKeyValue: "bar"},
-			wantErr:  errors.New("invalid API key specified"),
+			wantErr:  &models.ConfigValidationError{Field: "API key"},
 		},
 		{
+			name:     "Should error when API key authentication with key and value but missing allowed hosts",
 			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodApiKey, ApiKeyKey: "foo", ApiKeyValue: "bar"},
 			wantErr:  models.ErrMissingAllowedHosts,
 		},
 		{
+			name:     "Should error when bearer token authentication without token",
 			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodBearerToken},
-			wantErr:  errors.New("invalid or empty bearer token detected"),
+			wantErr:  &models.ConfigValidationError{Field: "Bearer token"},
 		},
 		{
+			name:     "Should error when there are no allowed hosts and bearer token authentication with token but missing allowed hosts",
 			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodBearerToken, BearerToken: "foo"},
 			wantErr:  models.ErrMissingAllowedHosts,
 		},
 		{
+			name:     "Should error when there are no allowed hosts and secure query fields",
 			settings: models.InfinitySettings{SecureQueryFields: map[string]string{"foo": "bar"}},
 			wantErr:  models.ErrMissingAllowedHosts,
 		},
 		{
+			name:     "Should not error when there are no allowed hosts and valid URL",
 			settings: models.InfinitySettings{URL: "https://foo"},
 		},
 		{
+			name:     "Should error when there are no allowed hosts and TLS client authentication",
 			settings: models.InfinitySettings{TLSClientAuth: true},
 			wantErr:  models.ErrMissingAllowedHosts,
 		},
 		{
-			settings: models.InfinitySettings{TLSClientAuth: true},
+			name:     "Should error when there are no allowed hosts and TLS cert authentication",
+			settings: models.InfinitySettings{TLSAuthWithCACert: true},
 			wantErr:  models.ErrMissingAllowedHosts,
 		},
 	}
