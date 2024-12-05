@@ -6,7 +6,6 @@ import (
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
-	"github.com/grafana/grafana-plugin-sdk-go/experimental/errorsource"
 	"github.com/grafana/infinity-libs/lib/go/transformations"
 )
 
@@ -28,7 +27,7 @@ func ApplyTransformations(query models.Query, input *backend.QueryDataResponse) 
 		}
 		response, err = ApplyTransformation(query, t, response)
 		if err != nil {
-			return response, errorsource.PluginError(err, false)
+			return response, backend.PluginError(err)
 		}
 	}
 	for k := range response.Responses {
