@@ -72,22 +72,6 @@ func TestParseErrorResponse(t *testing.T) {
 			wantErr: "unsuccessful HTTP response\nHTTP status code: 500 Internal Server Error\nError message from HTTP response: foo",
 		},
 		{
-			name: "Internal server error with JSON traceId",
-			res: &http.Response{
-				StatusCode: http.StatusInternalServerError,
-				Body:       io.NopCloser(strings.NewReader(`{ "traceId" : "bar" }`)),
-			},
-			wantErr: "unsuccessful HTTP response\nHTTP status code: 500 Internal Server Error\nTraceID from HTTP response: bar",
-		},
-		{
-			name: "Internal server error with JSON message and traceId",
-			res: &http.Response{
-				StatusCode: http.StatusInternalServerError,
-				Body:       io.NopCloser(strings.NewReader(`{ "error" : "foo", "traceId" : "bar" }`)),
-			},
-			wantErr: "unsuccessful HTTP response\nHTTP status code: 500 Internal Server Error\nError message from HTTP response: foo\nTraceID from HTTP response: bar",
-		},
-		{
 			name: "Invalid JSON content response",
 			res: &http.Response{
 				StatusCode: http.StatusInternalServerError,

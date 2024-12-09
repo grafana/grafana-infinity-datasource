@@ -14,7 +14,6 @@ import (
 type HTTPResponseError struct {
 	StatusCode int    // HTTP status code
 	Message    string // Extracted error message from the HTTP response if any
-	TraceID    string // Extracted trace ID from the HTTP response if any
 }
 
 // Error implements the error interface for HTTPResponseError.
@@ -25,9 +24,6 @@ func (h *HTTPResponseError) Error() string {
 	}
 	if h.Message != "" {
 		err = errors.Join(err, fmt.Errorf("Error message from HTTP response: %s", h.Message))
-	}
-	if h.TraceID != "" {
-		err = errors.Join(err, fmt.Errorf("TraceID from HTTP response: %s", h.TraceID))
 	}
 	return err.Error()
 }
@@ -64,11 +60,6 @@ func ParseErrorResponse(res *http.Response) error {
 	unmarshalErr := json.Unmarshal(bodyBytes, &out)
 	if unmarshalErr != nil {
 		return err
-	}
-	for _, key := range []string{"trace_id", "traceId", "traceID"} {
-		if traceId, ok := out[key].(string); ok && traceId != "" {
-			err.TraceID = traceId
-		}
 	}
 	for _, key := range []string{"error", "message", "status"} {
 		if errMsg, ok := out[key].(string); ok && errMsg != "" {
