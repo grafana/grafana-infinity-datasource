@@ -9,14 +9,12 @@ import (
 	"strings"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
-	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"moul.io/http2curl"
 )
 
 func GetRequest(ctx context.Context, settings models.InfinitySettings, body io.Reader, query models.Query, requestHeaders map[string]string, includeSect bool) (req *http.Request, err error) {
 	ctx, span := tracing.DefaultTracer().Start(ctx, "GetRequest")
-	logger := backend.Logger.FromContext(ctx)
 	defer span.End()
 	url, err := GetQueryURL(ctx, settings, query, includeSect)
 	if err != nil {
@@ -36,7 +34,7 @@ func GetRequest(ctx context.Context, settings models.InfinitySettings, body io.R
 	req = ApplyBearerToken(settings, req, includeSect)
 	req = ApplyApiKeyAuth(settings, req, includeSect)
 	req = ApplyForwardedOAuthIdentity(requestHeaders, settings, req, includeSect)
-	req = reqWithHTTPTraceContext(req, logger)
+	req = reqWithHTTPTraceContext(req)
 	return req, err
 }
 
