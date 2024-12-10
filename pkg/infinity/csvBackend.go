@@ -5,9 +5,9 @@ import (
 	"errors"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
+	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
-	"github.com/grafana/grafana-plugin-sdk-go/experimental/errorsource"
 	"github.com/grafana/infinity-libs/lib/go/csvframer"
 	"github.com/grafana/infinity-libs/lib/go/gframer"
 )
@@ -48,9 +48,9 @@ func GetCSVBackendResponse(ctx context.Context, responseString string, query mod
 	}
 	if err != nil {
 		if errors.Is(err, csvframer.ErrEmptyCsv) || errors.Is(err, csvframer.ErrReadingCsvResponse) {
-			err = errorsource.DownstreamError(err, false)
+			err = backend.DownstreamError(err)
 		} else {
-			err = errorsource.PluginError(err , false)
+			err = backend.PluginError(err)
 		}
 	}
 	return frame, err
