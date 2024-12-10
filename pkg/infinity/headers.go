@@ -2,6 +2,7 @@ package infinity
 
 import (
 	"bytes"
+	"context"
 	"encoding/base64"
 	"fmt"
 	"mime/multipart"
@@ -9,6 +10,8 @@ import (
 	"strings"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/propagation"
 )
 
 const dummyHeader = "xxxxxxxx"
@@ -148,6 +151,16 @@ func ApplyForwardedOAuthIdentity(requestHeaders map[string]string, settings mode
 	return req
 }
 
+// ApplyTraceHead injecting trace
+// https://opentelemetry.io/docs/specs/otel/context/api-propagators/#textmap-propagator
+func ApplyTraceHead(ctx context.Context, req *http.Request) *http.Request {
+	prop := otel.GetTextMapPropagator()
+	if prop != nil {
+		prop.Inject(ctx, propagation.HeaderCarrier(req.Header))
+	}
+	return req
+}
+
 func getQueryReqHeader(requestHeaders map[string]string, headerName string) string {
 	for name, value := range requestHeaders {
 		if strings.EqualFold(headerName, name) {
@@ -157,3 +170,4 @@ func getQueryReqHeader(requestHeaders map[string]string, headerName string) stri
 
 	return ""
 }
+
