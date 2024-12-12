@@ -29,7 +29,6 @@ export const InlineDataEntry = ({ query, onChange, onRunQuery }: { query: Infini
       <EditorField label="Data" tooltip={'Inline Data'}>
         <TextArea
           rows={6}
-          className="gf-form-input"
           style={{ width: '600px' }}
           value={query.data}
           placeholder=""
