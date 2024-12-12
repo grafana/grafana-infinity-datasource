@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
+	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
-	"github.com/grafana/grafana-plugin-sdk-go/experimental/errorsource"
 )
 
 type CustomMeta struct {
@@ -47,7 +47,7 @@ func WrapMetaForInlineQuery(ctx context.Context, frame *data.Frame, err error, q
 	customMeta := &CustomMeta{Query: query, Data: query.Data, ResponseCodeFromServer: 0}
 	if err != nil {
 		customMeta.Error = err.Error()
-		err = errorsource.PluginError(err, false)
+		err = backend.PluginError(err)
 	}
 	frame.Meta = &data.FrameMeta{
 		ExecutedQueryString: "This feature is not available for this type of query yet",

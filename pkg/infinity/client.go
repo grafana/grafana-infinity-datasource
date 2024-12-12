@@ -20,7 +20,6 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/proxy"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
-	"github.com/grafana/grafana-plugin-sdk-go/experimental/errorsource"
 	"github.com/icholy/digest"
 	"golang.org/x/oauth2"
 )
@@ -198,15 +197,15 @@ func (client *Client) req(ctx context.Context, url string, body io.Reader, setti
 	defer span.End()
 	req, err := GetRequest(ctx, settings, body, query, requestHeaders, true)
 	if err != nil {
-		return nil, http.StatusInternalServerError, 0, errorsource.DownstreamError(fmt.Errorf("error preparing request. %w", err), false)
+		return nil, http.StatusInternalServerError, 0, backend.DownstreamError(fmt.Errorf("error preparing request. %w", err))
 	}
 	if req == nil {
-		return nil, http.StatusInternalServerError, 0, errorsource.DownstreamError(errors.New("error preparing request. invalid request constructed"), false)
+		return nil, http.StatusInternalServerError, 0, backend.DownstreamError(errors.New("error preparing request. invalid request constructed"))
 	}
 	startTime := time.Now()
 	if !CanAllowURL(req.URL.String(), settings.AllowedHosts) {
 		logger.Debug("url is not in the allowed list. make sure to match the base URL with the settings", "url", req.URL.String())
-		return nil, http.StatusUnauthorized, 0, errorsource.DownstreamError(errors.New("requested URL is not allowed. To allow this URL, update the datasource config Security -> Allowed Hosts section"), false)
+		return nil, http.StatusUnauthorized, 0, backend.DownstreamError(errors.New("requested URL is not allowed. To allow this URL, update the datasource config Security -> Allowed Hosts section"))
 	}
 	logger.Debug("requesting URL", "host", req.URL.Hostname(), "url_path", req.URL.Path, "method", req.Method, "type", query.Type)
 	res, err := client.HttpClient.Do(req)
@@ -220,29 +219,29 @@ func (client *Client) req(ctx context.Context, url string, body io.Reader, setti
 			logger.Debug("error getting response from server", "url", url, "method", req.Method, "error", err.Error(), "status code", res.StatusCode)
 			// Infinity can query anything and users are responsible for ensuring that endpoint/auth is correct
 			// therefore any incoming error is considered downstream
-			return nil, res.StatusCode, duration, errorsource.DownstreamError(fmt.Errorf("error getting response from %s", url), false)
+			return nil, res.StatusCode, duration, backend.DownstreamError(fmt.Errorf("error getting response from %s", url))
 		}
 		if errors.Is(err, context.Canceled) {
 			logger.Debug("request cancelled", "url", url, "method", req.Method)
-			return nil, http.StatusInternalServerError, duration, errorsource.DownstreamError(err, false)
+			return nil, http.StatusInternalServerError, duration, backend.DownstreamError(err)
 		}
 		logger.Debug("error getting response from server. no response received", "url", url, "error", err.Error())
-		return nil, http.StatusInternalServerError, duration, errorsource.DownstreamError(fmt.Errorf("error getting response from url %s. no response received. Error: %w", url, err), false)
+		return nil, http.StatusInternalServerError, duration, backend.DownstreamError(fmt.Errorf("error getting response from url %s. no response received. Error: %w", url, err))
 	}
 	if res == nil {
 		logger.Debug("invalid response from server and also no error", "url", url, "method", req.Method)
-		return nil, http.StatusInternalServerError, duration, errorsource.DownstreamError(fmt.Errorf("invalid response received for the URL %s", url), false)
+		return nil, http.StatusInternalServerError, duration, backend.DownstreamError(fmt.Errorf("invalid response received for the URL %s", url))
 	}
 	if res.StatusCode >= http.StatusBadRequest {
 		err = fmt.Errorf("%w. %s", ErrUnsuccessfulHTTPResponseStatus, res.Status)
 		// Infinity can query anything and users are responsible for ensuring that endpoint/auth is correct
 		// therefore any incoming error is considered downstream
-		return nil, res.StatusCode, duration, errorsource.DownstreamError(err, false)
+		return nil, res.StatusCode, duration, backend.DownstreamError(err)
 	}
 	bodyBytes, err := io.ReadAll(res.Body)
 	if err != nil {
 		logger.Debug("error reading response body", "url", url, "error", err.Error())
-		return nil, res.StatusCode, duration, errorsource.DownstreamError(err, false)
+		return nil, res.StatusCode, duration, backend.DownstreamError(err)
 	}
 	bodyBytes = removeBOMContent(bodyBytes)
 	if CanParseAsJSON(query.Type, res.Header) {
@@ -250,7 +249,7 @@ func (client *Client) req(ctx context.Context, url string, body io.Reader, setti
 		err := json.Unmarshal(bodyBytes, &out)
 		if err != nil {
 			err = fmt.Errorf("%w. %w", ErrParsingResponseBodyAsJson, err)
-			err = errorsource.DownstreamError(err, false)
+			err = backend.DownstreamError(err)
 			logger.Debug("error un-marshaling JSON response", "url", url, "error", err.Error())
 		}
 		return out, res.StatusCode, duration, err
@@ -267,19 +266,19 @@ func (client *Client) GetResults(ctx context.Context, query models.Query, reques
 	logger := backend.Logger.FromContext(ctx)
 	if query.Source == "azure-blob" {
 		if strings.TrimSpace(query.AzBlobContainerName) == "" || strings.TrimSpace(query.AzBlobName) == "" {
-			return nil, http.StatusBadRequest, 0, errorsource.DownstreamError(errors.New("invalid/empty container name/blob name"), false)
+			return nil, http.StatusBadRequest, 0, backend.DownstreamError(errors.New("invalid/empty container name/blob name"))
 		}
 		if client.AzureBlobClient == nil {
-			return nil, http.StatusInternalServerError, 0, errorsource.PluginError(errors.New("invalid azure blob client"), false)
+			return nil, http.StatusInternalServerError, 0, backend.PluginError(errors.New("invalid azure blob client"))
 		}
 		blobDownloadResponse, err := client.AzureBlobClient.DownloadStream(ctx, strings.TrimSpace(query.AzBlobContainerName), strings.TrimSpace(query.AzBlobName), nil)
 		if err != nil {
-			return nil, http.StatusInternalServerError, 0, errorsource.DownstreamError(err, false)
+			return nil, http.StatusInternalServerError, 0, backend.DownstreamError(err)
 		}
 		reader := blobDownloadResponse.Body
 		bodyBytes, err := io.ReadAll(reader)
 		if err != nil {
-			return nil, http.StatusInternalServerError, 0, errorsource.PluginError(fmt.Errorf("error reading blob content. %w", err), false)
+			return nil, http.StatusInternalServerError, 0, backend.PluginError(fmt.Errorf("error reading blob content. %w", err))
 		}
 		bodyBytes = removeBOMContent(bodyBytes)
 		if CanParseAsJSON(query.Type, http.Header{}) {
@@ -287,7 +286,7 @@ func (client *Client) GetResults(ctx context.Context, query models.Query, reques
 			err := json.Unmarshal(bodyBytes, &out)
 			if err != nil {
 				logger.Error("error un-marshaling blob content", "error", err.Error())
-				err = errorsource.PluginError(err, false)
+				err = backend.PluginError(err)
 			}
 			return out, http.StatusOK, duration, err
 		}
