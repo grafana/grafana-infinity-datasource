@@ -1,9 +1,5 @@
 # Change Log
 
-## 3.0.0
-
-⚙️ **Chore**: Plugin now requires Grafana 10.4.8 or newer
-
 ## 2.11.4
 
 🐛 **Bug fix**: Fixed error source for invalid queries
