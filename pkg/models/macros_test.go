@@ -8,7 +8,6 @@ import (
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
-	"github.com/grafana/grafana-plugin-sdk-go/experimental/errorsource"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -22,9 +21,9 @@ func TestInterPolateCombineValueMacros(t *testing.T) {
 		wantError     error
 	}{
 		{query: "foo", want: "foo"},
-		{query: "$__combineValues", wantError: errorsource.DownstreamError(errors.New("insufficient arguments to combineValues macro"), false)},
-		{query: "$__combineValues()", wantError: errorsource.DownstreamError(errors.New("insufficient arguments to combineValues macro"), false)},
-		{query: "$__combineValues(a,b,c)", wantError: errorsource.DownstreamError(errors.New("insufficient arguments to combineValues macro"), false)},
+		{query: "$__combineValues", wantError: backend.DownstreamError(errors.New("insufficient arguments to combineValues macro"))},
+		{query: "$__combineValues()", wantError: backend.DownstreamError(errors.New("insufficient arguments to combineValues macro"))},
+		{query: "$__combineValues(a,b,c)", wantError: backend.DownstreamError(errors.New("insufficient arguments to combineValues macro"))},
 		{query: "$__combineValues(a,b,c,*)", want: ""},
 		{query: "$__combineValues(a,b,c,d)", want: "adb"},
 		{query: "$__combineValues(a,b,__space,d,e)", want: "adb aeb"},
@@ -108,7 +107,7 @@ func TestInterPolateCustomIntervalMacros(t *testing.T) {
 		{query: "$__customInterval(1d)", want: "1d"},
 		{query: "$__customInterval(1m,1 MIN)", want: "1 MIN"},
 		{query: "$__customInterval(1m,1 MIN,1d)", want: "1d"},
-		{query: "$__customInterval(1min,1 MIN,1d)", wantError: errorsource.DownstreamError(errors.New("invalid customInterval macro"), false)},
+		{query: "$__customInterval(1min,1 MIN,1d)", wantError: backend.DownstreamError(errors.New("invalid customInterval macro"))},
 		{query: "$__customInterval(2d,2 DAYS,1d)", want: "2 DAYS"},
 		{query: "$__customInterval(5m,5 MINUTES,1d,1 DAY,10d,10 days,1d)", want: "1 DAY"},
 		{query: "foo $__customInterval(5m,5 MINUTES,1d,1 DAY,10d,10 days,1d) $__customInterval(2d,2 DAYS,1d) bar", want: "foo 1 DAY 2 DAYS bar"},

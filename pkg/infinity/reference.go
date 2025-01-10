@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
-	"github.com/grafana/grafana-plugin-sdk-go/experimental/errorsource"
+	"github.com/grafana/grafana-plugin-sdk-go/backend"
 )
 
 func UpdateQueryWithReferenceData(ctx context.Context, query models.Query, settings models.InfinitySettings) (models.Query, error) {
@@ -18,7 +18,7 @@ func UpdateQueryWithReferenceData(ctx context.Context, query models.Query, setti
 				return query, nil
 			}
 		}
-		return query, errorsource.DownstreamError(errors.New("error getting reference data. Either empty or not defined"), false)
+		return query, backend.DownstreamError(errors.New("error getting reference data. Either empty or not defined"))
 	}
 	return query, nil
 }
