@@ -3,8 +3,6 @@ package infinity
 import (
 	"bytes"
 	"context"
-	"crypto/tls"
-	"crypto/x509"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -16,12 +14,10 @@ import (
 	"time"
 
 	"github.com/Azure/azure-sdk-for-go/sdk/storage/azblob"
+	"github.com/grafana/grafana-infinity-datasource/pkg/httpclient"
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
-	"github.com/grafana/grafana-plugin-sdk-go/backend/proxy"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
-	"github.com/icholy/digest"
-	"golang.org/x/oauth2"
 )
 
 type Client struct {
@@ -29,60 +25,6 @@ type Client struct {
 	HttpClient      *http.Client
 	AzureBlobClient *azblob.Client
 	IsMock          bool
-}
-
-func GetTLSConfigFromSettings(settings models.InfinitySettings) (*tls.Config, error) {
-	tlsConfig := &tls.Config{
-		InsecureSkipVerify: settings.InsecureSkipVerify,
-		ServerName:         settings.ServerName,
-	}
-	if settings.TLSClientAuth {
-		if settings.TLSClientCert == "" || settings.TLSClientKey == "" {
-			return nil, errors.New("invalid Client cert or key")
-		}
-		cert, err := tls.X509KeyPair([]byte(settings.TLSClientCert), []byte(settings.TLSClientKey))
-		if err != nil {
-			return nil, err
-		}
-		tlsConfig.Certificates = []tls.Certificate{cert}
-	}
-	if settings.TLSAuthWithCACert && settings.TLSCACert != "" {
-		caPool := x509.NewCertPool()
-		ok := caPool.AppendCertsFromPEM([]byte(settings.TLSCACert))
-		if !ok {
-			return nil, errors.New("invalid TLS CA certificate")
-		}
-		tlsConfig.RootCAs = caPool
-	}
-	return tlsConfig, nil
-}
-
-func getBaseHTTPClient(ctx context.Context, settings models.InfinitySettings) *http.Client {
-	logger := backend.Logger.FromContext(ctx)
-	tlsConfig, err := GetTLSConfigFromSettings(settings)
-	if err != nil {
-		return nil
-	}
-	transport := &http.Transport{TLSClientConfig: tlsConfig}
-	switch settings.ProxyType {
-	case models.ProxyTypeNone:
-		logger.Debug("proxy type is set to none. Not using the proxy")
-	case models.ProxyTypeUrl:
-		logger.Debug("proxy type is set to url. Using the proxy", "proxy_url", settings.ProxyUrl)
-		u, err := url.Parse(settings.ProxyUrl)
-		if err != nil {
-			logger.Error("error parsing proxy url", "err", err.Error(), "proxy_url", settings.ProxyUrl)
-			return nil
-		}
-		transport.Proxy = http.ProxyURL(u)
-	default:
-		transport.Proxy = http.ProxyFromEnvironment
-	}
-
-	return &http.Client{
-		Transport: transport,
-		Timeout:   time.Second * time.Duration(settings.TimeoutInSeconds),
-	}
 }
 
 func NewClient(ctx context.Context, settings models.InfinitySettings) (client *Client, err error) {
@@ -98,28 +40,16 @@ func NewClient(ctx context.Context, settings models.InfinitySettings) (client *C
 			settings.AuthenticationMethod = models.AuthenticationMethodForwardOauth
 		}
 	}
-	httpClient := getBaseHTTPClient(ctx, settings)
-	if httpClient == nil {
+	httpClient, err := httpclient.GetHTTPClient(ctx, settings)
+	if err != nil {
 		span.RecordError(errors.New("invalid http client"))
 		logger.Error("invalid http client", "datasource uid", settings.UID, "datasource name", settings.Name)
-		return client, errors.New("invalid http client")
-	}
-	httpClient = ApplyDigestAuth(ctx, httpClient, settings)
-	httpClient = ApplyOAuthClientCredentials(ctx, httpClient, settings)
-	httpClient = ApplyOAuthJWT(ctx, httpClient, settings)
-	httpClient = ApplyAWSAuth(ctx, httpClient, settings)
-
-	httpClient, err = ApplySecureSocksProxyConfiguration(ctx, httpClient, settings)
-	if err != nil {
-		logger.Error("error applying secure socks proxy", "datasource uid", settings.UID, "datasource name", settings.Name)
 		return client, err
 	}
-
 	client = &Client{
 		Settings:   settings,
 		HttpClient: httpClient,
 	}
-
 	if settings.AuthenticationMethod == models.AuthenticationMethodAzureBlob {
 		cred, err := azblob.NewSharedKeyCredential(settings.AzureBlobAccountName, settings.AzureBlobAccountKey)
 		if err != nil {
@@ -154,29 +84,6 @@ func NewClient(ctx context.Context, settings models.InfinitySettings) (client *C
 		client.IsMock = true
 	}
 	return client, err
-}
-
-func ApplySecureSocksProxyConfiguration(ctx context.Context, httpClient *http.Client, settings models.InfinitySettings) (*http.Client, error) {
-	logger := backend.Logger.FromContext(ctx)
-	if IsAwsAuthConfigured(settings) {
-		return httpClient, nil
-	}
-	t := httpClient.Transport
-	if IsDigestAuthConfigured(settings) {
-		// if we are using Digest, the Transport is 'digest.Transport' that wraps 'http.Transport'
-		t = t.(*digest.Transport).Transport
-	} else if IsOAuthCredentialsConfigured(settings) || IsOAuthJWTConfigured(settings) {
-		// if we are using Oauth, the Transport is 'oauth2.Transport' that wraps 'http.Transport'
-		t = t.(*oauth2.Transport).Base
-	}
-
-	// secure socks proxy configuration - checks if enabled inside the function
-	err := proxy.New(settings.ProxyOpts.ProxyOptions).ConfigureSecureSocksHTTPProxy(t.(*http.Transport))
-	if err != nil {
-		logger.Error("error configuring secure socks proxy", "err", err.Error())
-		return nil, fmt.Errorf("error configuring secure socks proxy. %s", err)
-	}
-	return httpClient, nil
 }
 
 func replaceSect(input string, settings models.InfinitySettings, includeSect bool) string {
@@ -233,7 +140,7 @@ func (client *Client) req(ctx context.Context, url string, body io.Reader, setti
 		return nil, http.StatusInternalServerError, duration, backend.DownstreamError(fmt.Errorf("invalid response received for the URL %s", url))
 	}
 	if res.StatusCode >= http.StatusBadRequest {
-		err = fmt.Errorf("%w. %s", ErrUnsuccessfulHTTPResponseStatus, res.Status)
+		err = fmt.Errorf("%w. %s", models.ErrUnsuccessfulHTTPResponseStatus, res.Status)
 		// Infinity can query anything and users are responsible for ensuring that endpoint/auth is correct
 		// therefore any incoming error is considered downstream
 		return nil, res.StatusCode, duration, backend.DownstreamError(err)
@@ -248,7 +155,7 @@ func (client *Client) req(ctx context.Context, url string, body io.Reader, setti
 		var out any
 		err := json.Unmarshal(bodyBytes, &out)
 		if err != nil {
-			err = fmt.Errorf("%w. %w", ErrParsingResponseBodyAsJson, err)
+			err = fmt.Errorf("%w. %w", models.ErrParsingResponseBodyAsJson, err)
 			err = backend.DownstreamError(err)
 			logger.Debug("error un-marshaling JSON response", "url", url, "error", err.Error())
 		}

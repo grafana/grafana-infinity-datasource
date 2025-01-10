@@ -3,12 +3,16 @@ package infinity_test
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"testing"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/infinity"
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/propagation"
+	"go.opentelemetry.io/otel/trace"
 )
 
 func Test_getQueryURL(t *testing.T) {
@@ -193,6 +197,7 @@ func Test_getQueryURL(t *testing.T) {
 		})
 	}
 }
+
 func TestClient_GetExecutedURL(t *testing.T) {
 	tests := []struct {
 		name     string
@@ -263,6 +268,73 @@ func TestNormalizeURL(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			require.Equal(t, tt.want, infinity.NormalizeURL(tt.u))
+		})
+	}
+}
+
+const (
+	traceIDStr = "4bf92f3577b34da6a3ce929d0e0e4736"
+	spanIDStr  = "00f067aa0ba902b7"
+)
+
+var (
+	traceID = mustTraceIDFromHex(traceIDStr)
+	spanID  = mustSpanIDFromHex(spanIDStr)
+)
+
+func mustTraceIDFromHex(s string) (t trace.TraceID) {
+	var err error
+	t, err = trace.TraceIDFromHex(s)
+	if err != nil {
+		panic(err)
+	}
+	return
+}
+
+func mustSpanIDFromHex(s string) (t trace.SpanID) {
+	var err error
+	t, err = trace.SpanIDFromHex(s)
+	if err != nil {
+		panic(err)
+	}
+	return
+}
+
+func TestInjectTrace(t *testing.T) {
+	tests := []struct {
+		name   string
+		sc     trace.SpanContext
+		before func()
+	}{
+		{
+			name:   "empty propagation",
+			before: func() {},
+			sc:     trace.NewSpanContext(trace.SpanContextConfig{}),
+		},
+
+		{
+			name: "inject trace",
+			before: func() {
+				otel.SetTextMapPropagator(propagation.TraceContext{})
+			},
+			sc: trace.NewSpanContext(trace.SpanContextConfig{
+				TraceID: traceID,
+				SpanID:  spanID,
+				Remote:  true,
+			}),
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			test.before()
+			ctx := trace.ContextWithRemoteSpanContext(context.Background(), test.sc)
+			req, _ := http.NewRequest(http.MethodGet, "https://github.com/grafana", nil)
+			req = infinity.ApplyTraceHead(ctx, req)
+			if test.sc.HasTraceID() {
+				newCtx := otel.GetTextMapPropagator().Extract(context.Background(), propagation.HeaderCarrier(req.Header))
+				require.Equal(t, test.sc.TraceID(), trace.SpanFromContext(newCtx).SpanContext().TraceID())
+			}
 		})
 	}
 }

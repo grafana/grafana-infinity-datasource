@@ -26,14 +26,15 @@ func GetRequest(ctx context.Context, settings models.InfinitySettings, body io.R
 	default:
 		req, err = http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	}
-	req = ApplyAcceptHeader(query, settings, req, includeSect)
-	req = ApplyContentTypeHeader(query, settings, req, includeSect)
-	req = ApplyHeadersFromSettings(settings, req, includeSect)
-	req = ApplyHeadersFromQuery(query, settings, req, includeSect)
-	req = ApplyBasicAuth(settings, req, includeSect)
-	req = ApplyBearerToken(settings, req, includeSect)
-	req = ApplyApiKeyAuth(settings, req, includeSect)
-	req = ApplyForwardedOAuthIdentity(requestHeaders, settings, req, includeSect)
+	req = ApplyAcceptHeader(ctx, query, settings, req, includeSect)
+	req = ApplyContentTypeHeader(ctx, query, settings, req, includeSect)
+	req = ApplyHeadersFromSettings(ctx, settings, req, includeSect)
+	req = ApplyHeadersFromQuery(ctx, query, settings, req, includeSect)
+	req = ApplyBasicAuth(ctx, settings, req, includeSect)
+	req = ApplyBearerToken(ctx, settings, req, includeSect)
+	req = ApplyApiKeyAuth(ctx, settings, req, includeSect)
+	req = ApplyForwardedOAuthIdentity(ctx, requestHeaders, settings, req, includeSect)
+	req = ApplyTraceHead(ctx, req)
 	return req, err
 }
 
