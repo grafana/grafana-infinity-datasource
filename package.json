@@ -50,7 +50,8 @@
   },
   "resolutions": {
     "uplot": "1.6.31",
-    "dompurify": "2.5.4"
+    "dompurify": "2.5.4",
+    "cross-spawn": "7.0.6"
   },
   "dependencies": {
     "@emotion/css": "11.10.6",
