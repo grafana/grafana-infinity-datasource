@@ -1,6 +1,6 @@
 {
   "name": "grafana-infinity-datasource",
-  "version": "2.12.0",
+  "version": "2.12.1",
   "description": "JSON, CSV, XML, GraphQL, HTML and REST API datasource for Grafana. Do infinite things with Grafana. Transform data with UQL/GROQ. Visualize data from many apis, RSS/ATOM feeds directly",
   "keywords": [
     "grafana",
