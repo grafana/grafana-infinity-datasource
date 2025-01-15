@@ -1,5 +1,9 @@
 # Change Log
 
+## 2.12.1
+
+⚙️ **Chore**: Updated `cross-spawn` to `7.0.6`
+
 ## 2.12.0
 
 🚀 **Improvement**: Injection trace into req.head (#1088)
