@@ -11,4 +11,4 @@ jobs:
       - uses: actions/add-to-project@main
         with:
           project-url: https://github.com/orgs/grafana/projects/457
-          github-token: ${{ secrets.ISSUE_COMMANDS_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
