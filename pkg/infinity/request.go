@@ -34,6 +34,7 @@ func GetRequest(ctx context.Context, settings models.InfinitySettings, body io.R
 	req = ApplyBearerToken(ctx, settings, req, includeSect)
 	req = ApplyApiKeyAuth(ctx, settings, req, includeSect)
 	req = ApplyForwardedOAuthIdentity(ctx, requestHeaders, settings, req, includeSect)
+	req = ApplyHTTPTraceToRequest(ctx, req)
 	req = ApplyTraceHead(ctx, req)
 	return req, err
 }
