@@ -11,7 +11,6 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
-	"github.com/grafana/grafana-plugin-sdk-go/experimental/errorsource"
 	"github.com/grafana/infinity-libs/lib/go/jsonframer"
 	"github.com/grafana/infinity-libs/lib/go/transformations"
 )
@@ -214,11 +213,11 @@ func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, query models.Q
 	if query.PageMode == models.PaginationModeCursor && strings.TrimSpace(query.PageParamCursorFieldExtractionPath) != "" {
 		body, err := json.Marshal(urlResponseObject)
 		if err != nil {
-			return frame, cursor, errorsource.PluginError(errors.New("error while finding the cursor value"), false)
+			return frame, cursor, backend.PluginError(errors.New("error while finding the cursor value"))
 		}
 		cursor, err = jsonframer.GetRootData(string(body), query.PageParamCursorFieldExtractionPath)
 		if err != nil {
-			return frame, cursor, errorsource.PluginError(errors.New("error while extracting the cursor value"), false)
+			return frame, cursor, backend.PluginError(errors.New("error while extracting the cursor value"))
 		}
 	}
 	return frame, cursor, nil
