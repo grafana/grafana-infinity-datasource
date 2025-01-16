@@ -42,6 +42,7 @@
     "countif",
     "csvframer",
     "dataframe",
+    "dataplane",
     "datapoints",
     "dataproxy",
     "datasource",
