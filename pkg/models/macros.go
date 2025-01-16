@@ -9,7 +9,6 @@ import (
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/gtime"
-	"github.com/grafana/grafana-plugin-sdk-go/experimental/errorsource"
 	m "github.com/grafana/infinity-libs/lib/go/macros"
 )
 
@@ -19,7 +18,7 @@ func getMatches(macroName, input string) ([][]string, error) {
 	macroRegex := fmt.Sprintf("\\$__%s\\b(?:\\((.*?)\\))?", macroName)
 	rgx, err := regexp.Compile(macroRegex)
 	if err != nil {
-		return nil, errorsource.PluginError(err, false)
+		return nil, backend.PluginError(err)
 	}
 	return rgx.FindAllStringSubmatch(input, -1), nil
 }
@@ -38,7 +37,7 @@ func InterPolateMacros(queryString string, timeRange backend.TimeRange, pluginCo
 	macros := map[string]macroFunc{
 		"combineValues": func(query string, args []string) (string, error) {
 			if len(args) <= 3 {
-				return query, errorsource.DownstreamError(errors.New("insufficient arguments to combineValues macro"), false)
+				return query, backend.DownstreamError(errors.New("insufficient arguments to combineValues macro"))
 			}
 			if len(args) == 4 && args[3] == "*" {
 				return "", nil
@@ -57,7 +56,7 @@ func InterPolateMacros(queryString string, timeRange backend.TimeRange, pluginCo
 		},
 		"customInterval": func(query string, args []string) (string, error) {
 			if len(args) == 0 {
-				return query, errorsource.DownstreamError(errors.New("insufficient arguments to customInterval macro"), false)
+				return query, backend.DownstreamError(errors.New("insufficient arguments to customInterval macro"))
 			}
 			for argI := range args {
 				if argI == len(args)-1 {
@@ -66,7 +65,7 @@ func InterPolateMacros(queryString string, timeRange backend.TimeRange, pluginCo
 				if argI%2 != 0 {
 					duration, err := gtime.ParseDuration(args[argI-1])
 					if err != nil {
-						return query, errorsource.DownstreamError(errors.New("invalid customInterval macro"), false)
+						return query, backend.DownstreamError(errors.New("invalid customInterval macro"))
 					}
 					if timeRangeInMilliSeconds <= duration.Milliseconds() {
 						return args[argI], nil
@@ -79,7 +78,7 @@ func InterPolateMacros(queryString string, timeRange backend.TimeRange, pluginCo
 	for key, macro := range macros {
 		matches, err := getMatches(key, queryString)
 		if err != nil {
-			return queryString, errorsource.PluginError(err, false)
+			return queryString, err
 		}
 		for _, match := range matches {
 			if len(match) == 0 {
@@ -91,7 +90,7 @@ func InterPolateMacros(queryString string, timeRange backend.TimeRange, pluginCo
 			}
 			res, err := macro(queryString, args)
 			if err != nil {
-				return queryString, errorsource.PluginError(err, false)
+				return queryString, err
 			}
 			queryString = strings.Replace(queryString, match[0], res, -1)
 		}

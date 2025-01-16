@@ -10,7 +10,6 @@ import (
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
-	"github.com/grafana/grafana-plugin-sdk-go/experimental/errorsource"
 	"github.com/grafana/infinity-libs/lib/go/gframer"
 )
 
@@ -49,7 +48,7 @@ func GetGoogleSheetsResponse(ctx context.Context, urlResponseObject any, query m
 			Query: query,
 			Error: "invalid response received from google sheets",
 		}
-		return frame, errorsource.DownstreamError(errors.New("invalid response received from google sheets"), false)
+		return frame, backend.DownstreamError(errors.New("invalid response received from google sheets"))
 	}
 	sheet := &Spreadsheet{}
 	if err := json.Unmarshal([]byte(sheetsString), &sheet); err != nil {
@@ -58,7 +57,7 @@ func GetGoogleSheetsResponse(ctx context.Context, urlResponseObject any, query m
 			Query: query,
 			Error: "invalid response received from google sheets",
 		}
-		return frame, errorsource.DownstreamError(errors.New("invalid response received from google sheets"), false)
+		return frame, backend.DownstreamError(errors.New("invalid response received from google sheets"))
 	}
 	if sheet != nil && len(sheet.Sheets) > 0 && len(sheet.Sheets[0].Data) > 0 {
 		parsedCSV := [][]string{}
