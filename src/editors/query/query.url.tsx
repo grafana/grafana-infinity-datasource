@@ -5,7 +5,7 @@ import { EditorField } from './../../components/extended/EditorField';
 import { Stack } from './../../components/extended/Stack';
 import { isDataQuery } from './../../app/utils';
 import { KeyValueEditor } from './../../components/KeyValuePairEditor';
-import type { InfinityQuery, InfinityQueryType, InfinityQueryWithURLSource, InfinityURLOptions, QueryBodyContentType, QueryBodyType } from './../../types';
+import type { InfinityQuery, InfinityQueryType, InfinityQueryWithURLSource, InfinityURLMethod, InfinityURLOptions, QueryBodyContentType, QueryBodyType } from './../../types';
 import type { SelectableValue } from '@grafana/data';
 import { usePrevious } from 'react-use';
 
@@ -30,11 +30,14 @@ export const Method = ({ query, onChange, onRunQuery }: { query: InfinityQuery; 
   if (query.source === 'inline' || query.source === 'azure-blob') {
     return <></>;
   }
-  const URL_METHODS: SelectableValue[] = [
+  const URL_METHODS: Array<SelectableValue<InfinityURLMethod>> = [
     { label: 'GET', value: 'GET' },
     { label: 'POST', value: 'POST' },
+    { label: 'PUT *', value: 'PUT' },
+    { label: 'PATCH *', value: 'PATCH' },
+    { label: 'DELETE *', value: 'DELETE' },
   ];
-  const onMethodChange = (method: 'GET' | 'POST') => {
+  const onMethodChange = (method: InfinityURLMethod) => {
     if (query.source === 'url') {
       onChange({
         ...query,
@@ -50,13 +53,17 @@ export const Method = ({ query, onChange, onRunQuery }: { query: InfinityQuery; 
     return <></>;
   }
   return (
-    <EditorField label="Method" horizontal={true}>
-      <Select
+    <EditorField
+      label="Method"
+      horizontal={true}
+      tooltip={`By default infinity allows GET & POST. To make use other methods, enable the "Allow non GET / POST HTTP verbs" in the data source config URL section`}
+    >
+      <Select<InfinityURLMethod>
         width={16}
         value={URL_METHODS.find((e) => e.value === (query.url_options.method || 'GET'))}
         defaultValue={URL_METHODS.find((e) => e.value === 'GET')}
         options={URL_METHODS}
-        onChange={(e) => onMethodChange(e.value)}
+        onChange={(e) => onMethodChange(e.value || 'GET')}
       ></Select>
     </EditorField>
   );
@@ -159,10 +166,11 @@ const Body = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange:
   }
   const placeholderGraphQLQuery = `{ query : { }}`;
   const placeholderGraphQLVariables = `{ }`;
+  const doesBodyAllowed = ['POST', 'PUT', 'PATCH', 'DELETE'].includes(query.url_options?.method);
   const onURLOptionsChange = <K extends keyof InfinityURLOptions, V extends InfinityURLOptions[K]>(key: K, value: V) => {
     onChange({ ...query, url_options: { ...query.url_options, [key]: value } });
   };
-  return query.url_options?.method === 'POST' ? (
+  return doesBodyAllowed ? (
     <>
       <Stack direction="column">
         <EditorField label="Body Type">

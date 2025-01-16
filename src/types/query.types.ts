@@ -1,5 +1,6 @@
 import { FilterOperator } from './../constants';
-import type { DataQuery, SelectableValue } from '@grafana/data';
+import type { SelectableValue } from '@grafana/data';
+import type { DataQuery } from '@grafana/schema';
 
 //#region Query
 export type InfinityQueryType = 'json' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'series' | 'global' | 'uql' | 'groq' | 'google-sheets' | 'transformations';
@@ -11,8 +12,9 @@ export type QueryBodyContentType = 'text/plain' | 'application/json' | 'applicat
 export type InfinityQueryBase<T extends InfinityQueryType> = { type: T } & DataQuery;
 export type InfinityQueryWithSource<S extends InfinityQuerySources> = { source: S } & DataQuery;
 export type InfinityKV = { key: string; value: string };
+export type InfinityURLMethod = 'GET' | 'POST' | 'PUT' | `PATCH` | 'DELETE';
 export type InfinityURLOptions = {
-  method: 'GET' | 'POST';
+  method: InfinityURLMethod;
   params?: InfinityKV[];
   headers?: InfinityKV[];
   data?: string;
