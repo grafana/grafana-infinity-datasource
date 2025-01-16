@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
@@ -187,7 +188,7 @@ type InfinityDataOverride struct {
 	Override string   `json:"override"`
 }
 
-func ApplyDefaultsToQuery(ctx context.Context, query Query, settings InfinitySettings) Query {
+func ApplyDefaultsToQuery(ctx context.Context, pCtx *backend.PluginContext, query Query, settings InfinitySettings) Query {
 	if query.Type == "" {
 		query.Type = QueryTypeJSON
 		if query.Source == "" {
@@ -243,12 +244,7 @@ func ApplyDefaultsToQuery(ctx context.Context, query Query, settings InfinitySet
 	}
 	if query.Parser == InfinityParserBackend && query.Source == "url" && !(query.PageMode == "" || query.PageMode == PaginationModeNone) {
 		if query.PageMode != PaginationModeNone {
-			if query.PageMaxPages <= 0 {
-				query.PageMaxPages = 1
-			}
-			if query.PageMaxPages >= 5 {
-				query.PageMaxPages = 5
-			}
+			query.PageMaxPages = GetPaginationMaxPagesValue(pCtx, query)
 			if query.PageParamSizeFieldName == "" {
 				query.PageParamSizeFieldName = "limit"
 			}
@@ -304,10 +300,28 @@ func LoadQuery(ctx context.Context, backendQuery backend.DataQuery, pluginContex
 	if err != nil {
 		return query, backend.DownstreamError(fmt.Errorf("error while parsing the query json. %w", err))
 	}
-	query = ApplyDefaultsToQuery(ctx, query, settings)
+	query = ApplyDefaultsToQuery(ctx, &pluginContext, query, settings)
 	if query.PageMode == PaginationModeList && strings.TrimSpace(query.PageParamListFieldName) == "" {
 		// Downstream error as user input is not correct
 		return query, backend.DownstreamError(errors.New("pagination_param_list_field_name cannot be empty"))
 	}
 	return ApplyMacros(ctx, query, backendQuery.TimeRange, pluginContext)
+}
+
+func GetPaginationMaxPagesValue(pCtx *backend.PluginContext, query Query) int {
+	maxPages := 5
+	if query.PageMaxPages <= 0 {
+		maxPages = 1
+	}
+	if query.PageMaxPages >= 5 {
+		maxPages = 5
+	}
+	maxPageFromEnv := getSettingsFromEnvironment(pCtx, "pagination_max_pages")
+	if maxPageFromEnvValue, err := strconv.Atoi(maxPageFromEnv); err == nil && maxPageFromEnvValue > 0 {
+		maxPages = maxPageFromEnvValue
+	}
+	if query.PageMaxPages <= maxPages && query.PageMaxPages > 0 {
+		return query.PageMaxPages
+	}
+	return maxPages
 }
