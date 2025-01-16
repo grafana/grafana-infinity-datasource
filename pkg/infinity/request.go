@@ -9,8 +9,8 @@ import (
 	"strings"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
+	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
-	"github.com/grafana/grafana-plugin-sdk-go/experimental/errorsource"
 	"moul.io/http2curl"
 )
 
@@ -22,7 +22,7 @@ func GetRequest(ctx context.Context, settings models.InfinitySettings, body io.R
 		return nil, err
 	}
 	if (strings.EqualFold(query.URLOptions.Method, "PUT") || strings.EqualFold(query.URLOptions.Method, "PATCH") || strings.EqualFold(query.URLOptions.Method, "DELETE")) && !settings.AllowNonGetPostMethods {
-		return nil, errorsource.DownstreamError(models.ErrNonHTTPGetPostRestricted, false)
+		return nil, backend.DownstreamError(models.ErrNonHTTPGetPostRestricted)
 	}
 	switch strings.ToUpper(query.URLOptions.Method) {
 	case http.MethodPost:

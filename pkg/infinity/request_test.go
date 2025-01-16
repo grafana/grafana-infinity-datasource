@@ -11,7 +11,7 @@ import (
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/infinity"
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
-	"github.com/grafana/grafana-plugin-sdk-go/experimental/errorsource"
+	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"go.opentelemetry.io/otel"
@@ -35,7 +35,7 @@ func TestGetRequest(t *testing.T) {
 			query: models.Query{
 				URLOptions: models.URLOptions{Method: "delete"},
 			},
-			wantErr: errorsource.DownstreamError(models.ErrNonHTTPGetPostRestricted, false),
+			wantErr: backend.DownstreamError(models.ErrNonHTTPGetPostRestricted),
 		},
 		{
 			name:     "should allow if DELETE method requested with enabled in the settings",
