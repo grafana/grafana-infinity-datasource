@@ -1,5 +1,19 @@
 # Change Log
 
+## 2.12.1
+
+⚙️ **Chore**: Updated `cross-spawn` to `7.0.6`
+
+## 2.12.0
+
+🚀 **Improvement**: Injection trace into req.head (#1088)
+
+⚙️ **Chore**: Updated `nanoid` from `3.3.7` to `3.3.8`
+
+⚙️ **Chore**: Updated backend plugin SDK `github.com/grafana/grafana-plugin-sdk-go` from `0.259.0` to `0.261.0`
+
+🐛 **Bug fix**: Fixed height of the text area
+
 ## 2.11.4
 
 🐛 **Bug fix**: Fixed error source for invalid queries

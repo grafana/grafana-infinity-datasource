@@ -1,6 +1,7 @@
 package infinity
 
 import (
+	"context"
 	"crypto/tls"
 	"net/http"
 	"net/http/httptrace"
@@ -8,7 +9,7 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 )
 
-func reqWithHTTPTraceContext(req *http.Request) *http.Request {
+func ApplyHTTPTraceToRequest(_ context.Context, req *http.Request) *http.Request {
 	ctx := req.Context()
 	logger := backend.Logger.FromContext(ctx)
 	trace := &httptrace.ClientTrace{

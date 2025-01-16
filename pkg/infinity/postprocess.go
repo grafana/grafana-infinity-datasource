@@ -10,7 +10,6 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
-	"github.com/grafana/grafana-plugin-sdk-go/experimental/errorsource"
 	"github.com/grafana/infinity-libs/lib/go/framesql"
 	t "github.com/grafana/infinity-libs/lib/go/transformations"
 )
@@ -27,7 +26,7 @@ func PostProcessFrame(ctx context.Context, frame *data.Frame, query models.Query
 	if err != nil {
 		logger.Error("error getting computed column", "error", err.Error())
 		frame.Meta.Custom = &CustomMeta{Query: query, Error: err.Error()}
-		return frame, errorsource.PluginError(err, false)
+		return frame, backend.PluginError(err)
 	}
 	frame, err = t.ApplyFilter(frame, query.FilterExpression)
 	if err != nil {
@@ -78,8 +77,8 @@ func addErrorSourceToTransformError(err error) error {
 	
 	for _, e := range downstreamErrors {
 		if errors.Is(err, e) {
-			return errorsource.DownstreamError(err, false)
+			return backend.DownstreamError(err)
 		}
 	}
-	return errorsource.PluginError(err, false)
+	return backend.PluginError(err)
 }
