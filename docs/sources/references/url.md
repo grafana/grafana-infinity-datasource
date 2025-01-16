@@ -60,7 +60,7 @@ Note: We suggest adding secure headers only via configuration and not in query.
 
 ## Forwarding Grafana meta data as headers / query params
 
-From Infinity plugin version 2.12.0, You will be able to forward grafana meta data such as user id, datasource uid to the outgoing requests via **Custom HTTP Headers** / **URL Query parameters\*** from the datasource settings page. In the datasource **URL** section, you can add any number of custom headers / query parameters with their own values. The values can include following macros which will be interpolated into actual value from the request context.
+From Infinity plugin version 3.0.0, You will be able to forward grafana meta data such as user id, datasource uid to the outgoing requests via **Custom HTTP Headers** / **URL Query parameters\*** from the datasource settings page. In the datasource **URL** section, you can add any number of custom headers / query parameters with their own values. The values can include following macros which will be interpolated into actual value from the request context.
 
 | Macro name            | Description                                                         |
 | --------------------- | ------------------------------------------------------------------- |
