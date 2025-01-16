@@ -9,14 +9,15 @@ import (
 	"strings"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
+	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"moul.io/http2curl"
 )
 
-func GetRequest(ctx context.Context, settings models.InfinitySettings, body io.Reader, query models.Query, requestHeaders map[string]string, includeSect bool) (req *http.Request, err error) {
+func GetRequest(ctx context.Context, pCtx *backend.PluginContext, settings models.InfinitySettings, body io.Reader, query models.Query, requestHeaders map[string]string, includeSect bool) (req *http.Request, err error) {
 	ctx, span := tracing.DefaultTracer().Start(ctx, "GetRequest")
 	defer span.End()
-	url, err := GetQueryURL(ctx, settings, query, includeSect)
+	url, err := GetQueryURL(ctx, pCtx, settings, query, includeSect)
 	if err != nil {
 		return nil, err
 	}
@@ -28,7 +29,7 @@ func GetRequest(ctx context.Context, settings models.InfinitySettings, body io.R
 	}
 	req = ApplyAcceptHeader(ctx, query, settings, req, includeSect)
 	req = ApplyContentTypeHeader(ctx, query, settings, req, includeSect)
-	req = ApplyHeadersFromSettings(ctx, settings, req, includeSect)
+	req = ApplyHeadersFromSettings(pCtx, requestHeaders, settings, req, includeSect)
 	req = ApplyHeadersFromQuery(ctx, query, settings, req, includeSect)
 	req = ApplyBasicAuth(ctx, settings, req, includeSect)
 	req = ApplyBearerToken(ctx, settings, req, includeSect)
@@ -38,7 +39,7 @@ func GetRequest(ctx context.Context, settings models.InfinitySettings, body io.R
 	return req, err
 }
 
-func GetQueryURL(ctx context.Context, settings models.InfinitySettings, query models.Query, includeSect bool) (string, error) {
+func GetQueryURL(ctx context.Context, pCtx *backend.PluginContext, settings models.InfinitySettings, query models.Query, includeSect bool) (string, error) {
 	_, span := tracing.DefaultTracer().Start(ctx, "GetQueryURL")
 	defer span.End()
 	urlString := query.URL
@@ -60,6 +61,7 @@ func GetQueryURL(ctx context.Context, settings models.InfinitySettings, query mo
 		if includeSect {
 			val = value
 		}
+		val = interpolateGrafanaMetaDataMacros(val, pCtx)
 		q.Set(key, val)
 	}
 	if settings.AuthenticationMethod == models.AuthenticationMethodApiKey && settings.ApiKeyType == models.ApiKeyTypeQuery {
@@ -96,7 +98,7 @@ func NormalizeURL(u string) string {
 func (client *Client) GetExecutedURL(ctx context.Context, query models.Query) string {
 	out := []string{}
 	if query.Source != "inline" && query.Source != "azure-blob" {
-		req, err := GetRequest(ctx, client.Settings, GetQueryBody(ctx, query), query, map[string]string{}, false)
+		req, err := GetRequest(ctx, nil, client.Settings, GetQueryBody(ctx, query), query, map[string]string{}, false)
 		if err != nil {
 			return fmt.Sprintf("error retrieving full url. %s", query.URL)
 		}
@@ -123,4 +125,23 @@ func (client *Client) GetExecutedURL(ctx context.Context, query models.Query) st
 		out = append(out, "###############", "> Authentication steps not included for azure blob authentication")
 	}
 	return strings.Join(out, "\n")
+}
+
+func interpolateGrafanaMetaDataMacros(value string, pCtx *backend.PluginContext) string {
+	if pCtx != nil {
+		value = strings.ReplaceAll(value, "${__org.id}", fmt.Sprintf("%d", pCtx.OrgID))
+		value = strings.ReplaceAll(value, "${__plugin.id}", pCtx.PluginID)
+		value = strings.ReplaceAll(value, "${__plugin.version}", pCtx.PluginVersion)
+		if pCtx.DataSourceInstanceSettings != nil {
+			value = strings.ReplaceAll(value, "${__ds.uid}", pCtx.DataSourceInstanceSettings.UID)
+			value = strings.ReplaceAll(value, "${__ds.name}", pCtx.DataSourceInstanceSettings.Name)
+			value = strings.ReplaceAll(value, "${__ds.id}", fmt.Sprintf("%d", pCtx.DataSourceInstanceSettings.ID))
+		}
+		if pCtx.User != nil {
+			value = strings.ReplaceAll(value, "${__user.login}", pCtx.User.Login)
+			value = strings.ReplaceAll(value, "${__user.email}", pCtx.User.Email)
+			value = strings.ReplaceAll(value, "${__user.name}", pCtx.User.Name)
+		}
+	}
+	return value
 }

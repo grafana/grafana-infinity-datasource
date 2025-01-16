@@ -3,11 +3,13 @@ package infinity_test
 import (
 	"context"
 	"fmt"
+	"io"
 	"net/http"
 	"testing"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/infinity"
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
+	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"go.opentelemetry.io/otel"
@@ -15,11 +17,12 @@ import (
 	"go.opentelemetry.io/otel/trace"
 )
 
-func Test_getQueryURL(t *testing.T) {
+func TestGetQueryURL(t *testing.T) {
 	tests := []struct {
 		name          string
 		settings      models.InfinitySettings
 		query         models.Query
+		pCtx          *backend.PluginContext
 		excludeSecret bool
 		want          string
 	}{
@@ -188,10 +191,20 @@ func Test_getQueryURL(t *testing.T) {
 			},
 			want: "https://foo.com/hello?foo=bar&key=val10&key=val11%20val%2B12&key2=value2%2Bvalue3",
 		},
+		{
+			name:     "should respect override from settings",
+			pCtx:     &backend.PluginContext{User: &backend.User{Login: "testuser"}},
+			settings: models.InfinitySettings{SecureQueryFields: map[string]string{"X-Grafana-User": "${__user.login}"}},
+			query: models.Query{
+				URL:        "http://foo.com",
+				URLOptions: models.URLOptions{Params: []models.URLOptionKeyValuePair{{Key: "X-Grafana-User", Value: "fake-user"}}},
+			},
+			want: "http://foo.com?X-Grafana-User=testuser",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			u, err := infinity.GetQueryURL(context.TODO(), tt.settings, tt.query, !tt.excludeSecret)
+			u, err := infinity.GetQueryURL(context.TODO(), tt.pCtx, tt.settings, tt.query, !tt.excludeSecret)
 			assert.Equal(t, err, nil)
 			assert.Equal(t, tt.want, u)
 		})
@@ -268,6 +281,54 @@ func TestNormalizeURL(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			require.Equal(t, tt.want, infinity.NormalizeURL(tt.u))
+		})
+	}
+}
+
+func TestGetRequest(t *testing.T) {
+	tests := []struct {
+		name           string
+		pCtx           *backend.PluginContext
+		settings       models.InfinitySettings
+		body           io.Reader
+		query          models.Query
+		requestHeaders map[string]string
+		wantReq        http.Request
+		wantErr        error
+	}{
+		{
+			name:    "shouldn't interpolate grafana values from query",
+			pCtx:    &backend.PluginContext{PluginID: "hello"},
+			query:   models.Query{URLOptions: models.URLOptions{Headers: []models.URLOptionKeyValuePair{{Key: "Something", Value: "${__plugin.id"}}}},
+			wantReq: http.Request{Header: http.Header{"Something": []string{"${__plugin.id"}}},
+		},
+		{
+			name:     "should forward grafana headers correctly when set in the custom header settings",
+			pCtx:     &backend.PluginContext{PluginID: "hello"},
+			settings: models.InfinitySettings{CustomHeaders: map[string]string{"Something": "${__plugin.id}"}},
+			wantReq:  http.Request{Header: http.Header{"Something": []string{"hello"}}},
+		},
+		{
+			name:     "should override values from settings compared to query",
+			pCtx:     &backend.PluginContext{PluginID: "hello"},
+			query:    models.Query{URLOptions: models.URLOptions{Headers: []models.URLOptionKeyValuePair{{Key: "Something", Value: "Some Value"}}}},
+			settings: models.InfinitySettings{CustomHeaders: map[string]string{"Something": "${__plugin.id}"}},
+			wantReq:  http.Request{Header: http.Header{"Something": []string{"hello"}}},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gotReq, err := infinity.GetRequest(context.TODO(), tt.pCtx, tt.settings, tt.body, tt.query, tt.requestHeaders, true)
+			if tt.wantErr != nil {
+				require.NotNil(t, err)
+				assert.Equal(t, tt.wantErr, err)
+				return
+			}
+			require.NotNil(t, gotReq)
+			assert.Equal(t, len(tt.wantReq.Header), len(gotReq.Header))
+			for k := range tt.wantReq.Header {
+				require.Equal(t, tt.wantReq.Header.Get(k), gotReq.Header.Get(k))
+			}
 		})
 	}
 }

@@ -8,6 +8,7 @@ import (
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/infinity"
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
+	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -65,7 +66,8 @@ func TestInfinityClient_GetResults(t *testing.T) {
 				Settings:   tt.settings,
 				HttpClient: &http.Client{},
 			}
-			gotO, statusCode, duration, err := client.GetResults(context.Background(), tt.query, tt.requestHeaders)
+			pluginContext := &backend.PluginContext{}
+			gotO, statusCode, duration, err := client.GetResults(context.Background(), pluginContext, tt.query, tt.requestHeaders)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("GetResults() error = %v, wantErr %v", err, tt.wantErr)
 				return
