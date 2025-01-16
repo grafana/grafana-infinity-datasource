@@ -2,6 +2,7 @@ package infinity
 
 import (
 	"bytes"
+	"context"
 	"encoding/base64"
 	"fmt"
 	"mime/multipart"
@@ -10,6 +11,8 @@ import (
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/propagation"
 )
 
 const dummyHeader = "xxxxxxxx"
@@ -26,7 +29,7 @@ const (
 	HeaderKeyIdToken       = "X-Id-Token"
 )
 
-func ApplyAcceptHeader(query models.Query, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
+func ApplyAcceptHeader(_ context.Context, query models.Query, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
 	if query.Type == models.QueryTypeJSON || query.Type == models.QueryTypeGraphQL {
 		req.Header.Set(headerKeyAccept, `application/json;q=0.9,text/plain`)
 	}
@@ -39,7 +42,7 @@ func ApplyAcceptHeader(query models.Query, settings models.InfinitySettings, req
 	return req
 }
 
-func ApplyContentTypeHeader(query models.Query, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
+func ApplyContentTypeHeader(_ context.Context, query models.Query, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
 	if strings.ToUpper(query.URLOptions.Method) == http.MethodPost {
 		switch query.URLOptions.BodyType {
 		case "raw":
@@ -80,7 +83,7 @@ func ApplyHeadersFromSettings(pCtx *backend.PluginContext, requestHeaders map[st
 	return req
 }
 
-func ApplyHeadersFromQuery(query models.Query, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
+func ApplyHeadersFromQuery(_ context.Context, query models.Query, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
 	for _, header := range query.URLOptions.Headers {
 		value := dummyHeader
 		if includeSect {
@@ -96,7 +99,7 @@ func ApplyHeadersFromQuery(query models.Query, settings models.InfinitySettings,
 	return req
 }
 
-func ApplyBasicAuth(settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
+func ApplyBasicAuth(_ context.Context, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
 	if settings.BasicAuthEnabled && (settings.UserName != "" || settings.Password != "") {
 		basicAuthHeader := fmt.Sprintf("Basic %s", dummyHeader)
 		if includeSect {
@@ -107,7 +110,7 @@ func ApplyBasicAuth(settings models.InfinitySettings, req *http.Request, include
 	return req
 }
 
-func ApplyBearerToken(settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
+func ApplyBearerToken(_ context.Context, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
 	if settings.AuthenticationMethod == models.AuthenticationMethodBearerToken {
 		bearerAuthHeader := fmt.Sprintf("Bearer %s", dummyHeader)
 		if includeSect {
@@ -118,7 +121,7 @@ func ApplyBearerToken(settings models.InfinitySettings, req *http.Request, inclu
 	return req
 }
 
-func ApplyApiKeyAuth(settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
+func ApplyApiKeyAuth(_ context.Context, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
 	if settings.AuthenticationMethod == models.AuthenticationMethodApiKey && settings.ApiKeyType == models.ApiKeyTypeHeader {
 		apiKeyHeader := dummyHeader
 		if includeSect {
@@ -131,7 +134,7 @@ func ApplyApiKeyAuth(settings models.InfinitySettings, req *http.Request, includ
 	return req
 }
 
-func ApplyForwardedOAuthIdentity(requestHeaders map[string]string, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
+func ApplyForwardedOAuthIdentity(_ context.Context, requestHeaders map[string]string, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
 	if settings.ForwardOauthIdentity {
 		authHeader := dummyHeader
 		token := dummyHeader
@@ -143,6 +146,16 @@ func ApplyForwardedOAuthIdentity(requestHeaders map[string]string, settings mode
 		if token != "" && token != dummyHeader {
 			req.Header.Add(HeaderKeyIdToken, token)
 		}
+	}
+	return req
+}
+
+// ApplyTraceHead injecting trace
+// https://opentelemetry.io/docs/specs/otel/context/api-propagators/#textmap-propagator
+func ApplyTraceHead(ctx context.Context, req *http.Request) *http.Request {
+	prop := otel.GetTextMapPropagator()
+	if prop != nil {
+		prop.Inject(ctx, propagation.HeaderCarrier(req.Header))
 	}
 	return req
 }
