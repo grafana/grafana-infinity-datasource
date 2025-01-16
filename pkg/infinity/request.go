@@ -10,6 +10,7 @@ import (
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
+	"github.com/grafana/grafana-plugin-sdk-go/experimental/errorsource"
 	"moul.io/http2curl"
 )
 
@@ -20,9 +21,18 @@ func GetRequest(ctx context.Context, settings models.InfinitySettings, body io.R
 	if err != nil {
 		return nil, err
 	}
+	if (strings.EqualFold(query.URLOptions.Method, "PUT") || strings.EqualFold(query.URLOptions.Method, "PATCH") || strings.EqualFold(query.URLOptions.Method, "DELETE")) && !settings.AllowNonGetPostMethods {
+		return nil, errorsource.DownstreamError(models.ErrNonHTTPGetPostRestricted, false)
+	}
 	switch strings.ToUpper(query.URLOptions.Method) {
 	case http.MethodPost:
 		req, err = http.NewRequestWithContext(ctx, http.MethodPost, url, body)
+	case http.MethodPatch:
+		req, err = http.NewRequestWithContext(ctx, http.MethodPatch, url, body)
+	case http.MethodPut:
+		req, err = http.NewRequestWithContext(ctx, http.MethodPut, url, body)
+	case http.MethodDelete:
+		req, err = http.NewRequestWithContext(ctx, http.MethodDelete, url, body)
 	default:
 		req, err = http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	}

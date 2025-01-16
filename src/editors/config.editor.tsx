@@ -10,12 +10,11 @@ import { SecurityConfigEditor } from './config/SecurityConfigEditor';
 import { GlobalQueryEditor } from './config/GlobalQueryEditor';
 import { ProvisioningScript } from './config/Provisioning';
 import { TLSConfigEditor } from './config/TLSConfigEditor';
-import { URLEditor } from './config/URL';
+import { URLEditor, URLMiscEditor } from './config/URL';
 import { ReferenceDataEditor } from './config/ReferenceData';
 import { CustomHealthCheckEditor } from './config/CustomHealthCheckEditor';
 import type { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 import type { InfinityOptions } from './../types';
-import { QueryParamEditor } from './config/QueryParamEditor';
 
 const Collapse = CollapseOriginal as any;
 
@@ -87,8 +86,8 @@ export const HeadersEditor = (props: DataSourcePluginOptionsEditorProps<Infinity
       <Collapse isOpen={true} collapsible={true} label="URL Query Param">
         <SecureFieldsEditor dataSourceConfig={options} onChange={onOptionsChange} title="URL Query Param" secureFieldName="secureQueryName" secureFieldValue="secureQueryValue" hideTile={true} />
       </Collapse>
-      <Collapse isOpen={true} collapsible={true} label="Query Param Encoding (EXPERIMENTAL)">
-        <QueryParamEditor options={options} onOptionsChange={onOptionsChange} />
+      <Collapse isOpen={true} collapsible={true} label="Misc URL settings">
+        <URLMiscEditor options={options} onOptionsChange={onOptionsChange} />
       </Collapse>
     </>
   );

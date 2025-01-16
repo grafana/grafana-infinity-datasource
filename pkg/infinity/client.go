@@ -201,7 +201,7 @@ func (client *Client) GetResults(ctx context.Context, query models.Query, reques
 		return string(bodyBytes), http.StatusOK, 0, nil
 	}
 	switch strings.ToUpper(query.URLOptions.Method) {
-	case http.MethodPost:
+	case http.MethodPost, http.MethodPatch, http.MethodPut, http.MethodDelete:
 		body := GetQueryBody(ctx, query)
 		return client.req(ctx, query.URL, body, client.Settings, query, requestHeaders)
 	default:
@@ -238,44 +238,46 @@ func CanAllowURL(url string, allowedHosts []string) bool {
 func GetQueryBody(ctx context.Context, query models.Query) io.Reader {
 	logger := backend.Logger.FromContext(ctx)
 	var body io.Reader
-	if strings.EqualFold(query.URLOptions.Method, http.MethodPost) {
-		switch query.URLOptions.BodyType {
-		case "raw":
-			body = strings.NewReader(query.URLOptions.Body)
-		case "form-data":
-			payload := &bytes.Buffer{}
-			writer := multipart.NewWriter(payload)
-			for _, f := range query.URLOptions.BodyForm {
-				_ = writer.WriteField(f.Key, f.Value)
-			}
-			if err := writer.Close(); err != nil {
-				logger.Error("error closing the query body reader")
-				return nil
-			}
-			body = payload
-		case "x-www-form-urlencoded":
-			form := url.Values{}
-			for _, f := range query.URLOptions.BodyForm {
-				form.Set(f.Key, f.Value)
-			}
-			body = strings.NewReader(form.Encode())
-		case "graphql":
-			var variables map[string]interface{}
-			if query.URLOptions.BodyGraphQLVariables != "" {
-				err := json.Unmarshal([]byte(query.URLOptions.BodyGraphQLVariables), &variables)
-				if err != nil {
-					logger.Error("Error parsing graphql variable json", err)
-				}
-			}
-			jsonData := map[string]interface{}{
-				"query":     query.URLOptions.BodyGraphQLQuery,
-				"variables": variables,
-			}
-			jsonValue, _ := json.Marshal(jsonData)
-			body = strings.NewReader(string(jsonValue))
-		default:
-			body = strings.NewReader(query.URLOptions.Body)
+	// according to https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods, GET method should not contain request body
+	if strings.EqualFold(query.URLOptions.Method, http.MethodGet) || strings.TrimSpace(query.URLOptions.Method) == "" {
+		return body
+	}
+	switch query.URLOptions.BodyType {
+	case "raw":
+		body = strings.NewReader(query.URLOptions.Body)
+	case "form-data":
+		payload := &bytes.Buffer{}
+		writer := multipart.NewWriter(payload)
+		for _, f := range query.URLOptions.BodyForm {
+			_ = writer.WriteField(f.Key, f.Value)
 		}
+		if err := writer.Close(); err != nil {
+			logger.Error("error closing the query body reader")
+			return nil
+		}
+		body = payload
+	case "x-www-form-urlencoded":
+		form := url.Values{}
+		for _, f := range query.URLOptions.BodyForm {
+			form.Set(f.Key, f.Value)
+		}
+		body = strings.NewReader(form.Encode())
+	case "graphql":
+		var variables map[string]interface{}
+		if query.URLOptions.BodyGraphQLVariables != "" {
+			err := json.Unmarshal([]byte(query.URLOptions.BodyGraphQLVariables), &variables)
+			if err != nil {
+				logger.Error("Error parsing graphql variable json", err)
+			}
+		}
+		jsonData := map[string]interface{}{
+			"query":     query.URLOptions.BodyGraphQLQuery,
+			"variables": variables,
+		}
+		jsonValue, _ := json.Marshal(jsonData)
+		body = strings.NewReader(string(jsonValue))
+	default:
+		body = strings.NewReader(query.URLOptions.Body)
 	}
 	return body
 }

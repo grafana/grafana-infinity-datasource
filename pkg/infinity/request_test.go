@@ -3,17 +3,82 @@ package infinity_test
 import (
 	"context"
 	"fmt"
+	"io"
 	"net/http"
+	"net/url"
+	"strings"
 	"testing"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/infinity"
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
+	"github.com/grafana/grafana-plugin-sdk-go/experimental/errorsource"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/trace"
 )
+
+func TestGetRequest(t *testing.T) {
+	tests := []struct {
+		name           string
+		settings       models.InfinitySettings
+		body           io.Reader
+		query          models.Query
+		requestHeaders map[string]string
+		wantReq        *http.Request
+		wantReqBody    bool
+		wantErr        error
+	}{
+		{
+			name: "should error if DELETE method requested without enabled in the settings",
+			query: models.Query{
+				URLOptions: models.URLOptions{Method: "delete"},
+			},
+			wantErr: errorsource.DownstreamError(models.ErrNonHTTPGetPostRestricted, false),
+		},
+		{
+			name:     "should allow if DELETE method requested with enabled in the settings",
+			query:    models.Query{URLOptions: models.URLOptions{Method: "delete"}},
+			settings: models.InfinitySettings{AllowNonGetPostMethods: true},
+			wantReq:  &http.Request{URL: &url.URL{}, Method: http.MethodDelete},
+		},
+		{
+			name:        "should not include body when not supplied in the query for non GET/POST methods",
+			query:       models.Query{URLOptions: models.URLOptions{Method: "delete"}},
+			settings:    models.InfinitySettings{AllowNonGetPostMethods: true},
+			wantReq:     &http.Request{URL: &url.URL{}, Method: http.MethodDelete},
+			wantReqBody: false,
+		},
+		{
+			name:        "should include body when supplied in the query for non GET/POST methods",
+			query:       models.Query{URLOptions: models.URLOptions{Method: "patch", Body: "foo"}},
+			body:        io.NopCloser(strings.NewReader("foo")),
+			settings:    models.InfinitySettings{AllowNonGetPostMethods: true},
+			wantReq:     &http.Request{URL: &url.URL{}, Method: http.MethodPatch},
+			wantReqBody: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gotReq, err := infinity.GetRequest(context.TODO(), tt.settings, tt.body, tt.query, tt.requestHeaders, true)
+			if tt.wantErr != nil {
+				require.NotNil(t, err)
+				assert.Equal(t, tt.wantErr, err)
+				return
+			}
+			require.NotNil(t, gotReq)
+			assert.Equal(t, tt.wantReq.URL.String(), gotReq.URL.String())
+			assert.Equal(t, tt.wantReq.Method, gotReq.Method)
+			if !tt.wantReqBody {
+				require.Nil(t, gotReq.Body)
+			}
+			if tt.wantReqBody {
+				require.NotNil(t, gotReq.Body)
+			}
+		})
+	}
+}
 
 func Test_getQueryURL(t *testing.T) {
 	tests := []struct {

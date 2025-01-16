@@ -55,6 +55,7 @@ If you need an advanced version of the datasource, use the following format:
     tlsAuthWithCACert: <<true or false>> -- false by default
     serverName: <<server name that matches in certificate for tlsAuthWithCACert>>
     timeoutInSeconds: <<60>> -- or whatever the timeout you want set. If not set defaults to 60.
+    allowNonGetPostMethods: false
   secureJsonData:
     basicAuthPassword: <<YOUR PASSWORD. Example -- MY_Github_PAT_Token>>
     tlsCACert: <<Your TLS cert>>

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"net/http"
 	"strings"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
@@ -144,7 +145,7 @@ type URLOptionKeyValuePair struct {
 }
 
 type URLOptions struct {
-	Method               string                  `json:"method"` // 'GET' | 'POST'
+	Method               string                  `json:"method"` // 'GET' | 'POST' | 'PATCH' | 'PUT | 'DELETE'
 	Params               []URLOptionKeyValuePair `json:"params"`
 	Headers              []URLOptionKeyValuePair `json:"headers"`
 	Body                 string                  `json:"data"`
@@ -206,10 +207,14 @@ func ApplyDefaultsToQuery(ctx context.Context, query Query, settings InfinitySet
 			query.URL = "https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.json"
 		}
 	}
-	if query.Source == "url" && strings.ToUpper(query.URLOptions.Method) == "POST" {
+	if query.Source == "url" && strings.TrimSpace(query.URLOptions.Method) == "" {
+		query.URLOptions.Method = http.MethodGet
+	}
+	if query.Source == "url" && (!strings.EqualFold(query.URLOptions.Method, http.MethodGet)) {
 		if query.URLOptions.BodyType == "" {
 			query.URLOptions.BodyType = "raw"
 			if query.Type == QueryTypeGraphQL {
+				query.URLOptions.Method = http.MethodPost
 				query.URLOptions.BodyType = "graphql"
 				query.URLOptions.BodyContentType = "application/json"
 				if query.URLOptions.BodyGraphQLQuery == "" {
