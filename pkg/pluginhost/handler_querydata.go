@@ -29,7 +29,11 @@ func (ds *DataSource) QueryData(ctx context.Context, req *backend.QueryDataReque
 			span.RecordError(err)
 			logger.Error("error un-marshaling the query", "error", err.Error())
 			// Here we are using error source from the original error and if it does not have any source we are using the plugin error as the default source
-			errorRes := backend.ErrorResponseWithErrorSource(backend.PluginError(fmt.Errorf("%s: %w", "error un-marshaling the query", err)))
+			err = fmt.Errorf("%s: %w", "error un-marshaling the query", err)
+			if(!backend.IsDownstreamError(err)) {
+				err = backend.PluginError(err)
+			}
+			errorRes := backend.ErrorResponseWithErrorSource(err)
 			response.Responses[q.RefID] = errorRes
 			continue
 		}
