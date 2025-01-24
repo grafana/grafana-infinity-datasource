@@ -1099,10 +1099,10 @@
     tslib "2.6.0"
     typescript "5.2.2"
 
-"@grafana/e2e-selectors@^11.5.0-216287":
-  version "11.5.0-216566"
-  resolved "https://registry.yarnpkg.com/@grafana/e2e-selectors/-/e2e-selectors-11.5.0-216566.tgz#bec2387690e2a9046dcd97e29102fc22f72af11d"
-  integrity sha512-uhMZxhVOsMjLIRNI7yJRXcfm+F1LXLITdCCkKNh5ATMLe67utpTKWK89Yi9534R0SN38i8w8ReChehetbR0gFA==
+"@grafana/e2e-selectors@^11.5.0-216908":
+  version "11.5.0-219385"
+  resolved "https://registry.yarnpkg.com/@grafana/e2e-selectors/-/e2e-selectors-11.5.0-219385.tgz#31ef5f4dc82e4b771c0090f258219255d0e465d0"
+  integrity sha512-aSFk6Xh3Dk3K4ohLk9TTZHtEfNvjT0Kdf4ghVkilpGTvHo9D1RimTj+U2BJRInhffOWQHR5dMP8qpKPhFjW7Iw==
   dependencies:
     "@grafana/tsconfig" "^2.0.0"
     semver "7.6.3"
@@ -1140,12 +1140,12 @@
     ua-parser-js "^1.0.32"
     web-vitals "^3.1.1"
 
-"@grafana/plugin-e2e@^1.14.6":
-  version "1.14.6"
-  resolved "https://registry.yarnpkg.com/@grafana/plugin-e2e/-/plugin-e2e-1.14.6.tgz#3ad08b4fd5aadee8dfd9170c7bb6d5e31a67bb53"
-  integrity sha512-YnARXviUFI+Ez0ygi1CypBHZGY+rNIShI428Mnrj8bn48mr0lCeiI/V2NGsQUz5YJegIfP1JSb05gb/7t8avBQ==
+"@grafana/plugin-e2e@^1.16.0":
+  version "1.16.0"
+  resolved "https://registry.yarnpkg.com/@grafana/plugin-e2e/-/plugin-e2e-1.16.0.tgz#9b44ac9465b1b9e50ea2ec5848fb96d42d3a6dd1"
+  integrity sha512-bBoIm9CmdbldWi0xLnqNPcEXujOMCBfj/74x4o6sDjSu99aq9wZVKdcRqYF+R9CiXIHx6mhMIR1bvnd06GWlcA==
   dependencies:
-    "@grafana/e2e-selectors" "^11.5.0-216287"
+    "@grafana/e2e-selectors" "^11.5.0-216908"
     semver "^7.5.4"
     uuid "^11.0.2"
     yaml "^2.3.4"
@@ -1762,12 +1762,12 @@
   resolved "https://registry.yarnpkg.com/@pkgr/core/-/core-0.1.1.tgz#1ec17e2edbec25c8306d424ecfbf13c7de1aaa31"
   integrity sha512-cq8o4cWH0ibXh9VGi5P20Tu9XF/0fFXl9EUinr9QfTM7a7p0oTA4iJRCQWppXR1Pg8dSM0UCItCkPwsk9qWWYA==
 
-"@playwright/test@^1.48.0":
-  version "1.49.1"
-  resolved "https://registry.yarnpkg.com/@playwright/test/-/test-1.49.1.tgz#55fa360658b3187bfb6371e2f8a64f50ef80c827"
-  integrity sha512-Ky+BVzPz8pL6PQxHqNRW1k3mIyv933LML7HktS8uik0bUXNCdPhoS/kLihiO1tMf/egaJb4IutXd7UywvXEW+g==
+"@playwright/test@^1.50.0":
+  version "1.50.0"
+  resolved "https://registry.yarnpkg.com/@playwright/test/-/test-1.50.0.tgz#25c63a09f833f89da4d54ad67db7900359e2d11d"
+  integrity sha512-ZGNXbt+d65EGjBORQHuYKj+XhCewlwpnSd/EDuLPZGSiEWmgOJB5RmMCCYGy5aMfTs9wx61RivfDKi8H/hcMvw==
   dependencies:
-    playwright "1.49.1"
+    playwright "1.50.0"
 
 "@popperjs/core@2.11.8":
   version "2.11.8"
@@ -7757,17 +7757,17 @@ pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
-playwright-core@1.49.1:
-  version "1.49.1"
-  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.49.1.tgz#32c62f046e950f586ff9e35ed490a424f2248015"
-  integrity sha512-BzmpVcs4kE2CH15rWfzpjzVGhWERJfmnXmniSyKeRZUs9Ws65m+RGIi7mjJK/euCegfn3i7jvqWeWyHe9y3Vgg==
+playwright-core@1.50.0:
+  version "1.50.0"
+  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.50.0.tgz#28dd6a1488211c193933695ed337a5b44d46867c"
+  integrity sha512-CXkSSlr4JaZs2tZHI40DsZUN/NIwgaUPsyLuOAaIZp2CyF2sN5MM5NJsyB188lFSSozFxQ5fPT4qM+f0tH/6wQ==
 
-playwright@1.49.1:
-  version "1.49.1"
-  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.49.1.tgz#830266dbca3008022afa7b4783565db9944ded7c"
-  integrity sha512-VYL8zLoNTBxVOrJBbDuRgDWa3i+mfQgDTrL8Ah9QXZ7ax4Dsj0MSq5bYgytRnDVVe+njoKnfsYkH3HzqVj5UZA==
+playwright@1.50.0:
+  version "1.50.0"
+  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.50.0.tgz#ccaf334f948d78139922844de55a18f8ae785410"
+  integrity sha512-+GinGfGTrd2IfX1TA4N2gNmeIksSb+IAe589ZH+FlmpV3MYTx6+buChGIuDLQwrGNCw2lWibqV50fU510N7S+w==
   dependencies:
-    playwright-core "1.49.1"
+    playwright-core "1.50.0"
   optionalDependencies:
     fsevents "2.3.2"
 
