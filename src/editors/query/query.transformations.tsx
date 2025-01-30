@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Drawer, Card, useTheme2, InlineLabel, Input } from '@grafana/ui';
-import { Stack } from './../../components/extended/Stack';
+import { Button, Drawer, Card, useTheme2, InlineLabel, Input, Stack } from '@grafana/ui';
 import { EditorRow } from './../../components/extended/EditorRow';
 import type { InfinityQuery, TransformationItem } from './../../types';
 

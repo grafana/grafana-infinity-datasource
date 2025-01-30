@@ -1,8 +1,6 @@
 import { css } from '@emotion/css';
 import React, { ComponentProps } from 'react';
-import { stylesFactory, useTheme2, ReactUtils, Field, Icon, PopoverContent, Tooltip, Tag } from '@grafana/ui';
-import { Space } from './Space';
-import { Stack } from './Stack';
+import { stylesFactory, useTheme2, ReactUtils, Field, Icon, PopoverContent, Tooltip, Tag, Stack, Space } from '@grafana/ui';
 import type { GrafanaTheme2 } from '@grafana/data';
 
 export const EditorFieldGroup: React.FC<{
