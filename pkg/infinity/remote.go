@@ -15,17 +15,17 @@ import (
 	"github.com/grafana/infinity-libs/lib/go/transformations"
 )
 
-func GetFrameForURLSources(ctx context.Context, query models.Query, infClient Client, requestHeaders map[string]string) (*data.Frame, error) {
+func GetFrameForURLSources(ctx context.Context, pCtx *backend.PluginContext, query models.Query, infClient Client, requestHeaders map[string]string) (*data.Frame, error) {
 	ctx, span := tracing.DefaultTracer().Start(ctx, "GetFrameForURLSources")
 	defer span.End()
 	if query.Type == models.QueryTypeJSON && query.Parser == models.InfinityParserBackend && query.PageMode != models.PaginationModeNone && query.PageMode != "" {
-		return GetPaginatedResults(ctx, query, infClient, requestHeaders)
+		return GetPaginatedResults(ctx, pCtx, query, infClient, requestHeaders)
 	}
-	frame, _, err := GetFrameForURLSourcesWithPostProcessing(ctx, query, infClient, requestHeaders, true)
+	frame, _, err := GetFrameForURLSourcesWithPostProcessing(ctx, pCtx, query, infClient, requestHeaders, true)
 	return frame, err
 }
 
-func GetPaginatedResults(ctx context.Context, query models.Query, infClient Client, requestHeaders map[string]string) (*data.Frame, error) {
+func GetPaginatedResults(ctx context.Context, pCtx *backend.PluginContext, query models.Query, infClient Client, requestHeaders map[string]string) (*data.Frame, error) {
 	ctx, span := tracing.DefaultTracer().Start(ctx, "GetPaginatedResults")
 	defer span.End()
 	frames := []*data.Frame{}
@@ -64,12 +64,12 @@ func GetPaginatedResults(ctx context.Context, query models.Query, infClient Clie
 	case models.PaginationModeCursor:
 		queries = append(queries, query)
 	default:
-		frame, _, err := GetFrameForURLSourcesWithPostProcessing(ctx, query, infClient, requestHeaders, true)
+		frame, _, err := GetFrameForURLSourcesWithPostProcessing(ctx, pCtx, query, infClient, requestHeaders, true)
 		return frame, err
 	}
 	if query.PageMode != models.PaginationModeCursor {
 		for _, currentQuery := range queries {
-			frame, _, err := GetFrameForURLSourcesWithPostProcessing(ctx, currentQuery, infClient, requestHeaders, false)
+			frame, _, err := GetFrameForURLSourcesWithPostProcessing(ctx, pCtx, currentQuery, infClient, requestHeaders, false)
 			frames = append(frames, frame)
 			errs = errors.Join(errs, err)
 		}
@@ -86,7 +86,7 @@ func GetPaginatedResults(ctx context.Context, query models.Query, infClient Clie
 				break
 			}
 			i++
-			frame, cursor, err := GetFrameForURLSourcesWithPostProcessing(ctx, currentQuery, infClient, requestHeaders, false)
+			frame, cursor, err := GetFrameForURLSourcesWithPostProcessing(ctx, pCtx, currentQuery, infClient, requestHeaders, false)
 			oCursor = cursor
 			frames = append(frames, frame)
 			errs = errors.Join(errs, err)
@@ -134,13 +134,13 @@ func ApplyPaginationItemToQuery(currentQuery models.Query, fieldType models.Pagi
 	return currentQuery
 }
 
-func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, query models.Query, infClient Client, requestHeaders map[string]string, postProcessingRequired bool) (*data.Frame, string, error) {
+func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, pCtx *backend.PluginContext, query models.Query, infClient Client, requestHeaders map[string]string, postProcessingRequired bool) (*data.Frame, string, error) {
 	ctx, span := tracing.DefaultTracer().Start(ctx, "GetFrameForURLSourcesWithPostProcessing")
 	logger := backend.Logger.FromContext(ctx)
 	defer span.End()
 	frame := GetDummyFrame(query)
 	cursor := ""
-	urlResponseObject, statusCode, duration, err := infClient.GetResults(ctx, query, requestHeaders)
+	urlResponseObject, statusCode, duration, err := infClient.GetResults(ctx, pCtx, query, requestHeaders)
 	frame.Meta.ExecutedQueryString = infClient.GetExecutedURL(ctx, query)
 	if infClient.IsMock {
 		duration = 123
