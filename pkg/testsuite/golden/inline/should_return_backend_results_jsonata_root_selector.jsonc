@@ -1,9 +1,10 @@
 //  🌟 This was machine generated.  Do not edit. 🌟
 //  
 //  Frame[0] {
+//      "type": "numeric-wide",
 //      "typeVersion": [
 //          0,
-//          0
+//          1
 //      ],
 //      "custom": {
 //          "query": {
@@ -80,9 +81,10 @@
       "schema": {
         "name": "q1",
         "meta": {
+          "type": "numeric-wide",
           "typeVersion": [
             0,
-            0
+            1
           ],
           "custom": {
             "query": {

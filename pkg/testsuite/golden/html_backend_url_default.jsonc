@@ -1,9 +1,10 @@
 //  🌟 This was machine generated.  Do not edit. 🌟
 //  
 //  Frame[0] {
+//      "type": "numeric-long",
 //      "typeVersion": [
 //          0,
-//          0
+//          1
 //      ],
 //      "custom": {
 //          "query": {
@@ -116,9 +117,10 @@
       "schema": {
         "name": "response",
         "meta": {
+          "type": "numeric-long",
           "typeVersion": [
             0,
-            0
+            1
           ],
           "custom": {
             "query": {
