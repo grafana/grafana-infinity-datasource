@@ -36,6 +36,7 @@ func GetRequest(ctx context.Context, pCtx *backend.PluginContext, settings model
 	req = ApplyBearerToken(ctx, settings, req, includeSect)
 	req = ApplyApiKeyAuth(ctx, settings, req, includeSect)
 	req = ApplyForwardedOAuthIdentity(ctx, requestHeaders, settings, req, includeSect)
+	req = ApplyHTTPTraceToRequest(ctx, req)
 	req = ApplyTraceHead(ctx, req)
 	return req, err
 }
