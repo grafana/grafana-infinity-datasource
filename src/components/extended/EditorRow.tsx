@@ -1,8 +1,7 @@
 import { css } from '@emotion/css';
 import React, { useState } from 'react';
 import { GrafanaTheme2 } from '@grafana/data';
-import { useStyles2, Button, useTheme2 } from '@grafana/ui';
-import { Stack } from './Stack';
+import { useStyles2, Button, Stack, useTheme2 } from '@grafana/ui';
 
 interface EditorRowProps {
   label: string;
