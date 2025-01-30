@@ -23,10 +23,11 @@ const (
 )
 
 const (
-	headerKeyAccept        = "Accept"
-	headerKeyContentType   = "Content-Type"
-	HeaderKeyAuthorization = "Authorization"
-	HeaderKeyIdToken       = "X-Id-Token"
+	headerKeyAccept         = "Accept"
+	headerKeyContentType    = "Content-Type"
+	headerKeyAcceptEncoding = "Accept-Encoding"
+	HeaderKeyAuthorization  = "Authorization"
+	HeaderKeyIdToken        = "X-Id-Token"
 )
 
 func ApplyAcceptHeader(_ context.Context, query models.Query, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
@@ -69,7 +70,12 @@ func ApplyContentTypeHeader(_ context.Context, query models.Query, settings mode
 	return req
 }
 
-func ApplyHeadersFromSettings(pCtx *backend.PluginContext, requestHeaders map[string]string, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
+func ApplyAcceptEncodingHeader(_ context.Context, query models.Query, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
+	req.Header.Set(headerKeyAcceptEncoding, "gzip")
+	return req
+}
+
+func ApplyHeadersFromSettings(_ context.Context, pCtx *backend.PluginContext, requestHeaders map[string]string, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
 	for key, value := range settings.CustomHeaders {
 		headerValue := dummyHeader
 		if includeSect {
