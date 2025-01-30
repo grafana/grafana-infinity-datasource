@@ -325,7 +325,8 @@ func TestGetRequest(t *testing.T) {
 				return
 			}
 			require.NotNil(t, gotReq)
-			assert.Equal(t, len(tt.wantReq.Header), len(gotReq.Header))
+			numberOfAdditionalHeaders := 1 // with gzip compression enabled, there will be additional header at run time.
+			assert.Equal(t, len(tt.wantReq.Header)+numberOfAdditionalHeaders, len(gotReq.Header))
 			for k := range tt.wantReq.Header {
 				require.Equal(t, tt.wantReq.Header.Get(k), gotReq.Header.Get(k))
 			}

@@ -29,8 +29,8 @@ func GetRequest(ctx context.Context, pCtx *backend.PluginContext, settings model
 	}
 	req = ApplyAcceptHeader(ctx, query, settings, req, includeSect)
 	req = ApplyContentTypeHeader(ctx, query, settings, req, includeSect)
-  req = ApplyAcceptEncodingHeader(query, settings, req, includeSect)
-	req = ApplyHeadersFromSettings(pCtx, requestHeaders, settings, req, includeSect)
+	req = ApplyAcceptEncodingHeader(ctx, query, settings, req, includeSect)
+	req = ApplyHeadersFromSettings(ctx, pCtx, requestHeaders, settings, req, includeSect)
 	req = ApplyHeadersFromQuery(ctx, query, settings, req, includeSect)
 	req = ApplyBasicAuth(ctx, settings, req, includeSect)
 	req = ApplyBearerToken(ctx, settings, req, includeSect)

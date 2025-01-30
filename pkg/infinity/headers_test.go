@@ -1,6 +1,7 @@
 package infinity
 
 import (
+	"context"
 	"net/http"
 	"strings"
 	"testing"
@@ -130,7 +131,7 @@ func TestApplyGrafanaHeaders(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			req, _ := http.NewRequest("GET", "http://example.com", nil)
-			got := ApplyHeadersFromSettings(tt.pCtx, map[string]string{}, tt.settings, req, true)
+			got := ApplyHeadersFromSettings(context.TODO(), tt.pCtx, map[string]string{}, tt.settings, req, true)
 			require.Equal(t, len(tt.want), len(got.Header))
 			for k, v := range tt.want {
 				require.Equal(t, v, got.Header.Get(k))
