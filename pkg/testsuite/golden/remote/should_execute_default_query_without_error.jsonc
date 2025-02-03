@@ -1,9 +1,10 @@
 //  🌟 This was machine generated.  Do not edit. 🌟
 //  
 //  Frame[0] {
+//      "type": "numeric-long",
 //      "typeVersion": [
 //          0,
-//          0
+//          1
 //      ],
 //      "custom": {
 //          "query": {
@@ -24,7 +25,7 @@
 //                  "body_graphql_variables": ""
 //              },
 //              "data": "",
-//              "parser": "",
+//              "parser": "backend",
 //              "filterExpression": "",
 //              "summarizeExpression": "",
 //              "summarizeBy": "",
@@ -54,7 +55,50 @@
 //              "global_query_id": "",
 //              "query_mode": ""
 //          },
-//          "data": {},
+//          "data": [
+//              {
+//                  "age": 38,
+//                  "country": "USA",
+//                  "name": "Leanne Graham",
+//                  "occupation": "Devops Engineer",
+//                  "salary": 3000
+//              },
+//              {
+//                  "age": 27,
+//                  "country": "USA",
+//                  "name": "Ervin Howell",
+//                  "occupation": "Software Engineer",
+//                  "salary": 2300
+//              },
+//              {
+//                  "age": 17,
+//                  "country": "Canada",
+//                  "name": "Clementine Bauch",
+//                  "occupation": "Student",
+//                  "salary": null
+//              },
+//              {
+//                  "age": 42,
+//                  "country": "UK",
+//                  "name": "Patricia Lebsack",
+//                  "occupation": "Software Engineer",
+//                  "salary": 2800
+//              },
+//              {
+//                  "age": 38,
+//                  "country": "USA",
+//                  "name": "Leanne Bell",
+//                  "occupation": "Senior Software Engineer",
+//                  "salary": 4000
+//              },
+//              {
+//                  "age": 32,
+//                  "country": "USA",
+//                  "name": "Chelsey Dietrich",
+//                  "occupation": "Software Engineer",
+//                  "salary": 3500
+//              }
+//          ],
 //          "responseCodeFromServer": 200,
 //          "duration": 123,
 //          "error": ""
@@ -62,9 +106,19 @@
 //      "executedQueryString": "###############\n## URL\n###############\n\nhttps://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.json\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' -H 'Accept-Encoding: gzip' 'https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.json'"
 //  }
 //  Name: response
-//  Dimensions: 0 Fields by 0 Rows
-//  +
-//  +
+//  Dimensions: 5 Fields by 6 Rows
+//  +------------------+-----------------+------------------+--------------------------+------------------+
+//  | Name: age        | Name: country   | Name: name       | Name: occupation         | Name: salary     |
+//  | Labels:          | Labels:         | Labels:          | Labels:                  | Labels:          |
+//  | Type: []*float64 | Type: []*string | Type: []*string  | Type: []*string          | Type: []*float64 |
+//  +------------------+-----------------+------------------+--------------------------+------------------+
+//  | 38               | USA             | Leanne Graham    | Devops Engineer          | 3000             |
+//  | 27               | USA             | Ervin Howell     | Software Engineer        | 2300             |
+//  | 17               | Canada          | Clementine Bauch | Student                  | null             |
+//  | 42               | UK              | Patricia Lebsack | Software Engineer        | 2800             |
+//  | 38               | USA             | Leanne Bell      | Senior Software Engineer | 4000             |
+//  | 32               | USA             | Chelsey Dietrich | Software Engineer        | 3500             |
+//  +------------------+-----------------+------------------+--------------------------+------------------+
 //  
 //  
 //  🌟 This was machine generated.  Do not edit. 🌟
@@ -75,9 +129,10 @@
       "schema": {
         "name": "response",
         "meta": {
+          "type": "numeric-long",
           "typeVersion": [
             0,
-            0
+            1
           ],
           "custom": {
             "query": {
@@ -98,7 +153,7 @@
                 "body_graphql_variables": ""
               },
               "data": "",
-              "parser": "",
+              "parser": "backend",
               "filterExpression": "",
               "summarizeExpression": "",
               "summarizeBy": "",
@@ -128,17 +183,142 @@
               "global_query_id": "",
               "query_mode": ""
             },
-            "data": {},
+            "data": [
+              {
+                "age": 38,
+                "country": "USA",
+                "name": "Leanne Graham",
+                "occupation": "Devops Engineer",
+                "salary": 3000
+              },
+              {
+                "age": 27,
+                "country": "USA",
+                "name": "Ervin Howell",
+                "occupation": "Software Engineer",
+                "salary": 2300
+              },
+              {
+                "age": 17,
+                "country": "Canada",
+                "name": "Clementine Bauch",
+                "occupation": "Student",
+                "salary": null
+              },
+              {
+                "age": 42,
+                "country": "UK",
+                "name": "Patricia Lebsack",
+                "occupation": "Software Engineer",
+                "salary": 2800
+              },
+              {
+                "age": 38,
+                "country": "USA",
+                "name": "Leanne Bell",
+                "occupation": "Senior Software Engineer",
+                "salary": 4000
+              },
+              {
+                "age": 32,
+                "country": "USA",
+                "name": "Chelsey Dietrich",
+                "occupation": "Software Engineer",
+                "salary": 3500
+              }
+            ],
             "responseCodeFromServer": 200,
             "duration": 123,
             "error": ""
           },
           "executedQueryString": "###############\n## URL\n###############\n\nhttps://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.json\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' -H 'Accept-Encoding: gzip' 'https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.json'"
         },
-        "fields": []
+        "fields": [
+          {
+            "name": "age",
+            "type": "number",
+            "typeInfo": {
+              "frame": "float64",
+              "nullable": true
+            }
+          },
+          {
+            "name": "country",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "occupation",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "salary",
+            "type": "number",
+            "typeInfo": {
+              "frame": "float64",
+              "nullable": true
+            }
+          }
+        ]
       },
       "data": {
-        "values": []
+        "values": [
+          [
+            38,
+            27,
+            17,
+            42,
+            38,
+            32
+          ],
+          [
+            "USA",
+            "USA",
+            "Canada",
+            "UK",
+            "USA",
+            "USA"
+          ],
+          [
+            "Leanne Graham",
+            "Ervin Howell",
+            "Clementine Bauch",
+            "Patricia Lebsack",
+            "Leanne Bell",
+            "Chelsey Dietrich"
+          ],
+          [
+            "Devops Engineer",
+            "Software Engineer",
+            "Student",
+            "Software Engineer",
+            "Senior Software Engineer",
+            "Software Engineer"
+          ],
+          [
+            3000,
+            2300,
+            null,
+            2800,
+            4000,
+            3500
+          ]
+        ]
       }
     }
   ]

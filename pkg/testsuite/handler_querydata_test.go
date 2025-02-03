@@ -661,16 +661,6 @@ func TestInlineSources(t *testing.T) {
 		test            func(t *testing.T, frame *data.Frame)
 	}{
 		{
-			name: "should execute default query without error",
-			test: func(t *testing.T, frame *data.Frame) {
-				require.NotNil(t, frame)
-				t.Run("should have custom meta data correctly", func(t *testing.T) {
-					require.NotNil(t, frame.Meta.Custom)
-					require.Equal(t, "This feature is not available for this type of query yet", frame.Meta.ExecutedQueryString)
-				})
-			},
-		},
-		{
 			name: "should return inline uql correctly",
 			queryJSON: `{
 				"refId":					"q1",
@@ -793,7 +783,8 @@ func TestRemoteSources(t *testing.T) {
 		test            func(t *testing.T, frame *data.Frame)
 	}{
 		{
-			name: "should execute default query without error",
+			name:   "should execute default query without error",
+			client: NewFromFileName(t, "../../testdata/users.json"),
 			test: func(t *testing.T, frame *data.Frame) {
 				require.NotNil(t, frame)
 				t.Run("should have custom meta data correctly", func(t *testing.T) {
@@ -811,7 +802,7 @@ func TestRemoteSources(t *testing.T) {
 				"format":					"table",
 				"url":						"http://foo"
 			}`,
-			client: New("[1,2,3]"),
+			client: New(t, "[1,2,3]"),
 			test: func(t *testing.T, frame *data.Frame) {
 				require.NotNil(t, frame)
 				require.Equal(t, "###############\n## URL\n###############\n\nhttp://foo\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' -H 'Accept-Encoding: gzip' 'http://foo'", frame.Meta.ExecutedQueryString)
@@ -840,7 +831,7 @@ func TestRemoteSources(t *testing.T) {
 				"format":					"table",
 				"url":						"http://bar"
 			}`,
-			client: New("a,b\na1,b1"),
+			client: New(t, "a,b\na1,b1"),
 			test: func(t *testing.T, frame *data.Frame) {
 				require.NotNil(t, frame)
 				require.Equal(t, "###############\n## URL\n###############\n\nhttp://bar\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: text/csv; charset=utf-8' -H 'Accept-Encoding: gzip' 'http://bar'", frame.Meta.ExecutedQueryString)
@@ -870,7 +861,7 @@ func TestRemoteSources(t *testing.T) {
 				"url":						"http://foo",
 				"uql":						"parse-json | count"
 			}`,
-			client: New("[1,2,3]"),
+			client: New(t, "[1,2,3]"),
 			test: func(t *testing.T, frame *data.Frame) {
 				require.NotNil(t, frame)
 				require.Equal(t, "###############\n## URL\n###############\n\nhttp://foo\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept-Encoding: gzip' 'http://foo'\n\n###############\n## UQL\n###############\n\nparse-json | count", frame.Meta.ExecutedQueryString)
@@ -901,7 +892,7 @@ func TestRemoteSources(t *testing.T) {
 				"url":						"http://foo",
 				"groq":						"*{1,2,3}"
 			}`,
-			client: New("[1,2,3]"),
+			client: New(t, "[1,2,3]"),
 			test: func(t *testing.T, frame *data.Frame) {
 				require.NotNil(t, frame)
 				require.Equal(t, "###############\n## URL\n###############\n\nhttp://foo\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept-Encoding: gzip' 'http://foo'\n###############\n## GROQ\n###############\n\n*{1,2,3}\n", frame.Meta.ExecutedQueryString)
@@ -935,7 +926,7 @@ func TestRemoteSources(t *testing.T) {
 			require.Nil(t, err)
 			client := tt.client
 			if client == nil {
-				client = New("")
+				client = New(t, "")
 			}
 
 			frame, err := infinity.GetFrameForURLSources(context.Background(), &backend.PluginContext{}, query, *client, map[string]string{})

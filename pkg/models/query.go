@@ -194,6 +194,12 @@ func ApplyDefaultsToQuery(ctx context.Context, query Query, settings InfinitySet
 			query.Source = "url"
 		}
 	}
+	// if the parser is already set, we should respect that
+	// if the root_selector is already set, overriding the parser type will break the queries with frontend parsing. So we should leave as it is
+	// if the query have columns defined, overriding the parser type will break the queries with frontend parsing. So we should leave as it is
+	if query.Parser == "" && strings.TrimSpace(query.RootSelector) == "" && len(query.Columns) == 0 && query.Type != QueryTypeUQL && query.Type != QueryTypeGROQ && query.Type != QueryTypeGSheets {
+		query.Parser = InfinityParserBackend
+	}
 	if query.Type == QueryTypeJSON && query.Source == "inline" && query.Data == "" {
 		query.Data = "[]"
 	}
