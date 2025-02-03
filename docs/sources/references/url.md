@@ -60,7 +60,7 @@ Note: We suggest adding secure headers only via configuration and not in query.
 
 ## Forwarding Grafana meta data as headers / query params
 
-From Infinity plugin version 3.0.0, You will be able to forward grafana meta data such as user id, datasource uid to the outgoing requests via **Custom HTTP Headers** / **URL Query parameters\*** from the datasource settings page. In the datasource **URL** section, you can add any number of custom headers / query parameters with their own values. The values can include following macros which will be interpolated into actual value from the request context.
+From Infinity plugin version 3.0.0, You will be able to forward grafana meta data such as user id, datasource uid to the outgoing requests via **Custom HTTP Headers** / **URL Query parameters** from the datasource settings page. In the datasource **URL** section, you can add any number of custom headers / query parameters with their own values. The values can include following macros which will be interpolated into actual value from the request context.
 
 | Macro name            | Description                                                         |
 | --------------------- | ------------------------------------------------------------------- |
@@ -76,8 +76,26 @@ From Infinity plugin version 3.0.0, You will be able to forward grafana meta dat
 
 > Note: Certain macros such as `${__user.login}` won't be available in the context of alerts, recorded queries, public dashboards etc.
 
-## Allowed Hosts
+## Allowed Hosts ( Data source config )
 
 Leaving blank will allow all the hosts. This is by default.
 
 If your data source needs to allow only certain hosts, configure the allowed host names in the config. There can be multiple hosts allowed. Host names are case sensitive and needs to be full host name. Example: `https://en.wikipedia.org/`
+
+## Allowed Hosts ( Grafana config )
+
+If the Grafana admin need to allow only certain hosts to be queried via infinity datasource plugin, they can set grafana.ini file. To set the allowed hosts in the grafana.ini file, add the following section in the grafana.ini file.
+
+```ini
+[plugin.yesoreyeram-infinity-datasource]
+host_allow_list = "foo.com bar.com baz.com"
+```
+
+## Denied Hosts ( Grafana config )
+
+If the Grafana admin need to deny certain hosts to be queried via infinity datasource plugin, they can set grafana.ini file. To set the denied hosts in the grafana.ini file, add the following section in the grafana.ini file.
+
+```ini
+[plugin.yesoreyeram-infinity-datasource]
+host_deny_list = "foo.com bar.com baz.com"
+```
