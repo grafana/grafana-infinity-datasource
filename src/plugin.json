@@ -92,8 +92,8 @@
     ]
   },
   "dependencies": {
-    "grafanaDependency": ">=9.5.15",
-    "grafanaVersion": "9.5.x",
+    "grafanaDependency": ">=10.4.8",
+    "grafanaVersion": "10.4.x",
     "plugins": []
   },
   "includes": [],

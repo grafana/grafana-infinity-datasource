@@ -32,3 +32,10 @@ docker/blocks/tempo/tempo-data
 # IDE
 .idea
 .eslintcache
+
+# playwright
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+playwright/.auth/

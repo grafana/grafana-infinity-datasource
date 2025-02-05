@@ -2,9 +2,8 @@ package infinity
 
 import (
 	"bytes"
+	"compress/gzip"
 	"context"
-	"crypto/tls"
-	"crypto/x509"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -16,13 +15,10 @@ import (
 	"time"
 
 	"github.com/Azure/azure-sdk-for-go/sdk/storage/azblob"
+	"github.com/grafana/grafana-infinity-datasource/pkg/httpclient"
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
-	"github.com/grafana/grafana-plugin-sdk-go/backend/proxy"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
-	"github.com/grafana/grafana-plugin-sdk-go/experimental/errorsource"
-	"github.com/icholy/digest"
-	"golang.org/x/oauth2"
 )
 
 type Client struct {
@@ -30,60 +26,6 @@ type Client struct {
 	HttpClient      *http.Client
 	AzureBlobClient *azblob.Client
 	IsMock          bool
-}
-
-func GetTLSConfigFromSettings(settings models.InfinitySettings) (*tls.Config, error) {
-	tlsConfig := &tls.Config{
-		InsecureSkipVerify: settings.InsecureSkipVerify,
-		ServerName:         settings.ServerName,
-	}
-	if settings.TLSClientAuth {
-		if settings.TLSClientCert == "" || settings.TLSClientKey == "" {
-			return nil, errors.New("invalid Client cert or key")
-		}
-		cert, err := tls.X509KeyPair([]byte(settings.TLSClientCert), []byte(settings.TLSClientKey))
-		if err != nil {
-			return nil, err
-		}
-		tlsConfig.Certificates = []tls.Certificate{cert}
-	}
-	if settings.TLSAuthWithCACert && settings.TLSCACert != "" {
-		caPool := x509.NewCertPool()
-		ok := caPool.AppendCertsFromPEM([]byte(settings.TLSCACert))
-		if !ok {
-			return nil, errors.New("invalid TLS CA certificate")
-		}
-		tlsConfig.RootCAs = caPool
-	}
-	return tlsConfig, nil
-}
-
-func getBaseHTTPClient(ctx context.Context, settings models.InfinitySettings) *http.Client {
-	logger := backend.Logger.FromContext(ctx)
-	tlsConfig, err := GetTLSConfigFromSettings(settings)
-	if err != nil {
-		return nil
-	}
-	transport := &http.Transport{TLSClientConfig: tlsConfig}
-	switch settings.ProxyType {
-	case models.ProxyTypeNone:
-		logger.Debug("proxy type is set to none. Not using the proxy")
-	case models.ProxyTypeUrl:
-		logger.Debug("proxy type is set to url. Using the proxy", "proxy_url", settings.ProxyUrl)
-		u, err := url.Parse(settings.ProxyUrl)
-		if err != nil {
-			logger.Error("error parsing proxy url", "err", err.Error(), "proxy_url", settings.ProxyUrl)
-			return nil
-		}
-		transport.Proxy = http.ProxyURL(u)
-	default:
-		transport.Proxy = http.ProxyFromEnvironment
-	}
-
-	return &http.Client{
-		Transport: transport,
-		Timeout:   time.Second * time.Duration(settings.TimeoutInSeconds),
-	}
 }
 
 func NewClient(ctx context.Context, settings models.InfinitySettings) (client *Client, err error) {
@@ -99,28 +41,16 @@ func NewClient(ctx context.Context, settings models.InfinitySettings) (client *C
 			settings.AuthenticationMethod = models.AuthenticationMethodForwardOauth
 		}
 	}
-	httpClient := getBaseHTTPClient(ctx, settings)
-	if httpClient == nil {
+	httpClient, err := httpclient.GetHTTPClient(ctx, settings)
+	if err != nil {
 		span.RecordError(errors.New("invalid http client"))
 		logger.Error("invalid http client", "datasource uid", settings.UID, "datasource name", settings.Name)
-		return client, errors.New("invalid http client")
-	}
-	httpClient = ApplyDigestAuth(ctx, httpClient, settings)
-	httpClient = ApplyOAuthClientCredentials(ctx, httpClient, settings)
-	httpClient = ApplyOAuthJWT(ctx, httpClient, settings)
-	httpClient = ApplyAWSAuth(ctx, httpClient, settings)
-
-	httpClient, err = ApplySecureSocksProxyConfiguration(ctx, httpClient, settings)
-	if err != nil {
-		logger.Error("error applying secure socks proxy", "datasource uid", settings.UID, "datasource name", settings.Name)
 		return client, err
 	}
-
 	client = &Client{
 		Settings:   settings,
 		HttpClient: httpClient,
 	}
-
 	if settings.AuthenticationMethod == models.AuthenticationMethodAzureBlob {
 		cred, err := azblob.NewSharedKeyCredential(settings.AzureBlobAccountName, settings.AzureBlobAccountKey)
 		if err != nil {
@@ -157,29 +87,6 @@ func NewClient(ctx context.Context, settings models.InfinitySettings) (client *C
 	return client, err
 }
 
-func ApplySecureSocksProxyConfiguration(ctx context.Context, httpClient *http.Client, settings models.InfinitySettings) (*http.Client, error) {
-	logger := backend.Logger.FromContext(ctx)
-	if IsAwsAuthConfigured(settings) {
-		return httpClient, nil
-	}
-	t := httpClient.Transport
-	if IsDigestAuthConfigured(settings) {
-		// if we are using Digest, the Transport is 'digest.Transport' that wraps 'http.Transport'
-		t = t.(*digest.Transport).Transport
-	} else if IsOAuthCredentialsConfigured(settings) || IsOAuthJWTConfigured(settings) {
-		// if we are using Oauth, the Transport is 'oauth2.Transport' that wraps 'http.Transport'
-		t = t.(*oauth2.Transport).Base
-	}
-
-	// secure socks proxy configuration - checks if enabled inside the function
-	err := proxy.New(settings.ProxyOpts.ProxyOptions).ConfigureSecureSocksHTTPProxy(t.(*http.Transport))
-	if err != nil {
-		logger.Error("error configuring secure socks proxy", "err", err.Error())
-		return nil, fmt.Errorf("error configuring secure socks proxy. %s", err)
-	}
-	return httpClient, nil
-}
-
 func replaceSect(input string, settings models.InfinitySettings, includeSect bool) string {
 	for key, value := range settings.SecureQueryFields {
 		if includeSect {
@@ -192,21 +99,21 @@ func replaceSect(input string, settings models.InfinitySettings, includeSect boo
 	return input
 }
 
-func (client *Client) req(ctx context.Context, url string, body io.Reader, settings models.InfinitySettings, query models.Query, requestHeaders map[string]string) (obj any, statusCode int, duration time.Duration, err error) {
+func (client *Client) req(ctx context.Context, pCtx *backend.PluginContext, url string, body io.Reader, settings models.InfinitySettings, query models.Query, requestHeaders map[string]string) (obj any, statusCode int, duration time.Duration, err error) {
 	ctx, span := tracing.DefaultTracer().Start(ctx, "client.req")
 	logger := backend.Logger.FromContext(ctx)
 	defer span.End()
-	req, err := GetRequest(ctx, settings, body, query, requestHeaders, true)
+	req, err := GetRequest(ctx, pCtx, settings, body, query, requestHeaders, true)
 	if err != nil {
-		return nil, http.StatusInternalServerError, 0, errorsource.DownstreamError(fmt.Errorf("error preparing request. %w", err), false)
+		return nil, http.StatusInternalServerError, 0, backend.DownstreamError(fmt.Errorf("error preparing request. %w", err))
 	}
 	if req == nil {
-		return nil, http.StatusInternalServerError, 0, errorsource.DownstreamError(errors.New("error preparing request. invalid request constructed"), false)
+		return nil, http.StatusInternalServerError, 0, backend.DownstreamError(errors.New("error preparing request. invalid request constructed"))
 	}
 	startTime := time.Now()
 	if !CanAllowURL(req.URL.String(), settings.AllowedHosts) {
 		logger.Debug("url is not in the allowed list. make sure to match the base URL with the settings", "url", req.URL.String())
-		return nil, http.StatusUnauthorized, 0, errorsource.DownstreamError(errors.New("requested URL is not allowed. To allow this URL, update the datasource config Security -> Allowed Hosts section"), false)
+		return nil, http.StatusUnauthorized, 0, backend.DownstreamError(errors.New("requested URL is not allowed. To allow this URL, update the datasource config Security -> Allowed Hosts section"))
 	}
 	logger.Debug("requesting URL", "host", req.URL.Hostname(), "url_path", req.URL.Path, "method", req.Method, "type", query.Type)
 	res, err := client.HttpClient.Do(req)
@@ -220,37 +127,37 @@ func (client *Client) req(ctx context.Context, url string, body io.Reader, setti
 			logger.Debug("error getting response from server", "url", url, "method", req.Method, "error", err.Error(), "status code", res.StatusCode)
 			// Infinity can query anything and users are responsible for ensuring that endpoint/auth is correct
 			// therefore any incoming error is considered downstream
-			return nil, res.StatusCode, duration, errorsource.DownstreamError(fmt.Errorf("error getting response from %s", url), false)
+			return nil, res.StatusCode, duration, backend.DownstreamError(fmt.Errorf("error getting response from %s", url))
 		}
 		if errors.Is(err, context.Canceled) {
 			logger.Debug("request cancelled", "url", url, "method", req.Method)
-			return nil, http.StatusInternalServerError, duration, errorsource.DownstreamError(err, false)
+			return nil, http.StatusInternalServerError, duration, backend.DownstreamError(err)
 		}
 		logger.Debug("error getting response from server. no response received", "url", url, "error", err.Error())
-		return nil, http.StatusInternalServerError, duration, errorsource.DownstreamError(fmt.Errorf("error getting response from url %s. no response received. Error: %w", url, err), false)
+		return nil, http.StatusInternalServerError, duration, backend.DownstreamError(fmt.Errorf("error getting response from url %s. no response received. Error: %w", url, err))
 	}
 	if res == nil {
 		logger.Debug("invalid response from server and also no error", "url", url, "method", req.Method)
-		return nil, http.StatusInternalServerError, duration, errorsource.DownstreamError(fmt.Errorf("invalid response received for the URL %s", url), false)
+		return nil, http.StatusInternalServerError, duration, backend.DownstreamError(fmt.Errorf("invalid response received for the URL %s", url))
 	}
 	if res.StatusCode >= http.StatusBadRequest {
-		err = fmt.Errorf("%w. %s", ErrUnsuccessfulHTTPResponseStatus, res.Status)
+		err = fmt.Errorf("%w. %s", models.ErrUnsuccessfulHTTPResponseStatus, res.Status)
 		// Infinity can query anything and users are responsible for ensuring that endpoint/auth is correct
 		// therefore any incoming error is considered downstream
-		return nil, res.StatusCode, duration, errorsource.DownstreamError(err, false)
+		return nil, res.StatusCode, duration, backend.DownstreamError(err)
 	}
-	bodyBytes, err := io.ReadAll(res.Body)
+	bodyBytes, err := getBodyBytes(res)
 	if err != nil {
 		logger.Debug("error reading response body", "url", url, "error", err.Error())
-		return nil, res.StatusCode, duration, errorsource.DownstreamError(err, false)
+		return nil, res.StatusCode, duration, backend.DownstreamError(err)
 	}
 	bodyBytes = removeBOMContent(bodyBytes)
 	if CanParseAsJSON(query.Type, res.Header) {
 		var out any
 		err := json.Unmarshal(bodyBytes, &out)
 		if err != nil {
-			err = fmt.Errorf("%w. %w", ErrParsingResponseBodyAsJson, err)
-			err = errorsource.DownstreamError(err, false)
+			err = fmt.Errorf("%w. %w", models.ErrParsingResponseBodyAsJson, err)
+			err = backend.DownstreamError(err)
 			logger.Debug("error un-marshaling JSON response", "url", url, "error", err.Error())
 		}
 		return out, res.StatusCode, duration, err
@@ -258,28 +165,40 @@ func (client *Client) req(ctx context.Context, url string, body io.Reader, setti
 	return string(bodyBytes), res.StatusCode, duration, err
 }
 
+func getBodyBytes(res *http.Response) ([]byte, error) {
+	if strings.EqualFold(res.Header.Get("Content-Encoding"), "gzip") {
+		reader, err := gzip.NewReader(res.Body)
+		if err != nil {
+			return nil, err
+		}
+		defer reader.Close()
+		return io.ReadAll(reader)
+	}
+	return io.ReadAll(res.Body)
+}
+
 // https://stackoverflow.com/questions/31398044/got-error-invalid-character-%C3%AF-looking-for-beginning-of-value-from-json-unmar
 func removeBOMContent(input []byte) []byte {
 	return bytes.TrimPrefix(input, []byte("\xef\xbb\xbf"))
 }
 
-func (client *Client) GetResults(ctx context.Context, query models.Query, requestHeaders map[string]string) (o any, statusCode int, duration time.Duration, err error) {
+func (client *Client) GetResults(ctx context.Context, pCtx *backend.PluginContext, query models.Query, requestHeaders map[string]string) (o any, statusCode int, duration time.Duration, err error) {
 	logger := backend.Logger.FromContext(ctx)
 	if query.Source == "azure-blob" {
 		if strings.TrimSpace(query.AzBlobContainerName) == "" || strings.TrimSpace(query.AzBlobName) == "" {
-			return nil, http.StatusBadRequest, 0, errorsource.DownstreamError(errors.New("invalid/empty container name/blob name"), false)
+			return nil, http.StatusBadRequest, 0, backend.DownstreamError(errors.New("invalid/empty container name/blob name"))
 		}
 		if client.AzureBlobClient == nil {
-			return nil, http.StatusInternalServerError, 0, errorsource.PluginError(errors.New("invalid azure blob client"), false)
+			return nil, http.StatusInternalServerError, 0, backend.PluginError(errors.New("invalid azure blob client"))
 		}
 		blobDownloadResponse, err := client.AzureBlobClient.DownloadStream(ctx, strings.TrimSpace(query.AzBlobContainerName), strings.TrimSpace(query.AzBlobName), nil)
 		if err != nil {
-			return nil, http.StatusInternalServerError, 0, errorsource.DownstreamError(err, false)
+			return nil, http.StatusInternalServerError, 0, backend.DownstreamError(err)
 		}
 		reader := blobDownloadResponse.Body
 		bodyBytes, err := io.ReadAll(reader)
 		if err != nil {
-			return nil, http.StatusInternalServerError, 0, errorsource.PluginError(fmt.Errorf("error reading blob content. %w", err), false)
+			return nil, http.StatusInternalServerError, 0, backend.PluginError(fmt.Errorf("error reading blob content. %w", err))
 		}
 		bodyBytes = removeBOMContent(bodyBytes)
 		if CanParseAsJSON(query.Type, http.Header{}) {
@@ -287,7 +206,7 @@ func (client *Client) GetResults(ctx context.Context, query models.Query, reques
 			err := json.Unmarshal(bodyBytes, &out)
 			if err != nil {
 				logger.Error("error un-marshaling blob content", "error", err.Error())
-				err = errorsource.PluginError(err, false)
+				err = backend.PluginError(err)
 			}
 			return out, http.StatusOK, duration, err
 		}
@@ -296,9 +215,9 @@ func (client *Client) GetResults(ctx context.Context, query models.Query, reques
 	switch strings.ToUpper(query.URLOptions.Method) {
 	case http.MethodPost:
 		body := GetQueryBody(ctx, query)
-		return client.req(ctx, query.URL, body, client.Settings, query, requestHeaders)
+		return client.req(ctx, pCtx, query.URL, body, client.Settings, query, requestHeaders)
 	default:
-		return client.req(ctx, query.URL, nil, client.Settings, query, requestHeaders)
+		return client.req(ctx, pCtx, query.URL, nil, client.Settings, query, requestHeaders)
 	}
 }
 

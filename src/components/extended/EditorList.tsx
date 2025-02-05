@@ -1,8 +1,6 @@
 import React from 'react';
 
-import { Button } from '@grafana/ui';
-
-import { Stack } from './Stack';
+import { Button, Stack } from '@grafana/ui';
 
 interface EditorListProps<T> {
   items: Array<Partial<T>>;

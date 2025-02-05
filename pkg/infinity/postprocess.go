@@ -6,11 +6,11 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/grafana/grafana-infinity-datasource/pkg/dataplane"
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
-	"github.com/grafana/grafana-plugin-sdk-go/experimental/errorsource"
 	"github.com/grafana/infinity-libs/lib/go/framesql"
 	t "github.com/grafana/infinity-libs/lib/go/transformations"
 )
@@ -27,7 +27,7 @@ func PostProcessFrame(ctx context.Context, frame *data.Frame, query models.Query
 	if err != nil {
 		logger.Error("error getting computed column", "error", err.Error())
 		frame.Meta.Custom = &CustomMeta{Query: query, Error: err.Error()}
-		return frame, errorsource.PluginError(err, false)
+		return frame, backend.PluginError(err)
 	}
 	frame, err = t.ApplyFilter(frame, query.FilterExpression)
 	if err != nil {
@@ -59,27 +59,42 @@ func PostProcessFrame(ctx context.Context, frame *data.Frame, query models.Query
 			return wFrame, err
 		}
 	}
+	if query.Parser != models.InfinityParserBackend {
+		return frame, nil
+	}
+	if frame.Meta == nil {
+		frame.Meta = &data.FrameMeta{}
+	}
+	if dataplane.CanBeNumericWide(frame) {
+		frame.Meta.Type = data.FrameTypeNumericWide
+		frame.Meta.TypeVersion = data.FrameTypeVersion{0, 1}
+		return frame, nil
+	}
+	if dataplane.CanBeNumericLong(frame) {
+		frame.Meta.Type = data.FrameTypeNumericLong
+		frame.Meta.TypeVersion = data.FrameTypeVersion{0, 1}
+		return frame, nil
+	}
 	return frame, nil
 }
 
 func addErrorSourceToTransformError(err error) error {
 	downstreamErrors := []error{
-		t.ErrSummarizeByFieldNotFound, 
-		t.ErrNotUniqueFieldNames, 
-		t.ErrEvaluatingFilterExpression, 
-		t.ErrMergeTransformationNoFrameSupplied, 
-		t.ErrMergeTransformationDifferentFields, 
-		t.ErrMergeTransformationDifferentFieldNames, 
+		t.ErrSummarizeByFieldNotFound,
+		t.ErrNotUniqueFieldNames,
+		t.ErrEvaluatingFilterExpression,
+		t.ErrMergeTransformationNoFrameSupplied,
+		t.ErrMergeTransformationDifferentFields,
+		t.ErrMergeTransformationDifferentFieldNames,
 		t.ErrMergeTransformationDifferentFieldTypes,
 		t.ErrInvalidFilterExpression,
 		framesql.ErrEmptySummarizeExpression,
 		framesql.ErrExpressionNotFoundInFields,
 	}
-	
 	for _, e := range downstreamErrors {
 		if errors.Is(err, e) {
-			return errorsource.DownstreamError(err, false)
+			return backend.DownstreamError(err)
 		}
 	}
-	return errorsource.PluginError(err, false)
+	return backend.PluginError(err)
 }

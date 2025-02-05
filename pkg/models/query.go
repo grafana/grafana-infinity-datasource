@@ -9,7 +9,6 @@ import (
 	"strings"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
-	"github.com/grafana/grafana-plugin-sdk-go/experimental/errorsource"
 )
 
 type QueryType string
@@ -299,12 +298,12 @@ func LoadQuery(ctx context.Context, backendQuery backend.DataQuery, pluginContex
 	var query Query
 	err := json.Unmarshal(backendQuery.JSON, &query)
 	if err != nil {
-		return query, errorsource.DownstreamError(fmt.Errorf("error while parsing the query json. %w", err), false)
+		return query, backend.DownstreamError(fmt.Errorf("error while parsing the query json. %w", err))
 	}
 	query = ApplyDefaultsToQuery(ctx, &pluginContext, query, settings)
 	if query.PageMode == PaginationModeList && strings.TrimSpace(query.PageParamListFieldName) == "" {
 		// Downstream error as user input is not correct
-		return query, errorsource.DownstreamError(errors.New("pagination_param_list_field_name cannot be empty"), false)
+		return query, backend.DownstreamError(errors.New("pagination_param_list_field_name cannot be empty"))
 	}
 	return ApplyMacros(ctx, query, backendQuery.TimeRange, pluginContext)
 }
