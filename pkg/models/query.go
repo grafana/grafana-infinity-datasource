@@ -245,7 +245,7 @@ func ApplyDefaultsToQuery(ctx context.Context, pCtx *backend.PluginContext, quer
 	}
 	if query.Parser == InfinityParserBackend && query.Source == "url" && !(query.PageMode == "" || query.PageMode == PaginationModeNone) {
 		if query.PageMode != PaginationModeNone {
-			query.PageMaxPages = GetPaginationMaxPagesValue(pCtx, query)
+			query.PageMaxPages = GetPaginationMaxPagesValue(ctx, pCtx, query)
 			if query.PageParamSizeFieldName == "" {
 				query.PageParamSizeFieldName = "limit"
 			}
@@ -309,7 +309,7 @@ func LoadQuery(ctx context.Context, backendQuery backend.DataQuery, pluginContex
 	return ApplyMacros(ctx, query, backendQuery.TimeRange, pluginContext)
 }
 
-func GetPaginationMaxPagesValue(pCtx *backend.PluginContext, query Query) int {
+func GetPaginationMaxPagesValue(ctx context.Context, pCtx *backend.PluginContext, query Query) int {
 	maxPages := 5
 	if query.PageMaxPages <= 0 {
 		maxPages = 1
@@ -317,7 +317,7 @@ func GetPaginationMaxPagesValue(pCtx *backend.PluginContext, query Query) int {
 	if query.PageMaxPages >= 5 {
 		maxPages = 5
 	}
-	maxPageFromEnv := getSettingsFromEnvironment(pCtx, "pagination_max_pages")
+	maxPageFromEnv := GetGrafanaConfig(ctx, pCtx, "pagination_max_pages")
 	if maxPageFromEnvValue, err := strconv.Atoi(maxPageFromEnv); err == nil && maxPageFromEnvValue > 0 {
 		maxPages = maxPageFromEnvValue
 	}

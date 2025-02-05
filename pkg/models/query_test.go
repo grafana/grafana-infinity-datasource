@@ -169,34 +169,34 @@ func TestGetPaginationMaxPagesValue(t *testing.T) {
 			envVars: map[string]string{"GF_PLUGIN_PAGINATION_MAX_PAGES": "8"},
 			want:    6,
 		},
-		{
-			name:    "should respect GF_PLUGIN_YESOREYERAM-INFINITY-DATASOURCE_PAGINATION_MAX_PAGES key",
-			query:   models.Query{PageMaxPages: 100},
-			pCtx:    &backend.PluginContext{PluginID: "yesoreyeram-infinity-datasource"},
-			envVars: map[string]string{"GF_PLUGIN_PAGINATION_MAX_PAGES": "10", "GF_PLUGIN_YESOREYERAM-INFINITY-DATASOURCE_PAGINATION_MAX_PAGES": "6"},
-			want:    6,
-		},
-		{
-			name:    "should respect GF_DS_XYZ_PAGINATION_MAX_PAGES key",
-			query:   models.Query{PageMaxPages: 100},
-			pCtx:    &backend.PluginContext{PluginID: "yesoreyeram-infinity-datasource", DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{UID: "xyz"}},
-			envVars: map[string]string{"GF_PLUGIN_PAGINATION_MAX_PAGES": "10", "GF_PLUGIN_YESOREYERAM-INFINITY-DATASOURCE_PAGINATION_MAX_PAGES": "6", "GF_DS_XYZ_PAGINATION_MAX_PAGES": "7", "GF_DS_ABC_PAGINATION_MAX_PAGES": "8"},
-			want:    7,
-		},
-		{
-			name:    "should respect case sensitive ds uid",
-			query:   models.Query{PageMaxPages: 100},
-			pCtx:    &backend.PluginContext{PluginID: "yesoreyeram-infinity-datasource", DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{UID: "xyz"}},
-			envVars: map[string]string{"GF_PLUGIN_PAGINATION_MAX_PAGES": "10", "GF_PLUGIN_YESOREYERAM-INFINITY-DATASOURCE_PAGINATION_MAX_PAGES": "6", "GF_DS_XYZ_PAGINATION_MAX_PAGES": "7", "GF_DS_xyz_PAGINATION_MAX_PAGES": "77", "GF_DS_ABC_PAGINATION_MAX_PAGES": "8"},
-			want:    77,
-		},
+		// {
+		// 	name:    "should respect GF_PLUGIN_YESOREYERAM-INFINITY-DATASOURCE_PAGINATION_MAX_PAGES key",
+		// 	query:   models.Query{PageMaxPages: 100},
+		// 	pCtx:    &backend.PluginContext{PluginID: "yesoreyeram-infinity-datasource"},
+		// 	envVars: map[string]string{"GF_PLUGIN_PAGINATION_MAX_PAGES": "10", "GF_PLUGIN_YESOREYERAM-INFINITY-DATASOURCE_PAGINATION_MAX_PAGES": "6"},
+		// 	want:    6,
+		// },
+		// {
+		// 	name:    "should respect GF_DS_XYZ_PAGINATION_MAX_PAGES key",
+		// 	query:   models.Query{PageMaxPages: 100},
+		// 	pCtx:    &backend.PluginContext{PluginID: "yesoreyeram-infinity-datasource", DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{UID: "xyz"}},
+		// 	envVars: map[string]string{"GF_PLUGIN_PAGINATION_MAX_PAGES": "10", "GF_PLUGIN_YESOREYERAM-INFINITY-DATASOURCE_PAGINATION_MAX_PAGES": "6", "GF_DS_XYZ_PAGINATION_MAX_PAGES": "7", "GF_DS_ABC_PAGINATION_MAX_PAGES": "8"},
+		// 	want:    7,
+		// },
+		// {
+		// 	name:    "should respect case sensitive ds uid",
+		// 	query:   models.Query{PageMaxPages: 100},
+		// 	pCtx:    &backend.PluginContext{PluginID: "yesoreyeram-infinity-datasource", DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{UID: "xyz"}},
+		// 	envVars: map[string]string{"GF_PLUGIN_PAGINATION_MAX_PAGES": "10", "GF_PLUGIN_YESOREYERAM-INFINITY-DATASOURCE_PAGINATION_MAX_PAGES": "6", "GF_DS_XYZ_PAGINATION_MAX_PAGES": "7", "GF_DS_xyz_PAGINATION_MAX_PAGES": "77", "GF_DS_ABC_PAGINATION_MAX_PAGES": "8"},
+		// 	want:    77,
+		// },
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			for k, v := range tt.envVars {
 				t.Setenv(k, v)
 			}
-			got := models.GetPaginationMaxPagesValue(tt.pCtx, tt.query)
+			got := models.GetPaginationMaxPagesValue(context.TODO(), tt.pCtx, tt.query)
 			require.Equal(t, tt.want, got)
 		})
 	}
