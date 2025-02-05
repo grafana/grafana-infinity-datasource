@@ -24,11 +24,16 @@ func GetXMLBackendResponse(ctx context.Context, inputString string, query models
 			TimeFormat: c.TimeStampFormat,
 		})
 	}
-	newFrame, err := xmlframer.ToFrame(inputString, xmlframer.FramerOptions{
+	framerOptions := xmlframer.FramerOptions{
+		FramerType:   string(jsonframer.FramerTypeGJSON),
 		FrameName:    query.RefID,
 		RootSelector: query.RootSelector,
 		Columns:      columns,
-	})
+	}
+	if query.Parser == models.InfinityParserJQBackend {
+		framerOptions.FramerType = string(jsonframer.FramerTypeJQ)
+	}
+	newFrame, err := xmlframer.ToFrame(inputString, framerOptions)
 	if newFrame != nil {
 		frame.Fields = append(frame.Fields, newFrame.Fields...)
 	}

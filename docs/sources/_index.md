@@ -64,7 +64,7 @@ A universal data source plugin for pulling data from various systems into Grafan
 <div style="margin-bottom:30px"></div>
 
 - Get data from multiple sources into Grafana
-- Flexible data manipulation with UQL, JSONata, GROQ
+- Flexible data manipulation with JSONata, JQ, UQL, GROQ
 - Supports various data formats such as JSON, CSV
 - Support various authentication
   - Basic authentication

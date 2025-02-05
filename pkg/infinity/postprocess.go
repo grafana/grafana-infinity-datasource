@@ -59,7 +59,7 @@ func PostProcessFrame(ctx context.Context, frame *data.Frame, query models.Query
 			return wFrame, err
 		}
 	}
-	if query.Parser != models.InfinityParserBackend {
+	if query.Parser != models.InfinityParserBackend && query.Parser != models.InfinityParserJQBackend {
 		return frame, nil
 	}
 	if frame.Meta == nil {

@@ -64,6 +64,8 @@ require (
 	github.com/hashicorp/go-plugin v1.6.2 // indirect
 	github.com/hashicorp/yamux v0.1.1 // indirect
 	github.com/invopop/yaml v0.3.1 // indirect
+	github.com/itchyny/gojq v0.12.17 // indirect
+	github.com/itchyny/timefmt-go v0.1.6 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
@@ -137,3 +139,7 @@ require (
 	gopkg.in/fsnotify/fsnotify.v1 v1.4.7 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
+
+replace github.com/grafana/infinity-libs/lib/go/jsonframer => github.com/grafana/infinity-libs/lib/go/jsonframer v1.1.5-0.20250204120602-effc6e8f4822
+
+replace github.com/grafana/infinity-libs/lib/go/xmlframer => github.com/grafana/infinity-libs/lib/go/xmlframer v1.0.1-0.20250204120602-effc6e8f4822

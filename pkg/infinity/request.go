@@ -110,10 +110,10 @@ func (client *Client) GetExecutedURL(ctx context.Context, query models.Query) st
 		out = append(out, "###############", "## URL", "###############", "", req.URL.String(), "")
 		out = append(out, "###############", "## Curl Command", "###############", "", command.String())
 	}
-	if query.Type == models.QueryTypeUQL || query.Parser == "uql" {
+	if query.Type == models.QueryTypeUQL || query.Parser == models.InfinityParserUQL {
 		out = append(out, "", "###############", "## UQL", "###############", "", query.UQL)
 	}
-	if query.Type == models.QueryTypeGROQ || query.Parser == "groq" {
+	if query.Type == models.QueryTypeGROQ || query.Parser == models.InfinityParserGROQ {
 		out = append(out, "###############", "## GROQ", "###############", "", query.GROQ, "")
 	}
 	if client.Settings.AuthenticationMethod == models.AuthenticationMethodOAuth {

@@ -16,7 +16,7 @@ func GetFrameForInlineSources(ctx context.Context, query models.Query) (*data.Fr
 	if query.Type == models.QueryTypeGROQ || query.Type == models.QueryTypeUQL {
 		return frame, nil
 	}
-	if query.Parser != "backend" {
+	if query.Parser != models.InfinityParserBackend && query.Parser != models.InfinityParserJQBackend {
 		return frame, nil
 	}
 	switch query.Type {
@@ -42,15 +42,20 @@ func GetFrameForInlineSources(ctx context.Context, query models.Query) (*data.Fr
 				TimeFormat: c.TimeStampFormat,
 			})
 		}
-		newFrame, err := jsonframer.ToFrame(query.Data, jsonframer.FramerOptions{
+		framerOptions := jsonframer.FramerOptions{
+			FramerType:   jsonframer.FramerTypeGJSON,
 			FrameName:    query.RefID,
 			RootSelector: query.RootSelector,
 			Columns:      columns,
-		})
+		}
+		if query.Parser == models.InfinityParserJQBackend {
+			framerOptions.FramerType = jsonframer.FramerTypeJQ
+		}
+		newFrame, err := jsonframer.ToFrame(query.Data, framerOptions)
 		if err != nil {
 			if errors.Is(err, jsonframer.ErrInvalidRootSelector) || errors.Is(err, jsonframer.ErrInvalidJSONContent) || errors.Is(err, jsonframer.ErrEvaluatingJSONata) {
-			return frame, backend.DownstreamError(fmt.Errorf("error converting json data to frame: %w", err))
-		}
+				return frame, backend.DownstreamError(fmt.Errorf("error converting json data to frame: %w", err))
+			}
 			return frame, err
 		}
 		if newFrame != nil {
