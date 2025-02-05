@@ -42,7 +42,7 @@ func TestErrors(t *testing.T) {
 			}, *client, map[string]string{}, backend.PluginContext{})
 			require.NotNil(t, res.Error)
 			require.Equal(t, backend.ErrorSourceDownstream, res.ErrorSource)
-			require.Equal(t, "error while performing the infinity query. unsuccessful HTTP response\nHTTP status code: 403 Forbidden", res.Error.Error())
+      require.Equal(t, "error while performing the infinity query. unsuccessful HTTP response\nHTTP status code: 403 Forbidden", res.Error.Error())
 		})
 		t.Run("fail with incorrect response from server", func(t *testing.T) {
 			server := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -57,7 +57,7 @@ func TestErrors(t *testing.T) {
 			}, *client, map[string]string{}, backend.PluginContext{})
 			require.NotNil(t, res.Error)
 			require.Equal(t, backend.ErrorSourceDownstream, res.ErrorSource)
-			require.ErrorIs(t, res.Error, infinity.ErrParsingResponseBodyAsJson)
+			require.ErrorIs(t, res.Error, models.ErrParsingResponseBodyAsJson)
 			require.Equal(t, "error while performing the infinity query. unable to parse response body as JSON. unexpected end of JSON input", res.Error.Error())
 		})
 		t.Run("fail with incorrect JSONata", func(t *testing.T) {

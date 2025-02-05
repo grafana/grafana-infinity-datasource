@@ -1,9 +1,8 @@
 import React from 'react';
-import { InlineLabel, Input, Select } from '@grafana/ui';
+import { InlineLabel, Input, Select, Stack } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
 import { EditorField } from './../../components/extended/EditorField';
 import { EditorRow } from './../../components/extended/EditorRow';
-import { Stack } from './../../components/extended/Stack';
 import type { InfinityQuery, PaginationParamType, PaginationType } from './../../types';
 
 const paginationTypes: Array<SelectableValue<PaginationType>> = [
@@ -32,8 +31,8 @@ export const PaginationEditor = (props: PaginationEditorProps) => {
   const { query, onChange } = props;
   return (
     <EditorRow label={'Pagination'} collapsible={true} collapsed={false} title={() => 'beta'}>
-      <Stack direction="row" wrap={true}>
-        <Stack wrap={false} direction="column">
+      <Stack direction="row" wrap={'wrap'}>
+        <Stack wrap={'nowrap'} direction="column">
           <EditorField label="Pagination Type">
             <Select<PaginationType> width={30} value={query.pagination_mode || 'none'} options={paginationTypes} onChange={(e) => onChange({ ...query, pagination_mode: e.value || 'none' })} />
           </EditorField>
@@ -53,7 +52,7 @@ export const PaginationEditor = (props: PaginationEditorProps) => {
         </Stack>
         {(query.pagination_mode === 'offset' || query.pagination_mode === 'page' || query.pagination_mode === 'cursor') && (
           <>
-            <Stack gap={1} wrap={false} direction="column">
+            <Stack gap={1} wrap={'wrap'} direction="column">
               <EditorField label="Size field">
                 <Stack>
                   <InlineLabel width={12}>Field name</InlineLabel>
@@ -176,7 +175,7 @@ export const PaginationEditor = (props: PaginationEditorProps) => {
         )}
         {query.pagination_mode === 'list' && (
           <>
-            <Stack gap={1} wrap={false} direction="column">
+            <Stack gap={1} wrap={'nowrap'} direction="column">
               <EditorField label="Variables List" invalid={(query.pagination_param_list_value || '').split(',').length > 5}>
                 <Stack>
                   <InlineLabel width={12}>Field name</InlineLabel>
