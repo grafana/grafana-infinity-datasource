@@ -2,4 +2,4 @@
 'grafana-infinity-datasource': minor
 ---
 
-Setting backend pagination max page size via environment variable
+Setting backend pagination max page size via grafana config (ini file)
