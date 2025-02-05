@@ -1,9 +1,10 @@
 //  🌟 This was machine generated.  Do not edit. 🌟
 //  
 //  Frame[0] {
+//      "type": "numeric-long",
 //      "typeVersion": [
 //          0,
-//          0
+//          1
 //      ],
 //      "custom": {
 //          "query": {
@@ -90,7 +91,7 @@
 //          "duration": 123,
 //          "error": ""
 //      },
-//      "executedQueryString": "###############\n## URL\n###############\n\nhttp://127.0.0.1:8080\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' 'http://127.0.0.1:8080'"
+//      "executedQueryString": "###############\n## URL\n###############\n\nhttp://127.0.0.1:8080\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept-Encoding: gzip' 'http://127.0.0.1:8080'"
 //  }
 //  Name: response
 //  Dimensions: 5 Fields by 6 Rows
@@ -116,9 +117,10 @@
       "schema": {
         "name": "response",
         "meta": {
+          "type": "numeric-long",
           "typeVersion": [
             0,
-            0
+            1
           ],
           "custom": {
             "query": {
@@ -205,7 +207,7 @@
             "duration": 123,
             "error": ""
           },
-          "executedQueryString": "###############\n## URL\n###############\n\nhttp://127.0.0.1:8080\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' 'http://127.0.0.1:8080'"
+          "executedQueryString": "###############\n## URL\n###############\n\nhttp://127.0.0.1:8080\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept-Encoding: gzip' 'http://127.0.0.1:8080'"
         },
         "fields": [
           {

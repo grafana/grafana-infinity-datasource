@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Input } from '@grafana/ui';
-import { Stack } from '../../components/extended/Stack';
+import { Input, Stack } from '@grafana/ui';
 import { EditorRow } from '../../components/extended/EditorRow';
 import { EditorField } from '../../components/extended/EditorField';
 import { ComputedColumnsEditor } from './query.computedColumns';
@@ -19,7 +18,7 @@ export const ExperimentalFeatures = ({ query, onChange, onRunQuery }: Experiment
   }
   return (
     <EditorRow label="Computed columns, Filter, Group by" collapsible={true} collapsed={false} title={() => ''}>
-      <Stack gap={1} direction="row" wrap={true}>
+      <Stack gap={1} direction="row" wrap={'wrap'}>
         <ComputedColumnsEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />
         <Filter query={query} onChange={onChange} onRunQuery={onRunQuery} />
         <Summarize query={query} onChange={onChange} onRunQuery={onRunQuery} />

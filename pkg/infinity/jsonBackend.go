@@ -10,7 +10,6 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
-	"github.com/grafana/grafana-plugin-sdk-go/experimental/errorsource"
 	"github.com/grafana/infinity-libs/lib/go/jsonframer"
 )
 
@@ -23,7 +22,7 @@ func GetJSONBackendResponse(ctx context.Context, urlResponseObject any, query mo
 	if err != nil {
 		logger.Error("error json parsing root data", "error", err.Error())
 		frame.Meta.Custom = &CustomMeta{Query: query, Error: err.Error()}
-		return frame, errorsource.PluginError(fmt.Errorf("error parsing json root data"), false)
+		return frame, backend.PluginError(fmt.Errorf("error parsing json root data"))
 	}
 	columns := []jsonframer.ColumnSelector{}
 	for _, c := range query.Columns {
@@ -42,9 +41,9 @@ func GetJSONBackendResponse(ctx context.Context, urlResponseObject any, query mo
 
 	if err != nil {
 		if errors.Is(err, jsonframer.ErrInvalidRootSelector) || errors.Is(err, jsonframer.ErrInvalidJSONContent) || errors.Is(err, jsonframer.ErrEvaluatingJSONata) {
-			return frame, errorsource.DownstreamError(fmt.Errorf("error converting json data to frame: %w", err), false)
+			return frame, backend.DownstreamError(fmt.Errorf("error converting json data to frame: %w", err))
 		}
-		return frame, errorsource.PluginError(fmt.Errorf("error converting json data to frame: %w", err), false)
+		return frame, backend.PluginError(fmt.Errorf("error converting json data to frame: %w", err))
 	}
 	if newFrame != nil {
 		frame.Fields = append(frame.Fields, newFrame.Fields...)
