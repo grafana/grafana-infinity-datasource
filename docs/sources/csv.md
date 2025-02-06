@@ -35,6 +35,8 @@ weight: 22
 
 ## 📊 Overview
 
+Looking for a quickstart example?  Please check [How to Visualize CSV Data with Grafana](https://grafana.com/blog/2025/02/05/how-to-visualize-csv-data-with-grafana/).  This page covers details the various powerful configuration options for dealing with CSV data in Infinity.
+
 <div style="margin-bottom:30px"></div>
 
 ![csv example](https://user-images.githubusercontent.com/153843/92571108-9e0ff800-f27a-11ea-9fe9-9f9dcbd7125a.png#center)
