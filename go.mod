@@ -137,3 +137,5 @@ require (
 	gopkg.in/fsnotify/fsnotify.v1 v1.4.7 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
+
+replace golang.org/x/oauth2 => github.com/yesoreyeram/oauth2 v0.0.0-20250203165345-7bba1e2e4544

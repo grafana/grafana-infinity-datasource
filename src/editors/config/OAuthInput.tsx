@@ -1,5 +1,5 @@
 import { onUpdateDatasourceSecureJsonDataOption, DataSourcePluginOptionsEditorProps, SelectableValue } from '@grafana/data';
-import { InlineFormLabel, Input, LegacyForms, LinkButton, RadioButtonGroup } from '@grafana/ui';
+import { CollapsableSection, Stack, InlineFormLabel, Input, LegacyForms, LinkButton, RadioButtonGroup } from '@grafana/ui';
 import React from 'react';
 import { SecureFieldsEditor } from './../../components/config/SecureFieldsEditor';
 import type { InfinityOptions, InfinitySecureOptions, OAuth2Props, OAuth2Type } from './../../types';
@@ -35,7 +35,7 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
   return (
     <>
       <div className="gf-form">
-        <InlineFormLabel width={10} tooltip="This refers to OAuth2 grant type">
+        <InlineFormLabel width={12} tooltip="This refers to OAuth2 grant type">
           Grant Type
         </InlineFormLabel>
         <RadioButtonGroup<OAuth2Type> options={oAuthTypes} onChange={(v) => onOAuth2PropsChange('oauth2_type', v)} value={oauth2.oauth2_type || 'client_credentials'}></RadioButtonGroup>
@@ -44,7 +44,7 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
         <>
           <div className="gf-form">
             <InlineFormLabel
-              width={10}
+              width={12}
               tooltip={
                 <>
                   {`AuthStyleAutoDetect means to auto-detect which authentication style the provider wants by trying both ways and caching the successful way for the future.`}
@@ -71,12 +71,12 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
             ></RadioButtonGroup>
           </div>
           <div className="gf-form">
-            <InlineFormLabel width={10}>Client ID</InlineFormLabel>
+            <InlineFormLabel width={12}>Client ID</InlineFormLabel>
             <Input onChange={(v) => onOAuth2PropsChange('client_id', v.currentTarget.value)} value={oauth2.client_id} width={30} placeholder={'Client ID'} />
           </div>
           <div className="gf-form">
             <LegacyForms.SecretFormField
-              labelWidth={10}
+              labelWidth={12}
               inputWidth={15}
               required
               value={secureJsonData.oauth2ClientSecret || ''}
@@ -89,11 +89,11 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
             />
           </div>
           <div className="gf-form">
-            <InlineFormLabel width={10}>Token URL</InlineFormLabel>
+            <InlineFormLabel width={12}>Token URL</InlineFormLabel>
             <Input onChange={(v) => onOAuth2PropsChange('token_url', v.currentTarget.value)} value={oauth2.token_url} width={30} placeholder={'Token URL'} />
           </div>
           <div className="gf-form">
-            <InlineFormLabel width={10}>Scopes</InlineFormLabel>
+            <InlineFormLabel width={12}>Scopes</InlineFormLabel>
             <Input
               onChange={(v) => onOAuth2PropsChange('scopes', (v.currentTarget.value || '').split(','))}
               value={(oauth2.scopes || []).join(',')}
@@ -108,30 +108,31 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
               title="Endpoint params"
               hideTile={true}
               label="Endpoint param"
-              labelWidth={10}
+              labelWidth={12}
               secureFieldName="oauth2EndPointParamsName"
               secureFieldValue="oauth2EndPointParamsValue"
             />
           </div>
+          <TokenCustomization options={options} onOptionsChange={onOptionsChange} />
         </>
       )}
       {oauth2.oauth2_type === 'jwt' && (
         <>
           <div className="gf-form">
-            <InlineFormLabel width={10} tooltip="Email is the OAuth client identifier used when communicating with the configured OAuth provider.">
+            <InlineFormLabel width={12} tooltip="Email is the OAuth client identifier used when communicating with the configured OAuth provider.">
               Email
             </InlineFormLabel>
             <Input onChange={(v) => onOAuth2PropsChange('email', v.currentTarget.value)} value={oauth2.email} width={30} placeholder={'email'} />
           </div>
           <div className="gf-form">
-            <InlineFormLabel width={10} tooltip="PrivateKeyID contains an optional hint indicating which key is being used">
+            <InlineFormLabel width={12} tooltip="PrivateKeyID contains an optional hint indicating which key is being used">
               Private Key Identifier
             </InlineFormLabel>
             <Input onChange={(v) => onOAuth2PropsChange('private_key_id', v.currentTarget.value)} value={oauth2.private_key_id} width={30} placeholder={'(optional) private key identifier'} />
           </div>
           <div className="gf-form">
             <LegacyForms.SecretFormField
-              labelWidth={10}
+              labelWidth={12}
               inputWidth={15}
               required
               value={secureJsonData.oauth2JWTPrivateKey || ''}
@@ -145,19 +146,19 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
             />
           </div>
           <div className="gf-form">
-            <InlineFormLabel width={10} tooltip="TokenURL is the endpoint required to complete the 2-legged JWT flow.">
+            <InlineFormLabel width={12} tooltip="TokenURL is the endpoint required to complete the 2-legged JWT flow.">
               Token URL
             </InlineFormLabel>
             <Input onChange={(v) => onOAuth2PropsChange('token_url', v.currentTarget.value)} value={oauth2.token_url} width={30} placeholder={'Token URL'} />
           </div>
           <div className="gf-form">
-            <InlineFormLabel width={10} tooltip="Subject is the optional user to impersonate.">
+            <InlineFormLabel width={12} tooltip="Subject is the optional user to impersonate.">
               Subject
             </InlineFormLabel>
             <Input onChange={(v) => onOAuth2PropsChange('subject', v.currentTarget.value)} value={oauth2.subject} width={30} placeholder={'(optional) Subject'} />
           </div>
           <div className="gf-form">
-            <InlineFormLabel width={10} tooltip="Scopes optionally specifies a list of requested permission scopes. Enter comma separated values">
+            <InlineFormLabel width={12} tooltip="Scopes optionally specifies a list of requested permission scopes. Enter comma separated values">
               Scopes
             </InlineFormLabel>
             <Input
@@ -167,6 +168,7 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
               placeholder={'Comma separated values of scopes'}
             />
           </div>
+          <TokenCustomization options={options} onOptionsChange={onOptionsChange} />
         </>
       )}
       {oauth2.oauth2_type === 'others' && (
@@ -182,5 +184,39 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
         </div>
       )}
     </>
+  );
+};
+
+const TokenCustomization = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
+  const { options, onOptionsChange } = props;
+  let oauth2: OAuth2Props = options?.jsonData?.oauth2 || {};
+  const onOAuth2PropsChange = <T extends keyof OAuth2Props, V extends OAuth2Props[T]>(key: T, value: V) => {
+    onOptionsChange({ ...options, jsonData: { ...options.jsonData, oauth2: { ...oauth2, [key]: value } } });
+  };
+  return (
+    <CollapsableSection label="Customization" isOpen={true}>
+      <Stack direction={'column'}>
+        <Stack gap={0.5}>
+          <InlineFormLabel
+            width={12}
+            interactive={true}
+            tooltip={`Once the token retrieved, the same will be sent to subsequent request's header with the key "Authorization". If the API require different key, provide the key here`}
+          >
+            Custom token header key
+          </InlineFormLabel>
+          <Input onChange={(v) => onOAuth2PropsChange('customTokenHeaderKey', v.currentTarget.value)} value={oauth2.customTokenHeaderKey} width={30} placeholder={'Authorization'} />
+        </Stack>
+        <Stack gap={0.5}>
+          <InlineFormLabel
+            width={12}
+            interactive={true}
+            tooltip={`Once the token retrieved, the same will be sent to subsequent request's Authorization header with the prefix "Bearer " or whatever returned from the initial token retrieval request's response. If the API require different prefix, provide the prefix here. Refer https://datatracker.ietf.org/doc/html/rfc6749#section-7.1 for more details`}
+          >
+            Custom token prefix
+          </InlineFormLabel>
+          <Input onChange={(v) => onOAuth2PropsChange('customTokenPrefix', v.currentTarget.value)} value={oauth2.customTokenPrefix} width={30} placeholder={'Bearer '} />
+        </Stack>
+      </Stack>
+    </CollapsableSection>
   );
 };
