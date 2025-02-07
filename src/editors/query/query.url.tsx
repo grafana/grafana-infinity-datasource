@@ -184,7 +184,7 @@ const Body = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange:
                 <KeyValueEditor value={query.url_options.body_form || []} onChange={(e) => onURLOptionsChange('body_form', e)} addButtonText="Add form item" />
               </>
             )}
-            {query.url_options?.body_type === 'graphql' && (
+            {query.url_options?.body_type === 'graphql' && query.url_options?.method === 'POST' && (
               <>
                 <br />
                 <br />
