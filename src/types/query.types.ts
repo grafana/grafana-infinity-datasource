@@ -1,5 +1,6 @@
 import { FilterOperator } from './../constants';
-import type { DataQuery, SelectableValue } from '@grafana/data';
+import type { SelectableValue } from '@grafana/data';
+import type { DataQuery } from '@grafana/schema';
 
 //#region Query
 export type InfinityQueryType = 'json' | 'csv' | 'tsv' | 'xml' | 'graphql' | 'html' | 'series' | 'global' | 'uql' | 'groq' | 'google-sheets' | 'transformations';
@@ -57,6 +58,7 @@ export type BackendParserOptions = { filterExpression?: string; summarizeExpress
 export type InfinityJSONQuery = (
   | { parser?: 'simple'; json_options?: InfinityJSONQueryOptions }
   | ({ parser: 'backend' } & BackendParserOptions)
+  | ({ parser: 'jq-backend' } & BackendParserOptions)
   | { parser: 'uql'; uql?: string }
   | { parser: 'groq'; groq?: string }
 ) &
@@ -81,15 +83,17 @@ export type InfinityTSVQuery = (
   | ({ parser: 'backend'; csv_options?: Exclude<InfinityCSVQueryOptions, 'delimiter'> } & BackendParserOptions)
 ) &
   InfinityQueryWithDataSource<'tsv'>;
-export type InfinityXMLQuery = ({ parser?: 'simple' } | { parser: 'uql'; uql: string } | ({ parser: 'backend' } & BackendParserOptions)) & InfinityQueryWithDataSource<'xml'>;
+export type InfinityXMLQuery = ({ parser?: 'simple' } | { parser: 'uql'; uql: string } | ({ parser: 'backend' } & BackendParserOptions) | ({ parser: 'jq-backend' } & BackendParserOptions)) &
+  InfinityQueryWithDataSource<'xml'>;
 export type InfinityGraphQLQuery = (
   | { parser?: 'simple'; json_options?: { root_is_not_array?: boolean; columnar?: boolean } }
   | ({ parser: 'backend' } & BackendParserOptions)
+  | ({ parser: 'jq-backend' } & BackendParserOptions)
   | { parser: 'uql'; uql: string }
   | { parser: 'groq'; groq: string }
 ) &
   InfinityQueryWithDataSource<'graphql'>;
-export type InfinityHTMLQuery = ({ parser?: 'simple' } | ({ parser: 'backend' } & BackendParserOptions)) & InfinityQueryWithDataSource<'html'>;
+export type InfinityHTMLQuery = ({ parser?: 'simple' } | ({ parser: 'backend' } & BackendParserOptions) | ({ parser: 'jq-backend' } & BackendParserOptions)) & InfinityQueryWithDataSource<'html'>;
 export type InfinitySeriesQueryBase<S extends InfinityQuerySources> = { seriesCount: number; alias: string; dataOverrides: DataOverride[] } & InfinityQueryWithSource<S> & InfinityQueryBase<'series'>;
 export type InfinitySeriesQueryRandomWalk = {} & InfinitySeriesQueryBase<'random-walk'>;
 export type InfinitySeriesQueryExpression = { expression?: string } & InfinitySeriesQueryBase<'expression'>;

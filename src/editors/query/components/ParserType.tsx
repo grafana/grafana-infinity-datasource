@@ -23,10 +23,12 @@ export const ParseTypeEditor = (props: { query: InfinityQuery; onChange: (value:
     return (
       <EditorField
         label="Parser"
-        tooltip={query.parser !== 'backend' ? 'Try backend parser to get support for alerting, public dashboards, query caching, recorded queries and many more options' : ''}
+        tooltip={
+          query.parser !== 'backend' && query.parser !== 'jq-backend' ? 'Try backend parser to get support for alerting, public dashboards, query caching, recorded queries and many more options' : ''
+        }
         horizontal={true}
         promoNode={
-          query.parser !== 'backend' && query.parser !== 'uql' ? (
+          query.parser !== 'backend' && query.parser !== 'jq-backend' && query.parser !== 'uql' ? (
             <span
               className={styles.parserType.promoNode}
               onClick={() => {
@@ -47,6 +49,7 @@ export const ParseTypeEditor = (props: { query: InfinityQuery; onChange: (value:
           options={[
             { value: 'simple', label: 'Default' },
             { value: 'backend', label: 'Backend' },
+            { value: 'jq-backend', label: 'JQ (Backend)' },
             { value: 'uql', label: 'UQL' },
             { value: 'groq', label: 'GROQ' },
           ]}
@@ -116,7 +119,7 @@ export const ParseTypeEditor = (props: { query: InfinityQuery; onChange: (value:
         label="Parser"
         horizontal={true}
         promoNode={
-          query.parser !== 'backend' && query.parser !== 'uql' ? (
+          query.parser !== 'backend' && query.parser !== 'jq-backend' && query.parser !== 'uql' ? (
             <span
               style={{ marginInline: '5px', color: 'yellowgreen' }}
               onClick={() => {
@@ -137,6 +140,7 @@ export const ParseTypeEditor = (props: { query: InfinityQuery; onChange: (value:
           options={[
             { value: 'simple', label: 'Default' },
             { value: 'backend', label: 'Backend' },
+            { value: 'jq-backend', label: 'JQ (Backend)' },
             { value: 'uql', label: 'UQL' },
           ]}
           onChange={(e) => {
@@ -157,7 +161,7 @@ export const ParseTypeEditor = (props: { query: InfinityQuery; onChange: (value:
         label="Parser"
         horizontal={true}
         promoNode={
-          query.parser !== 'backend' ? (
+          query.parser !== 'backend' && query.parser !== 'jq-backend' ? (
             <span
               style={{ marginInline: '5px', color: 'yellowgreen' }}
               onClick={() => {
@@ -178,6 +182,7 @@ export const ParseTypeEditor = (props: { query: InfinityQuery; onChange: (value:
           options={[
             { value: 'simple', label: 'Default' },
             { value: 'backend', label: 'Backend' },
+            { value: 'jq-backend', label: 'JQ (Backend)' },
           ]}
           onChange={(e) => {
             onChange({ ...query, parser: e?.value || 'simple' });

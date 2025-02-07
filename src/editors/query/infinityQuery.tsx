@@ -89,10 +89,11 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
             <GROQEditor {...{ query, onChange, onRunQuery, mode }} />
           </EditorRow>
         )}
-        {(query.type === 'json' || query.type === 'graphql' || query.type === 'csv' || query.type === 'tsv' || query.type === 'xml') && query.parser === 'backend' && (
-          <ExperimentalFeatures query={query} onChange={onChange} onRunQuery={onRunQuery} />
+        {(query.type === 'json' || query.type === 'graphql' || query.type === 'csv' || query.type === 'tsv' || query.type === 'xml') &&
+          (query.parser === 'backend' || query.parser === 'jq-backend') && <ExperimentalFeatures query={query} onChange={onChange} onRunQuery={onRunQuery} />}
+        {query.type === 'json' && (query.parser === 'backend' || query.parser === 'jq-backend') && query.source === 'url' && (
+          <PaginationEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />
         )}
-        {query.type === 'json' && query.parser === 'backend' && query.source === 'url' && <PaginationEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />}
         {query.type === 'transformations' && <TransformationsEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />}
       </EditorRows>
     </div>

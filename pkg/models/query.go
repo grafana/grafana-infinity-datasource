@@ -28,10 +28,11 @@ const (
 type InfinityParser string
 
 const (
-	InfinityParserSimple  InfinityParser = "simple"
-	InfinityParserBackend InfinityParser = "backend"
-	InfinityParserUQL     InfinityParser = "uql"
-	InfinityParserGROQ    InfinityParser = "groq"
+	InfinityParserSimple    InfinityParser = "simple"
+	InfinityParserBackend   InfinityParser = "backend"
+	InfinityParserJQBackend InfinityParser = "jq-backend"
+	InfinityParserUQL       InfinityParser = "uql"
+	InfinityParserGROQ      InfinityParser = "groq"
 )
 
 type PaginationMode string
@@ -93,7 +94,7 @@ type Query struct {
 	URL                                string                 `json:"url"`
 	URLOptions                         URLOptions             `json:"url_options"`
 	Data                               string                 `json:"data"`
-	Parser                             InfinityParser         `json:"parser"` // 'simple' | 'backend' | 'uql' | 'groq'
+	Parser                             InfinityParser         `json:"parser"` // 'simple' | 'backend' | 'jq-backend' | 'uql' | 'groq'
 	FilterExpression                   string                 `json:"filterExpression"`
 	SummarizeExpression                string                 `json:"summarizeExpression"`
 	SummarizeBy                        string                 `json:"summarizeBy"`

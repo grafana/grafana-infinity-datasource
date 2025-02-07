@@ -24,6 +24,7 @@ weight: 300
 # Query
 
 - [Backend Parser](./backend)
+- [JQ - Backend Parser](./jq-backend)
 - [UQL Parser](./uql)
 - [GROQ Parser](./groq)
 - [Filtering data](./filters)
