@@ -161,7 +161,7 @@ const Body = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange:
   const onURLOptionsChange = <K extends keyof InfinityURLOptions, V extends InfinityURLOptions[K]>(key: K, value: V) => {
     onChange({ ...query, url_options: { ...query.url_options, [key]: value } });
   };
-  return query.url_options?.method === 'POST' ? (
+  return (
     <>
       <Stack direction="column">
         <EditorField label="Body Type">
@@ -294,7 +294,5 @@ const Body = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange:
         </EditorField>
       </Stack>
     </>
-  ) : (
-    <></>
   );
 };
