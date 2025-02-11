@@ -11,10 +11,12 @@ services:
     volumes:
       - ./provisioning/dashboards-actual/:/dashboards/
       - ./provisioning:/etc/grafana/provisioning
+      - ./conf:/grafana-config
       - ./dist:/var/lib/grafana/plugins/yesoreyeram-infinity-datasource
     environment:
       - TERM=linux
       - GF_DEFAULT_APP_MODE=development
+      - GF_PATHS_CONFIG=/grafana-config/grafana.ini 
       - GF_AUTH_ANONYMOUS_ENABLED=true
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
       - GF_SECURITY_ANGULAR_SUPPORT_ENABLED=false

@@ -2,6 +2,7 @@ package infinity_test
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"testing"
@@ -10,6 +11,7 @@ import (
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestInfinityClient_GetResults(t *testing.T) {
@@ -79,43 +81,76 @@ func TestInfinityClient_GetResults(t *testing.T) {
 	}
 }
 
-func TestCanAllowURL(t *testing.T) {
+func TestValidateRequest(t *testing.T) {
 	tests := []struct {
-		name         string
-		url          string
-		allowedHosts []string
-		want         bool
+		name           string
+		url            string
+		envAllowedHost string
+		envDeniedHost  string
+		allowedHosts   []string
+		wantErr        error
 	}{
 		{
-			url:  "https://foo.com",
-			want: true,
+			url: "https://foo.com",
 		},
 		{
 			url:          "https://foo.com",
 			allowedHosts: []string{"https://foo.com"},
-			want:         true,
 		},
 		{
 			url:          "https://bar.com",
 			allowedHosts: []string{"https://foo.com"},
-			want:         false,
+			wantErr:      models.ErrURLNotAllowed,
 		},
 		{
 			name:         "should match only case sensitive URL",
 			url:          "https://FOO.com",
 			allowedHosts: []string{"https://foo.com"},
-			want:         false,
+			wantErr:      models.ErrURLNotAllowed,
 		},
 		{
 			url:          "https://bar.com/",
 			allowedHosts: []string{"https://foo.com/", "https://bar.com/", "https://baz.com/"},
-			want:         true,
+		},
+		{
+			name:          "should throw error if host name matches the denied list in the grafana config",
+			url:           "https://FOO.com",
+			envDeniedHost: "baa.com foo.com bar.com",
+			wantErr:       errors.New("hostname denied via grafana config. hostname FOO.com"),
+		},
+		{
+			name:           "should throw error if host name not found in the allowed list in the grafana config",
+			url:            "https://FOO.com",
+			envAllowedHost: "baa.com foo.co bar.com",
+			wantErr:        errors.New("hostname not allowed via grafana config. hostname FOO.com"),
+		},
+		{
+			name:          "should not throw error if host name doesn't match the denied list in the grafana config",
+			url:           "https://FOO.com",
+			envDeniedHost: "baa.com bar.com",
+		},
+		{
+			name:           "should not throw error if host name found in the allowed list in the grafana config",
+			url:            "https://FOO.com",
+			envAllowedHost: "baa.com foo.com bar.com",
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := infinity.CanAllowURL(tt.url, tt.allowedHosts)
-			assert.Equal(t, tt.want, got)
+			if tt.envAllowedHost != "" {
+				t.Setenv("GF_PLUGIN_HOST_ALLOW_LIST", tt.envAllowedHost)
+			}
+			if tt.envDeniedHost != "" {
+				t.Setenv("GF_PLUGIN_HOST_DENY_LIST", tt.envDeniedHost)
+			}
+			req, _ := http.NewRequest(http.MethodGet, tt.url, nil)
+			gotErr := infinity.ValidateRequest(context.TODO(), &backend.PluginContext{}, models.InfinitySettings{AllowedHosts: tt.allowedHosts}, req)
+			if tt.wantErr != nil {
+				require.NotNil(t, gotErr)
+				assert.Equal(t, tt.wantErr, gotErr)
+				return
+			}
+			require.Nil(t, gotErr)
 		})
 	}
 }
