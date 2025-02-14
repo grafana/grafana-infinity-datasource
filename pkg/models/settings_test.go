@@ -157,7 +157,7 @@ func TestAllSettingsAgainstFrontEnd(t *testing.T) {
 			"allowedHosts": ["host1","host2"],
 			"customHealthCheckEnabled" : true,
 			"customHealthCheckUrl" : "https://foo-check/",
-			"allowNonGetPostMethods": true,
+			"allowDangerousHTTPMethods": true,
 			"unsecuredQueryHandling" : "deny",
 			"aws" : {
 				"authType" 	: "keys",
@@ -245,7 +245,7 @@ func TestAllSettingsAgainstFrontEnd(t *testing.T) {
 		CustomHealthCheckEnabled: true,
 		CustomHealthCheckUrl:     "https://foo-check/",
 		UnsecuredQueryHandling:   models.UnsecuredQueryHandlingDeny,
-		AllowNonGetPostMethods:   true,
+		AllowDangerousHTTPMethods:   true,
 		CustomHeaders: map[string]string{
 			"header1": "headervalue1",
 		},

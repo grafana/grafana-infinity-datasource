@@ -59,9 +59,9 @@ If you want to setup specific proxy URL for the datasource, you can configure in
 
 > Proxy URL specification in data source config is available from v2.2.0
 
-## Allowing non HTTP GET / POST methods
+## Allowing dangerous HTTP methods
 
-By default infinity only allow GET/POST HTTP methods to reduce the risk of destructive/accidental payloads. But through configuration, you can allow other methods (`PATCH`,`POST` and `DELETE`) for any unconventional use cases. If you need to make use of this feature, Enable the `Allow non GET / POST HTTP verbs` setting under URL section of the datasource config
+By default infinity only allow GET and POST HTTP methods to reduce the risk of destructive payloads. But through configuration, you can allow other methods such as `PATCH`,`POST` and `DELETE` for any unconventional use cases. If you need to make use of this feature, Enable the `Allow dangerous HTTP methods` setting under URL section of the datasource config
 
 > This feature is only available from infinity plugin version v3.0.0
 

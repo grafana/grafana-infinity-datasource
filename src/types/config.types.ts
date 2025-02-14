@@ -52,7 +52,7 @@ export interface InfinityOptions extends DataSourceJsonData {
   unsecuredQueryHandling?: UnsecureQueryHandling;
   enableSecureSocksProxy?: boolean;
   pathEncodedUrlsEnabled?: boolean;
-  allowNonGetPostMethods?: boolean;
+  allowDangerousHTTPMethods?: boolean;
 }
 
 export interface InfinitySecureOptions {

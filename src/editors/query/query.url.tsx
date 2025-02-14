@@ -5,13 +5,34 @@ import { EditorField } from './../../components/extended/EditorField';
 import { Stack } from './../../components/extended/Stack';
 import { isDataQuery } from './../../app/utils';
 import { KeyValueEditor } from './../../components/KeyValuePairEditor';
-import type { InfinityQuery, InfinityQueryType, InfinityQueryWithURLSource, InfinityURLMethod, InfinityURLOptions, QueryBodyContentType, QueryBodyType } from './../../types';
+import type {
+  InfinityQuery,
+  InfinityQueryType,
+  InfinityQueryWithURLSource,
+  InfinityURLMethod,
+  InfinityURLOptions,
+  QueryBodyContentType,
+  QueryBodyType,
+} from './../../types';
 import type { SelectableValue } from '@grafana/data';
 import { usePrevious } from 'react-use';
 
-export const URLEditor = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void }) => {
+export const URLEditor = ({
+  query,
+  onChange,
+  onRunQuery,
+}: {
+  query: InfinityQuery;
+  onChange: (value: any) => void;
+  onRunQuery: () => void;
+}) => {
   return isDataQuery(query) && query.source === 'url' ? (
-    <EditorRow label="URL options" collapsible={true} collapsed={true} title={() => 'Method, Body, Additional headers & parameters'}>
+    <EditorRow
+      label="URL options"
+      collapsible={true}
+      collapsed={true}
+      title={() => 'Method, Body, Additional headers & parameters'}
+    >
       <Stack gap={1}>
         <Body query={query} onChange={onChange} onRunQuery={onRunQuery} />
         <Headers query={query} onChange={onChange} onRunQuery={onRunQuery} />
@@ -23,7 +44,17 @@ export const URLEditor = ({ query, onChange, onRunQuery }: { query: InfinityQuer
   );
 };
 
-export const Method = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void }) => {
+export const Method = ({
+  query,
+  onChange,
+  onRunQuery,
+  allowDangerousHTTPMethods,
+}: {
+  query: InfinityQuery;
+  onChange: (value: InfinityQuery) => void;
+  onRunQuery: () => void;
+  allowDangerousHTTPMethods?: boolean;
+}) => {
   if (!(isDataQuery(query) || query.type === 'uql' || query.type === 'groq')) {
     return <></>;
   }
@@ -33,10 +64,15 @@ export const Method = ({ query, onChange, onRunQuery }: { query: InfinityQuery; 
   const URL_METHODS: Array<SelectableValue<InfinityURLMethod>> = [
     { label: 'GET', value: 'GET' },
     { label: 'POST', value: 'POST' },
-    { label: 'PUT *', value: 'PUT' },
-    { label: 'PATCH *', value: 'PATCH' },
-    { label: 'DELETE *', value: 'DELETE' },
   ];
+
+  if (allowDangerousHTTPMethods) {
+    URL_METHODS.push(
+      { label: 'PUT', value: 'PUT' },
+      { label: 'PATCH', value: 'PATCH' },
+      { label: 'DELETE', value: 'DELETE' }
+    );
+  }
   const onMethodChange = (method: InfinityURLMethod) => {
     if (query.source === 'url') {
       onChange({
@@ -49,6 +85,20 @@ export const Method = ({ query, onChange, onRunQuery }: { query: InfinityQuery; 
     }
     onRunQuery();
   };
+
+  useEffect(() => {
+    // If the allowDangerousHTTPMethods changes
+    // we need to check if the method is still allowed
+    if (
+      query.source === 'url' &&
+      !allowDangerousHTTPMethods &&
+      query.url_options.method &&
+      !['GET', 'POST'].includes(query.url_options.method)
+    ) {
+      onMethodChange('GET');
+    }
+  }, [query, allowDangerousHTTPMethods]);
+
   if (query.source !== 'url') {
     return <></>;
   }
@@ -56,7 +106,7 @@ export const Method = ({ query, onChange, onRunQuery }: { query: InfinityQuery; 
     <EditorField
       label="Method"
       horizontal={true}
-      tooltip={`By default infinity allows GET & POST. To make use other methods, enable the "Allow non GET / POST HTTP verbs" in the data source config URL section`}
+      tooltip={`By default Infinity allows GET and POST methods. To make use other methods, enable the "Allow dangerous HTTP methods" in the data source configuration.`}
     >
       <Select<InfinityURLMethod>
         width={16}
@@ -111,7 +161,14 @@ export const URL = ({
   );
 };
 
-const Headers = ({ query, onChange }: { query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void }) => {
+const Headers = ({
+  query,
+  onChange,
+}: {
+  query: InfinityQuery;
+  onChange: (value: InfinityQuery) => void;
+  onRunQuery: () => void;
+}) => {
   if (!(isDataQuery(query) || query.type === 'uql' || query.type === 'groq')) {
     return <></>;
   }
@@ -123,7 +180,10 @@ const Headers = ({ query, onChange }: { query: InfinityQuery; onChange: (value: 
     value: 'header-value',
   };
   return (
-    <EditorField label="HTTP Headers" tooltip={`Add additional headers. Don't add any secure fields here. Use config instead`}>
+    <EditorField
+      label="HTTP Headers"
+      tooltip={`Add additional headers. Don't add any secure fields here. Use config instead`}
+    >
       <KeyValueEditor
         value={query.url_options?.headers || []}
         onChange={(v) => onChange({ ...query, url_options: { ...query.url_options, headers: v } })}
@@ -134,7 +194,15 @@ const Headers = ({ query, onChange }: { query: InfinityQuery; onChange: (value: 
   );
 };
 
-const QueryParams = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void }) => {
+const QueryParams = ({
+  query,
+  onChange,
+  onRunQuery,
+}: {
+  query: InfinityQuery;
+  onChange: (value: InfinityQuery) => void;
+  onRunQuery: () => void;
+}) => {
   if (!(isDataQuery(query) || query.type === 'uql' || query.type === 'groq')) {
     return <></>;
   }
@@ -146,7 +214,10 @@ const QueryParams = ({ query, onChange, onRunQuery }: { query: InfinityQuery; on
     value: 'value',
   };
   return (
-    <EditorField label="URL Query Params" tooltip={`Add additional query parameters. Don't add any secure fields here. Use config instead`}>
+    <EditorField
+      label="URL Query Params"
+      tooltip={`Add additional query parameters. Don't add any secure fields here. Use config instead`}
+    >
       <KeyValueEditor
         value={query.url_options?.params || []}
         onChange={(v) => onChange({ ...query, url_options: { ...query.url_options, params: v } })}
@@ -157,7 +228,15 @@ const QueryParams = ({ query, onChange, onRunQuery }: { query: InfinityQuery; on
   );
 };
 
-const Body = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void }) => {
+const Body = ({
+  query,
+  onChange,
+  onRunQuery,
+}: {
+  query: InfinityQuery;
+  onChange: (value: InfinityQuery) => void;
+  onRunQuery: () => void;
+}) => {
   if (!(isDataQuery(query) || query.type === 'uql' || query.type === 'groq')) {
     return <></>;
   }
@@ -167,7 +246,10 @@ const Body = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange:
   const placeholderGraphQLQuery = `{ query : { }}`;
   const placeholderGraphQLVariables = `{ }`;
   const doesBodyAllowed = ['POST', 'PUT', 'PATCH', 'DELETE'].includes(query.url_options?.method);
-  const onURLOptionsChange = <K extends keyof InfinityURLOptions, V extends InfinityURLOptions[K]>(key: K, value: V) => {
+  const onURLOptionsChange = <K extends keyof InfinityURLOptions, V extends InfinityURLOptions[K]>(
+    key: K,
+    value: V
+  ) => {
     onChange({ ...query, url_options: { ...query.url_options, [key]: value } });
   };
   return doesBodyAllowed ? (
@@ -186,11 +268,16 @@ const Body = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange:
               ]}
               onChange={(e) => onURLOptionsChange('body_type', e || 'raw')}
             ></RadioButtonGroup>
-            {(query.url_options?.body_type === 'form-data' || query.url_options?.body_type === 'x-www-form-urlencoded') && (
+            {(query.url_options?.body_type === 'form-data' ||
+              query.url_options?.body_type === 'x-www-form-urlencoded') && (
               <>
                 <br />
                 <br />
-                <KeyValueEditor value={query.url_options.body_form || []} onChange={(e) => onURLOptionsChange('body_form', e)} addButtonText="Add form item" />
+                <KeyValueEditor
+                  value={query.url_options.body_form || []}
+                  onChange={(e) => onURLOptionsChange('body_form', e)}
+                  addButtonText="Add form item"
+                />
               </>
             )}
             {query.url_options?.body_type === 'graphql' && (

@@ -21,8 +21,8 @@ func GetRequest(ctx context.Context, settings models.InfinitySettings, body io.R
 	if err != nil {
 		return nil, err
 	}
-	if (strings.EqualFold(query.URLOptions.Method, "PUT") || strings.EqualFold(query.URLOptions.Method, "PATCH") || strings.EqualFold(query.URLOptions.Method, "DELETE")) && !settings.AllowNonGetPostMethods {
-		return nil, backend.DownstreamError(models.ErrNonHTTPGetPostRestricted)
+	if (strings.EqualFold(query.URLOptions.Method, "PUT") || strings.EqualFold(query.URLOptions.Method, "PATCH") || strings.EqualFold(query.URLOptions.Method, "DELETE")) && !settings.AllowDangerousHTTPMethods {
+		return nil, backend.DownstreamError(models.ErrNotAllowedDangerousHTTPMethods)
 	}
 	switch strings.ToUpper(query.URLOptions.Method) {
 	case http.MethodPost:
@@ -106,6 +106,7 @@ func NormalizeURL(u string) string {
 func (client *Client) GetExecutedURL(ctx context.Context, query models.Query) string {
 	out := []string{}
 	if query.Source != "inline" && query.Source != "azure-blob" {
+
 		req, err := GetRequest(ctx, client.Settings, GetQueryBody(ctx, query), query, map[string]string{}, false)
 		if err != nil {
 			return fmt.Sprintf("error retrieving full url. %s", query.URL)

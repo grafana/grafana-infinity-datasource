@@ -26,7 +26,7 @@ export const URLEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpti
   );
 };
 
-export const URLMiscEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
+export const URLSettingsEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
   const { options, onOptionsChange } = props;
   const { jsonData = {} } = options;
   return (
@@ -34,11 +34,19 @@ export const URLMiscEditor = (props: DataSourcePluginOptionsEditorProps<Infinity
       <Stack>
         <InlineLabel
           width={36}
-          tooltip={`By default infinity only allow GET/POST HTTP methods to reduce the risk of destructive/accidental payloads. If you need non GET/POST methods, make use of this setting with caution. Note: Infinity don't evaluate any permissions against the underlying API`}
+          tooltip={`By default Infinity only allows GET and POST HTTP methods to reduce the risk of accidental and potentially destructive payloads. If you need PUT, PATCH or DELETE methods, make use of this setting with caution. Note: Infinity does not evaluate any permissions against the underlying API`}
         >
-          Allow non GET / POST HTTP verbs
+          Allow dangerous HTTP methods
         </InlineLabel>
-        <InlineSwitch value={jsonData.allowNonGetPostMethods || false} onChange={(e) => onOptionsChange({ ...options, jsonData: { ...jsonData, allowNonGetPostMethods: e.currentTarget.checked } })} />
+        <InlineSwitch
+          value={jsonData.allowDangerousHTTPMethods || false}
+          onChange={(e) =>
+            onOptionsChange({
+              ...options,
+              jsonData: { ...jsonData, allowDangerousHTTPMethods: e.currentTarget.checked },
+            })
+          }
+        />
       </Stack>
       <Stack>
         <InlineLabel width={36}>Encode query parameters with %20</InlineLabel>

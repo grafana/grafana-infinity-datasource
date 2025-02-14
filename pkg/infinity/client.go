@@ -200,11 +200,11 @@ func (client *Client) GetResults(ctx context.Context, query models.Query, reques
 		return string(bodyBytes), http.StatusOK, 0, nil
 	}
 	switch strings.ToUpper(query.URLOptions.Method) {
-	case http.MethodPost, http.MethodPatch, http.MethodPut, http.MethodDelete:
+	case http.MethodGet:
+		return client.req(ctx, query.URL, nil, client.Settings, query, requestHeaders)
+	default:
 		body := GetQueryBody(ctx, query)
 		return client.req(ctx, query.URL, body, client.Settings, query, requestHeaders)
-	default:
-		return client.req(ctx, query.URL, nil, client.Settings, query, requestHeaders)
 	}
 }
 
