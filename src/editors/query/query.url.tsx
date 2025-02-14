@@ -80,10 +80,12 @@ export const Method = ({
       <Select<InfinityURLMethod>
         width={16}
         value={
+          // If the selected URL method in query is in URL_METHODS and display it.
           URL_METHODS.find((e) => e.value === query.url_options.method) ||
-          // If the method is not in URL methods, check if it is in dangerous methods and display it (user will get error if they try to use it), but they will
-          // learn that they need to enable the dangerous methods in the data source configuration.
+          // If not, check if it is in DANGEROUS_URL_METHOD and display it - user will get error if they try to use it,
+          // but they will learn that they need to enable it in the data source configuration.
           DANGEROUS_URL_METHODS.find((e) => e.value === query.url_options.method) ||
+          // If not, display GET method as default.
           'GET'
         }
         defaultValue={URL_METHODS.find((e) => e.value === 'GET')}
