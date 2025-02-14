@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Button, LinkButton, Modal, Drawer, Card, TagList } from '@grafana/ui';
-import { Stack } from './../components/extended/Stack';
+import { Button, LinkButton, Modal, Drawer, Card, TagList, Stack } from '@grafana/ui';
 import type { InfinityQuery } from './../types';
 
 export const HelpLinks = () => {

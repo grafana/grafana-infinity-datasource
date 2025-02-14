@@ -59,7 +59,7 @@
 //          "duration": 123,
 //          "error": ""
 //      },
-//      "executedQueryString": "###############\n## URL\n###############\n\nhttp://bar\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: text/csv; charset=utf-8' 'http://bar'"
+//      "executedQueryString": "###############\n## URL\n###############\n\nhttp://bar\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: text/csv; charset=utf-8' -H 'Accept-Encoding: gzip' 'http://bar'"
 //  }
 //  Name: q1
 //  Dimensions: 0 Fields by 0 Rows
@@ -133,7 +133,7 @@
             "duration": 123,
             "error": ""
           },
-          "executedQueryString": "###############\n## URL\n###############\n\nhttp://bar\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: text/csv; charset=utf-8' 'http://bar'"
+          "executedQueryString": "###############\n## URL\n###############\n\nhttp://bar\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: text/csv; charset=utf-8' -H 'Accept-Encoding: gzip' 'http://bar'"
         },
         "fields": []
       },

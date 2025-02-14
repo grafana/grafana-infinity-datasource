@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
+	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/propagation"
 )
@@ -22,10 +23,11 @@ const (
 )
 
 const (
-	headerKeyAccept        = "Accept"
-	headerKeyContentType   = "Content-Type"
-	HeaderKeyAuthorization = "Authorization"
-	HeaderKeyIdToken       = "X-Id-Token"
+	headerKeyAccept         = "Accept"
+	headerKeyContentType    = "Content-Type"
+	headerKeyAcceptEncoding = "Accept-Encoding"
+	HeaderKeyAuthorization  = "Authorization"
+	HeaderKeyIdToken        = "X-Id-Token"
 )
 
 func ApplyAcceptHeader(_ context.Context, query models.Query, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
@@ -68,17 +70,20 @@ func ApplyContentTypeHeader(_ context.Context, query models.Query, settings mode
 	return req
 }
 
-func ApplyHeadersFromSettings(_ context.Context, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
+func ApplyAcceptEncodingHeader(_ context.Context, query models.Query, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
+	req.Header.Set(headerKeyAcceptEncoding, "gzip")
+	return req
+}
+
+func ApplyHeadersFromSettings(_ context.Context, pCtx *backend.PluginContext, requestHeaders map[string]string, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
 	for key, value := range settings.CustomHeaders {
-		val := dummyHeader
+		headerValue := dummyHeader
 		if includeSect {
-			val = value
+			headerValue = value
 		}
+		headerValue = interpolateGrafanaMetaDataMacros(headerValue, pCtx)
 		if key != "" {
-			req.Header.Add(key, val)
-			if strings.EqualFold(key, headerKeyAccept) || strings.EqualFold(key, headerKeyContentType) {
-				req.Header.Set(key, val)
-			}
+			req.Header.Set(key, headerValue)
 		}
 	}
 	return req

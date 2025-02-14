@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { Button, TextArea } from '@grafana/ui';
+import { Button, TextArea, Stack } from '@grafana/ui';
 import { EditorRow } from './../../components/extended/EditorRow';
 import { EditorField } from './../../components/extended/EditorField';
-import { Stack } from './../../components/extended/Stack';
 import { isBackendQuery, isDataQuery } from './../../app/utils';
 import { QueryColumnItem } from './../../components/QueryColumnItem';
 import { JSONOptionsEditor } from '../../components/JSONOptionsEditor';

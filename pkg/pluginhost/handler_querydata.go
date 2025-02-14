@@ -29,7 +29,7 @@ func (ds *DataSource) QueryData(ctx context.Context, req *backend.QueryDataReque
 			span.RecordError(err)
 			logger.Error("error un-marshaling the query", "error", err.Error())
 			// Here we are using error source from the original error and if it does not have any source we are using the plugin error as the default source
-			errorRes := backend.ErrorResponseWithErrorSource(backend.PluginError(fmt.Errorf("%s: %w", "error un-marshaling the query", err)))
+			errorRes := backend.ErrorResponseWithErrorSource(fmt.Errorf("%s: %w", "error un-marshaling the query", err))
 			response.Responses[q.RefID] = errorRes
 			continue
 		}
@@ -45,12 +45,12 @@ func (ds *DataSource) QueryData(ctx context.Context, req *backend.QueryDataReque
 			response = response1
 			continue
 		}
-		response.Responses[q.RefID] = QueryDataQuery(ctx, query, *ds.client, req.Headers, req.PluginContext)
+		response.Responses[q.RefID] = QueryDataQuery(ctx, req.PluginContext, query, *ds.client, req.Headers)
 	}
 	return response, nil
 }
 
-func QueryDataQuery(ctx context.Context, query models.Query, infClient infinity.Client, requestHeaders map[string]string, pluginContext backend.PluginContext) (response backend.DataResponse) {
+func QueryDataQuery(ctx context.Context, pluginContext backend.PluginContext, query models.Query, infClient infinity.Client, requestHeaders map[string]string) (response backend.DataResponse) {
 	logger := backend.Logger.FromContext(ctx)
 	ctx, span := tracing.DefaultTracer().Start(ctx, "QueryDataQuery", trace.WithAttributes(
 		attribute.String("type", string(query.Type)),
@@ -84,7 +84,7 @@ func QueryDataQuery(ctx context.Context, query models.Query, infClient infinity.
 			return backend.ErrorResponseWithErrorSource(backend.DownstreamError(errors.New("invalid or empty sheet ID")))
 		}
 		query.URL = fmt.Sprintf("https://sheets.googleapis.com/v4/spreadsheets/%s?includeGridData=true&ranges=%s", sheetId, sheetRange)
-		frame, err := infinity.GetFrameForURLSources(ctx, query, infClient, requestHeaders)
+		frame, err := infinity.GetFrameForURLSources(ctx, &pluginContext, query, infClient, requestHeaders)
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(500, err.Error())
@@ -122,7 +122,7 @@ func QueryDataQuery(ctx context.Context, query models.Query, infClient infinity.
 				response.ErrorSource = backend.ErrorSourceDownstream
 				return response
 			}
-			frame, err := infinity.GetFrameForURLSources(ctx, query, infClient, requestHeaders)
+			frame, err := infinity.GetFrameForURLSources(ctx, &pluginContext, query, infClient, requestHeaders)
 			if err != nil {
 				logger.Debug("error while performing the infinity query", "msg", err.Error())
 				if frame != nil {
