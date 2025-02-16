@@ -117,8 +117,9 @@ func (client *Client) req(ctx context.Context, pCtx *backend.PluginContext, url 
 		return nil, http.StatusUnauthorized, 0, backend.DownstreamError(errors.New("requested URL is not allowed. To allow this URL, update the datasource config Security -> Allowed Hosts section"))
 	}
 	logger.Debug("requesting URL", "host", req.URL.Hostname(), "url_path", req.URL.Path, "method", req.Method, "type", query.Type)
-	logger.Info(fmt.Sprintf("FUCKING LOOOOOOGS %v", requestHeaders))
 
+	// TODO: This is supposed to be enabled by a flag int he datasource settings.
+	// But no idea where that context is available (PluginContext?) from and I have no time right now :)
 	req.Header.Add(backend.CookiesHeaderName, requestHeaders[backend.CookiesHeaderName])
 
 	res, err := client.HttpClient.Do(req)

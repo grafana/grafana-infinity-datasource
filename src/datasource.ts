@@ -1,5 +1,3 @@
-import { getBackendSrv } from '@grafana/runtime'; // Grafana backend service
-import { map } from 'rxjs/operators';
 import { LoadingState, toDataFrame, DataFrame, DataQueryRequest, DataQueryResponse, ScopedVars, TimeRange } from '@grafana/data';
 import { DataSourceWithBackend, HealthStatus } from '@grafana/runtime';
 import { flatten, sample } from 'lodash';
@@ -31,16 +29,13 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
         withCredentials: true,
       };
   
-      // 🚀 Explicitly add the Cookie header
       const cookieHeader = document.cookie;
       if (cookieHeader) {
         (request as any).headers = {
-          ...(request as any).headers, // Preserve existing headers if any
+          ...(request as any).headers,
           Cookie: cookieHeader,
         };
       }
-  
-      console.log("🚀 Sending Request with Headers:", request.headers);
   
       super
         .query(request)
@@ -48,7 +43,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
         .then((result) => this.getResults(request, result))
         .then((result) => subscriber.next({ ...result, state: LoadingState.Done }))
         .catch((error) => {
-          console.error("❌ Error in Request:", error);
+          console.error(error);
           subscriber.next({ data: [], error, state: LoadingState.Error });
           subscriber.error(error);
         })
