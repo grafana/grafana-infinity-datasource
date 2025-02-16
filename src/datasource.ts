@@ -1,3 +1,5 @@
+import { getBackendSrv } from '@grafana/runtime'; // Grafana backend service
+import { map } from 'rxjs/operators';
 import { LoadingState, toDataFrame, DataFrame, DataQueryRequest, DataQueryResponse, ScopedVars, TimeRange } from '@grafana/data';
 import { DataSourceWithBackend, HealthStatus } from '@grafana/runtime';
 import { flatten, sample } from 'lodash';
@@ -24,22 +26,36 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
   }
   query(options: DataQueryRequest<InfinityQuery>): Observable<DataQueryResponse> {
     return new Observable<DataQueryResponse>((subscriber) => {
-      let request = getUpdatedDataRequest(options, this.instanceSettings);
-      // TODO: Remove or change this to be fired less often
-      // reportQuery(request?.targets || [], this.instanceSettings, this.meta, request?.app);
+      let request = {
+        ...getUpdatedDataRequest(options, this.instanceSettings),
+        withCredentials: true,
+      };
+  
+      // 🚀 Explicitly add the Cookie header
+      const cookieHeader = document.cookie;
+      if (cookieHeader) {
+        (request as any).headers = {
+          ...(request as any).headers, // Preserve existing headers if any
+          Cookie: cookieHeader,
+        };
+      }
+  
+      console.log("🚀 Sending Request with Headers:", request.headers);
+  
       super
         .query(request)
         .toPromise()
         .then((result) => this.getResults(request, result))
         .then((result) => subscriber.next({ ...result, state: LoadingState.Done }))
         .catch((error) => {
-          console.error(error);
+          console.error("❌ Error in Request:", error);
           subscriber.next({ data: [], error, state: LoadingState.Error });
           subscriber.error(error);
         })
         .finally(() => subscriber.complete());
     });
   }
+      
   interpolateVariablesInQueries(queries: InfinityQuery[], scopedVars: ScopedVars) {
     return interpolateVariablesInQueries(queries, scopedVars);
   }

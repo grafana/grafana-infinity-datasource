@@ -99,6 +99,7 @@ func replaceSect(input string, settings models.InfinitySettings, includeSect boo
 	return input
 }
 
+// ???
 func (client *Client) req(ctx context.Context, pCtx *backend.PluginContext, url string, body io.Reader, settings models.InfinitySettings, query models.Query, requestHeaders map[string]string) (obj any, statusCode int, duration time.Duration, err error) {
 	ctx, span := tracing.DefaultTracer().Start(ctx, "client.req")
 	logger := backend.Logger.FromContext(ctx)
@@ -116,6 +117,10 @@ func (client *Client) req(ctx context.Context, pCtx *backend.PluginContext, url 
 		return nil, http.StatusUnauthorized, 0, backend.DownstreamError(errors.New("requested URL is not allowed. To allow this URL, update the datasource config Security -> Allowed Hosts section"))
 	}
 	logger.Debug("requesting URL", "host", req.URL.Hostname(), "url_path", req.URL.Path, "method", req.Method, "type", query.Type)
+	logger.Info(fmt.Sprintf("FUCKING LOOOOOOGS %v", requestHeaders))
+
+	req.Header.Add(backend.CookiesHeaderName, requestHeaders[backend.CookiesHeaderName])
+
 	res, err := client.HttpClient.Do(req)
 	duration = time.Since(startTime)
 	logger.Debug("received response", "host", req.URL.Hostname(), "url_path", req.URL.Path, "method", req.Method, "type", query.Type, "duration_ms", duration.Milliseconds())
