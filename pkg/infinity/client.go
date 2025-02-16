@@ -99,7 +99,6 @@ func replaceSect(input string, settings models.InfinitySettings, includeSect boo
 	return input
 }
 
-// ???
 func (client *Client) req(ctx context.Context, pCtx *backend.PluginContext, url string, body io.Reader, settings models.InfinitySettings, query models.Query, requestHeaders map[string]string) (obj any, statusCode int, duration time.Duration, err error) {
 	ctx, span := tracing.DefaultTracer().Start(ctx, "client.req")
 	logger := backend.Logger.FromContext(ctx)
