@@ -24,19 +24,9 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
   }
   query(options: DataQueryRequest<InfinityQuery>): Observable<DataQueryResponse> {
     return new Observable<DataQueryResponse>((subscriber) => {
-      let request = {
-        ...getUpdatedDataRequest(options, this.instanceSettings),
-        withCredentials: true,
-      };
-  
-      const cookieHeader = document.cookie;
-      if (cookieHeader) {
-        (request as any).headers = {
-          ...(request as any).headers,
-          Cookie: cookieHeader,
-        };
-      }
-  
+      let request = getUpdatedDataRequest(options, this.instanceSettings);
+      // TODO: Remove or change this to be fired less often
+      // reportQuery(request?.targets || [], this.instanceSettings, this.meta, request?.app);
       super
         .query(request)
         .toPromise()
@@ -50,7 +40,6 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
         .finally(() => subscriber.complete());
     });
   }
-      
   interpolateVariablesInQueries(queries: InfinityQuery[], scopedVars: ScopedVars) {
     return interpolateVariablesInQueries(queries, scopedVars);
   }
