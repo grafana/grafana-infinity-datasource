@@ -12,7 +12,7 @@ export type QueryBodyContentType = 'text/plain' | 'application/json' | 'applicat
 export type InfinityQueryBase<T extends InfinityQueryType> = { type: T } & DataQuery;
 export type InfinityQueryWithSource<S extends InfinityQuerySources> = { source: S } & DataQuery;
 export type InfinityKV = { key: string; value: string };
-export type InfinityURLMethod = 'GET' | 'POST' | 'PUT' | `PATCH` | 'DELETE';
+export type InfinityURLMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 export type InfinityURLOptions = {
   method: InfinityURLMethod;
   params?: InfinityKV[];
