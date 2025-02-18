@@ -193,6 +193,7 @@ const Body = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange:
   }
   const placeholderGraphQLQuery = `{ query : { }}`;
   const placeholderGraphQLVariables = `{ }`;
+  // according to developer.mozilla.org/en-US/docs/Web/HTTP/Methods, GET method should not contain request body
   const doesBodyAllowed = ['POST', 'PUT', 'PATCH', 'DELETE'].includes(query.url_options?.method);
   const onURLOptionsChange = <K extends keyof InfinityURLOptions, V extends InfinityURLOptions[K]>(key: K, value: V) => {
     onChange({ ...query, url_options: { ...query.url_options, [key]: value } });
