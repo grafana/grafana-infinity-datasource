@@ -43,9 +43,9 @@ export const ParseTypeEditor = (props: { query: InfinityQuery; onChange: (value:
       >
         <Select<typeof query.parser>
           width={20}
-          value={query.parser || 'simple'}
+          value={query.parser || 'backend'}
           options={[
-            { value: 'simple', label: 'Default' },
+            { value: 'simple', label: 'Frontend' },
             { value: 'backend', label: 'Backend' },
             { value: 'uql', label: 'UQL' },
             { value: 'groq', label: 'GROQ' },
