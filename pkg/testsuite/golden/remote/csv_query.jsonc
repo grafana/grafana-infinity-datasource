@@ -13,7 +13,7 @@
 //              "source": "url",
 //              "url": "http://bar",
 //              "url_options": {
-//                  "method": "",
+//                  "method": "GET",
 //                  "params": null,
 //                  "headers": null,
 //                  "data": "",
@@ -24,7 +24,7 @@
 //                  "body_graphql_variables": ""
 //              },
 //              "data": "",
-//              "parser": "",
+//              "parser": "backend",
 //              "filterExpression": "",
 //              "summarizeExpression": "",
 //              "summarizeBy": "",
@@ -62,9 +62,14 @@
 //      "executedQueryString": "###############\n## URL\n###############\n\nhttp://bar\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: text/csv; charset=utf-8' -H 'Accept-Encoding: gzip' 'http://bar'"
 //  }
 //  Name: q1
-//  Dimensions: 0 Fields by 0 Rows
-//  +
-//  +
+//  Dimensions: 2 Fields by 1 Rows
+//  +-----------------+-----------------+
+//  | Name: a         | Name: b         |
+//  | Labels:         | Labels:         |
+//  | Type: []*string | Type: []*string |
+//  +-----------------+-----------------+
+//  | a1              | b1              |
+//  +-----------------+-----------------+
 //  
 //  
 //  🌟 This was machine generated.  Do not edit. 🌟
@@ -87,7 +92,7 @@
               "source": "url",
               "url": "http://bar",
               "url_options": {
-                "method": "",
+                "method": "GET",
                 "params": null,
                 "headers": null,
                 "data": "",
@@ -98,7 +103,7 @@
                 "body_graphql_variables": ""
               },
               "data": "",
-              "parser": "",
+              "parser": "backend",
               "filterExpression": "",
               "summarizeExpression": "",
               "summarizeBy": "",
@@ -135,10 +140,34 @@
           },
           "executedQueryString": "###############\n## URL\n###############\n\nhttp://bar\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: text/csv; charset=utf-8' -H 'Accept-Encoding: gzip' 'http://bar'"
         },
-        "fields": []
+        "fields": [
+          {
+            "name": "a",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "b",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          }
+        ]
       },
       "data": {
-        "values": []
+        "values": [
+          [
+            "a1"
+          ],
+          [
+            "b1"
+          ]
+        ]
       }
     }
   ]

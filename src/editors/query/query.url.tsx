@@ -4,7 +4,7 @@ import { EditorRow } from './../../components/extended/EditorRow';
 import { EditorField } from './../../components/extended/EditorField';
 import { isDataQuery } from './../../app/utils';
 import { KeyValueEditor } from './../../components/KeyValuePairEditor';
-import type { InfinityQuery, InfinityQueryType, InfinityQueryWithURLSource, InfinityURLOptions, QueryBodyContentType, QueryBodyType } from './../../types';
+import type { InfinityQuery, InfinityQueryType, InfinityQueryWithURLSource, InfinityURLMethod, InfinityURLOptions, QueryBodyContentType, QueryBodyType } from './../../types';
 import type { SelectableValue } from '@grafana/data';
 import { usePrevious } from 'react-use';
 
@@ -22,18 +22,40 @@ export const URLEditor = ({ query, onChange, onRunQuery }: { query: InfinityQuer
   );
 };
 
-export const Method = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void }) => {
+export const Method = ({
+  query,
+  onChange,
+  onRunQuery,
+  allowDangerousHTTPMethods,
+}: {
+  query: InfinityQuery;
+  onChange: (value: InfinityQuery) => void;
+  onRunQuery: () => void;
+  allowDangerousHTTPMethods?: boolean;
+}) => {
   if (!(isDataQuery(query) || query.type === 'uql' || query.type === 'groq')) {
     return <></>;
   }
   if (query.source === 'inline' || query.source === 'azure-blob') {
     return <></>;
   }
-  const URL_METHODS: SelectableValue[] = [
+  const SAFE_URL_METHODS: Array<SelectableValue<InfinityURLMethod>> = [
     { label: 'GET', value: 'GET' },
     { label: 'POST', value: 'POST' },
   ];
-  const onMethodChange = (method: 'GET' | 'POST') => {
+
+  const DANGEROUS_URL_METHODS: Array<SelectableValue<InfinityURLMethod>> = [
+    { label: 'PUT', value: 'PUT' },
+    { label: 'PATCH', value: 'PATCH' },
+    { label: 'DELETE', value: 'DELETE' },
+  ];
+
+  const URL_METHODS = [...SAFE_URL_METHODS];
+
+  if (allowDangerousHTTPMethods) {
+    URL_METHODS.push(...DANGEROUS_URL_METHODS);
+  }
+  const onMethodChange = (method: InfinityURLMethod) => {
     if (query.source === 'url') {
       onChange({
         ...query,
@@ -45,17 +67,30 @@ export const Method = ({ query, onChange, onRunQuery }: { query: InfinityQuery; 
     }
     onRunQuery();
   };
+
   if (query.source !== 'url') {
     return <></>;
   }
   return (
-    <EditorField label="Method" horizontal={true}>
-      <Select
+    <EditorField
+      label="Method"
+      horizontal={true}
+      tooltip={`By default Infinity allows GET and POST methods. To make use other methods, enable the "Allow dangerous HTTP methods" in the data source configuration.`}
+    >
+      <Select<InfinityURLMethod>
         width={16}
-        value={URL_METHODS.find((e) => e.value === (query.url_options.method || 'GET'))}
+        value={
+          // If the selected URL method in query is in URL_METHODS and display it.
+          URL_METHODS.find((e) => e.value === query.url_options.method) ||
+          // If not, check if it is in DANGEROUS_URL_METHOD and display it - user will get error if they try to use it,
+          // but they will learn that they need to enable it in the data source configuration.
+          DANGEROUS_URL_METHODS.find((e) => e.value === query.url_options.method) ||
+          // If not, display GET method as default.
+          'GET'
+        }
         defaultValue={URL_METHODS.find((e) => e.value === 'GET')}
         options={URL_METHODS}
-        onChange={(e) => onMethodChange(e.value)}
+        onChange={(e) => onMethodChange(e.value || 'GET')}
       ></Select>
     </EditorField>
   );
@@ -158,10 +193,12 @@ const Body = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange:
   }
   const placeholderGraphQLQuery = `{ query : { }}`;
   const placeholderGraphQLVariables = `{ }`;
+  // according to developer.mozilla.org/en-US/docs/Web/HTTP/Methods, GET method should not contain request body
+  const doesBodyAllowed = ['POST', 'PUT', 'PATCH', 'DELETE'].includes(query.url_options?.method);
   const onURLOptionsChange = <K extends keyof InfinityURLOptions, V extends InfinityURLOptions[K]>(key: K, value: V) => {
     onChange({ ...query, url_options: { ...query.url_options, [key]: value } });
   };
-  return query.url_options?.method === 'POST' ? (
+  return doesBodyAllowed ? (
     <>
       <Stack direction="column">
         <EditorField label="Body Type">

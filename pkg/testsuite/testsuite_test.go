@@ -51,11 +51,18 @@ func (rt *InfinityMocker) RoundTrip(req *http.Request) (*http.Response, error) {
 	return nil, errors.New("fake client not working as expected. If you got this error fix this method")
 }
 
-func New(body string) *infinity.Client {
+func New(t *testing.T, body string) *infinity.Client {
+	t.Helper()
 	client, _ := infinity.NewClient(context.TODO(), models.InfinitySettings{})
 	client.HttpClient.Transport = &InfinityMocker{Body: body}
 	client.IsMock = true
 	return client
+}
+
+func NewFromFileName(t *testing.T, fileName string) *infinity.Client {
+	t.Helper()
+	bodyContent, _ := os.ReadFile(fileName)
+	return New(t, string(bodyContent))
 }
 
 func getServerWithStaticResponse(t *testing.T, content string, isFile bool) *httptest.Server {
