@@ -1,5 +1,11 @@
 # Change Log
 
+## 3.0.0-beta.2
+
+🚀 **New Feature**: Support for additional HTTP methods (`PATCH`, `PUT` and `DELETE`) via data source config `allowDangerousHTTPMethods`
+🚀 **Improvements**: Set the backend parser as the default parser for new queries. Existing queries with frontend parser should work as before. If broken, setting the parser to `Frontend` may help.
+⚙️ **Chore**: Update frontend and backend dependencies
+
 ## 3.0.0-beta.1
 
 🚀 **New Feature**: Support for passing grafana meta data such as user id, datasource uid to the underlying API as headers / query params via datasource settings
