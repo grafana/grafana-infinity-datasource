@@ -51,7 +51,7 @@
   },
   "resolutions": {
     "uplot": "1.6.31",
-    "dompurify": "2.5.4",
+    "dompurify": "3.2.4",
     "cross-spawn": "7.0.6"
   },
   "dependencies": {
