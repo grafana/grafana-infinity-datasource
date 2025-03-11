@@ -13,7 +13,7 @@
 //              "source": "url",
 //              "url": "http://127.0.0.1:8080",
 //              "url_options": {
-//                  "method": "",
+//                  "method": "GET",
 //                  "params": null,
 //                  "headers": null,
 //                  "data": "",
@@ -24,7 +24,7 @@
 //                  "body_graphql_variables": ""
 //              },
 //              "data": "",
-//              "parser": "",
+//              "parser": "backend",
 //              "filterExpression": "",
 //              "summarizeExpression": "",
 //              "summarizeBy": "",
@@ -62,9 +62,15 @@
 //      "executedQueryString": "###############\n## URL\n###############\n\nhttp://127.0.0.1:8080\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: text/csv; charset=utf-8' -H 'Accept-Encoding: gzip' 'http://127.0.0.1:8080'"
 //  }
 //  Name: response
-//  Dimensions: 0 Fields by 0 Rows
-//  +
-//  +
+//  Dimensions: 2 Fields by 2 Rows
+//  +-----------------+-----------------+
+//  | Name: age       | Name: name      |
+//  | Labels:         | Labels:         |
+//  | Type: []*string | Type: []*string |
+//  +-----------------+-----------------+
+//  | 123             | foo             |
+//  | 456             | bar             |
+//  +-----------------+-----------------+
 //  
 //  
 //  🌟 This was machine generated.  Do not edit. 🌟
@@ -87,7 +93,7 @@
               "source": "url",
               "url": "http://127.0.0.1:8080",
               "url_options": {
-                "method": "",
+                "method": "GET",
                 "params": null,
                 "headers": null,
                 "data": "",
@@ -98,7 +104,7 @@
                 "body_graphql_variables": ""
               },
               "data": "",
-              "parser": "",
+              "parser": "backend",
               "filterExpression": "",
               "summarizeExpression": "",
               "summarizeBy": "",
@@ -135,10 +141,36 @@
           },
           "executedQueryString": "###############\n## URL\n###############\n\nhttp://127.0.0.1:8080\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: text/csv; charset=utf-8' -H 'Accept-Encoding: gzip' 'http://127.0.0.1:8080'"
         },
-        "fields": []
+        "fields": [
+          {
+            "name": "age",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          }
+        ]
       },
       "data": {
-        "values": []
+        "values": [
+          [
+            "123",
+            "456"
+          ],
+          [
+            "foo",
+            "bar"
+          ]
+        ]
       }
     }
   ]

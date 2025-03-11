@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"net/http"
 	"strconv"
 	"strings"
 
@@ -144,7 +145,7 @@ type URLOptionKeyValuePair struct {
 }
 
 type URLOptions struct {
-	Method               string                  `json:"method"` // 'GET' | 'POST'
+	Method               string                  `json:"method"` // 'GET' | 'POST' | 'PATCH' | 'PUT | 'DELETE'
 	Params               []URLOptionKeyValuePair `json:"params"`
 	Headers              []URLOptionKeyValuePair `json:"headers"`
 	Body                 string                  `json:"data"`
@@ -195,6 +196,12 @@ func ApplyDefaultsToQuery(ctx context.Context, pCtx *backend.PluginContext, quer
 			query.Source = "url"
 		}
 	}
+	// if the parser is already set, we should respect that
+	// if the root_selector is already set, overriding the parser type will break the queries with frontend parsing. So we should leave as it is
+	// if the query have columns defined, overriding the parser type will break the queries with frontend parsing. So we should leave as it is
+	if query.Parser == "" && strings.TrimSpace(query.RootSelector) == "" && len(query.Columns) == 0 && query.Type != QueryTypeUQL && query.Type != QueryTypeGROQ && query.Type != QueryTypeGSheets {
+		query.Parser = InfinityParserBackend
+	}
 	if query.Type == QueryTypeJSON && query.Source == "inline" && query.Data == "" {
 		query.Data = "[]"
 	}
@@ -206,10 +213,14 @@ func ApplyDefaultsToQuery(ctx context.Context, pCtx *backend.PluginContext, quer
 			query.URL = "https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.json"
 		}
 	}
-	if query.Source == "url" && strings.ToUpper(query.URLOptions.Method) == "POST" {
+	if query.Source == "url" && strings.TrimSpace(query.URLOptions.Method) == "" {
+		query.URLOptions.Method = http.MethodGet
+	}
+	if query.Source == "url" && (!strings.EqualFold(query.URLOptions.Method, http.MethodGet)) {
 		if query.URLOptions.BodyType == "" {
 			query.URLOptions.BodyType = "raw"
 			if query.Type == QueryTypeGraphQL {
+				query.URLOptions.Method = http.MethodPost
 				query.URLOptions.BodyType = "graphql"
 				query.URLOptions.BodyContentType = "application/json"
 				if query.URLOptions.BodyGraphQLQuery == "" {

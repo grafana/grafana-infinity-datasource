@@ -13,7 +13,7 @@
 //              "source": "url",
 //              "url": "http://127.0.0.1:8080",
 //              "url_options": {
-//                  "method": "",
+//                  "method": "GET",
 //                  "params": null,
 //                  "headers": null,
 //                  "data": "",
@@ -24,7 +24,7 @@
 //                  "body_graphql_variables": ""
 //              },
 //              "data": "",
-//              "parser": "",
+//              "parser": "backend",
 //              "filterExpression": "",
 //              "summarizeExpression": "",
 //              "summarizeBy": "",
@@ -64,9 +64,14 @@
 //      "executedQueryString": "###############\n## URL\n###############\n\nhttp://127.0.0.1:8080\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' -H 'Accept-Encoding: gzip' 'http://127.0.0.1:8080'"
 //  }
 //  Name: response
-//  Dimensions: 0 Fields by 0 Rows
-//  +
-//  +
+//  Dimensions: 1 Fields by 1 Rows
+//  +-----------------+
+//  | Name: message   |
+//  | Labels:         |
+//  | Type: []*string |
+//  +-----------------+
+//  | ok              |
+//  +-----------------+
 //  
 //  
 //  🌟 This was machine generated.  Do not edit. 🌟
@@ -89,7 +94,7 @@
               "source": "url",
               "url": "http://127.0.0.1:8080",
               "url_options": {
-                "method": "",
+                "method": "GET",
                 "params": null,
                 "headers": null,
                 "data": "",
@@ -100,7 +105,7 @@
                 "body_graphql_variables": ""
               },
               "data": "",
-              "parser": "",
+              "parser": "backend",
               "filterExpression": "",
               "summarizeExpression": "",
               "summarizeBy": "",
@@ -139,10 +144,23 @@
           },
           "executedQueryString": "###############\n## URL\n###############\n\nhttp://127.0.0.1:8080\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' -H 'Accept-Encoding: gzip' 'http://127.0.0.1:8080'"
         },
-        "fields": []
+        "fields": [
+          {
+            "name": "message",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          }
+        ]
       },
       "data": {
-        "values": []
+        "values": [
+          [
+            "ok"
+          ]
+        ]
       }
     }
   ]

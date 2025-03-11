@@ -13,7 +13,7 @@
 //              "source": "url",
 //              "url": "http://foo",
 //              "url_options": {
-//                  "method": "",
+//                  "method": "GET",
 //                  "params": null,
 //                  "headers": null,
 //                  "data": "",
@@ -24,7 +24,7 @@
 //                  "body_graphql_variables": ""
 //              },
 //              "data": "",
-//              "parser": "",
+//              "parser": "backend",
 //              "filterExpression": "",
 //              "summarizeExpression": "",
 //              "summarizeBy": "",
@@ -66,9 +66,16 @@
 //      "executedQueryString": "###############\n## URL\n###############\n\nhttp://foo\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' -H 'Accept-Encoding: gzip' 'http://foo'"
 //  }
 //  Name: q1
-//  Dimensions: 0 Fields by 0 Rows
-//  +
-//  +
+//  Dimensions: 1 Fields by 3 Rows
+//  +------------------+
+//  | Name: q1         |
+//  | Labels:          |
+//  | Type: []*float64 |
+//  +------------------+
+//  | 1                |
+//  | 2                |
+//  | 3                |
+//  +------------------+
 //  
 //  
 //  🌟 This was machine generated.  Do not edit. 🌟
@@ -91,7 +98,7 @@
               "source": "url",
               "url": "http://foo",
               "url_options": {
-                "method": "",
+                "method": "GET",
                 "params": null,
                 "headers": null,
                 "data": "",
@@ -102,7 +109,7 @@
                 "body_graphql_variables": ""
               },
               "data": "",
-              "parser": "",
+              "parser": "backend",
               "filterExpression": "",
               "summarizeExpression": "",
               "summarizeBy": "",
@@ -143,10 +150,25 @@
           },
           "executedQueryString": "###############\n## URL\n###############\n\nhttp://foo\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' -H 'Accept-Encoding: gzip' 'http://foo'"
         },
-        "fields": []
+        "fields": [
+          {
+            "name": "q1",
+            "type": "number",
+            "typeInfo": {
+              "frame": "float64",
+              "nullable": true
+            }
+          }
+        ]
       },
       "data": {
-        "values": []
+        "values": [
+          [
+            1,
+            2,
+            3
+          ]
+        ]
       }
     }
   ]

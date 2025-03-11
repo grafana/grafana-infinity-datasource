@@ -13,7 +13,7 @@
 //              "source": "url",
 //              "url": "http://127.0.0.1:8080",
 //              "url_options": {
-//                  "method": "",
+//                  "method": "GET",
 //                  "params": null,
 //                  "headers": null,
 //                  "data": "",
@@ -93,7 +93,7 @@
               "source": "url",
               "url": "http://127.0.0.1:8080",
               "url_options": {
-                "method": "",
+                "method": "GET",
                 "params": null,
                 "headers": null,
                 "data": "",

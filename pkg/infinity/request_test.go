@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
+	"strings"
 	"testing"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/infinity"
@@ -16,6 +18,96 @@ import (
 	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/trace"
 )
+
+func TestGetRequest(t *testing.T) {
+	tests := []struct {
+		name           string
+		pCtx           *backend.PluginContext
+		settings       models.InfinitySettings
+		body           io.Reader
+		query          models.Query
+		requestHeaders map[string]string
+		wantReq        *http.Request
+		wantReqBody    bool
+		wantErr        error
+	}{
+		{
+			name:    "shouldn't interpolate grafana values from query",
+			pCtx:    &backend.PluginContext{PluginID: "hello"},
+			query:   models.Query{URLOptions: models.URLOptions{Headers: []models.URLOptionKeyValuePair{{Key: "Something", Value: "${__plugin.id}"}}}},
+			wantReq: &http.Request{URL: &url.URL{}, Header: http.Header{"Something": []string{"${__plugin.id}"}}, Method: http.MethodGet},
+		},
+		{
+			name:     "should forward grafana headers correctly when set in the custom header settings",
+			pCtx:     &backend.PluginContext{PluginID: "hello"},
+			settings: models.InfinitySettings{CustomHeaders: map[string]string{"Something": "${__plugin.id}"}},
+			wantReq:  &http.Request{URL: &url.URL{}, Header: http.Header{"Something": []string{"hello"}}, Method: http.MethodGet},
+		},
+		{
+			name:     "should override values from settings compared to query",
+			pCtx:     &backend.PluginContext{PluginID: "hello"},
+			query:    models.Query{URLOptions: models.URLOptions{Headers: []models.URLOptionKeyValuePair{{Key: "Something", Value: "Some Value"}}}},
+			settings: models.InfinitySettings{CustomHeaders: map[string]string{"Something": "${__plugin.id}"}},
+			wantReq:  &http.Request{URL: &url.URL{}, Header: http.Header{"Something": []string{"hello"}}, Method: http.MethodGet},
+		},
+		{
+			name: "should error if DELETE method requested without enabled in the settings",
+			pCtx: &backend.PluginContext{PluginID: "hello"},
+			query: models.Query{
+				URLOptions: models.URLOptions{Method: "delete"},
+			},
+			wantErr: backend.DownstreamError(models.ErrNotAllowedDangerousHTTPMethods),
+		},
+		{
+			name:     "should allow if DELETE method requested with enabled in the settings",
+			pCtx:     &backend.PluginContext{PluginID: "hello"},
+			query:    models.Query{URLOptions: models.URLOptions{Method: "delete"}},
+			settings: models.InfinitySettings{AllowDangerousHTTPMethods: true},
+			wantReq:  &http.Request{URL: &url.URL{}, Method: http.MethodDelete},
+		},
+		{
+			name:        "should not include body when not supplied in the query for non GET/POST methods",
+			pCtx:        &backend.PluginContext{PluginID: "hello"},
+			query:       models.Query{URLOptions: models.URLOptions{Method: "delete"}},
+			settings:    models.InfinitySettings{AllowDangerousHTTPMethods: true},
+			wantReq:     &http.Request{URL: &url.URL{}, Method: http.MethodDelete},
+			wantReqBody: false,
+		},
+		{
+			name:        "should include body when supplied in the query for non GET/POST methods",
+			pCtx:        &backend.PluginContext{PluginID: "hello"},
+			query:       models.Query{URLOptions: models.URLOptions{Method: "patch", Body: "foo"}},
+			body:        io.NopCloser(strings.NewReader("foo")),
+			settings:    models.InfinitySettings{AllowDangerousHTTPMethods: true},
+			wantReq:     &http.Request{URL: &url.URL{}, Method: http.MethodPatch},
+			wantReqBody: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gotReq, err := infinity.GetRequest(context.TODO(), tt.pCtx, tt.settings, tt.body, tt.query, tt.requestHeaders, true)
+			if tt.wantErr != nil {
+				require.NotNil(t, err)
+				assert.Equal(t, tt.wantErr, err)
+				return
+			}
+			require.NotNil(t, gotReq)
+			assert.Equal(t, tt.wantReq.URL.String(), gotReq.URL.String())
+			assert.Equal(t, tt.wantReq.Method, gotReq.Method)
+			if !tt.wantReqBody {
+				require.Nil(t, gotReq.Body)
+			}
+			if tt.wantReqBody {
+				require.NotNil(t, gotReq.Body)
+			}
+			numberOfAdditionalHeaders := 1 // with gzip compression enabled, there will be additional header at run time.
+			assert.Equal(t, len(tt.wantReq.Header)+numberOfAdditionalHeaders, len(gotReq.Header))
+			for k := range tt.wantReq.Header {
+			require.Equal(t, tt.wantReq.Header.Get(k), gotReq.Header.Get(k))
+			}
+		})
+	}
+}
 
 func TestGetQueryURL(t *testing.T) {
 	tests := []struct {
@@ -281,55 +373,6 @@ func TestNormalizeURL(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			require.Equal(t, tt.want, infinity.NormalizeURL(tt.u))
-		})
-	}
-}
-
-func TestGetRequest(t *testing.T) {
-	tests := []struct {
-		name           string
-		pCtx           *backend.PluginContext
-		settings       models.InfinitySettings
-		body           io.Reader
-		query          models.Query
-		requestHeaders map[string]string
-		wantReq        http.Request
-		wantErr        error
-	}{
-		{
-			name:    "shouldn't interpolate grafana values from query",
-			pCtx:    &backend.PluginContext{PluginID: "hello"},
-			query:   models.Query{URLOptions: models.URLOptions{Headers: []models.URLOptionKeyValuePair{{Key: "Something", Value: "${__plugin.id"}}}},
-			wantReq: http.Request{Header: http.Header{"Something": []string{"${__plugin.id"}}},
-		},
-		{
-			name:     "should forward grafana headers correctly when set in the custom header settings",
-			pCtx:     &backend.PluginContext{PluginID: "hello"},
-			settings: models.InfinitySettings{CustomHeaders: map[string]string{"Something": "${__plugin.id}"}},
-			wantReq:  http.Request{Header: http.Header{"Something": []string{"hello"}}},
-		},
-		{
-			name:     "should override values from settings compared to query",
-			pCtx:     &backend.PluginContext{PluginID: "hello"},
-			query:    models.Query{URLOptions: models.URLOptions{Headers: []models.URLOptionKeyValuePair{{Key: "Something", Value: "Some Value"}}}},
-			settings: models.InfinitySettings{CustomHeaders: map[string]string{"Something": "${__plugin.id}"}},
-			wantReq:  http.Request{Header: http.Header{"Something": []string{"hello"}}},
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			gotReq, err := infinity.GetRequest(context.TODO(), tt.pCtx, tt.settings, tt.body, tt.query, tt.requestHeaders, true)
-			if tt.wantErr != nil {
-				require.NotNil(t, err)
-				assert.Equal(t, tt.wantErr, err)
-				return
-			}
-			require.NotNil(t, gotReq)
-			numberOfAdditionalHeaders := 1 // with gzip compression enabled, there will be additional header at run time.
-			assert.Equal(t, len(tt.wantReq.Header)+numberOfAdditionalHeaders, len(gotReq.Header))
-			for k := range tt.wantReq.Header {
-				require.Equal(t, tt.wantReq.Header.Get(k), gotReq.Header.Get(k))
-			}
 		})
 	}
 }
