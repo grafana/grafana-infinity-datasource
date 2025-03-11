@@ -1,8 +1,6 @@
 module github.com/grafana/grafana-infinity-datasource
 
-go 1.23.5
-
-toolchain go1.23.6
+go 1.24.1
 
 require (
 	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.3.1
