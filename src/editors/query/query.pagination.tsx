@@ -1,6 +1,6 @@
 import React from 'react';
-import { InlineLabel, Input, Select, Stack } from '@grafana/ui';
-import { SelectableValue } from '@grafana/data';
+import { FeatureBadge, InlineLabel, Input, Select, Stack } from '@grafana/ui';
+import { FeatureState, SelectableValue } from '@grafana/data';
 import { EditorField } from './../../components/extended/EditorField';
 import { EditorRow } from './../../components/extended/EditorRow';
 import type { InfinityQuery, PaginationParamType, PaginationType } from './../../types';
@@ -30,22 +30,21 @@ type PaginationEditorProps = {
 export const PaginationEditor = (props: PaginationEditorProps) => {
   const { query, onChange } = props;
   return (
-    <EditorRow label={'Pagination'} collapsible={true} collapsed={false} title={() => 'beta'}>
+    <EditorRow label={'Pagination'} collapsible={true} collapsed={false} title={() => <FeatureBadge featureState={FeatureState.beta} />}>
       <Stack direction="row" wrap={'wrap'}>
         <Stack wrap={'nowrap'} direction="column">
           <EditorField label="Pagination Type">
             <Select<PaginationType> width={30} value={query.pagination_mode || 'none'} options={paginationTypes} onChange={(e) => onChange({ ...query, pagination_mode: e.value || 'none' })} />
           </EditorField>
           {query.pagination_mode && query.pagination_mode !== 'none' && (
-            <EditorField label="Max pages" tooltip={'maximum of 5 pages. minimum of 1 page. Default 1'}>
+            <EditorField label="Max pages" tooltip={'Enter a value between 1 and 5 pages, or the maximum limit set in the Grafana configuration for the Infinity plugin'}>
               <Input
                 type={'number'}
                 min={1}
-                max={5}
                 width={30}
                 value={query.pagination_max_pages}
                 onChange={(e) => onChange({ ...query, pagination_max_pages: e.currentTarget.valueAsNumber || 1 })}
-                placeholder="min:1, max:5"
+                placeholder="1"
               />
             </EditorField>
           )}
