@@ -4,14 +4,17 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"sync"
 
-	"github.com/grafana/grafana-infinity-datasource/pkg/infinity"
-	"github.com/grafana/grafana-infinity-datasource/pkg/models"
+	"github.com/grafana/dskit/concurrency"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/trace"
+
+	"github.com/grafana/grafana-infinity-datasource/pkg/infinity"
+	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 )
 
 // QueryData handles multiple queries and returns multiple responses.
@@ -23,31 +26,77 @@ func (ds *DataSource) QueryData(ctx context.Context, req *backend.QueryDataReque
 	if ds.client == nil {
 		return response, backend.PluginError(errors.New("invalid infinity client"))
 	}
-	for _, q := range req.Queries {
-		query, err := models.LoadQuery(ctx, q, req.PluginContext, ds.client.Settings)
-		if err != nil {
-			span.RecordError(err)
-			logger.Error("error un-marshaling the query", "error", err.Error())
-			// Here we are using error source from the original error and if it does not have any source we are using the plugin error as the default source
-			errorRes := backend.ErrorResponseWithErrorSource(fmt.Errorf("%s: %w", "error un-marshaling the query", err))
-			response.Responses[q.RefID] = errorRes
-			continue
-		}
-		if query.Type == models.QueryTypeTransformations {
-			response1, err := infinity.ApplyTransformations(query, response)
+
+	var m sync.Mutex
+	hasInfinityRunQueriesInParallel := backend.GrafanaConfigFromContext(ctx).FeatureToggles().IsEnabled("infinityRunQueriesInParallel")
+	concurrentQueryCount, err := req.PluginContext.GrafanaConfig.ConcurrentQueryCount()
+	if err != nil {
+		logger.Debug(fmt.Sprintf("Concurrent Query Count read/parse error: %v", err), "infinityRunQueriesInParallel")
+		concurrentQueryCount = 10
+	}
+
+	if hasInfinityRunQueriesInParallel {
+		_ = concurrency.ForEachJob(ctx, len(req.Queries), concurrentQueryCount, func(ctx context.Context, idx int) error {
+			q := req.Queries[idx]
+			query, err := models.LoadQuery(ctx, q, req.PluginContext, ds.client.Settings)
 			if err != nil {
-				logger.Error("error applying infinity query transformation", "error", err.Error())
 				span.RecordError(err)
-				span.SetStatus(500, err.Error())
-				// We should have error source from the original error, but in a case it is not there, we are using the plugin error as the default source
-				return response, backend.PluginError(fmt.Errorf("%s: %w", "error applying infinity query transformation", err))
+				logger.Error("error un-marshaling the query", "error", err.Error())
+				// Here we are using error source from the original error and if it does not have any source we are using the plugin error as the default source
+				errorRes := backend.ErrorResponseWithErrorSource(fmt.Errorf("%s: %w", "error un-marshaling the query", err))
+				m.Lock()
+				response.Responses[q.RefID] = errorRes
+				m.Unlock()
+				return nil
 			}
-			response = response1
-			continue
+			if query.Type == models.QueryTypeTransformations {
+				response1, err := infinity.ApplyTransformations(query, response)
+				if err != nil {
+					logger.Error("error applying infinity query transformation", "error", err.Error())
+					span.RecordError(err)
+					span.SetStatus(500, err.Error())
+					// We should have error source from the original error, but in a case it is not there, we are using the plugin error as the default source
+					return backend.PluginError(fmt.Errorf("%s: %w", "error applying infinity query transformation", err))
+				}
+				m.Lock()
+				response = response1
+				m.Unlock()
+				return nil
+			}
+			dataResponse := QueryDataQuery(ctx, req.PluginContext, query, *ds.client, req.Headers)
+			m.Lock()
+			response.Responses[q.RefID] = dataResponse
+			m.Unlock()
+			return nil
+		})
+	} else {
+		for _, q := range req.Queries {
+			query, err := models.LoadQuery(ctx, q, req.PluginContext, ds.client.Settings)
+			if err != nil {
+				span.RecordError(err)
+				logger.Error("error un-marshaling the query", "error", err.Error())
+				// Here we are using error source from the original error and if it does not have any source we are using the plugin error as the default source
+				errorRes := backend.ErrorResponseWithErrorSource(fmt.Errorf("%s: %w", "error un-marshaling the query", err))
+				response.Responses[q.RefID] = errorRes
+				continue
+			}
+			if query.Type == models.QueryTypeTransformations {
+				response1, err := infinity.ApplyTransformations(query, response)
+				if err != nil {
+					logger.Error("error applying infinity query transformation", "error", err.Error())
+					span.RecordError(err)
+					span.SetStatus(500, err.Error())
+					// We should have error source from the original error, but in a case it is not there, we are using the plugin error as the default source
+					return response, backend.PluginError(fmt.Errorf("%s: %w", "error applying infinity query transformation", err))
+				}
+				response = response1
+				continue
+			}
+			response.Responses[q.RefID] = QueryDataQuery(ctx, req.PluginContext, query, *ds.client, req.Headers)
 		}
-		response.Responses[q.RefID] = QueryDataQuery(ctx, req.PluginContext, query, *ds.client, req.Headers)
 	}
 	return response, nil
+
 }
 
 func QueryDataQuery(ctx context.Context, pluginContext backend.PluginContext, query models.Query, infClient infinity.Client, requestHeaders map[string]string) (response backend.DataResponse) {
@@ -71,7 +120,7 @@ func QueryDataQuery(ctx context.Context, pluginContext backend.PluginContext, qu
 	args = append(args, "settings.AuthenticationMethod", infClient.Settings.AuthenticationMethod)
 	args = append(args, "settings.OAuth2Settings.OAuth2Type", infClient.Settings.OAuth2Settings.OAuth2Type)
 	logger.Info("performing QueryData in infinity datasource", args...)
-	//region Frame Builder
+	// region Frame Builder
 	switch query.Type {
 	case models.QueryTypeGSheets:
 		sheetId := query.Spreadsheet
@@ -95,7 +144,7 @@ func QueryDataQuery(ctx context.Context, pluginContext backend.PluginContext, qu
 			if backend.IsDownstreamError(err) {
 				response.ErrorSource = backend.ErrorSourceDownstream
 			} else {
-				response.ErrorSource = backend.ErrorSourcePlugin	
+				response.ErrorSource = backend.ErrorSourcePlugin
 			}
 			return response
 		}
@@ -133,7 +182,7 @@ func QueryDataQuery(ctx context.Context, pluginContext backend.PluginContext, qu
 				if backend.IsDownstreamError(err) {
 					response.ErrorSource = backend.ErrorSourceDownstream
 				} else {
-					response.ErrorSource = backend.ErrorSourcePlugin	
+					response.ErrorSource = backend.ErrorSourcePlugin
 				}
 				return response
 			}
@@ -159,7 +208,7 @@ func QueryDataQuery(ctx context.Context, pluginContext backend.PluginContext, qu
 				if backend.IsDownstreamError(err) {
 					response.ErrorSource = backend.ErrorSourceDownstream
 				} else {
-					response.ErrorSource = backend.ErrorSourcePlugin	
+					response.ErrorSource = backend.ErrorSourcePlugin
 				}
 				return response
 			}
@@ -174,6 +223,6 @@ func QueryDataQuery(ctx context.Context, pluginContext backend.PluginContext, qu
 			}
 		}
 	}
-	//endregion
+	// endregion
 	return response
 }
