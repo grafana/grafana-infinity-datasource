@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
@@ -143,7 +145,7 @@ type URLOptionKeyValuePair struct {
 }
 
 type URLOptions struct {
-	Method               string                  `json:"method"` // 'GET' | 'POST'
+	Method               string                  `json:"method"` // 'GET' | 'POST' | 'PATCH' | 'PUT | 'DELETE'
 	Params               []URLOptionKeyValuePair `json:"params"`
 	Headers              []URLOptionKeyValuePair `json:"headers"`
 	Body                 string                  `json:"data"`
@@ -187,12 +189,18 @@ type InfinityDataOverride struct {
 	Override string   `json:"override"`
 }
 
-func ApplyDefaultsToQuery(ctx context.Context, query Query, settings InfinitySettings) Query {
+func ApplyDefaultsToQuery(ctx context.Context, pCtx *backend.PluginContext, query Query, settings InfinitySettings) Query {
 	if query.Type == "" {
 		query.Type = QueryTypeJSON
 		if query.Source == "" {
 			query.Source = "url"
 		}
+	}
+	// if the parser is already set, we should respect that
+	// if the root_selector is already set, overriding the parser type will break the queries with frontend parsing. So we should leave as it is
+	// if the query have columns defined, overriding the parser type will break the queries with frontend parsing. So we should leave as it is
+	if query.Parser == "" && strings.TrimSpace(query.RootSelector) == "" && len(query.Columns) == 0 && query.Type != QueryTypeUQL && query.Type != QueryTypeGROQ && query.Type != QueryTypeGSheets {
+		query.Parser = InfinityParserBackend
 	}
 	if query.Type == QueryTypeJSON && query.Source == "inline" && query.Data == "" {
 		query.Data = "[]"
@@ -205,10 +213,14 @@ func ApplyDefaultsToQuery(ctx context.Context, query Query, settings InfinitySet
 			query.URL = "https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.json"
 		}
 	}
-	if query.Source == "url" && strings.ToUpper(query.URLOptions.Method) == "POST" {
+	if query.Source == "url" && strings.TrimSpace(query.URLOptions.Method) == "" {
+		query.URLOptions.Method = http.MethodGet
+	}
+	if query.Source == "url" && (!strings.EqualFold(query.URLOptions.Method, http.MethodGet)) {
 		if query.URLOptions.BodyType == "" {
 			query.URLOptions.BodyType = "raw"
 			if query.Type == QueryTypeGraphQL {
+				query.URLOptions.Method = http.MethodPost
 				query.URLOptions.BodyType = "graphql"
 				query.URLOptions.BodyContentType = "application/json"
 				if query.URLOptions.BodyGraphQLQuery == "" {
@@ -243,12 +255,7 @@ func ApplyDefaultsToQuery(ctx context.Context, query Query, settings InfinitySet
 	}
 	if query.Parser == InfinityParserBackend && query.Source == "url" && !(query.PageMode == "" || query.PageMode == PaginationModeNone) {
 		if query.PageMode != PaginationModeNone {
-			if query.PageMaxPages <= 0 {
-				query.PageMaxPages = 1
-			}
-			if query.PageMaxPages >= 5 {
-				query.PageMaxPages = 5
-			}
+			query.PageMaxPages = GetPaginationMaxPagesValue(ctx, pCtx, query)
 			if query.PageParamSizeFieldName == "" {
 				query.PageParamSizeFieldName = "limit"
 			}
@@ -304,10 +311,28 @@ func LoadQuery(ctx context.Context, backendQuery backend.DataQuery, pluginContex
 	if err != nil {
 		return query, backend.DownstreamError(fmt.Errorf("error while parsing the query json. %w", err))
 	}
-	query = ApplyDefaultsToQuery(ctx, query, settings)
+	query = ApplyDefaultsToQuery(ctx, &pluginContext, query, settings)
 	if query.PageMode == PaginationModeList && strings.TrimSpace(query.PageParamListFieldName) == "" {
 		// Downstream error as user input is not correct
 		return query, backend.DownstreamError(errors.New("pagination_param_list_field_name cannot be empty"))
 	}
 	return ApplyMacros(ctx, query, backendQuery.TimeRange, pluginContext)
+}
+
+func GetPaginationMaxPagesValue(ctx context.Context, pCtx *backend.PluginContext, query Query) int {
+	maxPages := 5
+	if query.PageMaxPages <= 0 {
+		maxPages = 1
+	}
+	if query.PageMaxPages >= 5 {
+		maxPages = 5
+	}
+	maxPageFromEnv := GetGrafanaConfig(ctx, pCtx, "pagination_max_pages")
+	if maxPageFromEnvValue, err := strconv.Atoi(maxPageFromEnv); err == nil && maxPageFromEnvValue > 0 {
+		maxPages = maxPageFromEnvValue
+	}
+	if query.PageMaxPages <= maxPages && query.PageMaxPages > 0 {
+		return query.PageMaxPages
+	}
+	return maxPages
 }

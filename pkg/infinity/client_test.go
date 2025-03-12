@@ -4,7 +4,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
+	"strings"
 	"testing"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/infinity"
@@ -77,6 +79,41 @@ func TestInfinityClient_GetResults(t *testing.T) {
 			assert.Equal(t, tt.wantO, gotO)
 			assert.NotNil(t, statusCode)
 			assert.NotNil(t, duration)
+		})
+	}
+}
+
+func TestGetQueryBody(t *testing.T) {
+	tests := []struct {
+		name  string
+		query models.Query
+		want  io.Reader
+	}{
+		{
+			name:  "should not include body for urls without method",
+			query: models.Query{URLOptions: models.URLOptions{Body: "foo"}},
+		},
+		{
+			name:  "should not include body for GET method",
+			query: models.Query{URLOptions: models.URLOptions{Method: "get", Body: "foo"}},
+		},
+		{
+			name:  "should include body for PATCH method if provided",
+			query: models.Query{URLOptions: models.URLOptions{Method: "patch", Body: "foo"}},
+			want:  strings.NewReader("foo"),
+		},
+		{
+			name: "should not include body for DELETE method if not provided",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := infinity.GetQueryBody(context.TODO(), tt.query)
+			if tt.want == nil {
+				require.Nil(t, got)
+				return
+			}
+			require.NotNil(t, got)
 		})
 	}
 }

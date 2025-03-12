@@ -134,3 +134,49 @@ func TestLoadQuery(t *testing.T) {
 		})
 	}
 }
+
+func TestGetPaginationMaxPagesValue(t *testing.T) {
+	tests := []struct {
+		name    string
+		pCtx    *backend.PluginContext
+		envVars map[string]string
+		query   models.Query
+		want    int
+	}{
+		{
+			name: "should return 1 if no defaults set",
+			want: 1,
+		},
+		{
+			name:  "should return 1 if negative values set in query",
+			query: models.Query{PageMaxPages: -5},
+			want:  1,
+		},
+		{
+			name:  "should return 5 if higher values set",
+			query: models.Query{PageMaxPages: 100},
+			want:  5,
+		},
+		{
+			name:    "should respect GF_PLUGIN_pagination_max_pages key",
+			query:   models.Query{PageMaxPages: 100},
+			envVars: map[string]string{"GF_PLUGIN_PAGINATION_MAX_PAGES": "10"},
+			want:    10,
+		},
+		{
+			name:    "should respect query page max if the value is lesser than environment variable",
+			query:   models.Query{PageMaxPages: 6},
+			envVars: map[string]string{"GF_PLUGIN_PAGINATION_MAX_PAGES": "8"},
+			want:    6,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			for k, v := range tt.envVars {
+				t.Setenv(k, v)
+			}
+			got := models.GetPaginationMaxPagesValue(context.TODO(), tt.pCtx, tt.query)
+			require.Equal(t, tt.want, got)
+		})
+	}
+}

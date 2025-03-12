@@ -35,6 +35,8 @@ weight: 22
 
 ## 📊 Overview
 
+Looking for a quick start example? Please check [How to Visualize CSV Data with Grafana](https://grafana.com/blog/2025/02/05/how-to-visualize-csv-data-with-grafana/). This page covers details the various powerful configuration options for dealing with CSV data in Infinity.
+
 <div style="margin-bottom:30px"></div>
 
 ![csv example](https://user-images.githubusercontent.com/153843/92571108-9e0ff800-f27a-11ea-9fe9-9f9dcbd7125a.png#center)
@@ -100,7 +102,7 @@ Germany,700
 Even if your CSV file has columns, you should specify them manually, and only those fields will be considered for display. The columns will appear in the order you specify. Each column will have the following properties:
 
 | Column   | Description                                      |
-| -------- | -----------------------------------------------  |
+| -------- | ------------------------------------------------ |
 | Title    | Title of the column when using the table format. |
 | Selector | Column name in CSV file. Case sensitive.         |
 | Format   | Format of the column.                            |
@@ -136,13 +138,13 @@ The following screenshot shows the example of CSV inline data source:
 
 ## CSV Options
 
-| Option                | Description                                                                                                                                                                                       |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Delimiter             | If your CSV file have any other delimiter than comma, then specify here. For tab delimited files, specify `\t` as delimiter.                                                                       |
-| Headers               | If CSV file doesn't have headers, specify here as comma separated values here.                                                                                                                     |
-| Skip empty lines      | Check this if you want to skip the empty lines.                                                                                                                                                    |
-| Skip lines with error | Check this if you want to skip the lines with error.                                                                                                                                               |
-| Relax column count    | Check this if you want to relax the column count check.                                                                                                                                            |
+| Option                | Description                                                                                                                                                                                          |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Delimiter             | If your CSV file have any other delimiter than comma, then specify here. For tab delimited files, specify `\t` as delimiter.                                                                         |
+| Headers               | If CSV file doesn't have headers, specify here as comma separated values here.                                                                                                                       |
+| Skip empty lines      | Check this if you want to skip the empty lines.                                                                                                                                                      |
+| Skip lines with error | Check this if you want to skip the lines with error.                                                                                                                                                 |
+| Relax column count    | Check this if you want to relax the column count check.                                                                                                                                              |
 | Comment               | If your CSV lines have comments, enter the comments delimiter. Treat all the characters after this one as a comment. Example: setting `#` will treat everything in each line after `#` as a comment. |
 
 > All these CSV options are available from version 0.7.

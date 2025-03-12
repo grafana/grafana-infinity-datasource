@@ -35,7 +35,7 @@ After the plugin is installed, you need to create an instance of the data source
 
 This data source can work out of the box without any additional configuration. If you need the URL to be authenticated or pass additional headers/query/tls/timeout settings, configure the corresponding section.
 
-- Configuration will be applied to all the queries. If you need different configuration for different queries, create separate instances of the data source. 
+- Configuration will be applied to all the queries. If you need different configuration for different queries, create separate instances of the data source.
 
 - If you configure the URL in the settings, the same will be prefixed along with all your queries.
 
@@ -58,3 +58,13 @@ If you want your data source to connect via proxy, set the environment appropria
 If you want to setup specific proxy URL for the datasource, you can configure in the datasource config network section.
 
 > Proxy URL specification in data source config is available from v2.2.0
+
+## Allowing dangerous HTTP methods
+
+By default infinity only allow GET and POST HTTP methods to reduce the risk of destructive payloads. But through configuration, you can allow other methods such as `PATCH`,`POST` and `DELETE` for any unconventional use cases. If you need to make use of this feature, Enable the `Allow dangerous HTTP methods` setting under URL section of the datasource config
+
+> This feature is only available from infinity plugin version v3.0.0
+
+{{< admonition type="warning" >}}
+Infinity doesn't validate any permissions against the underlying API. Enable this setting with caution as this can potentially perform any destructive action in the underlying API.
+{{< /admonition >}}
