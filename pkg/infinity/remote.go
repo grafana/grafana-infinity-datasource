@@ -21,7 +21,7 @@ func GetFrameForURLSources(ctx context.Context, pCtx *backend.PluginContext, que
 	if query.Type == models.QueryTypeJSON && query.Parser == models.InfinityParserBackend && query.PageMode != models.PaginationModeNone && query.PageMode != "" {
 		return GetPaginatedResults(ctx, pCtx, query, infClient, requestHeaders)
 	}
-	frame, _, err := GetFrameForURLSourcesWithPostProcessing(ctx, pCtx, query, infClient, requestHeaders, true)
+	frame, _, _, err := GetFrameForURLSourcesWithPostProcessing(ctx, pCtx, query, infClient, requestHeaders, true)
 	return frame, err
 }
 
@@ -64,30 +64,32 @@ func GetPaginatedResults(ctx context.Context, pCtx *backend.PluginContext, query
 	case models.PaginationModeCursor:
 		queries = append(queries, query)
 	default:
-		frame, _, err := GetFrameForURLSourcesWithPostProcessing(ctx, pCtx, query, infClient, requestHeaders, true)
+		frame, _, _, err := GetFrameForURLSourcesWithPostProcessing(ctx, pCtx, query, infClient, requestHeaders, true)
 		return frame, err
 	}
 	if query.PageMode != models.PaginationModeCursor {
 		for _, currentQuery := range queries {
-			frame, _, err := GetFrameForURLSourcesWithPostProcessing(ctx, pCtx, currentQuery, infClient, requestHeaders, false)
+			frame, _, _, err := GetFrameForURLSourcesWithPostProcessing(ctx, pCtx, currentQuery, infClient, requestHeaders, false)
 			frames = append(frames, frame)
 			errs = errors.Join(errs, err)
 		}
 	}
 	if query.PageMode == models.PaginationModeCursor {
 		i := 0
-		oCursor := ""
+		oCursor := query.PageParamCursorInitialValue
+		oHasNextPage := "true"
 		for {
 			currentQuery := query
-			if i > 0 && oCursor != "" {
-				currentQuery = ApplyPaginationItemToQuery(currentQuery, query.PageParamCursorFieldType, query.PageParamCursorFieldName, oCursor)
-			}
-			if i > query.PageMaxPages || (i > 0 && oCursor == "") {
+			currentQuery = ApplyPaginationItemToQuery(currentQuery, query.PageParamCursorFieldType, query.PageParamCursorFieldName, oCursor)
+
+			if i > query.PageMaxPages || oCursor == "" || strings.EqualFold(oHasNextPage, query.PageParamNoNextPageValue) {
 				break
 			}
 			i++
-			frame, cursor, err := GetFrameForURLSourcesWithPostProcessing(ctx, pCtx, currentQuery, infClient, requestHeaders, false)
+			frame, cursor, hasNextPage, err := GetFrameForURLSourcesWithPostProcessing(ctx, pCtx, currentQuery, infClient, requestHeaders, false)
 			oCursor = cursor
+			oHasNextPage = hasNextPage
+
 			frames = append(frames, frame)
 			errs = errors.Join(errs, err)
 		}
@@ -134,13 +136,15 @@ func ApplyPaginationItemToQuery(currentQuery models.Query, fieldType models.Pagi
 	return currentQuery
 }
 
-func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, pCtx *backend.PluginContext, query models.Query, infClient Client, requestHeaders map[string]string, postProcessingRequired bool) (*data.Frame, string, error) {
+func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, pCtx *backend.PluginContext, query models.Query, infClient Client, requestHeaders map[string]string, postProcessingRequired bool) (*data.Frame, string, string, error) {
 	ctx, span := tracing.DefaultTracer().Start(ctx, "GetFrameForURLSourcesWithPostProcessing")
 	logger := backend.Logger.FromContext(ctx)
 	defer span.End()
 	frame := GetDummyFrame(query)
 	cursor := ""
+	hasNextPage := ""
 	urlResponseObject, statusCode, duration, err := infClient.GetResults(ctx, pCtx, query, requestHeaders)
+
 	frame.Meta.ExecutedQueryString = infClient.GetExecutedURL(ctx, query)
 	if infClient.IsMock {
 		duration = 123
@@ -155,30 +159,30 @@ func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, pCtx *backend.
 			Query:                  query,
 			Error:                  err.Error(),
 		}
-		return frame, cursor, err
+		return frame, cursor, hasNextPage, err
 	}
 	if query.Type == models.QueryTypeGSheets {
 		if frame, err = GetGoogleSheetsResponse(ctx, urlResponseObject, query); err != nil {
-			return frame, cursor, err
+			return frame, cursor, hasNextPage, err
 		}
 	}
 	if query.Parser == "backend" {
 		if query.Type == models.QueryTypeJSON || query.Type == models.QueryTypeGraphQL {
 			if frame, err = GetJSONBackendResponse(ctx, urlResponseObject, query); err != nil {
-				return frame, cursor, err
+				return frame, cursor, hasNextPage, err
 			}
 		}
 		if query.Type == models.QueryTypeCSV || query.Type == models.QueryTypeTSV {
 			if responseString, ok := urlResponseObject.(string); ok {
 				if frame, err = GetCSVBackendResponse(ctx, responseString, query); err != nil {
-					return frame, cursor, err
+					return frame, cursor, hasNextPage, err
 				}
 			}
 		}
 		if query.Type == models.QueryTypeXML || query.Type == models.QueryTypeHTML {
 			if responseString, ok := urlResponseObject.(string); ok {
 				if frame, err = GetXMLBackendResponse(ctx, responseString, query); err != nil {
-					return frame, cursor, err
+					return frame, cursor, hasNextPage, err
 				}
 			}
 		}
@@ -208,17 +212,27 @@ func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, pCtx *backend.
 			Query:                  query,
 			Error:                  err.Error(),
 		}
-		return frame, cursor, err
+		return frame, cursor, hasNextPage, err
 	}
 	if query.PageMode == models.PaginationModeCursor && strings.TrimSpace(query.PageParamCursorFieldExtractionPath) != "" {
 		body, err := json.Marshal(urlResponseObject)
 		if err != nil {
-			return frame, cursor, backend.PluginError(errors.New("error while finding the cursor value"))
+			return frame, cursor, hasNextPage, backend.PluginError(errors.New("error while finding the cursor value"))
 		}
 		cursor, err = jsonframer.GetRootData(string(body), query.PageParamCursorFieldExtractionPath)
 		if err != nil {
-			return frame, cursor, backend.PluginError(errors.New("error while extracting the cursor value"))
+			return frame, cursor, hasNextPage, backend.PluginError(errors.New("error while extracting the cursor value"))
 		}
 	}
-	return frame, cursor, nil
+	if query.PageMode == models.PaginationModeCursor && strings.TrimSpace(query.PageParamHasNextPageFieldExtractionPath) != "" {
+		body, err := json.Marshal(urlResponseObject)
+		if err != nil {
+			return frame, cursor, hasNextPage, backend.PluginError(errors.New("error while finding the has next page value"))
+		}
+		hasNextPage, err = jsonframer.GetRootData(string(body), query.PageParamHasNextPageFieldExtractionPath)
+		if err != nil {
+			return frame, cursor, hasNextPage, backend.PluginError(errors.New("error while extracting the has next page value"))
+		}
+	}
+	return frame, cursor, hasNextPage, nil
 }
