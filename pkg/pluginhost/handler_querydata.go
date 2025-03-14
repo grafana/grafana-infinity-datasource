@@ -27,15 +27,16 @@ func (ds *DataSource) QueryData(ctx context.Context, req *backend.QueryDataReque
 		return response, backend.PluginError(errors.New("invalid infinity client"))
 	}
 
-	var m sync.Mutex
 	hasInfinityRunQueriesInParallel := ds.featureToggles.IsEnabled("infinityRunQueriesInParallel")
-	concurrentQueryCount, err := req.PluginContext.GrafanaConfig.ConcurrentQueryCount()
-	if err != nil {
-		logger.Debug(fmt.Sprintf("Concurrent Query Count read/parse error: %v", err), "infinityRunQueriesInParallel")
-		concurrentQueryCount = 10
-	}
 
 	if hasInfinityRunQueriesInParallel {
+		var m sync.Mutex
+		concurrentQueryCount, err := req.PluginContext.GrafanaConfig.ConcurrentQueryCount()
+		if err != nil {
+			logger.Debug(fmt.Sprintf("Concurrent Query Count read/parse error: %v", err), "infinityRunQueriesInParallel")
+			concurrentQueryCount = 10
+		}
+
 		_ = concurrency.ForEachJob(ctx, len(req.Queries), concurrentQueryCount, func(ctx context.Context, idx int) error {
 			q := req.Queries[idx]
 			query, err := models.LoadQuery(ctx, q, req.PluginContext, ds.client.Settings)
