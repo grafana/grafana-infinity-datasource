@@ -28,7 +28,7 @@ func (ds *DataSource) QueryData(ctx context.Context, req *backend.QueryDataReque
 	}
 
 	var m sync.Mutex
-	hasInfinityRunQueriesInParallel := backend.GrafanaConfigFromContext(ctx).FeatureToggles().IsEnabled("infinityRunQueriesInParallel")
+	hasInfinityRunQueriesInParallel := ds.featureToggles.IsEnabled("infinityRunQueriesInParallel")
 	concurrentQueryCount, err := req.PluginContext.GrafanaConfig.ConcurrentQueryCount()
 	if err != nil {
 		logger.Debug(fmt.Sprintf("Concurrent Query Count read/parse error: %v", err), "infinityRunQueriesInParallel")
