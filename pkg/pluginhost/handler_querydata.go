@@ -27,9 +27,29 @@ func (ds *DataSource) QueryData(ctx context.Context, req *backend.QueryDataReque
 		return response, backend.PluginError(errors.New("invalid infinity client"))
 	}
 
-	hasInfinityRunQueriesInParallel := ds.featureToggles.IsEnabled("infinityRunQueriesInParallel")
+	marshalledQueries := make([]models.Query, len(req.Queries))
 
-	if hasInfinityRunQueriesInParallel {
+	hasTransformationQuery := false
+	for i, q := range req.Queries {
+		query, err := models.LoadQuery(ctx, q, req.PluginContext, ds.client.Settings)
+		if err != nil {
+			span.RecordError(err)
+			logger.Error("error un-marshaling the query", "error", err.Error())
+			// Here we are using error source from the original error and if it does not have any source we are using the plugin error as the default source
+			errorRes := backend.ErrorResponseWithErrorSource(fmt.Errorf("%s: %w", "error un-marshaling the query", err))
+			response.Responses[q.RefID] = errorRes
+		} else {
+			marshalledQueries[i] = query
+			if query.Type == models.QueryTypeTransformations {
+				hasTransformationQuery = true
+			}
+		}
+	}
+
+	hasInfinityRunQueriesInParallel := ds.featureToggles.IsEnabled("infinityRunQueriesInParallel")
+	// if one of the queries is a transformation query we have to execute the queries sequentially
+	// as concurrent query execution breaks the transformation query to be applied correctly
+	if !hasTransformationQuery && hasInfinityRunQueriesInParallel {
 		var m sync.Mutex
 		concurrentQueryCount, err := req.PluginContext.GrafanaConfig.ConcurrentQueryCount()
 		if err != nil {
@@ -71,16 +91,7 @@ func (ds *DataSource) QueryData(ctx context.Context, req *backend.QueryDataReque
 			return nil
 		})
 	} else {
-		for _, q := range req.Queries {
-			query, err := models.LoadQuery(ctx, q, req.PluginContext, ds.client.Settings)
-			if err != nil {
-				span.RecordError(err)
-				logger.Error("error un-marshaling the query", "error", err.Error())
-				// Here we are using error source from the original error and if it does not have any source we are using the plugin error as the default source
-				errorRes := backend.ErrorResponseWithErrorSource(fmt.Errorf("%s: %w", "error un-marshaling the query", err))
-				response.Responses[q.RefID] = errorRes
-				continue
-			}
+		for _, query := range marshalledQueries {
 			if query.Type == models.QueryTypeTransformations {
 				response1, err := infinity.ApplyTransformations(query, response)
 				if err != nil {
@@ -93,11 +104,10 @@ func (ds *DataSource) QueryData(ctx context.Context, req *backend.QueryDataReque
 				response = response1
 				continue
 			}
-			response.Responses[q.RefID] = QueryDataQuery(ctx, req.PluginContext, query, *ds.client, req.Headers)
+			response.Responses[query.RefID] = QueryDataQuery(ctx, req.PluginContext, query, *ds.client, req.Headers)
 		}
 	}
 	return response, nil
-
 }
 
 func QueryDataQuery(ctx context.Context, pluginContext backend.PluginContext, query models.Query, infClient infinity.Client, requestHeaders map[string]string) (response backend.DataResponse) {
