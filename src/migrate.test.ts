@@ -1,16 +1,15 @@
 import { InfinityQuery } from 'types/query.types';
-import { migrateQuery } from './migrate';
+import { setDefaultParserToBackend } from './migrate';
 
-describe('Query Migration', () => {
+describe('setDefaultParserToBackend', () => {
   it('should set parser to backend for new URL source query with empty URL', () => {
     const query = {
       refId: 'A',
       type: 'json',
       source: 'url',
       url: '',
-      url_options: { method: 'GET', data: '' },
     } as InfinityQuery;
-    const result = migrateQuery(query);
+    const result = setDefaultParserToBackend(query);
     expect(result).toEqual({
       ...query,
       parser: 'backend',
@@ -25,9 +24,8 @@ describe('Query Migration', () => {
       type: 'json',
       source: 'url',
       url: 'http://example.com',
-      url_options: { method: 'GET', data: '' },
     } as InfinityQuery;
-    const result = migrateQuery(query);
+    const result = setDefaultParserToBackend(query);
     expect(result).toEqual({
       ...query,
       parser: 'simple',
@@ -39,9 +37,8 @@ describe('Query Migration', () => {
       refId: 'A',
       source: 'url',
       parser: 'backend',
-      url_options: { method: 'GET', data: '' },
     } as InfinityQuery;
-    const result = migrateQuery(query);
+    const result = setDefaultParserToBackend(query);
     expect(result).toEqual(query);
   });
 
@@ -51,9 +48,8 @@ describe('Query Migration', () => {
       type: 'json',
       source: 'url',
       root_selector: 'data',
-      url_options: { method: 'GET', data: '' },
     } as InfinityQuery;
-    const result = migrateQuery(query);
+    const result = setDefaultParserToBackend(query);
     expect(result).toEqual(query);
   });
 
@@ -63,9 +59,8 @@ describe('Query Migration', () => {
       type: 'json',
       source: 'url',
       columns: [{ selector: 'field', text: 'Field', type: 'string' }],
-      url_options: { method: 'GET', data: '' },
     } as InfinityQuery;
-    const result = migrateQuery(query);
+    const result = setDefaultParserToBackend(query);
     expect(result).toEqual(query);
   });
 });
