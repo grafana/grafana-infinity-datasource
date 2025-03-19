@@ -47,6 +47,13 @@ export const setDefaultParserToBackend = (query: InfinityQuery): InfinityQuery =
   if (!isDataQuery(newQuery)) {
     return newQuery;
   }
+
+  // If query has no parser set it means that it was created before 3.0 and user has not touched the parser field.
+  // So we set the parser to simple which is the default parser.
+  if (newQuery?.parser === undefined) {
+    return { ...newQuery, parser: 'simple' };
+  }
+
   // if the parser is already set, we should respect that
   // if the root_selector is already set, overriding the parser type will break the queries with frontend parsing. So we should leave as it is
   // if the query have columns defined, overriding the parser type will break the queries with frontend parsing. So we should leave as it is
