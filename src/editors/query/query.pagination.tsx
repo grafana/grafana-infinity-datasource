@@ -37,7 +37,7 @@ export const PaginationEditor = (props: PaginationEditorProps) => {
             <Select<PaginationType> width={30} value={query.pagination_mode || 'none'} options={paginationTypes} onChange={(e) => onChange({ ...query, pagination_mode: e.value || 'none' })} />
           </EditorField>
           {query.pagination_mode && query.pagination_mode !== 'none' && (
-            <EditorField label="Max pages" tooltip={'Enter a value between 0 and a maximum of 5 pages, or the maximum page limit set in the Grafana configuration for the Infinity plugin.'}>
+            <EditorField label="Max pages" tooltip={'Enter a value up to 5 pages, or the maximum page limit set in the Grafana configuration for the Infinity plugin.'}>
               <Input
                 type={'number'}
                 min={0}
