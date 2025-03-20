@@ -3,10 +3,11 @@ package pluginhost
 import (
 	"context"
 
-	"github.com/grafana/grafana-infinity-datasource/pkg/infinity"
-	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/instancemgmt"
+
+	"github.com/grafana/grafana-infinity-datasource/pkg/infinity"
+	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 )
 
 var (
@@ -17,7 +18,8 @@ var (
 )
 
 type DataSource struct {
-	client *infinity.Client
+	client         *infinity.Client
+	featureToggles backend.FeatureToggles
 }
 
 func NewDataSourceInstance(ctx context.Context, setting backend.DataSourceInstanceSettings) (instancemgmt.Instance, error) {
@@ -31,6 +33,7 @@ func NewDataSourceInstance(ctx context.Context, setting backend.DataSourceInstan
 		return nil, err
 	}
 	return &DataSource{
-		client: client,
+		client:         client,
+		featureToggles: backend.GrafanaConfigFromContext(ctx).FeatureToggles(),
 	}, nil
 }
