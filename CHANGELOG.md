@@ -1,5 +1,11 @@
 # Change Log
 
+## 3.1.0
+
+🚀 **New Feature**: Setting backend pagination max page size via grafana config (ini file)
+🐛 **Bug fix**: Fix default parser for queries created before 3.0.0
+🐛 **Bug fix**: Fix min value for input field in pagination
+
 ## 3.0.0
 
 🚀 **New Feature**: Support for additional HTTP methods (`PATCH`, `PUT` and `DELETE`) via data source config `allowDangerousHTTPMethods`
