@@ -1,5 +1,10 @@
 # Change Log
 
+## 3.2.0
+
+🚀 **New Feature**: Add support for concurrent query execution. It's behind the feature flag "infinityRunQueriesInParallel"
+🐛  **Bug fix**: Remove props mutation in config editor
+
 ## 3.1.0
 
 🚀 **New Feature**: Setting backend pagination max page size via grafana config (ini file)
