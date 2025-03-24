@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import defaultsDeep from 'lodash/defaultsDeep';
+import { defaultsDeep } from 'lodash';
 import { css } from '@emotion/css';
 import { InlineFormLabel, Input, Button, LinkButton, useTheme2, Collapse as CollapseOriginal } from '@grafana/ui';
 import { SecureFieldsEditor } from './../components/config/SecureFieldsEditor';
@@ -13,7 +13,7 @@ import { TLSConfigEditor } from './config/TLSConfigEditor';
 import { URLEditor, URLSettingsEditor } from './config/URL';
 import { ReferenceDataEditor } from './config/ReferenceData';
 import { CustomHealthCheckEditor } from './config/CustomHealthCheckEditor';
-import type { DataSourcePluginOptionsEditorProps } from '@grafana/data';
+import type { DataSourcePluginOptionsEditorProps, DataSourceSettings } from '@grafana/data';
 import type { InfinityOptions } from './../types';
 
 const Collapse = CollapseOriginal as any;
@@ -143,11 +143,15 @@ const config_sections: Array<{ value: string; label: string }> = [
   { value: 'global_queries', label: 'Global queries' },
 ];
 
+const getOptionsWithDefaults = (options: DataSourceSettings<InfinityOptions>) => {
+  return { ...options, jsonData: defaultsDeep(options.jsonData, { global_queries: [] }) };
+};
+
 export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
   const theme = useTheme2();
-  const { options, onOptionsChange } = props;
-  options.jsonData = defaultsDeep(options.jsonData, { global_queries: [] });
-  const [activeTab, setActiveTab] = useState(options.jsonData.auth_method ? 'auth' : 'main');
+  const { onOptionsChange } = props;
+  const optionsWithDefaults = getOptionsWithDefaults(props.options);
+  const [activeTab, setActiveTab] = useState(optionsWithDefaults.jsonData.auth_method ? 'auth' : 'main');
   const styles = {
     root: css`
       display: flex;
@@ -207,23 +211,23 @@ export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<I
         </div>
         <div style={{ flexGrow: 1, paddingInlineStart: '20px', borderLeft: `1px solid ${theme.colors.border.medium}` }}>
           {activeTab === 'main' ? (
-            <MainEditor options={options} onOptionsChange={onOptionsChange} setActiveTab={setActiveTab} />
+            <MainEditor options={optionsWithDefaults} onOptionsChange={onOptionsChange} setActiveTab={setActiveTab} />
           ) : activeTab === 'auth' ? (
-            <AuthEditor options={options} onOptionsChange={onOptionsChange} />
+            <AuthEditor options={optionsWithDefaults} onOptionsChange={onOptionsChange} />
           ) : activeTab === 'headers_and_params' ? (
-            <HeadersEditor options={options} onOptionsChange={onOptionsChange} />
+            <HeadersEditor options={optionsWithDefaults} onOptionsChange={onOptionsChange} />
           ) : activeTab === 'network' ? (
-            <NetworkEditor options={options} onOptionsChange={onOptionsChange} />
+            <NetworkEditor options={optionsWithDefaults} onOptionsChange={onOptionsChange} />
           ) : activeTab === 'security' ? (
-            <SecurityEditor options={options} onOptionsChange={onOptionsChange} />
+            <SecurityEditor options={optionsWithDefaults} onOptionsChange={onOptionsChange} />
           ) : activeTab === 'global_queries' ? (
-            <GlobalQueryEditor options={options} onOptionsChange={onOptionsChange} />
+            <GlobalQueryEditor options={optionsWithDefaults} onOptionsChange={onOptionsChange} />
           ) : activeTab === 'reference_data' ? (
-            <ReferenceDataEditor options={options} onOptionsChange={onOptionsChange} />
+            <ReferenceDataEditor options={optionsWithDefaults} onOptionsChange={onOptionsChange} />
           ) : activeTab === 'health_check' ? (
-            <CustomHealthCheckEditor options={options} onOptionsChange={onOptionsChange} />
+            <CustomHealthCheckEditor options={optionsWithDefaults} onOptionsChange={onOptionsChange} />
           ) : (
-            <AuthEditor options={options} onOptionsChange={onOptionsChange} />
+            <AuthEditor options={optionsWithDefaults} onOptionsChange={onOptionsChange} />
           )}
         </div>
       </div>
