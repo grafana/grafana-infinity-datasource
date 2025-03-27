@@ -132,6 +132,9 @@ export type PaginationCursor = {
   pagination_param_cursor_field_name?: string;
   pagination_param_cursor_field_type?: PaginationParamType;
   pagination_param_cursor_extraction_path?: string;
+  pagination_param_cursor_initial_value?: string;
+  pagination_param_no_next_page_value?: string;
+  pagination_param_has_next_page_extraction_path?: string;
 } & PaginationBase<'cursor'>;
 export type PaginationList = {
   pagination_param_list_field_name?: string;
