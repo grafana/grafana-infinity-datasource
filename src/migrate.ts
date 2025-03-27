@@ -1,4 +1,4 @@
-import { isDataQuery } from './app/utils';
+import { isDataQuery, isInfinityQueryWithUrlSource } from './app/utils';
 import type { InfinityQuery } from './types';
 
 /**
@@ -47,11 +47,23 @@ export const setDefaultParserToBackend = (query: InfinityQuery): InfinityQuery =
   if (!isDataQuery(newQuery)) {
     return newQuery;
   }
+
   // if the parser is already set, we should respect that
   // if the root_selector is already set, overriding the parser type will break the queries with frontend parsing. So we should leave as it is
   // if the query have columns defined, overriding the parser type will break the queries with frontend parsing. So we should leave as it is
   if (newQuery?.parser || newQuery?.root_selector || newQuery?.columns?.length > 0) {
     return newQuery;
   }
+
+  if (newQuery?.parser === undefined) {
+    // If query has no parser and it is a URL source query without a url, then this query is new and we want to use the backend parser.
+    if (isInfinityQueryWithUrlSource(newQuery) && newQuery.url === '') {
+      return { ...newQuery, parser: 'backend' };
+    }
+    // Otherwise use the simple parser. This is to ensure that old queries created before 3.0 continue to work, as simple parser
+    // was the default parser and if users have not touched the parser field it was set to simple.
+    return { ...newQuery, parser: 'simple' };
+  }
+
   return { ...newQuery, parser: 'backend' };
 };

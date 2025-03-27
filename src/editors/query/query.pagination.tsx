@@ -37,10 +37,10 @@ export const PaginationEditor = (props: PaginationEditorProps) => {
             <Select<PaginationType> width={30} value={query.pagination_mode || 'none'} options={paginationTypes} onChange={(e) => onChange({ ...query, pagination_mode: e.value || 'none' })} />
           </EditorField>
           {query.pagination_mode && query.pagination_mode !== 'none' && (
-            <EditorField label="Max pages" tooltip={'Enter a value between 1 and a maximum of 5 pages, or the maximum page limit set in the Grafana configuration for the Infinity plugin.'}>
+            <EditorField label="Max pages" tooltip={'Enter a value up to 5 pages, or the maximum page limit set in the Grafana configuration for the Infinity plugin.'}>
               <Input
                 type={'number'}
-                min={1}
+                min={0}
                 width={30}
                 value={query.pagination_max_pages}
                 onChange={(e) => onChange({ ...query, pagination_max_pages: e.currentTarget.valueAsNumber || 1 })}
@@ -73,7 +73,7 @@ export const PaginationEditor = (props: PaginationEditorProps) => {
                     width={20}
                     type="number"
                     value={query.pagination_param_size_value}
-                    min={1}
+                    min={0}
                     max={2000}
                     onChange={(e) => onChange({ ...query, pagination_param_size_value: e.currentTarget.valueAsNumber || 0 })}
                   ></Input>
@@ -103,7 +103,7 @@ export const PaginationEditor = (props: PaginationEditorProps) => {
                       width={20}
                       type="number"
                       value={query.pagination_param_offset_value}
-                      min={1}
+                      min={0}
                       max={2000}
                       onChange={(e) => onChange({ ...query, pagination_param_offset_value: e.currentTarget.valueAsNumber || 0 })}
                     ></Input>
@@ -134,7 +134,7 @@ export const PaginationEditor = (props: PaginationEditorProps) => {
                       width={20}
                       type="number"
                       value={query.pagination_param_page_value}
-                      min={1}
+                      min={0}
                       onChange={(e) => onChange({ ...query, pagination_param_page_value: e.currentTarget.valueAsNumber || 1 })}
                     ></Input>
                   </Stack>
