@@ -52,6 +52,7 @@
   "resolutions": {
     "uplot": "1.6.31",
     "dompurify": "3.2.4",
+    "prismjs": "1.30.0",
     "cross-spawn": "7.0.6"
   },
   "dependencies": {
