@@ -1,5 +1,5 @@
 import { LoadingState, toDataFrame, DataFrame, DataQueryRequest, DataQueryResponse, ScopedVars, TimeRange } from '@grafana/data';
-import { DataSourceWithBackend, HealthStatus } from '@grafana/runtime';
+import { DataSourceWithBackend, HealthCheckError, HealthStatus } from '@grafana/runtime';
 import { flatten, sample } from 'lodash';
 import { Observable } from 'rxjs';
 import { applyGroq } from './app/GROQProvider';
@@ -120,7 +120,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
       })
       .catch((ex) => {
         reportHealthCheck({ status: HealthStatus.Error, message: ex }, this.instanceSettings, this.meta);
-        return Promise.resolve({ status: 'error', message: ex.message });
+        return Promise.reject({ status: 'error', message: ex.message, error: new HealthCheckError(ex.message, {}) });
       });
   }
   getQueryDisplayText(query: InfinityQuery) {
