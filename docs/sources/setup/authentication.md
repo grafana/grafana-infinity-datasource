@@ -35,7 +35,7 @@ Infinity data source supports the following authentication methods:
 - OAuth 2.0 client credentials
 - OAuth 2.0 JWT authentication
 - Azure authentication
-- Azure blob storage key
+- Azure blob
 - AWS authentication
 
 ## No authentication
@@ -86,7 +86,7 @@ OAuth 2.0 client credentials require the following parameters:
 
 | Key                 | Description                                                                                       |
 | ------------------- | ------------------------------------------------------------------------------------------------- |
-| **Client ID**       | ClientID is the application's ID.                                                                  |
+| **Client ID**       | ClientID is the application's ID.                                                                 |
 | **Client Secret**   | ClientSecret is the application's secret.                                                         |
 | **Token URL**       | TokenURL is the resource server's token endpoint URL. This is a constant specific to each server. |
 | **Scopes**          | Scope specifies optional requested permissions.                                                   |
@@ -109,12 +109,18 @@ OAuth 2.0 JWT require the following parameters
 
 If you want to authenticate your API endpoints via Microsoft Azure authentication, refer to [Azure authentication](/docs/plugins/yesoreyeram-infinity-datasource/latest/examples/azure/).
 
-## Azure Blob Storage key
+## Azure Blob
 
-To retrieve content from azure blob storage, you need to provide the following information:
+To retrieve content from Azure blob storage, you need to provide the following information:
 
-- Azure storage account name.
-- Azure storage account key (either primary key or secondary key).
+| Key                      | Description                                                                              |
+| ------------------------ | ---------------------------------------------------------------------------------------- |
+| **Azure Cloud**          | Optional.                                                                                |
+|                          | Azure Cloud / `https://<your-storage-account-name>.blob.core.windows.net/`               |
+|                          | Azure US Government / `https://<your-storage-account-name>.blob.core.usgovcloudapi.net/` |
+|                          | Azure China / `https://<your-storage-account-name>.blob.core.chinacloudapi.cn/`          |
+| **Storage account name** | Required.                                                                                |
+| **Storage account key**  | Required. Provide either primary key or secondary key                                    |
 
 ## AWS
 

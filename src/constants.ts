@@ -1,5 +1,5 @@
 import type { SelectableValue } from '@grafana/data';
-import type { InfinityQuery, InfinityQueryType, InfinityQueryFormat, InfinityColumnFormat, ScrapQuerySources, VariableQueryType } from './types';
+import type { InfinityQuery, InfinityQueryType, InfinityQueryFormat, InfinityColumnFormat, ScrapQuerySources, VariableQueryType, AzureBlobCloudType } from './types';
 
 export const DefaultInfinityQuery: InfinityQuery = {
   refId: '',
@@ -124,3 +124,11 @@ export const AWSRegions: Array<SelectableValue<string>> = [
   'us-west-1',
   'us-west-2',
 ].map((value) => ({ value, label: value }));
+
+export const AzureBlobCloudTypeDefault: AzureBlobCloudType = 'AzureCloud';
+
+export const AzureBlobRegions: Array<SelectableValue<AzureBlobCloudType>> = [
+  { value: 'AzureCloud', label: 'Azure' },
+  { value: 'AzureUSGovernment', label: 'Azure US Government' },
+  { value: 'AzureChinaCloud', label: 'Azure China' },
+];
