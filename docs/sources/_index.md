@@ -63,7 +63,8 @@ A universal data source plugin for pulling data from various systems into Grafan
 
 <div style="margin-bottom:30px"></div>
 
-<section id="infinity-data-source-advantages">
+{{< shared id="infinity-data-source-advantages" >}}
+
 The Infinity data source supports the following key features:
 
 - Bring data from multiple sources into Grafana
@@ -81,7 +82,8 @@ The Infinity data source supports the following key features:
 - Alerting, recorded queries, shared dashboards, query caching
 - Utility variable functions
 - Grafana node graph panel, annotations, and so on
-</section>
+
+{{< /shared >}}
 
 ## 🎯 Supported data formats
 
