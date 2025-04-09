@@ -141,33 +141,64 @@ export const PaginationEditor = (props: PaginationEditorProps) => {
                 </EditorField>
               )}
               {query.pagination_mode === 'cursor' && (
-                <EditorField label="Cursor field">
-                  <Stack>
-                    <InlineLabel width={12}>Field name</InlineLabel>
-                    <Input
-                      width={30}
-                      value={query.pagination_param_cursor_field_name || ''}
-                      onChange={(e) => onChange({ ...query, pagination_param_cursor_field_name: e.currentTarget.value })}
-                      placeholder="cursor"
-                    />
-                    <InlineLabel width={12}>Field type</InlineLabel>
-                    <Select<PaginationParamType>
-                      width={20}
-                      options={paginationParamTypes}
-                      value={query.pagination_param_cursor_field_type || 'query'}
-                      onChange={(e) => onChange({ ...query, pagination_param_cursor_field_type: e.value || 'query' })}
-                    />
-                    <InlineLabel width={20} tooltip="selector to extract the cursor">
-                      Extraction path
-                    </InlineLabel>
-                    <Input
-                      width={20}
-                      value={query.pagination_param_cursor_extraction_path}
-                      onChange={(e) => onChange({ ...query, pagination_param_cursor_extraction_path: e.currentTarget.value || '' })}
-                      placeholder="selector to extract the cursor"
-                    ></Input>
-                  </Stack>
-                </EditorField>
+                <>
+                  <EditorField label="Cursor field">
+                    <Stack>
+                      <InlineLabel width={12}>Field name</InlineLabel>
+                      <Input
+                        width={30}
+                        value={query.pagination_param_cursor_field_name || ''}
+                        onChange={(e) => onChange({ ...query, pagination_param_cursor_field_name: e.currentTarget.value })}
+                        placeholder="cursor"
+                      />
+                      <InlineLabel width={12}>Initial value</InlineLabel>
+                      <Input
+                        width={20}
+                        value={query.pagination_param_cursor_initial_value || 'null'}
+                        onChange={(e) => onChange({ ...query, pagination_param_cursor_initial_value: e.currentTarget.value })}
+                        placeholder="cursor initial value"
+                      />
+                      <InlineLabel width={12}>Field type</InlineLabel>
+                      <Select<PaginationParamType>
+                        width={20}
+                        options={paginationParamTypes}
+                        value={query.pagination_param_cursor_field_type || 'query'}
+                        onChange={(e) => onChange({ ...query, pagination_param_cursor_field_type: e.value || 'query' })}
+                      />
+                      <InlineLabel width={20} tooltip="selector to extract the cursor">
+                        Extraction path
+                      </InlineLabel>
+                      <Input
+                        width={30}
+                        value={query.pagination_param_cursor_extraction_path}
+                        onChange={(e) => onChange({ ...query, pagination_param_cursor_extraction_path: e.currentTarget.value || '' })}
+                        placeholder="selector to extract the cursor"
+                      ></Input>
+                    </Stack>
+                  </EditorField>
+                  <EditorField label="Has next page field">
+                    <Stack>
+                      <InlineLabel width={25} tooltip="value that will be matched with received have next page field to stop iterating">
+                        No next page match value
+                      </InlineLabel>
+                      <Input
+                        width={20}
+                        value={query.pagination_param_no_next_page_value || 'false'}
+                        onChange={(e) => onChange({ ...query, pagination_param_no_next_page_value: e.currentTarget.value })}
+                        placeholder="No next page value"
+                      />
+                      <InlineLabel width={20} tooltip="selector to extract the have next page">
+                        Extraction path
+                      </InlineLabel>
+                      <Input
+                        width={30}
+                        value={query.pagination_param_has_next_page_extraction_path}
+                        onChange={(e) => onChange({ ...query, pagination_param_has_next_page_extraction_path: e.currentTarget.value || '' })}
+                        placeholder="selector to extract the has next page"
+                      ></Input>
+                    </Stack>
+                  </EditorField>
+                </>
               )}
             </Stack>
           </>
