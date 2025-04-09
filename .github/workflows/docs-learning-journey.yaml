@@ -1,0 +1,43 @@
+name: Docs Learning Journey
+
+on:
+  pull_request:
+    paths:
+      - 'docs/learning-journeys/**'
+
+jobs:
+  test:
+    name: Test learning journey docs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test learning journey
+        run: |
+          echo "Test learning journey";
+          exit 0;
+      - name: Get secrets from Vault
+        id: get-secrets
+        uses: grafana/shared-workflows/actions/get-vault-secrets@main
+        with:
+          vault_instance: ops
+          common_secrets: |
+            GITHUB_APP_ID=plugins-platform-bot-app:app-id
+            GITHUB_APP_PRIVATE_KEY=plugins-platform-bot-app:private-key
+      - name: Generate GitHub token
+        id: generate-github-token
+        uses: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547 # v1.12.0
+        with:
+          app-id: ${{ env.GITHUB_APP_ID }}
+          private-key: ${{ env.GITHUB_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+      - name: Checkout website repo
+        uses: actions/checkout@v4
+        with:
+          token: x-access-token:${{ steps.generate-github-token.outputs.token }}
+          repository: grafana/website
+          path: website
+      - name: List repo contents
+        run: |
+          pwd;
+          ls -lha;
+          ls -lha ./website;
+          exit 0;
