@@ -45,14 +45,13 @@ For more information, refer to [Configuring URL](/docs/plugins/yesoreyeram-infin
 
 ## Health check
 
-<section id="health-check">
+{{< shared id="health-check" >}}
 The settings for the Infinity data source on the configuration page don't automatically validate the URL. To ensure that your settings, including authentication and API keys, are valid, you need to enable the custom health check in the **Health check** section of the **Configuration** page.
 
 {{< admonition type="note" >}}
 The custom health check supports only HTTP GET methods. It verifies the response status code, specifically looking for an HTTP 200 status, but doesn't check the content of the response.
 {{< /admonition >}}
-
-</section>
+{{< /shared >}}
 
 ### Troubleshooting
 
