@@ -1,7 +1,7 @@
 import { CodeEditor, CodeEditorSuggestionItem, CodeEditorSuggestionItemKind, Icon } from '@grafana/ui';
 import React from 'react';
-import { EditorField } from './../../components/extended/EditorField';
-import type { InfinityQuery } from './../../types';
+import { EditorField } from '@/components/extended/EditorField';
+import type { InfinityQuery } from '@/types';
 declare const monaco: any;
 
 const UQLTips: string[] = [

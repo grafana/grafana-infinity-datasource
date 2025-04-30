@@ -9,7 +9,7 @@ import type {
   InfinityQueryWithURLSource,
   InfinityXMLQuery,
   InfinityQueryType,
-} from './../types';
+} from '@/types';
 
 export const isTableData = (res: any): res is TableData => res && res.columns;
 export const isDataFrame = (res: any): res is DataFrame => res && res.fields;

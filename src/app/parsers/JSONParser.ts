@@ -1,8 +1,8 @@
 import { JSONPath } from 'jsonpath-plus';
 import { flatten, forEach, get } from 'lodash';
-import { InfinityParser } from './InfinityParser';
-import { columnarToTable, getColumnsFromObjectArray, getValue } from './utils';
-import type { GrafanaTableRow, InfinityColumn, InfinityGraphQLQuery, InfinityJSONQuery } from './../../types';
+import { InfinityParser } from '@/app/parsers/InfinityParser';
+import { columnarToTable, getColumnsFromObjectArray, getValue } from '@/app/parsers/utils';
+import type { GrafanaTableRow, InfinityColumn, InfinityGraphQLQuery, InfinityJSONQuery } from '@/types';
 
 export class JSONParser extends InfinityParser<InfinityJSONQuery | InfinityGraphQLQuery> {
   constructor(JSONResponse: object, target: InfinityJSONQuery | InfinityGraphQLQuery, endTime?: Date) {

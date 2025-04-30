@@ -1,7 +1,7 @@
 import { CoreApp, DataSourcePluginMeta, TestDataSourceResponse } from '@grafana/data';
 import { reportInteraction, config } from '@grafana/runtime';
-import { isBackendQuery } from './../app/utils';
-import { InfinityInstanceSettings, InfinityQuery } from './../types';
+import { isBackendQuery } from '@/app/utils';
+import { InfinityInstanceSettings, InfinityQuery } from '@/types';
 
 type Report_Action = 'grafana_infinity_query_executed' | 'grafana_infinity_health_check_executed';
 

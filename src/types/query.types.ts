@@ -1,4 +1,4 @@
-import { FilterOperator } from './../constants';
+import { FilterOperator } from '@/constants';
 import type { SelectableValue } from '@grafana/data';
 import type { DataQuery } from '@grafana/schema';
 

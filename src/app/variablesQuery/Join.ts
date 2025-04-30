@@ -1,4 +1,4 @@
-import { replaceTokenFromVariable } from './utils';
+import { replaceTokenFromVariable } from '@/app/variablesQuery/utils';
 import type { SelectableValue } from '@grafana/data';
 
 export const JoinVariable = (query: string): Array<SelectableValue<string>> => {

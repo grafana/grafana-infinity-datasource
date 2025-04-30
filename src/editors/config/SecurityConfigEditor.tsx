@@ -1,7 +1,7 @@
 import React from 'react';
 import { InlineLabel, RadioButtonGroup } from '@grafana/ui';
 import { DataSourcePluginOptionsEditorProps } from '@grafana/data';
-import type { InfinityOptions, UnsecureQueryHandling } from './../../types';
+import type { InfinityOptions, UnsecureQueryHandling } from '@/types';
 
 type SecurityConfigEditorProps = DataSourcePluginOptionsEditorProps<InfinityOptions>;
 

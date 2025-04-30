@@ -1,5 +1,5 @@
-import { InfinityQuery } from 'types/query.types';
-import { setDefaultParserToBackend } from './migrate';
+import { InfinityQuery } from '@/types';
+import { setDefaultParserToBackend } from '@/migrate';
 
 describe('setDefaultParserToBackend', () => {
   it('should set parser to backend for new URL source query with empty URL', () => {

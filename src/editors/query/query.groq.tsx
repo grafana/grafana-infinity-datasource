@@ -1,7 +1,7 @@
 import { CodeEditor } from '@grafana/ui';
 import React from 'react';
-import { EditorField } from './../../components/extended/EditorField';
-import type { InfinityQuery } from './../../types';
+import { EditorField } from '@/components/extended/EditorField';
+import type { InfinityQuery } from '@/types';
 
 export const GROQEditor = (props: { query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void }) => {
   const { query, onChange, onRunQuery } = props;

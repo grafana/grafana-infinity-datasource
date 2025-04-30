@@ -1,4 +1,4 @@
-import { XMLParser } from './XMLParser';
+import { XMLParser } from '@/app/parsers/XMLParser';
 
 const XMLResults1 = new XMLParser('', {
   refId: '',

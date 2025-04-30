@@ -1,7 +1,7 @@
 import { Checkbox, InlineFormLabel, Input } from '@grafana/ui';
 import React from 'react';
-import { EditorField } from './extended/EditorField';
-import type { InfinityCSVQueryOptions, InfinityQuery } from './../types';
+import { EditorField } from '@/components/extended/EditorField';
+import type { InfinityCSVQueryOptions, InfinityQuery } from '@/types';
 
 export const CSVOptionsEditor = (props: { query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void }) => {
   const LABEL_WIDTH = 10;

@@ -1,6 +1,6 @@
-import { interpolateQuery } from './../interpolate';
-import { migrateQuery } from './../migrate';
-import type { GlobalInfinityQuery, InfinityInstanceSettings, InfinityOptions, InfinityQuery } from './../types';
+import { interpolateQuery } from '@/interpolate';
+import { migrateQuery } from '@/migrate';
+import type { GlobalInfinityQuery, InfinityInstanceSettings, InfinityOptions, InfinityQuery } from '@/types';
 import type { DataQueryRequest, DataSourceInstanceSettings, ScopedVars } from '@grafana/data';
 
 export const overrideWithGlobalQuery = (t: InfinityQuery, instanceSettings: DataSourceInstanceSettings<InfinityOptions>): InfinityQuery => {

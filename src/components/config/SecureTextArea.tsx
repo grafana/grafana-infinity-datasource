@@ -32,7 +32,7 @@ export const SecureTextArea = ({
         </div>
       ) : (
         <div className="gf-form gf-form--grow">
-          <TextArea rows={rows || 5} className="gf-form-input gf-form-textarea" onChange={onChange} onBlur={onBlur} placeholder={placeholder} />
+          <TextArea rows={rows || 5} onChange={onChange} onBlur={onBlur} placeholder={placeholder} />
         </div>
       )}
     </div>

@@ -1,4 +1,4 @@
-import type { InfinityQuery } from './query.types';
+import type { InfinityQuery } from '@/types';
 
 //#region Variable Query
 export type VariableTokenLegacy = 'Collection' | 'CollectionLookup' | 'Random' | 'Join' | 'UnixTimeStamp';

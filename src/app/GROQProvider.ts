@@ -1,6 +1,6 @@
 import { evaluate, parse } from 'groq-js';
-import { sendAsDataFrame } from './UQLProvider';
-import type { InfinityQueryFormat } from './../types';
+import { sendAsDataFrame } from '@/app/UQLProvider';
+import type { InfinityQueryFormat } from '@/types';
 import type { DataFrame } from '@grafana/data';
 
 export const getGroqResults = async (query = '*', data: unknown): Promise<any> => {

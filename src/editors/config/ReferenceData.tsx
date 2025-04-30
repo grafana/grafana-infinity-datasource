@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Card, InlineFormLabel, Input, TextArea } from '@grafana/ui';
-import type { InfinityOptions, InfinityReferenceData } from '../../types';
+import type { InfinityOptions, InfinityReferenceData } from '@/types';
 import type { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 
 export const ReferenceDataEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
@@ -51,19 +51,19 @@ export const ReferenceDataEditor = (props: DataSourcePluginOptionsEditorProps<In
           </Card>
         );
       })}
-      <div className="gf-form">
-        <Button
-          variant="secondary"
-          size="md"
-          icon="plus"
-          onClick={(e) => {
-            addReferenceData();
-            e.preventDefault();
-          }}
-        >
-          Add reference data
-        </Button>
-      </div>
+      <Button
+        variant={'secondary'}
+        size={'md'}
+        icon={'plus'}
+        type={'button'}
+        style={{ marginTop: '10px' }}
+        onClick={(e) => {
+          addReferenceData();
+          e.preventDefault();
+        }}
+      >
+        Add Reference Data
+      </Button>
     </>
   );
 };

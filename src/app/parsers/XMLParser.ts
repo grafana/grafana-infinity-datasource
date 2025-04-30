@@ -1,8 +1,8 @@
 import { forEach, get } from 'lodash';
 import { parseString } from 'xml2js';
-import { InfinityParser } from './InfinityParser';
-import { getValue } from './utils';
-import type { GrafanaTableRow, InfinityColumn, InfinityXMLQuery } from './../../types';
+import { InfinityParser } from '@/app/parsers/InfinityParser';
+import { getValue } from '@/app/parsers/utils';
+import type { GrafanaTableRow, InfinityColumn, InfinityXMLQuery } from '@/types';
 
 export class XMLParser extends InfinityParser<InfinityXMLQuery> {
   constructor(XMLResponse: any | string, target: InfinityXMLQuery, endTime?: Date) {

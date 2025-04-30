@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { InlineFormLabel, Select } from '@grafana/ui';
-import { Datasource } from './../../../datasource';
-import { isDataQuery } from './../../../app/utils';
-import { EditorField } from './../../../components/extended/EditorField';
-import type { InfinityQuery } from './../../../types';
+import { Datasource } from '@/datasource';
+import { isDataQuery } from '@/app/utils';
+import { EditorField } from '@/components/extended/EditorField';
+import type { InfinityQuery } from '@/types';
 
 export const ReferenceNameEditor = ({
   query,

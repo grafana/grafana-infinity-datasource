@@ -1,7 +1,7 @@
 import { InlineLabel, Input, InlineSwitch, Stack, Badge } from '@grafana/ui';
 import React, { useState } from 'react';
-import { IGNORE_URL } from './../../constants';
-import type { InfinityOptions } from './../../types';
+import { IGNORE_URL } from '@/constants';
+import type { InfinityOptions } from '@/types';
 import type { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 
 export const URLEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {

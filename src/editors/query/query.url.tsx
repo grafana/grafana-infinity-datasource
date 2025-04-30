@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { InlineFormLabel, CodeEditor, Select, Input, RadioButtonGroup, Icon, Stack } from '@grafana/ui';
-import { EditorRow } from './../../components/extended/EditorRow';
-import { EditorField } from './../../components/extended/EditorField';
-import { isDataQuery } from './../../app/utils';
-import { KeyValueEditor } from './../../components/KeyValuePairEditor';
-import type { InfinityQuery, InfinityQueryType, InfinityQueryWithURLSource, InfinityURLMethod, InfinityURLOptions, QueryBodyContentType, QueryBodyType } from './../../types';
+import { EditorRow } from '@/components/extended/EditorRow';
+import { EditorField } from '@/components/extended/EditorField';
+import { isDataQuery } from '@/app/utils';
+import { KeyValueEditor } from '@/components/KeyValuePairEditor';
+import type { InfinityQuery, InfinityQueryType, InfinityQueryWithURLSource, InfinityURLMethod, InfinityURLOptions, QueryBodyContentType, QueryBodyType } from '@/types';
 import type { SelectableValue } from '@grafana/data';
 import { usePrevious } from 'react-use';
 

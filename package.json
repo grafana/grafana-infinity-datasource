@@ -50,6 +50,7 @@
     "watch": "yarn dev"
   },
   "resolutions": {
+    "@babel/helpers": "7.27.0",
     "uplot": "1.6.31",
     "dompurify": "3.2.4",
     "prismjs": "1.30.0",
