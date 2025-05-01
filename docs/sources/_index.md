@@ -63,21 +63,27 @@ A universal data source plugin for pulling data from various systems into Grafan
 
 <div style="margin-bottom:30px"></div>
 
-- Get data from multiple sources into Grafana
+{{< shared id="infinity-data-source-advantages" >}}
+
+The Infinity data source supports the following key features:
+
+- Bring data from multiple sources into Grafana
 - Flexible data manipulation with UQL, JSONata, GROQ
-- Supports various data formats such as JSON, CSV
-- Support various authentication
+- Various data formats such as JSON, CSV
+- Various authentication methods
   - Basic authentication
   - Bearer token authentication
-  - API Key authentication
+  - API key authentication
   - OAuth passthrough
   - OAuth2 client credentials
   - OAuth2 JWT authentication
   - AWS/Azure/GCP authentication
   - Digest authentication
-- Supports alerting, recorded queries, shared dashboards, query caching
+- Alerting, recorded queries, shared dashboards, query caching
 - Utility variable functions
-- Supports for Grafana node graph panel, annotations etc
+- Grafana node graph panel, annotations, and so on
+
+{{< /shared >}}
 
 ## 🎯 Supported data formats
 

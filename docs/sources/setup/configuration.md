@@ -45,9 +45,17 @@ For more information, refer to [Configuring URL](/docs/plugins/yesoreyeram-infin
 
 ## Health check
 
-When you save the Infinity datasource settings in the config page, by default this will just save the settings and will not perform any validation against any URLs. If you want to validate the settings such as authentication or API keys, then you must enable the custom health check in the health check section of the configuration page.
+{{< shared id="health-check" >}}
+The settings for the Infinity data source on the configuration page don't automatically validate the URL. To ensure that your settings, including authentication and API keys, are valid, you need to enable the custom health check in the **Health check** section of the **Configuration** page.
 
-> Currently only HTTP GET methods are supported in the custom health check. Also custom health checks only validate the response status code HTTP 200 and doesn't perform any validation against the response content.
+{{< admonition type="note" >}}
+The custom health check supports only HTTP GET methods. It verifies the response status code, specifically looking for an HTTP 200 status, but doesn't check the content of the response.
+{{< /admonition >}}
+{{< /shared >}}
+
+### Troubleshooting
+
+If you receive a `Health check failed` message after you click **Save & Test**, check the URL to ensure it's valid and you entered it correctly.
 
 ## Proxy outgoing requests
 
