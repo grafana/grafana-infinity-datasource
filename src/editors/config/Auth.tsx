@@ -4,6 +4,7 @@ import { Icon, InlineFormLabel, LegacyForms, RadioButtonGroup, Select, useTheme2
 import React, { useState } from 'react';
 import { AllowedHostsEditor } from './AllowedHosts';
 import { OAuthInputsEditor } from './OAuthInput';
+import { AzureBlobAuthEditor } from './Auth.AzureBlob';
 import { OthersAuthentication } from './OtherAuthProviders';
 import { AWSRegions } from './../../constants';
 import type { APIKeyType, AuthType, InfinityOptions, InfinitySecureOptions } from './../../types';
@@ -94,9 +95,6 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
   };
   const onAwsServiceChange = (service: string) => {
     onOptionsChange({ ...options, jsonData: { ...options.jsonData, aws: { ...options.jsonData?.aws, service } } });
-  };
-  const onAzureBlogAccountChange = (azureBlobAccountName: string) => {
-    onOptionsChange({ ...options, jsonData: { ...options.jsonData, azureBlobAccountName } });
   };
   const onResetSecret = (key: keyof InfinitySecureOptions) => {
     onOptionsChange({
@@ -276,35 +274,7 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
               </>
             )}
             {authType === 'oauth2' && <OAuthInputsEditor {...props} />}
-            {authType === 'azureBlob' && (
-              <>
-                <div className="gf-form">
-                  <FormField
-                    label="Storage account name"
-                    placeholder="storage account name"
-                    tooltip={'storage account name'}
-                    labelWidth={12}
-                    value={props.options.jsonData?.azureBlobAccountName || ''}
-                    onChange={(e) => onAzureBlogAccountChange(e.currentTarget.value)}
-                  ></FormField>
-                </div>
-                <div className="gf-form">
-                  <SecretFormField
-                    labelWidth={12}
-                    inputWidth={12}
-                    required
-                    value={secureJsonData.azureBlobAccountKey || ''}
-                    isConfigured={(secureJsonFields && secureJsonFields.azureBlobAccountKey) as boolean}
-                    onReset={() => onResetSecret('azureBlobAccountKey')}
-                    onChange={onUpdateDatasourceSecureJsonDataOption(props, 'azureBlobAccountKey')}
-                    label="Storage account key"
-                    aria-label="azure blob storage account key"
-                    placeholder="azure blob storage account key"
-                    tooltip="azure blob storage account key"
-                  />
-                </div>
-              </>
-            )}
+            {authType === 'azureBlob' && <AzureBlobAuthEditor {...props} onResetSecret={onResetSecret} />}
           </div>
         </>
       )}

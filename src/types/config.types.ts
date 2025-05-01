@@ -28,6 +28,7 @@ export type AWSAuthProps = {
 export type InfinityReferenceData = { name: string; data: string };
 export type ProxyType = 'none' | 'env' | 'url';
 export type UnsecureQueryHandling = 'warn' | 'allow' | 'deny';
+export type AzureBlobCloudType = 'AzureCloud' | 'AzureUSGovernment' | 'AzureChinaCloud';
 export interface InfinityOptions extends DataSourceJsonData {
   auth_method?: AuthType;
   apiKeyKey?: string;
@@ -47,6 +48,7 @@ export interface InfinityOptions extends DataSourceJsonData {
   refData?: InfinityReferenceData[];
   customHealthCheckEnabled?: boolean;
   customHealthCheckUrl?: string;
+  azureBlobCloudType?: AzureBlobCloudType;
   azureBlobAccountUrl?: string;
   azureBlobAccountName?: string;
   unsecuredQueryHandling?: UnsecureQueryHandling;
