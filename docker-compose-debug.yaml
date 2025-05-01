@@ -9,6 +9,22 @@ services:
     image: vimagick/microsocks
     ports:
       - 1080:1080
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus
+    command:
+      - --web.enable-remote-write-receiver
+      - --enable-feature=native-histograms
+      - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./docker/blocks/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+  node-exporter:
+    container_name: node_exporter
+    image: prom/node-exporter
+    ports:
+      - "9100:9100"
   loki:
     image: grafana/loki:main
     command: -config.file=/etc/loki/loki-config.yaml
@@ -52,8 +68,6 @@ services:
       - GF_LOG_LEVEL=debug
       - GF_AUTH_ANONYMOUS_ENABLED=true
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
-      - GF_SECURITY_ADMIN_USER=infinity
-      - GF_SECURITY_ADMIN_PASSWORD=infinity
       - GF_SECURITY_ANGULAR_SUPPORT_ENABLED=false
       - GF_SECURITY_CSRF_ALWAYS_CHECK=true
       - GF_ENTERPRISE_LICENSE_TEXT=$GF_ENTERPRISE_LICENSE_TEXT

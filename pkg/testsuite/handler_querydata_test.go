@@ -318,6 +318,8 @@ func TestAuthentication(t *testing.T) {
 		})
 	})
 	t.Run("digest auth", func(t *testing.T) {
+		t.Skip() // skipping due to transient errors in httpbin.org.
+		//TODO: Replace httpbin with local digeset auth server
 		t.Run("should be ok with correct credentials", func(t *testing.T) {
 			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
 				AuthenticationMethod: models.AuthenticationMethodDigestAuth,
