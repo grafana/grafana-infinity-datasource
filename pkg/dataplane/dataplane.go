@@ -92,7 +92,7 @@ func CanBeNumericLong(frame *data.Frame) bool {
 	if err != nil {
 		return false
 	}
-	if rowLen == 1 && ftCount.numericFields > 0 && ftCount.stringFields == 0 {
+	if rowLen == 1 && ftCount.numericFields > 0 {
 		return true
 	}
 	if rowLen > 1 && ftCount.numericFields > 0 && ftCount.stringFields > 0 {

@@ -60,6 +60,10 @@ datasources:
       customHealthCheckUrl: 'https://postman-echo.com/basic-auth'
     secureJsonData:
       basicAuthPassword: 'password'
+  - name: Prometheus
+    uid: prometheus
+    type: prometheus
+    url: http://prometheus:9090
   - name: Loki
     uid: loki
     type: loki
