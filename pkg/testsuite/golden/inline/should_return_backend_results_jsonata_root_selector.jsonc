@@ -1,7 +1,7 @@
 //  🌟 This was machine generated.  Do not edit. 🌟
 //  
 //  Frame[0] {
-//      "type": "numeric-wide",
+//      "type": "numeric-long",
 //      "typeVersion": [
 //          0,
 //          1
@@ -81,7 +81,7 @@
       "schema": {
         "name": "q1",
         "meta": {
-          "type": "numeric-wide",
+          "type": "numeric-long",
           "typeVersion": [
             0,
             1
