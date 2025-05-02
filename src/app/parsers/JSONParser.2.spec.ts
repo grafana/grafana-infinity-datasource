@@ -1,5 +1,5 @@
-import { JSONParser } from './JSONParser';
-import type { InfinityQuery } from './../../types';
+import { JSONParser } from '@/app/parsers/JSONParser';
+import type { InfinityQuery } from '@/types';
 
 const defaultTarget: InfinityQuery = {
   refId: '',

@@ -1,9 +1,9 @@
 import { css } from '@emotion/css';
 import React from 'react';
 import { Select, useStyles2 } from '@grafana/ui';
-import { EditorField } from './../../../components/extended/EditorField';
+import { EditorField } from '@/components/extended/EditorField';
 import type { GrafanaTheme2 } from '@grafana/data';
-import type { InfinityQuery } from './../../../types';
+import type { InfinityQuery } from '@/types';
 
 const getStyles = (theme: GrafanaTheme2) => {
   return {

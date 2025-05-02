@@ -1,10 +1,10 @@
 import { Select, TagsInput, TextArea } from '@grafana/ui';
 import React from 'react';
-import { migrateLegacyQuery } from './../app/variablesQuery';
-import { variableQueryTypes } from './../constants';
-import { Datasource } from './../datasource';
-import { InfinityQueryEditor } from './query/infinityQuery';
-import type { InfinityQuery, VariableQuery, VariableQueryInfinity, VariableQueryLegacy, VariableQueryRandom, VariableQueryType } from './../types';
+import { migrateLegacyQuery } from '@/app/variablesQuery';
+import { variableQueryTypes } from '@/constants';
+import { Datasource } from '@/datasource';
+import { InfinityQueryEditor } from '@/editors/query/infinityQuery';
+import type { InfinityQuery, VariableQuery, VariableQueryInfinity, VariableQueryLegacy, VariableQueryRandom, VariableQueryType } from '@/types';
 
 export const VariableEditor = (props: { query: VariableQuery; onChange: (query: VariableQuery, definition: string) => void; datasource: Datasource }) => {
   const query = migrateLegacyQuery(props.query);

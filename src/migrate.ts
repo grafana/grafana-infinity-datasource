@@ -1,5 +1,5 @@
-import { isDataQuery, isInfinityQueryWithUrlSource } from './app/utils';
-import type { InfinityQuery } from './types';
+import { isDataQuery, isInfinityQueryWithUrlSource } from '@/app/utils';
+import type { InfinityQuery } from '@/types';
 
 /**
  * ************************************************

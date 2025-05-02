@@ -1,7 +1,6 @@
 import { getTemplateSrv } from '@grafana/runtime';
-import { isDataQuery } from './app/utils';
-import { QueryBodyContentType, QueryBodyType } from './types/query.types';
-import type { InfinityQuery, VariableQuery } from './types';
+import { isDataQuery } from '@/app/utils';
+import { QueryBodyContentType, QueryBodyType, type InfinityQuery, type VariableQuery } from '@/types';
 import type { ScopedVars } from '@grafana/data';
 
 const replaceVariable = (input = '', scopedVars: ScopedVars = {}, format = 'glob'): string => {

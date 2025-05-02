@@ -1,13 +1,13 @@
 import { css } from '@emotion/css';
 import { onUpdateDatasourceSecureJsonDataOption, DataSourcePluginOptionsEditorProps, SelectableValue } from '@grafana/data';
-import { Icon, InlineFormLabel, LegacyForms, RadioButtonGroup, Select, useTheme2 } from '@grafana/ui';
+import { Icon, InlineFormLabel, LegacyForms, RadioButtonGroup, Select, Grid, Link, useTheme2 } from '@grafana/ui';
 import React, { useState } from 'react';
-import { AllowedHostsEditor } from './AllowedHosts';
-import { OAuthInputsEditor } from './OAuthInput';
-import { AzureBlobAuthEditor } from './Auth.AzureBlob';
-import { OthersAuthentication } from './OtherAuthProviders';
-import { AWSRegions } from './../../constants';
-import type { APIKeyType, AuthType, InfinityOptions, InfinitySecureOptions } from './../../types';
+import { AllowedHostsEditor } from '@/editors/config/AllowedHosts';
+import { AzureBlobAuthEditor } from '@/editors/config/Auth.AzureBlob';
+import { OAuthInputsEditor } from './../../editors/config/OAuthInput';
+import { OthersAuthentication } from '@/editors/config/OtherAuthProviders';
+import { AWSRegions } from '@/constants';
+import type { APIKeyType, AuthType, InfinityOptions, InfinitySecureOptions } from '@/types';
 
 const authTypes: Array<SelectableValue<AuthType | 'others'> & { logo?: string }> = [
   { value: 'none', label: 'No Auth' },
@@ -106,15 +106,15 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
   return (
     <>
       <h5 className={styles.subheading}>Auth type</h5>
-      <div className={styles.container}>
+      <Grid minColumnWidth={34} gap={2}>
         {authTypes.map((a, ai) => (
-          <a
+          <Link
             role={'button'}
             tabIndex={ai + 1}
             className={a.value === authType && !othersOpen ? styles.card_selected : styles.card}
             key={a.value}
             onKeyDown={(e) => {
-              if (e.keyCode === 32) {
+              if (e.key === ' ') {
                 if (a && a.value) {
                   a.value === 'others' ? setOthersOpen(true) : onAuthTypeChange(a.value);
                 } else {
@@ -134,9 +134,9 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
           >
             {a.logo ? <img src={a.logo} width={24} height={24} style={{ marginInlineEnd: '10px' }} /> : <Icon name="key-skeleton-alt" style={{ marginInlineEnd: '10px' }} />}
             {a.label}
-          </a>
+          </Link>
         ))}
-      </div>
+      </Grid>
       <OthersAuthentication options={options} isOpen={othersOpen} onClose={() => setOthersOpen(false)} onOptionsChange={onOptionsChange} />
       {authType !== 'none' && authType !== 'oauthPassThru' && !othersOpen && (
         <>

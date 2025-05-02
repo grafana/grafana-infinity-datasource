@@ -1,7 +1,7 @@
 import React from 'react';
-import { URL } from './query.url';
+import { URL } from '@/editors/query/query.url';
 import { screen, render } from '@testing-library/react';
-import { InfinityQueryType, InfinityQueryWithURLSource } from 'types';
+import { InfinityQueryType, InfinityQueryWithURLSource } from '@/types';
 
 describe('URL', () => {
   it('should show changed URL', () => {

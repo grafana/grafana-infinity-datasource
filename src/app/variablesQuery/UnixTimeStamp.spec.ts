@@ -1,4 +1,4 @@
-import { getFormatAndTimeShift, relativeTimeStampParse, shiftTime } from './UnixTimeStamp';
+import { getFormatAndTimeShift, relativeTimeStampParse, shiftTime } from '@/app/variablesQuery/UnixTimeStamp';
 
 describe('getFormatAndTimeShift', () => {
   it('getFormatAndTimeShift', () => {

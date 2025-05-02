@@ -1,5 +1,5 @@
 import { MutableDataFrame, FieldType, DataFrame } from '@grafana/data';
-import { applyUQL } from './UQLProvider';
+import { applyUQL } from '@/app/UQLProvider';
 
 describe('UQLProvider', () => {
   it('basic array', async () => {

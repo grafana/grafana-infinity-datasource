@@ -3,34 +3,46 @@
 ## 3.2.0
 
 🚀 **New Feature**: Add support for concurrent query execution behind the `infinityRunQueriesInParallel` feature flag
+
 🐛 **Bug fix**: Remove props mutation in config editor
 
 ## 3.1.0
 
 🚀 **New Feature**: Setting backend pagination max page size via grafana config (ini file)
+
 🐛 **Bug fix**: Fix default parser for queries created before 3.0.0
+
 🐛 **Bug fix**: Fix min value for input field in pagination
 
 ## 3.0.0
 
 🚀 **New Feature**: Support for additional HTTP methods (`PATCH`, `PUT` and `DELETE`) via data source config `allowDangerousHTTPMethods`
+
 🚀 **New Feature**: Support for passing grafana meta data such as user id, datasource uid to the underlying API as headers / query params via datasource settings
+
 🚀 **Improvements**: Set the backend parser as the default parser for new queries. Existing queries with frontend parser should work as before. If broken, setting the parser to `Frontend` may help.
+
 🚀 **Improvements**: Added support for gzip compression for outgoing requests by default. Fixes [#1003](https://github.com/grafana/grafana-infinity-datasource/issues/1003)
+
 🚀 **Improvements**: Added frame type to dataplane compliant numeric data frames. This will help us to handle the results correctly in alerts, recorded queries, SSE etc.
+
 🎉 **Chore**: BREAKING: Plugin now requires Grafana 10.4.8 or newer
 
 ## 3.0.0-beta.2
 
 🚀 **New Feature**: Support for additional HTTP methods (`PATCH`, `PUT` and `DELETE`) via data source config `allowDangerousHTTPMethods`
+
 🚀 **Improvements**: Set the backend parser as the default parser for new queries. Existing queries with frontend parser should work as before. If broken, setting the parser to `Frontend` may help.
 ⚙️ **Chore**: Update frontend and backend dependencies
 
 ## 3.0.0-beta.1
 
 🚀 **New Feature**: Support for passing grafana meta data such as user id, datasource uid to the underlying API as headers / query params via datasource settings
+
 🚀 **Improvements**: Added support for gzip compression for outgoing requests by default. Fixes [#1003](https://github.com/grafana/grafana-infinity-datasource/issues/1003)
+
 🚀 **Improvements**: Added frame type to dataplane compliant numeric data frames. This will help us to handle the results correctly in alerts, recorded queries, SSE etc.
+
 🎉 **Chore**: BREAKING: Plugin now requires Grafana 10.4.8 or newer
 
 ## 2.12.2

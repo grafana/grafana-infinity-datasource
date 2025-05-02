@@ -1,10 +1,10 @@
 import { Select } from '@grafana/ui';
 import React from 'react';
-import { isDataQuery } from './../app/utils';
-import { EditorField } from './extended/EditorField';
-import { INFINITY_RESULT_FORMATS } from './../constants';
-import { Components } from './../selectors';
-import type { InfinityQuery, InfinityQueryFormat } from './../types';
+import { isDataQuery } from '@/app/utils';
+import { EditorField } from '@/components/extended/EditorField';
+import { INFINITY_RESULT_FORMATS } from '@/constants';
+import { Components } from '@/selectors';
+import type { InfinityQuery, InfinityQueryFormat } from '@/types';
 interface FormatSelectorProps {
   query: InfinityQuery;
   onChange: (e: InfinityQuery) => void;

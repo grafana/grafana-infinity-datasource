@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FileDropzone, LinkButton, Button, InlineFormLabel, Input } from '@grafana/ui';
 import type { DataSourceSettings } from '@grafana/data';
-import type { InfinityOptions } from './../../../types';
+import type { InfinityOptions } from '@/types';
 
 type GoogleJWTEditorProps = {
   options: DataSourceSettings<InfinityOptions, {}>;

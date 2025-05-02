@@ -2,18 +2,18 @@ import { LoadingState, toDataFrame, DataFrame, DataQueryRequest, DataQueryRespon
 import { DataSourceWithBackend, HealthCheckError, HealthStatus } from '@grafana/runtime';
 import { flatten, sample } from 'lodash';
 import { Observable } from 'rxjs';
-import { applyGroq } from './app/GROQProvider';
-import { InfinityProvider } from './app/InfinityProvider';
-import { SeriesProvider } from './app/SeriesProvider';
-import { applyUQL } from './app/UQLProvider';
-import { getUpdatedDataRequest, interpolateVariablesInQueries } from './app/queryUtils';
-import { getTemplateVariablesFromResult, LegacyVariableProvider, migrateLegacyQuery } from './app/variablesQuery';
-import { AnnotationsEditor } from './editors/annotation.editor';
-import { interpolateQuery, interpolateVariableQuery } from './interpolate';
-import { migrateQuery } from './migrate';
-import { isBackendQuery } from './app/utils';
-import { /*reportQuery,*/ reportHealthCheck } from './utils/analytics';
-import type { InfinityInstanceSettings, InfinityOptions, InfinityQuery, MetricFindValue, VariableQuery } from './types';
+import { applyGroq } from '@/app/GROQProvider';
+import { InfinityProvider } from '@/app/InfinityProvider';
+import { SeriesProvider } from '@/app/SeriesProvider';
+import { applyUQL } from '@/app/UQLProvider';
+import { getUpdatedDataRequest, interpolateVariablesInQueries } from '@/app/queryUtils';
+import { getTemplateVariablesFromResult, LegacyVariableProvider, migrateLegacyQuery } from '@/app/variablesQuery';
+import { AnnotationsEditor } from '@/editors/annotation.editor';
+import { interpolateQuery, interpolateVariableQuery } from '@/interpolate';
+import { migrateQuery } from '@/migrate';
+import { isBackendQuery } from '@/app/utils';
+import { /*reportQuery,*/ reportHealthCheck } from '@/utils/analytics';
+import type { InfinityInstanceSettings, InfinityOptions, InfinityQuery, MetricFindValue, VariableQuery } from '@/types';
 
 export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOptions> {
   constructor(public instanceSettings: InfinityInstanceSettings) {

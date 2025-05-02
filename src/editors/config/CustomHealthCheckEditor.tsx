@@ -1,7 +1,7 @@
 import React from 'react';
 import { InlineLabel, InlineSwitch, Input } from '@grafana/ui';
 import type { DataSourcePluginOptionsEditorProps } from '@grafana/data';
-import type { InfinityOptions } from '../../types';
+import type { InfinityOptions } from '@/types';
 
 export const CustomHealthCheckEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
   const { options, onOptionsChange } = props;

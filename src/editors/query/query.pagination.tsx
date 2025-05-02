@@ -1,9 +1,9 @@
 import React from 'react';
 import { FeatureBadge, InlineLabel, Input, Select, Stack } from '@grafana/ui';
 import { FeatureState, SelectableValue } from '@grafana/data';
-import { EditorField } from './../../components/extended/EditorField';
-import { EditorRow } from './../../components/extended/EditorRow';
-import type { InfinityQuery, PaginationParamType, PaginationType } from './../../types';
+import { EditorField } from '@/components/extended/EditorField';
+import { EditorRow } from '@/components/extended/EditorRow';
+import type { InfinityQuery, PaginationParamType, PaginationType } from '@/types';
 
 const paginationTypes: Array<SelectableValue<PaginationType>> = [
   { value: 'none', label: 'None' },

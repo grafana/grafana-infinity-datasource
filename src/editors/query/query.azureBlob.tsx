@@ -1,9 +1,9 @@
 import React from 'react';
 import { Input, Stack } from '@grafana/ui';
-import { EditorRow } from '../../components/extended/EditorRow';
-import { EditorField } from '../../components/extended/EditorField';
-import { isDataQuery } from './../../app/utils';
-import type { InfinityQuery } from './../../types';
+import { EditorRow } from '@/components/extended/EditorRow';
+import { EditorField } from '@/components/extended/EditorField';
+import { isDataQuery } from '@/app/utils';
+import type { InfinityQuery } from '@/types';
 
 type AzureBlobEditorProps = { query: InfinityQuery; onChange: (query: InfinityQuery) => void };
 

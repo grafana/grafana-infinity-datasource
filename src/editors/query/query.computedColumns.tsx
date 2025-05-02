@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button } from '@grafana/ui';
-import { EditorField } from './../../components/extended/EditorField';
-import { ComputedColumn } from './../../components/ComputedColumn';
-import type { InfinityQuery, InfinityColumn } from './../../types';
+import { EditorField } from '@/components/extended/EditorField';
+import { ComputedColumn } from '@/components/ComputedColumn';
+import type { InfinityQuery, InfinityColumn } from '@/types';
 
 export const ComputedColumnsEditor = (props: { query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void }) => {
   const { query, onChange } = props;

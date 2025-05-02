@@ -1,5 +1,5 @@
 import type { SelectableValue } from '@grafana/data';
-import type { InfinityQuery, InfinityQueryType, InfinityQueryFormat, InfinityColumnFormat, ScrapQuerySources, VariableQueryType, AzureBlobCloudType } from './types';
+import type { InfinityQuery, InfinityQueryType, InfinityQueryFormat, InfinityColumnFormat, ScrapQuerySources, VariableQueryType, AzureBlobCloudType } from '@/types';
 
 export const DefaultInfinityQuery: InfinityQuery = {
   refId: '',

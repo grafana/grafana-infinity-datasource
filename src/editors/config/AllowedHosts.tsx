@@ -1,6 +1,6 @@
 import { InlineFormLabel, TagsInput } from '@grafana/ui';
 import React from 'react';
-import type { InfinityOptions } from './../../types';
+import type { InfinityOptions } from '@/types';
 import type { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 
 type AllowedHostsEditorProps = {} & DataSourcePluginOptionsEditorProps<InfinityOptions>;

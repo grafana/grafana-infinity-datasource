@@ -1,18 +1,18 @@
 import React from 'react';
 import { Button, LinkButton } from '@grafana/ui';
-import { EditorRow } from '../../components/extended/EditorRow';
-import { FormatSelector } from '../../components/FormatSelector';
-import { GlobalQuerySelector } from '../../components/GlobalQuerySelector';
-import { ReferenceNameEditor } from './components/ReferenceName';
-import { InlineDataEntry, ImportData } from './query.data';
-import { SourceSelector } from '../../components/SourceSelector';
-import { TypeSelector } from '../../components/TypeSelector';
-import { ParseTypeEditor } from './components/ParserType';
-import { GoogleSheetsEditor } from './components/GoogleSheets';
-import { URL, Method } from './query.url';
-import { Datasource } from './../../datasource';
-import { isDataQuery, isInfinityQueryWithUrlSource } from './../../app/utils';
-import type { EditorMode, InfinityQuery, InfinityQueryType, InfinityQueryWithURLSource } from '../../types';
+import { EditorRow } from '@/components/extended/EditorRow';
+import { FormatSelector } from '@/components/FormatSelector';
+import { GlobalQuerySelector } from '@/components/GlobalQuerySelector';
+import { InlineDataEntry, ImportData } from '@/editors/query/query.data';
+import { SourceSelector } from '@/components/SourceSelector';
+import { TypeSelector } from '@/components/TypeSelector';
+import { ReferenceNameEditor } from '@/editors/query/components/ReferenceName';
+import { ParseTypeEditor } from '@/editors/query/components/ParserType';
+import { GoogleSheetsEditor } from '@/editors/query/components/GoogleSheets';
+import { URL, Method } from '@/editors/query/query.url';
+import { Datasource } from '@/datasource';
+import { isDataQuery, isInfinityQueryWithUrlSource } from '@/app/utils';
+import type { EditorMode, InfinityQuery, InfinityQueryType, InfinityQueryWithURLSource } from '@/types';
 
 export const BasicOptions = (props: {
   mode: EditorMode;

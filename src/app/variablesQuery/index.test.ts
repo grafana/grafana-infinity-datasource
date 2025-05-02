@@ -1,5 +1,5 @@
 import { MutableDataFrame } from '@grafana/data';
-import { getTemplateVariablesFromResult } from './index';
+import { getTemplateVariablesFromResult } from '@/app/variablesQuery';
 
 describe('getTemplateVariablesFromResult', () => {
   it('should return same value for value and text if only one field available', () => {

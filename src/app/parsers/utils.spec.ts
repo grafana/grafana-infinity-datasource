@@ -1,4 +1,4 @@
-import { getValue } from './utils';
+import { getValue } from '@/app/parsers/utils';
 
 describe('utils', () => {
   it('getValue', () => {

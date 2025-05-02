@@ -1,9 +1,9 @@
 import React from 'react';
 import { FileDropzone, TextArea } from '@grafana/ui';
-import { EditorField } from './../../components/extended/EditorField';
-import { EditorRow } from './../../components/extended/EditorRow';
-import { isDataQuery } from './../../app/utils';
-import type { InfinityQuery } from './../../types';
+import { EditorField } from '@/components/extended/EditorField';
+import { EditorRow } from '@/components/extended/EditorRow';
+import { isDataQuery } from '@/app/utils';
+import type { InfinityQuery } from '@/types';
 
 export const InlineDataEditor = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void }) => {
   if (isDataQuery(query) && query.source === 'inline') {

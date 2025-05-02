@@ -1,9 +1,9 @@
 import { DataSourcePluginOptionsEditorProps, DataSourceSettings } from '@grafana/data';
 import { Button, Drawer, InlineFormLabel, Input, Stack } from '@grafana/ui';
 import React, { useState } from 'react';
-import { InfinityQueryEditor } from './../query/infinityQuery';
-import { Datasource } from './../../datasource';
-import type { GlobalInfinityQuery, InfinityOptions, InfinityQuery } from './../../types';
+import { InfinityQueryEditor } from '@/editors/query/infinityQuery';
+import { Datasource } from '@/datasource';
+import type { GlobalInfinityQuery, InfinityOptions, InfinityQuery } from '@/types';
 
 const DefaultGlobalQuery: InfinityQuery = {
   refId: '',
@@ -84,7 +84,17 @@ export const GlobalQueryEditor = (props: DataSourcePluginOptionsEditorProps<Infi
             </Stack>
           ))}
       </Stack>
-      <Button variant="secondary" icon="plus" type="button" onClick={addGlobalQuery} style={{ marginTop: '10px' }}>
+      <Button
+        variant={'secondary'}
+        size={'md'}
+        icon={'plus'}
+        type={'button'}
+        style={{ marginTop: '10px' }}
+        onClick={(e) => {
+          addGlobalQuery();
+          e.preventDefault();
+        }}
+      >
         Add Global Query
       </Button>
     </>
@@ -99,14 +109,15 @@ const GlobalQuery = (props: { query: GlobalInfinityQuery; onUpdate: (query: Glob
   return (
     <>
       <Button
-        variant="primary"
-        size="sm"
+        variant={'primary'}
+        size={'sm'}
+        icon={'edit'}
+        type={'button'}
         style={{ margin: '5px' }}
         onClick={(e) => {
           setPopupState(true);
           e.preventDefault();
         }}
-        icon="edit"
       >
         Edit
       </Button>

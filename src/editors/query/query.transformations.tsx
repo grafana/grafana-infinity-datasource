@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Drawer, Card, useTheme2, InlineLabel, Input, Stack } from '@grafana/ui';
-import { EditorRow } from './../../components/extended/EditorRow';
-import type { InfinityQuery, TransformationItem } from './../../types';
+import { EditorRow } from '@/components/extended/EditorRow';
+import type { InfinityQuery, TransformationItem } from '@/types';
 
 type TransformationsEditorProps = {
   query: InfinityQuery;

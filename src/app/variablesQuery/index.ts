@@ -1,14 +1,14 @@
 import { DataFrameView, SelectableValue } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
 import { defaultsDeep, flatten } from 'lodash';
-import { DefaultInfinityQuery } from './../../constants';
-import { isDataFrame, isTableData } from './../utils';
-import { CollectionVariable } from './Collection';
-import { CollectionLookupVariable } from './CollectionLookup';
-import { JoinVariable } from './Join';
-import { RandomVariable } from './Random';
-import { UnixTimeStampVariable } from './UnixTimeStamp';
-import type { MetricFindValue, VariableQuery, VariableQueryInfinity } from './../../types';
+import { DefaultInfinityQuery } from '@/constants';
+import { isDataFrame, isTableData } from '@/app/utils';
+import { CollectionVariable } from '@/app/variablesQuery/Collection';
+import { CollectionLookupVariable } from '@/app/variablesQuery/CollectionLookup';
+import { JoinVariable } from '@/app/variablesQuery/Join';
+import { RandomVariable } from '@/app/variablesQuery/Random';
+import { UnixTimeStampVariable } from '@/app/variablesQuery/UnixTimeStamp';
+import type { MetricFindValue, VariableQuery, VariableQueryInfinity } from '@/types';
 
 export const getTemplateVariablesFromResult = (res: any): MetricFindValue[] => {
   if (isDataFrame(res) && res.fields.length > 0) {

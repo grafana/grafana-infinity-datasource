@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Button, TextArea, Stack } from '@grafana/ui';
-import { EditorRow } from './../../components/extended/EditorRow';
-import { EditorField } from './../../components/extended/EditorField';
-import { isBackendQuery, isDataQuery } from './../../app/utils';
-import { QueryColumnItem } from './../../components/QueryColumnItem';
-import { JSONOptionsEditor } from '../../components/JSONOptionsEditor';
-import { CSVOptionsEditor } from '../../components/CSVOptionsEditor';
-import { UQLEditor } from './query.uql';
-import { GROQEditor } from './query.groq';
-import type { InfinityColumn, InfinityQuery } from './../../types';
+import { EditorRow } from '@/components/extended/EditorRow';
+import { EditorField } from '@/components/extended/EditorField';
+import { isBackendQuery, isDataQuery } from '@/app/utils';
+import { QueryColumnItem } from '@/components/QueryColumnItem';
+import { JSONOptionsEditor } from '@/components/JSONOptionsEditor';
+import { CSVOptionsEditor } from '@/components/CSVOptionsEditor';
+import { UQLEditor } from '@/editors/query/query.uql';
+import { GROQEditor } from '@/editors/query/query.groq';
+import type { InfinityColumn, InfinityQuery } from '@/types';
 
 export const QueryColumnsEditor = (props: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void }) => {
   const { query, onChange, onRunQuery } = props;

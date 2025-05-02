@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import { defaultsDeep } from 'lodash';
 import { css } from '@emotion/css';
-import { InlineFormLabel, Input, Button, LinkButton, useTheme2, Collapse as CollapseOriginal } from '@grafana/ui';
-import { SecureFieldsEditor } from './../components/config/SecureFieldsEditor';
-import { AuthEditor } from './config/Auth';
-import { ProxyEditor } from './config/ProxyEditor';
-import { AllowedHostsEditor } from './config/AllowedHosts';
-import { SecurityConfigEditor } from './config/SecurityConfigEditor';
-import { GlobalQueryEditor } from './config/GlobalQueryEditor';
-import { ProvisioningScript } from './config/Provisioning';
-import { TLSConfigEditor } from './config/TLSConfigEditor';
-import { URLEditor, URLSettingsEditor } from './config/URL';
-import { ReferenceDataEditor } from './config/ReferenceData';
-import { CustomHealthCheckEditor } from './config/CustomHealthCheckEditor';
+import { InlineFormLabel, Input, Button, LinkButton, useTheme2, Collapse as CollapseOriginal, Stack, Grid } from '@grafana/ui';
+import { SecureFieldsEditor } from '@/components/config/SecureFieldsEditor';
+import { AuthEditor } from '@/editors/config/Auth';
+import { ProxyEditor } from '@/editors/config/ProxyEditor';
+import { AllowedHostsEditor } from '@/editors/config/AllowedHosts';
+import { SecurityConfigEditor } from '@/editors/config/SecurityConfigEditor';
+import { GlobalQueryEditor } from '@/editors/config/GlobalQueryEditor';
+import { ProvisioningScript } from '@/editors/config/Provisioning';
+import { TLSConfigEditor } from '@/editors/config/TLSConfigEditor';
+import { URLEditor, URLSettingsEditor } from '@/editors/config/URL';
+import { ReferenceDataEditor } from '@/editors/config/ReferenceData';
+import { CustomHealthCheckEditor } from '@/editors/config/CustomHealthCheckEditor';
 import type { DataSourcePluginOptionsEditorProps, DataSourceSettings } from '@grafana/data';
-import type { InfinityOptions } from './../types';
+import type { InfinityOptions } from '@/types';
 
 const Collapse = CollapseOriginal as any;
 
@@ -41,8 +41,8 @@ export const MainEditor = (
       <p style={{ marginBlockStart: 5 }}>
         <b>Without any additional configuration, this datasource can work.</b> Optionally, configure any of the settings you see in the left side such as Authentication if you needed.
       </p>
-      <div style={{ marginBlockStart: 5 }}>
-        <Button icon="lock" variant="primary" fill="outline" size="md" onClick={() => setActiveTab('auth')} style={{ marginInlineEnd: '5px', color: theme.isDark ? '#d9d9d9' : '' }}>
+      <Grid minColumnWidth={34} gap={2}>
+        <Button icon="lock" variant="primary" fill="solid" size="md" onClick={() => setActiveTab('auth')} style={{ marginInlineEnd: '5px', color: theme.isDark ? '#d9d9d9' : '' }}>
           Setup Authentication
         </Button>
         <LinkButton
@@ -68,7 +68,7 @@ export const MainEditor = (
           Star in Github
         </LinkButton>
         <ProvisioningScript options={options} />
-      </div>
+      </Grid>
     </div>
   );
 };
@@ -98,8 +98,8 @@ export const NetworkEditor = (props: DataSourcePluginOptionsEditorProps<Infinity
   const [timeoutInSeconds, setTimeoutInSeconds] = useState(options.jsonData.timeoutInSeconds || 60);
   return (
     <>
-      <div style={{ padding: '1px 10px' }}>
-        <div className="gf-form">
+      <Collapse isOpen={true} collapsible={true} label={'Timeout Settings'}>
+        <Stack direction={'row'} gap={0.25}>
           <InlineFormLabel>Timeout in seconds</InlineFormLabel>
           <Input
             value={timeoutInSeconds}
@@ -112,12 +112,14 @@ export const NetworkEditor = (props: DataSourcePluginOptionsEditorProps<Infinity
               props.onOptionsChange({ ...options, jsonData: { ...options.jsonData, timeoutInSeconds } });
             }}
           ></Input>
-        </div>
-      </div>
-      <div style={{ padding: '1px 10px' }}>
+        </Stack>
+      </Collapse>
+      <Collapse isOpen={true} collapsible={true} label={'TLS / SSL Settings'}>
         <TLSConfigEditor options={options} onOptionsChange={onOptionsChange} hideTile={true} />
+      </Collapse>
+      <Collapse isOpen={true} collapsible={true} label={'Proxy Settings'}>
         <ProxyEditor options={options} onOptionsChange={onOptionsChange} />
-      </div>
+      </Collapse>
     </>
   );
 };
@@ -160,7 +162,7 @@ export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<I
       min-height: 300px;
     `,
     tabs: css`
-      width: ${theme.spacing('240px')};
+      width: ${theme.spacing('200px')};
     `,
     tab: css`
       position: relative;
@@ -168,6 +170,8 @@ export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<I
       padding: 8px;
       padding-left: 14px;
       display: block;
+      width: ${theme.spacing('200px')};
+      min-width: ${theme.spacing('200px')};
       opacity: 0.8;
       &:hover {
         background: ${theme.colors.background.secondary};
@@ -181,6 +185,8 @@ export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<I
       padding-left: 14px;
       display: block;
       background: ${theme.colors.background.secondary};
+      width: ${theme.spacing('200px')};
+      min-width: ${theme.spacing('200px')};
       opacity: 1;
       &::before {
         display: block;
@@ -203,8 +209,19 @@ export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<I
     <>
       <div className={styles.root}>
         <div className={styles.tabs}>
-          {config_sections.map((tab) => (
-            <div key={tab.value} className={activeTab === tab.value ? styles.tab_active : styles.tab} onClick={() => setActiveTab(tab.value)}>
+          {config_sections.map((tab, tabIndex) => (
+            <div
+              key={tab.value}
+              tabIndex={tabIndex + 1}
+              className={activeTab === tab.value ? styles.tab_active : styles.tab}
+              onClick={() => setActiveTab(tab.value)}
+              onKeyDown={(e) => {
+                if (e.key === ' ' || e.key === 'Enter') {
+                  setActiveTab(tab.value);
+                  e.preventDefault();
+                }
+              }}
+            >
               {tab.label}
             </div>
           ))}
