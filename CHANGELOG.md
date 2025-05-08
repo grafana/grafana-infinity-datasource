@@ -1,5 +1,21 @@
 # Change Log
 
+## 3.2.1
+
+🎉 **New Feature**: Support for Azure US Government & Azure China cloud types with Azure blob storage account authentication
+
+🚀 **Improvements**: Improve health check error handling
+
+🐛 **Bug fix**: Fix error when setting up global query
+
+🐛 **Bug fix**: Fixed an error while determining dataframe type (previously caused issues in alerting & recorded queries when there is a single row of results)
+
+⚙️ **Chore**: Updated deprecated legacy components and utility classes in TlsConfigEditor
+
+⚙️ **Chore**: Updated outdated dependencies
+
+⚙️ **Chore**: Replaced absolute imports to use alias imports
+
 ## 3.2.0
 
 🚀 **New Feature**: Add support for concurrent query execution behind the `infinityRunQueriesInParallel` feature flag
