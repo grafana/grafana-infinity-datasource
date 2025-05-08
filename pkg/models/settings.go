@@ -79,44 +79,46 @@ const (
 )
 
 type InfinitySettings struct {
-	UID                      string
-	Name                     string
-	IsMock                   bool
-	AuthenticationMethod     string
-	OAuth2Settings           OAuth2Settings
-	BearerToken              string
-	ApiKeyKey                string
-	ApiKeyType               string
-	ApiKeyValue              string
-	AWSSettings              AWSSettings
-	AWSAccessKey             string
-	AWSSecretKey             string
-	URL                      string
-	BasicAuthEnabled         bool
-	UserName                 string
-	Password                 string
-	ForwardOauthIdentity     bool
-	CustomHeaders            map[string]string
-	SecureQueryFields        map[string]string
-	InsecureSkipVerify       bool
-	ServerName               string
-	TimeoutInSeconds         int64
-	TLSClientAuth            bool
-	TLSAuthWithCACert        bool
-	TLSCACert                string
-	TLSClientCert            string
-	TLSClientKey             string
-	ProxyType                ProxyType
-	ProxyUrl                 string
-	AllowedHosts             []string
-	ReferenceData            []RefData
-	CustomHealthCheckEnabled bool
-	CustomHealthCheckUrl     string
-	AzureBlobAccountUrl      string
-	AzureBlobAccountName     string
-	AzureBlobAccountKey      string
-	UnsecuredQueryHandling   UnsecuredQueryHandlingMode
-	PathEncodedURLsEnabled   bool
+	UID                       string
+	Name                      string
+	IsMock                    bool
+	AuthenticationMethod      string
+	OAuth2Settings            OAuth2Settings
+	BearerToken               string
+	ApiKeyKey                 string
+	ApiKeyType                string
+	ApiKeyValue               string
+	AWSSettings               AWSSettings
+	AWSAccessKey              string
+	AWSSecretKey              string
+	URL                       string
+	BasicAuthEnabled          bool
+	UserName                  string
+	Password                  string
+	ForwardOauthIdentity      bool
+	CustomHeaders             map[string]string
+	SecureQueryFields         map[string]string
+	InsecureSkipVerify        bool
+	ServerName                string
+	TimeoutInSeconds          int64
+	TLSClientAuth             bool
+	TLSAuthWithCACert         bool
+	TLSCACert                 string
+	TLSClientCert             string
+	TLSClientKey              string
+	ProxyType                 ProxyType
+	ProxyUrl                  string
+	AllowedHosts              []string
+	ReferenceData             []RefData
+	CustomHealthCheckEnabled  bool
+	CustomHealthCheckUrl      string
+	AzureBlobCloudType        string
+	AzureBlobAccountUrl       string
+	AzureBlobAccountName      string
+	AzureBlobAccountKey       string
+	UnsecuredQueryHandling    UnsecuredQueryHandlingMode
+	PathEncodedURLsEnabled    bool
+	AllowDangerousHTTPMethods bool
 	// ProxyOpts is used for Secure Socks Proxy configuration
 	ProxyOpts httpclient.Options
 }
@@ -180,26 +182,28 @@ type RefData struct {
 }
 
 type InfinitySettingsJson struct {
-	IsMock                   bool           `json:"is_mock,omitempty"`
-	AuthenticationMethod     string         `json:"auth_method,omitempty"`
-	APIKeyKey                string         `json:"apiKeyKey,omitempty"`
-	APIKeyType               string         `json:"apiKeyType,omitempty"`
-	OAuth2Settings           OAuth2Settings `json:"oauth2,omitempty"`
-	AWSSettings              AWSSettings    `json:"aws,omitempty"`
-	ForwardOauthIdentity     bool           `json:"oauthPassThru,omitempty"`
-	InsecureSkipVerify       bool           `json:"tlsSkipVerify,omitempty"`
-	ServerName               string         `json:"serverName,omitempty"`
-	TLSClientAuth            bool           `json:"tlsAuth,omitempty"`
-	TLSAuthWithCACert        bool           `json:"tlsAuthWithCACert,omitempty"`
-	TimeoutInSeconds         int64          `json:"timeoutInSeconds,omitempty"`
-	ProxyType                ProxyType      `json:"proxy_type,omitempty"`
-	ProxyUrl                 string         `json:"proxy_url,omitempty"`
-	ReferenceData            []RefData      `json:"refData,omitempty"`
-	CustomHealthCheckEnabled bool           `json:"customHealthCheckEnabled,omitempty"`
-	CustomHealthCheckUrl     string         `json:"customHealthCheckUrl,omitempty"`
-	AzureBlobAccountUrl      string         `json:"azureBlobAccountUrl,omitempty"`
-	AzureBlobAccountName     string         `json:"azureBlobAccountName,omitempty"`
-	PathEncodedURLsEnabled   bool           `json:"pathEncodedUrlsEnabled,omitempty"`
+	IsMock                    bool           `json:"is_mock,omitempty"`
+	AuthenticationMethod      string         `json:"auth_method,omitempty"`
+	APIKeyKey                 string         `json:"apiKeyKey,omitempty"`
+	APIKeyType                string         `json:"apiKeyType,omitempty"`
+	OAuth2Settings            OAuth2Settings `json:"oauth2,omitempty"`
+	AWSSettings               AWSSettings    `json:"aws,omitempty"`
+	ForwardOauthIdentity      bool           `json:"oauthPassThru,omitempty"`
+	InsecureSkipVerify        bool           `json:"tlsSkipVerify,omitempty"`
+	ServerName                string         `json:"serverName,omitempty"`
+	TLSClientAuth             bool           `json:"tlsAuth,omitempty"`
+	TLSAuthWithCACert         bool           `json:"tlsAuthWithCACert,omitempty"`
+	TimeoutInSeconds          int64          `json:"timeoutInSeconds,omitempty"`
+	ProxyType                 ProxyType      `json:"proxy_type,omitempty"`
+	ProxyUrl                  string         `json:"proxy_url,omitempty"`
+	ReferenceData             []RefData      `json:"refData,omitempty"`
+	CustomHealthCheckEnabled  bool           `json:"customHealthCheckEnabled,omitempty"`
+	CustomHealthCheckUrl      string         `json:"customHealthCheckUrl,omitempty"`
+	AzureBlobCloudType        string         `json:"azureBlobCloudType,omitempty"`
+	AzureBlobAccountUrl       string         `json:"azureBlobAccountUrl,omitempty"`
+	AzureBlobAccountName      string         `json:"azureBlobAccountName,omitempty"`
+	PathEncodedURLsEnabled    bool           `json:"pathEncodedUrlsEnabled,omitempty"`
+	AllowDangerousHTTPMethods bool           `json:"allowDangerousHTTPMethods,omitempty"`
 	// Security
 	AllowedHosts           []string                   `json:"allowedHosts,omitempty"`
 	UnsecuredQueryHandling UnsecuredQueryHandlingMode `json:"unsecuredQueryHandling,omitempty"`
@@ -243,6 +247,7 @@ func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings
 		settings.ProxyType = infJson.ProxyType
 		settings.ProxyUrl = infJson.ProxyUrl
 		settings.PathEncodedURLsEnabled = infJson.PathEncodedURLsEnabled
+		settings.AllowDangerousHTTPMethods = infJson.AllowDangerousHTTPMethods
 		if settings.ProxyType == "" {
 			settings.ProxyType = ProxyTypeEnv
 		}
@@ -260,6 +265,7 @@ func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings
 	settings.ReferenceData = infJson.ReferenceData
 	settings.CustomHealthCheckEnabled = infJson.CustomHealthCheckEnabled
 	settings.CustomHealthCheckUrl = infJson.CustomHealthCheckUrl
+	settings.AzureBlobCloudType = infJson.AzureBlobCloudType
 	settings.AzureBlobAccountUrl = infJson.AzureBlobAccountUrl
 	settings.AzureBlobAccountName = infJson.AzureBlobAccountName
 	if val, ok := config.DecryptedSecureJSONData["basicAuthPassword"]; ok {
@@ -304,8 +310,20 @@ func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings
 			settings.AuthenticationMethod = AuthenticationMethodForwardOauth
 		}
 	}
-	if settings.AuthenticationMethod == AuthenticationMethodAzureBlob && settings.AzureBlobAccountUrl == "" {
-		settings.AzureBlobAccountUrl = "https://%s.blob.core.windows.net/"
+	if settings.AuthenticationMethod == AuthenticationMethodAzureBlob {
+		if settings.AzureBlobCloudType == "" {
+			settings.AzureBlobCloudType = "AzureCloud"
+		}
+		if settings.AzureBlobAccountUrl == "" {
+			switch settings.AzureBlobCloudType {
+			case "AzureUSGovernment":
+				settings.AzureBlobAccountUrl = "https://%s.blob.core.usgovcloudapi.net/"
+			case "AzureChinaCloud":
+				settings.AzureBlobAccountUrl = "https://%s.blob.core.chinacloudapi.cn/"
+			default:
+				settings.AzureBlobAccountUrl = "https://%s.blob.core.windows.net/"
+			}
+		}
 	}
 
 	// secure socks proxy config

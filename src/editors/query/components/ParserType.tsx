@@ -1,9 +1,9 @@
 import { css } from '@emotion/css';
 import React from 'react';
 import { Select, useStyles2 } from '@grafana/ui';
-import { EditorField } from './../../../components/extended/EditorField';
+import { EditorField } from '@/components/extended/EditorField';
 import type { GrafanaTheme2 } from '@grafana/data';
-import type { InfinityQuery } from './../../../types';
+import type { InfinityQuery } from '@/types';
 
 const getStyles = (theme: GrafanaTheme2) => {
   return {
@@ -45,9 +45,9 @@ export const ParseTypeEditor = (props: { query: InfinityQuery; onChange: (value:
       >
         <Select<typeof query.parser>
           width={20}
-          value={query.parser || 'simple'}
+          value={query.parser || 'backend'}
           options={[
-            { value: 'simple', label: 'Default' },
+            { value: 'simple', label: 'Frontend' },
             { value: 'backend', label: 'Backend' },
             { value: 'jq-backend', label: 'JQ (Backend)' },
             { value: 'uql', label: 'UQL' },

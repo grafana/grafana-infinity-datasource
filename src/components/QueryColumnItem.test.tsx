@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 import React from 'react';
-import { QueryColumnItem } from './QueryColumnItem';
-import type { InfinityQuery } from './../types';
+import { QueryColumnItem } from '@/components/QueryColumnItem';
+import type { InfinityQuery } from '@/types';
 
 describe('app/components/QueryColumnItem', () => {
   it('should render without error', () => {

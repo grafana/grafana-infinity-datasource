@@ -1,4 +1,4 @@
-import type { InfinityQuery } from './query.types';
+import type { InfinityQuery } from '@/types';
 import type { DataSourceInstanceSettings, DataSourceJsonData } from '@grafana/data';
 
 //#region Config
@@ -28,6 +28,7 @@ export type AWSAuthProps = {
 export type InfinityReferenceData = { name: string; data: string };
 export type ProxyType = 'none' | 'env' | 'url';
 export type UnsecureQueryHandling = 'warn' | 'allow' | 'deny';
+export type AzureBlobCloudType = 'AzureCloud' | 'AzureUSGovernment' | 'AzureChinaCloud';
 export interface InfinityOptions extends DataSourceJsonData {
   auth_method?: AuthType;
   apiKeyKey?: string;
@@ -47,11 +48,13 @@ export interface InfinityOptions extends DataSourceJsonData {
   refData?: InfinityReferenceData[];
   customHealthCheckEnabled?: boolean;
   customHealthCheckUrl?: string;
+  azureBlobCloudType?: AzureBlobCloudType;
   azureBlobAccountUrl?: string;
   azureBlobAccountName?: string;
   unsecuredQueryHandling?: UnsecureQueryHandling;
   enableSecureSocksProxy?: boolean;
   pathEncodedUrlsEnabled?: boolean;
+  allowDangerousHTTPMethods?: boolean;
 }
 
 export interface InfinitySecureOptions {

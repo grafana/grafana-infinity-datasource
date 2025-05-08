@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { isDataQuery, isBackendQuery } from './../app/utils';
-import { INFINITY_COLUMN_FORMATS } from './../constants';
+import { isDataQuery, isBackendQuery } from '@/app/utils';
+import { INFINITY_COLUMN_FORMATS } from '@/constants';
 import { Select, InlineFormLabel, Input } from '@grafana/ui';
-import type { InfinityColumn, InfinityColumnFormat, InfinityQuery } from './../types';
+import type { InfinityColumn, InfinityColumnFormat, InfinityQuery } from '@/types';
 
 interface QueryColumnItemProps {
   query: InfinityQuery;

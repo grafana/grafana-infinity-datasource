@@ -1,4 +1,4 @@
-import { CSVParser } from './CSVParser';
+import { CSVParser } from '@/app/parsers/CSVParser';
 
 const CSVResults1 = new CSVParser(``, {
   refId: '',

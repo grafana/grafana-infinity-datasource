@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { InfinityQuery } from '../types';
+import type { InfinityQuery } from '@/types';
 
 interface ComputedColumnProps {
   query: InfinityQuery;

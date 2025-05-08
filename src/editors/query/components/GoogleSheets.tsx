@@ -1,7 +1,7 @@
 import React from 'react';
 import { Input } from '@grafana/ui';
-import { EditorField } from './../../../components/extended/EditorField';
-import type { InfinityGSheetsQuery } from './../../../types';
+import { EditorField } from '@/components/extended/EditorField';
+import type { InfinityGSheetsQuery } from '@/types';
 
 export const GoogleSheetsEditor = ({ query, onChange, onRunQuery }: { query: InfinityGSheetsQuery; onChange: (value: InfinityGSheetsQuery) => void; onRunQuery: () => void }) => {
   return (

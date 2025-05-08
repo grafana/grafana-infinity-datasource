@@ -2,9 +2,9 @@ import { VariableOrigin } from '@grafana/data';
 import { DataLinkInput, Modal, Select, Input } from '@grafana/ui';
 import { defaultsDeep, set } from 'lodash';
 import React, { useState } from 'react';
-import { EditorRow } from './../../components/extended/EditorRow';
-import { EditorField } from './../../components/extended/EditorField';
-import type { InfinitySeriesQuery, DataOverride } from './../../types';
+import { EditorRow } from '@/components/extended/EditorRow';
+import { EditorField } from '@/components/extended/EditorField';
+import type { InfinitySeriesQuery, DataOverride } from '@/types';
 
 export const SeriesEditor = ({ query, onChange }: { query: InfinitySeriesQuery; onChange: (value: any) => void }) => {
   query = defaultsDeep(query, {

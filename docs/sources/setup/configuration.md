@@ -35,7 +35,7 @@ After the plugin is installed, you need to create an instance of the data source
 
 This data source can work out of the box without any additional configuration. If you need the URL to be authenticated or pass additional headers/query/tls/timeout settings, configure the corresponding section.
 
-- Configuration will be applied to all the queries. If you need different configuration for different queries, create separate instances of the data source. 
+- Configuration will be applied to all the queries. If you need different configuration for different queries, create separate instances of the data source.
 
 - If you configure the URL in the settings, the same will be prefixed along with all your queries.
 
@@ -45,9 +45,17 @@ For more information, refer to [Configuring URL](/docs/plugins/yesoreyeram-infin
 
 ## Health check
 
-When you save the Infinity datasource settings in the config page, by default this will just save the settings and will not perform any validation against any URLs. If you want to validate the settings such as authentication or API keys, then you must enable the custom health check in the health check section of the configuration page.
+{{< shared id="health-check" >}}
+The settings for the Infinity data source on the configuration page don't automatically validate the URL. To ensure that your settings, including authentication and API keys, are valid, you need to enable the custom health check in the **Health check** section of the **Configuration** page.
 
-> Currently only HTTP GET methods are supported in the custom health check. Also custom health checks only validate the response status code HTTP 200 and doesn't perform any validation against the response content.
+{{< admonition type="note" >}}
+The custom health check supports only HTTP GET methods. It verifies the response status code, specifically looking for an HTTP 200 status, but doesn't check the content of the response.
+{{< /admonition >}}
+{{< /shared >}}
+
+### Troubleshooting
+
+If you receive a `Health check failed` message after you click **Save & Test**, check the URL to ensure it's valid and you entered it correctly.
 
 ## Proxy outgoing requests
 
@@ -58,3 +66,13 @@ If you want your data source to connect via proxy, set the environment appropria
 If you want to setup specific proxy URL for the datasource, you can configure in the datasource config network section.
 
 > Proxy URL specification in data source config is available from v2.2.0
+
+## Allowing dangerous HTTP methods
+
+By default infinity only allow GET and POST HTTP methods to reduce the risk of destructive payloads. But through configuration, you can allow other methods such as `PATCH`,`POST` and `DELETE` for any unconventional use cases. If you need to make use of this feature, Enable the `Allow dangerous HTTP methods` setting under URL section of the datasource config
+
+> This feature is only available from infinity plugin version v3.0.0
+
+{{< admonition type="warning" >}}
+Infinity doesn't validate any permissions against the underlying API. Enable this setting with caution as this can potentially perform any destructive action in the underlying API.
+{{< /admonition >}}

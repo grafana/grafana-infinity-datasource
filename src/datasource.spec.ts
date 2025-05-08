@@ -1,6 +1,6 @@
 import { PluginType, DataSourceInstanceSettings } from '@grafana/data';
 import { DataSourceWithBackend } from '@grafana/runtime';
-import { Datasource } from './datasource';
+import { Datasource } from '@/datasource';
 
 jest.mock('@grafana/runtime', () => ({
   ...(jest.requireActual('@grafana/runtime') as unknown as object),

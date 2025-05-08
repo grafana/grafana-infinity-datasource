@@ -1,7 +1,7 @@
 import React from 'react';
 import { InlineLabel, Input, RadioButtonGroup, useTheme2, InlineField, Switch } from '@grafana/ui';
 import { FeatureToggles, DataSourcePluginOptionsEditorProps } from '@grafana/data';
-import type { InfinityOptions, ProxyType } from './../../types';
+import type { InfinityOptions, ProxyType } from '@/types';
 import { config } from '@grafana/runtime';
 import { gte } from 'semver';
 import { css } from '@emotion/css';

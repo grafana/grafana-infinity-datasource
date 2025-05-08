@@ -1,9 +1,9 @@
 import { toDataFrame, FieldColorModeId, DataFrame, PreferredVisualisationType } from '@grafana/data';
 import { flatten, uniq } from 'lodash';
-import { isDataQuery } from './../utils';
-import { filterResults } from './filter';
-import { normalizeColumns } from './utils';
-import type { GrafanaTableRow, InfinityColumn, InfinityQuery, tableResult, timeSeriesResult } from './../../types';
+import { isDataQuery } from '@/app/utils';
+import { filterResults } from '@/app/parsers/filter';
+import { normalizeColumns } from '@/app/parsers/utils';
+import type { GrafanaTableRow, InfinityColumn, InfinityQuery, tableResult, timeSeriesResult } from '@/types';
 
 export class InfinityParser<T extends InfinityQuery> {
   target: T;

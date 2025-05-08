@@ -1,6 +1,6 @@
 import { Button, Modal, useTheme2 } from '@grafana/ui';
 import React, { useState } from 'react';
-import type { InfinityOptions } from './../../types';
+import type { InfinityOptions } from '@/types';
 import type { DataSourceSettings } from '@grafana/data';
 const YAML = require('json-to-pretty-yaml');
 

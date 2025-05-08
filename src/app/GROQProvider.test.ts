@@ -1,4 +1,4 @@
-import { getGroqResults } from './GROQProvider';
+import { getGroqResults } from '@/app/GROQProvider';
 
 describe('GROQProvider', () => {
   it('array', async () => {

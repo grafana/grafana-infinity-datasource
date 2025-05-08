@@ -1,11 +1,11 @@
 import { Button, Select } from '@grafana/ui';
 import React from 'react';
-import { EditorRow } from './../../components/extended/EditorRow';
-import { EditorField } from './../../components/extended/EditorField';
-import { filterOperators } from './../../app/parsers/filter';
-import { isDataQuery } from './../../app/utils';
-import { FilterOperator } from './../../constants';
-import type { InfinityFilter, InfinityQuery } from './../../types';
+import { EditorRow } from '@/components/extended/EditorRow';
+import { EditorField } from '@/components/extended/EditorField';
+import { filterOperators } from '@/app/parsers/filter';
+import { isDataQuery } from '@/app/utils';
+import { FilterOperator } from '@/constants';
+import type { InfinityFilter, InfinityQuery } from '@/types';
 import type { SelectableValue } from '@grafana/data';
 
 export const TableFilter = (props: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: any }) => {
@@ -83,7 +83,7 @@ export const TableFilter = (props: { query: InfinityQuery; onChange: (value: any
                     onChange={(e) => onFilterValueChange(index, 0, e.target.value)}
                     placeholder="Value"
                   ></input>
-                  <Button variant="destructive" size="sm" style={{ marginTop: '4px' }} onClick={() => removeFilter(index)} icon="trash-alt" fill="outline"></Button>
+                  <Button variant="destructive" size="sm" style={{ marginTop: '4px' }} data-testid={'trash-alt'} onClick={() => removeFilter(index)} icon="trash-alt" fill="outline"></Button>
                   <br />
                 </div>
               ))}

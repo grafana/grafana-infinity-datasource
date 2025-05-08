@@ -1,8 +1,8 @@
 import React from 'react';
-import { INFINITY_SOURCES } from './../constants';
+import { INFINITY_SOURCES } from '@/constants';
 import { Select } from '@grafana/ui';
-import { EditorField } from './extended/EditorField';
-import type { InfinityQuery, InfinityQuerySources } from './../types';
+import { EditorField } from '@/components/extended/EditorField';
+import type { InfinityQuery, InfinityQuerySources } from '@/types';
 
 export const SourceSelector = (props: { query: InfinityQuery; onChange: (e: InfinityQuery) => void; onRunQuery: () => void }) => {
   const { query, onChange, onRunQuery } = props;

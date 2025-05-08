@@ -1,4 +1,4 @@
-import { JSONParser } from './JSONParser';
+import { JSONParser } from '@/app/parsers/JSONParser';
 
 const JSONResults1 = new JSONParser(
   {},

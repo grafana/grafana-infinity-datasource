@@ -1,7 +1,7 @@
 import { Checkbox } from '@grafana/ui';
 import React from 'react';
-import { EditorField } from './extended/EditorField';
-import type { InfinityJSONQueryOptions, InfinityQuery } from './../types';
+import { EditorField } from '@/components/extended/EditorField';
+import type { InfinityJSONQueryOptions, InfinityQuery } from '@/types';
 
 export const JSONOptionsEditor = (props: { query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void }) => {
   const { query, onChange } = props;

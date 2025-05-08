@@ -1,4 +1,4 @@
-import { JoinVariable } from './Join';
+import { JoinVariable } from '@/app/variablesQuery/Join';
 import type { SelectableValue } from '@grafana/data';
 
 const data: Array<[string, string, Array<SelectableValue<string>>]> = [

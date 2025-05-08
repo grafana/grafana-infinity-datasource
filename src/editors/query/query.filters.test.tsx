@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
-import { TableFilter } from './query.filters';
+import { TableFilter } from '@/editors/query/query.filters';
 
 // We need to freeze the object to test for mutations
 describe('TableFilter', () => {

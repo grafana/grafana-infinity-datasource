@@ -1,4 +1,4 @@
-import { CollectionLookupVariable } from './CollectionLookup';
+import { CollectionLookupVariable } from '@/app/variablesQuery/CollectionLookup';
 import type { SelectableValue } from '@grafana/data';
 
 const data: Array<[string, string, Array<SelectableValue<string>>]> = [

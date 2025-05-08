@@ -1,7 +1,7 @@
 import { getTemplateSrv } from '@grafana/runtime';
-import { Datasource } from './../datasource';
-import { CSVParser, HTMLParser, JSONParser, XMLParser } from './parsers';
-import type { InfinityDataQuery } from './../types';
+import { Datasource } from '@/datasource';
+import { CSVParser, HTMLParser, JSONParser, XMLParser } from '@/app/parsers';
+import type { InfinityDataQuery } from '@/types';
 
 export class InfinityProvider {
   constructor(
