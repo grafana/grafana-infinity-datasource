@@ -23,10 +23,18 @@ weight: 300
 
 # Query
 
-- [Backend Parser](./backend)
+## Parsing data
+
+- [JSONata - Backend Parser](./backend)
 - [JQ - Backend Parser](./jq-backend)
-- [UQL Parser](./uql)
-- [GROQ Parser](./groq)
+- [UQL - Frontend Parser](./uql)
+- [GROQ - Frontend Parser](./groq)
+
+## Filtering data, Macros
+
 - [Filtering data](./filters)
 - [Macros](./macros)
+
+## Time formats
+
 - [Time formats](./time-formats)

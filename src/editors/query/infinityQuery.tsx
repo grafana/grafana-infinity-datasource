@@ -14,10 +14,11 @@ import { URLEditor } from '@/editors/query/query.url';
 import { ExperimentalFeatures } from '@/editors/query/query.experimental';
 import { AzureBlobEditor } from '@/editors/query/query.azureBlob';
 import { isDataQuery } from '@/app/utils';
-import type { EditorMode, InfinityQuery } from '@/types';
 import { Datasource } from '@/datasource';
 import { PaginationEditor } from '@/editors/query/query.pagination';
 import { TransformationsEditor } from '@/editors/query/query.transformations';
+import { QueryWarning } from '@/editors/query/query.warning';
+import type { EditorMode, InfinityQuery } from '@/types';
 
 export type InfinityEditorProps = {
   query: InfinityQuery;
@@ -95,6 +96,7 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
           <PaginationEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />
         )}
         {query.type === 'transformations' && <TransformationsEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />}
+        <QueryWarning query={query} />
       </EditorRows>
     </div>
   );

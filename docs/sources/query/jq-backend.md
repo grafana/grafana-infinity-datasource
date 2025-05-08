@@ -1,10 +1,8 @@
 ---
 slug: '/jq-backend'
-title: 'JQ Backend Parser'
-menuTitle: JQ Backend Parser
-description: JQ Backend Parser
-aliases:
-  - infinity
+title: 'JQ backend parser'
+menuTitle: JQ backend parser
+description: JQ backend parser
 keywords:
   - data source
   - infinity
@@ -16,19 +14,24 @@ keywords:
   - html
   - api
   - rest
+  - jq
 labels:
   products:
     - oss
 weight: 302
 ---
 
-JQ Backend parser (**Beta**) for infinity is introduced in version 3.0.0. Setting the parser to **jq-backend** in your query editor will allow you to use features such as `alerting`, `grafana expressions` ,`recorded queries`, `enterprise query caching` and `shared dashboards`.
+# JQ (backend parser)
 
-This parser is very similar to default backend parser where you use JSONata syntax in root selector. But with JQ backend parser, you will be using jq syntax in the root selector.
+JQ backend parser helps you to manipulate the data using JQ style syntax. You have to select JQ/jq-backend as the parser type in the query editor.
 
-All other backend features such as **Computed fields**, **Filter**, **Summarize** and **Pagination** works similar to backend parser
+Setting the parser to JQ/jq-backend allow you to use features such as [Alerting](https://grafana.com/docs/grafana/latest/alerting/), [Shared Dashboards](https://grafana.com/docs/grafana/latest/dashboards/share-dashboards-panels/shared-dashboards/), [SQL Expressions](https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/sql-expressions/), [Query Caching](https://grafana.com/docs/grafana/latest/administration/data-source-management/#query-and-resource-caching), [Recorded Queries](https://grafana.com/docs/grafana/latest/administration/recorded-queries/).
 
-## Example 1 - Simple JSON array
+This parser is very similar to jsonata backend parser where you use [JSONata style syntax](https://docs.jsonata.org/overview.html) in root selector. But with JQ backend parser, you will be using [jq style syntax](https://jqlang.org/tutorial/) in the root selector.
+
+## Examples
+
+### Manipulating simple JSON array
 
 ```json
 [
@@ -45,13 +48,12 @@ All other backend features such as **Computed fields**, **Filter**, **Summarize*
 
 and the root selector `.[]` will produce the following output
 
-```csv
-age,name
-123,foo
-456,bar
-```
+| age | name |
+| --- | ---- |
+| 123 | foo  |
+| 456 | bar  |
 
-## Example 2 - Nested JSON
+### Manipulating nested JSON object
 
 ```json
 {
@@ -73,12 +75,21 @@ age,name
 
 and the root selector `.data[]` will produce the following output
 
-```csv
-age,name
-123,foo
-456,bar
-```
+| age | name |
+| --- | ---- |
+| 123 | foo  |
+| 456 | bar  |
 
-## More examples
+For more examples and to learn more about jq syntax, refer official [jq documentation](https://jqlang.org/tutorial).
 
-For more examples and to learn more about jq syntax, refer official [jq documentation](https://jqlang.org/).
+## Computed fields
+
+Computed fields option with JQ parser works similar to JSONata parser
+
+## Filter
+
+Filter option with JQ parser works similar to JSONata parser
+
+## Summarize
+
+Summarize option with JQ parser works similar to JSONata parser
