@@ -37,11 +37,17 @@ weight: 22
 
 Looking for a quick start example? Please check [How to Visualize CSV Data with Grafana](https://grafana.com/blog/2025/02/05/how-to-visualize-csv-data-with-grafana/). This page covers details the various powerful configuration options for dealing with CSV data in Infinity.
 
+Alternatively, for a more concise learning journey, check out our Grafana Infinity data source learning journey:
+
+{{< docs/learning-journeys title="Visualize CSV data using the Infinity data source" url="https://grafana.com/docs/learning-journeys/infinity-csv/" >}}
+
 <div style="margin-bottom:30px"></div>
 
 ![csv example](https://user-images.githubusercontent.com/153843/92571108-9e0ff800-f27a-11ea-9fe9-9f9dcbd7125a.png#center)
 
 {{< docs/play title="Infinity plugin CSV demo" url="https://play.grafana.org/d/infinity-csv" >}}
+
+<div style="margin-bottom:30px"></div>
 
 Select **Type** of the query to `CSV`. You can either specify the URL of the CSV file or can provide inline CSV.
 

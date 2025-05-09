@@ -53,9 +53,9 @@ weight: 10
 
 A universal data source plugin for pulling data from various systems into Grafana using existing REST APIs. Grafana's go-to plugin for cases when a native plugin doesn’t exist yet.
 
-<p align="center">
-    <img src="https://user-images.githubusercontent.com/153843/189875668-3ac061a9-c548-4bfe-abcc-6d0d7e6bdb55.png" alt="Infinity datasource plugin for Grafana">
-</p>
+Watch this video to get started with the Grafana Infinity data source plugin:
+
+{{< youtube id="BxWw4BWY5ns" >}}
 
 {{< docs/play title="Infinity plugin demo" url="https://play.grafana.org/d/infinity" >}}
 

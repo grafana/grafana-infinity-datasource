@@ -35,11 +35,17 @@ weight: 21
 
 ## 📊 Overview
 
+For a more concise learning journey, check out our Grafana Infinity data source learning journey:
+
+{{< docs/learning-journeys title="Visualize JSON data using the Infinity data source" url="https://grafana.com/docs/learning-journeys/infinity-json/" >}}
+
 <div style="margin-bottom:30px"></div>
 
 ![Sample JSON Query in Infinity datasource](https://user-images.githubusercontent.com/153843/189874914-6b49d3ec-2030-46ea-b14e-fdd48628345e.png#center)
 
 {{< docs/play title="Infinity plugin JSON demo" url="https://play.grafana.org/d/infinity-json" >}}
+
+<div style="margin-bottom:30px"></div>
 
 Select **Type** of the query to `JSON`. You can either specify the URL of the JSON API, JSON file or can provide inline CSV.
 
