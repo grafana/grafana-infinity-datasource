@@ -162,7 +162,7 @@ func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, pCtx *backend.
 			return frame, cursor, err
 		}
 	}
-	if query.Parser == "backend" {
+	if query.Parser == models.InfinityParserBackend || query.Parser == models.InfinityParserJQBackend {
 		if query.Type == models.QueryTypeJSON || query.Type == models.QueryTypeGraphQL {
 			if frame, err = GetJSONBackendResponse(ctx, urlResponseObject, query); err != nil {
 				return frame, cursor, err
@@ -215,7 +215,11 @@ func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, pCtx *backend.
 		if err != nil {
 			return frame, cursor, backend.PluginError(errors.New("error while finding the cursor value"))
 		}
-		cursor, err = jsonframer.GetRootData(string(body), query.PageParamCursorFieldExtractionPath)
+		framerType := jsonframer.FramerTypeGJSON
+		if query.Parser == models.InfinityParserJQBackend {
+			framerType = jsonframer.FramerTypeJQ
+		}
+		cursor, err = jsonframer.GetRootData(string(body), query.PageParamCursorFieldExtractionPath, framerType)
 		if err != nil {
 			return frame, cursor, backend.PluginError(errors.New("error while extracting the cursor value"))
 		}
