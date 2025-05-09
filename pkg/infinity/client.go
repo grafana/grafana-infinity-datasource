@@ -111,9 +111,9 @@ func (client *Client) req(ctx context.Context, pCtx *backend.PluginContext, url 
 		return nil, http.StatusInternalServerError, 0, backend.DownstreamError(errors.New("error preparing request. invalid request constructed"))
 	}
 	startTime := time.Now()
-	if !CanAllowURL(req.URL.String(), settings.AllowedHosts) {
-		logger.Debug("url is not in the allowed list. make sure to match the base URL with the settings", "url", req.URL.String())
-		return nil, http.StatusUnauthorized, 0, backend.DownstreamError(errors.New("requested URL is not allowed. To allow this URL, update the datasource config Security -> Allowed Hosts section"))
+	if reqValidationErr := ValidateRequest(ctx, pCtx, settings, req); reqValidationErr != nil {
+		logger.Debug("url is not allowed", "url", req.URL.String(), "err", reqValidationErr.Error())
+		return nil, http.StatusUnauthorized, 0, backend.DownstreamError(reqValidationErr)
 	}
 	logger.Debug("requesting URL", "host", req.URL.Hostname(), "url_path", req.URL.Path, "method", req.Method, "type", query.Type)
 	res, err := client.HttpClient.Do(req)
@@ -232,19 +232,6 @@ func CanParseAsJSON(queryType models.QueryType, responseHeaders http.Header) boo
 		}
 	}
 	return false
-}
-
-func CanAllowURL(url string, allowedHosts []string) bool {
-	allow := false
-	if len(allowedHosts) == 0 {
-		return true
-	}
-	for _, host := range allowedHosts {
-		if strings.HasPrefix(url, host) {
-			return true
-		}
-	}
-	return allow
 }
 
 func GetQueryBody(ctx context.Context, query models.Query) io.Reader {
