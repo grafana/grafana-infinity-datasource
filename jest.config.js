@@ -8,6 +8,7 @@ module.exports = {
   ...originalConfig,
   transformIgnorePatterns: originalConfig.transformIgnorePatterns.map((pattern) => (pattern.startsWith('node_modules') ? `../../${pattern}` : pattern)),
   moduleNameMapper: {
+    ...originalConfig.moduleNameMapper,
     '^@/components/(.*)': '<rootDir>/src/components/$1',
     '^@/editors/(.*)': '<rootDir>/src/editors/$1',
     '^@/utils/(.*)': '<rootDir>/src/utils/$1',
