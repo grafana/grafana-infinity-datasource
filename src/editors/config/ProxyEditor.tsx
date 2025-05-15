@@ -68,7 +68,7 @@ export const ProxyEditor = (props: ProxyEditorProps) => {
           </Stack>
           <Stack gap={0}>
             <InlineLabel width={20} tooltip={UserNameSelector.tooltip}>
-              {URLSelector.label}
+              {UserNameSelector.label}
             </InlineLabel>
             <Input
               role="input"
