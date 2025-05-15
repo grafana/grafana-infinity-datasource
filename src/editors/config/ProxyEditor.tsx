@@ -1,10 +1,11 @@
 import React from 'react';
-import { InlineLabel, Input, RadioButtonGroup, useTheme2, InlineField, Switch } from '@grafana/ui';
-import { FeatureToggles, DataSourcePluginOptionsEditorProps } from '@grafana/data';
-import type { InfinityOptions, ProxyType } from '@/types';
 import { config } from '@grafana/runtime';
 import { gte } from 'semver';
 import { css } from '@emotion/css';
+import { useTheme2, InlineLabel, Input, RadioButtonGroup, InlineField, Switch, Stack, SecretInput } from '@grafana/ui';
+import { FeatureToggles, onUpdateDatasourceSecureJsonDataOption, type DataSourcePluginOptionsEditorProps } from '@grafana/data';
+import { Components } from './../../selectors';
+import type { InfinityOptions, InfinitySecureOptions, ProxyType } from '@/types';
 
 const styles = {
   toggle: css`
@@ -18,32 +19,81 @@ type ProxyEditorProps = DataSourcePluginOptionsEditorProps<InfinityOptions>;
 export const ProxyEditor = (props: ProxyEditorProps) => {
   const theme = useTheme2();
   const { options, onOptionsChange } = props;
-  const { jsonData } = options;
+  const { jsonData, secureJsonFields } = options;
+  const { URL: URLSelector, UserName: UserNameSelector, Password: PasswordSelector } = Components.ConfigEditor.Network.Proxy.ProxyCustomURL;
   const onProxyTypeChange = (proxy_type: ProxyType = 'env') => {
     onOptionsChange({ ...options, jsonData: { ...jsonData, proxy_type } });
   };
   const onProxyUrlChange = (proxy_url: string) => {
     onOptionsChange({ ...options, jsonData: { ...jsonData, proxy_url } });
   };
+  const onProxyUserNameChange = (proxy_username: string) => {
+    onOptionsChange({ ...options, jsonData: { ...jsonData, proxy_username } });
+  };
+  const onResetSecret = (key: keyof InfinitySecureOptions) => {
+    onOptionsChange({
+      ...options,
+      secureJsonFields: { ...options.secureJsonFields, [key]: false },
+      secureJsonData: { ...options.secureJsonData, [key]: '' },
+    });
+  };
   return (
-    <>
-      <div className="gf-form">
-        <InlineLabel width={20}>Proxy</InlineLabel>
+    <Stack gap={0.5} direction={'column'}>
+      <Stack gap={0}>
+        <InlineLabel width={20}>Proxy Mode</InlineLabel>
         <RadioButtonGroup<ProxyType>
           value={jsonData?.proxy_type || 'env'}
           options={[
             { value: 'env', label: 'From environment variable / Default' },
-            { value: 'url', label: 'URL' },
             { value: 'none', label: 'None' },
+            { value: 'url', label: 'URL' },
           ]}
           onChange={(e) => onProxyTypeChange(e || 'env')}
         />
-      </div>
+      </Stack>
       {jsonData?.proxy_type === 'url' && (
-        <div className="gf-form">
-          <InlineLabel width={20}>Proxy URL</InlineLabel>
-          <Input value={jsonData?.proxy_url || ''} onChange={(e) => onProxyUrlChange(e.currentTarget.value)} />
-        </div>
+        <>
+          <Stack gap={0}>
+            <InlineLabel width={20} tooltip={URLSelector.tooltip}>
+              {URLSelector.label}
+            </InlineLabel>
+            <Input
+              role="input"
+              width={40}
+              aria-label={URLSelector.ariaLabel}
+              placeholder={URLSelector.placeholder}
+              value={jsonData?.proxy_url || ''}
+              onChange={(e) => onProxyUrlChange(e.currentTarget.value)}
+            />
+          </Stack>
+          <Stack gap={0}>
+            <InlineLabel width={20} tooltip={UserNameSelector.tooltip}>
+              {URLSelector.label}
+            </InlineLabel>
+            <Input
+              role="input"
+              width={40}
+              aria-label={UserNameSelector.ariaLabel}
+              placeholder={UserNameSelector.placeholder}
+              value={jsonData?.proxy_username || ''}
+              onChange={(e) => onProxyUserNameChange(e.currentTarget.value)}
+            />
+          </Stack>
+          <Stack gap={0}>
+            <InlineLabel width={20} tooltip={PasswordSelector.tooltip}>
+              {PasswordSelector.label}
+            </InlineLabel>
+            <SecretInput
+              role="input"
+              width={40}
+              aria-label={PasswordSelector.ariaLabel}
+              placeholder={PasswordSelector.placeholder}
+              isConfigured={(secureJsonFields && secureJsonFields.azureBlobAccountKey) as boolean}
+              onChange={onUpdateDatasourceSecureJsonDataOption(props, 'proxyUserPassword')}
+              onReset={() => onResetSecret('proxyUserPassword')}
+            />
+          </Stack>
+        </>
       )}
       {(jsonData?.proxy_type === 'env' || !jsonData?.proxy_type) && (
         <>
@@ -86,6 +136,6 @@ export const ProxyEditor = (props: ProxyEditorProps) => {
           </InlineField>
         </>
       )}
-    </>
+    </Stack>
   );
 };
