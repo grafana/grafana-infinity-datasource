@@ -1,1 +1,10 @@
+.github/
 .eslintrc
+.prettierrc.js
+**/*.html
+**/*.md
+**/*.json
+**/*.jsonc
+**/*.css
+docker-compose.yaml
+docker-compose-debug.yaml
