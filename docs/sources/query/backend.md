@@ -1,10 +1,8 @@
 ---
 slug: '/backend'
-title: 'Backend Parser'
-menuTitle: Backend Parser
-description: Backend Parser
-aliases:
-  - infinity
+title: 'JSONata backend parser'
+menuTitle: JSONata backend parser
+description: JSONata backend parser
 keywords:
   - data source
   - infinity
@@ -16,25 +14,22 @@ keywords:
   - html
   - api
   - rest
+  - jsonata
 labels:
   products:
     - oss
 weight: 301
 ---
 
-# Backend Parser
+# JSONata (backend parser)
 
-Backend parser for infinity is introduced in version 1.0.0. Setting the parser to backend in your query editor will allow you to use features such as `alerting`, `grafana expressions` ,`recorded queries`, `enterprise query caching` and `shared dashboards`.
+JSONata backend parser helps you to manipulate the data using JSONata style syntax. You have to select JSONata/backend as the parser type in the query editor.
 
-> Support for backend parser is available for JSON from version 1.0.0.
-> Support for backend parser is available for CSV/TSV/GraphQL from version 1.1.0.
-> Support for backend parser is available for XML/HTML from version 1.2.0.
+Setting the parser to JSONata/backend allow you to use features such as [Alerting](https://grafana.com/docs/grafana/latest/alerting/), [Shared Dashboards](https://grafana.com/docs/grafana/latest/dashboards/share-dashboards-panels/shared-dashboards/), [SQL Expressions](https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/sql-expressions/), [Query Caching](https://grafana.com/docs/grafana/latest/administration/data-source-management/#query-and-resource-caching), [Recorded Queries](https://grafana.com/docs/grafana/latest/administration/recorded-queries/).
 
 ## Root selector/Field selector
 
-For JSON, data received from the server should be in array format. If not, then the array must be specified by the root selector. Root selector must be in the format specified by [gjson](https://github.com/tidwall/gjson#path-syntax).
-
-> Backend parser uses `gjson` style selectors and legacy/default/frontend parser uses `lodash` type selectors.
+Root selector allows you to manipulate the data received from the server. You can use [JSONata style syntax](https://docs.jsonata.org/overview.html) in root selector to manipulate your data.
 
 ## Computed fields
 
