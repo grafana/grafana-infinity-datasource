@@ -43,6 +43,7 @@ export interface InfinityOptions extends DataSourceJsonData {
   timeoutInSeconds?: number;
   proxy_type?: ProxyType;
   proxy_url?: string;
+  proxy_username?: string;
   oauthPassThru?: boolean;
   allowedHosts?: string[];
   refData?: InfinityReferenceData[];
@@ -69,6 +70,7 @@ export interface InfinitySecureOptions {
   oauth2ClientSecret?: string;
   oauth2JWTPrivateKey?: string;
   azureBlobAccountKey?: string;
+  proxyUserPassword?: string;
 }
 export interface SecureField {
   id: string;
