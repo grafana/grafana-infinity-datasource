@@ -1,4 +1,4 @@
-import { ArrayVector, MutableDataFrame, FieldType, DataFrame, Field, Labels, TableData } from '@grafana/data';
+import { MutableDataFrame, FieldType, DataFrame, Field, Labels, TableData, DataFrameType } from '@grafana/data';
 import type {
   InfinityCSVQuery,
   InfinityGraphQLQuery,
@@ -203,7 +203,7 @@ export const toTimeSeriesLong = (data: DataFrame[]): DataFrame[] => {
 
   return result;
 };
-export const toTimeSeriesMany = (data: DataFrame[]): DataFrame[] => {
+export const toTimeSeriesMulti = (data: DataFrame[]): DataFrame[] => {
   if (!Array.isArray(data) || data.length === 0) {
     return data;
   }
@@ -273,11 +273,11 @@ export const toTimeSeriesMany = (data: DataFrame[]): DataFrame[] => {
             fields: [
               {
                 ...timeField,
-                values: new ArrayVector(b.time),
+                values: b.time,
               },
               {
                 ...field,
-                values: new ArrayVector(b.value),
+                values: b.time,
                 labels: b.labels,
               },
             ],
@@ -290,6 +290,8 @@ export const toTimeSeriesMany = (data: DataFrame[]): DataFrame[] => {
           refId: frame.refId,
           meta: {
             ...frame.meta,
+            type: DataFrameType.TimeSeriesMulti,
+            typeVersion: [0, 1],
           },
           fields: [timeField, field],
           length: frame.length,
