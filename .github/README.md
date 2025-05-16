@@ -63,10 +63,18 @@ You can download and install this grafana plugin using various options
 
 For the plugin documentation, visit [plugin documentation website](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource).
 
+> [!TIP]
+> 
+> ## Give it a try using Grafana Play
+> 
+> With Grafana Play, you can explore and see how it works, learning from practical examples to accelerate your development. This feature can be seen on [Infinity plugin demo](https://play.grafana.org/d/infinity/).
+
 ## ⚡️ Useful Links
 
 - [Plugin documentation](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource)
 - [Demo video](https://youtu.be/Wmgs1E9Ry-s)
+- [Visualize CSV data Learning Journey](https://grafana.com/docs/learning-journeys/infinity-csv/)
+- [Visualize JSON data Learning Journey](https://grafana.com/docs/learning-journeys/infinity-json/)
 
 ## 👍 Contributing
 
