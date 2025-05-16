@@ -1,5 +1,11 @@
 # Change Log
 
+## 3.2.2
+
+### Patch Changes
+
+🐛 Upgrading from go 1.24.1 to 1.24.3 will address a number of known CVE's.
+
 ## 3.2.1
 
 🎉 **New Feature**: Support for Azure US Government & Azure China cloud types with Azure blob storage account authentication
