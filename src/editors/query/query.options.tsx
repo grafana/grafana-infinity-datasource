@@ -7,7 +7,7 @@ import { InlineDataEntry, ImportData } from '@/editors/query/query.data';
 import { SourceSelector } from '@/components/SourceSelector';
 import { TypeSelector } from '@/components/TypeSelector';
 import { ReferenceNameEditor } from '@/editors/query/components/ReferenceName';
-import { ParseTypeEditor } from '@/editors/query/components/ParserType';
+import { ParseTypeEditor } from '@/editors/query/query.parser';
 import { GoogleSheetsEditor } from '@/editors/query/components/GoogleSheets';
 import { URL, Method } from '@/editors/query/query.url';
 import { Datasource } from '@/datasource';

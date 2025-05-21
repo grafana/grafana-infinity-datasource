@@ -130,7 +130,7 @@ const RootSelector = (props: { query: InfinityQuery; onChange: (value: any) => v
         cols={50}
         rows={isBackendQuery(query) ? 7 : 2}
         value={root_selector}
-        placeholder={isBackendQuery(query) ? 'JSONata / rows selector' : 'rows/root selector (optional)'}
+        placeholder={isBackendQuery(query) ? (query.parser === 'jq-backend' ? 'JQ / rows selector' : 'JSONata / rows selector') : 'rows / root selector (optional)'}
         onChange={(e) => setRootSelector(e.currentTarget.value)}
         onBlur={onRootSelectorChange}
       />
