@@ -21,13 +21,13 @@ labels:
 weight: 302
 ---
 
-# JQ (backend parser)
+# JQ backend parser
 
 JQ backend parser helps you to manipulate the data using JQ style syntax. You have to select JQ/jq-backend as the parser type in the query editor.
 
-Setting the parser to JQ/jq-backend allow you to use features such as [Alerting](https://grafana.com/docs/grafana/latest/alerting/), [Shared Dashboards](https://grafana.com/docs/grafana/latest/dashboards/share-dashboards-panels/shared-dashboards/), [SQL Expressions](https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/sql-expressions/), [Query Caching](https://grafana.com/docs/grafana/latest/administration/data-source-management/#query-and-resource-caching), [Recorded Queries](https://grafana.com/docs/grafana/latest/administration/recorded-queries/).
+Setting the parser to JQ enables features such as [Alerting](https://grafana.com/docs/grafana/latest/alerting/), [Shared Dashboards](https://grafana.com/docs/grafana/latest/dashboards/share-dashboards-panels/shared-dashboards/), [SQL Expressions](https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/sql-expressions/), [Query Caching](https://grafana.com/docs/grafana/latest/administration/data-source-management/#query-and-resource-caching), [Recorded Queries](https://grafana.com/docs/grafana/latest/administration/recorded-queries/).
 
-This parser is very similar to jsonata backend parser where you use [JSONata style syntax](https://docs.jsonata.org/overview.html) in root selector. But with JQ backend parser, you will be using [jq style syntax](https://jqlang.org/tutorial/) in the root selector.
+This parser is very similar to JSONata backend parser where you use [JSONata style syntax](https://docs.jsonata.org/overview.html) in root selector. With JQ backend parser, you use [jq style syntax](https://jqlang.org/tutorial/) in the root selector.
 
 ## Examples
 

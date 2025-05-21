@@ -21,11 +21,17 @@ labels:
 weight: 301
 ---
 
-# JSONata (backend parser)
+# JSONata backend parser (previously called Backend parser)
 
-JSONata backend parser helps you to manipulate the data using JSONata style syntax. You have to select JSONata/backend as the parser type in the query editor.
+The JSONata parser allows you to transform and manipulate data using [JSONata syntax](https://jsonata.org/). 
 
-Setting the parser to JSONata/backend allow you to use features such as [Alerting](https://grafana.com/docs/grafana/latest/alerting/), [Shared Dashboards](https://grafana.com/docs/grafana/latest/dashboards/share-dashboards-panels/shared-dashboards/), [SQL Expressions](https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/sql-expressions/), [Query Caching](https://grafana.com/docs/grafana/latest/administration/data-source-management/#query-and-resource-caching), [Recorded Queries](https://grafana.com/docs/grafana/latest/administration/recorded-queries/).
+{{< admonition type="note" >}}
+In previous versions of the data source, this was referred to as the *backend parser*. In the current version, the *backend* is a parser category that includes both `JSONata` and `JQ` parsers. 
+{{< /admonition >}}
+
+To use JSONata, select **Backend → JSONata** as the parser type in the query editor.
+
+Setting the parser to JSONata enables features such as [Alerting](https://grafana.com/docs/grafana/latest/alerting/), [Shared Dashboards](https://grafana.com/docs/grafana/latest/dashboards/share-dashboards-panels/shared-dashboards/), [SQL Expressions](https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/sql-expressions/), [Query Caching](https://grafana.com/docs/grafana/latest/administration/data-source-management/#query-and-resource-caching), [Recorded Queries](https://grafana.com/docs/grafana/latest/administration/recorded-queries/).
 
 ## Root selector/Field selector
 
