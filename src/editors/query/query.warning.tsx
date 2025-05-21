@@ -44,26 +44,27 @@ const warningMessage = (query: InfinityQuery) => {
   return (
     <>
       {msg} does not support backend operations such as{' '}
-      <Link href="https://grafana.com/docs/grafana/latest/alerting/" target="_blank">
+      <Link href="https://grafana.com/docs/grafana/latest/alerting/" target="_blank" style={{ textDecoration: 'underline' }}>
         Alerting
       </Link>
       ,{' '}
-      <Link href="https://grafana.com/docs/grafana/latest/dashboards/share-dashboards-panels/shared-dashboards/" target="_blank">
+      <Link href="https://grafana.com/docs/grafana/latest/dashboards/share-dashboards-panels/shared-dashboards/" target="_blank" style={{ textDecoration: 'underline' }}>
         Shared Dashboards
       </Link>
       ,{' '}
-      <Link href="https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/sql-expressions/" target="_blank">
+      <Link href="https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/sql-expressions/" target="_blank" style={{ textDecoration: 'underline' }}>
         SQL Expressions
       </Link>
       ,{' '}
-      <Link href="https://grafana.com/docs/grafana/latest/administration/data-source-management/#query-and-resource-caching" target="_blank">
+      <Link href="https://grafana.com/docs/grafana/latest/administration/data-source-management/#query-and-resource-caching" target="_blank" style={{ textDecoration: 'underline' }}>
         Query Caching
       </Link>{' '}
       and{' '}
-      <Link href="https://grafana.com/docs/grafana/latest/administration/recorded-queries/" target="_blank">
+      <Link href="https://grafana.com/docs/grafana/latest/administration/recorded-queries/" target="_blank" style={{ textDecoration: 'underline' }}>
         Recorded Queries
       </Link>
-      . Consider using JSONata / JQ based backend parsers instead.
+      . <br />
+      Consider using JSONata / JQ backend parsers instead.
     </>
   );
 };
