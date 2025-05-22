@@ -29,7 +29,7 @@ describe('TableFilter', () => {
     const onRunQuery = jest.fn();
     render(<TableFilter query={query} onChange={onChange} onRunQuery={onRunQuery} />);
     fireEvent.click(screen.getByTestId('infinity-query-row-collapse-show-results-filter'));
-    fireEvent.click(screen.getByTestId(/trash-alt/));
+    fireEvent.click(screen.getByTitle('Delete filter'));
     expect(onChange).toHaveBeenCalledWith({ ...query, filters: [] });
   });
 
