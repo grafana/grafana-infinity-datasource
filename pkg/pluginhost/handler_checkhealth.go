@@ -2,6 +2,7 @@ package pluginhost
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -16,10 +17,7 @@ func (ds *DataSource) CheckHealth(ctx context.Context, req *backend.CheckHealthR
 	healthCheckResult, err := CheckHealth(ctx, ds.client, req)
 	if err != nil {
 		logger.Error("received error while performing health check", "err", err.Error())
-		return &backend.CheckHealthResult{
-			Status:  backend.HealthStatusError,
-			Message: err.Error(),
-		}, nil
+		return healthCheckErrorDetailed("", err.Error(), "")
 	}
 	return healthCheckResult, nil
 }
@@ -60,30 +58,41 @@ func CheckHealth(ctx context.Context, client *infinity.Client, req *backend.Chec
 			},
 		}, req.Headers)
 		if err != nil {
-			return &backend.CheckHealthResult{
-				Status:  backend.HealthStatusError,
-				Message: fmt.Sprintf("health check failed with url %s. error received: %s", client.Settings.CustomHealthCheckUrl, err.Error()),
-			}, nil
+			return healthCheckErrorDetailed("", err.Error(), "")
 		}
 		if statusCode != http.StatusOK {
-			return &backend.CheckHealthResult{
-				Status:  backend.HealthStatusError,
-				Message: fmt.Sprintf("health check failed with url %s. http status code received: %d", client.Settings.CustomHealthCheckUrl, statusCode),
-			}, nil
+			return healthCheckErrorDetailed("", fmt.Sprintf("http status code received : %d", statusCode), "")
 		}
 		if statusCode == http.StatusOK {
-			return &backend.CheckHealthResult{
-				Status:  backend.HealthStatusOk,
-				Message: fmt.Sprintf("health check successful with url %s. http status code received: %d", client.Settings.CustomHealthCheckUrl, statusCode),
-			}, nil
+			return healthCheckSuccess("")
 		}
 	}
-	return &backend.CheckHealthResult{
-		Status:  backend.HealthStatusOk,
-		Message: "OK",
-	}, nil
+	return healthCheckSuccess("")
+}
+func healthCheckSuccess(msg string) (*backend.CheckHealthResult, error) {
+	if msg == "" {
+		msg = "health check successful"
+	}
+	return &backend.CheckHealthResult{Status: backend.HealthStatusOk, Message: msg}, nil
+}
+func healthCheckError(msg string) (*backend.CheckHealthResult, error) {
+	return healthCheckErrorDetailed(msg, "", "")
 }
 
-func healthCheckError(msg string) (*backend.CheckHealthResult, error) {
-	return &backend.CheckHealthResult{Status: backend.HealthStatusError, Message: msg}, nil
+func healthCheckErrorDetailed(msg string, verboseMessage string, errorLink string) (*backend.CheckHealthResult, error) {
+	if msg == "" {
+		msg = "health check failed. Check details below for more information"
+	}
+	jsonDetails := map[string]string{}
+	if verboseMessage != "" {
+		jsonDetails["verboseMessage"] = verboseMessage
+	}
+	if errorLink != "" {
+		jsonDetails["errorLink"] = verboseMessage
+	}
+	jsonDetailsBytes, err := json.Marshal(jsonDetails)
+	if err != nil {
+		return &backend.CheckHealthResult{Status: backend.HealthStatusError, Message: msg}, nil
+	}
+	return &backend.CheckHealthResult{Status: backend.HealthStatusError, Message: msg, JSONDetails: jsonDetailsBytes}, nil
 }
