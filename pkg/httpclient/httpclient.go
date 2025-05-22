@@ -61,20 +61,33 @@ func getBaseHTTPClient(ctx context.Context, settings models.InfinitySettings) (*
 		logger.Debug("proxy type is set to none. Not using the proxy")
 	case models.ProxyTypeUrl:
 		logger.Debug("proxy type is set to url. Using the proxy", "proxy_url", settings.ProxyUrl)
-		u, err := url.Parse(settings.ProxyUrl)
+		u, err := GetProxyUrl(ctx, settings)
 		if err != nil {
-			logger.Error("error parsing proxy url", "err", err.Error(), "proxy_url", settings.ProxyUrl)
+			logger.Error("error getting proxy url", "err", err.Error(), "proxy_url", settings.ProxyUrl, "proxy_username", settings.ProxyUserName)
 			return nil, err
 		}
 		transport.Proxy = http.ProxyURL(u)
 	default:
 		transport.Proxy = http.ProxyFromEnvironment
 	}
-
 	return &http.Client{
 		Transport: transport,
 		Timeout:   time.Second * time.Duration(settings.TimeoutInSeconds),
 	}, nil
+}
+
+func GetProxyUrl(ctx context.Context, settings models.InfinitySettings) (*url.URL, error) {
+	logger := backend.Logger.FromContext(ctx)
+	u, err := url.Parse(settings.ProxyUrl)
+	if err != nil {
+		logger.Debug("error parsing proxy url", "err", err.Error(), "proxy_url", settings.ProxyUrl)
+		return nil, backend.DownstreamError(err)
+	}
+	if settings.ProxyUserName != "" && settings.ProxyUserPassword != "" {
+		logger.Debug("found proxy user name and proxy password", "proxy_username", settings.ProxyUserName)
+		u.User = url.UserPassword(settings.ProxyUserName, settings.ProxyUserPassword)
+	}
+	return u, nil
 }
 
 func isDigestAuthConfigured(settings models.InfinitySettings) bool {
