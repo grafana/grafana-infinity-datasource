@@ -53,6 +53,23 @@ export const URLSettingsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
         <InlineSwitch value={jsonData.pathEncodedUrlsEnabled || false} onChange={(e) => onOptionsChange({ ...options, jsonData: { ...jsonData, pathEncodedUrlsEnabled: e.currentTarget.checked } })} />
         <Badge text="Experimental" color="orange" icon={'exclamation-triangle'} />
       </Stack>
+      <Stack>
+        <InlineLabel
+          width={36}
+          tooltip={`When enabled, the datasource will process response body even for HTTP error status codes (4xx, 5xx). This is useful for APIs that return useful data in error responses, such as detailed error messages or partial data during service degradation.`}
+        >
+          Accept error status codes
+        </InlineLabel>
+        <InlineSwitch
+          value={jsonData.acceptErrorStatusCodes || false}
+          onChange={(e) =>
+            onOptionsChange({
+              ...options,
+              jsonData: { ...jsonData, acceptErrorStatusCodes: e.currentTarget.checked },
+            })
+          }
+        />
+      </Stack>
     </Stack>
   );
 };
