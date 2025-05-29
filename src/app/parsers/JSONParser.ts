@@ -8,7 +8,7 @@ export class JSONParser extends InfinityParser<InfinityJSONQuery | InfinityGraph
   constructor(JSONResponse: object, target: InfinityJSONQuery | InfinityGraphQLQuery, endTime?: Date) {
     super(target);
     let jsonResponse = this.formatInput(JSONResponse);
-    if (this.target.parser === 'backend' || this.target.parser === 'uql' || this.target.parser === 'groq') {
+    if (this.target.parser === 'backend' || this.target.parser === 'jq-backend' || this.target.parser === 'uql' || this.target.parser === 'groq') {
       return;
     }
     if (this.target.json_options?.columnar) {
