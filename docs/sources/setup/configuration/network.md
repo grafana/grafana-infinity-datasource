@@ -34,7 +34,7 @@ weight: 205
 
 ## Proxy settings
 
-Infinity always send API requests from Grafana server to the underlying downstream server. Sometimes, The requested needs to be routed via proxy servers. In such cases, you can configure the proxy settings by following the instructions below.
+Infinity always sends API requests from Grafana server to the underlying downstream server. Sometimes, The requested needs to be routed via proxy servers. In such cases, you can configure the proxy settings by following the instructions below.
 
 Infinity does support following ways to configure your proxy.
 
@@ -50,7 +50,7 @@ If you want your data source to connect via proxy, set the environment appropria
 
 ### No Proxy
 
-As the name suggests, All the requests skip the proxy and directly goes to underlying API from grafana server.
+As the name suggests, all the requests skip the proxy and directly goes to underlying API from grafana server.
 
 ### Proxy URL
 

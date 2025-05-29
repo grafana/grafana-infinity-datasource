@@ -88,7 +88,7 @@ export const ProxyEditor = (props: ProxyEditorProps) => {
               width={40}
               aria-label={PasswordSelector.ariaLabel}
               placeholder={PasswordSelector.placeholder}
-              isConfigured={(secureJsonFields && secureJsonFields.azureBlobAccountKey) as boolean}
+              isConfigured={(secureJsonFields && secureJsonFields.proxyUserPassword) as boolean}
               onChange={onUpdateDatasourceSecureJsonDataOption(props, 'proxyUserPassword')}
               onReset={() => onResetSecret('proxyUserPassword')}
             />
