@@ -3,8 +3,10 @@ package pluginhost
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/infinity"
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
@@ -16,8 +18,8 @@ func (ds *DataSource) CheckHealth(ctx context.Context, req *backend.CheckHealthR
 	logger := backend.Logger.FromContext(ctx)
 	healthCheckResult, err := CheckHealth(ctx, ds.client, req)
 	if err != nil {
-		logger.Error("received error while performing health check", "err", err.Error())
-		return healthCheckErrorDetailed("", err.Error(), "")
+		logger.Debug("received error while performing health check", "err", err.Error())
+		return healthCheckError("", err.Error(), "")
 	}
 	return healthCheckResult, nil
 }
@@ -25,10 +27,7 @@ func (ds *DataSource) CheckHealth(ctx context.Context, req *backend.CheckHealthR
 func CheckHealth(ctx context.Context, client *infinity.Client, req *backend.CheckHealthRequest) (*backend.CheckHealthResult, error) {
 	logger := backend.Logger.FromContext(ctx)
 	if client == nil {
-		return &backend.CheckHealthResult{
-			Status:  backend.HealthStatusError,
-			Message: "failed to get plugin instance",
-		}, nil
+		return healthCheckError("", models.ErrFailedToGetPluginInstance.Error(), "")
 	}
 	args := []interface{}{}
 	args = append(args, "AuthenticationMethod", client.Settings.AuthenticationMethod)
@@ -38,12 +37,12 @@ func CheckHealth(ctx context.Context, client *infinity.Client, req *backend.Chec
 	if client.Settings.OAuth2Settings.OAuth2Type != "" {
 		args = append(args, "OAuth2Type", client.Settings.OAuth2Settings.OAuth2Type)
 	}
-	logger.Info("performing CheckHealth in infinity datasource", args...)
+	logger.Debug("performing CheckHealth in infinity datasource", args...)
 	if err := client.Settings.Validate(); err != nil {
-		return &backend.CheckHealthResult{
-			Status:  backend.HealthStatusError,
-			Message: fmt.Sprintf("invalid settings. %s", err.Error()),
-		}, nil
+		if errors.Is(err, models.ErrInvalidConfigHostNotAllowed) {
+			return healthCheckError(err.Error(), err.Error(), "")
+		}
+		return healthCheckError(err.Error(), errors.Join(models.ErrInvalidConfig, err).Error(), "")
 	}
 	if client.Settings.AuthenticationMethod == models.AuthenticationMethodAzureBlob {
 		return checkHealthAzureBlobStorage(ctx, client)
@@ -58,10 +57,36 @@ func CheckHealth(ctx context.Context, client *infinity.Client, req *backend.Chec
 			},
 		}, req.Headers)
 		if err != nil {
-			return healthCheckErrorDetailed("", err.Error(), "")
+			if errors.Is(err, models.ErrUnsuccessfulHTTPResponseStatus) {
+				if unwrappedErr := errors.Unwrap(err); unwrappedErr != nil {
+					return healthCheckError(unwrappedErr.Error(), err.Error(), "")
+				}
+			}
+			if errors.Is(err, models.ErrInvalidConfigHostNotAllowed) {
+				if unwrappedErr := errors.Unwrap(err); unwrappedErr != nil {
+					return healthCheckError(unwrappedErr.Error(), err.Error(), "")
+				}
+			}
+			if strings.Contains(err.Error(), "no such host") {
+				return healthCheckError("Network error: no such host", err.Error(), "")
+			}
+			if strings.Contains(err.Error(), "network unreachable") {
+				return healthCheckError("Network error: network unreachable", err.Error(), "")
+			}
+			if strings.Contains(err.Error(), "context deadline exceeded") {
+				return healthCheckError("Network error: timeout", err.Error(), "")
+			}
+			if strings.Contains(err.Error(), "connection timed out") {
+				return healthCheckError("Network error: timeout", err.Error(), "")
+			}
+			if strings.Contains(err.Error(), "socks connect") && (strings.Contains(err.Error(), "network unreachable") || strings.Contains(err.Error(), "host unreachable")) {
+				return healthCheckError("Network error: error connecting through PDC", err.Error(), "https://grafana.com/docs/grafana-cloud/connect-externally-hosted/private-data-source-connect/")
+			}
+			return healthCheckError("", err.Error(), "")
 		}
 		if statusCode != http.StatusOK {
-			return healthCheckErrorDetailed("", fmt.Sprintf("http status code received : %d", statusCode), "")
+			msg := fmt.Sprintf("%s : %d", models.ErrUnsuccessfulHTTPResponseStatus, statusCode)
+			return healthCheckError("", msg, "")
 		}
 		if statusCode == http.StatusOK {
 			return healthCheckSuccess("")
@@ -69,30 +94,29 @@ func CheckHealth(ctx context.Context, client *infinity.Client, req *backend.Chec
 	}
 	return healthCheckSuccess("")
 }
+
 func healthCheckSuccess(msg string) (*backend.CheckHealthResult, error) {
 	if msg == "" {
-		msg = "health check successful"
+		msg = "Health check successful"
 	}
 	return &backend.CheckHealthResult{Status: backend.HealthStatusOk, Message: msg}, nil
 }
-func healthCheckError(msg string) (*backend.CheckHealthResult, error) {
-	return healthCheckErrorDetailed(msg, "", "")
-}
 
-func healthCheckErrorDetailed(msg string, verboseMessage string, errorLink string) (*backend.CheckHealthResult, error) {
-	if msg == "" {
-		msg = "health check failed. Check details below for more information"
+func healthCheckError(msg string, verboseMessage string, errorLink string) (*backend.CheckHealthResult, error) {
+	outMsg := "Health check failed"
+	if msg != "" {
+		outMsg += ". " + msg
 	}
 	jsonDetails := map[string]string{}
 	if verboseMessage != "" {
 		jsonDetails["verboseMessage"] = verboseMessage
 	}
 	if errorLink != "" {
-		jsonDetails["errorLink"] = verboseMessage
+		jsonDetails["errorLink"] = errorLink
 	}
 	jsonDetailsBytes, err := json.Marshal(jsonDetails)
 	if err != nil {
-		return &backend.CheckHealthResult{Status: backend.HealthStatusError, Message: msg}, nil
+		return &backend.CheckHealthResult{Status: backend.HealthStatusError, Message: outMsg}, nil
 	}
-	return &backend.CheckHealthResult{Status: backend.HealthStatusError, Message: msg, JSONDetails: jsonDetailsBytes}, nil
+	return &backend.CheckHealthResult{Status: backend.HealthStatusError, Message: outMsg, JSONDetails: jsonDetailsBytes}, nil
 }

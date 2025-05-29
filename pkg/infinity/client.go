@@ -113,7 +113,7 @@ func (client *Client) req(ctx context.Context, pCtx *backend.PluginContext, url 
 	startTime := time.Now()
 	if !CanAllowURL(req.URL.String(), settings.AllowedHosts) {
 		logger.Debug("url is not in the allowed list. make sure to match the base URL with the settings", "url", req.URL.String())
-		return nil, http.StatusUnauthorized, 0, backend.DownstreamError(errors.New("requested URL is not allowed. To allow this URL, update the datasource config Security -> Allowed Hosts section"))
+		return nil, http.StatusUnauthorized, 0, backend.DownstreamError(models.ErrInvalidConfigHostNotAllowed)
 	}
 	logger.Debug("requesting URL", "host", req.URL.Hostname(), "url_path", req.URL.Path, "method", req.Method, "type", query.Type)
 	res, err := client.HttpClient.Do(req)
@@ -141,7 +141,7 @@ func (client *Client) req(ctx context.Context, pCtx *backend.PluginContext, url 
 		return nil, http.StatusInternalServerError, duration, backend.DownstreamError(fmt.Errorf("invalid response received for the URL %s", url))
 	}
 	if res.StatusCode >= http.StatusBadRequest {
-		err = fmt.Errorf("%w. %s", models.ErrUnsuccessfulHTTPResponseStatus, res.Status)
+		err = fmt.Errorf("%w\nstatus code : %s", models.ErrUnsuccessfulHTTPResponseStatus, res.Status)
 		// Infinity can query anything and users are responsible for ensuring that endpoint/auth is correct
 		// therefore any incoming error is considered downstream
 		return nil, res.StatusCode, duration, backend.DownstreamError(err)

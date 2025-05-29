@@ -1,5 +1,5 @@
 import { LoadingState, toDataFrame, DataFrame, DataQueryRequest, DataQueryResponse, ScopedVars, TimeRange } from '@grafana/data';
-import { DataSourceWithBackend, HealthCheckError } from '@grafana/runtime';
+import { DataSourceWithBackend } from '@grafana/runtime';
 import { flatten, sample } from 'lodash';
 import { Observable } from 'rxjs';
 import { applyGroq } from '@/app/GROQProvider';
@@ -13,13 +13,6 @@ import { interpolateQuery, interpolateVariableQuery } from '@/interpolate';
 import { migrateQuery } from '@/migrate';
 import { isBackendQuery } from '@/app/utils';
 import type { InfinityInstanceSettings, InfinityOptions, InfinityQuery, MetricFindValue, VariableQuery } from '@/types';
-
-export const HEALTH_CHECK_SUCCESS_DEFAULT_MESSAGE = 'health check successful';
-export const HEALTH_CHECK_WARNING_NO_CUSTOM_HEALTH_CHECK = [
-  'Success',
-  'Settings saved but no health checks performed',
-  'To validate the connection/credentials, you have to provide a sample URL in Health Check section',
-].join(`. `);
 
 export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOptions> {
   constructor(public instanceSettings: InfinityInstanceSettings) {
@@ -98,24 +91,6 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
           break;
       }
     });
-  }
-  testDatasource() {
-    return super
-      .testDatasource()
-      .then((o) => {
-        switch (o?.message) {
-          case HEALTH_CHECK_SUCCESS_DEFAULT_MESSAGE:
-            if (!(this.instanceSettings?.jsonData?.customHealthCheckEnabled && this.instanceSettings?.jsonData?.customHealthCheckUrl) && this.instanceSettings?.jsonData?.auth_method) {
-              return Promise.resolve({ status: 'warning', message: HEALTH_CHECK_WARNING_NO_CUSTOM_HEALTH_CHECK });
-            }
-            return Promise.resolve({ status: 'success', message: o?.message });
-          default:
-            return Promise.resolve({ status: o?.status || 'success', message: o?.message || 'Settings saved' });
-        }
-      })
-      .catch((ex) => {
-        return Promise.reject({ status: 'error', message: ex.message, error: new HealthCheckError(ex.message, {}) });
-      });
   }
   getQueryDisplayText(query: InfinityQuery) {
     return (

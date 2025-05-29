@@ -1,6 +1,5 @@
 import { PluginType, DataSourceInstanceSettings } from '@grafana/data';
-import { DataSourceWithBackend } from '@grafana/runtime';
-import { Datasource, HEALTH_CHECK_SUCCESS_DEFAULT_MESSAGE, HEALTH_CHECK_WARNING_NO_CUSTOM_HEALTH_CHECK } from '@/datasource';
+import { Datasource } from '@/datasource';
 
 jest.mock('@grafana/runtime', () => ({
   ...(jest.requireActual('@grafana/runtime') as unknown as object),
@@ -70,24 +69,5 @@ describe('metricFindQuery', () => {
       expect(await ds.metricFindQuery({ query: 'CollectionLookup(A,a,B,b,C,c,D,d,C)', queryType: 'legacy' })).toMatchSnapshot();
       expect(await ds.metricFindQuery({ query: 'CollectionLookup(A,a,B,b,C,c,D,d,E)', queryType: 'legacy' })).toMatchSnapshot();
     });
-  });
-});
-
-describe('testDatasource', () => {
-  beforeEach(() => jest.spyOn(DataSourceWithBackend.prototype, 'testDatasource').mockResolvedValue({ message: HEALTH_CHECK_SUCCESS_DEFAULT_MESSAGE, status: 'success' }));
-  it('should pass with the default settings', async () => {
-    const ds = new Datasource({ ...DummyDatasource });
-    const result = await ds.testDatasource();
-    expect(result).toStrictEqual({ status: 'success', message: HEALTH_CHECK_SUCCESS_DEFAULT_MESSAGE });
-  });
-  it('should warn when no health check configured', async () => {
-    const ds = new Datasource({ ...DummyDatasource, jsonData: { auth_method: 'apiKey', allowedHosts: ['foo'] } });
-    const result = await ds.testDatasource();
-    expect(result).toStrictEqual({ status: 'warning', message: HEALTH_CHECK_WARNING_NO_CUSTOM_HEALTH_CHECK });
-  });
-  it('should pass when health check and allowed hosts configured', async () => {
-    const ds = new Datasource({ ...DummyDatasource, jsonData: { auth_method: 'apiKey', allowedHosts: ['foo'], customHealthCheckEnabled: true, customHealthCheckUrl: 'https://foo.com' } });
-    const result = await ds.testDatasource();
-    expect(result).toStrictEqual({ status: 'success', message: HEALTH_CHECK_SUCCESS_DEFAULT_MESSAGE });
   });
 });
