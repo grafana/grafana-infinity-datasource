@@ -55,6 +55,7 @@ export interface InfinityOptions extends DataSourceJsonData {
   enableSecureSocksProxy?: boolean;
   pathEncodedUrlsEnabled?: boolean;
   allowDangerousHTTPMethods?: boolean;
+  acceptErrorStatusCodes?: boolean;
 }
 
 export interface InfinitySecureOptions {
