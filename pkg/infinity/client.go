@@ -141,7 +141,7 @@ func (client *Client) req(ctx context.Context, pCtx *backend.PluginContext, url 
 		return nil, http.StatusInternalServerError, duration, backend.DownstreamError(fmt.Errorf("invalid response received for the URL %s", url))
 	}
 	if res.StatusCode >= http.StatusBadRequest {
-		err = fmt.Errorf("%w. %s", models.ErrUnsuccessfulHTTPResponseStatus, res.Status)
+		err = ParseErrorResponse(res)
 		// Infinity can query anything and users are responsible for ensuring that endpoint/auth is correct
 		// therefore any incoming error is considered downstream
 		return nil, res.StatusCode, duration, backend.DownstreamError(err)
