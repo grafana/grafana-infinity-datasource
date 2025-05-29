@@ -134,6 +134,9 @@ type Query struct {
 	PageParamCursorFieldName           string                 `json:"pagination_param_cursor_field_name,omitempty"`
 	PageParamCursorFieldType           PaginationParamType    `json:"pagination_param_cursor_field_type,omitempty"`
 	PageParamCursorFieldExtractionPath string                 `json:"pagination_param_cursor_extraction_path,omitempty"`
+	PageParamCursorInitialValue        string                 `json:"pagination_param_cursor_initial_value,omitempty"`
+	PageParamNoNextPageValue           string                 `json:"pagination_param_no_next_page_value,omitempty"`
+	PageParamHasNextPageFieldExtractionPath  string                 `json:"pagination_param_has_next_page_extraction_path,omitempty"`
 	PageParamListFieldName             string                 `json:"pagination_param_list_field_name,omitempty"`
 	PageParamListFieldType             PaginationParamType    `json:"pagination_param_list_field_type,omitempty"`
 	PageParamListFieldValue            string                 `json:"pagination_param_list_value,omitempty"`
