@@ -33,11 +33,16 @@ func GetJSONBackendResponse(ctx context.Context, urlResponseObject any, query mo
 			TimeFormat: c.TimeStampFormat,
 		})
 	}
-	newFrame, err := jsonframer.ToFrame(string(responseString), jsonframer.FramerOptions{
+	framerOptions := jsonframer.FramerOptions{
+		FramerType:   jsonframer.FramerTypeGJSON,
 		FrameName:    query.RefID,
 		RootSelector: query.RootSelector,
 		Columns:      columns,
-	})
+	}
+	if query.Parser == models.InfinityParserJQBackend {
+		framerOptions.FramerType = jsonframer.FramerTypeJQ
+	}
+	newFrame, err := jsonframer.ToFrame(string(responseString), framerOptions)
 
 	if err != nil {
 		if errors.Is(err, jsonframer.ErrInvalidRootSelector) || errors.Is(err, jsonframer.ErrInvalidJSONContent) || errors.Is(err, jsonframer.ErrEvaluatingJSONata) {
