@@ -7,13 +7,13 @@ require (
 	github.com/grafana/dskit v0.0.0-20250306142006-a53bcf294bdf
 	github.com/grafana/grafana-aws-sdk v0.31.2
 	github.com/grafana/grafana-plugin-sdk-go v0.277.1
-	github.com/grafana/infinity-libs/lib/go/csvframer v1.0.1
-	github.com/grafana/infinity-libs/lib/go/framesql v1.0.2
-	github.com/grafana/infinity-libs/lib/go/gframer v1.0.0
-	github.com/grafana/infinity-libs/lib/go/jsonframer v1.1.4
-	github.com/grafana/infinity-libs/lib/go/macros v1.0.1
-	github.com/grafana/infinity-libs/lib/go/transformations v1.0.3
-	github.com/grafana/infinity-libs/lib/go/xmlframer v1.0.0
+	github.com/grafana/infinity-libs/lib/go/csvframer v1.0.3
+	github.com/grafana/infinity-libs/lib/go/framesql v1.0.3
+	github.com/grafana/infinity-libs/lib/go/gframer v1.1.2
+	github.com/grafana/infinity-libs/lib/go/jsonframer v1.3.0
+	github.com/grafana/infinity-libs/lib/go/macros v1.0.3
+	github.com/grafana/infinity-libs/lib/go/transformations v1.0.6
+	github.com/grafana/infinity-libs/lib/go/xmlframer v1.0.3
 	github.com/icholy/digest v0.1.22
 	github.com/stretchr/testify v1.10.0
 	go.opentelemetry.io/otel v1.35.0
@@ -23,7 +23,7 @@ require (
 )
 
 require (
-	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.10.0 // indirect
+	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.9.2 // indirect
 	github.com/Azure/azure-sdk-for-go/sdk/internal v1.5.2 // indirect
 	github.com/BurntSushi/toml v1.4.0 // indirect
 	github.com/apache/arrow-go/v18 v18.2.0 // indirect
@@ -52,7 +52,7 @@ require (
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/mux v1.8.1 // indirect
 	github.com/grafana/dataplane/sdata v0.0.9 // indirect
-	github.com/grafana/infinity-libs/lib/go/utils v1.0.0 // indirect
+	github.com/grafana/infinity-libs/lib/go/utils v1.0.1 // indirect
 	github.com/grafana/otel-profiling-go v0.5.1 // indirect
 	github.com/grafana/pyroscope-go/godeltaprof v0.1.8 // indirect
 	github.com/grafana/sqlds/v4 v4.1.0 // indirect
@@ -62,6 +62,8 @@ require (
 	github.com/hashicorp/go-hclog v1.6.3 // indirect
 	github.com/hashicorp/go-plugin v1.6.3 // indirect
 	github.com/hashicorp/yamux v0.1.1 // indirect
+	github.com/itchyny/gojq v0.12.17 // indirect
+	github.com/itchyny/timefmt-go v0.1.6 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
@@ -99,15 +101,14 @@ require (
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/shopspring/decimal v1.4.0 // indirect
-	github.com/smartystreets/goconvey v1.7.2 // indirect
-	github.com/tidwall/gjson v1.17.1 // indirect
+	github.com/tidwall/gjson v1.18.0 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.1 // indirect
 	github.com/unknwon/bra v0.0.0-20200517080246-1e3013ecaff8 // indirect
 	github.com/unknwon/com v1.0.1 // indirect
 	github.com/unknwon/log v0.0.0-20200308114134-929b1006e34a // indirect
 	github.com/urfave/cli v1.22.16 // indirect
-	github.com/xiatechs/jsonata-go v1.8.7 // indirect
+	github.com/xiatechs/jsonata-go v1.8.8 // indirect
 	github.com/zeebo/xxh3 v1.0.2 // indirect
 	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.60.0 // indirect
@@ -120,14 +121,14 @@ require (
 	go.opentelemetry.io/otel/sdk v1.35.0 // indirect
 	go.opentelemetry.io/proto/otlp v1.5.0 // indirect
 	go.uber.org/atomic v1.10.0 // indirect
-	golang.org/x/crypto v0.37.0 // indirect
+	golang.org/x/crypto v0.38.0 // indirect
 	golang.org/x/exp v0.0.0-20240909161429-701f63a606c0 // indirect
 	golang.org/x/mod v0.23.0 // indirect
-	golang.org/x/net v0.39.0 // indirect
-	golang.org/x/sync v0.13.0 // indirect
-	golang.org/x/sys v0.32.0 // indirect
-	golang.org/x/term v0.31.0 // indirect
-	golang.org/x/text v0.24.0 // indirect
+	golang.org/x/net v0.40.0 // indirect
+	golang.org/x/sync v0.14.0 // indirect
+	golang.org/x/sys v0.33.0 // indirect
+	golang.org/x/term v0.32.0 // indirect
+	golang.org/x/text v0.25.0 // indirect
 	golang.org/x/tools v0.30.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20250218202821-56aae31c358a // indirect
