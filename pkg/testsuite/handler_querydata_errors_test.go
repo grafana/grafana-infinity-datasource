@@ -43,7 +43,7 @@ func TestErrors(t *testing.T) {
 			require.NotNil(t, res.Error)
 			require.Equal(t, backend.ErrorSourceDownstream, res.ErrorSource)
 			require.ErrorIs(t, res.Error, models.ErrUnsuccessfulHTTPResponseStatus)
-			require.Equal(t, "error while performing the infinity query. unsuccessful HTTP response. 403 Forbidden", res.Error.Error())
+			require.Equal(t, "error while performing the infinity query. unsuccessful HTTP response code\nstatus code : 403 Forbidden", res.Error.Error())
 		})
 		t.Run("fail with incorrect response from server", func(t *testing.T) {
 			server := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
