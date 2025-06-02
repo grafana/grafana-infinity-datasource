@@ -82,6 +82,20 @@ func TestGetRequest(t *testing.T) {
 			wantReq:     &http.Request{URL: &url.URL{}, Method: http.MethodPatch},
 			wantReqBody: true,
 		},
+		{
+			name:     "should forward cookies correctly when set in the keepCookies settings",
+			pCtx:     &backend.PluginContext{PluginID: "hello"},
+			settings: models.InfinitySettings{KeepCookies: []string{"cookie1"}},
+			requestHeaders: map[string]string{"Cookie": "cookie1=test"},
+			wantReq:  &http.Request{URL: &url.URL{}, Header: http.Header{"Cookie": []string{"cookie1=test"}}, Method: http.MethodGet},
+		},
+		{
+			name:     "should not forward cookies if keepCookies is not set in the settings",
+			pCtx:     &backend.PluginContext{PluginID: "hello"},
+			settings: models.InfinitySettings{},
+			requestHeaders: map[string]string{"Cookie": "cookie1=test"},
+			wantReq:  &http.Request{URL: &url.URL{}, Header: http.Header{}, Method: http.MethodGet},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
