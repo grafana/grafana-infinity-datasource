@@ -180,7 +180,10 @@ func getQueryReqHeader(requestHeaders map[string]string, headerName string) stri
 // Grafana appears to provide only the specified cookies in the requestHeaders
 func ApplyForwardedCookies(_ context.Context, settings models.InfinitySettings, req *http.Request, requestHeaders map[string]string) *http.Request {
 	if len(settings.KeepCookies) >= 1 {
-		req.Header.Set("Cookie", requestHeaders["Cookie"])
+		cookie, ok := requestHeaders["Cookie"]
+		if ok {
+			req.Header.Set("Cookie", cookie)
+		}
 	}
 	return req
 }

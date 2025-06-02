@@ -96,6 +96,13 @@ func TestGetRequest(t *testing.T) {
 			requestHeaders: map[string]string{"Cookie": "cookie1=test"},
 			wantReq:  &http.Request{URL: &url.URL{}, Header: http.Header{}, Method: http.MethodGet},
 		},
+		{
+			name:     "handles no cookies present",
+			pCtx:     &backend.PluginContext{PluginID: "hello"},
+			settings: models.InfinitySettings{KeepCookies: []string{"cookie1"}},
+			requestHeaders: map[string]string{"AnotherHeader": "test"},
+			wantReq:  &http.Request{URL: &url.URL{}, Header: http.Header{}, Method: http.MethodGet},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
