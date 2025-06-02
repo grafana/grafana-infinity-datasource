@@ -175,3 +175,12 @@ func getQueryReqHeader(requestHeaders map[string]string, headerName string) stri
 
 	return ""
 }
+
+// For extra precaution, only forwards cookies if jsonData.keepCookies is set for the datasource
+// Grafana appears to provide only the specified cookies in the requestHeaders
+func ApplyForwardedCookies(_ context.Context, settings models.InfinitySettings, req *http.Request, requestHeaders map[string]string) *http.Request {
+	if len(settings.KeepCookies) >= 1 {
+		req.Header.Set("Cookie", requestHeaders["Cookie"])
+	}
+	return req
+}
