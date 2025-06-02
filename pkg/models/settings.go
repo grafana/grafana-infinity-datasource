@@ -107,6 +107,8 @@ type InfinitySettings struct {
 	TLSClientKey              string
 	ProxyType                 ProxyType
 	ProxyUrl                  string
+	ProxyUserName             string
+	ProxyUserPassword         string
 	AllowedHosts              []string
 	ReferenceData             []RefData
 	CustomHealthCheckEnabled  bool
@@ -195,6 +197,7 @@ type InfinitySettingsJson struct {
 	TimeoutInSeconds          int64          `json:"timeoutInSeconds,omitempty"`
 	ProxyType                 ProxyType      `json:"proxy_type,omitempty"`
 	ProxyUrl                  string         `json:"proxy_url,omitempty"`
+	ProxyUserName             string         `json:"proxy_username,omitempty"`
 	ReferenceData             []RefData      `json:"refData,omitempty"`
 	CustomHealthCheckEnabled  bool           `json:"customHealthCheckEnabled,omitempty"`
 	CustomHealthCheckUrl      string         `json:"customHealthCheckUrl,omitempty"`
@@ -245,6 +248,7 @@ func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings
 		settings.TimeoutInSeconds = 60
 		settings.ProxyType = infJson.ProxyType
 		settings.ProxyUrl = infJson.ProxyUrl
+		settings.ProxyUserName = infJson.ProxyUserName
 		settings.PathEncodedURLsEnabled = infJson.PathEncodedURLsEnabled
 		settings.AllowDangerousHTTPMethods = infJson.AllowDangerousHTTPMethods
 		if settings.ProxyType == "" {
@@ -296,6 +300,9 @@ func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings
 	}
 	if val, ok := config.DecryptedSecureJSONData["azureBlobAccountKey"]; ok {
 		settings.AzureBlobAccountKey = val
+	}
+	if val, ok := config.DecryptedSecureJSONData["proxyUserPassword"]; ok {
+		settings.ProxyUserPassword = val
 	}
 	settings.CustomHeaders = GetSecrets(config, "httpHeaderName", "httpHeaderValue")
 	settings.SecureQueryFields = GetSecrets(config, "secureQueryName", "secureQueryValue")
