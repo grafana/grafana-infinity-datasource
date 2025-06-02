@@ -112,7 +112,7 @@ func TestAuthentication(t *testing.T) {
 			metaData := res.Frames[0].Meta.Custom.(*infinity.CustomMeta)
 			require.NotNil(t, res.Error)
 			require.NotNil(t, metaData)
-			require.Equal(t, "unsuccessful HTTP response. 401 Unauthorized", metaData.Error)
+			require.Equal(t, "unsuccessful HTTP response code\nstatus code : 401 Unauthorized", metaData.Error)
 			require.Equal(t, http.StatusUnauthorized, metaData.ResponseCodeFromServer)
 		})
 	})
