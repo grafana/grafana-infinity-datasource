@@ -25,7 +25,7 @@ export const TypeSelector = (props: { query: InfinityQuery; onChange: (e: Infini
   };
   return (
     <EditorField label="Type" tag={query.type === 'google-sheets' ? 'beta' : ''} horizontal={true}>
-      <Select width={18} options={getTypes()} onChange={(e) => onTypeChange(e.value as InfinityQueryType)} value={query.type || 'json'} menuShouldPortal={true}></Select>
+      <Select width={21} options={getTypes()} onChange={(e) => onTypeChange(e.value as InfinityQueryType)} value={query.type || 'json'} menuShouldPortal={true}></Select>
     </EditorField>
   );
 };

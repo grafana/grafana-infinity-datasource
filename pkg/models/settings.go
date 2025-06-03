@@ -3,7 +3,6 @@ package models
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/textproto"
 	"strings"
@@ -108,6 +107,8 @@ type InfinitySettings struct {
 	TLSClientKey              string
 	ProxyType                 ProxyType
 	ProxyUrl                  string
+	ProxyUserName             string
+	ProxyUserPassword         string
 	AllowedHosts              []string
 	ReferenceData             []RefData
 	CustomHealthCheckEnabled  bool
@@ -126,37 +127,37 @@ type InfinitySettings struct {
 
 func (s *InfinitySettings) Validate() error {
 	if (s.BasicAuthEnabled || s.AuthenticationMethod == AuthenticationMethodBasic || s.AuthenticationMethod == AuthenticationMethodDigestAuth) && s.Password == "" {
-		return errors.New("invalid or empty password detected")
+		return ErrInvalidConfigPassword
 	}
 	if s.AuthenticationMethod == AuthenticationMethodApiKey && (s.ApiKeyValue == "" || s.ApiKeyKey == "") {
-		return errors.New("invalid API key specified")
+		return ErrInvalidConfigAPIKey
 	}
 	if s.AuthenticationMethod == AuthenticationMethodBearerToken && s.BearerToken == "" {
-		return errors.New("invalid or empty bearer token detected")
+		return ErrInvalidConfigBearerToken
 	}
 	if s.AuthenticationMethod == AuthenticationMethodAzureBlob {
 		if strings.TrimSpace(s.AzureBlobAccountName) == "" {
-			return errors.New("invalid/empty azure blob account name")
+			return ErrInvalidConfigAzBlobAccName
 		}
 		if strings.TrimSpace(s.AzureBlobAccountKey) == "" {
-			return errors.New("invalid/empty azure blob key")
+			return ErrInvalidConfigAzBlobKey
 		}
 		return nil
 	}
 	if s.AuthenticationMethod == AuthenticationMethodAWS && s.AWSSettings.AuthType == AWSAuthTypeKeys {
 		if strings.TrimSpace(s.AWSAccessKey) == "" {
-			return errors.New("invalid/empty AWS access key")
+			return ErrInvalidConfigAWSAccessKey
 		}
 		if strings.TrimSpace(s.AWSSecretKey) == "" {
-			return errors.New("invalid/empty AWS secret key")
+			return ErrInvalidConfigAWSSecretKey
 		}
 		return nil
 	}
 	if s.AuthenticationMethod != AuthenticationMethodNone && len(s.AllowedHosts) < 1 {
-		return errors.New("configure allowed hosts in the authentication section")
+		return ErrInvalidConfigHostNotAllowed
 	}
 	if s.HaveSecureHeaders() && len(s.AllowedHosts) < 1 {
-		return errors.New("configure allowed hosts in the authentication section")
+		return ErrInvalidConfigHostNotAllowed
 	}
 	return nil
 }
@@ -197,6 +198,7 @@ type InfinitySettingsJson struct {
 	TimeoutInSeconds          int64          `json:"timeoutInSeconds,omitempty"`
 	ProxyType                 ProxyType      `json:"proxy_type,omitempty"`
 	ProxyUrl                  string         `json:"proxy_url,omitempty"`
+	ProxyUserName             string         `json:"proxy_username,omitempty"`
 	ReferenceData             []RefData      `json:"refData,omitempty"`
 	CustomHealthCheckEnabled  bool           `json:"customHealthCheckEnabled,omitempty"`
 	CustomHealthCheckUrl      string         `json:"customHealthCheckUrl,omitempty"`
@@ -248,6 +250,7 @@ func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings
 		settings.TimeoutInSeconds = 60
 		settings.ProxyType = infJson.ProxyType
 		settings.ProxyUrl = infJson.ProxyUrl
+		settings.ProxyUserName = infJson.ProxyUserName
 		settings.PathEncodedURLsEnabled = infJson.PathEncodedURLsEnabled
 		settings.AllowDangerousHTTPMethods = infJson.AllowDangerousHTTPMethods
 		settings.AcceptErrorStatusCodes = infJson.AcceptErrorStatusCodes
@@ -300,6 +303,9 @@ func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings
 	}
 	if val, ok := config.DecryptedSecureJSONData["azureBlobAccountKey"]; ok {
 		settings.AzureBlobAccountKey = val
+	}
+	if val, ok := config.DecryptedSecureJSONData["proxyUserPassword"]; ok {
+		settings.ProxyUserPassword = val
 	}
 	settings.CustomHeaders = GetSecrets(config, "httpHeaderName", "httpHeaderValue")
 	settings.SecureQueryFields = GetSecrets(config, "secureQueryName", "secureQueryValue")

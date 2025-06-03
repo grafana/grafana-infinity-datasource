@@ -1,6 +1,6 @@
 {
   "name": "grafana-infinity-datasource",
-  "version": "3.2.2",
+  "version": "3.3.0",
   "description": "JSON, CSV, XML, GraphQL, HTML and REST API datasource for Grafana. Do infinite things with Grafana. Transform data with UQL/GROQ. Visualize data from many apis, RSS/ATOM feeds directly",
   "keywords": [
     "grafana",
@@ -41,6 +41,7 @@
     "e2e": "playwright test",
     "lint": "prettier --list-different . && eslint --cache --ignore-path ./.gitignore --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
+    "docs": "cd docs && make docs",
     "server": "docker compose up --build",
     "sign": "npx --yes @grafana/sign-plugin@latest",
     "spellcheck": "cspell -c cspell.config.json \"**/*.{ts,tsx,js,go,md,mdx,yml,yaml,json,scss,css}\"",

@@ -1,8 +1,14 @@
 # Change Log
 
-## 3.2.2
+## 3.3.0
 
-### Patch Changes
+🚀 Added support for **jq** syntax in root selector via `jq-backend` parser. To learn more, refer the [documentation](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/query/jq-backend/).
+
+🚀 Added support for custom proxy URL user name and password
+
+🐛 Healthcheck error messages improvement
+
+## 3.2.2
 
 🐛 Upgrading from go 1.24.1 to 1.24.3 will address a number of known CVE's.
 

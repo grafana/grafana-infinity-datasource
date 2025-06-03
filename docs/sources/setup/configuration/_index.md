@@ -41,7 +41,11 @@ This data source can work out of the box without any additional configuration. I
 
 > If you specify the URL as `https://example.com/path` in your datasource config and `/my-endpoint` as your url in the query, then the final URL will be `https://example.com/path/my-endpoint`.
 
-For more information, refer to [Configuring URL](/docs/plugins/yesoreyeram-infinity-datasource/<INFINITY_PLUGIN_VERSION>/references/url/).
+For more information, refer to [Configuring URL](/docs/yesoreyeram-infinity-datasource/<INFINITY_PLUGIN_VERSION>/references/url/).
+
+## Network
+
+For configuring network settings such as proxy setting, Refer the [Network Documentation](/docs/plugins/yesoreyeram-infinity-datasource/latest/setup/configuration/network/)
 
 ## Health check
 
@@ -56,16 +60,6 @@ The custom health check supports only HTTP GET methods. It verifies the response
 ### Troubleshooting
 
 If you receive a `Health check failed` message after you click **Save & Test**, check the URL to ensure it's valid and you entered it correctly.
-
-## Proxy outgoing requests
-
-If you want your data source to connect via proxy, set the environment appropriate environment variables. HTTP_PROXY, HTTPS_PROXY and NO_PROXY. HTTPS_PROXY takes precedence over HTTP_PROXY for https requests.
-
-> proxy support is available from v0.7.10
-
-If you want to setup specific proxy URL for the datasource, you can configure in the datasource config network section.
-
-> Proxy URL specification in data source config is available from v2.2.0
 
 ## Allowing dangerous HTTP methods
 
