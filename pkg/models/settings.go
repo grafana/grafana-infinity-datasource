@@ -152,7 +152,7 @@ func (s *InfinitySettings) Validate() error {
 		}
 		return nil
 	}
-	if s.AuthenticationMethod != AuthenticationMethodNone && len(s.AllowedHosts) < 1 {
+	if s.AuthenticationMethod != AuthenticationMethodAzureBlob && s.AuthenticationMethod != AuthenticationMethodNone && len(s.AllowedHosts) < 1 {
 		return ErrInvalidConfigHostNotAllowed
 	}
 	if s.HaveSecureHeaders() && len(s.AllowedHosts) < 1 {
