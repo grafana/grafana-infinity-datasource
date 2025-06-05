@@ -36,17 +36,20 @@ const (
 )
 
 type OAuth2Settings struct {
-	OAuth2Type     string           `json:"oauth2_type,omitempty"`
-	ClientID       string           `json:"client_id,omitempty"`
-	TokenURL       string           `json:"token_url,omitempty"`
-	Email          string           `json:"email,omitempty"`
-	PrivateKeyID   string           `json:"private_key_id,omitempty"`
-	Subject        string           `json:"subject,omitempty"`
-	Scopes         []string         `json:"scopes,omitempty"`
-	AuthStyle      oauth2.AuthStyle `json:"authStyle,omitempty"`
-	ClientSecret   string
-	PrivateKey     string
-	EndpointParams map[string]string
+	OAuth2Type       string           `json:"oauth2_type,omitempty"`
+	ClientID         string           `json:"client_id,omitempty"`
+	TokenURL         string           `json:"token_url,omitempty"`
+	Email            string           `json:"email,omitempty"`
+	PrivateKeyID     string           `json:"private_key_id,omitempty"`
+	Subject          string           `json:"subject,omitempty"`
+	Scopes           []string         `json:"scopes,omitempty"`
+	AuthStyle        oauth2.AuthStyle `json:"authStyle,omitempty"`
+	TokenType        string           `json:"tokenType,omitempty"`
+	AuthHeader       string           `json:"authHeader,omitempty"`
+	SkipSpaceInToken bool             `json:"skipSpaceInToken,omitempty"`
+	ClientSecret     string
+	PrivateKey       string
+	EndpointParams   map[string]string
 }
 
 type AWSAuthType string

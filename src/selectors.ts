@@ -5,6 +5,22 @@ export const Components = {
   Common: {},
   ConfigEditor: {
     Auth: {
+      OAuth2: {
+        TokenHeader: {
+          label: 'Custom Token Header',
+          tooltip: `Once the token retrieved, the same will be sent to subsequent request's header with the key "Authorization". If the API require different key, provide the key here. Defaults to Authorization`,
+          placeholder: 'Authorization',
+        },
+        TokenPrefix: {
+          label: 'Custom Token Prefix',
+          tooltip: `Once the token retrieved, the same will be sent to subsequent request's Authorization header with the prefix "Bearer " or whatever returned from the initial token retrieval request's response. If the API require different prefix, provide the prefix here. Refer https://datatracker.ietf.org/doc/html/rfc6749#section-7.1 for more details. Defaults to Bearer`,
+          placeholder: 'Bearer',
+        },
+        SkipSpace: {
+          label: 'Skip Space in Token',
+          tooltip: 'If selected, space between token prefix and token will be skipped',
+        },
+      },
       AzureBlob: {
         Region: {
           label: 'Azure cloud',

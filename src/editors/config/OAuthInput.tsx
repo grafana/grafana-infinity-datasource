@@ -1,6 +1,7 @@
-import { onUpdateDatasourceSecureJsonDataOption, DataSourcePluginOptionsEditorProps, SelectableValue } from '@grafana/data';
-import { InlineFormLabel, Input, LegacyForms, LinkButton, RadioButtonGroup } from '@grafana/ui';
 import React from 'react';
+import { onUpdateDatasourceSecureJsonDataOption, type DataSourcePluginOptionsEditorProps, type SelectableValue } from '@grafana/data';
+import { InlineFormLabel, Input, LegacyForms, LinkButton, RadioButtonGroup, CollapsableSection, Stack, InlineSwitch } from '@grafana/ui';
+import { Components } from '@/selectors';
 import { SecureFieldsEditor } from '@/components/config/SecureFieldsEditor';
 import type { InfinityOptions, InfinitySecureOptions, OAuth2Props, OAuth2Type } from '@/types';
 
@@ -113,6 +114,7 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
               secureFieldValue="oauth2EndPointParamsValue"
             />
           </div>
+          <TokenCustomization options={options} onOptionsChange={onOptionsChange} />
         </>
       )}
       {oauth2.oauth2_type === 'jwt' && (
@@ -167,6 +169,7 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
               placeholder={'Comma separated values of scopes'}
             />
           </div>
+          <TokenCustomization options={options} onOptionsChange={onOptionsChange} />
         </>
       )}
       {oauth2.oauth2_type === 'others' && (
@@ -182,5 +185,38 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
         </div>
       )}
     </>
+  );
+};
+
+const TokenCustomization = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
+  const { options, onOptionsChange } = props;
+  const oauth2: OAuth2Props = options?.jsonData?.oauth2 || {};
+  const { TokenHeader: TokenHeaderSelector, TokenPrefix: TokenPrefixSelector, SkipSpace: SkipSpaceSelector } = Components.ConfigEditor.Auth.OAuth2;
+  const onOAuth2PropsChange = <T extends keyof OAuth2Props, V extends OAuth2Props[T]>(key: T, value: V) => {
+    onOptionsChange({ ...options, jsonData: { ...options.jsonData, oauth2: { ...oauth2, [key]: value } } });
+  };
+  return (
+    <CollapsableSection label="Customize auth token (Advanced)" isOpen={true}>
+      <Stack direction={'column'}>
+        <Stack gap={0.5}>
+          <InlineFormLabel width={12} interactive={true} tooltip={TokenHeaderSelector.tooltip}>
+            {TokenHeaderSelector.label}
+          </InlineFormLabel>
+          <Input onChange={(v) => onOAuth2PropsChange('authHeader', v.currentTarget.value)} value={oauth2.authHeader} width={30} placeholder={TokenHeaderSelector.placeholder} />
+        </Stack>
+        <Stack gap={0.5}>
+          <InlineFormLabel width={12} interactive={true} tooltip={TokenPrefixSelector.tooltip}>
+            {TokenPrefixSelector.label}
+          </InlineFormLabel>
+          <Input onChange={(v) => onOAuth2PropsChange('tokenType', v.currentTarget.value)} value={oauth2.tokenType} width={30} placeholder={TokenPrefixSelector.placeholder} />
+        </Stack>
+        <Stack gap={0.5}>
+          <InlineFormLabel width={12} interactive={true} tooltip={SkipSpaceSelector.tooltip}>
+            {SkipSpaceSelector.label}
+          </InlineFormLabel>
+          <InlineSwitch value={oauth2.skipSpaceInToken} onChange={(v) => onOAuth2PropsChange('skipSpaceInToken', v.currentTarget.checked)} />
+        </Stack>
+      </Stack>
+    </CollapsableSection>
   );
 };

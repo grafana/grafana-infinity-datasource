@@ -208,6 +208,135 @@ func TestAuthentication(t *testing.T) {
 			require.NotNil(t, metaData)
 			require.Equal(t, map[string]any(map[string]any{"foo": "bar"}), metaData.Data)
 		})
+		t.Run("should respect custom token header key and token prefix", func(t *testing.T) {
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if r.URL.String() == "/token" {
+					w.Header().Set("Content-Type", "application/json")
+					_, _ = io.WriteString(w, `{"access_token": "foo", "refresh_token": "bar"}`)
+					return
+				}
+				if r.Header.Get("Auth") != "key=foo" {
+					w.WriteHeader(http.StatusUnauthorized)
+					return
+				}
+				w.Header().Set("Content-Type", "application/json")
+				_, _ = io.WriteString(w, `{"foo":"bar"}`)
+			}))
+			defer server.Close()
+			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
+				URL:                  server.URL,
+				AllowedHosts:         []string{server.URL},
+				AuthenticationMethod: models.AuthenticationMethodOAuth,
+				OAuth2Settings: models.OAuth2Settings{
+					OAuth2Type:       models.AuthOAuthTypeClientCredentials,
+					TokenURL:         server.URL + "/token",
+					ClientID:         "MY_CLIENT_ID",
+					ClientSecret:     "MY_CLIENT_SECRET",
+					AuthHeader:       "Auth",
+					TokenType:        "key=",
+					Scopes:           []string{"scope1", "scope2"},
+					SkipSpaceInToken: true,
+				},
+			})
+			require.Nil(t, err)
+			res := queryData(t, context.Background(), backend.DataQuery{
+				JSON: []byte(fmt.Sprintf(`{
+					"type": "json",
+					"source": "url",
+					"url":  "%s/something-else"
+				}`, server.URL)),
+			}, *client, map[string]string{}, backend.PluginContext{})
+			require.NotNil(t, res)
+			require.Nil(t, res.Error)
+			metaData := res.Frames[0].Meta.Custom.(*infinity.CustomMeta)
+			require.NotNil(t, metaData)
+			require.Equal(t, map[string]any(map[string]any{"foo": "bar"}), metaData.Data)
+		})
+		t.Run("should respect custom token header key and token prefix without skip space", func(t *testing.T) {
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if r.URL.String() == "/token" {
+					w.Header().Set("Content-Type", "application/json")
+					_, _ = io.WriteString(w, `{"access_token": "foo", "refresh_token": "bar"}`)
+					return
+				}
+				if r.Header.Get("Auth") != "key= foo" {
+					w.WriteHeader(http.StatusUnauthorized)
+					return
+				}
+				w.Header().Set("Content-Type", "application/json")
+				_, _ = io.WriteString(w, `{"foo":"bar"}`)
+			}))
+			defer server.Close()
+			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
+				URL:                  server.URL,
+				AllowedHosts:         []string{server.URL},
+				AuthenticationMethod: models.AuthenticationMethodOAuth,
+				OAuth2Settings: models.OAuth2Settings{
+					OAuth2Type:   models.AuthOAuthTypeClientCredentials,
+					TokenURL:     server.URL + "/token",
+					ClientID:     "MY_CLIENT_ID",
+					ClientSecret: "MY_CLIENT_SECRET",
+					AuthHeader:   "Auth",
+					TokenType:    "key=",
+					Scopes:       []string{"scope1", "scope2"},
+				},
+			})
+			require.Nil(t, err)
+			res := queryData(t, context.Background(), backend.DataQuery{
+				JSON: []byte(fmt.Sprintf(`{
+					"type": "json",
+					"source": "url",
+					"url":  "%s/something-else"
+				}`, server.URL)),
+			}, *client, map[string]string{}, backend.PluginContext{})
+			require.NotNil(t, res)
+			require.Nil(t, res.Error)
+			metaData := res.Frames[0].Meta.Custom.(*infinity.CustomMeta)
+			require.NotNil(t, metaData)
+			require.Equal(t, map[string]any(map[string]any{"foo": "bar"}), metaData.Data)
+		})
+		t.Run("should respect empty token prefix", func(t *testing.T) {
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if r.URL.String() == "/token" {
+					w.Header().Set("Content-Type", "application/json")
+					_, _ = io.WriteString(w, `{"access_token": "foo", "refresh_token": "bar"}`)
+					return
+				}
+				if r.Header.Get("Authorization") != "foo" {
+					w.WriteHeader(http.StatusUnauthorized)
+					return
+				}
+				w.Header().Set("Content-Type", "application/json")
+				_, _ = io.WriteString(w, `{"foo":"bar"}`)
+			}))
+			defer server.Close()
+			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
+				URL:                  server.URL,
+				AllowedHosts:         []string{server.URL},
+				AuthenticationMethod: models.AuthenticationMethodOAuth,
+				OAuth2Settings: models.OAuth2Settings{
+					OAuth2Type:   models.AuthOAuthTypeClientCredentials,
+					TokenURL:     server.URL + "/token",
+					ClientID:     "MY_CLIENT_ID",
+					ClientSecret: "MY_CLIENT_SECRET",
+					TokenType:    " ",
+					Scopes:       []string{"scope1", "scope2"},
+				},
+			})
+			require.Nil(t, err)
+			res := queryData(t, context.Background(), backend.DataQuery{
+				JSON: []byte(fmt.Sprintf(`{
+					"type": "json",
+					"source": "url",
+					"url":  "%s/something-else"
+				}`, server.URL)),
+			}, *client, map[string]string{}, backend.PluginContext{})
+			require.NotNil(t, res)
+			require.Nil(t, res.Error)
+			metaData := res.Frames[0].Meta.Custom.(*infinity.CustomMeta)
+			require.NotNil(t, metaData)
+			require.Equal(t, map[string]any(map[string]any{"foo": "bar"}), metaData.Data)
+		})
 		t.Run("should throw error with invalid oauth credentials", func(t *testing.T) {
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				if r.URL.String() == "/token" {

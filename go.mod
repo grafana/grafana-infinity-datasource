@@ -139,3 +139,5 @@ require (
 	gopkg.in/fsnotify/fsnotify.v1 v1.4.7 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
+
+replace golang.org/x/oauth2 v0.29.0 => github.com/grafana/oauth2 v0.0.0-20250605095642-73fc75bdb082

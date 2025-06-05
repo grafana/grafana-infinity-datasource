@@ -113,12 +113,15 @@ func applyOAuthClientCredentials(ctx context.Context, httpClient *http.Client, s
 	defer span.End()
 	if isOAuthCredentialsConfigured(settings) {
 		oauthConfig := clientcredentials.Config{
-			ClientID:       settings.OAuth2Settings.ClientID,
-			ClientSecret:   settings.OAuth2Settings.ClientSecret,
-			TokenURL:       settings.OAuth2Settings.TokenURL,
-			Scopes:         []string{},
-			EndpointParams: url.Values{},
-			AuthStyle:      settings.OAuth2Settings.AuthStyle,
+			ClientID:         settings.OAuth2Settings.ClientID,
+			ClientSecret:     settings.OAuth2Settings.ClientSecret,
+			TokenURL:         settings.OAuth2Settings.TokenURL,
+			Scopes:           []string{},
+			EndpointParams:   url.Values{},
+			AuthStyle:        settings.OAuth2Settings.AuthStyle,
+			TokenType:        settings.OAuth2Settings.TokenType,
+			AuthHeader:       settings.OAuth2Settings.AuthHeader,
+			SkipSpaceInToken: settings.OAuth2Settings.SkipSpaceInToken,
 		}
 		for _, scope := range settings.OAuth2Settings.Scopes {
 			if scope != "" {
@@ -145,12 +148,15 @@ func applyOAuthJWT(ctx context.Context, httpClient *http.Client, settings models
 	defer span.End()
 	if isOAuthJWTConfigured(settings) {
 		jwtConfig := jwt.Config{
-			Email:        settings.OAuth2Settings.Email,
-			TokenURL:     settings.OAuth2Settings.TokenURL,
-			PrivateKey:   []byte(strings.ReplaceAll(settings.OAuth2Settings.PrivateKey, "\\n", "\n")),
-			PrivateKeyID: settings.OAuth2Settings.PrivateKeyID,
-			Subject:      settings.OAuth2Settings.Subject,
-			Scopes:       []string{},
+			Email:            settings.OAuth2Settings.Email,
+			TokenURL:         settings.OAuth2Settings.TokenURL,
+			PrivateKey:       []byte(strings.ReplaceAll(settings.OAuth2Settings.PrivateKey, "\\n", "\n")),
+			PrivateKeyID:     settings.OAuth2Settings.PrivateKeyID,
+			Subject:          settings.OAuth2Settings.Subject,
+			TokenType:        settings.OAuth2Settings.TokenType,
+			AuthHeader:       settings.OAuth2Settings.AuthHeader,
+			SkipSpaceInToken: settings.OAuth2Settings.SkipSpaceInToken,
+			Scopes:           []string{},
 		}
 		for _, scope := range settings.OAuth2Settings.Scopes {
 			if scope != "" {
