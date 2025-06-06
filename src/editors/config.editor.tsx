@@ -15,6 +15,7 @@ import { ReferenceDataEditor } from '@/editors/config/ReferenceData';
 import { CustomHealthCheckEditor } from '@/editors/config/CustomHealthCheckEditor';
 import type { DataSourcePluginOptionsEditorProps, DataSourceSettings } from '@grafana/data';
 import type { InfinityOptions } from '@/types';
+import { KeepCookiesEditor } from './config/KeepCookies';
 
 const Collapse = CollapseOriginal as any;
 
@@ -88,6 +89,9 @@ export const HeadersEditor = (props: DataSourcePluginOptionsEditorProps<Infinity
       </Collapse>
       <Collapse isOpen={true} collapsible={true} label="URL settings">
         <URLSettingsEditor options={options} onOptionsChange={onOptionsChange} />
+      </Collapse>
+      <Collapse isOpen={true} collapsible={true} label="Cookies">
+        <KeepCookiesEditor options={options} onOptionsChange={onOptionsChange} />
       </Collapse>
     </>
   );

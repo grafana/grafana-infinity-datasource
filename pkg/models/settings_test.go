@@ -155,6 +155,7 @@ func TestAllSettingsAgainstFrontEnd(t *testing.T) {
 			"proxy_type" : "url",
 			"proxy_url" : "https://foo.com",
 			"allowedHosts": ["host1","host2"],
+			"keepCookies": ["cookie1","cookie2"],
 			"customHealthCheckEnabled" : true,
 			"customHealthCheckUrl" : "https://foo-check/",
 			"allowDangerousHTTPMethods": true,
@@ -252,6 +253,7 @@ func TestAllSettingsAgainstFrontEnd(t *testing.T) {
 		SecureQueryFields: map[string]string{
 			"foo": "bar",
 		},
+		KeepCookies:               []string{"cookie1", "cookie2"},
 	}, gotSettings)
 }
 
