@@ -119,6 +119,8 @@ func applyOAuthClientCredentials(ctx context.Context, httpClient *http.Client, s
 			Scopes:         []string{},
 			EndpointParams: url.Values{},
 			AuthStyle:      settings.OAuth2Settings.AuthStyle,
+			AuthHeader:     settings.OAuth2Settings.AuthHeader,
+			TokenTemplate:  settings.OAuth2Settings.TokenTemplate,
 		}
 		for _, scope := range settings.OAuth2Settings.Scopes {
 			if scope != "" {
@@ -145,12 +147,14 @@ func applyOAuthJWT(ctx context.Context, httpClient *http.Client, settings models
 	defer span.End()
 	if isOAuthJWTConfigured(settings) {
 		jwtConfig := jwt.Config{
-			Email:        settings.OAuth2Settings.Email,
-			TokenURL:     settings.OAuth2Settings.TokenURL,
-			PrivateKey:   []byte(strings.ReplaceAll(settings.OAuth2Settings.PrivateKey, "\\n", "\n")),
-			PrivateKeyID: settings.OAuth2Settings.PrivateKeyID,
-			Subject:      settings.OAuth2Settings.Subject,
-			Scopes:       []string{},
+			Email:         settings.OAuth2Settings.Email,
+			TokenURL:      settings.OAuth2Settings.TokenURL,
+			PrivateKey:    []byte(strings.ReplaceAll(settings.OAuth2Settings.PrivateKey, "\\n", "\n")),
+			PrivateKeyID:  settings.OAuth2Settings.PrivateKeyID,
+			Subject:       settings.OAuth2Settings.Subject,
+			AuthHeader:    settings.OAuth2Settings.AuthHeader,
+			TokenTemplate: settings.OAuth2Settings.TokenTemplate,
+			Scopes:        []string{},
 		}
 		for _, scope := range settings.OAuth2Settings.Scopes {
 			if scope != "" {
