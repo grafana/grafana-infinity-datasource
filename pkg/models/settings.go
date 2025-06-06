@@ -123,7 +123,7 @@ type InfinitySettings struct {
 	// ProxyOpts is used for Secure Socks Proxy configuration
 	ProxyOpts httpclient.Options
 	// Specific cookies included by Grafana for forwarding
-	KeepCookies               []string
+	KeepCookies []string
 }
 
 func (s *InfinitySettings) Validate() error {
@@ -158,6 +158,9 @@ func (s *InfinitySettings) Validate() error {
 		return ErrInvalidConfigHostNotAllowed
 	}
 	if s.HaveSecureHeaders() && len(s.AllowedHosts) < 1 {
+		return ErrInvalidConfigHostNotAllowed
+	}
+	if len(s.KeepCookies) > 0 && len(s.AllowedHosts) < 1 {
 		return ErrInvalidConfigHostNotAllowed
 	}
 	return nil
