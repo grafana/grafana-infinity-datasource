@@ -60,6 +60,15 @@ datasources:
       customHealthCheckUrl: 'https://postman-echo.com/basic-auth'
     secureJsonData:
       basicAuthPassword: 'password'
+  - name: Postman Echo - Forward Cookies (log in to see grafana_session_expiry cookie echo)
+    uid: infinity-postman-echo-forward-cookies
+    type: yesoreyeram-infinity-datasource
+    url: https://postman-echo.com/cookies
+    jsonData:
+      allowedHosts:
+        - https://postman-echo.com
+      keepCookies:
+        - grafana_session_expiry
   - name: Prometheus
     uid: prometheus
     type: prometheus

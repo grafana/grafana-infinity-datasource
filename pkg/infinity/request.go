@@ -46,6 +46,7 @@ func GetRequest(ctx context.Context, pCtx *backend.PluginContext, settings model
 	req = ApplyApiKeyAuth(ctx, settings, req, includeSect)
 	req = ApplyForwardedOAuthIdentity(ctx, requestHeaders, settings, req, includeSect)
 	req = ApplyTraceHead(ctx, req)
+	req = ApplyForwardedCookies(ctx, settings, req, requestHeaders)
 	return req, err
 }
 
