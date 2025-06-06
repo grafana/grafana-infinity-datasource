@@ -33,7 +33,7 @@ func TestAuthentication(t *testing.T) {
 			fmt.Fprintf(w, `{ "message" : "OK" }`)
 		}))
 		defer server.Close()
-		client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodApiKey})
+		client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodApiKey, ApiKeyKey: "foo", ApiKeyValue: "bar"})
 		require.Nil(t, err)
 		require.NotNil(t, client)
 		res := queryData(t, context.Background(), backend.DataQuery{
@@ -45,7 +45,7 @@ func TestAuthentication(t *testing.T) {
 		}, *client, map[string]string{}, backend.PluginContext{})
 		require.NotNil(t, res)
 		require.NotNil(t, res.Error)
-		require.Equal(t, "datasource is missing allowed hosts/URLs. Configure it in the datasource settings page for enhanced security", res.Error.Error())
+		require.Equal(t, models.ErrInvalidConfigHostNotAllowed.Error(), res.Error.Error())
 		require.Equal(t, 0, len(res.Frames))
 	})
 	t.Run("basic auth", func(t *testing.T) {
