@@ -11,14 +11,10 @@ export const Components = {
           tooltip: `Once the token retrieved, the same will be sent to subsequent request's header with the key "Authorization". If the API require different key, provide the key here. Defaults to Authorization`,
           placeholder: 'Authorization',
         },
-        TokenPrefix: {
-          label: 'Custom Token Prefix',
-          tooltip: `Once the token retrieved, the same will be sent to subsequent request's Authorization header with the prefix "Bearer " or whatever returned from the initial token retrieval request's response. If the API require different prefix, provide the prefix here. Refer https://datatracker.ietf.org/doc/html/rfc6749#section-7.1 for more details. Defaults to Bearer`,
-          placeholder: 'Bearer',
-        },
-        SkipSpace: {
-          label: 'Skip Space in Token',
-          tooltip: 'If selected, space between token prefix and token will be skipped',
+        TokenTemplate: {
+          label: 'Custom Token Template',
+          tooltip: `Token Template allows you to customize the token value using the template. This will be Authorization header value. String {{ access_token }} will be replaced with actual access token`,
+          placeholder: 'Bearer {{ access_token }}',
         },
       },
       AzureBlob: {

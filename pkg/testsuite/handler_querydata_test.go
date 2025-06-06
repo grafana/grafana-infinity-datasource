@@ -228,14 +228,13 @@ func TestAuthentication(t *testing.T) {
 				AllowedHosts:         []string{server.URL},
 				AuthenticationMethod: models.AuthenticationMethodOAuth,
 				OAuth2Settings: models.OAuth2Settings{
-					OAuth2Type:       models.AuthOAuthTypeClientCredentials,
-					TokenURL:         server.URL + "/token",
-					ClientID:         "MY_CLIENT_ID",
-					ClientSecret:     "MY_CLIENT_SECRET",
-					AuthHeader:       "Auth",
-					TokenType:        "key=",
-					Scopes:           []string{"scope1", "scope2"},
-					SkipSpaceInToken: true,
+					OAuth2Type:    models.AuthOAuthTypeClientCredentials,
+					TokenURL:      server.URL + "/token",
+					ClientID:      "MY_CLIENT_ID",
+					ClientSecret:  "MY_CLIENT_SECRET",
+					AuthHeader:    "Auth",
+					TokenTemplate: "key={{ access_token }}",
+					Scopes:        []string{"scope1", "scope2"},
 				},
 			})
 			require.Nil(t, err)
@@ -272,13 +271,13 @@ func TestAuthentication(t *testing.T) {
 				AllowedHosts:         []string{server.URL},
 				AuthenticationMethod: models.AuthenticationMethodOAuth,
 				OAuth2Settings: models.OAuth2Settings{
-					OAuth2Type:   models.AuthOAuthTypeClientCredentials,
-					TokenURL:     server.URL + "/token",
-					ClientID:     "MY_CLIENT_ID",
-					ClientSecret: "MY_CLIENT_SECRET",
-					AuthHeader:   "Auth",
-					TokenType:    "key=",
-					Scopes:       []string{"scope1", "scope2"},
+					OAuth2Type:    models.AuthOAuthTypeClientCredentials,
+					TokenURL:      server.URL + "/token",
+					ClientID:      "MY_CLIENT_ID",
+					ClientSecret:  "MY_CLIENT_SECRET",
+					AuthHeader:    "Auth",
+					TokenTemplate: "key= {{ access_token }}",
+					Scopes:        []string{"scope1", "scope2"},
 				},
 			})
 			require.Nil(t, err)
@@ -315,12 +314,12 @@ func TestAuthentication(t *testing.T) {
 				AllowedHosts:         []string{server.URL},
 				AuthenticationMethod: models.AuthenticationMethodOAuth,
 				OAuth2Settings: models.OAuth2Settings{
-					OAuth2Type:   models.AuthOAuthTypeClientCredentials,
-					TokenURL:     server.URL + "/token",
-					ClientID:     "MY_CLIENT_ID",
-					ClientSecret: "MY_CLIENT_SECRET",
-					TokenType:    " ",
-					Scopes:       []string{"scope1", "scope2"},
+					OAuth2Type:    models.AuthOAuthTypeClientCredentials,
+					TokenURL:      server.URL + "/token",
+					ClientID:      "MY_CLIENT_ID",
+					ClientSecret:  "MY_CLIENT_SECRET",
+					TokenTemplate: "{{ access_token }}",
+					Scopes:        []string{"scope1", "scope2"},
 				},
 			})
 			require.Nil(t, err)

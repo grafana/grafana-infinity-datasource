@@ -39,19 +39,19 @@ Download the required version of release archive from [GitHub](https://github.co
 If you are using grafana-cli, execute the following command to install the latest published version of the plugin
 
 ```shell
-grafana-cli plugins install yesoreyeram-infinity-datasource
+grafana cli plugins install yesoreyeram-infinity-datasource
 ```
 
 If you need custom version of the plugin from github, you can install using the following command.
 
 ```shell
-grafana-cli --pluginUrl <ZIP_FILE_URL> plugins install yesoreyeram-infinity-datasource
+grafana cli --pluginUrl <ZIP_FILE_URL> plugins install yesoreyeram-infinity-datasource
 ```
 
 Example:
 
 ```shell
-grafana-cli --pluginUrl https://github.com/grafana/grafana-infinity-datasource/releases/download/v2.4.0/yesoreyeram-infinity-datasource-2.4.0.zip plugins install yesoreyeram-infinity-datasource
+grafana cli --pluginUrl https://github.com/grafana/grafana-infinity-datasource/releases/download/v3.3.0/yesoreyeram-infinity-datasource-3.3.0.zip plugins install yesoreyeram-infinity-datasource
 ```
 
 ## Install using helm chart
@@ -74,7 +74,7 @@ Example:
 
 ```yml
 plugins:
-  - https://github.com/grafana/grafana-infinity-datasource/releases/download/v2.4.0/yesoreyeram-infinity-datasource-2.4.0.zip;yesoreyeram-infinity-datasource
+  - https://github.com/grafana/grafana-infinity-datasource/releases/download/v3.3.0/yesoreyeram-infinity-datasource-3.3.0.zip;yesoreyeram-infinity-datasource
 ```
 
 ## Install using Docker
@@ -82,11 +82,11 @@ plugins:
 With Docker, you can install the plugin using the following command. This will download the latest published version of the plugin from Grafana plugins directory.
 
 ```shell
-docker run -p 3000:3000 -e "GF_INSTALL_PLUGINS=yesoreyeram-infinity-datasource" grafana/grafana-enterprise:10.2.3
+docker run -p 3000:3000 -e "GF_INSTALL_PLUGINS=yesoreyeram-infinity-datasource" grafana/grafana-enterprise:latest
 ```
 
 If you need to install a custom version of the plugin with Docker, use the following command:
 
 ```shell
-docker run -p 3000:3000 -e "GF_INSTALL_PLUGINS=https://github.com/grafana/grafana-infinity-datasource/releases/download/v2.4.0/yesoreyeram-infinity-datasource-2.4.0.zip;yesoreyeram-infinity-datasource" grafana/grafana-enterprise:10.2.3
+docker run -p 3000:3000 -e "GF_INSTALL_PLUGINS=https://github.com/grafana/grafana-infinity-datasource/releases/download/v3.3.0/yesoreyeram-infinity-datasource-3.3.0.zip;yesoreyeram-infinity-datasource" grafana/grafana-enterprise:latest
 ```

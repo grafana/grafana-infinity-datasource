@@ -10,7 +10,7 @@ If you want to contribute to the plugin, you can contribute in one of the follow
 You need following tools in your local machine for development
 
 - NodeJS v20.0+
-- Go 1.22
+- Go 1.24.4
 - Mage
 
 Once you clone the repo locally in the grafana's plugin folder. Do the following steps
@@ -21,7 +21,7 @@ Once you clone the repo locally in the grafana's plugin folder. Do the following
 - `yarn dev` - For continuously watching the front-end changes and build
 - `yarn build` - For building the frontend components
 - `mage -v` - This will help to build the backend part of the plugin. Do this once if you are contributing only the frontend. There is no significant code is in the backend. So no much changes expected
-- `docker-compose up` - To run the plugin with grafana locally. ( use infinity:infinity as the credentials ). You can also enable traces and logs with debug mode. Refer the **Setting up grafana in debug mode** section below
+- `docker compose up` - To run the plugin with grafana locally. ( use infinity:infinity as the credentials ). You can also enable traces and logs with debug mode. Refer the **Setting up grafana in debug mode** section below
 
 ## Submitting PR
 

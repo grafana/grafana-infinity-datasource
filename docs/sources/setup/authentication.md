@@ -91,9 +91,8 @@ OAuth 2.0 client credentials require the following parameters:
 | **Token URL**       | TokenURL is the resource server's token endpoint URL. This is a constant specific to each server. |
 | **Scopes**          | Scope specifies optional requested permissions.                                                   |
 | **Endpoint params** | EndpointParams specifies additional parameters for requests to the token endpoint.                |
-| **Custom Token Header** | Once the token retrieved, the same will be sent to subsequent request's header with the key "Authorization". If the API require different key, provide the key here. Defaults to Authorization |
-| **Custom Token Prefix** | Once the token retrieved, the same will be sent to subsequent request's Authorization header with the prefix "Bearer " or whatever returned from the initial token retrieval request's response. If the API require different prefix, provide the prefix here. Refer [https://datatracker.ietf.org/doc/html/rfc6749#section-7.1](https://datatracker.ietf.org/doc/html/rfc6749#section-7.1) for more details. Defaults to Bearer |
-| **Skip Space in Token** | If selected, space between token prefix and token will be skipped |
+| **Custom Token Header**   | Once the token retrieved, the same will be sent to subsequent request's header with the key "Authorization". If the API require different key, provide the key here. Defaults to Authorization |
+| **Custom Token Template** | Token Template allows you to customize the token value using the template. This will be Authorization header value. String `{{ access_token }}` will be replaced with actual access token |
 
 ## OAuth 2.0 JWT
 
@@ -108,8 +107,7 @@ OAuth 2.0 JWT require the following parameters
 | **Subject**                | Optional. Subject is the optional user to impersonate.                                                            |
 | **Scopes**                 | Scopes optionally specifies a list of requested permission scopes. Provide scopes as a comma separated values.    |
 | **Custom Token Header**    | Once the token retrieved, the same will be sent to subsequent request's header with the key "Authorization". If the API require different key, provide the key here. Defaults to Authorization |
-| **Custom Token Prefix**    | Once the token retrieved, the same will be sent to subsequent request's Authorization header with the prefix "Bearer " or whatever returned from the initial token retrieval request's response. If the API require different prefix, provide the prefix here. Refer [https://datatracker.ietf.org/doc/html/rfc6749#section-7.1](https://datatracker.ietf.org/doc/html/rfc6749#section-7.1) for more details. Defaults to Bearer |
-| **Skip Space in Token**    | If selected, space between token prefix and token will be skipped |
+| **Custom Token Template**  | Token Template allows you to customize the token value using the template. This will be Authorization header value. String `{{ access_token }}` will be replaced with actual access token |
 
 ## Azure
 

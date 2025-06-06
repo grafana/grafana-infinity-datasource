@@ -120,8 +120,8 @@ github.com/grafana/infinity-libs/lib/go/utils v1.0.1 h1:eA/kfSTtnzutzajmijIG9LUu
 github.com/grafana/infinity-libs/lib/go/utils v1.0.1/go.mod h1:+hkrwV9ib8dsTCQDNh29PPE8Cnr9sy+w2XzuhrYqPTU=
 github.com/grafana/infinity-libs/lib/go/xmlframer v1.0.3 h1:uKb2sHekW+eCJ34/SlGsoI2JUu6/4/F/mI0uBYeCF48=
 github.com/grafana/infinity-libs/lib/go/xmlframer v1.0.3/go.mod h1:Y0O6Cbztd8e9oVx+M9kd1E5XorjNeDtOorrX2vxSkuk=
-github.com/grafana/oauth2 v0.0.0-20250605095642-73fc75bdb082 h1:raSQrVZvnWSHEmoE664NA9xJ0n2zrGNAzjWR2GcuIs4=
-github.com/grafana/oauth2 v0.0.0-20250605095642-73fc75bdb082/go.mod h1:B++QgG3ZKulg6sRPGD/mqlHQs5rB3Ml9erfeDY7xKlU=
+github.com/grafana/oauth2 v0.0.0-20250606041833-478a0f4fbdd5 h1:dvy/xT8rWvJVT4pH8yMsOCI0wOJrXSN3G7ChxSzFLJo=
+github.com/grafana/oauth2 v0.0.0-20250606041833-478a0f4fbdd5/go.mod h1:B++QgG3ZKulg6sRPGD/mqlHQs5rB3Ml9erfeDY7xKlU=
 github.com/grafana/otel-profiling-go v0.5.1 h1:stVPKAFZSa7eGiqbYuG25VcqYksR6iWvF3YH66t4qL8=
 github.com/grafana/otel-profiling-go v0.5.1/go.mod h1:ftN/t5A/4gQI19/8MoWurBEtC6gFw8Dns1sJZ9W4Tls=
 github.com/grafana/pyroscope-go/godeltaprof v0.1.8 h1:iwOtYXeeVSAeYefJNaxDytgjKtUuKQbJqgAIjlnicKg=
