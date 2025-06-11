@@ -82,11 +82,11 @@ plugins:
 With Docker, you can install the plugin using the following command. This will download the latest published version of the plugin from Grafana plugins directory.
 
 ```shell
-docker run -p 3000:3000 -e "GF_INSTALL_PLUGINS=yesoreyeram-infinity-datasource" grafana/grafana-enterprise:10.2.3
+docker run -p 3000:3000 -e "GF_PLUGINS_PREINSTALL_SYNC=yesoreyeram-infinity-datasource" grafana/grafana-enterprise:latest
 ```
 
 If you need to install a custom version of the plugin with Docker, use the following command:
 
 ```shell
-docker run -p 3000:3000 -e "GF_INSTALL_PLUGINS=https://github.com/grafana/grafana-infinity-datasource/releases/download/v2.4.0/yesoreyeram-infinity-datasource-2.4.0.zip;yesoreyeram-infinity-datasource" grafana/grafana-enterprise:10.2.3
+docker run -p 3000:3000 -e "GF_PLUGINS_PREINSTALL_SYNC=yesoreyeram-infinity-datasource@@https://github.com/grafana/grafana-infinity-datasource/releases/download/v2.4.0/yesoreyeram-infinity-datasource-2.4.0.zip" grafana/grafana-enterprise:latest
 ```
