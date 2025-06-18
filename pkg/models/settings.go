@@ -124,6 +124,8 @@ type InfinitySettings struct {
 	AllowDangerousHTTPMethods bool
 	// ProxyOpts is used for Secure Socks Proxy configuration
 	ProxyOpts httpclient.Options
+	// Specific cookies included by Grafana for forwarding
+	KeepCookies []string
 }
 
 func (s *InfinitySettings) Validate() error {
@@ -154,10 +156,13 @@ func (s *InfinitySettings) Validate() error {
 		}
 		return nil
 	}
-	if s.AuthenticationMethod != AuthenticationMethodNone && len(s.AllowedHosts) < 1 {
+	if s.AuthenticationMethod != AuthenticationMethodAzureBlob && s.AuthenticationMethod != AuthenticationMethodNone && len(s.AllowedHosts) < 1 {
 		return ErrInvalidConfigHostNotAllowed
 	}
 	if s.HaveSecureHeaders() && len(s.AllowedHosts) < 1 {
+		return ErrInvalidConfigHostNotAllowed
+	}
+	if len(s.KeepCookies) > 0 && len(s.AllowedHosts) < 1 {
 		return ErrInvalidConfigHostNotAllowed
 	}
 	return nil
@@ -211,6 +216,7 @@ type InfinitySettingsJson struct {
 	// Security
 	AllowedHosts           []string                   `json:"allowedHosts,omitempty"`
 	UnsecuredQueryHandling UnsecuredQueryHandlingMode `json:"unsecuredQueryHandling,omitempty"`
+	KeepCookies            []string                   `json:"keepCookies,omitempty"`
 }
 
 func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings) (settings InfinitySettings, err error) {
@@ -265,6 +271,9 @@ func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings
 		}
 		if len(infJson.AllowedHosts) > 0 {
 			settings.AllowedHosts = infJson.AllowedHosts
+		}
+		if len(infJson.KeepCookies) > 0 {
+			settings.KeepCookies = infJson.KeepCookies
 		}
 	}
 	settings.ReferenceData = infJson.ReferenceData
