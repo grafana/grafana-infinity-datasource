@@ -141,13 +141,9 @@ func QueryDataQuery(ctx context.Context, pluginContext backend.PluginContext, qu
 		query, _ := infinity.UpdateQueryWithReferenceData(ctx, query, infClient.Settings)
 		switch query.Source {
 		case "url", "azure-blob":
-			if infClient.Settings.AuthenticationMethod != models.AuthenticationMethodAzureBlob && infClient.Settings.AuthenticationMethod != models.AuthenticationMethodNone && len(infClient.Settings.AllowedHosts) < 1 {
-				response.Error = errors.New("datasource is missing allowed hosts/URLs. Configure it in the datasource settings page for enhanced security")
-				response.ErrorSource = backend.ErrorSourceDownstream
-				return response
-			}
-			if infClient.Settings.HaveSecureHeaders() && len(infClient.Settings.AllowedHosts) < 1 {
-				response.Error = errors.New("datasource is missing allowed hosts/URLs. Configure it in the datasource settings page for enhanced security")
+			if err := infClient.Settings.Validate(); err != nil {
+				response.Error = backend.DownstreamError(err)
+				response.Status = backend.StatusForbidden
 				response.ErrorSource = backend.ErrorSourceDownstream
 				return response
 			}
