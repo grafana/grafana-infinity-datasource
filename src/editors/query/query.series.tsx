@@ -51,7 +51,8 @@ export const SeriesEditor = ({ query, onChange }: { query: InfinitySeriesQuery; 
   );
 };
 
-const SeriesAdvancedOptions = ({ query, onChange }: { query: InfinitySeriesQuery; onChange: (value: any) => void }) => {
+// exported for testing purposes only
+export const SeriesAdvancedOptions = ({ query, onChange }: { query: InfinitySeriesQuery; onChange: (value: any) => void }) => {
   query = defaultsDeep(query, {
     dataOverrides: [],
   });
@@ -66,19 +67,19 @@ const SeriesAdvancedOptions = ({ query, onChange }: { query: InfinitySeriesQuery
   });
 
   const addDataOverride = () => {
-    query.dataOverrides = query.dataOverrides || [];
+    const queryDataOverrides = query.dataOverrides || [];
     let newOverride: DataOverride = {
       values: ['${__value.index}', '10'],
       operator: '>=',
       override: 'null',
     };
-    query.dataOverrides.push(newOverride);
-    onChange(query);
+    const dataOverrides = queryDataOverrides.concat(newOverride);
+    onChange({ ...query, dataOverrides });
   };
   const removeDataOverride = (index: number) => {
-    query.dataOverrides = query.dataOverrides || [];
-    query.dataOverrides.splice(index, 1);
-    onChange(query);
+    const queryDataOverrides = query.dataOverrides || [];
+    const dataOverrides = queryDataOverrides.filter((_, i) => i !== index);
+    onChange({ ...query, dataOverrides });
   };
 
   const onTextChange = (value: string, field: string) => {
