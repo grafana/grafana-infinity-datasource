@@ -21,6 +21,7 @@ interface EditorFieldProps extends ComponentProps<typeof Field> {
   dataTestId?: string;
   borderColor?: string;
   horizontal?: boolean;
+  hideLabel?: boolean;
 }
 
 export const EditorField: React.FC<EditorFieldProps> = (props) => {
@@ -53,7 +54,7 @@ export const EditorField: React.FC<EditorFieldProps> = (props) => {
   if (horizontal) {
     return (
       <div className={styles.root} data-testid={testId('wrapper')}>
-        <Field className={styles.field} label={labelEl} {...fieldProps} horizontal={true}>
+        <Field className={styles.field} label={props.hideLabel ? <></> : labelEl} {...fieldProps} horizontal={true}>
           {children}
         </Field>
       </div>

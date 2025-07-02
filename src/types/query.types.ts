@@ -166,7 +166,8 @@ export type TransformationItem = {
 export type TransformationsQuery = {
   transformations: TransformationItem[];
 } & InfinityQueryBase<'transformations'>;
-export type InfinityQuery = (InfinityLegacyQuery | InfinityUQLQuery | InfinityGROQQuery | InfinityGSheetsQuery | TransformationsQuery) & Pagination;
+export type QueryEditorMode = 'full' | 'lite';
+export type InfinityQuery = { queryEditorMode?: QueryEditorMode } & (InfinityLegacyQuery | InfinityUQLQuery | InfinityGROQQuery | InfinityGSheetsQuery | TransformationsQuery) & Pagination;
 //#endregion
 
 //#region Misc

@@ -18,7 +18,9 @@ import { Datasource } from '@/datasource';
 import { PaginationEditor } from '@/editors/query/query.pagination';
 import { TransformationsEditor } from '@/editors/query/query.transformations';
 import { QueryWarning } from '@/editors/query/query.warning';
-import type { EditorMode, InfinityQuery } from '@/types';
+import type { EditorMode, InfinityQuery, QueryEditorMode } from '@/types';
+import { RadioButtonGroup, Stack } from '@grafana/ui';
+import { LiteQueryEditor } from '../query.lite.editor';
 
 export type InfinityEditorProps = {
   query: InfinityQuery;
@@ -30,11 +32,39 @@ export type InfinityEditorProps = {
 };
 
 export const InfinityQueryEditor = (props: InfinityEditorProps) => {
+  const [queryEditorMode, setQueryEditorMode] = useState<QueryEditorMode>(props.query.queryEditorMode || 'full');
+  let query: InfinityQuery = defaultsDeep(props.query, DefaultInfinityQuery) as InfinityQuery;
+  query = migrateQuery(query);
+  return (
+    <div className="infinity-query-editor" data-testid="infinity-query-editor" style={{ marginBottom: '5px' }}>
+      <Stack gap={1} direction={'column'}>
+        <Stack direction={'row'} justifyContent={'center'} gap={2}>
+          <div style={{ marginBlock: '1px' }}>
+            <RadioButtonGroup<QueryEditorMode>
+              size="sm"
+              value={queryEditorMode}
+              options={[
+                { value: 'lite', label: 'Simple' },
+                { value: 'full', label: 'Advanced' },
+              ]}
+              onChange={(e) => {
+                setQueryEditorMode(e);
+                props.onChange({ ...query, queryEditorMode: e });
+              }}
+            ></RadioButtonGroup>
+          </div>
+        </Stack>
+        {queryEditorMode === 'lite' ? <LiteQueryEditor {...props} query={query} /> : queryEditorMode === 'full' ? <FullQueryEditor {...props} query={query}></FullQueryEditor> : <></>}
+      </Stack>
+    </div>
+  );
+};
+
+const FullQueryEditor = (props: InfinityEditorProps) => {
   const { onChange, mode, instanceSettings, onRunQuery, datasource } = props;
   const [showUrlOptions, setShowUrlOptions] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
-  let query: InfinityQuery = defaultsDeep(props.query, DefaultInfinityQuery) as InfinityQuery;
-  query = migrateQuery(query);
+  let query: InfinityQuery = props.query;
   let canShowColumnsEditor = ['csv', 'tsv', 'html', 'json', 'graphql', 'xml', 'google-sheets'].includes(query.type);
   let canShowFilterEditor =
     query.type !== 'series' &&
@@ -58,46 +88,45 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
     query.columns &&
     query.columns.length > 0;
   return (
-    <div className="infinity-query-editor" data-testid="infinity-query-editor" style={{ marginBottom: '5px' }}>
-      <EditorRows>
-        {showHelp && (
-          <EditorRow label="Help">
-            <div style={{ marginBlock: '10px' }}>
-              <HelpLinks />
-            </div>
+    <EditorRows>
+      {showHelp && (
+        <EditorRow label="Help">
+          <div style={{ marginBlock: '10px' }}>
+            <HelpLinks />
+          </div>
+        </EditorRow>
+      )}
+      <BasicOptions
+        {...{ instanceSettings, mode, query, onChange, onRunQuery }}
+        onShowUrlOptions={() => setShowUrlOptions(!showUrlOptions)}
+        onShowHelp={() => setShowHelp(!showHelp)}
+        datasource={datasource}
+      />
+      {query.type === 'series' && <SeriesEditor {...{ query, onChange }} />}
+      {isDataQuery(query) && query.source !== 'inline' && showUrlOptions && <URLEditor {...{ mode, query, onChange, onRunQuery, instanceSettings }} />}
+      {isDataQuery(query) && query.source === 'azure-blob' && <AzureBlobEditor query={query} onChange={onChange} />}
+      {canShowColumnsEditor && <QueryColumnsEditor {...{ mode, query, onChange, onRunQuery }} />}
+      {canShowFilterEditor && <TableFilter {...{ query, onChange, onRunQuery }} />}
+      {query.type === 'uql' && (
+        <>
+          <EditorRow label="UQL" collapsible={true} title={() => 'UQL'}>
+            <UQLEditor {...{ query, onChange, onRunQuery, mode }} />
           </EditorRow>
-        )}
-        <BasicOptions
-          {...{ instanceSettings, mode, query, onChange, onRunQuery }}
-          onShowUrlOptions={() => setShowUrlOptions(!showUrlOptions)}
-          onShowHelp={() => setShowHelp(!showHelp)}
-          datasource={datasource}
-        />
-        {query.type === 'series' && <SeriesEditor {...{ query, onChange }} />}
-        {isDataQuery(query) && query.source !== 'inline' && showUrlOptions && <URLEditor {...{ mode, query, onChange, onRunQuery }} />}
-        {isDataQuery(query) && query.source === 'azure-blob' && <AzureBlobEditor query={query} onChange={onChange} />}
-        {canShowColumnsEditor && <QueryColumnsEditor {...{ mode, query, onChange, onRunQuery }} />}
-        {canShowFilterEditor && <TableFilter {...{ query, onChange, onRunQuery }} />}
-        {query.type === 'uql' && (
-          <>
-            <EditorRow label="UQL" collapsible={true} title={() => 'UQL'}>
-              <UQLEditor {...{ query, onChange, onRunQuery, mode }} />
-            </EditorRow>
-          </>
-        )}
-        {query.type === 'groq' && (
-          <EditorRow label="GROQ" collapsible={true} title={() => 'GROQ'}>
-            <GROQEditor {...{ query, onChange, onRunQuery, mode }} />
-          </EditorRow>
-        )}
-        {(query.type === 'json' || query.type === 'graphql' || query.type === 'csv' || query.type === 'tsv' || query.type === 'xml') &&
-          (query.parser === 'backend' || query.parser === 'jq-backend') && <ExperimentalFeatures query={query} onChange={onChange} onRunQuery={onRunQuery} />}
-        {query.type === 'json' && (query.parser === 'backend' || query.parser === 'jq-backend') && query.source === 'url' && (
-          <PaginationEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />
-        )}
-        {query.type === 'transformations' && <TransformationsEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />}
-        <QueryWarning query={query} />
-      </EditorRows>
-    </div>
+        </>
+      )}
+      {query.type === 'groq' && (
+        <EditorRow label="GROQ" collapsible={true} title={() => 'GROQ'}>
+          <GROQEditor {...{ query, onChange, onRunQuery, mode }} />
+        </EditorRow>
+      )}
+      {(query.type === 'json' || query.type === 'graphql' || query.type === 'csv' || query.type === 'tsv' || query.type === 'xml') && (query.parser === 'backend' || query.parser === 'jq-backend') && (
+        <ExperimentalFeatures query={query} onChange={onChange} onRunQuery={onRunQuery} />
+      )}
+      {query.type === 'json' && (query.parser === 'backend' || query.parser === 'jq-backend') && query.source === 'url' && (
+        <PaginationEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />
+      )}
+      {query.type === 'transformations' && <TransformationsEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />}
+      <QueryWarning query={query} />
+    </EditorRows>
   );
 };

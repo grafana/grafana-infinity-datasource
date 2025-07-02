@@ -8,10 +8,25 @@ import type { InfinityQuery, InfinityQueryType, InfinityQueryWithURLSource, Infi
 import type { SelectableValue } from '@grafana/data';
 import { usePrevious } from 'react-use';
 
-export const URLEditor = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void }) => {
-  return isDataQuery(query) && query.source === 'url' ? (
+export const URLEditor = ({
+  query,
+  onChange,
+  onRunQuery,
+  showByDefault,
+  instanceSettings,
+  liteMode,
+}: {
+  query: InfinityQuery;
+  onChange: (value: any) => void;
+  onRunQuery: () => void;
+  showByDefault?: boolean;
+  instanceSettings: any;
+  liteMode?: boolean;
+}) => {
+  return (isDataQuery(query) && query.source === 'url') || showByDefault ? (
     <EditorRow label="URL options" collapsible={true} collapsed={true} title={() => 'Method, Body, Additional headers & parameters'}>
       <Stack gap={1}>
+        {liteMode && <Method query={query as any} onChange={onChange} onRunQuery={onRunQuery} allowDangerousHTTPMethods={!!instanceSettings.jsonData.allowDangerousHTTPMethods} />}
         <Body query={query} onChange={onChange} onRunQuery={onRunQuery} />
         <Headers query={query} onChange={onChange} onRunQuery={onRunQuery} />
         <QueryParams query={query} onChange={onChange} onRunQuery={onRunQuery} />
@@ -27,11 +42,13 @@ export const Method = ({
   onChange,
   onRunQuery,
   allowDangerousHTTPMethods,
+  hideLabel,
 }: {
   query: InfinityQuery;
   onChange: (value: InfinityQuery) => void;
   onRunQuery: () => void;
   allowDangerousHTTPMethods?: boolean;
+  hideLabel?: boolean;
 }) => {
   if (!(isDataQuery(query) || query.type === 'uql' || query.type === 'groq')) {
     return <></>;
@@ -76,6 +93,7 @@ export const Method = ({
       label="Method"
       horizontal={true}
       tooltip={`By default Infinity allows GET and POST methods. To make use other methods, enable the "Allow dangerous HTTP methods" in the data source configuration.`}
+      hideLabel={hideLabel}
     >
       <Select<InfinityURLMethod>
         width={16}
@@ -101,11 +119,13 @@ export const URL = ({
   onChange,
   onRunQuery,
   onShowUrlOptions,
+  liteMode,
 }: {
   query: InfinityQueryWithURLSource<InfinityQueryType>;
   onChange: (value: InfinityQueryWithURLSource<InfinityQueryType>) => void;
   onRunQuery: () => void;
   onShowUrlOptions: () => void;
+  liteMode?: boolean;
 }) => {
   const [url, setURL] = useState(query.url);
   const previousUrl = usePrevious(query.url);
@@ -121,8 +141,25 @@ export const URL = ({
     onRunQuery();
   };
 
+  if (liteMode) {
+    return (
+      <Input
+        type="text"
+        style={{ background: 'rgba(0,0,0,0)', color: 'white', outline: 'none' }}
+        value={url}
+        placeholder={`https://github.com/grafana/grafana-infinity-datasource/blob/main/testdata/users.${
+          query.type === 'graphql' || query.type === 'uql' || query.type === 'groq' ? 'json' : query.type
+        }`}
+        width={84}
+        onChange={(e) => setURL(e.currentTarget.value)}
+        onBlur={onURLChange}
+        data-testid="infinity-query-url-input"
+      ></Input>
+    );
+  }
+
   return (
-    <EditorField label="URL" horizontal={true}>
+    <EditorField label="URL" horizontal={true} hideLabel={liteMode}>
       <Input
         type="text"
         value={url}
