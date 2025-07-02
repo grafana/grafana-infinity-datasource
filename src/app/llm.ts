@@ -40,7 +40,7 @@ export async function getLLMSuggestion(JSON_DATA: any, prompt: string): Promise<
   }
 }
 
-export async function getLLMSuggestions(JSON_DATA: any, prompt?: string): Promise<string> {
+export async function getLLMSuggestions(JSON_DATA: any): Promise<Array<{ insight: string; jq_query: string }>> {
   try {
     const enabled = await llm.enabled();
     if (!enabled) {
@@ -60,13 +60,17 @@ export async function getLLMSuggestions(JSON_DATA: any, prompt?: string): Promis
         content: `You have the following JSON data ${JSON.stringify(JSON_DATA)}`,
       },
       {
+        role: 'system',
+        content: `If the JSON data is of array type, then use the JSON as it is. If the JSON data is of object type, parse the JSON and find the array of object that contain valid results. If no array objects present in the JSON, consider JSON as key value pair`,
+      },
+      {
         role: 'user',
-        content: 'Can you give insights of the above JSON data using JQ query language. List all the insights and their corresponding JQ query in JSON format. Just return the JSON',
+        content:
+          'Can you give insights of the above JSON data using JQ query language. List all the insights and their corresponding JQ query in JSON format. Just return the JSON in JSON format and no markdown',
       },
     ];
     const response = await llm.chatCompletions({ model: llm.Model.BASE, messages });
-    let result = JSON.parse((response.choices[0]?.message?.content || '{}').replaceAll('```json', '').replaceAll('```', ''));
-    return result || { message: 'No response received' };
+    return JSON.parse(response.choices[0].message?.content || '{}').insights;
   } catch (error: any) {
     console.error('Failed to get LLM response:', error);
     throw new Error(`LLM request failed: ${error.message}`);

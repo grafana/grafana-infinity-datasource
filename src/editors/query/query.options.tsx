@@ -86,10 +86,6 @@ export const BasicURLEditor = (
 ) => {
   const { onChange, onRunQuery, onShowUrlOptions, instanceSettings, liteMode, children } = props;
   let query = props.query as InfinityQueryWithURLSource<InfinityQueryType>;
-  let urlOptionsLabel = query.url_options?.method === 'GET' ? 'Headers, Request params' : 'Headers, Body, Request params';
-  if (liteMode) {
-    urlOptionsLabel = `Configure URL`;
-  }
   return (
     <EditorRow label={'URL'}>
       {!liteMode && <Method query={query as any} onChange={onChange} onRunQuery={onRunQuery} allowDangerousHTTPMethods={!!instanceSettings.jsonData.allowDangerousHTTPMethods} />}

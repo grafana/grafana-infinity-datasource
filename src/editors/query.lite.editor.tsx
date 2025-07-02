@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Modal, Stack, TextArea, useTheme2 } from '@grafana/ui';
 import { llm } from '@grafana/llm';
-import { getLLMSuggestion } from '@/app/llm';
+import { Button, Card, Modal, Stack, TextArea, EmptySearchResult, Label } from '@grafana/ui';
+import { getLLMSuggestion, getLLMSuggestions } from '@/app/llm';
 import { Datasource } from '@/datasource';
 import { EditorRows } from '@/components/extended/EditorRow';
 import { URLEditor, URL } from '@/editors/query/query.url';
@@ -17,16 +17,17 @@ export const LiteQueryEditor = (
     query: InfinityQuery;
     onChange: (value: any) => void;
     onRunQuery: () => void;
+    setQueryEditorMode: () => void;
   }
 ) => {
-  const { query, datasource, onChange, onRunQuery } = props;
+  const { query, datasource, onChange, onRunQuery, setQueryEditorMode } = props;
   const [llmEnabled, setLLMEnabled] = useState(false);
   const [prompt, setPrompt] = useState('');
   const [promptInput, setPromptInput] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [showUrlOptions, setShowUrlOptions] = useState(false);
+  const [suggestions, setSuggestions] = useState<any[]>([]);
   const [JSON_DATA, SET_JSON_DATA] = useState({});
-  const theme = useTheme2();
   useEffect(() => {
     datasource
       .query({ targets: [{ ...query, parser: 'simple' }] } as any)
@@ -36,42 +37,57 @@ export const LiteQueryEditor = (
   useEffect(() => {
     llm.enabled().then((res) => setLLMEnabled(res));
   }, []);
-  const getAndSetLLMSuggestion = () => {
-    getLLMSuggestion(JSON_DATA, promptInput).then((root_selector) => {
-      onChange({ ...query, parser: 'jq-backend', root_selector });
-      onRunQuery();
-    });
+  const getAndSetLLMSuggestion = async () => {
+    await getLLMSuggestion(JSON_DATA, promptInput)
+      .then((root_selector) => {
+        onChange({ ...query, parser: 'jq-backend', root_selector });
+        onRunQuery();
+      })
+      .finally(() => setIsOpen(false));
+  };
+  const getAndSetLLMSuggestions = () => {
+    getLLMSuggestions(JSON_DATA).then((res) => setSuggestions(res));
   };
   return (
     <>
       <div>
         <EditorRows>
           <Stack justifyContent={'center'} alignItems={'center'} gap={2} direction={'column'}>
-            <h5>Enter your REST API URL</h5>
-            <Stack direction={'row'} gap={1}>
+            <Stack direction={'row'}>
+              <Label style={{ padding: '10px' }}>URL</Label>
               <URL
                 query={query as InfinityQueryWithURLSource<InfinityQueryType>}
-                onChange={onChange}
+                onChange={(query) => {
+                  onChange({ ...query, root_selector: '' });
+                  setSuggestions([]);
+                  setPrompt('');
+                }}
                 onRunQuery={onRunQuery}
                 onShowUrlOptions={() => setShowUrlOptions(!showUrlOptions)}
                 liteMode={true}
               />
               <URLOptionsButton query={query} liteMode={true} onShowUrlOptions={() => setShowUrlOptions(!showUrlOptions)} />
-            </Stack>
-            {llmEnabled ? (
-              <>
-                <Button size="md" icon="ai" onClick={() => setIsOpen(true)}>
-                  Ask Insights
-                </Button>{' '}
-                {/* <Button size="sm" icon="ai">
+              {llmEnabled ? (
+                <div>
+                  <Button
+                    size="md"
+                    icon="ai"
+                    fill="outline"
+                    onClick={(e) => {
+                      setIsOpen(true);
+                      getAndSetLLMSuggestions();
+                      e.preventDefault();
+                    }}
+                  >
+                    Ask AI
+                  </Button>
+                </div>
+              ) : (
+                <Button size="sm" icon="ai">
                   Configure parsing options
-                </Button> */}
-              </>
-            ) : (
-              <Button size="sm" icon="ai">
-                Configure parsing options
-              </Button>
-            )}
+                </Button>
+              )}
+            </Stack>
           </Stack>
           <Modal title={'Ask for insights'} isOpen={isOpen} onDismiss={() => setIsOpen(!isOpen)}>
             <Stack direction={'column'} gap={2} alignItems={'center'} justifyContent={'center'}>
@@ -82,21 +98,69 @@ export const LiteQueryEditor = (
                 value={prompt}
                 onChange={(e) => setPrompt(e.currentTarget.value || '')}
               />
-              <Button
-                icon="ai"
-                size="md"
-                fullWidth={false}
-                style={{ width: '160px' }}
-                onClick={(e) => {
-                  setIsOpen(false);
-                  setPromptInput(prompt);
-                  getAndSetLLMSuggestion();
-                  e.preventDefault();
-                }}
-              >
-                Show Results
-              </Button>
+              <Stack>
+                <Button
+                  icon="ai"
+                  size="md"
+                  fullWidth={false}
+                  style={{ width: '160px' }}
+                  disabled={!prompt}
+                  onClick={(e) => {
+                    setPromptInput(prompt);
+                    getAndSetLLMSuggestion();
+                    e.preventDefault();
+                  }}
+                >
+                  Show Results
+                </Button>
+              </Stack>
             </Stack>
+            {(suggestions || []).length > 0 ? (
+              <>
+                <h5>Suggested Insights</h5>
+                {(suggestions || []).map((s) => (
+                  <Card key={s}>
+                    <Card.Heading>{s.insight}</Card.Heading>
+                    <Card.Description>
+                      <b>JQ Query : </b>
+                      <code>{s.jq_query}</code>
+                    </Card.Description>
+                    <Card.SecondaryActions>
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        icon="bolt"
+                        onClick={() => {
+                          onChange({ ...query, parser: 'jq-backend', root_selector: s.jq_query });
+                          onRunQuery();
+                          setIsOpen(false);
+                        }}
+                      >
+                        Select
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        icon="cog"
+                        onClick={() => {
+                          onChange({ ...query, parser: 'jq-backend', root_selector: s.jq_query });
+                          onRunQuery();
+                          setIsOpen(false);
+                          setQueryEditorMode();
+                        }}
+                      >
+                        Edit
+                      </Button>
+                    </Card.SecondaryActions>
+                  </Card>
+                ))}
+              </>
+            ) : (
+              <>
+                <h5>Suggested Insights</h5>
+                <EmptySearchResult>Loading suggestions...</EmptySearchResult>
+              </>
+            )}
           </Modal>
         </EditorRows>
       </div>

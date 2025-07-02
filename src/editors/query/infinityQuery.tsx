@@ -1,5 +1,6 @@
 import { defaultsDeep } from 'lodash';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { llm } from '@grafana/llm';
 import { EditorRows, EditorRow } from '@/components/extended/EditorRow';
 import { DefaultInfinityQuery } from '@/constants';
 import { migrateQuery } from '@/migrate';
@@ -35,26 +36,49 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
   const [queryEditorMode, setQueryEditorMode] = useState<QueryEditorMode>(props.query.queryEditorMode || 'full');
   let query: InfinityQuery = defaultsDeep(props.query, DefaultInfinityQuery) as InfinityQuery;
   query = migrateQuery(query);
+  const [llmEnabled, setLLMEnabled] = useState(false);
+  useEffect(() => {
+    llm.enabled().then((res) => {
+      setLLMEnabled(res);
+      if (!res) {
+        setQueryEditorMode('full');
+      }
+    });
+  }, []);
   return (
     <div className="infinity-query-editor" data-testid="infinity-query-editor" style={{ marginBottom: '5px' }}>
       <Stack gap={1} direction={'column'}>
-        <Stack direction={'row'} justifyContent={'center'} gap={2}>
-          <div style={{ marginBlock: '1px' }}>
-            <RadioButtonGroup<QueryEditorMode>
-              size="sm"
-              value={queryEditorMode}
-              options={[
-                { value: 'lite', label: 'Simple' },
-                { value: 'full', label: 'Advanced' },
-              ]}
-              onChange={(e) => {
-                setQueryEditorMode(e);
-                props.onChange({ ...query, queryEditorMode: e });
-              }}
-            ></RadioButtonGroup>
-          </div>
-        </Stack>
-        {queryEditorMode === 'lite' ? <LiteQueryEditor {...props} query={query} /> : queryEditorMode === 'full' ? <FullQueryEditor {...props} query={query}></FullQueryEditor> : <></>}
+        {llmEnabled && (
+          <Stack direction={'row'} justifyContent={'center'} gap={2}>
+            <div style={{ marginBlock: '1px' }}>
+              <RadioButtonGroup<QueryEditorMode>
+                size="sm"
+                value={queryEditorMode}
+                options={[
+                  { value: 'lite', label: 'AI Assisted Query' },
+                  { value: 'full', label: 'Manual' },
+                ]}
+                onChange={(e) => {
+                  setQueryEditorMode(e);
+                  props.onChange({ ...query, queryEditorMode: e });
+                }}
+              ></RadioButtonGroup>
+            </div>
+          </Stack>
+        )}
+        {queryEditorMode === 'lite' ? (
+          <LiteQueryEditor
+            {...props}
+            query={query}
+            setQueryEditorMode={() => {
+              setQueryEditorMode('full');
+            }}
+          />
+        ) : queryEditorMode === 'full' || !llmEnabled ? (
+          <FullQueryEditor {...props} query={query}></FullQueryEditor>
+        ) : (
+          <></>
+        )}
       </Stack>
     </div>
   );
