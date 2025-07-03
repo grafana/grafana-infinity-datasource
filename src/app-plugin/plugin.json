@@ -1,0 +1,67 @@
+{
+  "$schema": "https://raw.githubusercontent.com/grafana/grafana/main/docs/sources/developers/plugins/plugin.schema.json",
+  "name": "Infinity Explorer",
+  "id": "yesoreyeram-infinity-app",
+  "type": "app",
+  "autoEnabled": true,
+  "info": {
+    "version": "%VERSION%",
+    "updated": "%TODAY%",
+    "description": "",
+    "author": {
+      "name": "Grafana Labs",
+      "url": "https://grafana.com"
+    },
+    "logos": {
+      "small": "../img/icon.svg",
+      "large": "../img/icon.svg"
+    },
+    "keywords": [
+      "atom",
+      "aws",
+      "azure",
+      "csv",
+      "feed",
+      "gcp",
+      "google cloud",
+      "grafana",
+      "graphql",
+      "groq",
+      "html",
+      "inline",
+      "json api",
+      "json",
+      "jsonata",
+      "jq",
+      "node graph",
+      "random walk",
+      "rest api",
+      "rss feed",
+      "rss",
+      "scraping",
+      "simple-json",
+      "soap",
+      "transformations",
+      "uql",
+      "url",
+      "xml"
+    ],
+    "screenshots": [],
+    "links": []
+  },
+  "dependencies": {
+    "grafanaDependency": ">=10.4.8",
+    "grafanaVersion": "10.4.x",
+    "plugins": []
+  },
+  "includes": [
+     {
+        "type": "page",
+        "name": "Infinity Explorer",
+        "path": "/a/yesoreyeram-infinity-app",
+        "addToNav": true,
+        "defaultNav": true
+    }
+  ],
+  "routes": []
+}
