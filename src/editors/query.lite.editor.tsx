@@ -39,9 +39,14 @@ export const LiteQueryEditor = (
   }, []);
   const getAndSetLLMSuggestion = async () => {
     await getLLMSuggestion(JSON_DATA, promptInput)
-      .then((root_selector) => {
-        onChange({ ...query, parser: 'jq-backend', root_selector });
-        onRunQuery();
+      .then((out) => {
+        let columns: InfinityColumn[] = [];
+        if (out.length > 0) {
+          (out[0].fields || []).forEach((f) => columns.push({ selector: f.selector, text: f.display_name, type: f.type }));
+          let new_query: InfinityQuery = { ...query, parser: 'jq-backend', root_selector: out[0].jq_query, columns } as InfinityQuery;
+          onChange(new_query);
+          onRunQuery();
+        }
       })
       .finally(() => setIsOpen(false));
   };
@@ -132,7 +137,7 @@ export const LiteQueryEditor = (
                         icon="bolt"
                         onClick={() => {
                           let columns: InfinityColumn[] = [];
-                          s.fields.forEach((f) => columns.push({ selector: f.selector, text: f.display_name, type: f.type }));
+                          (s.fields || []).forEach((f) => columns.push({ selector: f.selector, text: f.display_name, type: f.type }));
                           let new_query: InfinityQuery = { ...query, parser: 'jq-backend', root_selector: s.jq_query, columns } as InfinityQuery;
                           onChange(new_query);
                           onRunQuery();
@@ -147,7 +152,7 @@ export const LiteQueryEditor = (
                         icon="cog"
                         onClick={() => {
                           let columns: InfinityColumn[] = [];
-                          s.fields.forEach((f) => columns.push({ selector: f.selector, text: f.display_name, type: f.type }));
+                          (s.fields || []).forEach((f) => columns.push({ selector: f.selector, text: f.display_name, type: f.type }));
                           let new_query: InfinityQuery = { ...query, parser: 'jq-backend', root_selector: s.jq_query, columns } as InfinityQuery;
                           onChange(new_query);
                           onRunQuery();
