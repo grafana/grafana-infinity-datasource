@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { llm } from '@grafana/llm';
 import { Button, Card, Modal, Stack, TextArea, EmptySearchResult, Label } from '@grafana/ui';
-import { getLLMSuggestion, getLLMSuggestions } from '@/app/llm';
+import { getLLMSuggestion, getLLMSuggestions, type LLMSuggestionsOutput } from '@/app/llm';
 import { Datasource } from '@/datasource';
 import { EditorRows } from '@/components/extended/EditorRow';
 import { URLEditor, URL } from '@/editors/query/query.url';
 import { URLOptionsButton } from './query/query.options';
-import type { InfinityQuery, EditorMode, InfinityQueryWithURLSource, InfinityQueryType } from '@/types';
+import type { InfinityQuery, EditorMode, InfinityQueryWithURLSource, InfinityQueryType, InfinityColumn } from '@/types';
 import type { QueryEditorProps } from '@grafana/data';
 
 export const LiteQueryEditor = (
@@ -26,7 +26,7 @@ export const LiteQueryEditor = (
   const [promptInput, setPromptInput] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [showUrlOptions, setShowUrlOptions] = useState(false);
-  const [suggestions, setSuggestions] = useState<any[]>([]);
+  const [suggestions, setSuggestions] = useState<LLMSuggestionsOutput[]>([]);
   const [JSON_DATA, SET_JSON_DATA] = useState({});
   useEffect(() => {
     datasource
@@ -119,7 +119,7 @@ export const LiteQueryEditor = (
               <>
                 <h5>Suggested Insights</h5>
                 {(suggestions || []).map((s) => (
-                  <Card key={s}>
+                  <Card key={JSON.stringify(s)}>
                     <Card.Heading>{s.insight}</Card.Heading>
                     <Card.Description>
                       <b>JQ Query : </b>
@@ -131,7 +131,10 @@ export const LiteQueryEditor = (
                         size="sm"
                         icon="bolt"
                         onClick={() => {
-                          onChange({ ...query, parser: 'jq-backend', root_selector: s.jq_query });
+                          let columns: InfinityColumn[] = [];
+                          s.fields.forEach((f) => columns.push({ selector: f.selector, text: f.display_name, type: f.type }));
+                          let new_query: InfinityQuery = { ...query, parser: 'jq-backend', root_selector: s.jq_query, columns } as InfinityQuery;
+                          onChange(new_query);
                           onRunQuery();
                           setIsOpen(false);
                         }}
@@ -143,7 +146,10 @@ export const LiteQueryEditor = (
                         size="sm"
                         icon="cog"
                         onClick={() => {
-                          onChange({ ...query, parser: 'jq-backend', root_selector: s.jq_query });
+                          let columns: InfinityColumn[] = [];
+                          s.fields.forEach((f) => columns.push({ selector: f.selector, text: f.display_name, type: f.type }));
+                          let new_query: InfinityQuery = { ...query, parser: 'jq-backend', root_selector: s.jq_query, columns } as InfinityQuery;
+                          onChange(new_query);
                           onRunQuery();
                           setIsOpen(false);
                           setQueryEditorMode();

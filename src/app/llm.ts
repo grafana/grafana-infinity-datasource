@@ -1,3 +1,4 @@
+import { InfinityColumnFormat } from '@/types';
 import { llm } from '@grafana/llm';
 
 export async function getLLMSuggestion(JSON_DATA: any, prompt: string): Promise<any> {
@@ -23,24 +24,34 @@ export async function getLLMSuggestion(JSON_DATA: any, prompt: string): Promise<
         content: `You have the following JSON data ${JSON.stringify(JSON_DATA)}`,
       },
       {
+        role: 'system',
+        content: `If the JSON data includes any time field or looks like timeseries, add insights in timeseries format`,
+      },
+      {
         role: 'user',
-        content: `Can you generate the JQ query for the following question using the above JSON data. Just return the JQ query alone in string format and not in markdown format. Question: "${prompt}"`,
+        content: `Can you generate the JQ query for the following question using the above JSON data. Just return only the JQ query in plain text format and output shouldn't be in markdown format. Don't include any prefix / suffix to the JQ query. Also don't wrap the output with quotes. Question: "${prompt}"`,
       },
     ];
     const response = await llm.chatCompletions({ model: llm.Model.BASE, messages });
-    let result = (response.choices[0]?.message?.content || '{}').replaceAll('```jq', '').replaceAll('```', '').replaceAll('\n', '');
-    if (result.startsWith("'") && result.endsWith("'")) {
-      result = result.substring(1);
-      result = result.substring(0, result.length - 1);
-    }
-    return result || '.';
+    return response.choices[0]?.message?.content || '.';
   } catch (error: any) {
     console.error('Failed to get LLM response:', error);
     throw new Error(`LLM request failed: ${error.message}`);
   }
 }
 
-export async function getLLMSuggestions(JSON_DATA: any): Promise<Array<{ insight: string; jq_query: string }>> {
+export type LLMSuggestionsOutput = {
+  insight: string;
+  jq_query: string;
+  description: string;
+  fields: Array<{
+    selector: string;
+    display_name: string;
+    type: InfinityColumnFormat;
+  }>;
+};
+
+export async function getLLMSuggestions(JSON_DATA: any): Promise<LLMSuggestionsOutput[]> {
   try {
     const enabled = await llm.enabled();
     if (!enabled) {
@@ -64,13 +75,25 @@ export async function getLLMSuggestions(JSON_DATA: any): Promise<Array<{ insight
         content: `If the JSON data is of array type, then use the JSON as it is. If the JSON data is of object type, parse the JSON and find the array of object that contain valid results. If no array objects present in the JSON, consider JSON as key value pair`,
       },
       {
+        role: 'system',
+        content: `If the JSON data includes any time field or looks like timeseries, add insights in timeseries format`,
+      },
+      {
         role: 'user',
-        content:
-          'Can you give insights of the above JSON data using JQ query language. List all the insights and their corresponding JQ query in JSON format. Just return the JSON in JSON format and no markdown',
+        content: [
+          'Can you give at least 30 insights of the above JSON data using JQ query language.',
+          'List all the insights and their corresponding JQ query in JSON format.',
+          'Just return the JSON in JSON format and no markdown.',
+          'Output JSON should be array of objects with keys "insight", "description", "jq_query" and "fields"',
+          'fields column should be array of field names, user friendly name and their types. Field type should be one of string, number, timestamp, timestamp_epoch, timestamp_epoch_s or boolean. The keys of field should be "selector", "display_name" and "type". "selector" field name should come from JQ output JSON.',
+          'If the value of the field with string format looks like date or time field, mark its field type as timestamp',
+          'If the value of the field with number format looks like epoch milli seconds timestamp, mark its field type as timestamp_epoch',
+          'If the value of the field with number format looks like epoch seconds timestamp, mark its field type as timestamp_epoch_s',
+        ].join(' '),
       },
     ];
     const response = await llm.chatCompletions({ model: llm.Model.BASE, messages });
-    return JSON.parse(response.choices[0].message?.content || '{}').insights;
+    return JSON.parse(response.choices[0].message?.content || '{}');
   } catch (error: any) {
     console.error('Failed to get LLM response:', error);
     throw new Error(`LLM request failed: ${error.message}`);
