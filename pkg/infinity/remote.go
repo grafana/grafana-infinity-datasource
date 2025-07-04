@@ -15,10 +15,14 @@ import (
 	"github.com/grafana/infinity-libs/lib/go/transformations"
 )
 
+func isBackendQuery(query models.Query) bool {
+	return query.Parser == models.InfinityParserBackend || query.Parser == models.InfinityParserJQBackend
+}
+
 func GetFrameForURLSources(ctx context.Context, pCtx *backend.PluginContext, query models.Query, infClient Client, requestHeaders map[string]string) (*data.Frame, error) {
 	ctx, span := tracing.DefaultTracer().Start(ctx, "GetFrameForURLSources")
 	defer span.End()
-	if query.Type == models.QueryTypeJSON && query.Parser == models.InfinityParserBackend && query.PageMode != models.PaginationModeNone && query.PageMode != "" {
+	if query.Type == models.QueryTypeJSON && isBackendQuery(query) && query.PageMode != models.PaginationModeNone && query.PageMode != "" {
 		return GetPaginatedResults(ctx, pCtx, query, infClient, requestHeaders)
 	}
 	frame, _, err := GetFrameForURLSourcesWithPostProcessing(ctx, pCtx, query, infClient, requestHeaders, true)
@@ -162,7 +166,7 @@ func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, pCtx *backend.
 			return frame, cursor, err
 		}
 	}
-	if query.Parser == models.InfinityParserBackend || query.Parser == models.InfinityParserJQBackend {
+	if isBackendQuery(query) {
 		if query.Type == models.QueryTypeJSON || query.Type == models.QueryTypeGraphQL {
 			if frame, err = GetJSONBackendResponse(ctx, urlResponseObject, query); err != nil {
 				return frame, cursor, err
