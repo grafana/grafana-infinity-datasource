@@ -9,10 +9,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/grafana/grafana-aws-sdk/pkg/awsds"
-	"github.com/grafana/grafana-aws-sdk/pkg/sigv4"
+	v4 "github.com/aws/aws-sdk-go-v2/aws/signer/v4"
+
+	"github.com/grafana/grafana-aws-sdk/pkg/awsauth"
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
+	"github.com/grafana/grafana-plugin-sdk-go/backend/httpclient"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/proxy"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"github.com/icholy/digest"
@@ -187,23 +189,20 @@ func applyAWSAuth(ctx context.Context, httpClient *http.Client, settings models.
 		if service == "" {
 			service = "monitoring"
 		}
-		conf := &sigv4.Config{
-			AuthType:  string(authType),
-			Region:    region,
-			Service:   service,
-			AccessKey: settings.AWSAccessKey,
-			SecretKey: settings.AWSSecretKey,
+		httpOptions := httpclient.Options{
+			SigV4: &httpclient.SigV4Config{
+				AccessKey: settings.AWSAccessKey,
+				SecretKey: settings.AWSSecretKey,
+				AuthType:  string(authType),
+				Region:    region,
+				Service:   service,
+			},
 		}
-
-		authSettings := awsds.ReadAuthSettings(ctx)
-		rt, err := sigv4.New(conf, *authSettings, sigv4.RoundTripperFunc(func(req *http.Request) (*http.Response, error) {
+		acceptHeaderMiddleware := func(req *http.Request) (*http.Response, error) {
 			req.Header.Add("Accept", "application/json")
 			return tempHttpClient.Do(req)
-		}))
-		if err != nil {
-			return httpClient, err
 		}
-		httpClient.Transport = rt
+		httpClient.Transport = awsauth.NewSignerRoundTripper(httpOptions, httpclient.RoundTripperFunc(acceptHeaderMiddleware), v4.NewSigner())
 	}
 	return httpClient, nil
 }
