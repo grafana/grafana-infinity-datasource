@@ -1,8 +1,33 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { SeriesAdvancedOptions } from './query.series';
+import { SeriesAdvancedOptions, SeriesEditor } from './query.series';
 import type { DataOverride, InfinitySeriesQuery } from '../../types';
+
+describe('SeriesEditor', () => {
+  const mockOnChange = jest.fn();
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should add alias: Random Walk as default to query without mutating query', async () => {
+    const emptyQuery: InfinitySeriesQuery = Object.freeze({ type: 'series' } as InfinitySeriesQuery);
+
+    expect(async () => {
+      render(<SeriesEditor query={emptyQuery} onChange={mockOnChange} />);
+      await waitFor(() => {
+        expect(screen.getByLabelText('Series Count')).toBeInTheDocument();
+      });
+    }).not.toThrow();
+    expect(emptyQuery.dataOverrides).toBeUndefined();
+    expect(mockOnChange).not.toHaveBeenCalled();
+
+    // lets check that the query object has the alias: 'Random Walk'
+    await userEvent.type(screen.getByRole('spinbutton'), '2');
+    expect(mockOnChange).toHaveBeenCalledWith(expect.objectContaining({ alias: 'Random Walk', seriesCount: 2, type: 'series' }));
+  });
+});
 
 describe('SeriesAdvancedOptions', () => {
   // Freezing the object so that any mutations throw errors
@@ -17,11 +42,19 @@ describe('SeriesAdvancedOptions', () => {
 
   const mockOnChange = jest.fn();
 
-  beforeEach(() => {
+  afterEach(() => {
     jest.clearAllMocks();
   });
 
   describe('Adding data overrides', () => {
+    it('should add data overrides as defaults to query without mutating query', async () => {
+      const emptyQuery: InfinitySeriesQuery = Object.freeze({ type: 'series' } as InfinitySeriesQuery);
+
+      expect(() => render(<SeriesAdvancedOptions query={emptyQuery} onChange={mockOnChange} />)).not.toThrow();
+      expect(emptyQuery.dataOverrides).toBeUndefined();
+      expect(mockOnChange).not.toHaveBeenCalled();
+    });
+
     it('should add a new data override when clicking "Click to add Overrides"', async () => {
       render(<SeriesAdvancedOptions query={mockQuery} onChange={mockOnChange} />);
 
