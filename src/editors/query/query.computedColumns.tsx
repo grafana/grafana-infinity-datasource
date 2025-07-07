@@ -13,8 +13,8 @@ export const ComputedColumnsEditor = (props: { query: InfinityQuery; onChange: (
       onChange({ ...query, computed_columns: [...columns, defaultColumn] });
     };
     const onComputedColumnRemove = (index: number) => {
-      const computed_columns = query?.computed_columns || [];
-      computed_columns.splice(index, 1);
+      const computedColumns = query?.computed_columns || [];
+      const computed_columns = computedColumns.filter((_, i) => i !== index);
       onChange({ ...query, computed_columns });
     };
     return (
