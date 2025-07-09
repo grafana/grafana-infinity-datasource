@@ -5,11 +5,16 @@ import (
 	"encoding/base64"
 	"fmt"
 	"io"
+	"net"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
 
+	"crypto/md5"
+	"encoding/hex"
+
+	auth "github.com/abbot/go-http-auth"
 	"github.com/grafana/grafana-infinity-datasource/pkg/infinity"
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/grafana/grafana-infinity-datasource/pkg/pluginhost"
@@ -318,61 +323,81 @@ func TestAuthentication(t *testing.T) {
 		})
 	})
 	t.Run("digest auth", func(t *testing.T) {
-		t.Skip() // skipping due to transient errors in httpbin.org.
-		//TODO: Replace httpbin with local digeset auth server
+		realm := "test-realm"
+		username := "foo"
+		password := "bar"
+		secretProvider := func(user, realm string) string {
+			if user == username {
+				h := md5.New()
+				h.Write([]byte(fmt.Sprintf("%s:%s:%s", username, realm, password)))
+				return hex.EncodeToString(h.Sum(nil))
+			}
+			return ""
+		}
+		authenticator := auth.NewDigestAuthenticator(realm, secretProvider)
+		server := httptest.NewUnstartedServer(http.HandlerFunc(authenticator.Wrap(func(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
+			w.Header().Set("Content-Type", "application/json")
+			w.Write([]byte(`{"message": "OK"}`))
+		})))
+		l, err := net.Listen("tcp", "127.0.0.1:8080")
+		require.Nil(t, err)
+		server.Listener.Close()
+		server.Listener = l
+		server.Start()
+		defer server.Close()
+		query := backend.DataQuery{JSON: []byte(fmt.Sprintf(`{ "type": "json", "url":  "%s", "source": "url" }`, server.URL))}
 		t.Run("should be ok with correct credentials", func(t *testing.T) {
 			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
+				IsMock:               true,
 				AuthenticationMethod: models.AuthenticationMethodDigestAuth,
-				UserName:             "foo",
-				Password:             "bar",
-				AllowedHosts:         []string{"http://httpbin.org/digest-auth"},
+				UserName:             username,
+				Password:             password,
+				AllowedHosts:         []string{server.URL},
 			})
 			require.Nil(t, err)
-			res := queryData(t, context.Background(), backend.DataQuery{
-				JSON: []byte(fmt.Sprintf(`{
-					"type": "json",
-					"url":  "%s",
-					"source": "url"
-				}`, "http://httpbin.org/digest-auth/auth/foo/bar/MD5")),
-			}, *client, map[string]string{}, backend.PluginContext{})
+			res := queryData(t, context.Background(), query, *client, map[string]string{}, backend.PluginContext{})
 			require.NotNil(t, res)
 			require.Nil(t, res.Error)
+			experimental.CheckGoldenJSONResponse(t, "golden", "digest-auth-ok", &res, UPDATE_GOLDEN_DATA)
 		})
-		t.Run("should fail with incorrect credentials", func(t *testing.T) {
+		t.Run("should fail with incorrect username", func(t *testing.T) {
 			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
 				AuthenticationMethod: models.AuthenticationMethodDigestAuth,
-				UserName:             "foo",
-				Password:             "baz",
-				AllowedHosts:         []string{"http://httpbin.org/digest-auth"},
+				UserName:             "boo",
+				Password:             "bar",
+				AllowedHosts:         []string{server.URL},
 			})
 			require.Nil(t, err)
-			res := queryData(t, context.Background(), backend.DataQuery{
-				JSON: []byte(fmt.Sprintf(`{
-					"type": "json",
-					"url":  "%s",
-					"source": "url"
-				}`, "http://httpbin.org/digest-auth/auth/foo/bar/MD5")),
-			}, *client, map[string]string{}, backend.PluginContext{})
+			res := queryData(t, context.Background(), query, *client, map[string]string{}, backend.PluginContext{})
+			require.NotNil(t, res)
 			require.NotNil(t, res.Error)
-			require.Equal(t, "error while performing the infinity query. unsuccessful HTTP response. 401 UNAUTHORIZED", res.Error.Error())
+			require.Equal(t, "error while performing the infinity query. unsuccessful HTTP response code\nstatus code : 401 Unauthorized", res.Error.Error())
+		})
+		t.Run("should fail with incorrect password", func(t *testing.T) {
+			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodDigestAuth,
+				UserName:             "boo",
+				Password:             "bar",
+				AllowedHosts:         []string{server.URL},
+			})
+			require.Nil(t, err)
+			res := queryData(t, context.Background(), query, *client, map[string]string{}, backend.PluginContext{})
+			require.NotNil(t, res)
+			require.NotNil(t, res.Error)
+			require.Equal(t, "error while performing the infinity query. unsuccessful HTTP response code\nstatus code : 401 Unauthorized", res.Error.Error())
 		})
 		t.Run("should fail with incorrect auth method", func(t *testing.T) {
 			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
 				AuthenticationMethod: models.AuthenticationMethodBasic,
-				UserName:             "foo",
-				Password:             "bar",
-				AllowedHosts:         []string{"http://httpbin.org/digest-auth"},
+				UserName:             username,
+				Password:             password,
+				AllowedHosts:         []string{server.URL},
 			})
 			require.Nil(t, err)
-			res := queryData(t, context.Background(), backend.DataQuery{
-				JSON: []byte(fmt.Sprintf(`{
-					"type": "json",
-					"url":  "%s",
-					"source": "url"
-				}`, "http://httpbin.org/digest-auth/auth/foo/bar/MD5")),
-			}, *client, map[string]string{}, backend.PluginContext{})
+			res := queryData(t, context.Background(), query, *client, map[string]string{}, backend.PluginContext{})
+			require.NotNil(t, res)
 			require.NotNil(t, res.Error)
-			require.Equal(t, "error while performing the infinity query. unsuccessful HTTP response. 401 UNAUTHORIZED", res.Error.Error())
+			require.Equal(t, "error while performing the infinity query. unsuccessful HTTP response code\nstatus code : 401 Unauthorized", res.Error.Error())
 		})
 	})
 }
