@@ -35,7 +35,7 @@ func queryData(t *testing.T, ctx context.Context, backendQuery backend.DataQuery
 func TestAuthentication(t *testing.T) {
 	t.Run("should throw error when allowed hosts not configured", func(t *testing.T) {
 		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			fmt.Fprintf(w, `{ "message" : "OK" }`)
+			_, _ = fmt.Fprintf(w, `{ "message" : "OK" }`)
 		}))
 		defer server.Close()
 		client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodApiKey, ApiKeyKey: "foo", ApiKeyValue: "bar"})
@@ -59,7 +59,7 @@ func TestAuthentication(t *testing.T) {
 				assert.Equal(t, http.MethodGet, r.Method)
 				assert.Equal(t, "Basic "+base64.StdEncoding.EncodeToString([]byte("infinityUser:myPassword")), r.Header.Get(infinity.HeaderKeyAuthorization))
 				assert.Equal(t, "", r.Header.Get(infinity.HeaderKeyIdToken))
-				fmt.Fprintf(w, `{ "message" : "OK" }`)
+				_, _ = fmt.Fprintf(w, `{ "message" : "OK" }`)
 			}))
 			defer server.Close()
 			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
@@ -90,11 +90,11 @@ func TestAuthentication(t *testing.T) {
 				assert.Equal(t, http.MethodGet, r.Method)
 				assert.Equal(t, "", r.Header.Get(infinity.HeaderKeyIdToken))
 				if r.Header.Get(infinity.HeaderKeyAuthorization) == "Basic "+base64.StdEncoding.EncodeToString([]byte("infinityUser:myPassword")) {
-					fmt.Fprintf(w, "OK")
+					_, _ = fmt.Fprintf(w, "OK")
 					return
 				}
 				w.WriteHeader(http.StatusUnauthorized)
-				fmt.Fprintf(w, "UnAuthorized")
+				_, _ = fmt.Fprintf(w, "UnAuthorized")
 			}))
 			defer server.Close()
 			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
@@ -127,7 +127,7 @@ func TestAuthentication(t *testing.T) {
 				assert.Equal(t, http.MethodGet, r.Method)
 				assert.Equal(t, "foo", r.Header.Get(infinity.HeaderKeyAuthorization))
 				assert.Equal(t, "bar", r.Header.Get(infinity.HeaderKeyIdToken))
-				fmt.Fprintf(w, `{ "message" : "OK" }`)
+				_, _ = fmt.Fprintf(w, `{ "message" : "OK" }`)
 			}))
 			defer server.Close()
 			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
@@ -151,7 +151,7 @@ func TestAuthentication(t *testing.T) {
 				assert.Equal(t, http.MethodGet, r.Method)
 				assert.Equal(t, "", r.Header.Get(infinity.HeaderKeyAuthorization))
 				assert.Equal(t, "", r.Header.Get(infinity.HeaderKeyIdToken))
-				fmt.Fprintf(w, `{ "message" : "OK" }`)
+				_, _ = fmt.Fprintf(w, `{ "message" : "OK" }`)
 			}))
 			defer server.Close()
 			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
@@ -262,7 +262,7 @@ func TestAuthentication(t *testing.T) {
 			server := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				assert.Equal(t, http.MethodGet, r.Method)
 				assert.Equal(t, "", r.Header.Get(infinity.HeaderKeyIdToken))
-				fmt.Fprintf(w, `{ "message" : "OK" }`)
+				_, _ = fmt.Fprintf(w, `{ "message" : "OK" }`)
 			}))
 			server.TLS = getServerCertificate(server.URL)
 			assert.NotNil(t, server.TLS)
@@ -294,7 +294,7 @@ func TestAuthentication(t *testing.T) {
 			server := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				assert.Equal(t, http.MethodGet, r.Method)
 				assert.Equal(t, "", r.Header.Get(infinity.HeaderKeyIdToken))
-				fmt.Fprintf(w, `{ "message" : "OK" }`)
+				_, _ = fmt.Fprintf(w, `{ "message" : "OK" }`)
 			}))
 			server.TLS = getServerCertificate(server.URL)
 			assert.NotNil(t, server.TLS)
@@ -329,7 +329,7 @@ func TestAuthentication(t *testing.T) {
 		secretProvider := func(user, realm string) string {
 			if user == username {
 				h := md5.New()
-				h.Write([]byte(fmt.Sprintf("%s:%s:%s", username, realm, password)))
+				_, _ = h.Write([]byte(fmt.Sprintf("%s:%s:%s", username, realm, password)))
 				return hex.EncodeToString(h.Sum(nil))
 			}
 			return ""
@@ -337,11 +337,11 @@ func TestAuthentication(t *testing.T) {
 		authenticator := auth.NewDigestAuthenticator(realm, secretProvider)
 		server := httptest.NewUnstartedServer(http.HandlerFunc(authenticator.Wrap(func(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 			w.Header().Set("Content-Type", "application/json")
-			w.Write([]byte(`{"message": "OK"}`))
+			_, _ = w.Write([]byte(`{"message": "OK"}`))
 		})))
 		l, err := net.Listen("tcp", "127.0.0.1:8080")
 		require.Nil(t, err)
-		server.Listener.Close()
+		_ = server.Listener.Close()
 		server.Listener = l
 		server.Start()
 		defer server.Close()
@@ -407,7 +407,7 @@ func TestResponseFormats(t *testing.T) {
 		t.Run("should parse the response and send results", func(t *testing.T) {
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				assert.Equal(t, http.MethodGet, r.Method)
-				fmt.Fprintf(w, `{ "foo" : "bar" }`)
+				_, _ = fmt.Fprintf(w, `{ "foo" : "bar" }`)
 			}))
 			defer server.Close()
 			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{URL: server.URL})
@@ -432,7 +432,7 @@ func TestResponseFormats(t *testing.T) {
 		t.Run("should parse the response and send results", func(t *testing.T) {
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				assert.Equal(t, http.MethodGet, r.Method)
-				fmt.Fprintf(w, `{
+				_, _ = fmt.Fprintf(w, `{
 					"channel": {
 					  "id": 38629,
 					  "name": "Traffic Monitor",
@@ -551,7 +551,7 @@ func TestResponseFormats(t *testing.T) {
 		t.Run("should parse the response and send results", func(t *testing.T) {
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				assert.Equal(t, http.MethodGet, r.Method)
-				fmt.Fprintf(w, `{ "foo" : "bar" }`)
+				_, _ = fmt.Fprintf(w, `{ "foo" : "bar" }`)
 			}))
 			defer server.Close()
 			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{URL: server.URL})
@@ -577,7 +577,7 @@ func TestResponseFormats(t *testing.T) {
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				assert.Equal(t, http.MethodGet, r.Method)
 				w.Header().Add("Content-Type", "text/csv")
-				fmt.Fprintf(w, "a,b\na1,b1")
+				_, _ = fmt.Fprintf(w, "a,b\na1,b1")
 			}))
 			defer server.Close()
 			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{URL: server.URL})
@@ -603,7 +603,7 @@ func TestResponseFormats(t *testing.T) {
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				assert.Equal(t, http.MethodGet, r.Method)
 				w.Header().Add("Content-Type", "text/xml")
-				fmt.Fprintf(w, `<xml><User name="foo"></xml>`)
+				_, _ = fmt.Fprintf(w, `<xml><User name="foo"></xml>`)
 			}))
 			defer server.Close()
 			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{URL: server.URL})
@@ -629,7 +629,7 @@ func TestResponseFormats(t *testing.T) {
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				assert.Equal(t, http.MethodGet, r.Method)
 				w.Header().Add("Content-Type", "application/json")
-				fmt.Fprintf(w, `{ "foo" : "bar" }`)
+				_, _ = fmt.Fprintf(w, `{ "foo" : "bar" }`)
 			}))
 			defer server.Close()
 			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{URL: server.URL})
@@ -655,7 +655,7 @@ func TestResponseFormats(t *testing.T) {
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				assert.Equal(t, http.MethodGet, r.Method)
 				w.Header().Add("Content-Type", "application/json")
-				fmt.Fprintf(w, `{ "foo" : "bar" }`)
+				_, _ = fmt.Fprintf(w, `{ "foo" : "bar" }`)
 			}))
 			defer server.Close()
 			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{URL: server.URL})
