@@ -120,6 +120,7 @@ type InfinitySettings struct {
 	UnsecuredQueryHandling    UnsecuredQueryHandlingMode
 	PathEncodedURLsEnabled    bool
 	AllowDangerousHTTPMethods bool
+	AcceptErrorStatusCodes    bool
 	// ProxyOpts is used for Secure Socks Proxy configuration
 	ProxyOpts httpclient.Options
 	// Specific cookies included by Grafana for forwarding
@@ -211,6 +212,7 @@ type InfinitySettingsJson struct {
 	AzureBlobAccountName      string         `json:"azureBlobAccountName,omitempty"`
 	PathEncodedURLsEnabled    bool           `json:"pathEncodedUrlsEnabled,omitempty"`
 	AllowDangerousHTTPMethods bool           `json:"allowDangerousHTTPMethods,omitempty"`
+	AcceptErrorStatusCodes    bool           `json:"acceptErrorStatusCodes,omitempty"`
 	// Security
 	AllowedHosts           []string                   `json:"allowedHosts,omitempty"`
 	UnsecuredQueryHandling UnsecuredQueryHandlingMode `json:"unsecuredQueryHandling,omitempty"`
@@ -257,6 +259,7 @@ func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings
 		settings.ProxyUserName = infJson.ProxyUserName
 		settings.PathEncodedURLsEnabled = infJson.PathEncodedURLsEnabled
 		settings.AllowDangerousHTTPMethods = infJson.AllowDangerousHTTPMethods
+		settings.AcceptErrorStatusCodes = infJson.AcceptErrorStatusCodes
 		if settings.ProxyType == "" {
 			settings.ProxyType = ProxyTypeEnv
 		}

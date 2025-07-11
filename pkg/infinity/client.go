@@ -140,8 +140,12 @@ func (client *Client) req(ctx context.Context, pCtx *backend.PluginContext, url 
 		logger.Debug("invalid response from server and also no error", "url", url, "method", req.Method)
 		return nil, http.StatusInternalServerError, duration, backend.DownstreamError(fmt.Errorf("invalid response received for the URL %s", url))
 	}
-	if res.StatusCode >= http.StatusBadRequest {
-		err = fmt.Errorf("%w\nstatus code : %s", models.ErrUnsuccessfulHTTPResponseStatus, res.Status)
+	if res.StatusCode >= http.StatusBadRequest && !settings.AcceptErrorStatusCodes {
+		err = fmt.Errorf("%w. %s", models.ErrUnsuccessfulHTTPResponseStatus, res.Status)
+		// Infinity can query anything and users are responsible for ensuring that endpoint/auth is correct
+		// therefore any incoming error is considered downstream
+		return nil, res.StatusCode, duration, backend.DownstreamError(err)
+	}
 		// Infinity can query anything and users are responsible for ensuring that endpoint/auth is correct
 		// therefore any incoming error is considered downstream
 		return nil, res.StatusCode, duration, backend.DownstreamError(err)
