@@ -53,7 +53,7 @@ const (
 	PaginationParamTypeQuery    PaginationParamType = "query"
 	PaginationParamTypeHeader   PaginationParamType = "header"
 	PaginationParamTypeBodyData PaginationParamType = "body_data"
-	PaginationParamTypeBodyJson PaginationParamType = "body_json"
+	PaginationParamTypeBodyJson PaginationParamType = "body_json" // TODO: NOT IMPLEMENTED YET
 	PaginationParamTypeReplace  PaginationParamType = "replace"
 )
 

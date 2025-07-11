@@ -106,36 +106,40 @@ func GetPaginatedResults(ctx context.Context, pCtx *backend.PluginContext, query
 	return PostProcessFrame(ctx, mergedFrame, query)
 }
 
-func ApplyPaginationItemToQuery(currentQuery models.Query, fieldType models.PaginationParamType, fieldName string, fieldValue string) models.Query {
+func ApplyPaginationItemToQuery(query models.Query, fieldType models.PaginationParamType, fieldName string, fieldValue string) models.Query {
 	if strings.TrimSpace(fieldValue) == "" {
-		return currentQuery
+		return query
 	}
 	field := models.URLOptionKeyValuePair{Key: fieldName, Value: fieldValue}
 	switch fieldType {
 	case models.PaginationParamTypeHeader:
-		currentQuery.URLOptions.Headers = append(currentQuery.URLOptions.Headers, field)
+		query.URLOptions.Headers = append(query.URLOptions.Headers, field)
 	case models.PaginationParamTypeBodyData:
-		currentQuery.URLOptions.BodyForm = append(currentQuery.URLOptions.BodyForm, field)
+		query.URLOptions.BodyForm = append(query.URLOptions.BodyForm, field)
 	case models.PaginationParamTypeReplace:
-		currentQuery.URL = strings.ReplaceAll(currentQuery.URL, fieldName, field.Value)
-		currentQuery.URLOptions.Body = strings.ReplaceAll(currentQuery.URLOptions.Body, fieldName, field.Value)
-		currentQuery.URLOptions.BodyGraphQLQuery = strings.ReplaceAll(currentQuery.URLOptions.BodyGraphQLQuery, fieldName, fieldValue)
-		for headerIndex, header := range currentQuery.URLOptions.Headers {
-			currentQuery.URLOptions.Headers[headerIndex].Key = strings.ReplaceAll(header.Key, fieldName, field.Value)
-			currentQuery.URLOptions.Headers[headerIndex].Value = strings.ReplaceAll(header.Value, fieldName, field.Value)
+		fieldNameUpdated := fmt.Sprintf(`${__pagination.%s}`, fieldName)
+		query.URL = strings.ReplaceAll(query.URL, fieldNameUpdated, field.Value)
+		query.URLOptions.Body = strings.ReplaceAll(query.URLOptions.Body, fieldNameUpdated, field.Value)
+		query.URLOptions.BodyGraphQLQuery = strings.ReplaceAll(query.URLOptions.BodyGraphQLQuery, fieldNameUpdated, fieldValue)
+		query.URLOptions.BodyGraphQLVariables = strings.ReplaceAll(query.URLOptions.BodyGraphQLVariables, fieldNameUpdated, fieldValue)
+		for headerIndex, header := range query.URLOptions.Headers {
+			query.URLOptions.Headers[headerIndex].Key = strings.ReplaceAll(header.Key, fieldNameUpdated, field.Value)
+			query.URLOptions.Headers[headerIndex].Value = strings.ReplaceAll(header.Value, fieldNameUpdated, field.Value)
 		}
-		for paramIndex, param := range currentQuery.URLOptions.Params {
-			currentQuery.URLOptions.Params[paramIndex].Key = strings.ReplaceAll(param.Key, fieldName, field.Value)
-			currentQuery.URLOptions.Params[paramIndex].Value = strings.ReplaceAll(param.Value, fieldName, field.Value)
+		for paramIndex, param := range query.URLOptions.Params {
+			query.URLOptions.Params[paramIndex].Key = strings.ReplaceAll(param.Key, fieldNameUpdated, field.Value)
+			query.URLOptions.Params[paramIndex].Value = strings.ReplaceAll(param.Value, fieldNameUpdated, field.Value)
 		}
-		for bodyFormIndex, bodyFormItem := range currentQuery.URLOptions.BodyForm {
-			currentQuery.URLOptions.BodyForm[bodyFormIndex].Key = strings.ReplaceAll(bodyFormItem.Key, fieldName, field.Value)
-			currentQuery.URLOptions.BodyForm[bodyFormIndex].Value = strings.ReplaceAll(bodyFormItem.Value, fieldName, field.Value)
+		for bodyFormIndex, bodyFormItem := range query.URLOptions.BodyForm {
+			query.URLOptions.BodyForm[bodyFormIndex].Key = strings.ReplaceAll(bodyFormItem.Key, fieldNameUpdated, field.Value)
+			query.URLOptions.BodyForm[bodyFormIndex].Value = strings.ReplaceAll(bodyFormItem.Value, fieldNameUpdated, field.Value)
 		}
+	case models.PaginationParamTypeQuery:
+		fallthrough // It should go to default
 	default:
-		currentQuery.URLOptions.Params = append(currentQuery.URLOptions.Params, field)
+		query.URLOptions.Params = append(query.URLOptions.Params, field)
 	}
-	return currentQuery
+	return query
 }
 
 func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, pCtx *backend.PluginContext, query models.Query, infClient Client, requestHeaders map[string]string, postProcessingRequired bool) (*data.Frame, string, error) {
