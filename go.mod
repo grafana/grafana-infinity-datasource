@@ -16,11 +16,16 @@ require (
 	github.com/grafana/infinity-libs/lib/go/transformations v1.0.6
 	github.com/grafana/infinity-libs/lib/go/xmlframer v1.0.3
 	github.com/icholy/digest v0.1.22
-	github.com/stretchr/testify v1.10.0
 	go.opentelemetry.io/otel v1.36.0
 	go.opentelemetry.io/otel/trace v1.36.0
 	golang.org/x/oauth2 v0.30.0
 	moul.io/http2curl v1.0.0
+)
+
+// tests related deps
+require (
+	github.com/abbot/go-http-auth v0.4.0
+	github.com/stretchr/testify v1.10.0
 )
 
 require (
