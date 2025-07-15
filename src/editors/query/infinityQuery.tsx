@@ -41,10 +41,10 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
     query.type !== 'global' &&
     query.type !== 'google-sheets' &&
     query.type !== 'transformations' &&
-    !(query.type === 'json' && query.parser === 'backend') &&
-    !(query.type === 'graphql' && query.parser === 'backend') &&
-    !(query.type === 'csv' && query.parser === 'backend') &&
-    !(query.type === 'tsv' && query.parser === 'backend') &&
+    !(query.type === 'json' &&( query.parser === 'backend'|| query.parser ==='jq-backend')) &&
+    !(query.type === 'graphql' && (query.parser === 'backend'|| query.parser==='jq-backend')) &&
+    !(query.type === 'csv' && (query.parser === 'backend'|| query.parser==='jq-backend')) &&
+    !(query.type === 'tsv' && (query.parser === 'backend'|| query.parser==='jq-backend')) &&
     !(query.type === 'xml' && query.parser === 'backend') &&
     !(query.type === 'html' && query.parser === 'backend') &&
     !(query.type === 'json' && query.parser === 'uql') &&

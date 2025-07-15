@@ -76,13 +76,13 @@ export type InfinityCSVQueryOptions = {
 export type InfinityCSVQuery = (
   | { parser?: 'simple'; csv_options?: InfinityCSVQueryOptions }
   | { parser: 'uql'; uql: string }
-  | ({ parser: 'backend'; csv_options?: InfinityCSVQueryOptions } & BackendParserOptions)
+  | ({ parser: 'backend' | 'jq-backend'; csv_options?: InfinityCSVQueryOptions; root_selector?: string } & BackendParserOptions)
 ) &
   InfinityQueryWithDataSource<'csv'>;
 export type InfinityTSVQuery = (
   | { parser?: 'simple'; csv_options?: Exclude<InfinityCSVQueryOptions, 'delimiter'> }
   | { parser: 'uql'; uql: string }
-  | ({ parser: 'backend'; csv_options?: Exclude<InfinityCSVQueryOptions, 'delimiter'> } & BackendParserOptions)
+  | ({ parser: 'backend' | 'jq-backend'; csv_options?: Exclude<InfinityCSVQueryOptions, 'delimiter'>; root_selector?: string } & BackendParserOptions)
 ) &
   InfinityQueryWithDataSource<'tsv'>;
 export type InfinityXMLQuery = ({ parser?: 'simple' } | { parser: 'uql'; uql: string } | ({ parser: 'backend' } & BackendParserOptions) | ({ parser: 'jq-backend' } & BackendParserOptions)) &

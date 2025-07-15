@@ -25,11 +25,8 @@ export const isBackendQuerySupported = (
   query.type === 'json' || query.type === 'csv' || query.type === 'tsv' || query.type === 'graphql' || query.type === 'xml' || query.type === 'html';
 export const isBackendQuery = (
   query: InfinityQuery
-): query is Extract<
-  InfinityQuery,
-  | (({ type: 'json' } | { type: 'csv' } | { type: 'tsv' } | { type: 'xml' } | { type: 'graphql' } | { type: 'html' }) & { parser: 'backend' })
-  | (({ type: 'json' } | { type: 'xml' } | { type: 'graphql' } | { type: 'html' }) & { parser: 'jq-backend' })
-> => query.type === 'transformations' || (isBackendQuerySupported(query) && (query.parser === 'backend' || query.parser === 'jq-backend'));
+): query is Extract<InfinityQuery, ({ type: 'json' } | { type: 'csv' } | { type: 'tsv' } | { type: 'xml' } | { type: 'graphql' } | { type: 'html' }) & { parser: 'backend' | 'jq-backend' }> =>
+  query.type === 'transformations' || (isBackendQuerySupported(query) && (query.parser === 'backend' || query.parser === 'jq-backend'));
 
 export const isDataQuery = (query: InfinityQuery): query is InfinityQueryWithDataSource<any> => {
   switch (query.type) {

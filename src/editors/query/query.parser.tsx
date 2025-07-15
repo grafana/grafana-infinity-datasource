@@ -67,7 +67,10 @@ const getParserOptions = (queryType: InfinityQueryType): Array<SelectableValue<I
       return [
         {
           label: 'Backend',
-          options: [{ value: 'backend', label: 'Backend' }],
+          options: [
+            { value: 'backend', label: 'JSONata' },
+            { value: 'jq-backend', label: 'JQ' }
+          ],
         },
         {
           label: 'Frontend',

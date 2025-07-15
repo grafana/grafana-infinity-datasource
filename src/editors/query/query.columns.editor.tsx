@@ -60,9 +60,17 @@ export const QueryColumnsEditor = (props: { query: InfinityQuery; onChange: (val
         ) : (
           <>
             <Stack direction="column">
-              <RootSelector {...props} />
-              {query.type === 'json' && <JSONOptionsEditor {...props} />}
-              {(query.type === 'csv' || query.type === 'tsv') && <CSVOptionsEditor {...props} />}
+              {
+              query.type === 'json' && <Stack>
+                  <RootSelector {...props} />
+                  <JSONOptionsEditor {...props} />
+                </Stack>
+                }
+              {(query.type === 'csv' || query.type === 'tsv') && <Stack>
+                  <CSVOptionsEditor {...props} />
+                  <RootSelector {...props} />
+                </Stack>
+                }
             </Stack>
             <EditorField label="Columns" optional={true}>
               <>
@@ -123,7 +131,7 @@ const RootSelector = (props: { query: InfinityQuery; onChange: (value: any) => v
     onChange({ ...query, root_selector });
     onRunQuery();
   };
-  return ['html', 'json', 'xml', 'graphql'].indexOf(props.query.type) > -1 ? (
+  return ['html','csv','tsv', 'json', 'xml', 'graphql'].indexOf(props.query.type) > -1 ? (
     <EditorField label="Rows/Root" optional={true}>
       <TextArea
         width={'300px'}
