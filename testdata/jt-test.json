@@ -1,0 +1,17 @@
+[
+  {
+    "timestamp": "2024-07-23T10:00:00Z",
+    "page": "/home",
+    "visits": 120
+  },
+  {
+    "timestamp": "2024-07-23T10:00:00Z",
+    "page": "/about",
+    "visits": 45
+  },
+  {
+    "timestamp": "2024-07-23T10:15:00Z",
+    "page": "/home",
+    "visits": 135
+  }
+]
