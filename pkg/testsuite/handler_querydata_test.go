@@ -213,6 +213,48 @@ func TestAuthentication(t *testing.T) {
 			require.NotNil(t, metaData)
 			require.Equal(t, map[string]any(map[string]any{"foo": "bar"}), metaData.Data)
 		})
+		t.Run("should respect oauth credentials with token customization", func(t *testing.T) {
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				w.Header().Set("Content-Type", "application/json")
+				if r.URL.String() == "/token" {
+					_, _ = io.WriteString(w, `{"access_token": "at", "refresh_token": "rt", "token_type": "tt"}`)
+					return
+				}
+				if r.Header.Get("Foo-Value") != "foo at rt tt at" {
+					w.WriteHeader(http.StatusUnauthorized)
+					return
+				}
+				_, _ = io.WriteString(w, `{"hello":"world"}`)
+			}))
+			defer server.Close()
+			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
+				URL:                  server.URL,
+				AllowedHosts:         []string{server.URL},
+				AuthenticationMethod: models.AuthenticationMethodOAuth,
+				OAuth2Settings: models.OAuth2Settings{
+					OAuth2Type:    models.AuthOAuthTypeClientCredentials,
+					TokenURL:      server.URL + "/token",
+					ClientID:      "MY_CLIENT_ID",
+					ClientSecret:  "MY_CLIENT_SECRET",
+					Scopes:        []string{"scope1", "scope2"},
+					TokenTemplate: "foo ${__oauth2.access_token} ${__oauth2.refresh_token} ${__oauth2.token_type} ${__oauth2.access_token}",
+					AuthHeader:    "Foo-Value",
+				},
+			})
+			require.Nil(t, err)
+			res := queryData(t, context.Background(), backend.DataQuery{
+				JSON: []byte(fmt.Sprintf(`{
+					"type": "json",
+					"source": "url",
+					"url":  "%s/something-else"
+				}`, server.URL)),
+			}, *client, map[string]string{}, backend.PluginContext{})
+			require.NotNil(t, res)
+			require.Nil(t, res.Error)
+			metaData := res.Frames[0].Meta.Custom.(*infinity.CustomMeta)
+			require.NotNil(t, metaData)
+			require.Equal(t, map[string]any(map[string]any{"hello": "world"}), metaData.Data)
+		})
 		t.Run("should throw error with invalid oauth credentials", func(t *testing.T) {
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				if r.URL.String() == "/token" {

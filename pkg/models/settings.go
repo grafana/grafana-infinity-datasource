@@ -44,6 +44,8 @@ type OAuth2Settings struct {
 	Subject        string           `json:"subject,omitempty"`
 	Scopes         []string         `json:"scopes,omitempty"`
 	AuthStyle      oauth2.AuthStyle `json:"authStyle,omitempty"`
+	AuthHeader     string           `json:"authHeader,omitempty"`
+	TokenTemplate  string           `json:"tokenTemplate,omitempty"`
 	ClientSecret   string
 	PrivateKey     string
 	EndpointParams map[string]string

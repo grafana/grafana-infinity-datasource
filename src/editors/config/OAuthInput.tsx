@@ -1,6 +1,8 @@
+import { css } from '@emotion/css';
 import { onUpdateDatasourceSecureJsonDataOption, DataSourcePluginOptionsEditorProps, SelectableValue } from '@grafana/data';
-import { InlineFormLabel, Input, LegacyForms, LinkButton, RadioButtonGroup } from '@grafana/ui';
+import { InlineFormLabel, Input, LegacyForms, LinkButton, RadioButtonGroup, Stack } from '@grafana/ui';
 import React from 'react';
+import { Components } from '@/selectors';
 import { SecureFieldsEditor } from '@/components/config/SecureFieldsEditor';
 import type { InfinityOptions, InfinitySecureOptions, OAuth2Props, OAuth2Type } from '@/types';
 
@@ -113,6 +115,7 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
               secureFieldValue="oauth2EndPointParamsValue"
             />
           </div>
+          <TokenCustomization options={options} onOptionsChange={onOptionsChange} />
         </>
       )}
       {oauth2.oauth2_type === 'jwt' && (
@@ -167,6 +170,7 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
               placeholder={'Comma separated values of scopes'}
             />
           </div>
+          <TokenCustomization options={options} onOptionsChange={onOptionsChange} />
         </>
       )}
       {oauth2.oauth2_type === 'others' && (
@@ -182,5 +186,38 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
         </div>
       )}
     </>
+  );
+};
+
+const TokenCustomization = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
+  const { options, onOptionsChange } = props;
+  const oauth2: OAuth2Props = options?.jsonData?.oauth2 || {};
+  const { TokenHeader: TokenHeaderSelector, TokenTemplate: TokenTemplateSelector, CustomizeTokenSection: CustomizeTokenSectionSelector } = Components.ConfigEditor.Auth.OAuth2;
+  const onOAuth2PropsChange = <T extends keyof OAuth2Props, V extends OAuth2Props[T]>(key: T, value: V) => {
+    onOptionsChange({ ...options, jsonData: { ...options.jsonData, oauth2: { ...oauth2, [key]: value } } });
+  };
+  const styles = {
+    subheading: css`
+      margin-block: 20px;
+    `,
+  };
+  return (
+    <div>
+      <h5 className={styles.subheading}>{CustomizeTokenSectionSelector.label}</h5>
+      <Stack direction={'column'}>
+        <Stack gap={0.5}>
+          <InlineFormLabel width={12} interactive={true} tooltip={TokenHeaderSelector.tooltip}>
+            {TokenHeaderSelector.label}
+          </InlineFormLabel>
+          <Input onChange={(v) => onOAuth2PropsChange('authHeader', v.currentTarget.value)} value={oauth2.authHeader} width={30} placeholder={TokenHeaderSelector.placeholder} />
+        </Stack>
+        <Stack gap={0.5}>
+          <InlineFormLabel width={12} interactive={true} tooltip={TokenTemplateSelector.tooltip}>
+            {TokenTemplateSelector.label}
+          </InlineFormLabel>
+          <Input onChange={(v) => onOAuth2PropsChange('tokenTemplate', v.currentTarget.value)} value={oauth2.tokenTemplate} width={30} placeholder={TokenTemplateSelector.placeholder} />
+        </Stack>
+      </Stack>
+    </div>
   );
 };

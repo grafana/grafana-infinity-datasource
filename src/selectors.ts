@@ -5,6 +5,21 @@ export const Components = {
   Common: {},
   ConfigEditor: {
     Auth: {
+      OAuth2: {
+        CustomizeTokenSection: {
+          label: 'Customize OAuth2 token (Advanced)',
+        },
+        TokenHeader: {
+          label: 'Custom Token Header',
+          tooltip: `Once the token retrieved, the same will be sent to subsequent request's header with the key "Authorization". If the API require different key, provide the key here. Defaults to Authorization`,
+          placeholder: 'Authorization',
+        },
+        TokenTemplate: {
+          label: 'Custom Token Template',
+          tooltip: `Token Template allows you to customize the token value using the template. This will be Authorization header value. String \${__oauth2.access_token} will be replaced with actual access token`,
+          placeholder: `Bearer \${__oauth2.access_token}`,
+        },
+      },
       AzureBlob: {
         Region: {
           label: 'Azure cloud',
