@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
-	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"golang.org/x/oauth2"
 )
 
@@ -24,7 +23,6 @@ type oauth2CustomTokenTransport struct {
 }
 
 func (t *oauth2CustomTokenTransport) RoundTrip(req *http.Request) (*http.Response, error) {
-	backend.Logger.Error("TOKEN DEBUG", "tt", t.TokenTemplate, "h", t.AuthHeader)
 	authHeader := t.AuthHeader
 	if strings.TrimSpace(authHeader) == "" {
 		authHeader = "Authorization"
@@ -44,16 +42,19 @@ func (t *oauth2CustomTokenTransport) RoundTrip(req *http.Request) (*http.Respons
 	tokenValue := strings.ReplaceAll(tokenTemplate, OAuth2AccessTokenReplacer, token.AccessToken)
 	tokenValue = strings.ReplaceAll(tokenValue, OAuth2RefreshTokenReplacer, token.RefreshToken)
 	tokenValue = strings.ReplaceAll(tokenValue, OAuth2TokenTypeReplacer, token.TokenType)
-	backend.Logger.Error("TOKEN DEBUG", "tt", t.TokenTemplate, "h", t.AuthHeader, "tv", tokenValue)
-	newReq.Header.Add(authHeader, tokenValue)
+	newReq.Header.Set(authHeader, tokenValue)
 	return t.Transport.RoundTrip(newReq)
 }
 
 func getCustomOAuth2Transport(settings models.InfinitySettings, httpClient *http.Client) http.RoundTripper {
 	if settings.OAuth2Settings.AuthHeader != "" || settings.OAuth2Settings.TokenTemplate != "" {
+		oauth2Transport, ok := httpClient.Transport.(*oauth2.Transport)
+		if !ok {
+			return httpClient.Transport
+		}
 		return &oauth2CustomTokenTransport{
 			Transport:     httpClient.Transport,
-			TokenSource:   httpClient.Transport.(*oauth2.Transport).Source,
+			TokenSource:   oauth2Transport.Source,
 			TokenTemplate: settings.OAuth2Settings.TokenTemplate,
 			AuthHeader:    settings.OAuth2Settings.AuthHeader,
 		}

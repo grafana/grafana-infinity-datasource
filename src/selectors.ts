@@ -17,7 +17,7 @@ export const Components = {
         TokenTemplate: {
           label: 'Custom Token Template',
           tooltip: `Token Template allows you to customize the token value using the template. This will be Authorization header value. String {{ access_token }} will be replaced with actual access token`,
-          placeholder: 'Bearer {{ access_token }}',
+          placeholder: 'Bearer ${__oauth2.access_token}',
         },
       },
       AzureBlob: {
