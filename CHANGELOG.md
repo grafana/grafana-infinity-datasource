@@ -2,7 +2,7 @@
 
 ## 3.4.0
 
-🚀 Added support for OAuth2 token customization. To learn more, refer the [documentation](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/setup/oauth2-token-customization/)
+🚀 **OAuth2 token customization**: Added support for OAuth2 token customization. To learn more, refer the [documentation](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/setup/oauth2-token-customization/)
 
 🐛 **Cookie forwarding**: Forward cookies if jsonData.keepCookies is specified in datasource config
 
