@@ -144,7 +144,7 @@ func TestGetQueryURL(t *testing.T) {
 			query: models.Query{
 				URL: "0.0.0.0",
 			},
-			want: "0.0.0.0",
+			want: "https://0.0.0.0",
 		},
 		{
 			settings: models.InfinitySettings{},

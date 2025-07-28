@@ -92,6 +92,7 @@ func GetQueryURL(ctx context.Context, pCtx *backend.PluginContext, settings mode
 }
 
 func NormalizeURL(u string) string {
+	u = models.FixMissingURLSchema(u)
 	urlArray := strings.Split(u, "/")
 	if strings.HasPrefix(u, "https://github.com") && len(urlArray) > 5 && urlArray[5] == "blob" && urlArray[4] != "blob" && urlArray[3] != "blob" {
 		u = strings.Replace(u, "https://github.com", "https://raw.githubusercontent.com", 1)
