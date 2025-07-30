@@ -57,7 +57,7 @@ You can download and install this grafana plugin using various options
 - Using grafana cli
   - `grafana-cli plugins install yesoreyeram-infinity-datasource`
 - Using docker
-  - `docker run -p 3000:3000 -e "GF_PLUGINS_PREINSTALL_SYNC=yesoreyeram-infinity-datasource" grafana/grafana:latest`
+  - `docker run -p 3000:3000 -e "GF_PLUGINS_PREINSTALL_SYNC=yesoreyeram-infinity-datasource" grafana/grafana-enterprise:latest`
 
 ## 🎯 Documentation
 
