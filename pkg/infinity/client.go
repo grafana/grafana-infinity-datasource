@@ -234,17 +234,47 @@ func CanParseAsJSON(queryType models.QueryType, responseHeaders http.Header) boo
 	return false
 }
 
-func CanAllowURL(url string, allowedHosts []string) bool {
+func CanAllowURL(urlString string, allowedUrls []string) bool {
 	allow := false
-	if len(allowedHosts) == 0 {
+	if len(allowedUrls) == 0 {
 		return true
 	}
-	for _, host := range allowedHosts {
-		if strings.HasPrefix(url, host) {
+	allowedHosts, err := GetAllowedHosts(allowedUrls)
+	if err != nil {
+		backend.Logger.Debug("error parsing allowed list URLs", "err", err.Error())
+		return false
+	}
+	for _, allowedUrl := range allowedUrls {
+		// Legacy Check : Make sure the URL matches the pattern / allowed list prefix
+		// This is to ensure only certain paths are allowed. Example: Should allow foo.com/a and block foo.com/b
+		matchesURL := strings.HasPrefix(urlString, allowedUrl)
+		// Updated Check : Make sure the host name matches
+		fullUrlString := models.FixMissingURLSchema(urlString)
+		parsedURL, err := url.Parse(fullUrlString)
+		if err != nil {
+			backend.Logger.Debug("error parsing the URL", "err", err.Error())
+			return false
+		}
+		parsedURLHostName := parsedURL.Hostname()
+		matchesHostName := allowedHosts[parsedURLHostName]
+		if matchesURL && matchesHostName {
 			return true
 		}
 	}
 	return allow
+}
+
+func GetAllowedHosts(allowedUrls []string) (map[string]bool, error) {
+	allowedHosts := map[string]bool{}
+	for _, allowedUrl := range allowedUrls {
+		fullAllowedUrl := models.FixMissingURLSchema(allowedUrl)
+		parsedURL, err := url.Parse(fullAllowedUrl)
+		if err != nil {
+			return allowedHosts, err
+		}
+		allowedHosts[parsedURL.Hostname()] = true
+	}
+	return allowedHosts, nil
 }
 
 func GetQueryBody(ctx context.Context, query models.Query) io.Reader {
