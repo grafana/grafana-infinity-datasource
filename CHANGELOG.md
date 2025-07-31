@@ -1,5 +1,11 @@
 # Change Log
 
+## 3.4.1
+
+⚙️ **Chore**: If the URL is specified without `http://` / `https://` scheme, infinity will now default to `https://` for non localhost URLs.
+
+⚙️ **Chore**: Added more tests
+
 ## 3.4.0
 
 🚀 **OAuth2 token customization**: Added support for OAuth2 token customization. To learn more, refer the [documentation](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/setup/oauth2-token-customization/)

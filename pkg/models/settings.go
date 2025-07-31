@@ -3,8 +3,10 @@ package models
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/textproto"
+	urllib "net/url"
 	"strings"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
@@ -156,19 +158,26 @@ func (s *InfinitySettings) Validate() error {
 		}
 		return nil
 	}
-	if s.AuthenticationMethod != AuthenticationMethodAzureBlob && s.AuthenticationMethod != AuthenticationMethodNone && len(s.AllowedHosts) < 1 {
+	if s.DoesAllowedHostsRequired() && len(s.AllowedHosts) < 1 {
 		return ErrInvalidConfigHostNotAllowed
 	}
-	if s.HaveSecureHeaders() && len(s.AllowedHosts) < 1 {
-		return ErrInvalidConfigHostNotAllowed
-	}
-	if len(s.KeepCookies) > 0 && len(s.AllowedHosts) < 1 {
-		return ErrInvalidConfigHostNotAllowed
-	}
-	return nil
+	return ValidateAllowedHosts(s.AllowedHosts)
 }
 
-func (s *InfinitySettings) HaveSecureHeaders() bool {
+func (s *InfinitySettings) DoesAllowedHostsRequired() bool {
+	// If base url is configured, there is no need for allowed hosts
+	if strings.TrimSpace(s.URL) != "" {
+		return false
+	}
+	// If there is specific authentication mechanism (except none and azure blob), then allowed hosts required
+	if s.AuthenticationMethod != "" && s.AuthenticationMethod != AuthenticationMethodNone && s.AuthenticationMethod != AuthenticationMethodAzureBlob {
+		return true
+	}
+	// If there are any TLS specific settings enabled, then allowed hosts required
+	if s.TLSAuthWithCACert || s.TLSClientAuth {
+		return true
+	}
+	// If there are custom headers (not generic headers such as Accept, Content Type etc), then allowed hosts required
 	if len(s.CustomHeaders) > 0 {
 		for k := range s.CustomHeaders {
 			if textproto.CanonicalMIMEHeaderKey(k) == "Accept" {
@@ -179,9 +188,49 @@ func (s *InfinitySettings) HaveSecureHeaders() bool {
 			}
 			return true
 		}
-		return false
+	}
+	// If there are custom query parameters, then allowed hosts required
+	if len(s.SecureQueryFields) > 0 {
+		return true
+	}
+	// If there are cookie forwarding, then allowed hosts required
+	if len(s.KeepCookies) > 0 {
+		return true
 	}
 	return false
+}
+
+func ValidateAllowedHosts(allowedUrls []string) error {
+	for _, allowedUrl := range allowedUrls {
+		fullAllowedUrl := FixMissingURLSchema(allowedUrl)
+		parsedURL, err := urllib.Parse(fullAllowedUrl)
+		if err != nil {
+			return fmt.Errorf("error parsing allowed list url %s", allowedUrl)
+		}
+		allowedHostName := parsedURL.Hostname()
+		if strings.TrimSpace(allowedHostName) == "" {
+			return errors.New("invalid url found in allowed hosts settings")
+		}
+		protocol := strings.ToLower(parsedURL.Scheme)
+		if !(protocol == "http" || protocol == "https") {
+			return fmt.Errorf("invalid url in allowed list %s", allowedUrl)
+		}
+	}
+	return nil
+}
+
+func FixMissingURLSchema(urlString string) string {
+	if strings.TrimSpace(urlString) == "" {
+		return ""
+	}
+	lowerUrlString := strings.ToLower(urlString)
+	if !(strings.HasPrefix(lowerUrlString, "http://") || strings.HasPrefix(lowerUrlString, "https://")) {
+		if lowerUrlString == "localhost" || strings.HasPrefix(lowerUrlString, "localhost:") {
+			return "http://" + urlString
+		}
+		return "https://" + urlString
+	}
+	return urlString
 }
 
 type RefData struct {
