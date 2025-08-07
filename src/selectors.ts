@@ -40,6 +40,22 @@ export const Components = {
         },
       },
     },
+    URL: {
+      IgnoreStatusCodeCheck: {
+        tooltip:
+          'When enabled, the datasource will process response body even for HTTP error status codes (4xx, 5xx). This is useful for APIs that return useful data in error responses, such as detailed error messages or partial data during service degradation.',
+        label: 'Ignore status code check',
+      },
+      AllowDangerousHTTPMethods: {
+        tooltip:
+          'By default Infinity only allows GET and POST HTTP methods to reduce the risk of accidental and potentially destructive payloads. If you need PUT, PATCH or DELETE methods, make use of this setting with caution. Note: Infinity does not evaluate any permissions against the underlying API',
+        label: 'Allow dangerous HTTP methods',
+      },
+      PathEncodedUrlsEnabled: {
+        tooltip: '',
+        label: 'Encode query parameters with %20',
+      },
+    },
     Network: {
       Proxy: {
         ProxyCustomURL: {
