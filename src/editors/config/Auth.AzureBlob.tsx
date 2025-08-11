@@ -1,9 +1,9 @@
 import React from 'react';
 import { Stack, InlineLabel, Input, SecretInput, Select } from '@grafana/ui';
 import { onUpdateDatasourceSecureJsonDataOption, DataSourcePluginOptionsEditorProps } from '@grafana/data';
-import { Components } from './../../selectors';
-import { AzureBlobRegions, AzureBlobCloudTypeDefault } from './../../constants';
-import type { InfinityOptions, InfinitySecureOptions } from './../../types';
+import { Components } from '@/selectors';
+import { AzureBlobRegions, AzureBlobCloudTypeDefault } from '@/constants';
+import type { InfinityOptions, InfinitySecureOptions } from '@/types';
 
 export const AzureBlobAuthEditor = (
   props: DataSourcePluginOptionsEditorProps<InfinityOptions> & {

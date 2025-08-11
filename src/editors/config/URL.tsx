@@ -1,6 +1,7 @@
 import { InlineLabel, Input, InlineSwitch, Stack, Badge } from '@grafana/ui';
 import React, { useState } from 'react';
 import { IGNORE_URL } from '@/constants';
+import { Components } from '@/selectors';
 import type { InfinityOptions } from '@/types';
 import type { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 
@@ -29,27 +30,30 @@ export const URLEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpti
 export const URLSettingsEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
   const { options, onOptionsChange } = props;
   const { jsonData = {} } = options;
+  const {
+    IgnoreStatusCodeCheck: IgnoreStatusCodeCheckSelector,
+    AllowDangerousHTTPMethods: AllowDangerousHTTPMethodsSelector,
+    PathEncodedUrlsEnabled: PathEncodedUrlsEnabledSelector,
+  } = Components.ConfigEditor.URL;
   return (
     <Stack direction={'column'}>
       <Stack>
-        <InlineLabel
-          width={36}
-          tooltip={`By default Infinity only allows GET and POST HTTP methods to reduce the risk of accidental and potentially destructive payloads. If you need PUT, PATCH or DELETE methods, make use of this setting with caution. Note: Infinity does not evaluate any permissions against the underlying API`}
-        >
-          Allow dangerous HTTP methods
+        <InlineLabel width={36} tooltip={IgnoreStatusCodeCheckSelector.tooltip}>
+          {IgnoreStatusCodeCheckSelector.label}
+        </InlineLabel>
+        <InlineSwitch value={jsonData.ignoreStatusCodeCheck || false} onChange={(e) => onOptionsChange({ ...options, jsonData: { ...jsonData, ignoreStatusCodeCheck: e.currentTarget.checked } })} />
+      </Stack>
+      <Stack>
+        <InlineLabel width={36} tooltip={AllowDangerousHTTPMethodsSelector.tooltip}>
+          {AllowDangerousHTTPMethodsSelector.label}
         </InlineLabel>
         <InlineSwitch
           value={jsonData.allowDangerousHTTPMethods || false}
-          onChange={(e) =>
-            onOptionsChange({
-              ...options,
-              jsonData: { ...jsonData, allowDangerousHTTPMethods: e.currentTarget.checked },
-            })
-          }
+          onChange={(e) => onOptionsChange({ ...options, jsonData: { ...jsonData, allowDangerousHTTPMethods: e.currentTarget.checked } })}
         />
       </Stack>
       <Stack>
-        <InlineLabel width={36}>Encode query parameters with %20</InlineLabel>
+        <InlineLabel width={36}>{PathEncodedUrlsEnabledSelector.label}</InlineLabel>
         <InlineSwitch value={jsonData.pathEncodedUrlsEnabled || false} onChange={(e) => onOptionsChange({ ...options, jsonData: { ...jsonData, pathEncodedUrlsEnabled: e.currentTarget.checked } })} />
         <Badge text="Experimental" color="orange" icon={'exclamation-triangle'} />
       </Stack>
