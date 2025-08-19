@@ -19,6 +19,7 @@ import { PaginationEditor } from '@/editors/query/query.pagination';
 import { TransformationsEditor } from '@/editors/query/query.transformations';
 import { QueryWarning } from '@/editors/query/query.warning';
 import type { EditorMode, InfinityQuery } from '@/types';
+import { PanelData } from '@grafana/data';
 
 export type InfinityEditorProps = {
   query: InfinityQuery;
@@ -27,10 +28,11 @@ export type InfinityEditorProps = {
   instanceSettings: any;
   mode: EditorMode;
   datasource: Datasource;
+  data?: PanelData;
 };
 
 export const InfinityQueryEditor = (props: InfinityEditorProps) => {
-  const { onChange, mode, instanceSettings, onRunQuery, datasource } = props;
+  const { onChange, mode, instanceSettings, onRunQuery, datasource, data } = props;
   const [showUrlOptions, setShowUrlOptions] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   let query: InfinityQuery = defaultsDeep(props.query, DefaultInfinityQuery) as InfinityQuery;
@@ -76,7 +78,7 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
         {query.type === 'series' && <SeriesEditor {...{ query, onChange }} />}
         {isDataQuery(query) && query.source !== 'inline' && showUrlOptions && <URLEditor {...{ mode, query, onChange, onRunQuery }} />}
         {isDataQuery(query) && query.source === 'azure-blob' && <AzureBlobEditor query={query} onChange={onChange} />}
-        {canShowColumnsEditor && <QueryColumnsEditor {...{ mode, query, onChange, onRunQuery }} />}
+        {canShowColumnsEditor && <QueryColumnsEditor {...{ mode, query, onChange, onRunQuery, datasource, data }} />}
         {canShowFilterEditor && <TableFilter {...{ query, onChange, onRunQuery }} />}
         {query.type === 'uql' && (
           <>

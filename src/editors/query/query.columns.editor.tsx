@@ -9,8 +9,11 @@ import { CSVOptionsEditor } from '@/components/CSVOptionsEditor';
 import { UQLEditor } from '@/editors/query/query.uql';
 import { GROQEditor } from '@/editors/query/query.groq';
 import type { InfinityColumn, InfinityQuery } from '@/types';
+import type { Datasource } from '@/datasource';
+import { createAssistantContextItem, OpenAssistantButton} from '@grafana/assistant';
+import { PanelData } from '@grafana/data';
 
-export const QueryColumnsEditor = (props: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void }) => {
+export const QueryColumnsEditor = (props: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void; datasource?: Datasource; data?: PanelData }) => {
   const { query, onChange, onRunQuery } = props;
   if (!isDataQuery(query) && query.type !== 'google-sheets') {
     return <></>;
@@ -113,8 +116,8 @@ export const QueryColumnsEditor = (props: { query: InfinityQuery; onChange: (val
   );
 };
 
-const RootSelector = (props: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void }) => {
-  const { query, onChange, onRunQuery } = props;
+const RootSelector = (props: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void; datasource?: Datasource; data?: PanelData }) => {
+  const { query, onChange, onRunQuery, datasource, data } = props;
   const [root_selector, setRootSelector] = useState(isDataQuery(query) ? query.root_selector || '' : '');
   if (!isDataQuery(query)) {
     return <></>;
@@ -125,15 +128,32 @@ const RootSelector = (props: { query: InfinityQuery; onChange: (value: any) => v
   };
   return ['html', 'json', 'xml', 'graphql'].indexOf(props.query.type) > -1 ? (
     <EditorField label="Rows/Root" optional={true}>
-      <TextArea
-        width={'300px'}
-        cols={50}
-        rows={isBackendQuery(query) ? 7 : 2}
-        value={root_selector}
-        placeholder={isBackendQuery(query) ? (query.parser === 'jq-backend' ? 'JQ / rows selector' : 'JSONata / rows selector') : 'rows / root selector (optional)'}
-        onChange={(e) => setRootSelector(e.currentTarget.value)}
-        onBlur={onRootSelectorChange}
-      />
+      <Stack direction="row" gap={2} alignItems="flex-start">
+        <TextArea
+          width={'300px'}
+          cols={50}
+          rows={isBackendQuery(query) ? 7 : 2}
+          value={root_selector}
+          placeholder={isBackendQuery(query) ? (query.parser === 'jq-backend' ? 'JQ / rows selector' : 'JSONata / rows selector') : 'rows / root selector (optional)'}
+          onChange={(e) => setRootSelector(e.currentTarget.value)}
+          onBlur={onRootSelectorChange}
+        />
+        {datasource && (query.parser === 'backend' || query.parser === 'jq-backend') && (
+          <OpenAssistantButton 
+            iconOnlyButton={true}
+            size="md"
+            prompt={`Help me write a parser for the following data. Here is sample of existing data:` +
+              // if data is array, then take first 2 items, if it is string, then take first 1000 characters
+              `\n\n${JSON.stringify(Array.isArray(data?.series[0]?.meta?.custom?.data) ? data?.series[0]?.meta?.custom?.data.slice(0, 2) : data?.series[0]?.meta?.custom?.data ?? '').slice(0, 1000)}` +
+              `\n\nSelected parser: ${query.parser === 'backend' ? 'JSONata' : query.parser}.`}
+            context={[createAssistantContextItem('datasource', {
+              datasourceUid: datasource.uid,
+  
+            })]}
+            name="Use Assistant to create a parser query"
+          />
+        )}
+      </Stack>
     </EditorField>
   ) : (
     <></>
