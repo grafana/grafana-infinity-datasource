@@ -151,7 +151,9 @@ const RootSelector = (props: { query: InfinityQuery; onChange: (value: any) => v
                 title: 'Data',
                 data: {
                   // We take first 5 items if it is array, or the first 1500 character
-                  stringifiedData: Array.isArray(data?.series?.[0]?.meta?.custom?.data) ? JSON.stringify(data?.series?.[0]?.meta?.custom?.data.slice(0, 5)) : (JSON.stringify(data?.series?.[0]?.meta?.custom?.data ?? '')).slice(0, 1500)
+                  stringifiedData: Array.isArray(data?.series?.[0]?.meta?.custom?.data)
+                    ? JSON.stringify(data?.series?.[0]?.meta?.custom?.data.slice(0, 5))
+                    : JSON.stringify(data?.series?.[0]?.meta?.custom?.data ?? '').slice(0, 1500),
                 },
               }),
               createAssistantContextItem('structured', {
