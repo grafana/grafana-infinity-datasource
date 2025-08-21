@@ -141,7 +141,7 @@ const RootSelector = (props: { query: InfinityQuery; onChange: (value: any) => v
         {datasource && (query.parser === 'backend' || query.parser === 'jq-backend') && (
           <OpenAssistantButton
             title="Create parser with Assistant"
-            origin="infinity-query-builder-parser"
+            origin="data-source-infinity-query-builder-parser"
             size="sm"
             prompt={`Write a ${query.parser === 'backend' ? 'JSONata' : query.parser} parser expression to extract rows from provided data.`}
             context={[
