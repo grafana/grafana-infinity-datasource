@@ -143,16 +143,27 @@ const RootSelector = (props: { query: InfinityQuery; onChange: (value: any) => v
             title="Create parser with Assistant"
             origin="data-source-infinity-query-builder-parser"
             size="sm"
-            prompt={`Write a ${query.parser === 'backend' ? 'JSONata' : query.parser} parser expression to extract rows from provided data.`}
+            prompt={`Create a ${query.parser === 'backend' ? 'JSONata' : query.parser} parser expression that extracts rows from provided data. The expression should work with the sample data provided in the context.`}
             context={[
               createAssistantContextItem('datasource', { datasourceUid: datasource.uid }),
 
               createAssistantContextItem('structured', {
                 title: 'Data',
                 data: {
-                  name: 'data',
                   // We take first 2 items if it is array, or first 1500 characters if it is string as sample
-                  value: Array.isArray(data?.series?.[0]?.meta?.custom?.data) ? data?.series?.[0]?.meta?.custom?.data.slice(0, 2) : (data?.series?.[0]?.meta?.custom?.data ?? '').slice(0, 1500),
+                  data: Array.isArray(data?.series?.[0]?.meta?.custom?.data) ? data?.series?.[0]?.meta?.custom?.data.slice(0, 5) : (data?.series?.[0]?.meta?.custom?.data ?? '').slice(0, 1500),
+                },
+              }),
+              createAssistantContextItem('structured', {
+                hidden: true,
+                title: 'Page-specific instructions',
+                data: {
+                  instructions: `
+                  - Use proper ${query.parser === 'backend' ? 'JSONata' : query.parser} syntax
+                  - If data has null/undefined values, handle them gracefully
+                  - Provide 3 different examples showing:
+                    - Basic data extraction (show all data)
+                    - Data filtering (select specific records)`,
                 },
               }),
             ]}
