@@ -17,16 +17,16 @@ describe('ComputedColumnsEditor', () => {
     root_selector: '',
     url_options: {} as InfinityURLOptions,
     computed_columns: Object.freeze([
-      {
+      Object.freeze({
         text: 'Column 1',
         selector: '$.name',
         type: 'string' as InfinityColumnFormat,
-      },
-      {
+      }),
+      Object.freeze({
         text: 'Column 2',
         selector: '$.value',
         type: 'number' as InfinityColumnFormat,
-      },
+      }),
     ]) as InfinityColumn[],
   });
 

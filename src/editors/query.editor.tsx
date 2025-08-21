@@ -1,4 +1,4 @@
-import { defaultsDeep } from 'lodash';
+import { cloneDeep, defaultsDeep } from 'lodash';
 import React from 'react';
 import { getDefaultGlobalQueryID } from '@/app/queryUtils';
 import { DefaultInfinityQuery } from '@/constants';
@@ -9,7 +9,7 @@ import type { QueryEditorProps } from '@grafana/data';
 
 export const QueryEditor = (props: QueryEditorProps<Datasource, InfinityQuery>) => {
   const { datasource, onChange, onRunQuery } = props;
-  const query = defaultsDeep(props.query, {
+  const query = defaultsDeep(cloneDeep(props.query), {
     ...DefaultInfinityQuery,
     global_query_id: getDefaultGlobalQueryID(datasource.instanceSettings),
   });

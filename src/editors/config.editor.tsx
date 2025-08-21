@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { defaultsDeep } from 'lodash';
+import { cloneDeep, defaultsDeep } from 'lodash';
 import { css } from '@emotion/css';
 import { InlineFormLabel, Input, Button, LinkButton, useTheme2, Collapse as CollapseOriginal, Stack, Grid } from '@grafana/ui';
 import { SecureFieldsEditor } from '@/components/config/SecureFieldsEditor';
@@ -150,7 +150,7 @@ const config_sections: Array<{ value: string; label: string }> = [
 ];
 
 const getOptionsWithDefaults = (options: DataSourceSettings<InfinityOptions>) => {
-  return { ...options, jsonData: defaultsDeep(options.jsonData, { global_queries: [] }) };
+  return { ...options, jsonData: defaultsDeep(cloneDeep(options.jsonData), { global_queries: [] }) };
 };
 
 export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {

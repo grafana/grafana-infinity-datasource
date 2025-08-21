@@ -1,4 +1,4 @@
-import { defaultsDeep } from 'lodash';
+import { cloneDeep, defaultsDeep } from 'lodash';
 import React, { useState } from 'react';
 import { EditorRows, EditorRow } from '@/components/extended/EditorRow';
 import { DefaultInfinityQuery } from '@/constants';
@@ -33,7 +33,7 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
   const { onChange, mode, instanceSettings, onRunQuery, datasource } = props;
   const [showUrlOptions, setShowUrlOptions] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
-  let query: InfinityQuery = defaultsDeep(props.query, DefaultInfinityQuery) as InfinityQuery;
+  let query: InfinityQuery = defaultsDeep(cloneDeep(props.query), DefaultInfinityQuery) as InfinityQuery;
   query = migrateQuery(query);
   let canShowColumnsEditor = ['csv', 'tsv', 'html', 'json', 'graphql', 'xml', 'google-sheets'].includes(query.type);
   let canShowFilterEditor =
