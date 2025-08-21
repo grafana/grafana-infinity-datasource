@@ -140,7 +140,7 @@ func (client *Client) req(ctx context.Context, pCtx *backend.PluginContext, url 
 		logger.Debug("invalid response from server and also no error", "url", url, "method", req.Method)
 		return nil, http.StatusInternalServerError, duration, backend.DownstreamError(fmt.Errorf("invalid response received for the URL %s", url))
 	}
-	if res.StatusCode >= http.StatusBadRequest {
+	if res.StatusCode >= http.StatusBadRequest && !settings.IgnoreStatusCodeCheck {
 		err = fmt.Errorf("%w\nstatus code : %s", models.ErrUnsuccessfulHTTPResponseStatus, res.Status)
 		// Infinity can query anything and users are responsible for ensuring that endpoint/auth is correct
 		// therefore any incoming error is considered downstream
@@ -150,6 +150,10 @@ func (client *Client) req(ctx context.Context, pCtx *backend.PluginContext, url 
 	if err != nil {
 		logger.Debug("error reading response body", "url", url, "error", err.Error())
 		return nil, res.StatusCode, duration, backend.DownstreamError(err)
+	}
+	if len(bodyBytes) == 0 {
+		logger.Debug("empty response body received", "url", url)
+		return nil, res.StatusCode, duration, backend.DownstreamError(fmt.Errorf("empty response body received for the URL %s", url))
 	}
 	bodyBytes = removeBOMContent(bodyBytes)
 	if CanParseAsJSON(query.Type, res.Header) {
@@ -166,6 +170,9 @@ func (client *Client) req(ctx context.Context, pCtx *backend.PluginContext, url 
 }
 
 func getBodyBytes(res *http.Response) ([]byte, error) {
+	if res == nil || res.Body == nil {
+		return nil, errors.New("invalid/empty response received from underlying API")
+	}
 	if strings.EqualFold(res.Header.Get("Content-Encoding"), "gzip") {
 		reader, err := gzip.NewReader(res.Body)
 		if err != nil {
@@ -234,17 +241,47 @@ func CanParseAsJSON(queryType models.QueryType, responseHeaders http.Header) boo
 	return false
 }
 
-func CanAllowURL(url string, allowedHosts []string) bool {
+func CanAllowURL(urlString string, allowedUrls []string) bool {
 	allow := false
-	if len(allowedHosts) == 0 {
+	if len(allowedUrls) == 0 {
 		return true
 	}
-	for _, host := range allowedHosts {
-		if strings.HasPrefix(url, host) {
+	allowedHosts, err := GetAllowedHosts(allowedUrls)
+	if err != nil {
+		backend.Logger.Debug("error parsing allowed list URLs", "err", err.Error())
+		return false
+	}
+	for _, allowedUrl := range allowedUrls {
+		// Legacy Check : Make sure the URL matches the pattern / allowed list prefix
+		// This is to ensure only certain paths are allowed. Example: Should allow foo.com/a and block foo.com/b
+		matchesURL := strings.HasPrefix(urlString, allowedUrl)
+		// Updated Check : Make sure the host name matches
+		fullUrlString := models.FixMissingURLSchema(urlString)
+		parsedURL, err := url.Parse(fullUrlString)
+		if err != nil {
+			backend.Logger.Debug("error parsing the URL", "err", err.Error())
+			return false
+		}
+		parsedURLHostName := parsedURL.Hostname()
+		matchesHostName := allowedHosts[parsedURLHostName]
+		if matchesURL && matchesHostName {
 			return true
 		}
 	}
 	return allow
+}
+
+func GetAllowedHosts(allowedUrls []string) (map[string]bool, error) {
+	allowedHosts := map[string]bool{}
+	for _, allowedUrl := range allowedUrls {
+		fullAllowedUrl := models.FixMissingURLSchema(allowedUrl)
+		parsedURL, err := url.Parse(fullAllowedUrl)
+		if err != nil {
+			return allowedHosts, err
+		}
+		allowedHosts[parsedURL.Hostname()] = true
+	}
+	return allowedHosts, nil
 }
 
 func GetQueryBody(ctx context.Context, query models.Query) io.Reader {

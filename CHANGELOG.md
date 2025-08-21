@@ -1,5 +1,21 @@
 # Change Log
 
+## 3.4.1
+
+⚙️ **Chore**: If the URL is specified without `http://` / `https://` scheme, infinity will now default to `https://` for non localhost URLs.
+
+⚙️ **Chore**: Added more tests
+
+## 3.4.0
+
+🚀 **OAuth2 token customization**: Added support for OAuth2 token customization. To learn more, refer the [documentation](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/setup/oauth2-token-customization/)
+
+🐛 **Cookie forwarding**: Forward cookies if jsonData.keepCookies is specified in datasource config
+
+🐛 **Bug fix**: Fixes a bug where field type set to replace_url in field
+
+🐛 **Bug fix**: Fixed a bug where pagination not working with jq backend parser
+
 ## 3.3.0
 
 🚀 Added support for **jq** syntax in root selector via `jq-backend` parser. To learn more, refer the [documentation](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/query/jq-backend/).

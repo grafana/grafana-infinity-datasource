@@ -5,11 +5,16 @@ import (
 	"encoding/base64"
 	"fmt"
 	"io"
+	"net"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
 
+	"crypto/md5"
+	"encoding/hex"
+
+	auth "github.com/abbot/go-http-auth"
 	"github.com/grafana/grafana-infinity-datasource/pkg/infinity"
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/grafana/grafana-infinity-datasource/pkg/pluginhost"
@@ -30,7 +35,7 @@ func queryData(t *testing.T, ctx context.Context, backendQuery backend.DataQuery
 func TestAuthentication(t *testing.T) {
 	t.Run("should throw error when allowed hosts not configured", func(t *testing.T) {
 		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			fmt.Fprintf(w, `{ "message" : "OK" }`)
+			_, _ = fmt.Fprintf(w, `{ "message" : "OK" }`)
 		}))
 		defer server.Close()
 		client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodApiKey, ApiKeyKey: "foo", ApiKeyValue: "bar"})
@@ -54,7 +59,7 @@ func TestAuthentication(t *testing.T) {
 				assert.Equal(t, http.MethodGet, r.Method)
 				assert.Equal(t, "Basic "+base64.StdEncoding.EncodeToString([]byte("infinityUser:myPassword")), r.Header.Get(infinity.HeaderKeyAuthorization))
 				assert.Equal(t, "", r.Header.Get(infinity.HeaderKeyIdToken))
-				fmt.Fprintf(w, `{ "message" : "OK" }`)
+				_, _ = fmt.Fprintf(w, `{ "message" : "OK" }`)
 			}))
 			defer server.Close()
 			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
@@ -85,11 +90,11 @@ func TestAuthentication(t *testing.T) {
 				assert.Equal(t, http.MethodGet, r.Method)
 				assert.Equal(t, "", r.Header.Get(infinity.HeaderKeyIdToken))
 				if r.Header.Get(infinity.HeaderKeyAuthorization) == "Basic "+base64.StdEncoding.EncodeToString([]byte("infinityUser:myPassword")) {
-					fmt.Fprintf(w, "OK")
+					_, _ = fmt.Fprintf(w, "OK")
 					return
 				}
 				w.WriteHeader(http.StatusUnauthorized)
-				fmt.Fprintf(w, "UnAuthorized")
+				_, _ = fmt.Fprintf(w, "UnAuthorized")
 			}))
 			defer server.Close()
 			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
@@ -122,7 +127,7 @@ func TestAuthentication(t *testing.T) {
 				assert.Equal(t, http.MethodGet, r.Method)
 				assert.Equal(t, "foo", r.Header.Get(infinity.HeaderKeyAuthorization))
 				assert.Equal(t, "bar", r.Header.Get(infinity.HeaderKeyIdToken))
-				fmt.Fprintf(w, `{ "message" : "OK" }`)
+				_, _ = fmt.Fprintf(w, `{ "message" : "OK" }`)
 			}))
 			defer server.Close()
 			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
@@ -146,7 +151,7 @@ func TestAuthentication(t *testing.T) {
 				assert.Equal(t, http.MethodGet, r.Method)
 				assert.Equal(t, "", r.Header.Get(infinity.HeaderKeyAuthorization))
 				assert.Equal(t, "", r.Header.Get(infinity.HeaderKeyIdToken))
-				fmt.Fprintf(w, `{ "message" : "OK" }`)
+				_, _ = fmt.Fprintf(w, `{ "message" : "OK" }`)
 			}))
 			defer server.Close()
 			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
@@ -208,6 +213,48 @@ func TestAuthentication(t *testing.T) {
 			require.NotNil(t, metaData)
 			require.Equal(t, map[string]any(map[string]any{"foo": "bar"}), metaData.Data)
 		})
+		t.Run("should respect oauth credentials with token customization", func(t *testing.T) {
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				w.Header().Set("Content-Type", "application/json")
+				if r.URL.String() == "/token" {
+					_, _ = io.WriteString(w, `{"access_token": "at", "refresh_token": "rt", "token_type": "tt"}`)
+					return
+				}
+				if r.Header.Get("Foo-Value") != "foo at rt tt at" {
+					w.WriteHeader(http.StatusUnauthorized)
+					return
+				}
+				_, _ = io.WriteString(w, `{"hello":"world"}`)
+			}))
+			defer server.Close()
+			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
+				URL:                  server.URL,
+				AllowedHosts:         []string{server.URL},
+				AuthenticationMethod: models.AuthenticationMethodOAuth,
+				OAuth2Settings: models.OAuth2Settings{
+					OAuth2Type:    models.AuthOAuthTypeClientCredentials,
+					TokenURL:      server.URL + "/token",
+					ClientID:      "MY_CLIENT_ID",
+					ClientSecret:  "MY_CLIENT_SECRET",
+					Scopes:        []string{"scope1", "scope2"},
+					TokenTemplate: "foo ${__oauth2.access_token} ${__oauth2.refresh_token} ${__oauth2.token_type} ${__oauth2.access_token}",
+					AuthHeader:    "Foo-Value",
+				},
+			})
+			require.Nil(t, err)
+			res := queryData(t, context.Background(), backend.DataQuery{
+				JSON: []byte(fmt.Sprintf(`{
+					"type": "json",
+					"source": "url",
+					"url":  "%s/something-else"
+				}`, server.URL)),
+			}, *client, map[string]string{}, backend.PluginContext{})
+			require.NotNil(t, res)
+			require.Nil(t, res.Error)
+			metaData := res.Frames[0].Meta.Custom.(*infinity.CustomMeta)
+			require.NotNil(t, metaData)
+			require.Equal(t, map[string]any(map[string]any{"hello": "world"}), metaData.Data)
+		})
 		t.Run("should throw error with invalid oauth credentials", func(t *testing.T) {
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				if r.URL.String() == "/token" {
@@ -257,7 +304,7 @@ func TestAuthentication(t *testing.T) {
 			server := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				assert.Equal(t, http.MethodGet, r.Method)
 				assert.Equal(t, "", r.Header.Get(infinity.HeaderKeyIdToken))
-				fmt.Fprintf(w, `{ "message" : "OK" }`)
+				_, _ = fmt.Fprintf(w, `{ "message" : "OK" }`)
 			}))
 			server.TLS = getServerCertificate(server.URL)
 			assert.NotNil(t, server.TLS)
@@ -289,7 +336,7 @@ func TestAuthentication(t *testing.T) {
 			server := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				assert.Equal(t, http.MethodGet, r.Method)
 				assert.Equal(t, "", r.Header.Get(infinity.HeaderKeyIdToken))
-				fmt.Fprintf(w, `{ "message" : "OK" }`)
+				_, _ = fmt.Fprintf(w, `{ "message" : "OK" }`)
 			}))
 			server.TLS = getServerCertificate(server.URL)
 			assert.NotNil(t, server.TLS)
@@ -318,61 +365,81 @@ func TestAuthentication(t *testing.T) {
 		})
 	})
 	t.Run("digest auth", func(t *testing.T) {
-		t.Skip() // skipping due to transient errors in httpbin.org.
-		//TODO: Replace httpbin with local digeset auth server
+		realm := "test-realm"
+		username := "foo"
+		password := "bar"
+		secretProvider := func(user, realm string) string {
+			if user == username {
+				h := md5.New()
+				_, _ = h.Write([]byte(fmt.Sprintf("%s:%s:%s", username, realm, password)))
+				return hex.EncodeToString(h.Sum(nil))
+			}
+			return ""
+		}
+		authenticator := auth.NewDigestAuthenticator(realm, secretProvider)
+		server := httptest.NewUnstartedServer(http.HandlerFunc(authenticator.Wrap(func(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
+			w.Header().Set("Content-Type", "application/json")
+			_, _ = w.Write([]byte(`{"message": "OK"}`))
+		})))
+		l, err := net.Listen("tcp", "127.0.0.1:8080")
+		require.Nil(t, err)
+		_ = server.Listener.Close()
+		server.Listener = l
+		server.Start()
+		defer server.Close()
+		query := backend.DataQuery{JSON: []byte(fmt.Sprintf(`{ "type": "json", "url":  "%s", "source": "url" }`, server.URL))}
 		t.Run("should be ok with correct credentials", func(t *testing.T) {
 			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
+				IsMock:               true,
 				AuthenticationMethod: models.AuthenticationMethodDigestAuth,
-				UserName:             "foo",
-				Password:             "bar",
-				AllowedHosts:         []string{"http://httpbin.org/digest-auth"},
+				UserName:             username,
+				Password:             password,
+				AllowedHosts:         []string{server.URL},
 			})
 			require.Nil(t, err)
-			res := queryData(t, context.Background(), backend.DataQuery{
-				JSON: []byte(fmt.Sprintf(`{
-					"type": "json",
-					"url":  "%s",
-					"source": "url"
-				}`, "http://httpbin.org/digest-auth/auth/foo/bar/MD5")),
-			}, *client, map[string]string{}, backend.PluginContext{})
+			res := queryData(t, context.Background(), query, *client, map[string]string{}, backend.PluginContext{})
 			require.NotNil(t, res)
 			require.Nil(t, res.Error)
+			experimental.CheckGoldenJSONResponse(t, "golden", "digest-auth-ok", &res, UPDATE_GOLDEN_DATA)
 		})
-		t.Run("should fail with incorrect credentials", func(t *testing.T) {
+		t.Run("should fail with incorrect username", func(t *testing.T) {
 			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
 				AuthenticationMethod: models.AuthenticationMethodDigestAuth,
-				UserName:             "foo",
-				Password:             "baz",
-				AllowedHosts:         []string{"http://httpbin.org/digest-auth"},
+				UserName:             "boo",
+				Password:             "bar",
+				AllowedHosts:         []string{server.URL},
 			})
 			require.Nil(t, err)
-			res := queryData(t, context.Background(), backend.DataQuery{
-				JSON: []byte(fmt.Sprintf(`{
-					"type": "json",
-					"url":  "%s",
-					"source": "url"
-				}`, "http://httpbin.org/digest-auth/auth/foo/bar/MD5")),
-			}, *client, map[string]string{}, backend.PluginContext{})
+			res := queryData(t, context.Background(), query, *client, map[string]string{}, backend.PluginContext{})
+			require.NotNil(t, res)
 			require.NotNil(t, res.Error)
-			require.Equal(t, "error while performing the infinity query. unsuccessful HTTP response. 401 UNAUTHORIZED", res.Error.Error())
+			require.Equal(t, "error while performing the infinity query. unsuccessful HTTP response code\nstatus code : 401 Unauthorized", res.Error.Error())
+		})
+		t.Run("should fail with incorrect password", func(t *testing.T) {
+			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodDigestAuth,
+				UserName:             "boo",
+				Password:             "bar",
+				AllowedHosts:         []string{server.URL},
+			})
+			require.Nil(t, err)
+			res := queryData(t, context.Background(), query, *client, map[string]string{}, backend.PluginContext{})
+			require.NotNil(t, res)
+			require.NotNil(t, res.Error)
+			require.Equal(t, "error while performing the infinity query. unsuccessful HTTP response code\nstatus code : 401 Unauthorized", res.Error.Error())
 		})
 		t.Run("should fail with incorrect auth method", func(t *testing.T) {
 			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
 				AuthenticationMethod: models.AuthenticationMethodBasic,
-				UserName:             "foo",
-				Password:             "bar",
-				AllowedHosts:         []string{"http://httpbin.org/digest-auth"},
+				UserName:             username,
+				Password:             password,
+				AllowedHosts:         []string{server.URL},
 			})
 			require.Nil(t, err)
-			res := queryData(t, context.Background(), backend.DataQuery{
-				JSON: []byte(fmt.Sprintf(`{
-					"type": "json",
-					"url":  "%s",
-					"source": "url"
-				}`, "http://httpbin.org/digest-auth/auth/foo/bar/MD5")),
-			}, *client, map[string]string{}, backend.PluginContext{})
+			res := queryData(t, context.Background(), query, *client, map[string]string{}, backend.PluginContext{})
+			require.NotNil(t, res)
 			require.NotNil(t, res.Error)
-			require.Equal(t, "error while performing the infinity query. unsuccessful HTTP response. 401 UNAUTHORIZED", res.Error.Error())
+			require.Equal(t, "error while performing the infinity query. unsuccessful HTTP response code\nstatus code : 401 Unauthorized", res.Error.Error())
 		})
 	})
 }
@@ -382,7 +449,7 @@ func TestResponseFormats(t *testing.T) {
 		t.Run("should parse the response and send results", func(t *testing.T) {
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				assert.Equal(t, http.MethodGet, r.Method)
-				fmt.Fprintf(w, `{ "foo" : "bar" }`)
+				_, _ = fmt.Fprintf(w, `{ "foo" : "bar" }`)
 			}))
 			defer server.Close()
 			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{URL: server.URL})
@@ -407,7 +474,7 @@ func TestResponseFormats(t *testing.T) {
 		t.Run("should parse the response and send results", func(t *testing.T) {
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				assert.Equal(t, http.MethodGet, r.Method)
-				fmt.Fprintf(w, `{
+				_, _ = fmt.Fprintf(w, `{
 					"channel": {
 					  "id": 38629,
 					  "name": "Traffic Monitor",
@@ -526,7 +593,7 @@ func TestResponseFormats(t *testing.T) {
 		t.Run("should parse the response and send results", func(t *testing.T) {
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				assert.Equal(t, http.MethodGet, r.Method)
-				fmt.Fprintf(w, `{ "foo" : "bar" }`)
+				_, _ = fmt.Fprintf(w, `{ "foo" : "bar" }`)
 			}))
 			defer server.Close()
 			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{URL: server.URL})
@@ -552,7 +619,7 @@ func TestResponseFormats(t *testing.T) {
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				assert.Equal(t, http.MethodGet, r.Method)
 				w.Header().Add("Content-Type", "text/csv")
-				fmt.Fprintf(w, "a,b\na1,b1")
+				_, _ = fmt.Fprintf(w, "a,b\na1,b1")
 			}))
 			defer server.Close()
 			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{URL: server.URL})
@@ -578,7 +645,7 @@ func TestResponseFormats(t *testing.T) {
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				assert.Equal(t, http.MethodGet, r.Method)
 				w.Header().Add("Content-Type", "text/xml")
-				fmt.Fprintf(w, `<xml><User name="foo"></xml>`)
+				_, _ = fmt.Fprintf(w, `<xml><User name="foo"></xml>`)
 			}))
 			defer server.Close()
 			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{URL: server.URL})
@@ -604,7 +671,7 @@ func TestResponseFormats(t *testing.T) {
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				assert.Equal(t, http.MethodGet, r.Method)
 				w.Header().Add("Content-Type", "application/json")
-				fmt.Fprintf(w, `{ "foo" : "bar" }`)
+				_, _ = fmt.Fprintf(w, `{ "foo" : "bar" }`)
 			}))
 			defer server.Close()
 			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{URL: server.URL})
@@ -630,7 +697,7 @@ func TestResponseFormats(t *testing.T) {
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				assert.Equal(t, http.MethodGet, r.Method)
 				w.Header().Add("Content-Type", "application/json")
-				fmt.Fprintf(w, `{ "foo" : "bar" }`)
+				_, _ = fmt.Fprintf(w, `{ "foo" : "bar" }`)
 			}))
 			defer server.Close()
 			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{URL: server.URL})

@@ -92,6 +92,16 @@ OAuth 2.0 client credentials require the following parameters:
 | **Scopes**          | Scope specifies optional requested permissions.                                                   |
 | **Endpoint params** | EndpointParams specifies additional parameters for requests to the token endpoint.                |
 
+### Customizing OAuth2 Tokens
+
+In Infinity, OAuth2.0 client credentials authentication supports advanced customization for scenarios where APIs require non-standard token formats or headers. For detailed information on customizing OAuth2 token headers and templates, see [OAuth2 Custom Tokens](/docs/plugins/yesoreyeram-infinity-datasource/latest/setup/oauth2-token-customization/).
+
+Key features:
+
+- Custom header names (e.g., `X-API-Key` instead of `Authorization`)  
+- Custom token value format (e.g., `Token ${__oauth2.access_token}` instead of `Bearer ${__oauth2.access_token}`)
+- Support for multiple token properties (access token, refresh token, token type)
+
 ## OAuth 2.0 JWT
 
 OAuth 2.0 JWT require the following parameters
@@ -104,6 +114,9 @@ OAuth 2.0 JWT require the following parameters
 | **Token URL**              | TokenURL is the endpoint required to complete the 2-legged JWT flow.                                              |
 | **Subject**                | Optional. Subject is the optional user to impersonate.                                                            |
 | **Scopes**                 | Scopes optionally specifies a list of requested permission scopes. Provide scopes as a comma separated values.    |
+
+> Infinity OAuth 2.0 JWT authentication also supports token customization. See [OAuth2 Custom Tokens](/docs/plugins/yesoreyeram-infinity-datasource/latest/setup/oauth2-token-customization) for details.
+
 
 ## Azure
 

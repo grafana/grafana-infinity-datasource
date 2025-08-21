@@ -134,6 +134,7 @@ func applyOAuthClientCredentials(ctx context.Context, httpClient *http.Client, s
 		}
 		ctx := context.WithValue(context.Background(), oauth2.HTTPClient, httpClient)
 		httpClient = oauthConfig.Client(ctx)
+		httpClient.Transport = getCustomOAuth2Transport(settings, httpClient)
 	}
 	return httpClient, nil
 }
@@ -161,6 +162,7 @@ func applyOAuthJWT(ctx context.Context, httpClient *http.Client, settings models
 		}
 		ctx := context.WithValue(context.Background(), oauth2.HTTPClient, httpClient)
 		httpClient = jwtConfig.Client(ctx)
+		httpClient.Transport = getCustomOAuth2Transport(settings, httpClient)
 	}
 	return httpClient, nil
 }
@@ -217,10 +219,12 @@ func applySecureSocksProxyConfiguration(ctx context.Context, httpClient *http.Cl
 		// if we are using Digest, the Transport is 'digest.Transport' that wraps 'http.Transport'
 		t = t.(*digest.Transport).Transport
 	} else if isOAuthCredentialsConfigured(settings) || isOAuthJWTConfigured(settings) {
-		// if we are using Oauth, the Transport is 'oauth2.Transport' that wraps 'http.Transport'
-		t = t.(*oauth2.Transport).Base
+		if cht, ok := t.(*oauth2CustomTokenTransport); ok {
+			t = cht.Transport.(*oauth2.Transport).Base
+		} else {
+			t = t.(*oauth2.Transport).Base
+		}
 	}
-
 	// secure socks proxy configuration - checks if enabled inside the function
 	err := proxy.New(settings.ProxyOpts.ProxyOptions).ConfigureSecureSocksHTTPProxy(t.(*http.Transport))
 	if err != nil {

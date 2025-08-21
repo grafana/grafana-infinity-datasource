@@ -3,6 +3,7 @@ package models_test
 import (
 	"context"
 	"errors"
+	"strings"
 	"testing"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
@@ -253,7 +254,7 @@ func TestAllSettingsAgainstFrontEnd(t *testing.T) {
 		SecureQueryFields: map[string]string{
 			"foo": "bar",
 		},
-		KeepCookies:               []string{"cookie1", "cookie2"},
+		KeepCookies: []string{"cookie1", "cookie2"},
 	}, gotSettings)
 }
 
@@ -403,6 +404,180 @@ func TestInfinitySettings_Validate(t *testing.T) {
 				return
 			}
 			require.Nil(t, err)
+		})
+	}
+}
+
+func TestValidateAllowedHosts(t *testing.T) {
+	tests := []struct {
+		name        string
+		allowedUrls []string
+		wantErr     bool
+		expectedErr string
+	}{
+		{
+			name:        "empty list should not error",
+			allowedUrls: []string{},
+		},
+		{
+			name:        "nil list should not error",
+			allowedUrls: nil,
+		},
+		{
+			name:        "valid https URLs",
+			allowedUrls: []string{"https://api.example.com", "https://api2.example.com"},
+		},
+		{
+			name:        "valid http URLs",
+			allowedUrls: []string{"http://api.example.com", "http://localhost:8080"},
+		},
+		{
+			name:        "valid URLs with paths",
+			allowedUrls: []string{"https://api.example.com/v1", "https://api.example.com/v2/users"},
+		},
+		{
+			name:        "valid URLs with ports",
+			allowedUrls: []string{"https://api.example.com:8443", "http://localhost:3000"},
+		},
+		{
+			name:        "valid URLs with query parameters",
+			allowedUrls: []string{"https://api.example.com?version=v1", "https://api.example.com/search?q=test"},
+		},
+		{
+			name:        "valid URLs with fragments",
+			allowedUrls: []string{"https://api.example.com#section", "https://docs.example.com/api#overview"},
+		},
+		{
+			name:        "valid IP addresses",
+			allowedUrls: []string{"http://192.168.1.1", "https://10.0.0.1:8080"},
+		},
+		{
+			name:        "valid IPv6 addresses",
+			allowedUrls: []string{"http://[::1]", "https://[2001:db8::1]:8080"},
+		},
+		{
+			name:        "valid subdomain URLs",
+			allowedUrls: []string{"https://api.sub.example.com", "https://v2.api.example.com"},
+		},
+		{
+			name:        "valid URLs with authentication info",
+			allowedUrls: []string{"https://user:pass@api.example.com", "http://admin@localhost:8080"},
+		},
+		{
+			name: "mixed valid URLs",
+			allowedUrls: []string{
+				"https://api.example.com",
+				"http://localhost:8080",
+				"https://192.168.1.100:9000/api/v1",
+				"http://[::1]:3000",
+			},
+		},
+		{
+			name:        "invalid URL - malformed",
+			allowedUrls: []string{"://invalid-url"},
+			wantErr:     true,
+			expectedErr: "invalid url found in allowed hosts settings",
+		},
+		{
+			name:        "valid URL - missing protocol - should default to https",
+			allowedUrls: []string{"api.example.com"},
+			wantErr:     false,
+		},
+		{
+			name:        "invalid URL - empty string",
+			allowedUrls: []string{""},
+			wantErr:     true,
+			expectedErr: "invalid url found in allowed hosts settings",
+		},
+		{
+			name:        "invalid URL - only protocol",
+			allowedUrls: []string{"https://"},
+			wantErr:     true,
+			expectedErr: "invalid url found in allowed hosts settings",
+		},
+		{
+			name:        "invalid URL - whitespace only",
+			allowedUrls: []string{"   "},
+			wantErr:     true,
+			expectedErr: "invalid url found in allowed hosts settings",
+		},
+		{
+			name:        "invalid URL - protocol only with path",
+			allowedUrls: []string{"https:///path"},
+			wantErr:     true,
+			expectedErr: "invalid url found in allowed hosts settings",
+		},
+		{
+			name:        "invalid URL - space in URL",
+			allowedUrls: []string{"https://api example.com"},
+			wantErr:     true,
+			expectedErr: "error parsing allowed list url",
+		},
+		{
+			name:        "invalid URL - invalid characters",
+			allowedUrls: []string{"https://api.exam ple.com"},
+			wantErr:     true,
+			expectedErr: "error parsing allowed list url",
+		},
+		{
+			name:        "mixed valid and invalid URLs - should fail on first invalid",
+			allowedUrls: []string{"https://api.example.com", "https://", "https://api2.example.com"},
+			wantErr:     true,
+			expectedErr: "invalid url found in allowed hosts settings",
+		},
+		{
+			name:        "invalid URL - control characters",
+			allowedUrls: []string{"https://api.example.com\x00"},
+			wantErr:     true,
+			expectedErr: "error parsing allowed list url",
+		},
+		{
+			name:        "edge case - localhost variants",
+			allowedUrls: []string{"http://localhost", "http://127.0.0.1", "http://0.0.0.0"},
+			wantErr:     false,
+		},
+		{
+			name:        "edge case - unusual but valid ports",
+			allowedUrls: []string{"https://api.example.com:65535", "http://localhost:1"},
+		},
+		{
+			name:        "edge case - very long hostname",
+			allowedUrls: []string{"https://" + strings.Repeat("a", 253) + ".com"},
+		},
+		{
+			name:        "invalid URL - percent encoding issues",
+			allowedUrls: []string{"https://api.example.com/%"},
+			wantErr:     true,
+			expectedErr: "error parsing allowed list url",
+		},
+		{
+			name:        "valid host name",
+			allowedUrls: []string{"localhost"},
+		},
+		{
+			name:        "valid host name with port",
+			allowedUrls: []string{"localhost:8080"},
+		},
+		{
+			name:        "hostnames such as h should be considered as hostname instead of url scheme",
+			allowedUrls: []string{"h"},
+		},
+		{
+			name:        "hostnames such as abc should be considered as hostname instead of url scheme",
+			allowedUrls: []string{"abc"},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := models.ValidateAllowedHosts(tt.allowedUrls)
+			if tt.wantErr {
+				require.Error(t, err, "Expected an error but got none")
+				if tt.expectedErr != "" {
+					assert.Contains(t, err.Error(), tt.expectedErr, "Error message should contain expected text")
+				}
+			} else {
+				require.NoError(t, err, "Expected no error but got: %v", err)
+			}
 		})
 	}
 }

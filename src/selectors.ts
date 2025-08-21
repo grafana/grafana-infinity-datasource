@@ -5,6 +5,21 @@ export const Components = {
   Common: {},
   ConfigEditor: {
     Auth: {
+      OAuth2: {
+        CustomizeTokenSection: {
+          label: 'Customize OAuth2 token (Advanced)',
+        },
+        TokenHeader: {
+          label: 'Custom Token Header',
+          tooltip: `Once the token retrieved, the same will be sent to subsequent request's header with the key "Authorization". If the API require different key, provide the key here. Defaults to Authorization`,
+          placeholder: 'Authorization',
+        },
+        TokenTemplate: {
+          label: 'Custom Token Template',
+          tooltip: `Token Template allows you to customize the token value using the template. This will be Authorization header value. String \${__oauth2.access_token} will be replaced with actual access token`,
+          placeholder: `Bearer \${__oauth2.access_token}`,
+        },
+      },
       AzureBlob: {
         Region: {
           label: 'Azure cloud',
@@ -23,6 +38,22 @@ export const Components = {
           placeholder: 'Azure blob storage account key',
           ariaLabel: 'Azure blob storage account key',
         },
+      },
+    },
+    URL: {
+      IgnoreStatusCodeCheck: {
+        tooltip:
+          'When enabled, the datasource will process response body even for HTTP error status codes (4xx, 5xx). This is useful for APIs that return useful data in error responses, such as detailed error messages or partial data during service degradation.',
+        label: 'Ignore status code check',
+      },
+      AllowDangerousHTTPMethods: {
+        tooltip:
+          'By default Infinity only allows GET and POST HTTP methods to reduce the risk of accidental and potentially destructive payloads. If you need PUT, PATCH or DELETE methods, make use of this setting with caution. Note: Infinity does not evaluate any permissions against the underlying API',
+        label: 'Allow dangerous HTTP methods',
+      },
+      PathEncodedUrlsEnabled: {
+        tooltip: '',
+        label: 'Encode query parameters with %20',
       },
     },
     Network: {

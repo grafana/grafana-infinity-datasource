@@ -19,6 +19,8 @@ export type OAuth2Props = {
   token_url?: string;
   scopes?: string[];
   authStyle?: number;
+  authHeader?: string;
+  tokenTemplate?: string;
 };
 export type AWSAuthProps = {
   authType?: 'keys';
@@ -55,6 +57,7 @@ export interface InfinityOptions extends DataSourceJsonData {
   unsecuredQueryHandling?: UnsecureQueryHandling;
   enableSecureSocksProxy?: boolean;
   pathEncodedUrlsEnabled?: boolean;
+  ignoreStatusCodeCheck?: boolean;
   allowDangerousHTTPMethods?: boolean;
   keepCookies?: string[];
 }
