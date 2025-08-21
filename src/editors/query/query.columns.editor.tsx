@@ -128,7 +128,7 @@ const RootSelector = (props: { query: InfinityQuery; onChange: (value: any) => v
   };
   return ['html', 'json', 'xml', 'graphql'].indexOf(props.query.type) > -1 ? (
     <EditorField label="Rows/Root" optional={true}>
-      <Stack direction="row" gap={2} alignItems="flex-start">
+      <Stack direction="column" gap={2} alignItems="flex-start">
         <TextArea
           width={'300px'}
           cols={50}
@@ -140,7 +140,7 @@ const RootSelector = (props: { query: InfinityQuery; onChange: (value: any) => v
         />
         {datasource && (query.parser === 'backend' || query.parser === 'jq-backend') && (
           <OpenAssistantButton
-            title="Create parser with Assistant"
+            title="Use Assistant to parse data"
             origin="data-source-infinity-query-builder-parser"
             size="sm"
             prompt={`Create a ${query.parser === 'backend' ? 'JSONata' : query.parser} parser expression that extracts rows from provided data. The expression should work with the sample data provided in the context.`}
@@ -150,8 +150,8 @@ const RootSelector = (props: { query: InfinityQuery; onChange: (value: any) => v
               createAssistantContextItem('structured', {
                 title: 'Data',
                 data: {
-                  // We take first 2 items if it is array, or first 1500 characters if it is string as sample
-                  data: Array.isArray(data?.series?.[0]?.meta?.custom?.data) ? data?.series?.[0]?.meta?.custom?.data.slice(0, 5) : (data?.series?.[0]?.meta?.custom?.data ?? '').slice(0, 1500),
+                  // We take first 5 items if it is array, or the first 1500 character
+                  stringifiedData: Array.isArray(data?.series?.[0]?.meta?.custom?.data) ? JSON.stringify(data?.series?.[0]?.meta?.custom?.data.slice(0, 5)) : (JSON.stringify(data?.series?.[0]?.meta?.custom?.data ?? '')).slice(0, 1500)
                 },
               }),
               createAssistantContextItem('structured', {
@@ -159,11 +159,17 @@ const RootSelector = (props: { query: InfinityQuery; onChange: (value: any) => v
                 title: 'Page-specific instructions',
                 data: {
                   instructions: `
+                  - The data is provided in string format as a stringifiedData
                   - Use proper ${query.parser === 'backend' ? 'JSONata' : query.parser} syntax
-                  - If data has null/undefined values, handle them gracefully
-                  - Provide 3 different examples showing:
-                    - Basic data extraction (show all data)
-                    - Data filtering (select specific records)`,
+                  - For JSONata (backend parser): Use $.* to get all array items, $.fieldName to get specific array
+                  - For JQ (jq-backend parser): Use .[] to get all array items, .fieldName[] to get specific array
+                  - If data has null/undefined values, handle them gracefully with null coalescing or default values
+                  - Analyze the data structure first: identify if it's an array of objects, nested objects, or mixed structure
+                  - Provide 3 different examples:
+                    1. Basic extraction: Select all items from the main array (e.g., $.* or .[])
+                    2. Nested extraction: Navigate to a specific nested array (e.g., $.users or .users[])
+                    3. Filtered extraction: Add conditions to filter data (e.g., $[?(@.status == "active")] or .[select(.status == "active")])
+                  - Explain what each expression does`,
                 },
               }),
             ]}
