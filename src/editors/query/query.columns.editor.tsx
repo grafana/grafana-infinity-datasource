@@ -143,11 +143,19 @@ const RootSelector = (props: { query: InfinityQuery; onChange: (value: any) => v
             title="Create parser with Assistant"
             origin="infinity-query-builder-parser"
             size="sm"
-            prompt={`Write a ${query.parser === 'backend' ? 'JSONata' : query.parser} parser expression to extract rows from this data structure. Sample data:\n${JSON.stringify(
-              // We take first 2 items if it is array, or first 1000 characters if it is string as sample
-              Array.isArray(data?.series?.[0]?.meta?.custom?.data) ? data?.series?.[0]?.meta?.custom?.data.slice(0, 2) : (data?.series?.[0]?.meta?.custom?.data ?? '')
-            ).slice(0, 1000)}`}
-            context={[createAssistantContextItem('datasource', { datasourceUid: datasource.uid })]}
+            prompt={`Write a ${query.parser === 'backend' ? 'JSONata' : query.parser} parser expression to extract rows from provided data.`}
+            context={[
+              createAssistantContextItem('datasource', { datasourceUid: datasource.uid }),
+
+              createAssistantContextItem('structured', {
+                title: 'Data',
+                data: {
+                  name: 'data',
+                  // We take first 2 items if it is array, or first 1500 characters if it is string as sample
+                  value: Array.isArray(data?.series?.[0]?.meta?.custom?.data) ? data?.series?.[0]?.meta?.custom?.data.slice(0, 2) : (data?.series?.[0]?.meta?.custom?.data ?? '').slice(0, 1500),
+                },
+              }),
+            ]}
           />
         )}
       </Stack>
