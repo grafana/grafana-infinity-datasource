@@ -141,7 +141,7 @@ const RootSelector = (props: { query: InfinityQuery; onChange: (value: any) => v
         {datasource && (query.parser === 'backend' || query.parser === 'jq-backend') && (
           <OpenAssistantButton
             title="Use Assistant to parse data"
-            origin="data-source-infinity-query-builder-parser"
+            origin="grafana-datasources/yesoreyeram-infinity-datasource/query-builder-parser"
             size="sm"
             prompt={`Create a ${query.parser === 'backend' ? 'JSONata' : query.parser} parser expression that extracts rows from provided data. The expression should work with the sample data provided in the context.`}
             context={[
