@@ -10,7 +10,7 @@ import { UQLEditor } from '@/editors/query/query.uql';
 import { GROQEditor } from '@/editors/query/query.groq';
 import type { InfinityColumn, InfinityQuery } from '@/types';
 import type { Datasource } from '@/datasource';
-import { createAssistantContextItem, OpenAssistantButton} from '@grafana/assistant';
+import { createAssistantContextItem, OpenAssistantButton } from '@grafana/assistant';
 import { PanelData } from '@grafana/data';
 
 export const QueryColumnsEditor = (props: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void; datasource?: Datasource; data?: PanelData }) => {
@@ -139,18 +139,15 @@ const RootSelector = (props: { query: InfinityQuery; onChange: (value: any) => v
           onBlur={onRootSelectorChange}
         />
         {datasource && (query.parser === 'backend' || query.parser === 'jq-backend') && (
-          <OpenAssistantButton 
-            iconOnlyButton={true}
-            size="md"
-            prompt={`Help me write a parser for the following data. Here is sample of existing data:` +
-              // if data is array, then take first 2 items, if it is string, then take first 1000 characters
-              `\n\n${JSON.stringify(Array.isArray(data?.series[0]?.meta?.custom?.data) ? data?.series[0]?.meta?.custom?.data.slice(0, 2) : data?.series[0]?.meta?.custom?.data ?? '').slice(0, 1000)}` +
-              `\n\nSelected parser: ${query.parser === 'backend' ? 'JSONata' : query.parser}.`}
-            context={[createAssistantContextItem('datasource', {
-              datasourceUid: datasource.uid,
-  
-            })]}
-            name="Use Assistant to create a parser query"
+          <OpenAssistantButton
+            title="Create parser with Assistant"
+            origin="infinity-query-builder-parser"
+            size="sm"
+            prompt={`Write a ${query.parser === 'backend' ? 'JSONata' : query.parser} parser expression to extract rows from this data structure. Sample data:\n${JSON.stringify(
+              // We take first 2 items if it is array, or first 1000 characters if it is string as sample
+              Array.isArray(data?.series?.[0]?.meta?.custom?.data) ? data?.series?.[0]?.meta?.custom?.data.slice(0, 2) : (data?.series?.[0]?.meta?.custom?.data ?? '')
+            ).slice(0, 1000)}`}
+            context={[createAssistantContextItem('datasource', { datasourceUid: datasource.uid })]}
           />
         )}
       </Stack>

@@ -59,7 +59,7 @@
   },
   "dependencies": {
     "@emotion/css": "11.10.6",
-    "@grafana/assistant": "file:../grafana-assistant-app/packages/@grafana/assistant",
+    "@grafana/assistant": "^0.0.16",
     "@grafana/data": "^10.4.8",
     "@grafana/runtime": "^10.4.8",
     "@grafana/schema": "^10.4.8",
