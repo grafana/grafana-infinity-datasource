@@ -143,7 +143,7 @@ const RootSelector = (props: { query: InfinityQuery; onChange: (value: any) => v
             title="Use Assistant to parse data"
             origin="grafana-datasources/yesoreyeram-infinity-datasource/query-builder-parser"
             size="sm"
-            prompt={`Create a ${query.parser === 'backend' ? 'JSONata' : query.parser} parser expression that extracts rows from provided data. The expression should work with the sample data provided in the context.`}
+            prompt={`Create a ${query.parser === 'backend' ? 'JSONata' : 'JQ'} parser expression that extracts rows from provided data. The expression should work with the sample data provided in the context.`}
             context={[
               createAssistantContextItem('datasource', { datasourceUid: datasource.uid }),
 
@@ -162,15 +162,14 @@ const RootSelector = (props: { query: InfinityQuery; onChange: (value: any) => v
                 data: {
                   instructions: `
                   - The data is provided in string format as a stringifiedData
-                  - Use proper ${query.parser === 'backend' ? 'JSONata' : query.parser} syntax
-                  - For JSONata (backend parser): Use $.* to get all array items, $.fieldName to get specific array
-                  - For JQ (jq-backend parser): Use .[] to get all array items, .fieldName[] to get specific array
-                  - If data has null/undefined values, handle them gracefully with null coalescing or default values
                   - Analyze the data structure first: identify if it's an array of objects, nested objects, or mixed structure
+                  - Use proper ${query.parser === 'backend' ? 'JSONata' : 'JQ'} syntax
+                  - Use ${query.parser === 'backend' ? '$' : '.'} as a root selector
+                  - If data has null/undefined values, handle them gracefully with null coalescing or default values
                   - Provide 3 different examples:
-                    1. Basic extraction: Select all items from the main array (e.g., $.* or .[])
-                    2. Nested extraction: Navigate to a specific nested array (e.g., $.users or .users[])
-                    3. Filtered extraction: Add conditions to filter data (e.g., $[?(@.status == "active")] or .[select(.status == "active")])
+                    1. Basic extraction
+                    2. Nested extraction
+                    3. Filtered extraction
                   - Explain what each expression does`,
                 },
               }),
