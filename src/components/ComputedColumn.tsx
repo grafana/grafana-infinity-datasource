@@ -18,14 +18,14 @@ export const ComputedColumn = (props: ComputedColumnProps) => {
   if ((query.type === 'json' || query.type === 'graphql' || query.type === 'csv' || query.type === 'tsv') && query.parser === 'backend') {
     const onExpressionChange = () => {
       const computedColumns = query?.computed_columns || [];
-      computedColumns[index].selector = expression;
-      onChange({ ...query, computed_columns: computedColumns });
+      const updatedComputedColumns = computedColumns.map((col, i) => (i === index ? { ...col, selector: expression } : col));
+      onChange({ ...query, computed_columns: updatedComputedColumns });
       onRunQuery();
     };
     const onAliasChange = () => {
       const computed_columns = query?.computed_columns || [];
-      computed_columns[index].text = alias;
-      onChange({ ...query, computed_columns });
+      const updatedComputedColumns = computed_columns.map((col, i) => (i === index ? { ...col, text: alias } : col));
+      onChange({ ...query, computed_columns: updatedComputedColumns });
       onRunQuery();
     };
     return (

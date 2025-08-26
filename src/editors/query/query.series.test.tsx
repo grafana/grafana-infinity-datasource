@@ -85,11 +85,11 @@ describe('SeriesAdvancedOptions', () => {
       const queryWithExistingOverride: InfinitySeriesQuery = Object.freeze({
         ...mockQuery,
         dataOverrides: Object.freeze([
-          {
+          Object.freeze({
             values: ['test1', 'test2'],
             operator: '=',
             override: 'test-override',
-          },
+          }),
         ]) as unknown as DataOverride[],
       });
 
@@ -130,16 +130,16 @@ describe('SeriesAdvancedOptions', () => {
       const queryWithOverrides: InfinitySeriesQuery = Object.freeze({
         ...mockQuery,
         dataOverrides: Object.freeze([
-          {
+          Object.freeze({
             values: ['test1', 'test2'],
             operator: '=',
             override: 'test-override',
-          },
-          {
+          }),
+          Object.freeze({
             values: ['test3', 'test4'],
             operator: '!=',
             override: 'another-override',
-          },
+          }),
         ]) as unknown as DataOverride[],
       });
 
@@ -173,11 +173,11 @@ describe('SeriesAdvancedOptions', () => {
       const queryWithOverrides: InfinitySeriesQuery = Object.freeze({
         ...mockQuery,
         dataOverrides: Object.freeze([
-          {
+          Object.freeze({
             values: ['test1', 'test2'],
             operator: '=',
             override: 'test-override',
-          },
+          }),
         ]) as unknown as DataOverride[],
       });
 
