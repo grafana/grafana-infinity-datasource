@@ -1,4 +1,4 @@
-import { DataFrameType, FieldType, MutableDataFrame } from '@grafana/data';
+import { FieldType, MutableDataFrame } from '@grafana/data';
 import { toTimeSeriesLong, toTimeSeriesMulti } from './utils';
 
 describe('utils', () => {
