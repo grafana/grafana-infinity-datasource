@@ -254,7 +254,7 @@ func ApplyDefaultsToQuery(ctx context.Context, pCtx *backend.PluginContext, quer
 	if query.ComputedColumns == nil {
 		query.ComputedColumns = []InfinityColumn{}
 	}
-	if query.Parser == InfinityParserBackend && query.Source == "url" && !(query.PageMode == "" || query.PageMode == PaginationModeNone) {
+	if query.Parser == InfinityParserBackend && query.Source == "url" && query.PageMode != "" && query.PageMode != PaginationModeNone {
 		if query.PageMode != PaginationModeNone {
 			query.PageMaxPages = GetPaginationMaxPagesValue(ctx, pCtx, query)
 			if query.PageParamSizeFieldName == "" {

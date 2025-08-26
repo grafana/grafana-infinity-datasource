@@ -213,7 +213,7 @@ func ValidateAllowedHosts(allowedUrls []string) error {
 			return errors.New("invalid url found in allowed hosts settings")
 		}
 		protocol := strings.ToLower(parsedURL.Scheme)
-		if !(protocol == "http" || protocol == "https") {
+		if protocol != "http" && protocol != "https" {
 			return fmt.Errorf("invalid url in allowed list %s", allowedUrl)
 		}
 	}
@@ -225,7 +225,7 @@ func FixMissingURLSchema(urlString string) string {
 		return ""
 	}
 	lowerUrlString := strings.ToLower(urlString)
-	if !(strings.HasPrefix(lowerUrlString, "http://") || strings.HasPrefix(lowerUrlString, "https://")) {
+	if !strings.HasPrefix(lowerUrlString, "http://") && !strings.HasPrefix(lowerUrlString, "https://") {
 		if lowerUrlString == "localhost" || strings.HasPrefix(lowerUrlString, "localhost:") {
 			return "http://" + urlString
 		}
