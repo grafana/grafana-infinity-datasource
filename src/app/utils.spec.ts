@@ -1,11 +1,7 @@
 import { DataFrameType, FieldType, MutableDataFrame } from '@grafana/data';
-import {
-    toTimeSeriesLong,
-    toTimeSeriesMulti
-} from './utils';
+import { toTimeSeriesLong, toTimeSeriesMulti } from './utils';
 
 describe('utils', () => {
-
   describe('Time Series Transformations', () => {
     describe('toTimeSeriesMulti', () => {
       it('should handle empty input', () => {
@@ -32,12 +28,12 @@ describe('utils', () => {
 
         expect(result).toHaveLength(1);
         const resultFrame = result[0];
-        
+
         // Check that we have time and value fields
         expect(resultFrame.fields).toHaveLength(2);
         expect(resultFrame.fields[0].name).toBe('time');
         expect(resultFrame.fields[1].name).toBe('value');
-        
+
         // The critical test: ensure the value field contains the actual values, not time values
         expect(resultFrame.fields[1].values).toEqual([10, 20, 30]);
         // And time field should contain time values
@@ -58,12 +54,12 @@ describe('utils', () => {
         const result = toTimeSeriesMulti([inputFrame]);
 
         expect(result).toHaveLength(2);
-        
+
         // First series (A)
         expect(result[0].fields[0].values).toEqual([1000, 2000]);
         expect(result[0].fields[1].values).toEqual([10, 20]);
         expect(result[0].fields[1].labels).toEqual({ series: 'A' });
-        
+
         // Second series (B)
         expect(result[1].fields[0].values).toEqual([3000, 4000]);
         expect(result[1].fields[1].values).toEqual([30, 40]);
@@ -99,11 +95,11 @@ describe('utils', () => {
         const result = toTimeSeriesMulti([inputFrame]);
 
         expect(result).toHaveLength(2);
-        
+
         // First value field
         expect(result[0].fields[1].name).toBe('value1');
         expect(result[0].fields[1].values).toEqual([10, 20]);
-        
+
         // Second value field
         expect(result[1].fields[1].name).toBe('value2');
         expect(result[1].fields[1].values).toEqual([100, 200]);
@@ -143,9 +139,7 @@ describe('utils', () => {
         const inputFrame = new MutableDataFrame({
           name: 'test',
           refId: 'A',
-          fields: [
-            { name: 'value', type: FieldType.number, values: [10, 20, 30] },
-          ],
+          fields: [{ name: 'value', type: FieldType.number, values: [10, 20, 30] }],
         });
 
         const result = toTimeSeriesLong([inputFrame]);
@@ -169,14 +163,14 @@ describe('utils', () => {
 
         expect(result).toHaveLength(1);
         const longFrame = result[0];
-        
+
         // Should have time, value fields, and label fields
-        expect(longFrame.fields.some(f => f.name === 'time')).toBe(true);
-        expect(longFrame.fields.some(f => f.name === 'series_a')).toBe(true);
-        expect(longFrame.fields.some(f => f.name === 'series_b')).toBe(true);
-        expect(longFrame.fields.some(f => f.name === 'host')).toBe(true);
-        expect(longFrame.fields.some(f => f.name === 'metric')).toBe(true);
-        
+        expect(longFrame.fields.some((f) => f.name === 'time')).toBe(true);
+        expect(longFrame.fields.some((f) => f.name === 'series_a')).toBe(true);
+        expect(longFrame.fields.some((f) => f.name === 'series_b')).toBe(true);
+        expect(longFrame.fields.some((f) => f.name === 'host')).toBe(true);
+        expect(longFrame.fields.some((f) => f.name === 'metric')).toBe(true);
+
         // Should have more rows than the original (long format)
         expect(longFrame.length).toBeGreaterThan(inputFrame.length);
       });
