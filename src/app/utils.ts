@@ -1,15 +1,15 @@
-import { MutableDataFrame, FieldType, DataFrame, Field, Labels, TableData, DataFrameType } from '@grafana/data';
 import type {
   InfinityCSVQuery,
   InfinityGraphQLQuery,
   InfinityHTMLQuery,
   InfinityJSONQuery,
   InfinityQuery,
+  InfinityQueryType,
   InfinityQueryWithDataSource,
   InfinityQueryWithURLSource,
   InfinityXMLQuery,
-  InfinityQueryType,
 } from '@/types';
+import { DataFrame, DataFrameType, Field, FieldType, Labels, MutableDataFrame, TableData } from '@grafana/data';
 
 export const isTableData = (res: any): res is TableData => res && res.columns;
 export const isDataFrame = (res: any): res is DataFrame => res && res.fields;
@@ -280,7 +280,7 @@ export const toTimeSeriesMulti = (data: DataFrame[]): DataFrame[] => {
               },
               {
                 ...field,
-                values: b.time,
+                values: b.value,
                 labels: b.labels,
               },
             ],
