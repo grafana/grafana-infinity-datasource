@@ -1,6 +1,7 @@
 package httpclient
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"strings"
@@ -16,10 +17,19 @@ const (
 )
 
 type oauth2CustomTokenTransport struct {
+	Settings      models.InfinitySettings
 	Transport     http.RoundTripper
 	AuthHeader    string
 	TokenTemplate string
 	TokenSource   oauth2.TokenSource
+}
+
+func (t *oauth2CustomTokenTransport) Base(ctx context.Context) http.RoundTripper {
+	baseClient, err := getBaseHTTPClient(ctx, t.Settings)
+	if err != nil {
+		return http.DefaultTransport
+	}
+	return baseClient.Transport
 }
 
 func (t *oauth2CustomTokenTransport) RoundTrip(req *http.Request) (*http.Response, error) {
@@ -43,7 +53,7 @@ func (t *oauth2CustomTokenTransport) RoundTrip(req *http.Request) (*http.Respons
 	tokenValue = strings.ReplaceAll(tokenValue, OAuth2RefreshTokenReplacer, token.RefreshToken)
 	tokenValue = strings.ReplaceAll(tokenValue, OAuth2TokenTypeReplacer, token.TokenType)
 	newReq.Header.Set(authHeader, tokenValue)
-	return t.Transport.RoundTrip(newReq)
+	return t.Base(newReq.Context()).RoundTrip(newReq)
 }
 
 func getCustomOAuth2Transport(settings models.InfinitySettings, httpClient *http.Client) http.RoundTripper {
@@ -53,6 +63,7 @@ func getCustomOAuth2Transport(settings models.InfinitySettings, httpClient *http
 			return httpClient.Transport
 		}
 		return &oauth2CustomTokenTransport{
+			Settings:      settings,
 			Transport:     httpClient.Transport,
 			TokenSource:   oauth2Transport.Source,
 			TokenTemplate: settings.OAuth2Settings.TokenTemplate,
