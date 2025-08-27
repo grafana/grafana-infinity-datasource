@@ -18,6 +18,7 @@ import (
 	"github.com/grafana/grafana-infinity-datasource/pkg/httpclient"
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
+	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 )
 
@@ -120,7 +121,11 @@ func (client *Client) req(ctx context.Context, pCtx *backend.PluginContext, url 
 	duration = time.Since(startTime)
 	logger.Debug("received response", "host", req.URL.Hostname(), "url_path", req.URL.Path, "method", req.Method, "type", query.Type, "duration_ms", duration.Milliseconds())
 	if res != nil {
-		defer res.Body.Close()
+		defer func() {
+			if err := res.Body.Close(); err != nil {
+				logger.Warn("error closing response body", "error", err.Error())
+			}
+		}()
 	}
 	if err != nil {
 		if res != nil {
@@ -146,7 +151,7 @@ func (client *Client) req(ctx context.Context, pCtx *backend.PluginContext, url 
 		// therefore any incoming error is considered downstream
 		return nil, res.StatusCode, duration, backend.DownstreamError(err)
 	}
-	bodyBytes, err := getBodyBytes(res)
+	bodyBytes, err := getBodyBytes(res, logger)
 	if err != nil {
 		logger.Debug("error reading response body", "url", url, "error", err.Error())
 		return nil, res.StatusCode, duration, backend.DownstreamError(err)
@@ -169,7 +174,7 @@ func (client *Client) req(ctx context.Context, pCtx *backend.PluginContext, url 
 	return string(bodyBytes), res.StatusCode, duration, err
 }
 
-func getBodyBytes(res *http.Response) ([]byte, error) {
+func getBodyBytes(res *http.Response, logger log.Logger) ([]byte, error) {
 	if res == nil || res.Body == nil {
 		return nil, errors.New("invalid/empty response received from underlying API")
 	}
@@ -178,7 +183,11 @@ func getBodyBytes(res *http.Response) ([]byte, error) {
 		if err != nil {
 			return nil, err
 		}
-		defer reader.Close()
+		defer func() {
+			if err := reader.Close(); err != nil {
+				logger.Warn("error closing gzip reader", "error", err.Error())
+			}
+		}()
 		return io.ReadAll(reader)
 	}
 	return io.ReadAll(res.Body)
