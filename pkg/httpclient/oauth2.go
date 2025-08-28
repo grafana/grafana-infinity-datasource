@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
+	hc "github.com/grafana/grafana-plugin-sdk-go/backend/httpclient"
 	"golang.org/x/oauth2"
 )
 
@@ -27,7 +28,7 @@ type oauth2CustomTokenTransport struct {
 func (t *oauth2CustomTokenTransport) Base(ctx context.Context) http.RoundTripper {
 	baseClient, err := getBaseHTTPClient(ctx, t.Settings)
 	if err != nil {
-		return http.DefaultTransport
+		return hc.NewHTTPTransport()
 	}
 	return baseClient.Transport
 }
