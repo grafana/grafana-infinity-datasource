@@ -7,6 +7,13 @@ import { QueryEditor } from './query.editor';
 
 // Mock react-router-dom Link component
 jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  Link: ({ children, ...props }: any) => <a {...props}>{children}</a>,
+}));
+
+// Mock @grafana/ui Link component to avoid Router context issues
+jest.mock('@grafana/ui', () => ({
+  ...jest.requireActual('@grafana/ui'),
   Link: ({ children, ...props }: any) => <a {...props}>{children}</a>,
 }));
 
