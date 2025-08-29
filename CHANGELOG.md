@@ -1,5 +1,15 @@
 # Change Log
 
+## 3.5.0
+
+🚀 **New Feature**: Allow parsing HTTP response from non 200 status codes
+
+🐛 **Bug fix**: Fixed a bug in oauth2 custom token template implementation
+
+🐛 **Bug fix**: Fixed timeseries parsing in UQL
+
+⚙️ **Chore**: Updated dependencies
+
 ## 3.4.1
 
 ⚙️ **Chore**: If the URL is specified without `http://` / `https://` scheme, infinity will now default to `https://` for non localhost URLs.
