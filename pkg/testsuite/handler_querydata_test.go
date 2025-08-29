@@ -482,7 +482,7 @@ func TestAuthentication(t *testing.T) {
 		secretProvider := func(user, realm string) string {
 			if user == username {
 				h := md5.New()
-				_, _ = h.Write([]byte(fmt.Sprintf("%s:%s:%s", username, realm, password)))
+				_, _ = fmt.Fprintf(h, "%s:%s:%s", username, realm, password)
 				return hex.EncodeToString(h.Sum(nil))
 			}
 			return ""

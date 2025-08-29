@@ -92,7 +92,7 @@ func InterPolateMacros(queryString string, timeRange backend.TimeRange, pluginCo
 			if err != nil {
 				return queryString, err
 			}
-			queryString = strings.Replace(queryString, match[0], res, -1)
+			queryString = strings.ReplaceAll(queryString, match[0], res)
 		}
 	}
 	queryString, err := m.ApplyMacros(queryString, m.Args{TimeRange: timeRange, User: pluginContext.User})
