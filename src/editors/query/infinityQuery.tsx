@@ -78,7 +78,7 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
         {query.type === 'series' && <SeriesEditor {...{ query, onChange }} />}
         {isDataQuery(query) && query.source !== 'inline' && showUrlOptions && <URLEditor {...{ mode, query, onChange, onRunQuery }} />}
         {isDataQuery(query) && query.source === 'azure-blob' && <AzureBlobEditor query={query} onChange={onChange} />}
-        {canShowColumnsEditor && <QueryColumnsEditor {...{ mode, query, onChange, onRunQuery, datasource, data }} />}
+        {canShowColumnsEditor && <QueryColumnsEditor {...{ mode, query, onChange, onRunQuery, datasourceUid: datasource?.uid, data }} />}
         {canShowFilterEditor && <TableFilter {...{ query, onChange, onRunQuery }} />}
         {query.type === 'uql' && (
           <>
