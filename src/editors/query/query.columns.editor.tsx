@@ -117,7 +117,7 @@ export const QueryColumnsEditor = (props: { query: InfinityQuery; onChange: (val
 };
 
 const RootSelector = (props: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void; datasource?: Datasource; data?: PanelData }) => {
-  const { query, onChange, onRunQuery, datasource, data } = props;
+  const { query, onChange, onRunQuery, datasource, data: panelData } = props;
   const [root_selector, setRootSelector] = useState(isDataQuery(query) ? query.root_selector || '' : '');
   if (!isDataQuery(query)) {
     return <></>;
@@ -126,6 +126,9 @@ const RootSelector = (props: { query: InfinityQuery; onChange: (value: any) => v
     onChange({ ...query, root_selector });
     onRunQuery();
   };
+
+  const data = panelData?.series?.[0]?.meta?.custom?.data;
+  
   return ['html', 'json', 'xml', 'graphql'].indexOf(props.query.type) > -1 ? (
     <EditorField label="Rows/Root" optional={true}>
       <Stack direction="column" gap={2} alignItems="flex-start">
@@ -146,14 +149,13 @@ const RootSelector = (props: { query: InfinityQuery; onChange: (value: any) => v
             prompt={`Create a ${query.parser === 'backend' ? 'JSONata' : 'JQ'} parser expression that extracts rows from provided data. The expression should work with the sample data provided in the context.`}
             context={[
               createAssistantContextItem('datasource', { datasourceUid: datasource.uid }),
-
               createAssistantContextItem('structured', {
                 title: 'Data',
                 data: {
                   // We take first 5 items if it is array, or the first 1500 character
-                  stringifiedData: Array.isArray(data?.series?.[0]?.meta?.custom?.data)
-                    ? JSON.stringify(data?.series?.[0]?.meta?.custom?.data.slice(0, 5))
-                    : JSON.stringify(data?.series?.[0]?.meta?.custom?.data ?? '').slice(0, 1500),
+                  stringifiedData: Array.isArray(data)
+                    ? JSON.stringify(data.slice(0, 5))
+                    : JSON.stringify(data ?? '').slice(0, 1500),
                 },
               }),
               createAssistantContextItem('structured', {
