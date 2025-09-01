@@ -298,6 +298,117 @@ func TestAuthentication(t *testing.T) {
 			require.Equal(t, fmt.Sprintf("error getting response from url %s/something-else. no response received. Error: Get \"%s/something-else\": oauth2: cannot fetch token: 401 Unauthorized\nResponse: ", server.URL, server.URL), metaData.Error)
 			require.Equal(t, nil, metaData.Data)
 		})
+		t.Run("should succeed with valid oauth credentials used with custom token template", func(t *testing.T) {
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				w.Header().Set("Content-Type", "application/json")
+				if r.URL.String() == "/token" {
+					_, _ = io.WriteString(w, `{"access_token": "foo", "refresh_token": "bar"}`)
+					return
+				}
+				if r.Header.Get(infinity.HeaderKeyAuthorization) != "Foo Bar" {
+					w.WriteHeader(http.StatusUnauthorized)
+					return
+				}
+				_, _ = io.WriteString(w, `{"message":"OK"}`)
+			}))
+			defer server.Close()
+			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
+				AllowedHosts:         []string{server.URL},
+				AuthenticationMethod: models.AuthenticationMethodOAuth,
+				OAuth2Settings: models.OAuth2Settings{
+					OAuth2Type:    models.AuthOAuthTypeClientCredentials,
+					TokenURL:      server.URL + "/token",
+					ClientID:      "client_id",
+					ClientSecret:  "client_secret",
+					TokenTemplate: "Foo Bar",
+				},
+			})
+			require.Nil(t, err)
+			res := queryData(t, context.Background(), backend.DataQuery{
+				JSON: []byte(fmt.Sprintf(`{ "type": "json", "source": "url", "url":  "%s/something-else" }`, server.URL)),
+			}, *client, map[string]string{}, backend.PluginContext{})
+			require.NotNil(t, res)
+			require.Nil(t, res.Error)
+			metaData := res.Frames[0].Meta.Custom.(*infinity.CustomMeta)
+			require.NotNil(t, metaData)
+			require.Equal(t, http.StatusOK, metaData.ResponseCodeFromServer)
+			require.Equal(t, map[string]any(map[string]any{"message": "OK"}), metaData.Data)
+		})
+		t.Run("should succeed with valid oauth credentials used with custom auth header", func(t *testing.T) {
+			customAuthHeader := "customAuthHeader"
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				w.Header().Set("Content-Type", "application/json")
+				if r.URL.String() == "/token" {
+					_, _ = io.WriteString(w, `{"access_token": "foo", "refresh_token": "bar"}`)
+					return
+				}
+				if r.Header.Get(customAuthHeader) != "Bearer foo" {
+					w.WriteHeader(http.StatusUnauthorized)
+					return
+				}
+				_, _ = io.WriteString(w, `{"message":"OK"}`)
+			}))
+			defer server.Close()
+			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
+				AllowedHosts:         []string{server.URL},
+				AuthenticationMethod: models.AuthenticationMethodOAuth,
+				OAuth2Settings: models.OAuth2Settings{
+					OAuth2Type:   models.AuthOAuthTypeClientCredentials,
+					TokenURL:     server.URL + "/token",
+					ClientID:     "client_id",
+					ClientSecret: "client_secret",
+					AuthHeader:   customAuthHeader,
+				},
+			})
+			require.Nil(t, err)
+			res := queryData(t, context.Background(), backend.DataQuery{
+				JSON: []byte(fmt.Sprintf(`{ "type": "json", "source": "url", "url":  "%s/something-else" }`, server.URL)),
+			}, *client, map[string]string{}, backend.PluginContext{})
+			require.NotNil(t, res)
+			require.Nil(t, res.Error)
+			metaData := res.Frames[0].Meta.Custom.(*infinity.CustomMeta)
+			require.NotNil(t, metaData)
+			require.Equal(t, http.StatusOK, metaData.ResponseCodeFromServer)
+			require.Equal(t, map[string]any(map[string]any{"message": "OK"}), metaData.Data)
+		})
+		t.Run("should succeed with valid oauth credentials used with both custom token template and custom auth header", func(t *testing.T) {
+			customAuthHeader := "customAuthHeader"
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				w.Header().Set("Content-Type", "application/json")
+				if r.URL.String() == "/token" {
+					_, _ = io.WriteString(w, `{"access_token": "foo", "refresh_token": "bar"}`)
+					return
+				}
+				if r.Header.Get(customAuthHeader) != "Foo Bar foo bar" {
+					w.WriteHeader(http.StatusUnauthorized)
+					return
+				}
+				_, _ = io.WriteString(w, `{"message":"OK"}`)
+			}))
+			defer server.Close()
+			client, err := infinity.NewClient(context.TODO(), models.InfinitySettings{
+				AllowedHosts:         []string{server.URL},
+				AuthenticationMethod: models.AuthenticationMethodOAuth,
+				OAuth2Settings: models.OAuth2Settings{
+					OAuth2Type:    models.AuthOAuthTypeClientCredentials,
+					TokenURL:      server.URL + "/token",
+					ClientID:      "client_id",
+					ClientSecret:  "client_secret",
+					AuthHeader:    customAuthHeader,
+					TokenTemplate: "Foo Bar ${__oauth2.access_token} ${__oauth2.refresh_token} ${__oauth2.token_type}",
+				},
+			})
+			require.Nil(t, err)
+			res := queryData(t, context.Background(), backend.DataQuery{
+				JSON: []byte(fmt.Sprintf(`{ "type": "json", "source": "url", "url":  "%s/something-else" }`, server.URL)),
+			}, *client, map[string]string{}, backend.PluginContext{})
+			require.NotNil(t, res)
+			require.Nil(t, res.Error)
+			metaData := res.Frames[0].Meta.Custom.(*infinity.CustomMeta)
+			require.NotNil(t, metaData)
+			require.Equal(t, http.StatusOK, metaData.ResponseCodeFromServer)
+			require.Equal(t, map[string]any(map[string]any{"message": "OK"}), metaData.Data)
+		})
 	})
 	t.Run("client cert and tls verify", func(t *testing.T) {
 		t.Run("should error when CA cert verification failed", func(t *testing.T) {
@@ -371,7 +482,7 @@ func TestAuthentication(t *testing.T) {
 		secretProvider := func(user, realm string) string {
 			if user == username {
 				h := md5.New()
-				_, _ = h.Write([]byte(fmt.Sprintf("%s:%s:%s", username, realm, password)))
+				_, _ = fmt.Fprintf(h, "%s:%s:%s", username, realm, password)
 				return hex.EncodeToString(h.Sum(nil))
 			}
 			return ""
