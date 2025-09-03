@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { Button, TextArea, Stack } from '@grafana/ui';
+import { PanelData } from '@grafana/data';
 import { EditorRow } from '@/components/extended/EditorRow';
 import { EditorField } from '@/components/extended/EditorField';
 import { isBackendQuery, isDataQuery } from '@/app/utils';
 import { QueryColumnItem } from '@/components/QueryColumnItem';
 import { JSONOptionsEditor } from '@/components/JSONOptionsEditor';
 import { CSVOptionsEditor } from '@/components/CSVOptionsEditor';
+import { RootSelectorAssistant } from '@/editors/query/components/RootSelectorAssistant';
 import { UQLEditor } from '@/editors/query/query.uql';
 import { GROQEditor } from '@/editors/query/query.groq';
 import type { InfinityColumn, InfinityQuery } from '@/types';
-import { createAssistantContextItem, OpenAssistantButton } from '@grafana/assistant';
-import { PanelData } from '@grafana/data';
 
 export const QueryColumnsEditor = (props: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void; datasourceUid?: string; data?: PanelData }) => {
   const { query, onChange, onRunQuery } = props;
@@ -125,9 +125,6 @@ const RootSelector = (props: { query: InfinityQuery; onChange: (value: any) => v
     onChange({ ...query, root_selector });
     onRunQuery();
   };
-
-  const data = panelData?.series?.[0]?.meta?.custom?.data;
-
   return ['html', 'json', 'xml', 'graphql'].indexOf(props.query.type) > -1 ? (
     <EditorField label="Rows/Root" optional={true}>
       <Stack direction="column" gap={2} alignItems="flex-start">
@@ -140,43 +137,7 @@ const RootSelector = (props: { query: InfinityQuery; onChange: (value: any) => v
           onChange={(e) => setRootSelector(e.currentTarget.value)}
           onBlur={onRootSelectorChange}
         />
-        {datasourceUid && (query.parser === 'backend' || query.parser === 'jq-backend') && (
-          <OpenAssistantButton
-            title="Use Assistant to parse data"
-            origin="grafana-datasources/yesoreyeram-infinity-datasource/query-builder-parser"
-            size="sm"
-            prompt={`Create a ${query.parser === 'backend' ? 'JSONata' : 'JQ'} parser expression that extracts rows from provided data. The expression should work with the sample data provided in the context.`}
-            context={[
-              createAssistantContextItem('datasource', { datasourceUid }),
-              createAssistantContextItem('structured', {
-                title: 'Data',
-                data: {
-                  // We take first 5 items if it is array, or the first 1500 character
-                  stringifiedData: Array.isArray(data)
-                    ? JSON.stringify(data.slice(0, 5))
-                    : JSON.stringify(data ?? '').slice(0, 1500),
-                },
-              }),
-              createAssistantContextItem('structured', {
-                hidden: true,
-                title: 'Page-specific instructions',
-                data: {
-                  instructions: `
-                  - The data is provided in string format as a stringifiedData
-                  - Analyze the data structure first: identify if it's an array of objects, nested objects, or mixed structure
-                  - Use proper ${query.parser === 'backend' ? 'JSONata' : 'JQ'} syntax
-                  - Use ${query.parser === 'backend' ? '$' : '.'} as a root selector
-                  - If data has null/undefined values, handle them gracefully with null coalescing or default values
-                  - Provide 3 different examples:
-                    1. Basic extraction
-                    2. Nested extraction
-                    3. Filtered extraction
-                  - Explain what each expression does`,
-                },
-              }),
-            ]}
-          />
-        )}
+        <RootSelectorAssistant datasourceUid={datasourceUid} parser={query.parser} panelData={panelData} />
       </Stack>
     </EditorField>
   ) : (
