@@ -15,6 +15,7 @@ e2e-results/
 logs
 mage_output_file.go
 node_modules/
+.yarn/install-state.gz
 npm-debug.log*
 pids
 provisioning/

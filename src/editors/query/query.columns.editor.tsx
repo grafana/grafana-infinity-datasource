@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import { Button, TextArea, Stack } from '@grafana/ui';
+import { PanelData } from '@grafana/data';
 import { EditorRow } from '@/components/extended/EditorRow';
 import { EditorField } from '@/components/extended/EditorField';
 import { isBackendQuery, isDataQuery } from '@/app/utils';
 import { QueryColumnItem } from '@/components/QueryColumnItem';
 import { JSONOptionsEditor } from '@/components/JSONOptionsEditor';
 import { CSVOptionsEditor } from '@/components/CSVOptionsEditor';
+import { RootSelectorAssistant } from '@/editors/query/components/RootSelectorAssistant';
 import { UQLEditor } from '@/editors/query/query.uql';
 import { GROQEditor } from '@/editors/query/query.groq';
 import type { InfinityColumn, InfinityQuery } from '@/types';
 
-export const QueryColumnsEditor = (props: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void }) => {
+export const QueryColumnsEditor = (props: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void; datasourceUid?: string; data?: PanelData }) => {
   const { query, onChange, onRunQuery } = props;
   if (!isDataQuery(query) && query.type !== 'google-sheets') {
     return <></>;
@@ -113,8 +115,8 @@ export const QueryColumnsEditor = (props: { query: InfinityQuery; onChange: (val
   );
 };
 
-const RootSelector = (props: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void }) => {
-  const { query, onChange, onRunQuery } = props;
+const RootSelector = (props: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void; datasourceUid?: string; data?: PanelData }) => {
+  const { query, onChange, onRunQuery, datasourceUid, data: panelData } = props;
   const [root_selector, setRootSelector] = useState(isDataQuery(query) ? query.root_selector || '' : '');
   if (!isDataQuery(query)) {
     return <></>;
@@ -125,15 +127,18 @@ const RootSelector = (props: { query: InfinityQuery; onChange: (value: any) => v
   };
   return ['html', 'json', 'xml', 'graphql'].indexOf(props.query.type) > -1 ? (
     <EditorField label="Rows/Root" optional={true}>
-      <TextArea
-        width={'300px'}
-        cols={50}
-        rows={isBackendQuery(query) ? 7 : 2}
-        value={root_selector}
-        placeholder={isBackendQuery(query) ? (query.parser === 'jq-backend' ? 'JQ / rows selector' : 'JSONata / rows selector') : 'rows / root selector (optional)'}
-        onChange={(e) => setRootSelector(e.currentTarget.value)}
-        onBlur={onRootSelectorChange}
-      />
+      <Stack direction="column" gap={2} alignItems="flex-start">
+        <TextArea
+          width={'300px'}
+          cols={50}
+          rows={isBackendQuery(query) ? 7 : 2}
+          value={root_selector}
+          placeholder={isBackendQuery(query) ? (query.parser === 'jq-backend' ? 'JQ / rows selector' : 'JSONata / rows selector') : 'rows / root selector (optional)'}
+          onChange={(e) => setRootSelector(e.currentTarget.value)}
+          onBlur={onRootSelectorChange}
+        />
+        <RootSelectorAssistant datasourceUid={datasourceUid} parser={query.parser} panelData={panelData} />
+      </Stack>
     </EditorField>
   ) : (
     <></>
