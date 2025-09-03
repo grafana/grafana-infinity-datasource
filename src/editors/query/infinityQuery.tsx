@@ -18,8 +18,8 @@ import { Datasource } from '@/datasource';
 import { PaginationEditor } from '@/editors/query/query.pagination';
 import { TransformationsEditor } from '@/editors/query/query.transformations';
 import { QueryWarning } from '@/editors/query/query.warning';
+import type { PanelData } from '@grafana/data';
 import type { EditorMode, InfinityQuery } from '@/types';
-import { PanelData } from '@grafana/data';
 
 export type InfinityEditorProps = {
   query: InfinityQuery;
