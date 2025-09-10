@@ -138,3 +138,13 @@ To retrieve content from Azure blob storage, you need to provide the following i
 ## AWS
 
 If you want to authenticate your API endpoints via Amazon AWS authentication, refer to [AWS authentication](/docs/plugins/yesoreyeram-infinity-datasource/latest/examples/aws/).
+
+## Private data source connect (PDC)
+
+Use private data source connect (PDC) to connect to and query data within a secure network without opening that network to inbound traffic from Grafana Cloud. See [Private data source connect](https://grafana.com/docs/grafana-cloud/connect-externally-hosted/private-data-source-connect/) for more information on how PDC works and [Configure Grafana private data source connect (PDC)](https://grafana.com/docs/grafana-cloud/connect-externally-hosted/private-data-source-connect/configure-pdc/#configure-grafana-private-data-source-connect-pdc) for steps on setting up a PDC connection.
+
+If you use PDC with AWS Authentication, the PDC agent must allow internet egress to`sts.<region>.amazonaws.com:443`.
+
+- **Private data source connect** - Click in the box to set the default PDC connection from the dropdown menu or create a new connection.
+
+Once you have configured your Infinity data source options, click **Save & test** at the bottom to test out your data source connection. You can also remove a connection by clicking **Delete**.
