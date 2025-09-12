@@ -13,7 +13,7 @@ export const GoogleSheetsEditor = ({ query, onChange, onRunQuery }: { query: Inf
         <Input value={query.sheetName} width={20} onChange={(e) => onChange({ ...query, sheetName: e.currentTarget.value })} onBlur={onRunQuery} />
       </EditorField>
       <EditorField label="Range" horizontal={true}>
-        <Input value={query.range} width={20} onChange={(e) => onChange({ ...query, range: e.currentTarget.value })} onBlur={onRunQuery} />
+        <Input value={query.sheetRange} width={20} onChange={(e) => onChange({ ...query, sheetRange: e.currentTarget.value })} onBlur={onRunQuery} />
       </EditorField>
     </>
   );

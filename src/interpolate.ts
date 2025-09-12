@@ -84,7 +84,7 @@ export const interpolateQuery = (query: InfinityQuery, scopedVars: ScopedVars): 
   if (newQuery.type === 'google-sheets') {
     newQuery.spreadsheet = replaceVariable(newQuery.spreadsheet, scopedVars);
     newQuery.sheetName = replaceVariable(newQuery.sheetName, scopedVars);
-    newQuery.range = replaceVariable(newQuery.range, scopedVars);
+    newQuery.sheetRange = replaceVariable(newQuery.sheetRange, scopedVars);
   }
   return newQuery;
 };
