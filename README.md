@@ -16,4 +16,4 @@ Docs on how to use JSON API - [Docs](https://grafana.com/docs/plugins/yesoreyera
 
 ## Known limitations
 
-- Backend features such as Alerting, Recorded Queries, Enterprise query caching, public dashboards only works if the `backend` parser option is selected in queries.
+- Backend features such as Alerting, Recorded Queries, Enterprise query caching, public dashboards only works if the `backend` parser option is selected in queries
