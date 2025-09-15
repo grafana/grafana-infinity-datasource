@@ -1,9 +1,11 @@
+import { Datasource } from '@/datasource';
+import { InfinityQueryEditor } from '@/editors/query/infinityQuery';
+import type { GlobalInfinityQuery, InfinityOptions, InfinityQuery } from '@/types';
 import { DataSourcePluginOptionsEditorProps, DataSourceSettings } from '@grafana/data';
+import { getDataSourceSrv } from '@grafana/runtime';
 import { Button, Drawer, InlineFormLabel, Input, Stack } from '@grafana/ui';
 import React, { useState } from 'react';
-import { InfinityQueryEditor } from '@/editors/query/infinityQuery';
-import { Datasource } from '@/datasource';
-import type { GlobalInfinityQuery, InfinityOptions, InfinityQuery } from '@/types';
+import { useAsync } from 'react-use';
 
 const DefaultGlobalQuery: InfinityQuery = {
   refId: '',
@@ -106,6 +108,7 @@ const GlobalQuery = (props: { query: GlobalInfinityQuery; onUpdate: (query: Glob
   const [id, setId] = useState(query.id || '');
   const [name, setName] = useState(query.name || '');
   const [popupState, setPopupState] = useState(false);
+  const datasource = useAsync(async () => await getDataSourceSrv().get(options.name));
   return (
     <>
       <Button
@@ -148,7 +151,7 @@ const GlobalQuery = (props: { query: GlobalInfinityQuery; onUpdate: (query: Glob
               onRunQuery={() => {}}
               instanceSettings={options}
               mode="global"
-              datasource={{} as Datasource}
+              datasource={datasource.value as Datasource}
             />
             <Button variant="primary" onClick={() => setPopupState(false)}>
               Update
