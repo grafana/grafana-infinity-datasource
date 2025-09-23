@@ -219,6 +219,7 @@ export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<I
               tabIndex={tabIndex + 1}
               className={activeTab === tab.value ? styles.tab_active : styles.tab}
               onClick={() => setActiveTab(tab.value)}
+              role="button"
               onKeyDown={(e) => {
                 if (e.key === ' ' || e.key === 'Enter') {
                   setActiveTab(tab.value);
