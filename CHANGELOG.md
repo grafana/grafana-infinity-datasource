@@ -1,5 +1,13 @@
 # Change Log
 
+## 3.6.0
+
+💥 **BREAKING CHANGE**: Renamed the Google Sheets range property to sheetRange to avoid conflicts with Grafana's built-in range field. See more information here [#1337](https://github.com/grafana/grafana-infinity-datasource/issues/1337)
+
+🐛 **Bug fix**: Add Assistant helper for creating JQ and JSONata parser
+
+🐛 **Bug fix**: Config editor crash when global query added
+
 ## 3.5.0
 
 🚀 **New Feature**: Allow parsing HTTP response from non 200 status codes
