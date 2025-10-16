@@ -55,7 +55,7 @@
   },
   "dependencies": {
     "@emotion/css": "11.10.6",
-    "@grafana/assistant": "^0.0.17",
+    "@grafana/assistant": "^0.1.0",
     "@grafana/data": "^12.1.0",
     "@grafana/runtime": "^12.1.0",
     "@grafana/schema": "^12.1.0",
