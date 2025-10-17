@@ -35,3 +35,4 @@ jobs:
       environment: ${{ github.event.inputs.environment }}
       docs-only: ${{ fromJSON(github.event.inputs.docs-only) }}
       run-playwright: true
+      github-draft-release: false
