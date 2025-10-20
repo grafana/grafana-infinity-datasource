@@ -215,7 +215,11 @@ func ApplyDefaultsToQuery(ctx context.Context, pCtx *backend.PluginContext, quer
 		}
 	}
 	if query.Source == "url" && strings.TrimSpace(query.URLOptions.Method) == "" {
-		query.URLOptions.Method = http.MethodGet
+		if m := strings.TrimSpace(settings.Method); m != "" {
+			query.URLOptions.Method = m
+		} else {
+			query.URLOptions.Method = http.MethodGet
+		}		
 	}
 	if query.Source == "url" && (!strings.EqualFold(query.URLOptions.Method, http.MethodGet)) {
 		if query.URLOptions.BodyType == "" {
