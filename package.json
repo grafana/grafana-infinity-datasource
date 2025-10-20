@@ -107,7 +107,7 @@
     "cspell": "^5.19.7",
     "css-loader": "^6.7.3",
     "eslint": "^8.0.0",
-    "eslint-config-prettier": "^8.8.0",
+    "eslint-config-prettier": "^8.10.0",
     "eslint-plugin-deprecation": "^2.0.0",
     "eslint-plugin-jsdoc": "^46.8.0",
     "eslint-plugin-prettier": "^4.0.0",
