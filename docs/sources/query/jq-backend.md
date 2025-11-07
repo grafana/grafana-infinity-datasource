@@ -82,9 +82,11 @@ and the root selector `.data[]` will produce the following output
 
 For more examples and to learn more about jq syntax, refer official [jq documentation](https://jqlang.org/tutorial).
 
-## Computed fields
+## Computed columns
 
-Computed fields option with JQ parser works similar to JSONata parser
+Computed columns option with JQ parser works similar to JSONata parser. Computed columns let you create new fields that calculate their values based on your existing data.
+
+For details on available operators and expression syntax, refer to the [Computed columns section in the JSONata backend parser documentation](../backend/#computed-columns).
 
 ## Filter
 
