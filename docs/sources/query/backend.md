@@ -39,7 +39,7 @@ Root selector allows you to manipulate the data received from the server. You ca
 
 ## Computed columns
 
-Computed columns let you create new fields that calculate their values based on your existing data. This is something similar to the `Add field from calculation -> Binary Operation` transformation but enhanced with powerful expression language. For example `price * qty` gives the multiplication value of two columns names `price` and `qty`
+Computed columns let you create new fields that calculate their values based on your existing data. This is something similar to the `Add field from calculation -> Binary Operation` transformation but enhanced with powerful expression language. For example `price * qty` gives the multiplication value of two column names `price` and `qty`
 
 ![calculated fields](https://user-images.githubusercontent.com/153843/196197153-306bbf2a-bc95-4be2-b3ad-75e12c8ea404.png#center)
 
