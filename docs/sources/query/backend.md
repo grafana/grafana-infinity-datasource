@@ -37,11 +37,55 @@ Setting the parser to JSONata enables features such as [Alerting](https://grafan
 
 Root selector allows you to manipulate the data received from the server. You can use [JSONata style syntax](https://docs.jsonata.org/overview.html) in root selector to manipulate your data.
 
-## Computed fields
+## Computed columns
 
-Once you have some fields already and you want to compute new field based on existing columns, you can use computed fields to do. This is something similar to the `Add field from calculation -> Binary Operation` transformation but enhanced with powerful expression language. For example `price * qty` gives the multiplication value of two columns names `price` and `qty`
+Computed columns let you create new fields that calculate their values based on your existing data. This is something similar to the `Add field from calculation -> Binary Operation` transformation but enhanced with powerful expression language. For example `price * qty` gives the multiplication value of two column names `price` and `qty`
 
 ![calculated fields](https://user-images.githubusercontent.com/153843/196197153-306bbf2a-bc95-4be2-b3ad-75e12c8ea404.png#center)
+
+### Available operators
+
+Computed columns support a wide range of operators and functions for creating expressions:
+
+#### Arithmetic operators
+- `+` (addition)
+- `-` (subtraction)
+- `*` (multiplication)
+- `/` (division)
+- `**` (exponentiation)
+- `%` (modulo)
+
+#### Comparison operators
+- `==` (equal)
+- `!=` (not equal)
+- `>` (greater than)
+- `>=` (greater than or equal to)
+- `<` (less than)
+- `<=` (less than or equal to)
+
+#### Logical operators
+- `&&` (logical AND)
+- `||` (logical OR)
+- `!` (logical NOT)
+
+#### String operators
+- `+` (string concatenation)
+
+#### Other operators
+- `IN` (check if value is in a list)
+- `=~` (regex match)
+- `!~` (regex not match)
+
+#### Ternary operator
+- `? :` (ternary conditional)
+
+#### Supported types
+- Numeric types (int, float)
+- Boolean types
+- String types
+- Arrays/lists (for use with `IN` operator)
+
+For more details on expression syntax and advanced usage, refer to the [govaluate documentation](https://pkg.go.dev/gopkg.in/Knetic/govaluate.v3).
 
 ## Filter
 
