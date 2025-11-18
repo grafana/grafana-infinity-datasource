@@ -285,9 +285,6 @@ func ApplyDefaultsToQuery(ctx context.Context, pCtx *backend.PluginContext, quer
 			if query.PageParamPageFieldType == "" {
 				query.PageParamPageFieldType = PaginationParamTypeQuery
 			}
-			if query.PageParamPageFieldVal == 0 {
-				query.PageParamPageFieldVal = 1
-			}
 		}
 		if query.PageMode == PaginationModeCursor {
 			if query.PageParamCursorFieldName == "" {
