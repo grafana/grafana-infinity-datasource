@@ -5,7 +5,7 @@ go 1.25
 require (
 	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.3.1
 	github.com/aws/aws-sdk-go-v2 v1.36.5
-	github.com/grafana/dskit v0.0.0-20250306142006-a53bcf294bdf
+	github.com/grafana/dskit v0.0.0-20251121181836-4ba32efe3d86
 	github.com/grafana/grafana-aws-sdk v1.0.4
 	github.com/grafana/grafana-plugin-sdk-go v0.281.0
 	github.com/grafana/infinity-libs/lib/go/csvframer v1.0.3
@@ -130,7 +130,7 @@ require (
 	go.uber.org/atomic v1.10.0 // indirect
 	go.yaml.in/yaml/v2 v2.4.3 // indirect
 	golang.org/x/crypto v0.45.0 // indirect
-	golang.org/x/exp v0.0.0-20251002181428-27f1f14c8bb9 // indirect
+	golang.org/x/exp v0.0.0-20251023183803-a4bb9ffd2546 // indirect
 	golang.org/x/mod v0.29.0 // indirect
 	golang.org/x/net v0.47.0 // indirect
 	golang.org/x/sync v0.18.0 // indirect
