@@ -19,7 +19,7 @@ export const ComputedColumnsEditor = (props: { query: InfinityQuery; onChange: (
     };
     return (
       <>
-        <EditorField label="Computed Columns" optional={true} tooltip={'Computed columns will be computed after the columns computed'}>
+        <EditorField label="Computed Columns" optional={true} tooltip={'Computed columns let you create new fields that calculate their values based on your existing data.'}>
           <>
             {(query.computed_columns || []).map((computed_column: InfinityColumn, index: number) => {
               return (
