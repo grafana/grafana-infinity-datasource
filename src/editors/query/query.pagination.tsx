@@ -43,7 +43,7 @@ export const PaginationEditor = (props: PaginationEditorProps) => {
                 min={0}
                 width={30}
                 value={query.pagination_max_pages}
-                onChange={(e) => onChange({ ...query, pagination_max_pages: e.currentTarget.valueAsNumber || 1 })}
+                onChange={(e) => onChange({ ...query, pagination_max_pages: Number.isNaN(e.currentTarget.valueAsNumber) ? 1 : e.currentTarget.valueAsNumber })}
                 placeholder="1"
               />
             </EditorField>
@@ -105,7 +105,8 @@ export const PaginationEditor = (props: PaginationEditorProps) => {
                       value={query.pagination_param_offset_value}
                       min={0}
                       max={2000}
-                      onChange={(e) => onChange({ ...query, pagination_param_offset_value: e.currentTarget.valueAsNumber || 0 })}
+                      onChange={(e) => onChange({ ...query, pagination_param_offset_value: Number.isNaN(e.currentTarget.valueAsNumber) ? 0 : e.currentTarget.valueAsNumber })}
+                      placeholder="0"
                     ></Input>
                   </Stack>
                 </EditorField>
@@ -135,7 +136,8 @@ export const PaginationEditor = (props: PaginationEditorProps) => {
                       type="number"
                       value={query.pagination_param_page_value}
                       min={0}
-                      onChange={(e) => onChange({ ...query, pagination_param_page_value: e.currentTarget.valueAsNumber || 1 })}
+                      onChange={(e) => onChange({ ...query, pagination_param_page_value: Number.isNaN(e.currentTarget.valueAsNumber) ? 1 : e.currentTarget.valueAsNumber })}
+                      placeholder="1"
                     ></Input>
                   </Stack>
                 </EditorField>
