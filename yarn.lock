@@ -1344,9 +1344,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grafana/assistant@npm:^0.1.4":
-  version: 0.1.4
-  resolution: "@grafana/assistant@npm:0.1.4"
+"@grafana/assistant@npm:^0.1.7":
+  version: 0.1.7
+  resolution: "@grafana/assistant@npm:0.1.7"
   peerDependencies:
     "@grafana/data": ">=12.1.0"
     "@grafana/runtime": ">=12.1.0"
@@ -1354,7 +1354,7 @@ __metadata:
     "@grafana/ui": ">=12.1.0"
     react: ">=18.0.0"
     rxjs: ">=7.0.0"
-  checksum: 10c0/e6063bfd406acd396f5389c9ec0943866b320c1f8fccf889ab3c472765fffc7a72d38cbba18914a593562e8b9f19da1e8a1a112774c3ea7183bb0e2e610e725e
+  checksum: 10c0/6572a4c24573d2f2e02d0a284360adad821d3396195fcafb59d0665e52d8d50c3def6b87ed9da67893281fea668fee2a6e02f3f703173500fd49b4da6309c927
   languageName: node
   linkType: hard
 
@@ -7309,7 +7309,7 @@ __metadata:
     "@changesets/cli": "npm:^2.26.1"
     "@changesets/types": "npm:^5.2.1"
     "@emotion/css": "npm:11.10.6"
-    "@grafana/assistant": "npm:^0.1.4"
+    "@grafana/assistant": "npm:^0.1.7"
     "@grafana/data": "npm:^12.1.0"
     "@grafana/eslint-config": "npm:^8.0.0"
     "@grafana/plugin-e2e": "npm:^2.1.7"
