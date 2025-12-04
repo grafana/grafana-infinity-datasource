@@ -132,7 +132,7 @@ func applyOAuthClientCredentials(ctx context.Context, httpClient *http.Client, s
 				oauthConfig.EndpointParams.Set(k, v)
 			}
 		}
-		ctx := context.WithValue(context.Background(), oauth2.HTTPClient, httpClient)
+		ctx := context.WithValue(context.Background(), oauth2.HTTPClient, getOAuthClientWithAcceptHeader(httpClient))
 		httpClient = oauthConfig.Client(ctx)
 		httpClient.Transport = getCustomOAuth2Transport(settings, httpClient)
 	}
@@ -160,7 +160,7 @@ func applyOAuthJWT(ctx context.Context, httpClient *http.Client, settings models
 				jwtConfig.Scopes = append(jwtConfig.Scopes, scope)
 			}
 		}
-		ctx := context.WithValue(context.Background(), oauth2.HTTPClient, httpClient)
+		ctx := context.WithValue(context.Background(), oauth2.HTTPClient, getOAuthClientWithAcceptHeader(httpClient))
 		httpClient = jwtConfig.Client(ctx)
 		httpClient.Transport = getCustomOAuth2Transport(settings, httpClient)
 	}
@@ -223,6 +223,10 @@ func applySecureSocksProxyConfiguration(ctx context.Context, httpClient *http.Cl
 			t = cht.Transport.(*oauth2.Transport).Base
 		} else {
 			t = t.(*oauth2.Transport).Base
+		}
+		// Unwrap acceptHeaderTransport if present in the Base
+		if aht, ok := t.(*acceptHeaderTransport); ok {
+			t = aht.base
 		}
 	}
 	// secure socks proxy configuration - checks if enabled inside the function

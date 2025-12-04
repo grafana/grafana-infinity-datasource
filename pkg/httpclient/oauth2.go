@@ -17,6 +17,28 @@ const (
 	OAuth2TokenTypeReplacer    = "${__oauth2.token_type}"
 )
 
+// acceptHeaderTransport wraps an http.RoundTripper to add Accept: application/json header
+// This fixes compatibility with OAuth2 servers that strictly validate the Accept header
+type acceptHeaderTransport struct {
+	base http.RoundTripper
+}
+
+func (t *acceptHeaderTransport) RoundTrip(req *http.Request) (*http.Response, error) {
+	if req.Header.Get("Accept") == "" {
+		req.Header.Set("Accept", "application/json")
+	}
+	return t.base.RoundTrip(req)
+}
+
+// getOAuthClientWithAcceptHeader returns an HTTP client with Accept header middleware
+// for OAuth2 token endpoint requests
+func getOAuthClientWithAcceptHeader(baseClient *http.Client) *http.Client {
+	return &http.Client{
+		Transport: &acceptHeaderTransport{base: baseClient.Transport},
+		Timeout:   baseClient.Timeout,
+	}
+}
+
 type oauth2CustomTokenTransport struct {
 	Settings      models.InfinitySettings
 	Transport     http.RoundTripper
