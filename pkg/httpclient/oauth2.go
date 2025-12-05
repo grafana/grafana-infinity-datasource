@@ -17,6 +17,35 @@ const (
 	OAuth2TokenTypeReplacer    = "${__oauth2.token_type}"
 )
 
+// customHeadersTransport wraps an http.RoundTripper to add custom headers to token endpoint requests
+// This allows users to configure headers like Accept, Content-Type, etc. for OAuth2 servers that strictly validate headers
+type customHeadersTransport struct {
+	base    http.RoundTripper
+	headers map[string]string
+}
+
+func (t *customHeadersTransport) RoundTrip(req *http.Request) (*http.Response, error) {
+	// Apply custom headers only if they're not already set
+	for key, value := range t.headers {
+		if req.Header.Get(key) == "" {
+			req.Header.Set(key, value)
+		}
+	}
+	return t.base.RoundTrip(req)
+}
+
+// getOAuthClientWithCustomHeaders returns an HTTP client with custom header middleware
+// for OAuth2 token endpoint requests
+func getOAuthClientWithCustomHeaders(baseClient *http.Client, headers map[string]string) *http.Client {
+	if len(headers) == 0 {
+		return baseClient
+	}
+	return &http.Client{
+		Transport: &customHeadersTransport{base: baseClient.Transport, headers: headers},
+		Timeout:   baseClient.Timeout,
+	}
+}
+
 type oauth2CustomTokenTransport struct {
 	Settings      models.InfinitySettings
 	Transport     http.RoundTripper
