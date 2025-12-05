@@ -80,3 +80,11 @@ The `tokenTemplate` field allows you to specify a custom format for the token va
 - `${__oauth2.access_token}` (token only, no prefix)
 - `${__oauth2.token_type} ${__oauth2.access_token}` (dynamic prefix)
 - `ApiKey ${__oauth2.access_token}`
+
+## OAuth2 Token Endpoint Compatibility
+
+### Accept Header
+
+The datasource automatically includes an `Accept: application/json` header in OAuth2 token endpoint requests. This ensures compatibility with OAuth2 servers that strictly validate request headers.
+
+> **Note**: This header is only sent to the OAuth2 token endpoint and does not affect your API requests.
