@@ -113,6 +113,35 @@ Instead of the default:
 Authorization: Bearer abc123
 ```
 
+## TokenHeaders option
+
+The `tokenHeaders` field allows you to specify custom HTTP headers to send with OAuth2 token endpoint requests. This is useful when working with OAuth2 servers that have strict header validation requirements.
+
+| Setting | Description |
+|---------|-------------|
+| Default | None (no custom headers) |
+| Type | Map of string key-value pairs |
+
+**Use case**: Some OAuth2 servers validate the `Accept` header or other headers in token requests. By default, the OAuth2 library may not set certain headers, causing authentication failures with error messages like:
+
+```
+oauth2: "invalid_request" "The header 'Accept : ' is not supported."
+```
+
+**Common headers to configure:**
+
+| Header | Example value | Purpose |
+|--------|---------------|---------|
+| `Accept` | `application/json` | Specify the desired response format |
+| `Content-Type` | `application/x-www-form-urlencoded` | Override the default content type |
+| `User-Agent` | `MyApp/1.0` | Custom user agent string |
+
+**Important notes:**
+
+- Token headers are only sent to the token endpoint URL, not to your API requests.
+- Headers specified here will not override headers already set by the OAuth2 library.
+- These headers are in addition to the standard OAuth2 authentication headers.
+
 ## Configure in the UI
 
 1. In the data source configuration, expand **Authentication**.
@@ -122,4 +151,5 @@ Authorization: Bearer abc123
 1. Expand **Customize OAuth2 token (Advanced)**.
 1. In the **Custom Token Header** field, enter your custom header name.
 1. In the **Custom Token Template** field, enter your custom token format using placeholders.
+1. To add token request headers, use the **Token request headers** fields to enter key-value pairs.
 1. Click **Save & test**.
