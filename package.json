@@ -51,11 +51,13 @@
     "watch": "yarn dev"
   },
   "resolutions": {
-    "brace-expansion": "2.0.2"
+    "brace-expansion": "2.0.2",
+    "js-yaml": "4.1.1",
+    "tmp": "0.2.4"
   },
   "dependencies": {
     "@emotion/css": "11.10.6",
-    "@grafana/assistant": "^0.1.4",
+    "@grafana/assistant": "^0.1.7",
     "@grafana/data": "^12.1.0",
     "@grafana/runtime": "^12.1.0",
     "@grafana/schema": "^12.1.0",
