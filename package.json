@@ -128,7 +128,7 @@
     "sass-loader": "13.3.1",
     "semver": "^7.6.3",
     "stream-browserify": "^3.0.0",
-    "style-loader": "3.3.3",
+    "style-loader": "3.3.4",
     "swc-loader": "^0.2.3",
     "terser-webpack-plugin": "^5.3.10",
     "timers-browserify": "^2.0.12",
