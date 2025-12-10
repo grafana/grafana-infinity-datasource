@@ -6,12 +6,12 @@ x-logging: &default-logging
 services:
   microsocks:
     container_name: microsocks
-    image: vimagick/microsocks
+    image: vimagick/microsocks@sha256:7b61de9b46c40672ca7b2a95f45abf023926d9e1dfd7ecfe95d21a82506227c4
     ports:
       - 1080:1080
   prometheus:
     container_name: prometheus
-    image: prom/prometheus
+    image: prom/prometheus@sha256:d936808bdea528155c0154a922cd42fd75716b8bb7ba302641350f9f3eaeba09
     command:
       - --web.enable-remote-write-receiver
       - --enable-feature=native-histograms
@@ -22,18 +22,18 @@ services:
       - "9090:9090"
   node-exporter:
     container_name: node_exporter
-    image: prom/node-exporter
+    image: prom/node-exporter@sha256:3ac34ce007accad95afed72149e0d2b927b7e42fd1c866149b945b84737c62c3
     ports:
       - "9100:9100"
   loki:
-    image: grafana/loki:main
+    image: grafana/loki:main@sha256:ae0d78305c9c06512dfdee24b518eee82716269707c5e02ce62462c415a2f0c2
     command: -config.file=/etc/loki/loki-config.yaml
     volumes:
       - ./docker/blocks/loki/config.yaml:/etc/loki/loki-config.yaml
     ports:
       - "3100:3100"
   tempo:
-    image: grafana/tempo:latest
+    image: grafana/tempo:latest@sha256:8d8b8e118394e4e4acf6881c4038e5d2eeeca71fa8cd498b941bfef33aaa3ee5
     depends_on:
       - loki
     command:
