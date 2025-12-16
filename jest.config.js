@@ -15,7 +15,6 @@ module.exports = {
     '^@/app/(.*)': '<rootDir>/src/app/$1',
     '^@/types/(.*)': '<rootDir>/src/types/$1',
     '^@/constants': '<rootDir>/src/constants.ts',
-    '^@/variables': '<rootDir>/src/variables.ts',
     '^@/datasource': '<rootDir>/src/datasource.ts',
     '^@/interpolate': '<rootDir>/src/interpolate.ts',
     '^@/migrate': '<rootDir>/src/migrate.ts',

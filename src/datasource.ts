@@ -7,8 +7,7 @@ import { InfinityProvider } from '@/app/InfinityProvider';
 import { SeriesProvider } from '@/app/SeriesProvider';
 import { applyUQL } from '@/app/UQLProvider';
 import { getUpdatedDataRequest, interpolateVariablesInQueries } from '@/app/queryUtils';
-import { getTemplateVariablesFromResult, LegacyVariableProvider, migrateLegacyQuery } from '@/app/variablesQuery';
-import { InfinityVariableSupport } from '@/variables';
+import { InfinityVariableSupport, getTemplateVariablesFromResult, LegacyVariableProvider, migrateLegacyQuery } from '@/app/variablesQuery';
 import { AnnotationsEditor } from '@/editors/annotation.editor';
 import { interpolateQuery, interpolateVariableQuery } from '@/interpolate';
 import { migrateQuery } from '@/migrate';
@@ -42,7 +41,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
   interpolateVariablesInQueries(queries: InfinityQuery[], scopedVars: ScopedVars) {
     return interpolateVariablesInQueries(queries, scopedVars);
   }
-  MetricFindQuery(originalQuery: VariableQuery, options?: { scopedVars: ScopedVars }): Promise<MetricFindValue[]> {
+  getVariableQueryValues(originalQuery: VariableQuery, options?: { scopedVars: ScopedVars }): Promise<MetricFindValue[]> {
     let query = migrateLegacyQuery(originalQuery);
     query = interpolateVariableQuery(query);
     return new Promise((resolve) => {

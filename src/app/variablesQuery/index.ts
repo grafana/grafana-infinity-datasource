@@ -1,6 +1,9 @@
-import { DataFrameView, SelectableValue } from '@grafana/data';
-import { getTemplateSrv } from '@grafana/runtime';
+import { from, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { defaultsDeep, flatten } from 'lodash';
+import { DataFrameView, SelectableValue, CustomVariableSupport, type DataQueryRequest, type MetricFindValue } from '@grafana/data';
+import { getTemplateSrv } from '@grafana/runtime';
+import { Datasource } from '@/datasource';
 import { DefaultInfinityQuery } from '@/constants';
 import { isDataFrame, isTableData } from '@/app/utils';
 import { CollectionVariable } from '@/app/variablesQuery/Collection';
@@ -8,7 +11,19 @@ import { CollectionLookupVariable } from '@/app/variablesQuery/CollectionLookup'
 import { JoinVariable } from '@/app/variablesQuery/Join';
 import { RandomVariable } from '@/app/variablesQuery/Random';
 import { UnixTimeStampVariable } from '@/app/variablesQuery/UnixTimeStamp';
-import type { MetricFindValue, VariableQuery, VariableQueryInfinity } from '@/types';
+import { VariableEditor } from '@/editors/variable.editor';
+import type { VariableQuery, VariableQueryInfinity } from '@/types';
+
+export class InfinityVariableSupport extends CustomVariableSupport<Datasource, VariableQuery> {
+  editor = VariableEditor;
+  constructor(private datasource: Datasource) {
+    super();
+  }
+  query(request: DataQueryRequest<VariableQuery>): Observable<{ data: MetricFindValue[] }> {
+    const resultPromise = this.datasource.getVariableQueryValues(request.targets[0], { scopedVars: request.scopedVars });
+    return from(resultPromise).pipe(map((data) => ({ data })));
+  }
+}
 
 export const getTemplateVariablesFromResult = (res: any): MetricFindValue[] => {
   if (isDataFrame(res) && res.fields.length > 0) {
