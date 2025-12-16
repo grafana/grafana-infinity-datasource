@@ -14,7 +14,7 @@ export const VariableEditor = (props: { query: VariableQuery; onChange: (query: 
   };
   return (
     <>
-      <Field label="QueryType">
+      <Field label="Query Type">
         <RadioButtonGroup<VariableQueryType> options={variableQueryTypes} value={query.queryType} onChange={(v) => onQueryTypeChange(v)}></RadioButtonGroup>
       </Field>
       {query.queryType === 'infinity' && query.infinityQuery && <VariableEditorInfinity {...props} query={query} />}

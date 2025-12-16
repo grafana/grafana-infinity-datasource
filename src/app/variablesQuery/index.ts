@@ -25,6 +25,7 @@ export class InfinityVariableSupport extends CustomVariableSupport<Datasource, V
   }
   getDefaultQuery() {
     return {
+      refId: 'variable',
       queryType: 'infinity',
       infinityQuery: {
         type: 'csv',
