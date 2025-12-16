@@ -23,6 +23,17 @@ export class InfinityVariableSupport extends CustomVariableSupport<Datasource, V
     const resultPromise = this.datasource.getVariableQueryValues(request.targets[0], { scopedVars: request.scopedVars });
     return from(resultPromise).pipe(map((data) => ({ data })));
   }
+  getDefaultQuery() {
+    return {
+      queryType: 'infinity',
+      infinityQuery: {
+        type: 'csv',
+        parser: 'backend',
+        source: 'inline',
+        data: 'values\nfoo\nbar\nbaz',
+      },
+    };
+  }
 }
 
 export const getTemplateVariablesFromResult = (res: any): MetricFindValue[] => {
