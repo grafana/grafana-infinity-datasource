@@ -26,6 +26,7 @@ const config = async (env: any): Promise<Configuration> => {
         '@/app': path.resolve(process.cwd(), 'src/app/'),
         '@/types': path.resolve(process.cwd(), 'src/types/'),
         '@/constants': path.resolve(process.cwd(), 'src/constants.ts'),
+        '@/variables': path.resolve(process.cwd(), 'src/variables.ts'),
         '@/datasource': path.resolve(process.cwd(), 'src/datasource.ts'),
         '@/interpolate': path.resolve(process.cwd(), 'src/interpolate.ts'),
         '@/migrate': path.resolve(process.cwd(), 'src/migrate.ts'),

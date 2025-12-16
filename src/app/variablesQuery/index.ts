@@ -53,6 +53,7 @@ export const getTemplateVariablesFromResult = (res: any): MetricFindValue[] => {
 export const migrateLegacyQuery = (query: VariableQuery | string): VariableQuery => {
   if (typeof query === 'string') {
     return {
+      refId: 'variable',
       query: query,
       queryType: 'legacy',
       infinityQuery: {
@@ -67,6 +68,7 @@ export const migrateLegacyQuery = (query: VariableQuery | string): VariableQuery
     } as VariableQuery;
   } else {
     return {
+      refId: 'variable',
       query: '',
       queryType: 'legacy',
     };

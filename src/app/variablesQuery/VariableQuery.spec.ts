@@ -19,6 +19,7 @@ describe('migrateLegacyQuery', () => {
     let originalQuery: VariableQuery = {
       queryType: 'infinity',
       infinityQuery: DefaultInfinityQuery,
+      refId: 'variable',
     };
     let newQuery = migrateLegacyQuery(originalQuery) as VariableQueryInfinity;
     expect(newQuery.queryType).toBe('infinity');
