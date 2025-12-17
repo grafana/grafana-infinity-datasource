@@ -1,7 +1,7 @@
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { defaultsDeep, flatten } from 'lodash';
-import { DataFrameView, SelectableValue, CustomVariableSupport, type DataQueryRequest, type MetricFindValue } from '@grafana/data';
+import { DataFrameView, SelectableValue, CustomVariableSupport, type DataQueryRequest } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
 import { Datasource } from '@/datasource';
 import { DefaultInfinityQuery } from '@/constants';
@@ -12,7 +12,7 @@ import { JoinVariable } from '@/app/variablesQuery/Join';
 import { RandomVariable } from '@/app/variablesQuery/Random';
 import { UnixTimeStampVariable } from '@/app/variablesQuery/UnixTimeStamp';
 import { VariableEditor } from '@/editors/variable.editor';
-import type { VariableQuery, VariableQueryInfinity } from '@/types';
+import type { VariableQuery, VariableQueryInfinity, MetricFindValue } from '@/types';
 
 export class InfinityVariableSupport extends CustomVariableSupport<Datasource, VariableQuery> {
   editor = VariableEditor;
