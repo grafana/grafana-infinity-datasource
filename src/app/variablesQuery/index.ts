@@ -58,7 +58,6 @@ export const getTemplateVariablesFromResult = (res: any): MetricFindValue[] => {
     if (res.columns.length === 2) {
       return res.rows.map((row: string[]) => {
         return {
-          label: row[0],
           value: row[1],
           text: row[0],
         };
@@ -67,7 +66,6 @@ export const getTemplateVariablesFromResult = (res: any): MetricFindValue[] => {
       return flatten(res.rows || []).map((res) => {
         return {
           value: String(res),
-          label: String(res),
           text: String(res),
         };
       });
