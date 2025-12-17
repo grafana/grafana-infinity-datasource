@@ -1,7 +1,10 @@
 import { MetricFindValue as MetricFindValueCore } from '@grafana/data';
 
 //#region Grafana Types
-export type MetricFindValue = {} & MetricFindValueCore;
+export type MetricFindValue = {
+  // TODO: Remove this once the MetricFindValue from @grafana/data natively supports
+  properties?: Record<string, string>;
+} & MetricFindValueCore;
 
 export type dataPoint = [number | null, number];
 export type timeSeriesResult = {

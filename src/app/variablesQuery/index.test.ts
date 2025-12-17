@@ -1,14 +1,14 @@
 import { firstValueFrom } from 'rxjs';
 import { DataQueryRequest, MutableDataFrame } from '@grafana/data';
-import { getTemplateVariablesFromResult, InfinityVariableSupport } from '@/app/variablesQuery';
+import { getTemplateVariablesFromResult, InfinityVariableSupport, TEXT_FIELD_SELECTOR_IN_VARIABLE, VALUE_FIELD_SELECTOR_IN_VARIABLE } from '@/app/variablesQuery';
 describe('getTemplateVariablesFromResult', () => {
   it('should return same value for value and text if only one field available', () => {
     let input = new MutableDataFrame({
       fields: [{ name: 'users', values: ['foo', 'bar'] }],
     });
     expect(getTemplateVariablesFromResult(input)).toStrictEqual([
-      { value: 'foo', text: 'foo' },
-      { value: 'bar', text: 'bar' },
+      { value: 'foo', text: 'foo', properties: {} },
+      { value: 'bar', text: 'bar', properties: {} },
     ]);
   });
   it('should return different values for value and text if two fields available', () => {
@@ -19,8 +19,8 @@ describe('getTemplateVariablesFromResult', () => {
       ],
     });
     expect(getTemplateVariablesFromResult(input)).toStrictEqual([
-      { value: 'foo-id', text: 'foo' },
-      { value: 'bar-id', text: 'bar' },
+      { value: 'foo-id', text: 'foo', properties: {} },
+      { value: 'bar-id', text: 'bar', properties: {} },
     ]);
   });
   it('should return same value for value and text if more than two fields available', () => {
@@ -32,46 +32,78 @@ describe('getTemplateVariablesFromResult', () => {
       ],
     });
     expect(getTemplateVariablesFromResult(input)).toStrictEqual([
-      { value: 'foo', text: 'foo' },
-      { value: 'bar', text: 'bar' },
+      { value: 'foo', text: 'foo', properties: { usersIds: 'foo-id', userCounties: 'foo-country' } },
+      { value: 'bar', text: 'bar', properties: { usersIds: 'bar-id', userCounties: 'bar-country' } },
     ]);
   });
   describe('dataframe with more than 1 field', () => {
     it('with __text and __value', () => {
       const fields = [
         { name: 'users', values: ['foo', 'bar'] },
-        { name: '__value', values: ['v1', 'v2'] },
+        { name: VALUE_FIELD_SELECTOR_IN_VARIABLE, values: ['v1', 'v2'] },
         { name: 'usersIds', values: ['foo-id', 'bar-id'] },
-        { name: '__text', values: ['t1', 't2'] },
+        { name: TEXT_FIELD_SELECTOR_IN_VARIABLE, values: ['t1', 't2'] },
         { name: 'userCounties', values: ['foo-country', 'bar-country'] },
       ];
       expect(getTemplateVariablesFromResult(new MutableDataFrame({ fields }))).toStrictEqual([
-        { value: fields.find((f) => f.name === '__value')?.values[0], text: fields.find((f) => f.name === '__text')?.values[0] },
-        { value: fields.find((f) => f.name === '__value')?.values[1], text: fields.find((f) => f.name === '__text')?.values[1] },
+        {
+          value: fields.find((f) => f.name === VALUE_FIELD_SELECTOR_IN_VARIABLE)?.values[0],
+          text: fields.find((f) => f.name === TEXT_FIELD_SELECTOR_IN_VARIABLE)?.values[0],
+          properties: {
+            users: 'foo',
+            usersIds: 'foo-id',
+            userCounties: 'foo-country',
+          },
+        },
+        {
+          value: fields.find((f) => f.name === VALUE_FIELD_SELECTOR_IN_VARIABLE)?.values[1],
+          text: fields.find((f) => f.name === TEXT_FIELD_SELECTOR_IN_VARIABLE)?.values[1],
+          properties: {
+            users: 'bar',
+            usersIds: 'bar-id',
+            userCounties: 'bar-country',
+          },
+        },
       ]);
     });
     it('with __text', () => {
       const fields = [
         { name: 'users', values: ['foo', 'bar'] },
         { name: 'usersIds', values: ['foo-id', 'bar-id'] },
-        { name: '__text', values: ['t1', 't2'] },
+        { name: TEXT_FIELD_SELECTOR_IN_VARIABLE, values: ['t1', 't2'] },
         { name: 'userCounties', values: ['foo-country', 'bar-country'] },
       ];
       expect(getTemplateVariablesFromResult(new MutableDataFrame({ fields }))).toStrictEqual([
-        { value: fields.find((f) => f.name === '__text')?.values[0], text: fields.find((f) => f.name === '__text')?.values[0] },
-        { value: fields.find((f) => f.name === '__text')?.values[1], text: fields.find((f) => f.name === '__text')?.values[1] },
+        {
+          value: fields.find((f) => f.name === TEXT_FIELD_SELECTOR_IN_VARIABLE)?.values[0],
+          text: fields.find((f) => f.name === TEXT_FIELD_SELECTOR_IN_VARIABLE)?.values[0],
+          properties: { users: 'foo', usersIds: 'foo-id', userCounties: 'foo-country' },
+        },
+        {
+          value: fields.find((f) => f.name === TEXT_FIELD_SELECTOR_IN_VARIABLE)?.values[1],
+          text: fields.find((f) => f.name === TEXT_FIELD_SELECTOR_IN_VARIABLE)?.values[1],
+          properties: { users: 'bar', usersIds: 'bar-id', userCounties: 'bar-country' },
+        },
       ]);
     });
     it('with __value', () => {
       const fields = [
         { name: 'users', values: ['foo', 'bar'] },
         { name: 'usersIds', values: ['foo-id', 'bar-id'] },
-        { name: '__value', values: ['v1', 'v2'] },
+        { name: VALUE_FIELD_SELECTOR_IN_VARIABLE, values: ['v1', 'v2'] },
         { name: 'userCounties', values: ['foo-country', 'bar-country'] },
       ];
       expect(getTemplateVariablesFromResult(new MutableDataFrame({ fields }))).toStrictEqual([
-        { value: fields.find((f) => f.name === '__value')?.values[0], text: fields.find((f) => f.name === '__value')?.values[0] },
-        { value: fields.find((f) => f.name === '__value')?.values[1], text: fields.find((f) => f.name === '__value')?.values[1] },
+        {
+          value: fields.find((f) => f.name === VALUE_FIELD_SELECTOR_IN_VARIABLE)?.values[0],
+          text: fields.find((f) => f.name === VALUE_FIELD_SELECTOR_IN_VARIABLE)?.values[0],
+          properties: { users: 'foo', usersIds: 'foo-id', userCounties: 'foo-country' },
+        },
+        {
+          value: fields.find((f) => f.name === VALUE_FIELD_SELECTOR_IN_VARIABLE)?.values[1],
+          text: fields.find((f) => f.name === VALUE_FIELD_SELECTOR_IN_VARIABLE)?.values[1],
+          properties: { users: 'bar', usersIds: 'bar-id', userCounties: 'bar-country' },
+        },
       ]);
     });
     it('without __text or __value', () => {
@@ -81,40 +113,56 @@ describe('getTemplateVariablesFromResult', () => {
         { name: 'userCounties', values: ['foo-country', 'bar-country'] },
       ];
       expect(getTemplateVariablesFromResult(new MutableDataFrame({ fields }))).toStrictEqual([
-        { value: fields[0].values[0], text: fields[0].values[0] },
-        { value: fields[0].values[1], text: fields[0].values[1] },
+        { value: fields[0].values[0], text: fields[0].values[0], properties: { usersIds: 'foo-id', userCounties: 'foo-country' } },
+        { value: fields[0].values[1], text: fields[0].values[1], properties: { usersIds: 'bar-id', userCounties: 'bar-country' } },
       ]);
     });
   });
   describe('dataframe with 2 fields', () => {
     it('with __text and __value', () => {
       const fields = [
-        { name: '__text', values: ['t1', 't2'] },
-        { name: '__value', values: ['v1', 'v2'] },
+        { name: TEXT_FIELD_SELECTOR_IN_VARIABLE, values: ['t1', 't2'] },
+        { name: VALUE_FIELD_SELECTOR_IN_VARIABLE, values: ['v1', 'v2'] },
       ];
       expect(getTemplateVariablesFromResult(new MutableDataFrame({ fields }))).toStrictEqual([
-        { value: fields.find((f) => f.name === '__value')?.values[0], text: fields.find((f) => f.name === '__text')?.values[0] },
-        { value: fields.find((f) => f.name === '__value')?.values[1], text: fields.find((f) => f.name === '__text')?.values[1] },
+        { value: fields.find((f) => f.name === VALUE_FIELD_SELECTOR_IN_VARIABLE)?.values[0], text: fields.find((f) => f.name === TEXT_FIELD_SELECTOR_IN_VARIABLE)?.values[0], properties: {} },
+        { value: fields.find((f) => f.name === VALUE_FIELD_SELECTOR_IN_VARIABLE)?.values[1], text: fields.find((f) => f.name === TEXT_FIELD_SELECTOR_IN_VARIABLE)?.values[1], properties: {} },
       ]);
     });
     it('with __text', () => {
       const fields = [
         { name: 'users', values: ['foo', 'bar'] },
-        { name: '__text', values: ['t1', 't2'] },
+        { name: TEXT_FIELD_SELECTOR_IN_VARIABLE, values: ['t1', 't2'] },
       ];
       expect(getTemplateVariablesFromResult(new MutableDataFrame({ fields }))).toStrictEqual([
-        { value: fields.find((f) => f.name === '__text')?.values[0], text: fields.find((f) => f.name === '__text')?.values[0] },
-        { value: fields.find((f) => f.name === '__text')?.values[1], text: fields.find((f) => f.name === '__text')?.values[1] },
+        {
+          value: fields.find((f) => f.name === TEXT_FIELD_SELECTOR_IN_VARIABLE)?.values[0],
+          text: fields.find((f) => f.name === TEXT_FIELD_SELECTOR_IN_VARIABLE)?.values[0],
+          properties: { users: 'foo' },
+        },
+        {
+          value: fields.find((f) => f.name === TEXT_FIELD_SELECTOR_IN_VARIABLE)?.values[1],
+          text: fields.find((f) => f.name === TEXT_FIELD_SELECTOR_IN_VARIABLE)?.values[1],
+          properties: { users: 'bar' },
+        },
       ]);
     });
     it('with __value', () => {
       const fields = [
         { name: 'users', values: ['foo', 'bar'] },
-        { name: '__value', values: ['v1', 'v2'] },
+        { name: VALUE_FIELD_SELECTOR_IN_VARIABLE, values: ['v1', 'v2'] },
       ];
       expect(getTemplateVariablesFromResult(new MutableDataFrame({ fields }))).toStrictEqual([
-        { value: fields.find((f) => f.name === '__value')?.values[0], text: fields.find((f) => f.name === '__value')?.values[0] },
-        { value: fields.find((f) => f.name === '__value')?.values[1], text: fields.find((f) => f.name === '__value')?.values[1] },
+        {
+          value: fields.find((f) => f.name === VALUE_FIELD_SELECTOR_IN_VARIABLE)?.values[0],
+          text: fields.find((f) => f.name === VALUE_FIELD_SELECTOR_IN_VARIABLE)?.values[0],
+          properties: { users: 'foo' },
+        },
+        {
+          value: fields.find((f) => f.name === VALUE_FIELD_SELECTOR_IN_VARIABLE)?.values[1],
+          text: fields.find((f) => f.name === VALUE_FIELD_SELECTOR_IN_VARIABLE)?.values[1],
+          properties: { users: 'bar' },
+        },
       ]);
     });
     it('without __text or __value', () => {
@@ -123,8 +171,8 @@ describe('getTemplateVariablesFromResult', () => {
         { name: 'usersIds', values: ['foo-id', 'bar-id'] },
       ];
       expect(getTemplateVariablesFromResult(new MutableDataFrame({ fields }))).toStrictEqual([
-        { value: fields[1].values[0], text: fields[0].values[0] },
-        { value: fields[1].values[1], text: fields[0].values[1] },
+        { value: fields[1].values[0], text: fields[0].values[0], properties: {} },
+        { value: fields[1].values[1], text: fields[0].values[1], properties: {} },
       ]);
     });
   });
@@ -132,8 +180,8 @@ describe('getTemplateVariablesFromResult', () => {
     it('first field', () => {
       const fields = [{ name: 'users', values: ['foo', 'bar'] }];
       expect(getTemplateVariablesFromResult(new MutableDataFrame({ fields }))).toStrictEqual([
-        { value: fields[0].values[0], text: fields[0].values[0] },
-        { value: fields[0].values[1], text: fields[0].values[1] },
+        { value: fields[0].values[0], text: fields[0].values[0], properties: {} },
+        { value: fields[0].values[1], text: fields[0].values[1], properties: {} },
       ]);
     });
   });
