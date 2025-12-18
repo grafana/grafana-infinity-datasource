@@ -1,7 +1,7 @@
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { defaultsDeep, flatten } from 'lodash';
-import { DataFrameView, SelectableValue, CustomVariableSupport, type DataQueryRequest } from '@grafana/data';
+import { DataFrameView, DataQueryResponse, SelectableValue, CustomVariableSupport, type DataQueryRequest } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
 import { Datasource } from '@/datasource';
 import { DefaultInfinityQuery } from '@/constants';
@@ -19,7 +19,7 @@ export class InfinityVariableSupport extends CustomVariableSupport<Datasource, V
   constructor(private datasource: Datasource) {
     super();
   }
-  query(request: DataQueryRequest<VariableQuery>): Observable<{ data: MetricFindValue[] }> {
+  query(request: DataQueryRequest<VariableQuery>): Observable<DataQueryResponse> {
     const resultPromise = this.datasource.getVariableQueryValues(request.targets[0], { scopedVars: request.scopedVars });
     return from(resultPromise).pipe(map((data) => ({ data })));
   }
@@ -37,21 +37,30 @@ export class InfinityVariableSupport extends CustomVariableSupport<Datasource, V
   }
 }
 
+export const TEXT_FIELD_SELECTOR_IN_VARIABLE = '__text';
+export const VALUE_FIELD_SELECTOR_IN_VARIABLE = '__value';
+
 export const getTemplateVariablesFromResult = (res: any): MetricFindValue[] => {
   if (isDataFrame(res) && res.fields.length > 0) {
     const view = new DataFrameView(res);
     return (view || []).map((item) => {
       const keys = Object.keys(item || {}) || [];
-      if (keys.length >= 2 && keys.includes('__text') && keys.includes('__value')) {
-        return { text: item['__text'], value: item['__value'] };
-      } else if (keys.includes('__text')) {
-        return { text: item['__text'], value: item['__text'] };
-      } else if (keys.includes('__value')) {
-        return { text: item['__value'], value: item['__value'] };
+      if (keys.length >= 2 && keys.includes(TEXT_FIELD_SELECTOR_IN_VARIABLE) && keys.includes(VALUE_FIELD_SELECTOR_IN_VARIABLE)) {
+        const { __text, __value, ...properties } = item;
+        return { text: __text, value: __value, properties };
+      } else if (keys.includes(TEXT_FIELD_SELECTOR_IN_VARIABLE)) {
+        const { __text, ...properties } = item;
+        return { text: __text, value: __text, properties };
+      } else if (keys.includes(VALUE_FIELD_SELECTOR_IN_VARIABLE)) {
+        const { __value, ...properties } = item;
+        return { text: __value, value: __value, properties };
       } else if (keys.length === 2) {
-        return { text: item[0], value: item[1] };
+        // NOTE: always consider first field as text, second field as value for backwards compatibility
+        return { text: item[0], value: item[1], properties: {} };
       } else {
-        return { text: item[0], value: item[0] };
+        // NOTE: consider first field for both text and value; remaining goes into properties
+        const properties = Object.fromEntries(keys.slice(1).map((k) => [k, item[k]]));
+        return { text: item[0], value: item[0], properties };
       }
     });
   } else if (isTableData(res) && res.columns.length > 0) {
