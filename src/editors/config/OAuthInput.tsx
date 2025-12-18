@@ -115,6 +115,18 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
               secureFieldValue="oauth2EndPointParamsValue"
             />
           </div>
+          <div className="gf-form">
+            <SecureFieldsEditor
+              dataSourceConfig={options}
+              onChange={onOptionsChange}
+              title="Token request headers"
+              hideTile={true}
+              label="Token header"
+              labelWidth={10}
+              secureFieldName="oauth2TokenHeadersName"
+              secureFieldValue="oauth2TokenHeadersValue"
+            />
+          </div>
           <TokenCustomization options={options} onOptionsChange={onOptionsChange} />
         </>
       )}
