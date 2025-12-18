@@ -7,7 +7,7 @@ import { InfinityProvider } from '@/app/InfinityProvider';
 import { SeriesProvider } from '@/app/SeriesProvider';
 import { applyUQL } from '@/app/UQLProvider';
 import { getUpdatedDataRequest, interpolateVariablesInQueries } from '@/app/queryUtils';
-import { getTemplateVariablesFromResult, LegacyVariableProvider, migrateLegacyQuery } from '@/app/variablesQuery';
+import { InfinityVariableSupport, getTemplateVariablesFromResult, LegacyVariableProvider, migrateLegacyQuery } from '@/app/variablesQuery';
 import { AnnotationsEditor } from '@/editors/annotation.editor';
 import { interpolateQuery, interpolateVariableQuery } from '@/interpolate';
 import { migrateQuery } from '@/migrate';
@@ -17,6 +17,7 @@ import type { InfinityInstanceSettings, InfinityOptions, InfinityQuery, MetricFi
 export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOptions> {
   constructor(public instanceSettings: InfinityInstanceSettings) {
     super(instanceSettings);
+    this.variables = new InfinityVariableSupport(this);
     this.annotations = {
       QueryEditor: AnnotationsEditor,
     };
@@ -40,21 +41,27 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
   interpolateVariablesInQueries(queries: InfinityQuery[], scopedVars: ScopedVars) {
     return interpolateVariablesInQueries(queries, scopedVars);
   }
-  metricFindQuery(originalQuery: VariableQuery, options?: { scopedVars: ScopedVars }): Promise<MetricFindValue[]> {
+  getVariableQueryValues(originalQuery: VariableQuery, options?: { scopedVars: ScopedVars }): Promise<MetricFindValue[]> {
     let query = migrateLegacyQuery(originalQuery);
     query = interpolateVariableQuery(query);
     return new Promise((resolve) => {
       switch (query.queryType) {
+        case 'legacy':
+          // eslint-disable-next-line no-case-declarations
+          const legacyVariableProvider = new LegacyVariableProvider(query.query);
+          legacyVariableProvider.query().then((res) => resolve(flatten(res)));
+          break;
         case 'random':
           if (query.values && query.values.length > 0) {
             const solvedValue = sample(query.values || []) || query.values[0];
-            resolve([{ text: solvedValue, value: solvedValue, label: solvedValue }]);
+            resolve([{ text: solvedValue, value: solvedValue }]);
           } else {
             const solvedValue = new Date().getTime().toString();
-            resolve([{ text: solvedValue, value: solvedValue, label: solvedValue }]);
+            resolve([{ text: solvedValue, value: solvedValue }]);
           }
           break;
         case 'infinity':
+        default:
           if (query.infinityQuery) {
             let updatedQuery = migrateQuery(query.infinityQuery);
             const request = { targets: [interpolateQuery(updatedQuery, options?.scopedVars || {})] } as DataQueryRequest<InfinityQuery>;
@@ -82,12 +89,6 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
           } else {
             resolve([]);
           }
-          break;
-        case 'legacy':
-        default:
-          // eslint-disable-next-line no-case-declarations
-          const legacyVariableProvider = new LegacyVariableProvider(query.query);
-          legacyVariableProvider.query().then((res) => resolve(flatten(res)));
           break;
       }
     });

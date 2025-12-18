@@ -1,6 +1,9 @@
-import { DataFrameView, SelectableValue } from '@grafana/data';
-import { getTemplateSrv } from '@grafana/runtime';
+import { from, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { defaultsDeep, flatten } from 'lodash';
+import { DataFrameView, SelectableValue, CustomVariableSupport, type DataQueryRequest } from '@grafana/data';
+import { getTemplateSrv } from '@grafana/runtime';
+import { Datasource } from '@/datasource';
 import { DefaultInfinityQuery } from '@/constants';
 import { isDataFrame, isTableData } from '@/app/utils';
 import { CollectionVariable } from '@/app/variablesQuery/Collection';
@@ -8,7 +11,31 @@ import { CollectionLookupVariable } from '@/app/variablesQuery/CollectionLookup'
 import { JoinVariable } from '@/app/variablesQuery/Join';
 import { RandomVariable } from '@/app/variablesQuery/Random';
 import { UnixTimeStampVariable } from '@/app/variablesQuery/UnixTimeStamp';
-import type { MetricFindValue, VariableQuery, VariableQueryInfinity } from '@/types';
+import { VariableEditor } from '@/editors/variable.editor';
+import type { VariableQuery, VariableQueryInfinity, MetricFindValue } from '@/types';
+
+export class InfinityVariableSupport extends CustomVariableSupport<Datasource, VariableQuery> {
+  editor = VariableEditor;
+  constructor(private datasource: Datasource) {
+    super();
+  }
+  query(request: DataQueryRequest<VariableQuery>): Observable<{ data: MetricFindValue[] }> {
+    const resultPromise = this.datasource.getVariableQueryValues(request.targets[0], { scopedVars: request.scopedVars });
+    return from(resultPromise).pipe(map((data) => ({ data })));
+  }
+  getDefaultQuery() {
+    return {
+      refId: 'variable',
+      queryType: 'infinity',
+      infinityQuery: {
+        type: 'csv',
+        parser: 'backend',
+        source: 'inline',
+        data: 'values\nfoo\nbar\nbaz',
+      },
+    };
+  }
+}
 
 export const getTemplateVariablesFromResult = (res: any): MetricFindValue[] => {
   if (isDataFrame(res) && res.fields.length > 0) {
@@ -31,7 +58,6 @@ export const getTemplateVariablesFromResult = (res: any): MetricFindValue[] => {
     if (res.columns.length === 2) {
       return res.rows.map((row: string[]) => {
         return {
-          label: row[0],
           value: row[1],
           text: row[0],
         };
@@ -40,7 +66,6 @@ export const getTemplateVariablesFromResult = (res: any): MetricFindValue[] => {
       return flatten(res.rows || []).map((res) => {
         return {
           value: String(res),
-          label: String(res),
           text: String(res),
         };
       });
@@ -53,6 +78,7 @@ export const getTemplateVariablesFromResult = (res: any): MetricFindValue[] => {
 export const migrateLegacyQuery = (query: VariableQuery | string): VariableQuery => {
   if (typeof query === 'string') {
     return {
+      refId: 'variable',
       query: query,
       queryType: 'legacy',
       infinityQuery: {
@@ -67,6 +93,7 @@ export const migrateLegacyQuery = (query: VariableQuery | string): VariableQuery
     } as VariableQuery;
   } else {
     return {
+      refId: 'variable',
       query: '',
       queryType: 'legacy',
     };

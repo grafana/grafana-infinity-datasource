@@ -1,9 +1,7 @@
+import { MetricFindValue as MetricFindValueCore } from '@grafana/data';
+
 //#region Grafana Types
-export interface MetricFindValue {
-  text: string;
-  value: string | number;
-  label?: string;
-}
+export type MetricFindValue = {} & MetricFindValueCore;
 
 export type dataPoint = [number | null, number];
 export type timeSeriesResult = {

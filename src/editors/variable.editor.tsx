@@ -1,4 +1,4 @@
-import { Select, TagsInput, TextArea } from '@grafana/ui';
+import { TagsInput, TextArea, RadioButtonGroup, Field } from '@grafana/ui';
 import React from 'react';
 import { migrateLegacyQuery } from '@/app/variablesQuery';
 import { variableQueryTypes } from '@/constants';
@@ -14,15 +14,9 @@ export const VariableEditor = (props: { query: VariableQuery; onChange: (query: 
   };
   return (
     <>
-      <div className="gf-form">
-        <label className="gf-form-label width-10">Query Type</label>
-        <Select
-          options={variableQueryTypes}
-          value={variableQueryTypes.find((v) => v.value === query.queryType)}
-          defaultValue={variableQueryTypes[0]}
-          onChange={(e) => onQueryTypeChange(e.value as VariableQueryType)}
-        ></Select>
-      </div>
+      <Field label="Query Type">
+        <RadioButtonGroup<VariableQueryType> options={variableQueryTypes} value={query.queryType} onChange={(v) => onQueryTypeChange(v)}></RadioButtonGroup>
+      </Field>
       {query.queryType === 'infinity' && query.infinityQuery && <VariableEditorInfinity {...props} query={query} />}
       {query.queryType === 'legacy' && <VariableEditorLegacy {...props} query={query} />}
       {query.queryType === 'random' && <VariableEditorRandom {...props} query={query} />}
@@ -37,17 +31,15 @@ const VariableEditorLegacy = (props: { query: VariableQueryLegacy; onChange: (qu
     onChange(newQuery, `${props.datasource.name}- (${newQuery.queryType}) ${newQuery.query}`);
   };
   return (
-    <div className="gf-form">
-      <span className="gf-form-label width-10">Query</span>
+    <Field label="Query">
       <TextArea
-        rows={1}
-        className="gf-form-input"
+        rows={5}
         placeholder="Collection(India,in,United Kingdom,uk)"
         value={query.query}
         onBlur={(e) => onQueryChange(e.currentTarget.value)}
         onChange={(e) => onQueryChange(e.currentTarget.value)}
       ></TextArea>
-    </div>
+    </Field>
   );
 };
 
@@ -76,9 +68,8 @@ const VariableEditorRandom = (props: { query: VariableQueryRandom; onChange: (qu
     onChange(newQuery, `${props.datasource.name}- (${newQuery.queryType}) ${(newQuery.values || []).join(',')}`);
   };
   return (
-    <div className="gf-form">
-      <label className="gf-form-label width-10">Values</label>
+    <Field label="Values">
       <TagsInput tags={query.values || []} onChange={onQueryChange} placeholder="Enter values (enter key to add)" />
-    </div>
+    </Field>
   );
 };

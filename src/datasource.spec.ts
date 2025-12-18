@@ -46,28 +46,28 @@ describe('metricFindQuery', () => {
   const ds = new Datasource(DummyDatasource);
   describe('Random Variable', () => {
     it('Random', async () => {
-      const result = await ds.metricFindQuery({ query: 'Random(A,B,C,D)', queryType: 'legacy' });
+      const result = await ds.getVariableQueryValues({ query: 'Random(A,B,C,D)', queryType: 'legacy', refId: 'variable' });
       expect(['A', 'B', 'C', 'D']).toContain(result[0].text);
     });
   });
 
   describe('Join', () => {
     it('Join', async () => {
-      expect(await ds.metricFindQuery({ query: 'Join(A,B,C,D)', queryType: 'legacy' })).toStrictEqual([{ text: 'ABCD', value: 'ABCD' }]);
+      expect(await ds.getVariableQueryValues({ query: 'Join(A,B,C,D)', queryType: 'legacy', refId: 'variable' })).toStrictEqual([{ text: 'ABCD', value: 'ABCD' }]);
     });
   });
 
   describe('Collection', () => {
     it('Collection', async () => {
-      expect(await ds.metricFindQuery({ query: 'Collection(A,B,C,D)', queryType: 'legacy' })).toMatchSnapshot();
+      expect(await ds.getVariableQueryValues({ query: 'Collection(A,B,C,D)', queryType: 'legacy', refId: 'variable' })).toMatchSnapshot();
     });
   });
 
   describe('CollectionLookup', () => {
     it('CollectionLookup', async () => {
-      expect(await ds.metricFindQuery({ query: 'CollectionLookup(pd,prod-server,np,nonprod-server,dev,dev-server,np)', queryType: 'legacy' })).toMatchSnapshot();
-      expect(await ds.metricFindQuery({ query: 'CollectionLookup(A,a,B,b,C,c,D,d,C)', queryType: 'legacy' })).toMatchSnapshot();
-      expect(await ds.metricFindQuery({ query: 'CollectionLookup(A,a,B,b,C,c,D,d,E)', queryType: 'legacy' })).toMatchSnapshot();
+      expect(await ds.getVariableQueryValues({ query: 'CollectionLookup(pd,prod-server,np,nonprod-server,dev,dev-server,np)', queryType: 'legacy', refId: 'variable' })).toMatchSnapshot();
+      expect(await ds.getVariableQueryValues({ query: 'CollectionLookup(A,a,B,b,C,c,D,d,C)', queryType: 'legacy', refId: 'variable' })).toMatchSnapshot();
+      expect(await ds.getVariableQueryValues({ query: 'CollectionLookup(A,a,B,b,C,c,D,d,E)', queryType: 'legacy', refId: 'variable' })).toMatchSnapshot();
     });
   });
 });
