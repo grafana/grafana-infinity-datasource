@@ -21,7 +21,6 @@ export type OAuth2Props = {
   authStyle?: number;
   authHeader?: string;
   tokenTemplate?: string;
-  tokenHeaders?: Record<string, string>;
 };
 export type AWSAuthProps = {
   authType?: 'keys';
