@@ -132,8 +132,19 @@ func applyOAuthClientCredentials(ctx context.Context, httpClient *http.Client, s
 				oauthConfig.EndpointParams.Set(k, v)
 			}
 		}
-		ctx := context.WithValue(context.Background(), oauth2.HTTPClient, getOAuthClientWithCustomHeaders(httpClient, settings.OAuth2Settings.TokenHeaders))
-		httpClient = oauthConfig.Client(ctx)
+
+		tokenClient := getOAuthTokenClient(httpClient, settings.OAuth2Settings.TokenHeaders)
+		tokenCtx := context.WithValue(context.Background(), oauth2.HTTPClient, tokenClient)
+
+		tokenSource := oauthConfig.TokenSource(tokenCtx)
+
+		httpClient = &http.Client{
+			Transport: &oauth2.Transport{
+				Source: tokenSource,
+				Base:   httpClient.Transport,
+			},
+			Timeout: httpClient.Timeout,
+		}
 		httpClient.Transport = getCustomOAuth2Transport(settings, httpClient)
 	}
 	return httpClient, nil
@@ -160,8 +171,19 @@ func applyOAuthJWT(ctx context.Context, httpClient *http.Client, settings models
 				jwtConfig.Scopes = append(jwtConfig.Scopes, scope)
 			}
 		}
-		ctx := context.WithValue(context.Background(), oauth2.HTTPClient, getOAuthClientWithCustomHeaders(httpClient, settings.OAuth2Settings.TokenHeaders))
-		httpClient = jwtConfig.Client(ctx)
+
+		tokenClient := getOAuthTokenClient(httpClient, settings.OAuth2Settings.TokenHeaders)
+		tokenCtx := context.WithValue(context.Background(), oauth2.HTTPClient, tokenClient)
+
+		tokenSource := jwtConfig.TokenSource(tokenCtx)
+
+		httpClient = &http.Client{
+			Transport: &oauth2.Transport{
+				Source: tokenSource,
+				Base:   httpClient.Transport,
+			},
+			Timeout: httpClient.Timeout,
+		}
 		httpClient.Transport = getCustomOAuth2Transport(settings, httpClient)
 	}
 	return httpClient, nil
@@ -223,10 +245,6 @@ func applySecureSocksProxyConfiguration(ctx context.Context, httpClient *http.Cl
 			t = cht.Transport.(*oauth2.Transport).Base
 		} else {
 			t = t.(*oauth2.Transport).Base
-		}
-		// Unwrap customHeadersTransport if present in the Base
-		if cht, ok := t.(*customHeadersTransport); ok {
-			t = cht.base
 		}
 	}
 	// secure socks proxy configuration - checks if enabled inside the function
