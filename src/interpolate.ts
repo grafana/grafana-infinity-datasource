@@ -1,5 +1,5 @@
 import { getTemplateSrv } from '@grafana/runtime';
-import { isDataQuery } from '@/app/utils';
+import { isBackendQuery, isDataQuery } from '@/app/utils';
 import { QueryBodyContentType, QueryBodyType, type InfinityQuery, type VariableQuery } from '@/types';
 import type { ScopedVars } from '@grafana/data';
 
@@ -68,7 +68,7 @@ export const interpolateQuery = (query: InfinityQuery, scopedVars: ScopedVars): 
     }
     if (
       (newQuery.type === 'json' || newQuery.type === 'graphql' || newQuery.type === 'csv' || newQuery.type === 'tsv' || newQuery.type === 'html' || newQuery.type === 'xml') &&
-      newQuery.parser === 'backend'
+      isBackendQuery(newQuery)
     ) {
       newQuery.root_selector = replaceVariable(newQuery.root_selector || '', scopedVars);
       newQuery.computed_columns = (newQuery.computed_columns || []).map((c) => {
