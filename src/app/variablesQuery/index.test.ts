@@ -1,6 +1,7 @@
 import { firstValueFrom } from 'rxjs';
 import { DataQueryRequest, MutableDataFrame } from '@grafana/data';
-import { getTemplateVariablesFromResult, InfinityVariableSupport } from '@/app/variablesQuery';
+import * as runtime from '@grafana/runtime';
+import { getTemplateVariablesFromResult, InfinityVariableSupport, LegacyVariableProvider } from '@/app/variablesQuery';
 describe('getTemplateVariablesFromResult', () => {
   it('should return same value for value and text if only one field available', () => {
     let input = new MutableDataFrame({
@@ -140,27 +141,43 @@ describe('getTemplateVariablesFromResult', () => {
 });
 
 describe('test InfinityVariableSupport', () => {
+  beforeEach(() => {
+    jest.spyOn(runtime, 'getTemplateSrv').mockReturnValue({
+      replace: (value: string) => value,
+    } as any);
+  });
   afterEach(() => jest.restoreAllMocks());
   describe('query', () => {
     describe('Random', () => {
       it('emits data wrapped from getVariableQueryValues result', async () => {
-        const mockResult = [{ text: 'A', value: 'A' }];
-        const ds: any = { getVariableQueryValues: jest.fn().mockResolvedValue(mockResult) };
+        const mockResult = [{ text: 'A', value: 'a' }];
+        jest.spyOn(LegacyVariableProvider.prototype, 'query').mockResolvedValueOnce(mockResult);
+        const ds: any = { getVariableQueryValues: jest.fn() };
         const support = new InfinityVariableSupport(ds as any);
         const query = { queryType: 'legacy', query: 'Random(A)' };
         const request = { targets: [query], scopedVars: {} } as DataQueryRequest<any>;
         const emitted = await firstValueFrom(support.query(request));
-        expect(emitted).toEqual({ data: mockResult });
+        expect(emitted.data).toHaveLength(1);
+        const frame = emitted.data[0];
+        expect(frame.refId).toBe('variables');
+        expect(frame.fields[0].name).toBe('value');
+        expect(frame.fields[1].name).toBe('text');
+        expect(frame.fields[0].values.get(0)).toBe('a');
+        expect(frame.fields[1].values.get(0)).toBe('A');
       });
 
       it('emits empty array when getVariableQueryValues resolves empty', async () => {
         const mockResult: any[] = [];
-        const ds: any = { getVariableQueryValues: jest.fn().mockResolvedValue(mockResult) };
+        jest.spyOn(LegacyVariableProvider.prototype, 'query').mockResolvedValueOnce(mockResult);
+        const ds: any = { getVariableQueryValues: jest.fn() };
         const support = new InfinityVariableSupport(ds as any);
         const query = { queryType: 'legacy', query: 'Random()' };
         const request = { targets: [query], scopedVars: {} } as DataQueryRequest<any>;
         const emitted = await firstValueFrom(support.query(request));
-        expect(emitted).toEqual({ data: mockResult });
+        expect(emitted.data).toHaveLength(1);
+        const frame = emitted.data[0];
+        expect(frame.fields[0].values.length).toBe(0);
+        expect(frame.fields[1].values.length).toBe(0);
       });
     });
   });

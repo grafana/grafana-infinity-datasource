@@ -26,31 +26,40 @@ export class InfinityVariableSupport extends CustomVariableSupport<Datasource, V
     }
     let query = migrateLegacyQuery(request.targets[0]);
     query = interpolateVariableQuery(query);
-    if (query.queryType === 'random') {
-      if (query.values && query.values.length > 0) {
-        const value = sample(query.values || []) || query.values[0];
-        const df = createDataFrame({
-          refId: query.refId || 'variables',
-          fields: [
-            { name: 'value', values: [value], type: FieldType.string },
-            { name: 'label', values: [value], type: FieldType.string },
+    const refId = query.refId || 'variables';
+    switch (query.queryType) {
+      case 'legacy':
+        const legacyVariableProvider = new LegacyVariableProvider(query.query);
+        return from(legacyVariableProvider.query()).pipe(
+          map((values = []) => {
+            const df = createDataFrame({
+              refId,
+              fields: [
+                { name: 'value', values: values.map((item) => item.value), type: FieldType.string },
+                { name: 'text', values: values.map((item) => item.text), type: FieldType.string },
+              ],
+            });
+            return { data: [df] };
+          })
+        );
+      case 'random':
+        let value = query.values && query.values.length > 0 ? sample(query.values || []) || query.values[0] : new Date().getTime().toString();
+        return of({
+          data: [
+            createDataFrame({
+              refId,
+              fields: [
+                { name: 'value', values: [value], type: FieldType.string },
+                { name: 'text', values: [value], type: FieldType.string },
+              ],
+            }),
           ],
         });
-        return of({ data: [df] });
-      } else {
-        const value = new Date().getTime().toString();
-        const df = createDataFrame({
-          refId: query.refId || 'variables',
-          fields: [
-            { name: 'value', values: [value], type: FieldType.string },
-            { name: 'label', values: [value], type: FieldType.string },
-          ],
-        });
-        return of({ data: [df] });
-      }
+      case 'infinity':
+      default:
+        const resultPromise = this.datasource.getVariableQueryValues(query, { scopedVars: request.scopedVars });
+        return from(resultPromise).pipe(map((data) => ({ data })));
     }
-    const resultPromise = this.datasource.getVariableQueryValues(query, { scopedVars: request.scopedVars });
-    return from(resultPromise).pipe(map((data) => ({ data })));
   }
   getDefaultQuery() {
     return {

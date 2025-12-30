@@ -7,7 +7,7 @@ import { InfinityProvider } from '@/app/InfinityProvider';
 import { SeriesProvider } from '@/app/SeriesProvider';
 import { applyUQL } from '@/app/UQLProvider';
 import { getUpdatedDataRequest, interpolateVariablesInQueries } from '@/app/queryUtils';
-import { InfinityVariableSupport, getTemplateVariablesFromResult, LegacyVariableProvider } from '@/app/variablesQuery';
+import { InfinityVariableSupport, getTemplateVariablesFromResult } from '@/app/variablesQuery';
 import { AnnotationsEditor } from '@/editors/annotation.editor';
 import { interpolateQuery } from '@/interpolate';
 import { migrateQuery } from '@/migrate';
@@ -45,9 +45,6 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
     return new Promise((resolve) => {
       switch (query.queryType) {
         case 'legacy':
-          // eslint-disable-next-line no-case-declarations
-          const legacyVariableProvider = new LegacyVariableProvider(query.query);
-          legacyVariableProvider.query().then((res) => resolve(flatten(res)));
           break;
         case 'random':
           break;
