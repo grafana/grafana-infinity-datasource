@@ -7,12 +7,11 @@ import { InfinityProvider } from '@/app/InfinityProvider';
 import { SeriesProvider } from '@/app/SeriesProvider';
 import { applyUQL } from '@/app/UQLProvider';
 import { getUpdatedDataRequest, interpolateVariablesInQueries } from '@/app/queryUtils';
-import { InfinityVariableSupport, getTemplateVariablesFromResult } from '@/app/variablesQuery';
+import { InfinityVariableSupport } from '@/app/variablesQuery';
 import { AnnotationsEditor } from '@/editors/annotation.editor';
 import { interpolateQuery } from '@/interpolate';
-import { migrateQuery } from '@/migrate';
 import { isBackendQuery } from '@/app/utils';
-import type { InfinityInstanceSettings, InfinityOptions, InfinityQuery, MetricFindValue, VariableQuery } from '@/types';
+import type { InfinityInstanceSettings, InfinityOptions, InfinityQuery } from '@/types';
 
 export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOptions> {
   constructor(public instanceSettings: InfinityInstanceSettings) {
@@ -40,46 +39,6 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
   }
   interpolateVariablesInQueries(queries: InfinityQuery[], scopedVars: ScopedVars) {
     return interpolateVariablesInQueries(queries, scopedVars);
-  }
-  getVariableQueryValues(query: VariableQuery, options?: { scopedVars: ScopedVars }): Promise<MetricFindValue[]> {
-    return new Promise((resolve) => {
-      switch (query.queryType) {
-        case 'legacy':
-          break;
-        case 'random':
-          break;
-        case 'infinity':
-        default:
-          if (query.infinityQuery) {
-            let updatedQuery = migrateQuery(query.infinityQuery);
-            const request = { targets: [interpolateQuery(updatedQuery, options?.scopedVars || {})] } as DataQueryRequest<InfinityQuery>;
-            super
-              .query(request)
-              .toPromise()
-              .then((res) => {
-                this.getResults(request, res)
-                  .then((r) => {
-                    if (r?.data) {
-                      resolve(getTemplateVariablesFromResult(r.data[0]) as MetricFindValue[]);
-                    } else {
-                      resolve([]);
-                    }
-                  })
-                  .catch((ex) => {
-                    console.error(ex);
-                    resolve([]);
-                  });
-              })
-              .catch((ex) => {
-                console.error(ex);
-                resolve([]);
-              });
-          } else {
-            resolve([]);
-          }
-          break;
-      }
-    });
   }
   getQueryDisplayText(query: InfinityQuery) {
     return (

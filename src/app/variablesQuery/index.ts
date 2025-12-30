@@ -1,19 +1,19 @@
 import { from, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { defaultsDeep, flatten, sample } from 'lodash';
-import { DataFrameView, SelectableValue, CustomVariableSupport, type DataQueryRequest, DataQueryResponse, createDataFrame, FieldType } from '@grafana/data';
+import { defaultsDeep, sample } from 'lodash';
+import { SelectableValue, CustomVariableSupport, type DataQueryRequest, DataQueryResponse, createDataFrame, FieldType, DataFrame, Field } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
 import { Datasource } from '@/datasource';
 import { DefaultInfinityQuery } from '@/constants';
-import { interpolateVariableQuery } from '@/interpolate';
-import { isDataFrame, isTableData } from '@/app/utils';
+import { migrateQuery } from '@/migrate';
+import { interpolateQuery, interpolateVariableQuery } from '@/interpolate';
 import { CollectionVariable } from '@/app/variablesQuery/Collection';
 import { CollectionLookupVariable } from '@/app/variablesQuery/CollectionLookup';
 import { JoinVariable } from '@/app/variablesQuery/Join';
 import { RandomVariable } from '@/app/variablesQuery/Random';
 import { UnixTimeStampVariable } from '@/app/variablesQuery/UnixTimeStamp';
 import { VariableEditor } from '@/editors/variable.editor';
-import type { VariableQuery, VariableQueryInfinity, MetricFindValue } from '@/types';
+import type { VariableQuery, VariableQueryInfinity } from '@/types';
 
 export class InfinityVariableSupport extends CustomVariableSupport<Datasource, VariableQuery> {
   editor = VariableEditor;
@@ -22,11 +22,11 @@ export class InfinityVariableSupport extends CustomVariableSupport<Datasource, V
   }
   query(request: DataQueryRequest<VariableQuery>): Observable<DataQueryResponse> {
     if (request.targets.length < 1) {
-      return of({ data: [], errors: [{ message: 'no variable query found' }] });
+      throw new Error('no variable query found');
     }
     let query = migrateLegacyQuery(request.targets[0]);
     query = interpolateVariableQuery(query);
-    const refId = query.refId || 'variables';
+    const refId = query.refId || 'variable';
     switch (query.queryType) {
       case 'legacy':
         const legacyVariableProvider = new LegacyVariableProvider(query.query);
@@ -57,8 +57,20 @@ export class InfinityVariableSupport extends CustomVariableSupport<Datasource, V
         });
       case 'infinity':
       default:
-        const resultPromise = this.datasource.getVariableQueryValues(query, { scopedVars: request.scopedVars });
-        return from(resultPromise).pipe(map((data) => ({ data })));
+        if (!query.infinityQuery) {
+          throw new Error('no infinity variable query found');
+        }
+        const migratedQuery = migrateQuery(query.infinityQuery);
+        const interpolatedTarget = interpolateQuery(migratedQuery, request.scopedVars || {});
+        const query_request = { ...request, targets: [{ ...interpolatedTarget, refId }] };
+        return this.datasource.query(query_request).pipe(
+          map((d: DataQueryResponse) => {
+            return {
+              ...d,
+              data: d.data.map((frame: DataFrame) => ({ ...frame, fields: convertOriginalFieldsToVariableFields(frame.fields) })),
+            };
+          })
+        );
     }
   }
   getDefaultQuery() {
@@ -75,42 +87,37 @@ export class InfinityVariableSupport extends CustomVariableSupport<Datasource, V
   }
 }
 
-export const getTemplateVariablesFromResult = (res: any): MetricFindValue[] => {
-  if (isDataFrame(res) && res.fields.length > 0) {
-    const view = new DataFrameView(res);
-    return (view || []).map((item) => {
-      const keys = Object.keys(item || {}) || [];
-      if (keys.length >= 2 && keys.includes('__text') && keys.includes('__value')) {
-        return { text: item['__text'], value: item['__value'] };
-      } else if (keys.includes('__text')) {
-        return { text: item['__text'], value: item['__text'] };
-      } else if (keys.includes('__value')) {
-        return { text: item['__value'], value: item['__value'] };
-      } else if (keys.length === 2) {
-        return { text: item[0], value: item[1] };
-      } else {
-        return { text: item[0], value: item[0] };
-      }
-    });
-  } else if (isTableData(res) && res.columns.length > 0) {
-    if (res.columns.length === 2) {
-      return res.rows.map((row: string[]) => {
-        return {
-          value: row[1],
-          text: row[0],
-        };
-      });
-    } else {
-      return flatten(res.rows || []).map((res) => {
-        return {
-          value: String(res),
-          text: String(res),
-        };
-      });
-    }
+export const convertOriginalFieldsToVariableFields = (original_fields: Array<Field<any>>): Array<Field<any>> => {
+  let fields: Field[] = [];
+  let tf = original_fields.find((f) => f.name === '__text');
+  let vf = original_fields.find((f) => f.name === '__value');
+  if (original_fields.length >= 2 && tf && vf) {
+    fields = [
+      { ...tf, name: 'text' },
+      { ...vf, name: 'value' },
+    ];
+  } else if (tf) {
+    fields = [
+      { ...tf, name: 'text' },
+      { ...tf, name: 'value' },
+    ];
+  } else if (vf) {
+    fields = [
+      { ...vf, name: 'text' },
+      { ...vf, name: 'value' },
+    ];
+  } else if (original_fields.length === 2) {
+    fields = [
+      { ...original_fields[0], name: 'text' },
+      { ...original_fields[1], name: 'value' },
+    ];
   } else {
-    return [];
+    fields = [
+      { ...original_fields[0], name: 'text' },
+      { ...original_fields[0], name: 'value' },
+    ];
   }
+  return fields;
 };
 
 export const migrateLegacyQuery = (query: VariableQuery | string): VariableQuery => {
