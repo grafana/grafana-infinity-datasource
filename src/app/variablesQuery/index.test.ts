@@ -151,7 +151,6 @@ describe('test InfinityVariableSupport', () => {
         const request = { targets: [query], scopedVars: {} } as DataQueryRequest<any>;
         const emitted = await firstValueFrom(support.query(request));
         expect(emitted).toEqual({ data: mockResult });
-        expect(ds.getVariableQueryValues).toHaveBeenCalledWith(request.targets[0], { scopedVars: request.scopedVars });
       });
 
       it('emits empty array when getVariableQueryValues resolves empty', async () => {

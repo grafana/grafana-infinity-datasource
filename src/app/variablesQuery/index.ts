@@ -1,10 +1,11 @@
-import { from, Observable } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { defaultsDeep, flatten } from 'lodash';
-import { DataFrameView, SelectableValue, CustomVariableSupport, type DataQueryRequest } from '@grafana/data';
+import { defaultsDeep, flatten, sample } from 'lodash';
+import { DataFrameView, SelectableValue, CustomVariableSupport, type DataQueryRequest, DataQueryResponse, createDataFrame, FieldType } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
 import { Datasource } from '@/datasource';
 import { DefaultInfinityQuery } from '@/constants';
+import { interpolateVariableQuery } from '@/interpolate';
 import { isDataFrame, isTableData } from '@/app/utils';
 import { CollectionVariable } from '@/app/variablesQuery/Collection';
 import { CollectionLookupVariable } from '@/app/variablesQuery/CollectionLookup';
@@ -19,8 +20,36 @@ export class InfinityVariableSupport extends CustomVariableSupport<Datasource, V
   constructor(private datasource: Datasource) {
     super();
   }
-  query(request: DataQueryRequest<VariableQuery>): Observable<{ data: MetricFindValue[] }> {
-    const resultPromise = this.datasource.getVariableQueryValues(request.targets[0], { scopedVars: request.scopedVars });
+  query(request: DataQueryRequest<VariableQuery>): Observable<DataQueryResponse> {
+    if (request.targets.length < 1) {
+      return of({ data: [], errors: [{ message: 'no variable query found' }] });
+    }
+    let query = migrateLegacyQuery(request.targets[0]);
+    query = interpolateVariableQuery(query);
+    if (query.queryType === 'random') {
+      if (query.values && query.values.length > 0) {
+        const value = sample(query.values || []) || query.values[0];
+        const df = createDataFrame({
+          refId: query.refId || 'variables',
+          fields: [
+            { name: 'value', values: [value], type: FieldType.string },
+            { name: 'label', values: [value], type: FieldType.string },
+          ],
+        });
+        return of({ data: [df] });
+      } else {
+        const value = new Date().getTime().toString();
+        const df = createDataFrame({
+          refId: query.refId || 'variables',
+          fields: [
+            { name: 'value', values: [value], type: FieldType.string },
+            { name: 'label', values: [value], type: FieldType.string },
+          ],
+        });
+        return of({ data: [df] });
+      }
+    }
+    const resultPromise = this.datasource.getVariableQueryValues(query, { scopedVars: request.scopedVars });
     return from(resultPromise).pipe(map((data) => ({ data })));
   }
   getDefaultQuery() {

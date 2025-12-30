@@ -1,15 +1,15 @@
 import { LoadingState, toDataFrame, DataFrame, DataQueryRequest, DataQueryResponse, ScopedVars, TimeRange } from '@grafana/data';
 import { DataSourceWithBackend } from '@grafana/runtime';
-import { flatten, sample } from 'lodash';
+import { flatten } from 'lodash';
 import { Observable } from 'rxjs';
 import { applyGroq } from '@/app/GROQProvider';
 import { InfinityProvider } from '@/app/InfinityProvider';
 import { SeriesProvider } from '@/app/SeriesProvider';
 import { applyUQL } from '@/app/UQLProvider';
 import { getUpdatedDataRequest, interpolateVariablesInQueries } from '@/app/queryUtils';
-import { InfinityVariableSupport, getTemplateVariablesFromResult, LegacyVariableProvider, migrateLegacyQuery } from '@/app/variablesQuery';
+import { InfinityVariableSupport, getTemplateVariablesFromResult, LegacyVariableProvider } from '@/app/variablesQuery';
 import { AnnotationsEditor } from '@/editors/annotation.editor';
-import { interpolateQuery, interpolateVariableQuery } from '@/interpolate';
+import { interpolateQuery } from '@/interpolate';
 import { migrateQuery } from '@/migrate';
 import { isBackendQuery } from '@/app/utils';
 import type { InfinityInstanceSettings, InfinityOptions, InfinityQuery, MetricFindValue, VariableQuery } from '@/types';
@@ -41,9 +41,7 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
   interpolateVariablesInQueries(queries: InfinityQuery[], scopedVars: ScopedVars) {
     return interpolateVariablesInQueries(queries, scopedVars);
   }
-  getVariableQueryValues(originalQuery: VariableQuery, options?: { scopedVars: ScopedVars }): Promise<MetricFindValue[]> {
-    let query = migrateLegacyQuery(originalQuery);
-    query = interpolateVariableQuery(query);
+  getVariableQueryValues(query: VariableQuery, options?: { scopedVars: ScopedVars }): Promise<MetricFindValue[]> {
     return new Promise((resolve) => {
       switch (query.queryType) {
         case 'legacy':
@@ -52,13 +50,6 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
           legacyVariableProvider.query().then((res) => resolve(flatten(res)));
           break;
         case 'random':
-          if (query.values && query.values.length > 0) {
-            const solvedValue = sample(query.values || []) || query.values[0];
-            resolve([{ text: solvedValue, value: solvedValue }]);
-          } else {
-            const solvedValue = new Date().getTime().toString();
-            resolve([{ text: solvedValue, value: solvedValue }]);
-          }
           break;
         case 'infinity':
         default:
