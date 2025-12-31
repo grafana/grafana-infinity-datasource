@@ -13,7 +13,7 @@ import { JoinVariable } from '@/app/variablesQuery/Join';
 import { RandomVariable } from '@/app/variablesQuery/Random';
 import { UnixTimeStampVariable } from '@/app/variablesQuery/UnixTimeStamp';
 import { VariableEditor } from '@/editors/variable.editor';
-import type { VariableQuery, VariableQueryInfinity } from '@/types';
+import type { VariableQuery, VariableQueryInfinity, VariableMeta } from '@/types';
 
 export class InfinityVariableSupport extends CustomVariableSupport<Datasource, VariableQuery> {
   editor = VariableEditor;
@@ -67,7 +67,7 @@ export class InfinityVariableSupport extends CustomVariableSupport<Datasource, V
           map((d: DataQueryResponse) => {
             return {
               ...d,
-              data: d.data.map((frame: DataFrame) => ({ ...frame, fields: convertOriginalFieldsToVariableFields(frame.fields) })),
+              data: d.data.map((frame: DataFrame) => ({ ...frame, fields: convertOriginalFieldsToVariableFields(frame.fields, query.meta) })),
             };
           })
         );
@@ -87,10 +87,14 @@ export class InfinityVariableSupport extends CustomVariableSupport<Datasource, V
   }
 }
 
-export const convertOriginalFieldsToVariableFields = (original_fields: Array<Field<any>>): Array<Field<any>> => {
+export const convertOriginalFieldsToVariableFields = (original_fields: Array<Field<any>>, meta?: VariableMeta): Array<Field<any>> => {
   let fields: Field[] = [];
   let tf = original_fields.find((f) => f.name === '__text');
   let vf = original_fields.find((f) => f.name === '__value');
+  if (meta) {
+    tf = meta.textField ? original_fields.find((f) => f.name === meta.textField) : undefined;
+    vf = meta.valueField ? original_fields.find((f) => f.name === meta.valueField) : undefined;
+  }
   if (original_fields.length >= 2 && tf && vf) {
     fields = [
       { ...tf, name: 'text' },
