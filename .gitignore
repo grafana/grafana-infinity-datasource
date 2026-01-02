@@ -18,14 +18,8 @@ node_modules/
 .yarn/install-state.gz
 npm-debug.log*
 pids
-provisioning/
+provisioning/datasources/prod.yml
 temp_test.go
-website/.cache/
-website/.next/
-website/.contentlayer/
-website/node_modules/
-website/out/
-website/next-env.d.ts
 work/
 yarn-debug.log*
 yarn-error.log*

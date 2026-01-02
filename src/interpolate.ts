@@ -1,10 +1,18 @@
 import { getTemplateSrv } from '@grafana/runtime';
-import { isDataQuery } from '@/app/utils';
-import { QueryBodyContentType, QueryBodyType, type InfinityQuery, type VariableQuery } from '@/types';
+import { isBackendQuery, isDataQuery } from '@/app/utils';
 import type { ScopedVars } from '@grafana/data';
+import type { InfinityKV, QueryBodyContentType, QueryBodyType, InfinityQuery, VariableQuery } from '@/types';
+
+const templateSrv = getTemplateSrv();
 
 const replaceVariable = (input = '', scopedVars: ScopedVars = {}, format = 'glob'): string => {
-  return getTemplateSrv().replace(input, scopedVars, format);
+  return templateSrv.replace(input, scopedVars, format);
+};
+
+const replaceVariableInKV = (input: InfinityKV[] | undefined = [], scopedVars: ScopedVars = {}, format = 'glob') => {
+  return input.map((f) => {
+    return { ...f, value: replaceVariable(f?.value || '', scopedVars, format) };
+  });
 };
 
 export const interpolateQuery = (query: InfinityQuery, scopedVars: ScopedVars): InfinityQuery => {
@@ -19,24 +27,9 @@ export const interpolateQuery = (query: InfinityQuery, scopedVars: ScopedVars): 
         body_content_type: replaceVariable(newQuery.url_options?.body_content_type || '', scopedVars) as QueryBodyContentType,
         body_graphql_query: replaceVariable(newQuery.url_options?.body_graphql_query || '', scopedVars),
         body_graphql_variables: replaceVariable(newQuery.url_options?.body_graphql_variables || '', scopedVars),
-        body_form: newQuery.url_options?.body_form?.map((f) => {
-          return {
-            ...f,
-            value: getTemplateSrv().replace(f?.value || '', scopedVars, 'glob'),
-          };
-        }),
-        params: newQuery.url_options?.params?.map((param) => {
-          return {
-            ...param,
-            value: getTemplateSrv().replace(param?.value || '', scopedVars, 'glob'),
-          };
-        }),
-        headers: newQuery.url_options?.headers?.map((header) => {
-          return {
-            ...header,
-            value: getTemplateSrv().replace(header?.value || '', scopedVars, 'glob'),
-          };
-        }),
+        body_form: replaceVariableInKV(newQuery.url_options?.body_form, scopedVars),
+        params: replaceVariableInKV(newQuery.url_options?.params, scopedVars),
+        headers: replaceVariableInKV(newQuery.url_options?.headers, scopedVars),
       };
       if (newQuery.pagination_mode === 'list') {
         newQuery.pagination_param_list_value = replaceVariable(newQuery.pagination_param_list_value || '', scopedVars);
@@ -52,7 +45,7 @@ export const interpolateQuery = (query: InfinityQuery, scopedVars: ScopedVars): 
     if (isDataQuery(newQuery)) {
       newQuery.filters = (newQuery.filters || []).map((filter) => {
         const value = (filter.value || []).map((val) => {
-          return getTemplateSrv().replace(val || '', scopedVars, 'glob');
+          return replaceVariable(val || '', scopedVars);
         });
         return { ...filter, value };
       });
@@ -66,10 +59,7 @@ export const interpolateQuery = (query: InfinityQuery, scopedVars: ScopedVars): 
     if (newQuery.type === 'groq' || (newQuery.type === 'json' && newQuery.parser === 'groq')) {
       newQuery.groq = replaceVariable(newQuery.groq || '', scopedVars);
     }
-    if (
-      (newQuery.type === 'json' || newQuery.type === 'graphql' || newQuery.type === 'csv' || newQuery.type === 'tsv' || newQuery.type === 'html' || newQuery.type === 'xml') &&
-      newQuery.parser === 'backend'
-    ) {
+    if (isBackendQuery(newQuery)) {
       newQuery.root_selector = replaceVariable(newQuery.root_selector || '', scopedVars);
       newQuery.computed_columns = (newQuery.computed_columns || []).map((c) => {
         return {
