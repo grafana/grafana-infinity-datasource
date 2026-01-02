@@ -114,6 +114,7 @@
     "plugincheck",
     "pluginhost",
     "popperjs",
+    "PREINSTALL",
     "prismjs",
     "promhttp",
     "proxying",

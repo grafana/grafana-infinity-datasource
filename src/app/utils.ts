@@ -9,10 +9,8 @@ import type {
   InfinityQueryWithURLSource,
   InfinityXMLQuery,
 } from '@/types';
-import { DataFrame, DataFrameType, Field, FieldType, Labels, MutableDataFrame, TableData } from '@grafana/data';
+import { DataFrame, DataFrameType, Field, FieldType, Labels, MutableDataFrame } from '@grafana/data';
 
-export const isTableData = (res: any): res is TableData => res && res.columns;
-export const isDataFrame = (res: any): res is DataFrame => res && res.fields;
 export const isCSVQuery = (query: InfinityQuery): query is InfinityCSVQuery => query.type === 'csv';
 export const isJSONQuery = (query: InfinityQuery): query is InfinityJSONQuery => query.type === 'json';
 export const isXMLQuery = (query: InfinityQuery): query is InfinityXMLQuery => query.type === 'xml';
