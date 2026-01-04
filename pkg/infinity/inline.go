@@ -51,7 +51,7 @@ func GetFrameForInlineSources(ctx context.Context, query models.Query) (*data.Fr
 		if query.Parser == models.InfinityParserJQBackend {
 			framerOptions.FramerType = jsonframer.FramerTypeJQ
 		}
-		newFrame, err := jsonframer.ToFrame(query.Data, framerOptions)
+		newFrame, err := jsonframer.ToFrame(stripRFC9557Timezone(query.Data), framerOptions)
 		if err != nil {
 			if errors.Is(err, jsonframer.ErrInvalidRootSelector) || errors.Is(err, jsonframer.ErrInvalidJSONContent) || errors.Is(err, jsonframer.ErrEvaluatingJSONata) {
 				return frame, backend.DownstreamError(fmt.Errorf("error converting json data to frame: %w", err))

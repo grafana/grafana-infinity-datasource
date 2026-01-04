@@ -54,6 +54,13 @@ export const columnarToTable = (response: any, columns: InfinityColumn[] = []) =
   return res;
 };
 
+export const stripRFC9557Timezone = (input: string): string => {
+  if (typeof input !== 'string') {
+    return input;
+  }
+  return input.replace(/(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2}))\[[^\]]+\]/g, '$1');
+};
+
 export const getValue = (input: string | boolean | number | Date | null, type: InfinityColumnFormat, asTimestamp?: boolean) => {
   switch (type) {
     case 'string':
@@ -85,7 +92,12 @@ export const getValue = (input: string | boolean | number | Date | null, type: I
         return null;
       }
     case 'timestamp':
-      return asTimestamp ? new Date(input + '').getTime() : new Date(input + '');
+      let dateString = input + '';
+      // RFC9557 support: strip timezone information in brackets if present
+      if (dateString.includes('[') && dateString.trim().endsWith(']')) {
+        dateString = dateString.split('[')[0];
+      }
+      return asTimestamp ? new Date(dateString + '').getTime() : new Date(dateString + '');
     case 'timestamp_epoch':
       if (typeof input === 'string') {
         return asTimestamp ? new Date(parseInt(input, 10)).getTime() : new Date(parseInt(input, 10));

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
@@ -14,6 +15,12 @@ import (
 	"github.com/grafana/infinity-libs/lib/go/jsonframer"
 	"github.com/grafana/infinity-libs/lib/go/transformations"
 )
+
+var rfc9557Regex = regexp.MustCompile(`(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2}))\[[^\]]+\]`)
+
+func stripRFC9557Timezone(input string) string {
+	return rfc9557Regex.ReplaceAllString(input, "$1")
+}
 
 func isBackendQuery(query models.Query) bool {
 	return query.Parser == models.InfinityParserBackend || query.Parser == models.InfinityParserJQBackend

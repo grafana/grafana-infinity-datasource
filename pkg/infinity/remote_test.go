@@ -7,6 +7,31 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func TestStripRFC9557Timezone(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected string
+	}{
+		{
+			input:    "2025-11-10T16:46:51+01:00[Europe/Paris]",
+			expected: "2025-11-10T16:46:51+01:00",
+		},
+		{
+			input:    "2025-11-10T16:46:51.123Z[UTC]",
+			expected: "2025-11-10T16:46:51.123Z",
+		},
+		{
+			input:    "Normal text [with brackets]",
+			expected: "Normal text [with brackets]",
+		},
+	}
+
+	for _, tt := range tests {
+		result := stripRFC9557Timezone(tt.input)
+		require.Equal(t, tt.expected, result)
+	}
+}
+
 func TestApplyPaginationItemToQuery(t *testing.T) {
 	t.Run(string(models.PaginationParamTypeQuery), func(t *testing.T) {
 		tests := []struct {

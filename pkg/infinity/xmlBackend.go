@@ -33,7 +33,7 @@ func GetXMLBackendResponse(ctx context.Context, inputString string, query models
 	if query.Parser == models.InfinityParserJQBackend {
 		framerOptions.FramerType = string(jsonframer.FramerTypeJQ)
 	}
-	newFrame, err := xmlframer.ToFrame(inputString, framerOptions)
+	newFrame, err := xmlframer.ToFrame(stripRFC9557Timezone(inputString), framerOptions)
 	if newFrame != nil {
 		frame.Fields = append(frame.Fields, newFrame.Fields...)
 	}

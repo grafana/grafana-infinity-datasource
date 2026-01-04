@@ -53,4 +53,8 @@ describe('utils', () => {
     expect(getValue('1609459200', 'timestamp_epoch_s')).toStrictEqual(new Date('2021'));
     expect(getValue(1609459200, 'timestamp_epoch_s')).toStrictEqual(new Date('2021'));
   });
+  it('RFC9557 support', () => {
+    expect(getValue('2025-11-10T16:46:51+01:00[Europe/Paris]', 'timestamp')).toStrictEqual(new Date('2025-11-10T16:46:51+01:00'));
+    expect(getValue('2025-11-10T16:46:51.123Z[UTC]', 'timestamp')).toStrictEqual(new Date('2025-11-10T16:46:51.123Z'));
+  });
 });

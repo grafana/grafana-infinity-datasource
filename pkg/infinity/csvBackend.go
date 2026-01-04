@@ -42,7 +42,7 @@ func GetCSVBackendResponse(ctx context.Context, responseString string, query mod
 	if query.Type == models.QueryTypeTSV {
 		csvOptions.Delimiter = "\t"
 	}
-	newFrame, err := csvframer.ToFrame(responseString, csvOptions)
+	newFrame, err := csvframer.ToFrame(stripRFC9557Timezone(responseString), csvOptions)
 	if newFrame != nil {
 		frame.Fields = append(frame.Fields, newFrame.Fields...)
 	}

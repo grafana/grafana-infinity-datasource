@@ -12,6 +12,7 @@ import { AnnotationsEditor } from '@/editors/annotation.editor';
 import { interpolateQuery, interpolateVariableQuery } from '@/interpolate';
 import { migrateQuery } from '@/migrate';
 import { isBackendQuery } from '@/app/utils';
+import { stripRFC9557Timezone } from '@/app/parsers/utils';
 import type { InfinityInstanceSettings, InfinityOptions, InfinityQuery, MetricFindValue, VariableQuery } from '@/types';
 
 export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOptions> {
@@ -202,13 +203,13 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
             resolve(data);
           }
           if ((t.type === 'json' || t.type === 'csv' || t.type === 'tsv' || t.type === 'graphql' || t.type === 'xml') && t.parser === 'uql') {
-            applyUQL(t.uql || '', data, t.format, t.refId)
+            applyUQL(t.uql || '', stripRFC9557Timezone(data), t.format, t.refId)
               .then(resolve)
               .catch(reject);
             break;
           }
           if ((t.type === 'json' || t.type === 'graphql') && t.parser === 'groq') {
-            applyGroq(t.groq || '', data, t.format, t.refId)
+            applyGroq(t.groq || '', stripRFC9557Timezone(data), t.format, t.refId)
               .then(resolve)
               .catch(reject);
             break;
@@ -216,10 +217,10 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
           new InfinityProvider(t, this).formatResults(data).then(resolve).catch(reject);
           break;
         case 'uql':
-          applyUQL(t.uql, data, t.format, t.refId).then(resolve).catch(reject);
+          applyUQL(t.uql, stripRFC9557Timezone(data), t.format, t.refId).then(resolve).catch(reject);
           break;
         case 'groq':
-          applyGroq(t.groq, data, t.format, t.refId).then(resolve).catch(reject);
+          applyGroq(t.groq, stripRFC9557Timezone(data), t.format, t.refId).then(resolve).catch(reject);
           break;
         case 'series':
           new SeriesProvider(interpolateQuery(t, scopedVars)).query(new Date(range?.from?.toDate()).getTime(), new Date(range?.to?.toDate()).getTime()).then(resolve).catch(reject);

@@ -42,7 +42,7 @@ func GetJSONBackendResponse(ctx context.Context, urlResponseObject any, query mo
 	if query.Parser == models.InfinityParserJQBackend {
 		framerOptions.FramerType = jsonframer.FramerTypeJQ
 	}
-	newFrame, err := jsonframer.ToFrame(string(responseString), framerOptions)
+	newFrame, err := jsonframer.ToFrame(stripRFC9557Timezone(string(responseString)), framerOptions)
 
 	if err != nil {
 		if errors.Is(err, jsonframer.ErrInvalidRootSelector) || errors.Is(err, jsonframer.ErrInvalidJSONContent) || errors.Is(err, jsonframer.ErrEvaluatingJSONata) {
