@@ -88,40 +88,21 @@ export class InfinityVariableSupport extends CustomVariableSupport<Datasource, V
 }
 
 export const convertOriginalFieldsToVariableFields = (original_fields: Array<Field<any>>, meta?: VariableMeta): Array<Field<any>> => {
-  let fields: Field[] = [];
+  if (original_fields.length < 1) {
+    throw new Error('at least one field expected for variable');
+  }
   let tf = original_fields.find((f) => f.name === '__text');
   let vf = original_fields.find((f) => f.name === '__value');
   if (meta) {
     tf = meta.textField ? original_fields.find((f) => f.name === meta.textField) : undefined;
     vf = meta.valueField ? original_fields.find((f) => f.name === meta.valueField) : undefined;
   }
-  if (original_fields.length >= 2 && tf && vf) {
-    fields = [
-      { ...tf, name: 'text' },
-      { ...vf, name: 'value' },
-    ];
-  } else if (tf) {
-    fields = [
-      { ...tf, name: 'text' },
-      { ...tf, name: 'value' },
-    ];
-  } else if (vf) {
-    fields = [
-      { ...vf, name: 'text' },
-      { ...vf, name: 'value' },
-    ];
-  } else if (original_fields.length === 2) {
-    fields = [
-      { ...original_fields[0], name: 'text' },
-      { ...original_fields[1], name: 'value' },
-    ];
-  } else {
-    fields = [
-      { ...original_fields[0], name: 'text' },
-      { ...original_fields[0], name: 'value' },
-    ];
-  }
-  return fields;
+  const textField = tf || vf || original_fields[0];
+  const valueField = tf && vf ? vf : tf || vf || (original_fields.length === 2 ? original_fields[1] : original_fields[0]);
+  return [
+    { ...textField, name: 'text' },
+    { ...valueField, name: 'value' },
+  ];
 };
 
 export const migrateLegacyQuery = (query: VariableQuery | string): VariableQuery => {
