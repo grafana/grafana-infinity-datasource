@@ -27,7 +27,7 @@ The Infinity data source is a universal plugin for pulling data from various sys
 
 The following resources will help you get started with the Infinity data source:
 
-- [Configure the Infinity data source]({{< relref "./setup/configuration" >}})
+- [Configure the Infinity data source]({{< relref "./configure" >}})
 - [Infinity query editor]({{< relref "./query" >}})
 - [Template variables]({{< relref "./variables" >}})
 - [Annotations]({{< relref "./annotations" >}})
