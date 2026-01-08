@@ -1396,7 +1396,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grafana/e2e-selectors@npm:12.3.1, @grafana/e2e-selectors@npm:^12.1.0-254610":
+"@grafana/e2e-selectors@npm:12.3.1, @grafana/e2e-selectors@npm:^12.2.0-255920":
   version: 12.3.1
   resolution: "@grafana/e2e-selectors@npm:12.3.1"
   dependencies:
@@ -1463,17 +1463,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grafana/plugin-e2e@npm:2.1.8":
-  version: 2.1.8
-  resolution: "@grafana/plugin-e2e@npm:2.1.8"
+"@grafana/plugin-e2e@npm:2.2.3":
+  version: 2.2.3
+  resolution: "@grafana/plugin-e2e@npm:2.2.3"
   dependencies:
-    "@grafana/e2e-selectors": "npm:^12.1.0-254610"
+    "@grafana/e2e-selectors": "npm:^12.2.0-255920"
     semver: "npm:^7.5.4"
-    uuid: "npm:^11.0.2"
+    uuid: "npm:^13.0.0"
     yaml: "npm:^2.3.4"
   peerDependencies:
     "@playwright/test": ^1.52.0
-  checksum: 10c0/3b473227400e764314fe548cc45c35e748d03d6570d1f36d297dccfb3fedbf323a3c2de2f8b8f57b55f9016f75d617e117b743cccbcd5d2c5ee80b005c880e92
+  checksum: 10c0/da1bcf35e3a94c815884a58805293e208a2bfd2c4b21b37efff60393e54a96a153ac4b48ff32af120811996ec1a669f34cf2925b6c6b58ea26c426814cbca305
   languageName: node
   linkType: hard
 
@@ -7509,7 +7509,7 @@ __metadata:
     "@grafana/assistant": "npm:^0.1.7"
     "@grafana/data": "npm:^12.1.0"
     "@grafana/eslint-config": "npm:8.0.0"
-    "@grafana/plugin-e2e": "npm:2.1.8"
+    "@grafana/plugin-e2e": "npm:2.2.3"
     "@grafana/runtime": "npm:^12.1.0"
     "@grafana/schema": "npm:^12.1.0"
     "@grafana/tsconfig": "npm:2.0.1"
@@ -13327,12 +13327,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:11.1.0, uuid@npm:^11.0.2":
+"uuid@npm:11.1.0":
   version: 11.1.0
   resolution: "uuid@npm:11.1.0"
   bin:
     uuid: dist/esm/bin/uuid
   checksum: 10c0/34aa51b9874ae398c2b799c88a127701408cd581ee89ec3baa53509dd8728cbb25826f2a038f9465f8b7be446f0fbf11558862965b18d21c993684297628d4d3
+  languageName: node
+  linkType: hard
+
+"uuid@npm:^13.0.0":
+  version: 13.0.0
+  resolution: "uuid@npm:13.0.0"
+  bin:
+    uuid: dist-node/bin/uuid
+  checksum: 10c0/950e4c18d57fef6c69675344f5700a08af21e26b9eff2bf2180427564297368c538ea11ac9fb2e6528b17fc3966a9fd2c5049361b0b63c7d654f3c550c9b3d67
   languageName: node
   linkType: hard
 
