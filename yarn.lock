@@ -1325,7 +1325,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grafana/data@npm:12.3.1, @grafana/data@npm:^12.1.0":
+"@grafana/data@npm:12.3.1, @grafana/data@npm:^12.2.0":
   version: 12.3.1
   resolution: "@grafana/data@npm:12.3.1"
   dependencies:
@@ -1374,9 +1374,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grafana/eslint-config@npm:8.0.0":
-  version: 8.0.0
-  resolution: "@grafana/eslint-config@npm:8.0.0"
+"@grafana/eslint-config@npm:^8.2.0":
+  version: 8.2.0
+  resolution: "@grafana/eslint-config@npm:8.2.0"
   peerDependencies:
     "@stylistic/eslint-plugin-ts": ">=2.9.0"
     "@typescript-eslint/eslint-plugin": ">=6.18.0"
@@ -1387,7 +1387,7 @@ __metadata:
     eslint-plugin-react: ">=7.33.0"
     eslint-plugin-react-hooks: ">=4.6.0"
     typescript: ">=5.2.0"
-  checksum: 10c0/2933ed41f38ebc825625e4f6fa49f8627e23da813acd635fdbfc2721ea7699cac26cdfd35f467745e958c1e7bb87c2f9a4931d8bcc8f6fcc028bd9e5ec2dfbec
+  checksum: 10c0/d8a234a6b83460e1eee6f8aa5312521c20d7871004600d0e5ff507f8094bb7da211ea1c19a29d15579a002b0ab624bacde38f5b6ab78a4b77c72ba09b211a7be
   languageName: node
   linkType: hard
 
@@ -1412,7 +1412,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grafana/i18n@npm:12.3.1":
+"@grafana/i18n@npm:12.3.1, @grafana/i18n@npm:^12.2.0":
   version: 12.3.1
   resolution: "@grafana/i18n@npm:12.3.1"
   dependencies:
@@ -1444,7 +1444,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grafana/runtime@npm:^12.1.0":
+"@grafana/runtime@npm:^12.2.0":
   version: 12.3.1
   resolution: "@grafana/runtime@npm:12.3.1"
   dependencies:
@@ -1470,7 +1470,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grafana/schema@npm:12.3.1, @grafana/schema@npm:^12.1.0":
+"@grafana/schema@npm:12.3.1, @grafana/schema@npm:^12.2.0":
   version: 12.3.1
   resolution: "@grafana/schema@npm:12.3.1"
   dependencies:
@@ -1486,7 +1486,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grafana/ui@npm:12.3.1, @grafana/ui@npm:^12.1.0":
+"@grafana/ui@npm:12.3.1, @grafana/ui@npm:^12.2.0":
   version: 12.3.1
   resolution: "@grafana/ui@npm:12.3.1"
   dependencies:
@@ -5056,7 +5056,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"copy-webpack-plugin@npm:11.0.0":
+"copy-webpack-plugin@npm:^11.0.0":
   version: 11.0.0
   resolution: "copy-webpack-plugin@npm:11.0.0"
   dependencies:
@@ -7020,7 +7020,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fork-ts-checker-webpack-plugin@npm:8.0.0":
+"fork-ts-checker-webpack-plugin@npm:^8.0.0":
   version: 8.0.0
   resolution: "fork-ts-checker-webpack-plugin@npm:8.0.0"
   dependencies:
@@ -7474,13 +7474,14 @@ __metadata:
     "@changesets/types": "npm:5.2.1"
     "@emotion/css": "npm:11.10.6"
     "@grafana/assistant": "npm:^0.1.7"
-    "@grafana/data": "npm:^12.1.0"
-    "@grafana/eslint-config": "npm:8.0.0"
+    "@grafana/data": "npm:^12.2.0"
+    "@grafana/eslint-config": "npm:^8.2.0"
+    "@grafana/i18n": "npm:^12.2.0"
     "@grafana/plugin-e2e": "npm:2.2.3"
-    "@grafana/runtime": "npm:^12.1.0"
-    "@grafana/schema": "npm:^12.1.0"
+    "@grafana/runtime": "npm:^12.2.0"
+    "@grafana/schema": "npm:^12.2.0"
     "@grafana/tsconfig": "npm:2.0.1"
-    "@grafana/ui": "npm:^12.1.0"
+    "@grafana/ui": "npm:^12.2.0"
     "@playwright/test": "npm:1.57.0"
     "@stylistic/eslint-plugin-ts": "npm:2.13.0"
     "@swc/core": "npm:1.10.12"
@@ -7503,7 +7504,7 @@ __metadata:
     "@typescript-eslint/parser": "npm:8.41.0"
     buffer: "npm:6.0.3"
     cheerio: "npm:^1.0.0-rc.10"
-    copy-webpack-plugin: "npm:11.0.0"
+    copy-webpack-plugin: "npm:^11.0.0"
     cspell: "npm:5.21.2"
     css-loader: "npm:6.11.0"
     csv-parse: "npm:^4.12.0"
@@ -7515,11 +7516,11 @@ __metadata:
     eslint-plugin-react: "npm:7.37.5"
     eslint-plugin-react-hooks: "npm:4.6.2"
     eslint-webpack-plugin: "npm:4.2.0"
-    fork-ts-checker-webpack-plugin: "npm:8.0.0"
+    fork-ts-checker-webpack-plugin: "npm:^8.0.0"
     glob: "npm:12.0.0"
     groq-js: "npm:1.1.8"
     identity-obj-proxy: "npm:3.0.0"
-    imports-loader: "npm:5.0.0"
+    imports-loader: "npm:^5.0.0"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
     json-to-pretty-yaml: "npm:^1.2.2"
@@ -7531,7 +7532,7 @@ __metadata:
     react: "npm:18.3.1"
     react-dom: "npm:18.3.1"
     react-use: "npm:^17.5.0"
-    replace-in-file-webpack-plugin: "npm:1.0.6"
+    replace-in-file-webpack-plugin: "npm:^1.0.6"
     sass: "npm:1.63.2"
     sass-loader: "npm:13.3.3"
     semver: "npm:7.7.3"
@@ -7541,16 +7542,16 @@ __metadata:
     terser-webpack-plugin: "npm:5.3.16"
     timers-browserify: "npm:2.0.12"
     ts-jest: "npm:29.2.5"
-    ts-node: "npm:10.9.2"
+    ts-node: "npm:^10.9.2"
     tsconfig-paths: "npm:4.2.0"
     tslib: "npm:2.5.3"
     typescript: "npm:5.9.3"
     uql: "npm:0.0.24"
     webpack: "npm:5.97.1"
-    webpack-cli: "npm:5.1.4"
-    webpack-livereload-plugin: "npm:3.0.2"
-    webpack-subresource-integrity: "npm:5.1.0"
-    webpack-virtual-modules: "npm:0.6.2"
+    webpack-cli: "npm:^5.1.4"
+    webpack-livereload-plugin: "npm:^3.0.2"
+    webpack-subresource-integrity: "npm:^5.1.0"
+    webpack-virtual-modules: "npm:^0.6.2"
     xml2js: "npm:^0.6.2"
   languageName: unknown
   linkType: soft
@@ -7921,7 +7922,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"imports-loader@npm:5.0.0":
+"imports-loader@npm:^5.0.0":
   version: 5.0.0
   resolution: "imports-loader@npm:5.0.0"
   dependencies:
@@ -11462,7 +11463,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"replace-in-file-webpack-plugin@npm:1.0.6":
+"replace-in-file-webpack-plugin@npm:^1.0.6":
   version: 1.0.6
   resolution: "replace-in-file-webpack-plugin@npm:1.0.6"
   checksum: 10c0/a04086786c68df77e7f59d43675cc2c88fbcb1d266a09bd579e6ec05618077c6c7d609f054355f06d20686ae482791c0306ae0ea62d097bb16445dab833d594c
@@ -12885,7 +12886,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-node@npm:10.9.2":
+"ts-node@npm:^10.9.2":
   version: 10.9.2
   resolution: "ts-node@npm:10.9.2"
   dependencies:
@@ -13423,7 +13424,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-cli@npm:5.1.4":
+"webpack-cli@npm:^5.1.4":
   version: 5.1.4
   resolution: "webpack-cli@npm:5.1.4"
   dependencies:
@@ -13455,7 +13456,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-livereload-plugin@npm:3.0.2":
+"webpack-livereload-plugin@npm:^3.0.2":
   version: 3.0.2
   resolution: "webpack-livereload-plugin@npm:3.0.2"
   dependencies:
@@ -13487,7 +13488,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-subresource-integrity@npm:5.1.0":
+"webpack-subresource-integrity@npm:^5.1.0":
   version: 5.1.0
   resolution: "webpack-subresource-integrity@npm:5.1.0"
   dependencies:
@@ -13502,7 +13503,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-virtual-modules@npm:0.6.2":
+"webpack-virtual-modules@npm:^0.6.2":
   version: 0.6.2
   resolution: "webpack-virtual-modules@npm:0.6.2"
   checksum: 10c0/5ffbddf0e84bf1562ff86cf6fcf039c74edf09d78358a6904a09bbd4484e8bb6812dc385fe14330b715031892dcd8423f7a88278b57c9f5002c84c2860179add
