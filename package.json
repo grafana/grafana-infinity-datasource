@@ -130,7 +130,7 @@
     "stream-browserify": "3.0.0",
     "style-loader": "3.3.3",
     "swc-loader": "0.2.6",
-    "terser-webpack-plugin": "5.3.11",
+    "terser-webpack-plugin": "5.3.16",
     "timers-browserify": "2.0.12",
     "ts-jest": "29.2.5",
     "ts-node": "10.9.2",
