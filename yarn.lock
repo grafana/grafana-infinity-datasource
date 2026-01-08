@@ -7523,7 +7523,7 @@ __metadata:
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
     json-to-pretty-yaml: "npm:^1.2.2"
-    jsonata: "npm:2.0.4"
+    jsonata: "npm:2.1.0"
     jsonpath-plus: "npm:10.3.0"
     lodash: "npm:^4.17.21"
     mathjs: "npm:11.7.0"
@@ -9252,10 +9252,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsonata@npm:2.0.4":
-  version: 2.0.4
-  resolution: "jsonata@npm:2.0.4"
-  checksum: 10c0/0e5c3f9630dec7eb59d8c79b02aa6f6c4465af1a1638abae0b1d42df7a02f1911a3494038645d260cdc96b395f072498b5adf35927dea0918ad75a6401fb35ad
+"jsonata@npm:2.1.0":
+  version: 2.1.0
+  resolution: "jsonata@npm:2.1.0"
+  checksum: 10c0/3f7e56960dc7870969aede56262d500e444b55576d5d49b793d75f405cfc4729764a92189ed14d77912d1b2906bc9cd95fed4ebf63eb6b732af2878409d5a0de
   languageName: node
   linkType: hard
 
