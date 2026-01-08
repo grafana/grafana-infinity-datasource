@@ -152,7 +152,7 @@ export const TransformationsEditor = (props: TransformationsEditorProps) => {
                     <Stack direction="column" gap={1}>
                       <Stack direction="row" alignItems={'stretch'}>
                         <h5 style={{ marginBlock: theme.spacing(0.5) }}>Limit</h5>
-                        <Button variant="secondary" fill="outline" icon="trash-alt" size="sm" onClick={() => onDeleteTransformation(i)} />
+                        <Button variant="secondary" aria-label="Remove item" fill="outline" icon="trash-alt" size="sm" onClick={() => onDeleteTransformation(i)} />
                       </Stack>
                       <div className="gf-form">
                         <InlineLabel width={10}>Limit</InlineLabel>
@@ -173,7 +173,7 @@ export const TransformationsEditor = (props: TransformationsEditorProps) => {
                     <Stack direction="column" gap={1}>
                       <Stack direction="row" alignItems={'stretch'}>
                         <h5 style={{ marginBlock: theme.spacing(0.5) }}>Filter Expression</h5>
-                        <Button variant="secondary" fill="outline" icon="trash-alt" size="sm" onClick={() => onDeleteTransformation(i)} />
+                        <Button variant="secondary" aria-label="Remove item" fill="outline" icon="trash-alt" size="sm" onClick={() => onDeleteTransformation(i)} />
                       </Stack>
                       <div className="gf-form">
                         <InlineLabel width={14}>Expression</InlineLabel>
@@ -193,7 +193,7 @@ export const TransformationsEditor = (props: TransformationsEditorProps) => {
                     <Stack direction="column" gap={1}>
                       <Stack direction="row" alignItems={'stretch'}>
                         <h5 style={{ marginBlock: theme.spacing(0.5) }}>Summarize</h5>
-                        <Button variant="secondary" fill="outline" icon="trash-alt" size="sm" onClick={() => onDeleteTransformation(i)} />
+                        <Button variant="secondary" aria-label="Remove item" fill="outline" icon="trash-alt" size="sm" onClick={() => onDeleteTransformation(i)} />
                       </Stack>
                       <div className="gf-form">
                         <InlineLabel width={14}>Expression</InlineLabel>
@@ -240,7 +240,7 @@ export const TransformationsEditor = (props: TransformationsEditorProps) => {
                     <Stack direction="column" gap={1}>
                       <Stack direction="row" alignItems={'stretch'}>
                         <h5 style={{ marginBlock: theme.spacing(0.5) }}>Computed Column</h5>
-                        <Button variant="secondary" fill="outline" icon="trash-alt" size="sm" onClick={() => onDeleteTransformation(i)} />
+                        <Button variant="secondary" aria-label="Remove item" fill="outline" icon="trash-alt" size="sm" onClick={() => onDeleteTransformation(i)} />
                       </Stack>
                       <div className="gf-form">
                         <InlineLabel width={14}>Expression</InlineLabel>
