@@ -77,6 +77,7 @@ export const QueryColumnsEditor = (props: { query: InfinityQuery; onChange: (val
                           className="btn btn-danger btn-small"
                           icon="trash-alt"
                           variant="destructive"
+                          aria-label="Remove item"
                           fill="outline"
                           size="sm"
                           style={{ margin: '5px' }}
