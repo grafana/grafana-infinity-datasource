@@ -26,6 +26,7 @@ func TestLoadSettings(t *testing.T) {
 				AuthenticationMethod: models.AuthenticationMethodNone,
 				OAuth2Settings: models.OAuth2Settings{
 					EndpointParams: map[string]string{},
+					TokenHeaders:   map[string]string{},
 				},
 				CustomHeaders:     map[string]string{},
 				SecureQueryFields: map[string]string{},
@@ -66,6 +67,7 @@ func TestLoadSettings(t *testing.T) {
 				UnsecuredQueryHandling: models.UnsecuredQueryHandlingWarn,
 				OAuth2Settings: models.OAuth2Settings{
 					EndpointParams: map[string]string{},
+					TokenHeaders:   map[string]string{},
 				},
 				CustomHeaders: map[string]string{
 					"header1": "headervalue1",
@@ -105,6 +107,7 @@ func TestLoadSettings(t *testing.T) {
 				UnsecuredQueryHandling: models.UnsecuredQueryHandlingWarn,
 				OAuth2Settings: models.OAuth2Settings{
 					EndpointParams: map[string]string{},
+					TokenHeaders:   map[string]string{},
 				},
 				CustomHeaders: map[string]string{
 					"header1": "headervalue1",
@@ -232,6 +235,7 @@ func TestAllSettingsAgainstFrontEnd(t *testing.T) {
 				"resource": "Resource1",
 				"name":     "Resource2",
 			},
+			TokenHeaders: map[string]string{},
 		},
 		BearerToken:               "myBearerToken",
 		ApiKeyKey:                 "hello",
