@@ -74,7 +74,7 @@
     "react-dom": "18.3.1",
     "react-use": "^17.5.0",
     "tslib": "2.5.3",
-    "uql": "0.0.23",
+    "uql": "0.0.24",
     "xml2js": "^0.6.2"
   },
   "devDependencies": {

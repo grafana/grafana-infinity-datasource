@@ -6840,7 +6840,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-xml-parser@npm:^4.3.5":
+"fast-xml-parser@npm:^4.2.4":
   version: 4.5.3
   resolution: "fast-xml-parser@npm:4.5.3"
   dependencies:
@@ -7545,7 +7545,7 @@ __metadata:
     tsconfig-paths: "npm:4.2.0"
     tslib: "npm:2.5.3"
     typescript: "npm:5.5.4"
-    uql: "npm:0.0.23"
+    uql: "npm:0.0.24"
     webpack: "npm:5.97.1"
     webpack-cli: "npm:5.1.4"
     webpack-livereload-plugin: "npm:3.0.2"
@@ -13230,20 +13230,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uql@npm:0.0.23":
-  version: 0.0.23
-  resolution: "uql@npm:0.0.23"
+"uql@npm:0.0.24":
+  version: 0.0.24
+  resolution: "uql@npm:0.0.24"
   dependencies:
     "@yesoreyeram/nearley": "npm:^3.0.0-beta.2"
     csv-parse: "npm:4.12.0"
     dayjs: "npm:^1.10.7"
-    fast-xml-parser: "npm:^4.3.5"
+    fast-xml-parser: "npm:^4.2.4"
     js-yaml: "npm:^4.1.0"
     jsonata: "npm:1.8.7"
     lodash: "npm:^4.17.21"
     moo: "npm:^0.5.2"
     xml2js: "npm:0.6.2"
-  checksum: 10c0/b6ab901848d8b0bc7fe5ad0268c34e210410fc9f41b71cec1a5ecb8dd50d76d553417f6933ae92df1c057b2cd32f1bc7bbaf4020a0859bd36766712719df3a87
+  checksum: 10c0/490259152ed220d3a4e2ac300f33df6480a2853780e86d1a2eacb8a37fe0326fb95b5988dcc7d6f6f19a59917a2baedde1b5d0e5ef9a923540ff26032c61238c
   languageName: node
   linkType: hard
 
