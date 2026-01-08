@@ -79,7 +79,7 @@
   },
   "devDependencies": {
     "@babel/core": "7.26.7",
-    "@changesets/cli": "2.27.12",
+    "@changesets/cli": "2.29.8",
     "@changesets/types": "5.2.1",
     "@grafana/eslint-config": "8.0.0",
     "@grafana/plugin-e2e": "2.1.8",

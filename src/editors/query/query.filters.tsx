@@ -83,7 +83,16 @@ export const TableFilter = (props: { query: InfinityQuery; onChange: (value: any
                     onChange={(e) => onFilterValueChange(index, 0, e.target.value)}
                     placeholder="Value"
                   ></input>
-                  <Button title="Delete filter" variant="destructive" size="sm" style={{ marginTop: '4px' }} onClick={() => removeFilter(index)} icon="trash-alt" fill="outline"></Button>
+                  <Button
+                    title="Delete filter"
+                    variant="destructive"
+                    aria-label="Remove item"
+                    size="sm"
+                    style={{ marginTop: '4px' }}
+                    onClick={() => removeFilter(index)}
+                    icon="trash-alt"
+                    fill="outline"
+                  ></Button>
                   <br />
                 </div>
               ))}
