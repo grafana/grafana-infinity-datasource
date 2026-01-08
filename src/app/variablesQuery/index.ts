@@ -1,58 +1,114 @@
-import { DataFrameView, SelectableValue } from '@grafana/data';
+import { from, Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { defaultsDeep, sample } from 'lodash';
+import { SelectableValue, CustomVariableSupport, type DataQueryRequest, DataQueryResponse, createDataFrame, FieldType, DataFrame, Field } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
-import { defaultsDeep, flatten } from 'lodash';
+import { Datasource } from '@/datasource';
 import { DefaultInfinityQuery } from '@/constants';
-import { isDataFrame, isTableData } from '@/app/utils';
+import { migrateQuery } from '@/migrate';
+import { interpolateQuery, interpolateVariableQuery } from '@/interpolate';
 import { CollectionVariable } from '@/app/variablesQuery/Collection';
 import { CollectionLookupVariable } from '@/app/variablesQuery/CollectionLookup';
 import { JoinVariable } from '@/app/variablesQuery/Join';
 import { RandomVariable } from '@/app/variablesQuery/Random';
 import { UnixTimeStampVariable } from '@/app/variablesQuery/UnixTimeStamp';
-import type { MetricFindValue, VariableQuery, VariableQueryInfinity } from '@/types';
+import { VariableEditor } from '@/editors/variable.editor';
+import type { VariableQuery, VariableQueryInfinity, VariableMeta } from '@/types';
 
-export const getTemplateVariablesFromResult = (res: any): MetricFindValue[] => {
-  if (isDataFrame(res) && res.fields.length > 0) {
-    const view = new DataFrameView(res);
-    return (view || []).map((item) => {
-      const keys = Object.keys(item || {}) || [];
-      if (keys.length >= 2 && keys.includes('__text') && keys.includes('__value')) {
-        return { text: item['__text'], value: item['__value'] };
-      } else if (keys.includes('__text')) {
-        return { text: item['__text'], value: item['__text'] };
-      } else if (keys.includes('__value')) {
-        return { text: item['__value'], value: item['__value'] };
-      } else if (keys.length === 2) {
-        return { text: item[0], value: item[1] };
-      } else {
-        return { text: item[0], value: item[0] };
-      }
-    });
-  } else if (isTableData(res) && res.columns.length > 0) {
-    if (res.columns.length === 2) {
-      return res.rows.map((row: string[]) => {
-        return {
-          label: row[0],
-          value: row[1],
-          text: row[0],
-        };
-      });
-    } else {
-      return flatten(res.rows || []).map((res) => {
-        return {
-          value: String(res),
-          label: String(res),
-          text: String(res),
-        };
-      });
-    }
-  } else {
-    return [];
+export class InfinityVariableSupport extends CustomVariableSupport<Datasource, VariableQuery> {
+  editor = VariableEditor;
+  constructor(private datasource: Datasource) {
+    super();
   }
+  query(request: DataQueryRequest<VariableQuery>): Observable<DataQueryResponse> {
+    if (request.targets.length < 1) {
+      throw new Error('no variable query found');
+    }
+    let query = migrateLegacyQuery(request.targets[0]);
+    query = interpolateVariableQuery(query);
+    const refId = query.refId || 'variable';
+    switch (query.queryType) {
+      case 'legacy':
+        const legacyVariableProvider = new LegacyVariableProvider(query.query);
+        return from(legacyVariableProvider.query()).pipe(
+          map((values = []) => {
+            const df = createDataFrame({
+              refId,
+              fields: [
+                { name: 'value', values: values.map((item) => item.value), type: FieldType.string },
+                { name: 'text', values: values.map((item) => item.text), type: FieldType.string },
+              ],
+            });
+            return { data: [df] };
+          })
+        );
+      case 'random':
+        let value = query.values && query.values.length > 0 ? sample(query.values || []) || query.values[0] : new Date().getTime().toString();
+        return of({
+          data: [
+            createDataFrame({
+              refId,
+              fields: [
+                { name: 'value', values: [value], type: FieldType.string },
+                { name: 'text', values: [value], type: FieldType.string },
+              ],
+            }),
+          ],
+        });
+      case 'infinity':
+      default:
+        if (!query.infinityQuery) {
+          throw new Error('no infinity variable query found');
+        }
+        const migratedQuery = migrateQuery(query.infinityQuery);
+        const interpolatedTarget = interpolateQuery(migratedQuery, request.scopedVars || {});
+        const query_request = { ...request, targets: [{ ...interpolatedTarget, refId }] };
+        return this.datasource.query(query_request).pipe(
+          map((d: DataQueryResponse) => {
+            return {
+              ...d,
+              data: d.data.map((frame: DataFrame) => ({ ...frame, fields: convertOriginalFieldsToVariableFields(frame.fields, query.meta) })),
+            };
+          })
+        );
+    }
+  }
+  getDefaultQuery() {
+    return {
+      refId: 'variable',
+      queryType: 'infinity',
+      infinityQuery: {
+        type: 'csv',
+        parser: 'backend',
+        source: 'inline',
+        data: 'values\nfoo\nbar\nbaz',
+      },
+    };
+  }
+}
+
+export const convertOriginalFieldsToVariableFields = (original_fields: Array<Field<any>>, meta?: VariableMeta): Array<Field<any>> => {
+  if (original_fields.length < 1) {
+    throw new Error('at least one field expected for variable');
+  }
+  let tf = original_fields.find((f) => f.name === '__text');
+  let vf = original_fields.find((f) => f.name === '__value');
+  if (meta) {
+    tf = meta.textField ? original_fields.find((f) => f.name === meta.textField) : undefined;
+    vf = meta.valueField ? original_fields.find((f) => f.name === meta.valueField) : undefined;
+  }
+  const textField = tf || vf || original_fields[0];
+  const valueField = tf && vf ? vf : tf || vf || (original_fields.length === 2 ? original_fields[1] : original_fields[0]);
+  return [
+    { ...textField, name: 'text' },
+    { ...valueField, name: 'value' },
+  ];
 };
 
 export const migrateLegacyQuery = (query: VariableQuery | string): VariableQuery => {
   if (typeof query === 'string') {
     return {
+      refId: 'variable',
       query: query,
       queryType: 'legacy',
       infinityQuery: {
@@ -67,6 +123,7 @@ export const migrateLegacyQuery = (query: VariableQuery | string): VariableQuery
     } as VariableQuery;
   } else {
     return {
+      refId: 'variable',
       query: '',
       queryType: 'legacy',
     };
