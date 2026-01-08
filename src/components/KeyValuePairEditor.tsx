@@ -41,6 +41,7 @@ export const KeyValueEditor = (props: { value: InfinityKV[]; onChange: (value: I
                 <Button
                   icon="trash-alt"
                   variant="destructive"
+                  aria-label="Remove item"
                   fill="outline"
                   size="sm"
                   onClick={(e) => {

@@ -26,6 +26,7 @@ export const EditorRow: React.FC<EditorRowProps> = ({ label, collapsible, collap
             fill="text"
             size="sm"
             variant="secondary"
+            aria-label={`Toggle ${label}`}
             onClick={(e) => {
               setShow(!show);
               e.preventDefault();
