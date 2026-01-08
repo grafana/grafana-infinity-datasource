@@ -3402,7 +3402,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:^18.0.0":
+"@types/react-dom@npm:^18.0.0, @types/react-dom@npm:^18.3.0":
   version: 18.3.7
   resolution: "@types/react-dom@npm:18.3.7"
   peerDependencies:
@@ -7443,6 +7443,7 @@ __metadata:
     "@types/mathjs": "npm:6.0.12"
     "@types/node": "npm:20.19.27"
     "@types/react": "npm:18.3.27"
+    "@types/react-dom": "npm:^18.3.0"
     "@types/react-router-dom": "npm:5.3.3"
     "@types/testing-library__jest-dom": "npm:5.14.9"
     "@types/xml2js": "npm:0.4.14"
