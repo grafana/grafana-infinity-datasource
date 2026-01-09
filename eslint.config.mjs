@@ -1,0 +1,43 @@
+import { defineConfig } from 'eslint/config';
+import baseConfig from './.config/eslint.config.mjs';
+
+export default defineConfig([
+  {
+    ignores: [
+      '**/__debug_bin',
+      '**/.data/',
+      '**/.env',
+      '**/.pnpm-debug.log*',
+      '**/.turbo/',
+      '**/*.log',
+      '**/*.pid',
+      '**/*.pid.lock',
+      '**/*.seed',
+      '**/artifacts/',
+      '**/ci/',
+      '**/coverage/',
+      '**/dist/',
+      '**/e2e-results/',
+      '**/logs',
+      '**/mage_output_file.go',
+      '**/node_modules/',
+      '.yarn/install-state.gz',
+      '**/npm-debug.log*',
+      '**/pids',
+      'provisioning/datasources/prod.yml',
+      '**/temp_test.go',
+      '**/work/',
+      '**/yarn-debug.log*',
+      '**/yarn-error.log*',
+      'docker/blocks/tempo/tempo-data',
+      '**/.idea',
+      '**/.eslintcache',
+      '**/test-results/',
+      '**/playwright-report/',
+      '**/blob-report/',
+      'playwright/.cache/',
+      'playwright/.auth/',
+    ],
+  },
+  ...baseConfig,
+]);

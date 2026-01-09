@@ -1,5 +1,5 @@
 import { CodeEditor, CodeEditorSuggestionItem, CodeEditorSuggestionItemKind, Icon } from '@grafana/ui';
-import React from 'react';
+import React, { useState } from 'react';
 import { EditorField } from '@/components/extended/EditorField';
 import type { InfinityQuery } from '@/types';
 declare const monaco: any;
@@ -13,6 +13,8 @@ const UQLTips: string[] = [
 
 export const UQLEditor = (props: { query: InfinityQuery; onChange: (value: InfinityQuery) => void; onRunQuery: () => void }) => {
   const { query, onChange, onRunQuery } = props;
+  // Compute random tip once on mount using lazy initializer to avoid impure function call during render
+  const [randomTip] = useState(() => UQLTips[Math.floor(Math.random() * UQLTips.length)]);
   const onUQLChange = (uql: string) => {
     if (query.type === 'uql' || ((query.type === 'json' || query.type === 'csv' || query.type === 'tsv' || query.type === 'graphql' || query.type === 'xml') && query.parser === 'uql')) {
       onChange({ ...query, uql });
@@ -42,7 +44,7 @@ export const UQLEditor = (props: { query: InfinityQuery; onChange: (value: Infin
             onBlur={onUQLChange}
             onEditorDidMount={handleMount}
           />
-          <span style={{ color: 'yellowgreen' }}>{UQLTips[Math.floor(Math.random() * UQLTips.length)]}</span>
+          <span style={{ color: 'yellowgreen' }}>{randomTip}</span>
         </div>
         <div title="Alternatively, you can also press ctrl+s ">
           <Icon
@@ -66,12 +68,10 @@ async function registerUQL(editor: any) {
     editor.updateOptions({ fixedOverflowWidgets: true });
     const allLangs = monaco.languages.getLanguages();
     const { language: uqlLang } = await allLangs.find(({ id }: any) => id === 'sql').loader();
-    // eslint-disable-next-line no-prototype-builtins
     if (!uqlLang.hasOwnProperty('keywords')) {
       uqlLang.keywords = [];
     }
     uqlLang.keywords.unshift.apply(uqlLang.keywords, UQLKeyWords);
-    // eslint-disable-next-line no-prototype-builtins
     if (!uqlLang.hasOwnProperty('builtinFunctions')) {
       uqlLang.builtinFunctions = [];
     }

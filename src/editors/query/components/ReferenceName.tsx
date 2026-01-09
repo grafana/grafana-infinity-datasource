@@ -16,24 +16,39 @@ export const ReferenceNameEditor = ({
   onRunQuery: () => void;
   datasource: Datasource;
 }) => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [refNames, setRefNames] = useState<string[]>([]);
-  useEffect(() => {
+  const [lastDatasource, setLastDatasource] = useState(datasource);
+
+  // Reset loading state during render when datasource changes
+  if (datasource !== lastDatasource) {
+    setLastDatasource(datasource);
     setLoading(true);
     setError('');
+    setRefNames([]);
+  }
+
+  useEffect(() => {
+    let cancelled = false;
     datasource
       .getResource('reference-data')
       .then((res) => {
-        setRefNames(res);
-        setError('');
+        if (!cancelled) {
+          setRefNames(res);
+          setError('');
+          setLoading(false);
+        }
       })
       .catch((ex) => {
-        setError(JSON.stringify(ex));
-      })
-      .finally(() => {
-        setLoading(false);
+        if (!cancelled) {
+          setError(JSON.stringify(ex));
+          setLoading(false);
+        }
       });
+    return () => {
+      cancelled = true;
+    };
   }, [datasource]);
   if (isDataQuery(query) && query.source === 'reference') {
     return (
