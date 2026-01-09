@@ -31,7 +31,7 @@ export class InfinityProvider {
         }
         return new JSONParser(res, query).getResults();
       case 'xml':
-        // eslint-disable-next-line no-case-declarations
+         
         let xmlData = await new XMLParser(res, query);
         return xmlData.getResults();
       case 'csv':

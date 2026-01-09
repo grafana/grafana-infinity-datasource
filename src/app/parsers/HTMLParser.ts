@@ -1,4 +1,4 @@
-import { load } from 'cheerio';
+import { load, type Cheerio } from 'cheerio';
 import { forEach } from 'lodash';
 import { InfinityParser } from '@/app/parsers/InfinityParser';
 import { getValue } from '@/app/parsers/utils';
@@ -16,8 +16,8 @@ export class HTMLParser extends InfinityParser<InfinityHTMLQuery> {
     const rootElements = $(this.target.root_selector);
     return rootElements;
   }
-  // eslint-disable-next-line no-undef
-  private constructTableData(rootElements: cheerio.Cheerio) {
+   
+  private constructTableData(rootElements: Cheerio<any>) {
     forEach(rootElements, (r) => {
       const row: GrafanaTableRow = [];
       const $ = load(r);
@@ -30,8 +30,8 @@ export class HTMLParser extends InfinityParser<InfinityHTMLQuery> {
     });
   }
 
-  // eslint-disable-next-line no-undef
-  private constructTimeSeriesData(rootElements: cheerio.Cheerio, endTime: Date | undefined) {
+   
+  private constructTimeSeriesData(rootElements: Cheerio<any>, endTime: Date | undefined) {
     this.NumbersColumns.forEach((metricColumn: InfinityColumn) => {
       forEach(rootElements, (r) => {
         const $$ = load(r);
