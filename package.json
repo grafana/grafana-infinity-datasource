@@ -36,8 +36,8 @@
   "author": "Grafana Labs",
   "main": "dist/module.js",
   "scripts": {
-    "build": "webpack -c ./.config/webpack/webpack.config.ts --env production",
-    "dev": "webpack -w -c ./.config/webpack/webpack.config.ts --env development",
+    "build": "webpack -c ./webpack.config.ts --env production",
+    "dev": "webpack -w -c ./webpack.config.ts --env development",
     "e2e": "playwright test",
     "lint": "eslint --cache .",
     "lint:fix": "yarn run lint --fix && prettier --write --list-different .",
