@@ -132,7 +132,7 @@
     "swc-loader": "0.2.6",
     "terser-webpack-plugin": "5.3.16",
     "timers-browserify": "2.0.12",
-    "ts-jest": "29.2.5",
+    "ts-jest": "29.4.6",
     "ts-node": "10.9.2",
     "tsconfig-paths": "4.2.0",
     "typescript": "5.9.3",
