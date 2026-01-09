@@ -136,7 +136,7 @@
     "ts-node": "10.9.2",
     "tsconfig-paths": "4.2.0",
     "typescript": "5.9.3",
-    "webpack": "5.97.1",
+    "webpack": "5.104.1",
     "webpack-cli": "5.1.4",
     "webpack-livereload-plugin": "3.0.2",
     "webpack-subresource-integrity": "5.1.0",
