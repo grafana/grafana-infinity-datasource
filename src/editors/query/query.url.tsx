@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { InlineFormLabel, CodeEditor, Select, Input, RadioButtonGroup, Icon, Stack } from '@grafana/ui';
 import { EditorRow } from '@/components/extended/EditorRow';
 import { EditorField } from '@/components/extended/EditorField';
@@ -6,7 +6,6 @@ import { isDataQuery } from '@/app/utils';
 import { KeyValueEditor } from '@/components/KeyValuePairEditor';
 import type { InfinityQuery, InfinityQueryType, InfinityQueryWithURLSource, InfinityURLMethod, InfinityURLOptions, QueryBodyContentType, QueryBodyType } from '@/types';
 import type { SelectableValue } from '@grafana/data';
-import { usePrevious } from 'react-use';
 
 export const URLEditor = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void }) => {
   return isDataQuery(query) && query.source === 'url' ? (
@@ -108,13 +107,13 @@ export const URL = ({
   onShowUrlOptions: () => void;
 }) => {
   const [url, setURL] = useState(query.url);
-  const previousUrl = usePrevious(query.url);
+  const [lastQueryUrl, setLastQueryUrl] = useState(query.url);
 
-  useEffect(() => {
-    if (query.url !== previousUrl && query.url !== url) {
-      setURL(query.url);
-    }
-  }, [query.url, previousUrl, url]);
+  // Sync local state with prop during render (recommended React pattern)
+  if (query.url !== lastQueryUrl) {
+    setLastQueryUrl(query.url);
+    setURL(query.url);
+  }
 
   const onURLChange = () => {
     onChange({ ...query, url });
