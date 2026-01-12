@@ -1312,8 +1312,8 @@ __metadata:
   linkType: hard
 
 "@grafana/assistant@npm:^0.1.7":
-  version: 0.1.9
-  resolution: "@grafana/assistant@npm:0.1.9"
+  version: 0.1.11
+  resolution: "@grafana/assistant@npm:0.1.11"
   peerDependencies:
     "@grafana/data": ">=12.1.0"
     "@grafana/runtime": ">=12.1.0"
@@ -1321,7 +1321,7 @@ __metadata:
     "@grafana/ui": ">=12.1.0"
     react: ">=18.0.0"
     rxjs: ">=7.0.0"
-  checksum: 10c0/fbaec91e5fbaee56c4081bb4933bb7b23492a64baa2adae39e9a2a0c184b8f979c154abb6796710d73e44fb721224a1caad5bf1f7b2f2ebadbbcc2524abf0e6a
+  checksum: 10c0/54c5b40c044e1f0289137e8475ded4f2dbbf64b103a45db48ae19de6e0f7b417ffc6df71733b58ceadeab11cdb4e49aec580c16c5c1591df46671301c9331317
   languageName: node
   linkType: hard
 
