@@ -26,7 +26,10 @@ weight: 7901
 
 # Global Queries / Registered Queries
 
-> **DEPRECATED**. From v0.7.8, This feature is deprecated in favour of Grafana panel library.
+{{< admonition type="caution" >}}
+Starting with Infinity plugin version 0.7.8, Global Queries is deprecated in favor of the Grafana panel library.
+It will be removed in a future release.
+{{< /admonition >}}
 
 Working with the same queries in multiple dashboards might be hard some times. To change a query, you need to update all the dashboards. To solve this, Infinity data source gives an option to register queries globally and allows to reuse the queries across dashboards.
 

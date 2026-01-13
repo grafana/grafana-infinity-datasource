@@ -1,25 +1,19 @@
 ---
 slug: '/tracing'
-title: 'Tracing format'
-menuTitle: Tracing format
-description: Tracing format
+title: Tracing
+menuTitle: Tracing
+description: Configure data for trace visualization with the Infinity data source
 aliases:
-  - infinity
+  - /docs/plugins/yesoreyeram-infinity-datasource/latest/references/display-options/format-tracing/
 keywords:
-  - data source
   - infinity
-  - json
-  - graphql
-  - csv
-  - tsv
-  - xml
-  - html
-  - api
-  - rest
+  - tracing
+  - traces
+  - visualization
 labels:
   products:
     - oss
-weight: 7102
+weight: 70
 ---
 
 # Visualizing data in Tracing format

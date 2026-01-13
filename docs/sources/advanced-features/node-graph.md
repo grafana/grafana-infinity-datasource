@@ -1,25 +1,18 @@
 ---
 slug: '/node-graph'
-title: 'Node Graph'
-menuTitle: Node Graph
-description: Node Graph
+title: Node graph
+menuTitle: Node graph
+description: Configure data for node graph visualization with the Infinity data source
 aliases:
-  - infinity
+  - /docs/plugins/yesoreyeram-infinity-datasource/latest/references/display-options/node-graph/
 keywords:
-  - data source
   - infinity
-  - json
-  - graphql
-  - csv
-  - tsv
-  - xml
-  - html
-  - api
-  - rest
+  - node graph
+  - visualization
 labels:
   products:
     - oss
-weight: 7101
+weight: 60
 ---
 
 # Visualizing data in Node Graph format

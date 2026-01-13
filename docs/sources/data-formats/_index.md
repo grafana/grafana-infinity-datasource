@@ -29,6 +29,7 @@ The Infinity data source can query and visualize data from multiple formats. Eac
 | [XML](/docs/plugins/yesoreyeram-infinity-datasource/latest/data-formats/xml/) | Query XML APIs and files | SOAP APIs, RSS feeds, legacy systems |
 | [GraphQL](/docs/plugins/yesoreyeram-infinity-datasource/latest/data-formats/graphql/) | Query GraphQL endpoints | GraphQL APIs |
 | [HTML](/docs/plugins/yesoreyeram-infinity-datasource/latest/data-formats/html/) | Extract data from HTML pages | Web scraping, legacy systems without APIs |
+| [Azure Blob Storage](/docs/plugins/yesoreyeram-infinity-datasource/latest/data-formats/azure-blob-storage/) | Query data from Azure Blob Storage | Cloud storage, Azure integrations |
 
 ## Common concepts
 
