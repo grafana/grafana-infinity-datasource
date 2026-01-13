@@ -27,11 +27,11 @@ The Infinity data source is a universal plugin for pulling data from various sys
 
 The following resources will help you get started with the Infinity data source:
 
-- [Configure the Infinity data source]({{< relref "./configure" >}})
-- [Infinity query editor]({{< relref "./query" >}})
-- [Template variables]({{< relref "./variables" >}})
-- [Annotations]({{< relref "./annotations" >}})
-- [Examples]({{< relref "./examples" >}})
+- [Configure the Infinity data source](/docs/plugins/yesoreyeram-infinity-datasource/latest/configure/)
+- [Infinity query editor](/docs/plugins/yesoreyeram-infinity-datasource/latest/query/)
+- [Template variables](/docs/plugins/yesoreyeram-infinity-datasource/latest/variables/)
+- [Annotations](/docs/plugins/yesoreyeram-infinity-datasource/latest/annotations/)
+- [Examples](/docs/plugins/yesoreyeram-infinity-datasource/latest/examples/)
 
 ## Key capabilities
 
@@ -59,10 +59,10 @@ Before you configure the Infinity data source, you need:
 
 This data source supports the following formats:
 
-- [JSON]({{< relref "./json" >}}) - Query JSON APIs and inline JSON data
-- [CSV / TSV]({{< relref "./csv" >}}) - Query CSV, TSV, or any delimited content
-- [XML / HTML]({{< relref "./xml" >}}) - Query XML and HTML endpoints
-- [GraphQL]({{< relref "./graphql" >}}) - Query GraphQL APIs
+- [JSON](/docs/plugins/yesoreyeram-infinity-datasource/latest/json/) - Query JSON APIs and inline JSON data
+- [CSV / TSV](/docs/plugins/yesoreyeram-infinity-datasource/latest/csv/) - Query CSV, TSV, or any delimited content
+- [XML / HTML](/docs/plugins/yesoreyeram-infinity-datasource/latest/xml/) - Query XML and HTML endpoints
+- [GraphQL](/docs/plugins/yesoreyeram-infinity-datasource/latest/graphql/) - Query GraphQL APIs
 
 ## Known limitations
 
@@ -75,7 +75,7 @@ This data source supports the following formats:
 Once you have configured the Infinity data source, you can:
 
 - Use [Explore](https://grafana.com/docs/grafana/latest/explore/) to run ad-hoc queries.
-- Configure and use [template variables]({{< relref "./variables" >}}) for dynamic dashboards.
+- Configure and use [template variables](/docs/plugins/yesoreyeram-infinity-datasource/latest/variables/) for dynamic dashboards.
 - Add [transformations](https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/transform-data/) to process query results.
 
 ## Get started
