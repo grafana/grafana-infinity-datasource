@@ -1,40 +1,136 @@
 ---
 slug: '/groq'
-title: 'GROQ Parser'
-menuTitle: GROQ Parser
-description: GROQ Parser
+title: 'GROQ parser'
+menuTitle: GROQ parser
+description: Query and transform JSON data using GROQ (Graph-Relational Object Queries) syntax in the Infinity data source.
 aliases:
-  - infinity
+  - /groq
 keywords:
-  - data source
   - infinity
-  - json
-  - graphql
-  - csv
-  - tsv
-  - xml
-  - html
-  - api
-  - rest
-labels:
-  products:
-    - oss
+  - groq
+  - parser
+  - json query
 weight: 320
 ---
 
-# GROQ Parser
+# GROQ parser
 
-[GROQ](https://groq.dev/) is query language which is designed to work directly on JSON documents. [GROQ](https://www.sanity.io/docs/groq) was developed by [Sanity.io](https://www.sanity.io/docs/groq) (where it’s used as the primary query language).
+The GROQ parser allows you to query and transform JSON data using [GROQ (Graph-Relational Object Queries)](https://groq.dev/) syntax. GROQ was developed by [Sanity.io](https://www.sanity.io/docs/groq) as a query language designed to work directly on JSON documents.
 
-> GROQ is still in ALPHA.
+{{< admonition type="caution" >}}
+The GROQ parser is currently in alpha. The underlying [groq-js library](https://github.com/sanity-io/groq-js) is still under development, and some features may be limited.
+{{< /admonition >}}
 
-## Using GROQ with infinity
+## Supported data formats
 
-The following example shows how to make use of GROQ inside Grafana Infinity data source.
+GROQ is available as a frontend parser for the following data formats:
 
-![groq query type in grafana](https://user-images.githubusercontent.com/153843/151544429-1c039a19-75c5-4dfc-bc52-e2f74f9c8a51.png#center)
+| Data format | Available |
+|-------------|-----------|
+| JSON | Yes |
+| GraphQL | Yes |
+| CSV | No |
+| TSV | No |
+| XML | No |
+| HTML | No |
+
+You can also use GROQ as a standalone query type by selecting **GROQ** from the Type drop-down.
+
+## Basic syntax
+
+GROQ queries start with `*` which represents all documents in the dataset. You can then filter and project the results.
+
+### Select all data
+
+To return all data without transformation:
+
+```groq
+*
+```
+
+### Filter by condition
+
+Use square brackets to filter data:
+
+```groq
+*[age >= 20]
+```
+
+This returns only items where `age` is 20 or greater.
+
+### Project specific fields
+
+Use curly braces to select specific fields:
+
+```groq
+*{name, email}
+```
+
+This returns only the `name` and `email` fields from each item.
+
+### Combine filter and projection
+
+You can chain filtering and projection:
+
+```groq
+*[age >= 20]{name}
+```
+
+This filters items where `age` is 20 or greater, then returns only the `name` field.
+
+## Query examples
+
+### Filter by string value
+
+```groq
+*[status == "active"]
+```
+
+### Filter by multiple conditions
+
+```groq
+*[age >= 18 && country == "US"]
+```
+
+### Select nested fields
+
+```groq
+*{name, address{city, country}}
+```
+
+### Order results
+
+```groq
+*[_type == "user"] | order(name asc)
+```
+
+### Limit results
+
+```groq
+*[0...10]
+```
+
+Returns the first 10 items.
+
+## Use GROQ with JSON data
+
+To use GROQ with JSON data:
+
+1. Select **JSON** as the Type
+2. Set the Parser to **GROQ** (under Frontend options)
+3. Enter your GROQ query in the GROQ Query field
+
+Alternatively, select **GROQ** directly as the Type for a simplified interface.
 
 ## Known limitations
 
-- The library used under the hood is still is in [alpha](https://github.com/sanity-io/groq-js).
-- With the initial test, only works with array type of docs.
+- **Array data**: GROQ works best with array-type JSON documents. Object-type responses may require additional handling.
+- **Alpha status**: Some advanced GROQ features may not be available due to the alpha status of the groq-js library.
+- **Frontend only**: GROQ runs in the browser, not on the Grafana server. This means GROQ queries don't support features that require backend processing, such as alerting or recorded queries.
+
+## Additional resources
+
+- [GROQ specification](https://groq.dev/)
+- [GROQ cheat sheet](https://www.sanity.io/docs/groq-cheat-sheet)
+- [GROQ functions reference](https://www.sanity.io/docs/groq-functions)
+- [groq-js library](https://github.com/sanity-io/groq-js)

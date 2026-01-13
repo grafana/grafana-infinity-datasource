@@ -1,96 +1,167 @@
 ---
 slug: '/filters'
-title: 'Filtering data'
-menuTitle: Filtering data
-description: Filtering data
+title: 'Filter data'
+menuTitle: Filter data
+description: Filter query results using filter expressions, visual filters, or UQL where clauses in the Infinity data source.
 aliases:
-  - infinity
+  - /filters
 keywords:
-  - data source
   - infinity
-  - json
-  - graphql
-  - csv
-  - tsv
-  - xml
-  - html
-  - api
-  - rest
-labels:
-  products:
-    - oss
+  - filter
+  - where clause
+  - template variables
 weight: 360
 ---
 
-<!-- markdownlint-disable MD033 -->
+# Filter data
 
-# Filtering data / Using template variables in Query
-
-In order to filter the data in Infinity datasource, you can use the following options based on the parser you are using.
+The Infinity data source provides multiple ways to filter data depending on which parser you use. You can filter results using expressions, visual filters, or query language syntax.
 
 {{< admonition type="note" >}}
-All filtering happens after retrieving the content.
-For better performance, use filtering provided by the API.
+All filtering happens after retrieving the content from the source.
+For better performance, use filtering provided by the API when possible (for example, query parameters in the URL).
 {{< /admonition >}}
 
-## Filtering with Backend Parser
+## Filter methods by parser
 
-When using the backend parser, use the following examples for filtering your data. In most cases, you will be filtering data based on single value or multiple value variable.
+| Parser | Filter method |
+|--------|---------------|
+| Backend (JSONata) | Filter expression field |
+| Backend (JQ) | Filter expression field |
+| Frontend | Visual filter editor |
+| UQL | `where` clause in query |
+| GROQ | Native GROQ filtering |
 
-### Variable setup - single
+## Filter with the Backend parser
 
-<img width="1522" alt="image" src="https://github.com/grafana/grafana-infinity-datasource/assets/153843/56b1ccb3-e351-4f2e-9d1a-008a1005a551" />
-<img width="988" alt="image" src="https://github.com/grafana/grafana-infinity-datasource/assets/153843/a09256a8-2b68-4334-ad8d-efc4164947f6" />
+When using the Backend parser (JSONata or JQ), use the **Filter** expression field to filter rows. The expression must evaluate to `true` or `false`.
 
-### Variable setup - multi
+### Filter expression syntax
 
-<img width="1653" alt="image" src="https://github.com/grafana/grafana-infinity-datasource/assets/153843/735d0d6a-82fc-412e-988c-109ec0cd20eb" />
-<img width="947" alt="image" src="https://github.com/grafana/grafana-infinity-datasource/assets/153843/df4f570b-e4c6-4075-a6e7-d5d814af390b" />
+Filter expressions support the following operators:
 
-### Without filter
+| Category | Operators | Example |
+|----------|-----------|---------|
+| Comparison | `==`, `!=`, `>`, `>=`, `<`, `<=` | `price > 100` |
+| Logical | `&&`, `\|\|`, `!` | `price > 100 && stock > 0` |
+| String | `==`, `!=` | `status == 'active'` |
+| Null check | `!= null`, `== null` | `name != null` |
+| Membership | `IN`, `NOT IN` | `region IN ('US','EU')` |
+| Negation | `!()` | `!(region IN ('US','EU'))` |
 
-<img width="433" alt="image" src="https://github.com/grafana/grafana-infinity-datasource/assets/153843/f000a467-40c2-4149-9a08-7a6a42fd39df" />
-<img width="456" alt="image" src="https://github.com/grafana/grafana-infinity-datasource/assets/153843/4f3e1e6e-b9fb-4aea-bc84-f48ea6d70ac0" />
-<img width="1315" alt="image" src="https://github.com/grafana/grafana-infinity-datasource/assets/153843/171080c0-de0e-4c69-8b25-b572877726e3" />
+### Filter with a single value variable
 
-### With single filter
+To filter based on a single-value template variable:
 
-We are using the filter `region == "${region}"`
+```text
+region == '${region}'
+```
 
-<img width="1332" alt="image" src="https://github.com/grafana/grafana-infinity-datasource/assets/153843/08828e44-77f3-41fb-beca-6136805d8860" />
+This filters rows where the `region` field matches the selected variable value.
 
-### With multi filter
+### Filter with a multi-value variable
 
-We are using the filter `region IN (${region_multi:singlequote})` to show multiple regions
+To filter based on a multi-value template variable, use the `IN` operator with the `singlequote` format:
 
-<img width="1327" alt="image" src="https://github.com/grafana/grafana-infinity-datasource/assets/153843/4fdbbd6d-8514-4730-96f3-998ee20f2182" />
+```text
+region IN (${region:singlequote})
+```
 
-### With multi filter (NOT IN)
+This filters rows where the `region` field matches any of the selected values.
 
-We are using the filter `!(region IN (${region_multi:singlequote})` to exclude multiple regions. As you see we use <kbd>!</kbd> symbol before our condition
+### Exclude values (NOT IN)
 
-<img width="1322" alt="image" src="https://github.com/grafana/grafana-infinity-datasource/assets/153843/1438b99c-478a-459e-a6a2-513d5285326c"/>
+To exclude multiple values, wrap the condition with `!()`:
 
-## Filtering with UQL Parser
+```text
+!(region IN (${region:singlequote}))
+```
 
-When using the backend parser, use the following examples for filtering your data. In most cases you will be filtering data based on single value or multiple value variable.
+### Combine multiple conditions
 
-### UQL - Without filter
+You can combine conditions using `&&` (AND) and `||` (OR):
+
+```text
+region == 'US' && status == 'active'
+price > 100 || featured == true
+```
+
+## Filter with the Frontend parser
+
+When using the Frontend parser with defined columns, you can use the visual filter editor. This provides a drop-down interface for selecting fields, operators, and values.
+
+### Available filter operators
+
+The visual filter editor supports the following operators:
+
+| Operator | Description |
+|----------|-------------|
+| Equals | Exact match (case-sensitive) |
+| Not Equals | Does not match (case-sensitive) |
+| Contains | Field contains the value |
+| Not Contains | Field does not contain the value |
+| Starts With | Field starts with the value |
+| Ends With | Field ends with the value |
+| Equals - Ignore Case | Exact match (case-insensitive) |
+| Not Equals - Ignore Case | Does not match (case-insensitive) |
+| Contains - Ignore Case | Contains (case-insensitive) |
+| Not Contains - Ignore Case | Does not contain (case-insensitive) |
+| Starts With - Ignore Case | Starts with (case-insensitive) |
+| Ends With - Ignore Case | Ends with (case-insensitive) |
+| Regex | Matches regular expression |
+| Regex not match | Does not match regular expression |
+| In | Value is in a list |
+| Not In | Value is not in a list |
+| == | Numeric equals |
+| != | Numeric not equals |
+| < | Less than |
+| <= | Less than or equal to |
+| > | Greater than |
+| >= | Greater than or equal to |
+
+{{< admonition type="note" >}}
+The visual filter editor is only available when using the Frontend parser and when you have defined at least one column.
+{{< /admonition >}}
+
+## Filter with UQL
+
+When using UQL (Unified Query Language), use the `where` clause to filter data.
+
+### Basic UQL filter
 
 ```uql
 parse-json
+| where "region" == 'US'
 | summarize count("name") by "region"
 ```
 
-### UQL - With single filter
+### UQL with single-value variable
 
 ```uql
 parse-json
-| where "region" == '$region'
+| where "region" == '${region}'
 | summarize count("name") by "region"
 ```
 
-### UQL - With single filter (JSONata)
+### UQL with multi-value variable
+
+```uql
+parse-json
+| where "region" in (${region:singlequote})
+| summarize count("name") by "region"
+```
+
+### UQL exclude values (NOT IN)
+
+```uql
+parse-json
+| where "region" !in (${region:singlequote})
+| summarize count("name") by "region"
+```
+
+### UQL with JSONata expressions
+
+You can also use JSONata syntax within UQL for more complex filtering:
 
 ```uql
 parse-json
@@ -98,34 +169,34 @@ parse-json
 | summarize count("name") by "region"
 ```
 
-### UQL - With multi filter
+For multi-value variables with JSONata:
 
 ```uql
 parse-json
-| where "region" in (${region_multi:singlequote})
+| jsonata "$[region in [${region:singlequote}]]"
 | summarize count("name") by "region"
 ```
 
-### UQL - Multi filter (JSONata)
+To exclude values with JSONata:
 
 ```uql
 parse-json
-| jsonata "$[region in [${region_multi:singlequote}]]"
+| jsonata "$[$not(region in [${region:singlequote}])]"
 | summarize count("name") by "region"
 ```
 
-### UQL - Multi filter (NOT IN)
+## Use template variables in filters
 
-```uql
-parse-json
-| where "region" !in (${region_multi:singlequote})
-| summarize count("name") by "region"
-```
+Template variables make filters dynamic, allowing users to select values from dashboard drop-downs.
 
-### UQL - Multi filter (NOT IN) (JSONata)
+### Variable formatting options
 
-```uql
-parse-json
-| jsonata "$[$not(region in [${region_multi:singlequote}])]"
-| summarize count("name") by "region"
-```
+When using multi-value variables in filters, use the appropriate format option:
+
+| Format | Syntax | Output example |
+|--------|--------|----------------|
+| Single quote | `${var:singlequote}` | `'value1','value2'` |
+| Double quote | `${var:doublequote}` | `"value1","value2"` |
+| Raw | `${var:raw}` | `value1,value2` |
+
+For more information about variable formatting, refer to [Advanced variable format options](https://grafana.com/docs/grafana/latest/dashboards/variables/variable-syntax/#advanced-variable-format-options).

@@ -1,86 +1,99 @@
 ---
 slug: '/backend'
-title: 'JSONata backend parser'
-menuTitle: JSONata backend parser
-description: JSONata backend parser
+title: 'JSONata parser'
+menuTitle: JSONata parser
+description: Transform and manipulate data using JSONata syntax with the Infinity data source JSONata parser.
+aliases:
+  - /backend
 keywords:
-  - data source
   - infinity
-  - json
-  - graphql
-  - csv
-  - tsv
-  - xml
-  - html
-  - api
-  - rest
   - jsonata
-labels:
-  products:
-    - oss
+  - parser
+  - backend parser
+  - data transformation
 weight: 301
 ---
 
-# JSONata backend parser (previously called Backend parser)
+# JSONata parser
 
-The JSONata parser allows you to transform and manipulate data using [JSONata syntax](https://jsonata.org/). 
+The JSONata parser allows you to transform and manipulate data using [JSONata syntax](https://jsonata.org/).
 
 {{< admonition type="note" >}}
-In previous versions of the data source, this was referred to as the *backend parser*. In the current version, the *backend* is a parser category that includes both `JSONata` and `JQ` parsers. 
+In previous versions of the data source, this was referred to as the *backend parser*. In the current version, *backend* is a parser category that includes both the JSONata and JQ parsers.
 {{< /admonition >}}
 
 To use JSONata, select **Backend → JSONata** as the parser type in the query editor.
 
-Setting the parser to JSONata enables features such as [Alerting](https://grafana.com/docs/grafana/latest/alerting/), [Shared Dashboards](https://grafana.com/docs/grafana/latest/dashboards/share-dashboards-panels/shared-dashboards/), [SQL Expressions](https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/sql-expressions/), [Query Caching](https://grafana.com/docs/grafana/latest/administration/data-source-management/#query-and-resource-caching), [Recorded Queries](https://grafana.com/docs/grafana/latest/administration/recorded-queries/).
+## Supported data formats
 
-## Root selector/Field selector
+The JSONata parser is available for the following data formats:
 
-Root selector allows you to manipulate the data received from the server. You can use [JSONata style syntax](https://docs.jsonata.org/overview.html) in root selector to manipulate your data.
+| Data format | Parser label |
+|-------------|--------------|
+| JSON | JSONata |
+| GraphQL | JSONata |
+| XML | JSONata |
+| HTML | JSONata |
+| CSV | Backend |
+| TSV | Backend |
+
+{{< admonition type="note" >}}
+For CSV and TSV formats, the backend parser provides the same computed columns, filter, and summarize features, but the root selector uses a different syntax since the data is already tabular.
+{{< /admonition >}}
+
+## Benefits of using the JSONata parser
+
+Using the JSONata parser enables the following Grafana features:
+
+- [Alerting](https://grafana.com/docs/grafana/latest/alerting/)
+- [Shared dashboards](https://grafana.com/docs/grafana/latest/dashboards/share-dashboards-panels/shared-dashboards/)
+- [SQL expressions](https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/sql-expressions/)
+- [Query caching](https://grafana.com/docs/grafana/latest/administration/data-source-management/#query-and-resource-caching)
+- [Recorded queries](https://grafana.com/docs/grafana/latest/administration/recorded-queries/)
+
+## Root selector
+
+The root selector allows you to manipulate the data received from the server. Use [JSONata syntax](https://docs.jsonata.org/overview.html) in the root selector to transform your data before it's processed further.
+
+You can use JSONata functions directly in the root selector. For example:
+
+- `orders` — Select the `orders` array from the response
+- `orders.price` — Extract all `price` values from the `orders` array
+- `$sum(orders.price)` — Calculate the sum of all prices
+- `$avg(orders.quantity)` — Calculate the average quantity
+
+Refer to the [JSONata functions documentation](https://docs.jsonata.org/string-functions) for a complete list of available functions.
 
 ## Computed columns
 
-Computed columns let you create new fields that calculate their values based on your existing data. This is something similar to the `Add field from calculation -> Binary Operation` transformation but enhanced with powerful expression language. For example `price * qty` gives the multiplication value of two column names `price` and `qty`
+Computed columns let you create new fields that calculate values based on existing data. This is similar to the **Add field from calculation → Binary Operation** transformation but enhanced with a powerful expression language.
 
-![calculated fields](https://user-images.githubusercontent.com/153843/196197153-306bbf2a-bc95-4be2-b3ad-75e12c8ea404.png#center)
+For example, `price * qty` multiplies the values of the `price` and `qty` columns to create a new computed field.
+
+### Referencing field names
+
+You can reference field names in two ways:
+
+- **Directly**: Use the field name as-is, matching is case-insensitive. For example, `horsepower` matches a field named `Horsepower`.
+- **Brackets**: Use square brackets for exact matching or when field names contain special characters. For example, `[Cylinders] + [Horsepower]`.
 
 ### Available operators
 
-Computed columns support a wide range of operators and functions for creating expressions:
+Computed columns support a wide range of operators and functions for creating expressions.
 
-#### Arithmetic operators
-- `+` (addition)
-- `-` (subtraction)
-- `*` (multiplication)
-- `/` (division)
-- `**` (exponentiation)
-- `%` (modulo)
+| Category | Operators | Description |
+|----------|-----------|-------------|
+| Arithmetic | `+`, `-`, `*`, `/`, `**`, `%` | Addition, subtraction, multiplication, division, exponentiation, modulo |
+| Comparison | `==`, `!=`, `>`, `>=`, `<`, `<=` | Equal, not equal, greater than, greater than or equal, less than, less than or equal |
+| Logical | `&&`, `\|\|`, `!` | AND, OR, NOT |
+| String | `+` | Concatenation |
+| Membership | `IN` | Check if value is in a list |
+| Regex | `=~`, `!~` | Match, not match |
+| Ternary | `? :` | Conditional expression |
 
-#### Comparison operators
-- `==` (equal)
-- `!=` (not equal)
-- `>` (greater than)
-- `>=` (greater than or equal to)
-- `<` (less than)
-- `<=` (less than or equal to)
+### Supported types
 
-#### Logical operators
-- `&&` (logical AND)
-- `||` (logical OR)
-- `!` (logical NOT)
-
-#### String operators
-- `+` (string concatenation)
-
-#### Other operators
-- `IN` (check if value is in a list)
-- `=~` (regex match)
-- `!~` (regex not match)
-
-#### Ternary operator
-- `? :` (ternary conditional)
-
-#### Supported types
-- Numeric types (int, float)
+- Numeric types (integer, float)
 - Boolean types
 - String types
 - Arrays/lists (for use with `IN` operator)
@@ -89,14 +102,54 @@ For more details on expression syntax and advanced usage, refer to the [govaluat
 
 ## Filter
 
-If you want to filter data, you can use filter expressions. The expression should yield `true` or `false`. Example: `price > 500`, `name != 'MacBook' && price != null`, `name IN ('MacBook','MacBook Air')` and `!(name IN ('MacBook','MacBook Air'))` are valid filter expressions.
+Filter expressions let you include or exclude rows based on conditions. The expression must evaluate to `true` or `false`.
 
-![Filter expression](https://user-images.githubusercontent.com/153843/196344664-33733b04-3ac9-4c00-9c3c-970a9cb63bb3.png#center)
+**Example filter expressions:**
+
+- `price > 500` — Include rows where price exceeds 500
+- `name != 'MacBook' && price != null` — Exclude MacBook and rows with null prices
+- `name IN ('MacBook','MacBook Air')` — Include only MacBook or MacBook Air
+- `!(name IN ('MacBook','MacBook Air'))` — Exclude MacBook and MacBook Air
 
 ## Summarize
 
-Backend parser also supports summarizing the fields into a metric. For example, `count(something)` or `max(some-other-thing)` or `mean([some other thing])` can be calculated from the array of data. You can also use numeric options such as `sum`,`min`,`max`,`mean`,`first` and `last`. You can also use expressions like `sum(price) / count(id)`.
+The JSONata parser supports summarizing fields into aggregated metrics. You can calculate values like `count(something)`, `max(some-other-thing)`, or `mean([some other thing])` from your data.
 
-When specifying the field name, all special characters must be replaced with `-` and also transformed to lower case. Or the field name can also be specified within square brackets if they contain special characters. For example if the field name is `Something Else!`, then that can be specified like `min(something-else-)` or `min([Something Else!])`.
+### Available aggregation functions
 
-You can optionally specify the alias for the summarize expression using **Summarize alias** option. If nothing specified, `summary` will be used as alias. This alias will be helpful when you want to use merge transformation with results from different queries.
+| Function | Description |
+|----------|-------------|
+| `sum` | Sum of all values |
+| `min` | Minimum value |
+| `max` | Maximum value |
+| `mean` | Average value |
+| `count` | Number of items |
+| `first` | First value |
+| `last` | Last value |
+
+You can also combine functions in expressions, such as `sum(price) / count(id)`.
+
+### Field name syntax
+
+When specifying field names in summarize expressions:
+
+- **Standard format**: Replace special characters with `-` and use lowercase. For example, `Something Else!` becomes `something-else-`. Field names are matched case-insensitively in this format.
+- **Bracket format**: Enclose the original field name in square brackets to preserve exact casing and special characters. For example, `min([Something Else!])`.
+
+### Summarize by (group by)
+
+Use the **Summarize By** option to group your aggregation by a specific field, similar to SQL's `GROUP BY` clause.
+
+**Example:**
+
+For data containing employee records with `department` and `salary` fields:
+
+- **Summarize expression**: `sum(salary)`
+- **Summarize by**: `department`
+- **Result**: Total salary grouped by each department
+
+This produces one row per unique value in the grouping field, with the aggregated result for each group.
+
+### Summarize alias
+
+Use the **Summarize alias** option to specify a custom name for the aggregated result. If not specified, `summary` is used as the default alias. Custom aliases are useful when merging results from different queries using transformations.
