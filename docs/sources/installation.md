@@ -1,25 +1,21 @@
 ---
 slug: '/installation'
-title: 'Installation'
-menuTitle: Installation
-description: This document introduces the Infinity data source
+title: Install the Infinity data source
+menuTitle: Install
+description: Learn how to install the Infinity data source plugin for Grafana
 aliases:
-  - infinity
+  - /docs/plugins/yesoreyeram-infinity-datasource/latest/setup/installation/
 keywords:
-  - data source
   - infinity
-  - json
-  - graphql
-  - csv
-  - tsv
-  - xml
-  - html
-  - api
-  - rest
+  - installation
+  - plugin
+  - grafana-cli
+  - docker
+  - helm
 labels:
   products:
     - oss
-weight: 101
+weight: 15
 ---
 
 # Installing Infinity data source plugin

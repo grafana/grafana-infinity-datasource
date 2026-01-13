@@ -156,7 +156,11 @@ OAuth 2.0 client credentials authentication requires the following settings:
 | **Scopes** | Optional. Specifies requested permissions. |
 | **Endpoint params** | Optional. Additional parameters for requests to the token endpoint. |
 
-For advanced token customization (custom header names, token formats), refer to [OAuth2 Custom Tokens](/docs/plugins/yesoreyeram-infinity-datasource/latest/setup/oauth2-custom-tokens/).
+For advanced token customization, refer to [OAuth2 Custom Tokens](/docs/plugins/yesoreyeram-infinity-datasource/latest/oauth2-custom-tokens/). Key customization options include:
+
+- Custom header names (for example, `X-API-Key` instead of `Authorization`)
+- Custom token value formats (for example, `Token ${__oauth2.access_token}` instead of `Bearer ${__oauth2.access_token}`)
+- Access to multiple token properties (access token, refresh token, token type)
 
 #### OAuth 2.0 JWT
 
@@ -171,7 +175,7 @@ OAuth 2.0 JWT authentication requires the following settings:
 | **Subject** | Optional. The user to impersonate. |
 | **Scopes** | Optional. A comma-separated list of requested permission scopes. |
 
-OAuth 2.0 JWT authentication also supports token customization. Refer to [OAuth2 Custom Tokens](/docs/plugins/yesoreyeram-infinity-datasource/latest/setup/oauth2-custom-tokens/) for details.
+OAuth 2.0 JWT authentication also supports token customization. Refer to [OAuth2 Custom Tokens](/docs/plugins/yesoreyeram-infinity-datasource/latest/oauth2-custom-tokens/) for details.
 
 #### Azure authentication
 
@@ -240,9 +244,13 @@ Infinity doesn't validate any permissions against the underlying API. Enable thi
 
 Configure how the Infinity data source connects to external APIs.
 
+{{< admonition type="note" >}}
+The Infinity data source sends all API requests from the Grafana server, not from the user's browser. This means network configuration (proxies, firewalls, etc.) must allow outbound connections from your Grafana server to the target APIs.
+{{< /admonition >}}
+
 #### Proxy settings
 
-The Infinity data source sends API requests from the Grafana server to the downstream server. You can configure proxy settings for routing requests through a proxy server.
+You can configure proxy settings for routing requests through a proxy server.
 
 | Setting | Description |
 |---------|-------------|
@@ -370,6 +378,4 @@ datasources:
 {{< admonition type="tip" >}}
 Once you have manually configured the data source and verified it is working, you can generate a provisioning YAML file from the data source configuration page. Look for the **Provisioning Script** button at the bottom of the config page in the **More** section.
 {{< /admonition >}}
-
-For more provisioning examples, refer to [Provisioning](/docs/plugins/yesoreyeram-infinity-datasource/latest/setup/provisioning/).
 

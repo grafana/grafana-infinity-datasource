@@ -1,25 +1,20 @@
 ---
-slug: '/oauth2-token-customization'
-title: 'OAuth2 token customization'
+slug: '/oauth2-custom-tokens'
+title: OAuth2 token customization
 menuTitle: OAuth2 token customization
-description: Customizing OAuth2 tokens
+description: Customize OAuth2 token headers and formats for the Infinity data source
 aliases:
-  - infinity
+  - /docs/plugins/yesoreyeram-infinity-datasource/latest/setup/oauth2-custom-tokens/
+  - /docs/plugins/yesoreyeram-infinity-datasource/latest/setup/oauth2-token-customization/
 keywords:
-  - data source
   - infinity
-  - json
-  - graphql
-  - csv
-  - tsv
-  - xml
-  - html
-  - api
-  - rest
+  - oauth2
+  - authentication
+  - token customization
 labels:
   products:
     - oss
-weight: 232
+weight: 25
 ---
 
 # OAuth2 Custom Token and Header Configuration
