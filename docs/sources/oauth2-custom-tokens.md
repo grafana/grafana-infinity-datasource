@@ -2,7 +2,7 @@
 slug: '/oauth2-custom-tokens'
 title: OAuth2 token customization
 menuTitle: OAuth2 token customization
-description: Customize OAuth2 token headers and formats for the Infinity data source
+description: Customize OAuth2 token headers and formats for the Infinity data source.
 aliases:
   - /docs/plugins/yesoreyeram-infinity-datasource/latest/setup/oauth2-custom-tokens/
   - /docs/plugins/yesoreyeram-infinity-datasource/latest/setup/oauth2-token-customization/
@@ -11,21 +11,14 @@ keywords:
   - oauth2
   - authentication
   - token customization
-labels:
-  products:
-    - oss
 weight: 25
 ---
 
-# OAuth2 Custom Token and Header Configuration
+# OAuth2 token customization
 
-## Overview
+The Infinity data source supports OAuth2 authentication with advanced customization options for token headers and token templates. This feature allows you to customize how OAuth2 access tokens are sent in HTTP requests, accommodating APIs that don't follow standard OAuth2 patterns.
 
-The Grafana Infinity Datasource supports OAuth2 authentication with advanced customization options for token headers and token templates. This feature allows you to customize how OAuth2 access tokens are sent in HTTP requests, accommodating various API requirements that may not follow standard OAuth2 patterns.
-
-## Standard OAuth2 vs Custom Token Configuration
-
-### Standard OAuth2 Behavior
+## When to use custom token configuration
 
 By default, OAuth2 authentication sends the access token in the standard format:
 
@@ -33,45 +26,94 @@ By default, OAuth2 authentication sends the access token in the standard format:
 Authorization: Bearer <access_token>
 ```
 
-### Custom Token Configuration
+Use custom token configuration when your API requires:
 
-With custom token configuration, you can:
+- A different header name (for example, `X-API-Key` or `X-Access-Token`)
+- A custom token format with different prefixes
+- Access to the refresh token or token type in the header
 
-- Use a different header name (e.g., `X-API-Key`, `X-Access-Token`)
-- Use a custom token value format with different prefixes or formats
-- Access various token properties (access token, refresh token, token type)
+## AuthHeader option
 
-## Configuration Options
+The `authHeader` field specifies a custom header name for the OAuth2 token.
 
-### AuthHeader
+| Setting | Description |
+|---------|-------------|
+| Default | `Authorization` |
+| Type | String |
 
-The `authHeader` field allows you to specify a custom header name for the OAuth2 token.
-
-**Default**: `Authorization`
-
-**Examples**:
+**Example values:**
 
 - `X-API-Key`
 - `X-Access-Token`
-- `Authorization`
 - `Bearer-Token`
 
-### TokenTemplate
+## TokenTemplate option
 
-The `tokenTemplate` field allows you to specify a custom format for the token value.
+The `tokenTemplate` field specifies a custom format for the token value using placeholders.
 
-**Default**: `Bearer ${__oauth2.access_token}`
+| Setting | Description |
+|---------|-------------|
+| Default | `Bearer ${__oauth2.access_token}` |
+| Type | String with placeholders |
 
-**Available Placeholders**:
+**Available placeholders:**
 
-- `${__oauth2.access_token}` - The OAuth2 access token
-- `${__oauth2.refresh_token}` - The OAuth2 refresh token (when available)
-- `${__oauth2.token_type}` - The OAuth2 token type
+| Placeholder | Description |
+|-------------|-------------|
+| `${__oauth2.access_token}` | The OAuth2 access token |
+| `${__oauth2.refresh_token}` | The OAuth2 refresh token (when available) |
+| `${__oauth2.token_type}` | The OAuth2 token type returned by the server |
 
-**Examples**:
+**Example templates:**
 
-- `Bearer ${__oauth2.access_token}` (default)
-- `Token ${__oauth2.access_token}`
-- `${__oauth2.access_token}` (token only, no prefix)
-- `${__oauth2.token_type} ${__oauth2.access_token}` (dynamic prefix)
-- `ApiKey ${__oauth2.access_token}`
+| Template | Result |
+|----------|--------|
+| `Bearer ${__oauth2.access_token}` | `Bearer abc123` (default) |
+| `Token ${__oauth2.access_token}` | `Token abc123` |
+| `${__oauth2.access_token}` | `abc123` (no prefix) |
+| `${__oauth2.token_type} ${__oauth2.access_token}` | Dynamic prefix from token response |
+| `ApiKey ${__oauth2.access_token}` | `ApiKey abc123` |
+
+## Configuration example
+
+To configure custom OAuth2 token handling, add the following to your data source provisioning YAML:
+
+```yaml
+apiVersion: 1
+datasources:
+  - name: Custom API
+    type: yesoreyeram-infinity-datasource
+    jsonData:
+      oauthPassThru: false
+      oauth2:
+        oauth2_type: client_credentials
+        client_id: your-client-id
+        token_url: https://auth.example.com/oauth/token
+        authHeader: X-API-Key
+        tokenTemplate: "ApiKey ${__oauth2.access_token}"
+    secureJsonData:
+      oauth2ClientSecret: your-client-secret
+```
+
+This configuration sends requests with:
+
+```http
+X-API-Key: ApiKey abc123
+```
+
+Instead of the default:
+
+```http
+Authorization: Bearer abc123
+```
+
+## Configure in the UI
+
+1. In the data source configuration, expand **Authentication**.
+1. Select **OAuth2** as the authentication method.
+1. Select your OAuth2 type (for example, **Client Credentials**).
+1. Fill in the required OAuth2 fields (Client ID, Client Secret, Token URL).
+1. Expand **Customize OAuth2 token (Advanced)**.
+1. In the **Custom Token Header** field, enter your custom header name.
+1. In the **Custom Token Template** field, enter your custom token format using placeholders.
+1. Click **Save & test**.
