@@ -65,6 +65,8 @@ Configuration applies to all queries using this data source instance. If you nee
 
 ## Configuration options
 
+The following sections describe the available configuration options for the Infinity data source.
+
 ### Connection
 
 | Setting | Description |
@@ -72,7 +74,7 @@ Configuration applies to all queries using this data source instance. If you nee
 | **Base URL** | Optional. The base URL for all queries. If configured, this URL is prefixed to all query URLs. For example, if you set `https://example.com/api` as the base URL and `/users` as the query URL, the final URL will be `https://example.com/api/users`. |
 | **Allowed hosts** | Optional. A list of hosts that the data source is allowed to connect to. If configured, requests to other hosts will be blocked. |
 
-For more information about URL configuration, refer to [URL reference]({{< relref "./references/url" >}}).
+For more information about URL configuration, refer to [URL reference](/docs/plugins/yesoreyeram-infinity-datasource/latest/references/url/).
 
 ### Authentication
 
@@ -154,7 +156,7 @@ OAuth 2.0 client credentials authentication requires the following settings:
 | **Scopes** | Optional. Specifies requested permissions. |
 | **Endpoint params** | Optional. Additional parameters for requests to the token endpoint. |
 
-For advanced token customization (custom header names, token formats), refer to [OAuth2 Custom Tokens]({{< relref "./setup/oauth2-custom-tokens" >}}).
+For advanced token customization (custom header names, token formats), refer to [OAuth2 Custom Tokens](/docs/plugins/yesoreyeram-infinity-datasource/latest/setup/oauth2-custom-tokens/).
 
 #### OAuth 2.0 JWT
 
@@ -169,11 +171,11 @@ OAuth 2.0 JWT authentication requires the following settings:
 | **Subject** | Optional. The user to impersonate. |
 | **Scopes** | Optional. A comma-separated list of requested permission scopes. |
 
-OAuth 2.0 JWT authentication also supports token customization. Refer to [OAuth2 Custom Tokens]({{< relref "./setup/oauth2-custom-tokens" >}}) for details.
+OAuth 2.0 JWT authentication also supports token customization. Refer to [OAuth2 Custom Tokens](/docs/plugins/yesoreyeram-infinity-datasource/latest/setup/oauth2-custom-tokens/) for details.
 
 #### Azure authentication
 
-To authenticate your API endpoints via Microsoft Azure authentication, refer to [Azure authentication]({{< relref "./examples/azure" >}}).
+To authenticate your API endpoints via Microsoft Azure authentication, refer to [Azure authentication](/docs/plugins/yesoreyeram-infinity-datasource/latest/examples/azure/).
 
 #### Azure Blob storage
 
@@ -187,7 +189,7 @@ To retrieve content from Azure Blob storage, configure the following settings:
 
 #### AWS authentication
 
-To authenticate your API endpoints via Amazon AWS authentication, refer to [AWS authentication]({{< relref "./examples/aws" >}}).
+To authenticate your API endpoints via Amazon AWS authentication, refer to [AWS authentication](/docs/plugins/yesoreyeram-infinity-datasource/latest/examples/aws/).
 
 ### TLS settings
 
@@ -214,6 +216,8 @@ You can add custom HTTP headers to all requests made by the data source.
 
 ### Additional settings
 
+Configure additional options for request handling and HTTP methods.
+
 #### Timeout
 
 | Setting | Description |
@@ -233,6 +237,8 @@ Infinity doesn't validate any permissions against the underlying API. Enable thi
 {{< /admonition >}}
 
 ### Network settings
+
+Configure how the Infinity data source connects to external APIs.
 
 #### Proxy settings
 
@@ -258,7 +264,7 @@ If you use PDC with AWS Authentication, the PDC agent must allow internet egress
 
 | Setting | Description |
 |---------|-------------|
-| **Private data source connect** | Select a PDC connection from the dropdown or create a new connection. |
+| **Private data source connect** | Select a PDC connection from the drop-down or create a new connection. |
 
 ### Health check
 
@@ -365,5 +371,5 @@ datasources:
 Once you have manually configured the data source and verified it is working, you can generate a provisioning YAML file from the data source configuration page. Look for the **Provisioning Script** button at the bottom of the config page in the **More** section.
 {{< /admonition >}}
 
-For more provisioning examples, refer to [Provisioning]({{< relref "./setup/provisioning" >}}).
+For more provisioning examples, refer to [Provisioning](/docs/plugins/yesoreyeram-infinity-datasource/latest/setup/provisioning/).
 
