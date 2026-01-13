@@ -10,7 +10,7 @@ keywords:
   - uql
   - parser
   - query language
-weight: 310
+weight: 110
 ---
 
 # UQL parser

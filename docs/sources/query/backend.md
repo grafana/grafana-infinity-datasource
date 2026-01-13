@@ -11,7 +11,7 @@ keywords:
   - parser
   - backend parser
   - data transformation
-weight: 301
+weight: 100
 ---
 
 # JSONata parser

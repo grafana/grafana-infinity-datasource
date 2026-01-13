@@ -11,7 +11,7 @@ keywords:
   - parser
   - json query
   - data transformation
-weight: 302
+weight: 120
 ---
 
 # JQ parser

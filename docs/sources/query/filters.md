@@ -10,7 +10,7 @@ keywords:
   - filter
   - where clause
   - template variables
-weight: 360
+weight: 200
 ---
 
 # Filter data

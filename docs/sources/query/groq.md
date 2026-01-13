@@ -10,7 +10,7 @@ keywords:
   - groq
   - parser
   - json query
-weight: 320
+weight: 130
 ---
 
 # GROQ parser
