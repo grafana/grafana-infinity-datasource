@@ -21,7 +21,7 @@ weight: 20
 Select **CSV** as the query type to retrieve data from CSV files or endpoints. You can query data from a URL or provide inline CSV data.
 
 {{< admonition type="tip" >}}
-For a quick start, refer to [How to Visualize CSV Data with Grafana](https://grafana.com/blog/2025/02/05/how-to-visualize-csv-data-with-grafana/) or the [Visualize CSV data using the Infinity data source](https://grafana.com/docs/learning-journeys/infinity-csv/) learning journey.
+For a quick start, refer to [How to Visualize CSV Data with Grafana](https://grafana.com/blog/how-to-visualize-csv-data-with-grafana/) or the [Visualize CSV data using the Infinity data source](https://grafana.com/docs/learning-journeys/infinity-csv/) learning journey.
 {{< /admonition >}}
 
 {{< docs/play title="Infinity plugin CSV demo" url="https://play.grafana.org/d/infinity-csv" >}}
