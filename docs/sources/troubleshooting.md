@@ -321,6 +321,43 @@ This is expected behavior. The Grafana server makes API requests on behalf of th
 1. Firewall rules should allow outbound connections from the Grafana server.
 1. API rate limits apply to the Grafana server's IP address.
 
+## Alerting issues
+
+These issues relate to using Infinity queries with Grafana Alerting.
+
+### Alert rule shows "no data" or doesn't fire
+
+**Cause:** The query uses a frontend parser that doesn't support alerting.
+
+**Solution:**
+
+1. Alerting only works with **backend parsers**: JSONata or JQ.
+1. Change your parser from Default, UQL, or GROQ to **JSONata** or **JQ**.
+1. Verify the query returns numeric data that can be evaluated against alert thresholds.
+1. Test the query in Explore to ensure it returns data.
+
+{{< admonition type="note" >}}
+Frontend parsers (Default, UQL, GROQ) run in the browser and cannot be used for alerting, recorded queries, or public dashboards. Use JSONata or JQ for these features.
+{{< /admonition >}}
+
+### User macros not available in alerts
+
+**Cause:** Alert queries run in a system context without user session information.
+
+**Solution:**
+
+User-related macros (`${__user.login}`, `${__user.email}`, `${__user.name}`) are not available in:
+
+- Alert rules
+- Recorded queries
+- Public dashboards
+
+If your query depends on user context, you'll need to:
+
+1. Remove user macros from alert queries.
+1. Use static values or other macros that don't require user context.
+1. Consider using data source-level filters instead of user-based filters.
+
 ## Azure Blob Storage errors
 
 These errors are specific to Azure Blob Storage queries.
