@@ -12,6 +12,11 @@ keywords:
   - grafana-cli
   - docker
   - helm
+labels:
+  products:
+    - oss
+    - enterprise
+    - cloud
 weight: 15
 ---
 

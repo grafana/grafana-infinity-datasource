@@ -12,6 +12,11 @@ keywords:
   - oauth2
   - authentication
   - token customization
+labels:
+  products:
+    - oss
+    - enterprise
+    - cloud
 weight: 80
 ---
 

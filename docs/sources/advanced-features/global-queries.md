@@ -2,59 +2,50 @@
 slug: '/global-queries'
 title: 'Global queries'
 menuTitle: Global queries
-description: Global queries
+description: Create reusable queries that can be shared across dashboards.
 aliases:
-  - infinity
+  - /docs/plugins/yesoreyeram-infinity-datasource/latest/references/global-queries/
 keywords:
-  - data source
   - infinity
-  - json
-  - graphql
-  - csv
-  - tsv
-  - xml
-  - html
-  - api
-  - rest
+  - global queries
+  - reusable queries
 labels:
   products:
     - oss
+    - enterprise
+    - cloud
 weight: 100
 ---
-
-<!-- markdownlint-disable MD028 -->
 
 # Global queries
 
 {{< admonition type="caution" >}}
-Starting with Infinity plugin version 0.7.8, Global Queries is deprecated in favor of the Grafana panel library.
+Starting with Infinity plugin version 0.7.8, global queries is deprecated in favor of the Grafana panel library.
 It will be removed in a future release.
 {{< /admonition >}}
 
-Working with the same queries in multiple dashboards might be hard some times. To change a query, you need to update all the dashboards. To solve this, Infinity data source gives an option to register queries globally and allows to reuse the queries across dashboards.
+Global queries let you register queries in the data source configuration and reuse them across multiple dashboards. When the query definition changes, all dashboards using it reflect the change after reloading.
 
-## Creating a global query
+## Create a global query
 
-To register a query, in the data source instance settings follow the steps below:
-
-1. Click **Add Global Query** button.
-1. Change the name and id of the query. ID should be unique per data source instance.
-1. Enter the query fields.
+1. Navigate to the data source configuration.
+1. Click **Add Global Query**.
+1. Enter a unique **Name** and **ID** for the query.
+1. Configure the query fields (type, URL, parser, columns, etc.).
 1. Click **Save**.
 
-![image](https://user-images.githubusercontent.com/153843/93780448-1635d080-fc20-11ea-8c92-d6e91dbcf003.png#center)
+You can register multiple global queries per data source instance.
 
-You can have multiple queries registered per data source instance.
+## Use a global query in a panel
 
-## Using global queries in the panel
+1. In the query editor, set **Type** to **Global Query**.
+1. Select the query from the drop-down list.
+1. Click **Run query**.
 
-In order to use the registered query in the dashboard, you have to select `Global Query` / `global` as type. Then select the query you needed from the list.
+## Provision global queries
 
-![image](https://user-images.githubusercontent.com/153843/93780923-ab38c980-fc20-11ea-9d87-078233102905.png#center)
+Configure global queries through provisioning:
 
-## Provision the global queries
-
-You can also provision the global queries in the data source provisioning. The example below provides a sample of inline CSV query provisioning:
 ```yaml
 apiVersion: 1
 datasources:
@@ -88,8 +79,10 @@ datasources:
     readOnly: true
 ```
 
-> **Note**: When using global queries, queries will be loaded from the data source setting when loading the dashboard only. If the query changes, dashboards will reflect the change only when they are reloaded. (Query refresh won't fetch the latest query).
+{{< admonition type="note" >}}
+Global queries are loaded from the data source settings when the dashboard loads. If you change a global query, dashboards reflect the change only after reloading. Query refresh does not fetch the latest query definition.
+{{< /admonition >}}
 
 {{< admonition type="note" >}}
-When provisioning, Grafana variables like `${__from}` aren't supported.
+When provisioning, Grafana variables like `${__from}` are not supported in global queries.
 {{< /admonition >}}

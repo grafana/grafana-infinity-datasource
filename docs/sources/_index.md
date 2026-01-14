@@ -18,6 +18,8 @@ keywords:
 labels:
   products:
     - oss
+    - enterprise
+    - cloud
 weight: 10
 ---
 

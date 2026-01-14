@@ -9,6 +9,11 @@ keywords:
   - infinity
   - logs
   - log visualization
+labels:
+  products:
+    - oss
+    - enterprise
+    - cloud
 weight: 30
 ---
 

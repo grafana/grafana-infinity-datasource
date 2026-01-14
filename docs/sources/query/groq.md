@@ -10,6 +10,11 @@ keywords:
   - groq
   - parser
   - json query
+labels:
+  products:
+    - oss
+    - enterprise
+    - cloud
 weight: 130
 ---
 

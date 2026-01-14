@@ -10,6 +10,11 @@ keywords:
   - filter
   - where clause
   - template variables
+labels:
+  products:
+    - oss
+    - enterprise
+    - cloud
 weight: 200
 ---
 

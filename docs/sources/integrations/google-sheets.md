@@ -8,6 +8,11 @@ keywords:
   - Google Sheets
   - spreadsheet
   - Google API
+labels:
+  products:
+    - oss
+    - enterprise
+    - cloud
 weight: 250
 ---
 

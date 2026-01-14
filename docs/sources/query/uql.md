@@ -10,6 +10,12 @@ keywords:
   - uql
   - parser
   - query language
+
+labels:
+  products:
+    - oss
+    - enterprise
+    - cloud
 weight: 110
 ---
 

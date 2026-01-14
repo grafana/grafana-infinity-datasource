@@ -8,6 +8,11 @@ keywords:
   - troubleshooting
   - errors
   - debugging
+labels:
+  products:
+    - oss
+    - enterprise
+    - cloud
 weight: 700
 ---
 

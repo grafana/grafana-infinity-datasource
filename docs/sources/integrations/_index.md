@@ -12,6 +12,11 @@ keywords:
   - Azure
   - GitHub
   - API
+labels:
+  products:
+    - oss
+    - enterprise
+    - cloud
 weight: 600
 ---
 

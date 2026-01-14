@@ -11,6 +11,11 @@ keywords:
   - parser
   - json query
   - data transformation
+labels:
+  products:
+    - oss
+    - enterprise
+    - cloud
 weight: 120
 ---
 

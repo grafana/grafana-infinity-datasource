@@ -11,6 +11,11 @@ keywords:
   - dynamic queries
   - time range
   - template variables
+labels:
+  products:
+    - oss
+    - enterprise
+    - cloud
 weight: 220
 ---
 
