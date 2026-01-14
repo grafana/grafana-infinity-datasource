@@ -122,8 +122,8 @@ github.com/grafana/dataplane/sdata v0.0.9 h1:AGL1LZnCUG4MnQtnWpBPbQ8ZpptaZs14w6k
 github.com/grafana/dataplane/sdata v0.0.9/go.mod h1:Jvs5ddpGmn6vcxT7tCTWAZ1mgi4sbcdFt9utQx5uMAU=
 github.com/grafana/dskit v0.0.0-20260108080602-787465f625cd h1:BzZa+IWYwio061wd2j5yTnxMcFLBEAT/poYQzSj2D0Y=
 github.com/grafana/dskit v0.0.0-20260108080602-787465f625cd/go.mod h1:HFQzMAbbgJ1z7xJ+qnm4GvrVp52pV/a31Z8tpgSmGDU=
-github.com/grafana/grafana-aws-sdk v1.4.0 h1:kQ3CF6Fz5Oqlv5hp/HChvArdDLCIf+X4VdXjbABZIAY=
-github.com/grafana/grafana-aws-sdk v1.4.0/go.mod h1:1qnZdYs6gQzxxF0dDodaE7Rn9fiMzuhwvtaAZ7ySnhY=
+github.com/grafana/grafana-aws-sdk v1.4.2 h1:GrUEoLbs46r8rG/GZL4L2b63Bo+rkIYKdtCT7kT5KkM=
+github.com/grafana/grafana-aws-sdk v1.4.2/go.mod h1:1qnZdYs6gQzxxF0dDodaE7Rn9fiMzuhwvtaAZ7ySnhY=
 github.com/grafana/grafana-plugin-sdk-go v0.284.0 h1:1bK7eWsnPBLUWDcWJWe218Ik5ad0a5JpEL4mH9ry7Ws=
 github.com/grafana/grafana-plugin-sdk-go v0.284.0/go.mod h1:lHPniaSxq3SL5MxDIPy04TYB1jnTp/ivkYO+xn5Rz3E=
 github.com/grafana/infinity-libs/lib/go/csvframer v1.0.3 h1:Vr1Iy2+VDe5Vkx3kLaNbUGVYvpdWqBiYg/BjSkCzPYg=
