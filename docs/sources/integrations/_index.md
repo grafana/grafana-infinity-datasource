@@ -28,6 +28,7 @@ The Infinity data source can connect to virtually any API that returns JSON, CSV
 | [AWS API](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/integrations/aws/) | Connect to AWS management APIs for metrics, cost data, and more |
 | [Azure API](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/integrations/azure/) | Query Azure management APIs for subscriptions, resources, and monitoring |
 | [GitHub GraphQL](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/integrations/github/) | Query GitHub repositories, issues, and pull requests using GraphQL |
+| [Google Sheets](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/integrations/google-sheets/) | Query data directly from Google Sheets spreadsheets |
 | [RSS feeds](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/integrations/rss-feeds/) | Visualize RSS and Atom feeds, including status pages |
 | [ThingSpeak](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/integrations/thingspeak/) | Connect to ThingSpeak IoT platform for sensor data |
 

@@ -73,6 +73,78 @@ https://api.example.com/data?from=${__timeFrom}&to=${__timeTo}
 
 For more information about URL configuration, refer to [URL configuration](/docs/plugins/yesoreyeram-infinity-datasource/latest/advanced-features/url/).
 
+## Pagination
+
+For APIs that return data across multiple pages, use the **Pagination** section to automatically fetch and combine results from all pages.
+
+{{< admonition type="note" >}}
+Pagination is a beta feature. The maximum number of pages is limited to 5 by default, or the limit configured by your Grafana administrator.
+{{< /admonition >}}
+
+### Pagination modes
+
+| Mode | Description | Use when |
+|------|-------------|----------|
+| **None** | No pagination (default) | API returns all data in one response |
+| **Offset** | Uses offset/limit parameters | API uses `offset=0&limit=100` style |
+| **Page number** | Uses page number parameter | API uses `page=1&size=100` style |
+| **Cursor** | Uses cursor from response | API returns a `nextCursor` token |
+| **List of values** | Iterates through a list | Need to query multiple IDs or values |
+
+### Configure offset pagination
+
+Use offset pagination when your API accepts `offset` and `limit` (or similar) parameters.
+
+| Setting | Description |
+|---------|-------------|
+| **Max pages** | Maximum number of pages to fetch (up to 5) |
+| **Size field name** | Parameter name for page size (for example, `limit`, `size`, `count`) |
+| **Size field type** | Where to send the parameter: Query param, Header, Body form, or Replace URL |
+| **Size field value** | Number of items per page |
+| **Offset field name** | Parameter name for offset (for example, `offset`, `skip`) |
+| **Offset field type** | Where to send the parameter |
+| **Initial value** | Starting offset value (usually 0) |
+
+The offset is automatically calculated for each page: `initialValue + ((pageNumber - 1) * pageSize)`.
+
+### Configure page number pagination
+
+Use page number pagination when your API accepts a page number parameter.
+
+| Setting | Description |
+|---------|-------------|
+| **Max pages** | Maximum number of pages to fetch (up to 5) |
+| **Size field name** | Parameter name for page size |
+| **Size field value** | Number of items per page |
+| **Page field name** | Parameter name for page number (for example, `page`) |
+| **Initial value** | Starting page number (usually 1) |
+
+### Configure cursor pagination
+
+Use cursor pagination when your API returns a cursor or token for the next page.
+
+| Setting | Description |
+|---------|-------------|
+| **Max pages** | Maximum number of pages to fetch (up to 5) |
+| **Size field name** | Parameter name for page size |
+| **Size field value** | Number of items per page |
+| **Cursor field name** | Parameter name for the cursor |
+| **Extraction path** | JSONPath or selector to extract the cursor from the response |
+
+The plugin extracts the cursor value from each response and uses it for the next request.
+
+### Configure list pagination
+
+Use list pagination to iterate through a set of values, making one request per value.
+
+| Setting | Description |
+|---------|-------------|
+| **Field name** | Parameter name to replace |
+| **Field type** | Where to send the parameter |
+| **Field value** | Comma-separated list of values (for example, `id1,id2,id3`) |
+
+This mode is useful when you need to query multiple resources by ID and combine the results.
+
 ## Parsing options
 
 The **Parsing options & Result fields** section configures how data is extracted:
@@ -138,6 +210,7 @@ Select the appropriate format for your visualization:
 | **Node graph (nodes/edges)** | Network topology visualization |
 
 For specialized formats, refer to:
+- [Logs format](/docs/plugins/yesoreyeram-infinity-datasource/latest/advanced-features/logs/)
 - [Tracing format](/docs/plugins/yesoreyeram-infinity-datasource/latest/advanced-features/tracing/)
 - [Node graph format](/docs/plugins/yesoreyeram-infinity-datasource/latest/advanced-features/node-graph/)
 

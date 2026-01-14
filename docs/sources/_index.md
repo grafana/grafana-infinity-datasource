@@ -39,7 +39,7 @@ The following resources will help you get started with the Infinity data source:
 
 The Infinity data source supports:
 
-- **Multiple data formats:** Query JSON, CSV, TSV, XML, HTML, and GraphQL endpoints.
+- **Multiple data formats:** Query JSON, CSV, TSV, XML, HTML, GraphQL endpoints, and Google Sheets.
 - **Flexible data manipulation:** Transform data with UQL, JSONata, and GROQ.
 - **Various authentication methods:** Basic, Bearer token, API key, OAuth passthrough, OAuth2 client credentials, OAuth2 JWT, AWS/Azure/GCP authentication, and Digest authentication.
 - **Backend features:** Alerting, recorded queries, shared dashboards, and query caching (in backend parsing mode).
