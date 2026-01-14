@@ -156,7 +156,7 @@ OAuth 2.0 client credentials authentication requires the following settings:
 | **Scopes** | Optional. Specifies requested permissions. |
 | **Endpoint params** | Optional. Additional parameters for requests to the token endpoint. |
 
-For advanced token customization, refer to [OAuth2 Custom Tokens](/docs/plugins/yesoreyeram-infinity-datasource/latest/oauth2-custom-tokens/). Key customization options include:
+For advanced token customization, refer to [OAuth2 Custom Tokens](/docs/plugins/yesoreyeram-infinity-datasource/latest/advanced-features/oauth2-custom-tokens/). Key customization options include:
 
 - Custom header names (for example, `X-API-Key` instead of `Authorization`)
 - Custom token value formats (for example, `Token ${__oauth2.access_token}` instead of `Bearer ${__oauth2.access_token}`)
@@ -175,7 +175,7 @@ OAuth 2.0 JWT authentication requires the following settings:
 | **Subject** | Optional. The user to impersonate. |
 | **Scopes** | Optional. A comma-separated list of requested permission scopes. |
 
-OAuth 2.0 JWT authentication also supports token customization. Refer to [OAuth2 Custom Tokens](/docs/plugins/yesoreyeram-infinity-datasource/latest/oauth2-custom-tokens/) for details.
+OAuth 2.0 JWT authentication also supports token customization. Refer to [OAuth2 Custom Tokens](/docs/plugins/yesoreyeram-infinity-datasource/latest/advanced-features/oauth2-custom-tokens/) for details.
 
 #### Azure authentication
 

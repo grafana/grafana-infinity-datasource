@@ -129,7 +129,7 @@ These errors relate to authentication configuration issues.
 1. For Azure, verify the `resource` endpoint parameter is set correctly.
 1. Check if the OAuth2 provider requires additional endpoint parameters.
 
-For custom token configurations, refer to [OAuth2 token customization](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/oauth2-custom-tokens/).
+For custom token configurations, refer to [OAuth2 token customization](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/advanced-features/oauth2-custom-tokens/).
 
 ### AWS authentication failures
 
