@@ -379,3 +379,27 @@ datasources:
 Once you have manually configured the data source and verified it is working, you can generate a provisioning YAML file from the data source configuration page. Look for the **Provisioning Script** button at the bottom of the config page in the **More** section.
 {{< /admonition >}}
 
+## Administrator configuration
+
+Grafana administrators can configure plugin-wide settings using environment variables.
+
+### Pagination limits
+
+By default, pagination queries are limited to 5 pages maximum. To increase this limit, set the `GF_PLUGIN_PAGINATION_MAX_PAGES` environment variable:
+
+```shell
+GF_PLUGIN_PAGINATION_MAX_PAGES=10
+```
+
+For Docker deployments:
+
+```shell
+docker run -p 3000:3000 \
+  -e "GF_INSTALL_PLUGINS=yesoreyeram-infinity-datasource" \
+  -e "GF_PLUGIN_PAGINATION_MAX_PAGES=10" \
+  grafana/grafana:latest
+```
+
+{{< admonition type="note" >}}
+Higher pagination limits increase the number of API requests made per query, which can affect performance and API rate limits.
+{{< /admonition >}}
