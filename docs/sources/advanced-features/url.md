@@ -1,83 +1,161 @@
 ---
 slug: '/url'
-title: 'URL'
+title: URL configuration
 menuTitle: URL
-description: URL
+description: Configure URLs, HTTP methods, headers, and request bodies for Infinity queries.
 aliases:
-  - infinity
+  - /docs/plugins/yesoreyeram-infinity-datasource/latest/references/url/
 keywords:
-  - data source
   - infinity
-  - json
-  - graphql
-  - csv
-  - tsv
-  - xml
-  - html
-  - api
-  - rest
+  - URL
+  - HTTP
+  - headers
+  - query parameters
 labels:
   products:
     - oss
 weight: 60
 ---
 
-# Configuring URL
+# URL configuration
 
-You can enter any URL in the query URL field. URL must be a valid JSON, CSV, GraphQL, XML, or HTML endpoint.
+The Infinity data source supports advanced URL configuration options including HTTP methods, custom headers, query parameters, and request bodies. Use these options to connect to any REST API or web endpoint.
 
-In the query editor, click the expand icon next the URL field to configure more query URL options like HTTP Method (GET/POST), additional headers and additional query strings.
+## Before you begin
 
-## Variables in URL
+- Ensure you have the Infinity data source installed and configured
+- Know the API endpoint requirements (authentication, headers, body format)
 
-In the query URL, you can use any [grafana global variables](https://grafana.com/docs/grafana/latest/variables/variable-types/global-variables) or any dashboard variables this includes from and to timestamps of the dashboard
+## Configure URL options
 
-For example,
+In the query editor, click the expand icon next to the **URL** field to access advanced options.
 
-```bash
-https://example.com/path/subpath?from=${__from:date:YYYY-MM}&to=${__to:date:YYYY-MM}
+### HTTP methods
+
+| Method | Description |
+|--------|-------------|
+| **GET** | Retrieve data (default) |
+| **POST** | Send data in request body |
+| **PUT** | Update existing resource (requires admin configuration) |
+| **PATCH** | Partial update (requires admin configuration) |
+| **DELETE** | Remove resource (requires admin configuration) |
+
+{{< admonition type="note" >}}
+PUT, PATCH, and DELETE methods are considered dangerous and must be enabled by an administrator in the data source configuration.
+{{< /admonition >}}
+
+### Query parameters
+
+Add query parameters that will be appended to the URL. Each parameter has a key and value.
+
+### Request headers
+
+Add custom headers to send with the request. Each header has a key and value.
+
+### Request body
+
+For POST, PUT, and PATCH requests, configure the request body:
+
+| Body type | Description |
+|-----------|-------------|
+| **none** | No request body |
+| **form-data** | Multipart form data |
+| **x-www-form-urlencoded** | URL-encoded form data |
+| **raw** | Raw text body with content type |
+| **graphql** | GraphQL query and variables |
+
+**Content types for raw body:**
+
+| Content type | Use case |
+|--------------|----------|
+| `application/json` | JSON payloads |
+| `application/xml` | XML payloads |
+| `text/plain` | Plain text |
+| `text/html` | HTML content |
+| `application/javascript` | JavaScript |
+
+## Variables in URLs
+
+Use Grafana variables in your URL to create dynamic queries. This includes global variables and dashboard variables.
+
+**Example:**
+
+```
+https://api.example.com/data?from=${__from:date:YYYY-MM-DD}&to=${__to:date:YYYY-MM-DD}
 ```
 
-will produce
+**Result:**
 
-```bash
-https://example.com/path/subpath?from=2020-01&to=2020-04
+```
+https://api.example.com/data?from=2024-01-01&to=2024-01-31
 ```
 
-## Secure keys in the URL query strings
+For more information about available variables, refer to [Macros](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/query/macros/).
 
-In some cases, you may need to pass the secure API keys as part of your URL. Hard-coding them in the panel is not secure. You can configure those secure keys in the datasource settings.
+## Secure keys in URLs
 
-![image](https://user-images.githubusercontent.com/153843/116439894-f3b80580-a847-11eb-9788-8c60bce00866.png#center)
+For API keys or tokens that must be included in URLs, use the secure key configuration in the data source settings instead of hardcoding them in queries.
 
-You can also use Api key authentication for this purpose.
+1. Navigate to the data source configuration.
+2. In the **Authentication** section, configure your API key.
+3. Select whether to send the key as a **Header** or **Query parameter**.
+4. Enter the key name and value.
 
-## Headers in the URL
+The key value is stored securely and not exposed in dashboards or query logs.
 
-You can configure the headers required for the URL in the datasource config and also in the query headers. By default infinity datasource automatically sets two headers. Header `User-Agent : Go-http-client/1.1` will be set for all requests and `Content-Type : application/json`. You can override these headers in the datasource configuration page.
+## Custom headers
 
-Note: We suggest adding secure headers only via configuration and not in query.
+Configure headers in two locations:
 
-## Forwarding Grafana meta data as headers / query params
+| Location | Use case |
+|----------|----------|
+| **Data source configuration** | Headers applied to all queries |
+| **Query editor** | Headers for specific queries |
 
-From Infinity plugin version 3.0.0, You will be able to forward grafana meta data such as user id, datasource uid to the outgoing requests via **Custom HTTP Headers** / **URL Query parameters\*** from the datasource settings page. In the datasource **URL** section, you can add any number of custom headers / query parameters with their own values. The values can include following macros which will be interpolated into actual value from the request context.
+**Default headers:**
 
-| Macro name            | Description                                                         |
-| --------------------- | ------------------------------------------------------------------- |
-| `${__org.id}`         | This will be replaced by grafana org id where the request came from |
-| `${__plugin.id}`      | This will be replaced by the plugin id                              |
-| `${__plugin.version}` | This will be replaced by the plugin version                         |
-| `${__ds.uid}`         | This will be replaced by the datasource uid                         |
-| `${__ds.name}`        | This will be replaced by the datasource name                        |
-| `${__ds.id}`          | This will be replaced by the datasource id (deprecated)             |
-| `${__user.login}`     | This will be replaced by the user login id                          |
-| `${__user.email}`     | This will be replaced by the user login email                       |
-| `${__user.name}`      | This will be replaced by the user name                              |
+The Infinity data source automatically sets these headers:
 
-> Note: Certain macros such as `${__user.login}` won't be available in the context of alerts, recorded queries, public dashboards etc.
+- `User-Agent: Go-http-client/1.1`
+- `Content-Type: application/json` (for JSON requests)
 
-## Allowed Hosts
+You can override these defaults in the data source configuration.
 
-Leaving blank will allow all the hosts. This is by default.
+{{< admonition type="note" >}}
+Add secure or sensitive headers only in the data source configuration, not in individual queries.
+{{< /admonition >}}
 
-If your data source needs to allow only certain hosts, configure the allowed host names in the config. There can be multiple hosts allowed. Host names are case sensitive and needs to be full host name. Example: `https://en.wikipedia.org/`
+## Grafana metadata headers
+
+Forward Grafana metadata to your API using macros in custom headers or query parameters.
+
+| Macro | Description |
+|-------|-------------|
+| `${__org.id}` | Grafana organization ID |
+| `${__plugin.id}` | Plugin ID |
+| `${__plugin.version}` | Plugin version |
+| `${__ds.uid}` | Data source UID |
+| `${__ds.name}` | Data source name |
+| `${__ds.id}` | Data source ID (deprecated) |
+| `${__user.login}` | User login ID |
+| `${__user.email}` | User email |
+| `${__user.name}` | User display name |
+
+{{< admonition type="warning" >}}
+User macros (`${__user.*}`) are not available in alerts, recorded queries, or public dashboards because there is no user context in these scenarios.
+{{< /admonition >}}
+
+## Allowed hosts
+
+By default, the Infinity data source can connect to any URL. To restrict access to specific hosts:
+
+1. Navigate to the data source configuration.
+2. In the **Network** section, add allowed host names.
+3. Save the configuration.
+
+**Requirements:**
+- Host names are case-sensitive
+- Use the full host name including protocol (for example, `https://api.example.com`)
+- Multiple hosts can be configured
+
+When allowed hosts are configured, queries to other hosts will be blocked.

@@ -1,21 +1,15 @@
 ---
 slug: '/reference-data'
-title: 'Reference Data'
+title: Reference data
 menuTitle: Reference data
-description: Reference data
+description: Store small static datasets in your Infinity data source configuration for reuse across queries.
 aliases:
-  - infinity
+  - /docs/plugins/yesoreyeram-infinity-datasource/latest/references/reference-data/
 keywords:
-  - data source
   - infinity
-  - json
-  - graphql
-  - csv
-  - tsv
-  - xml
-  - html
-  - api
-  - rest
+  - reference data
+  - static data
+  - inline data
 labels:
   products:
     - oss
@@ -24,21 +18,79 @@ weight: 10
 
 # Reference data
 
-You can add multiple small size static data as reference data in your data source config. Then, you can query them multiple times directly without re-entering the same data in multiple places. You can also use provisioning to configure this reference data.
+Reference data lets you store small static datasets directly in your data source configuration. Use this feature to define data once and query it from multiple dashboards without re-entering the same data in each query.
 
-> Reference data feature is available from plugin version 1.2.0
+## Before you begin
 
-Reference data name must be unique. If duplicate matches found, first matching record will be returned. Reference name can be any valid string. It is handy to specify suffix to the reference name such as `my list of computers.csv`.
+- Ensure you have the Infinity data source installed and configured
+- Have administrator access to edit the data source configuration
 
-Below is the example on how to configure reference data.
+## Use cases
 
-![image](https://user-images.githubusercontent.com/153843/198975951-1642f55d-e2a8-4eab-ae18-b2f2a9d3fce1.png#center)
+- Store lookup tables for mapping codes to descriptions
+- Define static configuration data used across multiple dashboards
+- Store small reference datasets that don't change frequently
 
-Below image is the example on how to query it.
+## Supported formats
 
-![image](https://user-images.githubusercontent.com/153843/198976089-0736c591-2a53-4aac-a58f-00f3c92797f8.png#center)
+Reference data supports the following formats:
+
+- JSON
+- CSV
+- TSV
+- XML
+- HTML
+
+## Configure reference data
+
+1. Navigate to **Connections** > **Data sources** and select your Infinity data source.
+2. Scroll to the **Reference data** section.
+3. Click **Add Reference Data**.
+4. Enter a unique **Name** for the reference data (for example, `servers.csv` or `region-codes.json`).
+5. Enter the data in the **Data** field using your chosen format.
+6. Click **Save & test**.
+
+You can add multiple reference data entries to a single data source instance.
 
 {{< admonition type="note" >}}
-We suggest to add only small size data as reference data.
-It's designed to support data of less than 10 MB. Adding data of bigger size may affect the performance of Grafana and the plugin.
+Reference data names must be unique within a data source instance. If duplicate names exist, the first matching entry is returned.
+{{< /admonition >}}
+
+## Query reference data
+
+1. In the query editor, set **Source** to **Reference**.
+2. Select your reference data from the **Reference** drop-down.
+3. Configure the **Type** to match your data format (JSON, CSV, XML, etc.).
+4. Set the **Format** and configure columns as needed.
+
+## Provision reference data
+
+You can configure reference data through provisioning:
+
+```yaml
+apiVersion: 1
+datasources:
+  - name: Infinity
+    type: yesoreyeram-infinity-datasource
+    jsonData:
+      refData:
+        - name: servers.csv
+          data: |
+            id,name,region,status
+            1,server-a,us-east,active
+            2,server-b,eu-west,active
+            3,server-c,ap-south,maintenance
+        - name: regions.json
+          data: |
+            [
+              {"code": "us-east", "name": "US East"},
+              {"code": "eu-west", "name": "EU West"},
+              {"code": "ap-south", "name": "Asia Pacific"}
+            ]
+```
+
+## Size limits
+
+{{< admonition type="warning" >}}
+Reference data is designed for small datasets of less than 10 MB. Larger datasets may affect Grafana and plugin performance. For larger datasets, use URL-based queries instead.
 {{< /admonition >}}
