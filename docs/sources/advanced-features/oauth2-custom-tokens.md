@@ -12,7 +12,7 @@ keywords:
   - oauth2
   - authentication
   - token customization
-weight: 50
+weight: 80
 ---
 
 # OAuth2 token customization

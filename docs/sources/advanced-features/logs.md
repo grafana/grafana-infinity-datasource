@@ -9,7 +9,7 @@ keywords:
   - infinity
   - logs
   - log visualization
-weight: 65
+weight: 30
 ---
 
 # Visualize data in logs format

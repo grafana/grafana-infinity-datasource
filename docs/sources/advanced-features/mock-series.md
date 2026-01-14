@@ -1,7 +1,7 @@
 ---
 slug: '/series'
-title: 'Mock Series'
-menuTitle: Mock Series
+title: 'Mock series'
+menuTitle: Mock series
 description: Creating Mock time series data using Infinity
 aliases:
   - infinity
@@ -19,7 +19,7 @@ keywords:
 labels:
   products:
     - oss
-weight: 7900
+weight: 70
 ---
 
 # Creating Mock time series data using Infinity

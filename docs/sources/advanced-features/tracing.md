@@ -13,7 +13,7 @@ keywords:
 labels:
   products:
     - oss
-weight: 70
+weight: 50
 ---
 
 # Visualizing data in Tracing format

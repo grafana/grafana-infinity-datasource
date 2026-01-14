@@ -19,7 +19,7 @@ keywords:
 labels:
   products:
     - oss
-weight: 7001
+weight: 60
 ---
 
 # Configuring URL

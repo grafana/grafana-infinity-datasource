@@ -12,7 +12,7 @@ keywords:
 labels:
   products:
     - oss
-weight: 60
+weight: 40
 ---
 
 # Visualizing data in Node Graph format

@@ -1,8 +1,8 @@
 ---
 slug: '/global-queries'
-title: 'Global Queries / Registered Queries'
-menuTitle: Global Queries
-description: Global Queries
+title: 'Global queries'
+menuTitle: Global queries
+description: Global queries
 aliases:
   - infinity
 keywords:
@@ -19,12 +19,12 @@ keywords:
 labels:
   products:
     - oss
-weight: 7901
+weight: 100
 ---
 
 <!-- markdownlint-disable MD028 -->
 
-# Global Queries / Registered Queries
+# Global queries
 
 {{< admonition type="caution" >}}
 Starting with Infinity plugin version 0.7.8, Global Queries is deprecated in favor of the Grafana panel library.

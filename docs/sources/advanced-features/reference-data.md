@@ -1,8 +1,8 @@
 ---
 slug: '/reference-data'
 title: 'Reference Data'
-menuTitle: Reference Data
-description: Reference Data
+menuTitle: Reference data
+description: Reference data
 aliases:
   - infinity
 keywords:
@@ -19,7 +19,7 @@ keywords:
 labels:
   products:
     - oss
-weight: 7002
+weight: 10
 ---
 
 # Reference data
