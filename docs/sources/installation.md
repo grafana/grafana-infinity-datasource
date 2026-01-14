@@ -2,7 +2,7 @@
 slug: '/installation'
 title: Install the Infinity data source
 menuTitle: Install
-description: Learn how to install the Infinity data source plugin for Grafana
+description: Learn how to install the Infinity data source plugin for Grafana.
 aliases:
   - /docs/plugins/yesoreyeram-infinity-datasource/latest/setup/installation/
 keywords:
@@ -12,77 +12,101 @@ keywords:
   - grafana-cli
   - docker
   - helm
-labels:
-  products:
-    - oss
 weight: 15
 ---
 
-# Installing Infinity data source plugin
+# Install the Infinity data source
 
-There are multiple ways to install this plugin into your Grafana instance
+You can install the Infinity data source plugin using several methods, depending on your Grafana deployment.
 
-## Install from grafana.com
+## Before you begin
 
-Install the plugin from [grafana.com plugins page](https://grafana.com/grafana/plugins/yesoreyeram-infinity-datasource/?tab=installation) using the instructions provided there. With this installation, you will get the latest published version of the plugin.
+- Grafana 10.4.8 or later.
+- Administrator access to your Grafana instance.
 
-## Install from github
+## Grafana Cloud
 
-Download the required version of release archive from [GitHub](https://github.com/grafana/grafana-infinity-datasource/releases) and extract into your Grafana plugin folder. Then, restart Grafana.
+The Infinity data source plugin is available in Grafana Cloud. To install:
+
+1. In your Grafana Cloud stack, navigate to **Administration** > **Plugins**.
+1. Search for "Infinity".
+1. Click **Install**.
+
+No additional configuration is required for Grafana Cloud installations.
+
+## Install from the Grafana plugin catalog
+
+The simplest way to install the plugin is from the [Grafana plugin catalog](https://grafana.com/grafana/plugins/yesoreyeram-infinity-datasource/):
+
+1. In Grafana, navigate to **Administration** > **Plugins**.
+1. Search for "Infinity".
+1. Click **Install**.
+
+Alternatively, visit the [plugin page](https://grafana.com/grafana/plugins/yesoreyeram-infinity-datasource/?tab=installation) and follow the installation instructions.
 
 ## Install using grafana-cli
 
-If you are using grafana-cli, execute the following command to install the latest published version of the plugin
+Use the Grafana CLI to install the latest version:
 
 ```shell
 grafana-cli plugins install yesoreyeram-infinity-datasource
 ```
 
-If you need custom version of the plugin from github, you can install using the following command.
-
-```shell
-grafana-cli --pluginUrl <ZIP_FILE_URL> plugins install yesoreyeram-infinity-datasource
-```
-
-Example:
+To install a specific version, provide the plugin URL:
 
 ```shell
 grafana-cli --pluginUrl https://github.com/grafana/grafana-infinity-datasource/releases/download/v2.4.0/yesoreyeram-infinity-datasource-2.4.0.zip plugins install yesoreyeram-infinity-datasource
 ```
 
-## Install using helm chart
+After installation, restart Grafana for the plugin to load.
 
-If you use [grafana helm chart](https://github.com/grafana/helm-charts/blob/grafana-6.32.12/charts/grafana/values.yaml#L482) to provision grafana, use the following config to install the plugin
+## Install from GitHub releases
 
-```yml
+To install manually:
+
+1. Download the desired version from [GitHub releases](https://github.com/grafana/grafana-infinity-datasource/releases).
+1. Extract the archive to your Grafana plugins directory (typically `/var/lib/grafana/plugins/`).
+1. Restart Grafana.
+
+## Install using Docker
+
+Use the `GF_INSTALL_PLUGINS` environment variable to install the plugin when starting the container:
+
+```shell
+docker run -p 3000:3000 -e "GF_INSTALL_PLUGINS=yesoreyeram-infinity-datasource" grafana/grafana:latest
+```
+
+To install a specific version:
+
+```shell
+docker run -p 3000:3000 -e "GF_INSTALL_PLUGINS=yesoreyeram-infinity-datasource;https://github.com/grafana/grafana-infinity-datasource/releases/download/v2.4.0/yesoreyeram-infinity-datasource-2.4.0.zip" grafana/grafana:latest
+```
+
+## Install using Helm
+
+If you deploy Grafana using the [Grafana Helm chart](https://github.com/grafana/helm-charts/tree/main/charts/grafana), add the plugin to your `values.yaml`:
+
+```yaml
 plugins:
   - yesoreyeram-infinity-datasource
 ```
 
-If you need to install a custom version of the plugin from github.com, you can provide the zip file url
+To install a specific version:
 
-```yml
-plugins:
-  - <ZIP_FILE_URL>;yesoreyeram-infinity-datasource
-```
-
-Example:
-
-```yml
+```yaml
 plugins:
   - https://github.com/grafana/grafana-infinity-datasource/releases/download/v2.4.0/yesoreyeram-infinity-datasource-2.4.0.zip;yesoreyeram-infinity-datasource
 ```
 
-## Install using Docker
+## Verify installation
 
-With Docker, you can install the plugin using the following command. This will download the latest published version of the plugin from Grafana plugins directory.
+After installation:
 
-```shell
-docker run -p 3000:3000 -e "GF_PLUGINS_PREINSTALL_SYNC=yesoreyeram-infinity-datasource" grafana/grafana-enterprise:latest
-```
+1. In Grafana, navigate to **Connections** > **Data sources**.
+1. Click **Add data source**.
+1. Search for "Infinity" — if it appears, the installation was successful.
 
-If you need to install a custom version of the plugin with Docker, use the following command:
+## Next steps
 
-```shell
-docker run -p 3000:3000 -e "GF_PLUGINS_PREINSTALL_SYNC=yesoreyeram-infinity-datasource@@https://github.com/grafana/grafana-infinity-datasource/releases/download/v2.4.0/yesoreyeram-infinity-datasource-2.4.0.zip" grafana/grafana-enterprise:latest
-```
+- [Configure the Infinity data source](/docs/plugins/yesoreyeram-infinity-datasource/latest/configure/)
+- [Create your first query](/docs/plugins/yesoreyeram-infinity-datasource/latest/query/)

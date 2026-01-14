@@ -78,7 +78,7 @@ For more information about URL configuration, refer to [URL configuration](/docs
 For APIs that return data across multiple pages, use the **Pagination** section to automatically fetch and combine results from all pages.
 
 {{< admonition type="note" >}}
-Pagination is a beta feature. The maximum number of pages is limited to 5 by default, or the limit configured by your Grafana administrator.
+Pagination is a beta feature. The maximum number of pages is limited to 5 by default. Grafana administrators can increase this limit using the `GF_PLUGIN_PAGINATION_MAX_PAGES` environment variable. Refer to [Administrator configuration](/docs/plugins/yesoreyeram-infinity-datasource/latest/configure/#administrator-configuration) for details.
 {{< /admonition >}}
 
 ### Pagination modes
