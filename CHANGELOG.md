@@ -1,5 +1,23 @@
 # Change Log
 
+## 3.7.0
+
+### Minor Changes
+
+🚀 **Variable**: Added support for multi dimension / multi prop variable
+
+🚀 **Variable**: Migrate variable queries to send standard `DataFrame` instead of `MetricFindValue[]`
+
+🚀 **Variable**: Migrate from legacy variable query runner to CustomVariableSupport
+
+🚀 **Variable**: Add support for custom text value field mapping in variables
+
+⚙️ **Chore**: Update @grafana/assistant dependency to v0.1.0
+
+⚙️ **Chore**: Bump brace-expansion v2.0.2
+
+🐛 **Bug Fix**: Fixed a bug where variables not interpolated in jq parser
+
 ## 3.6.0
 
 💥 **BREAKING CHANGE**: Renamed the Google Sheets range property to sheetRange to avoid conflicts with Grafana's built-in range field. See more information here [#1337](https://github.com/grafana/grafana-infinity-datasource/issues/1337)
