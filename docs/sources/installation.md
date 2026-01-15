@@ -111,6 +111,32 @@ After installation:
 1. Click **Add data source**.
 1. Search for "Infinity" — if it appears, the installation was successful.
 
+## Update the plugin
+
+Keep the Infinity data source plugin up to date to access new features, performance improvements, and bug fixes. Check the [changelog](https://github.com/grafana/grafana-infinity-datasource/blob/main/CHANGELOG.md) for details on each release.
+
+### Grafana Cloud
+
+Grafana Cloud automatically updates plugins. No action is required.
+
+### Grafana plugin catalog
+
+1. In Grafana, navigate to **Administration** > **Plugins**.
+1. Search for "Infinity" and select it.
+1. If an update is available, click **Update**.
+
+### grafana-cli
+
+```shell
+grafana-cli plugins update yesoreyeram-infinity-datasource
+```
+
+After updating, restart Grafana for the changes to take effect.
+
+### Docker and Helm
+
+For containerized deployments, update the version in your configuration and redeploy. Refer to the installation sections above for version-specific examples.
+
 ## Next steps
 
 - [Configure the Infinity data source](/docs/plugins/yesoreyeram-infinity-datasource/latest/configure/)

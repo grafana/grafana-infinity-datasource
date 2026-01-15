@@ -381,6 +381,80 @@ datasources:
 Once you have manually configured the data source and verified it is working, you can generate a provisioning YAML file from the data source configuration page. Look for the **Provisioning Script** button at the bottom of the config page in the **More** section.
 {{< /admonition >}}
 
+## Provision the data source with Terraform
+
+You can provision the Infinity data source using the [Grafana Terraform provider](https://registry.terraform.io/providers/grafana/grafana/latest/docs). Use the `grafana_data_source` resource to create and manage data source instances.
+
+### Basic Terraform provisioning
+
+```hcl
+resource "grafana_data_source" "infinity" {
+  type = "yesoreyeram-infinity-datasource"
+  name = "Infinity"
+}
+```
+
+### Terraform provisioning with authentication
+
+The following example shows provisioning with basic authentication:
+
+```hcl
+resource "grafana_data_source" "infinity" {
+  type                = "yesoreyeram-infinity-datasource"
+  name                = "Infinity"
+  basic_auth_enabled  = true
+  basic_auth_username = "your_username"
+
+  json_data_encoded = jsonencode({
+    auth_method  = "basicAuth"
+    allowedHosts = ["https://api.example.com"]
+  })
+
+  secure_json_data_encoded = jsonencode({
+    basicAuthPassword = "your_password"
+  })
+}
+```
+
+The following example shows provisioning with bearer token authentication:
+
+```hcl
+resource "grafana_data_source" "infinity" {
+  type = "yesoreyeram-infinity-datasource"
+  name = "Infinity"
+
+  json_data_encoded = jsonencode({
+    auth_method  = "bearerToken"
+    allowedHosts = ["https://api.example.com"]
+  })
+
+  secure_json_data_encoded = jsonencode({
+    bearerToken = "your_token"
+  })
+}
+```
+
+### Terraform provisioning with custom headers
+
+```hcl
+resource "grafana_data_source" "infinity" {
+  type = "yesoreyeram-infinity-datasource"
+  name = "Infinity"
+
+  json_data_encoded = jsonencode({
+    httpHeaderName1 = "X-Custom-Header"
+    httpHeaderName2 = "X-API-Token"
+  })
+
+  secure_json_data_encoded = jsonencode({
+    httpHeaderValue1 = "custom-value"
+    httpHeaderValue2 = "your-api-token"
+  })
+}
+```
+
+For more information about the Grafana Terraform provider, refer to the [provider documentation](https://registry.terraform.io/providers/grafana/grafana/latest/docs/resources/data_source).
+
 ## Administrator configuration
 
 Grafana administrators can configure plugin-wide settings using environment variables.
