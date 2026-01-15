@@ -99,10 +99,8 @@ export const convertOriginalFieldsToVariableFields = (original_fields: Array<Fie
   }
   const textField = tf || vf || original_fields[0];
   const valueField = tf && vf ? vf : tf || vf || (original_fields.length === 2 ? original_fields[1] : original_fields[0]);
-  return [
-    { ...textField, name: 'text' },
-    { ...valueField, name: 'value' },
-  ];
+  const otherFields = original_fields.filter((f: Field) => f.name !== 'value' && f.name !== 'text');
+  return [{ ...textField, name: 'text' }, { ...valueField, name: 'value' }, ...otherFields];
 };
 
 export const migrateLegacyQuery = (query: VariableQuery | string): VariableQuery => {
