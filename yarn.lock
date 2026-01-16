@@ -3787,12 +3787,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:25.0.7, @types/node@npm:>=13.7.0":
-  version: 25.0.7
-  resolution: "@types/node@npm:25.0.7"
+"@types/node@npm:*, @types/node@npm:25.0.8, @types/node@npm:>=13.7.0":
+  version: 25.0.8
+  resolution: "@types/node@npm:25.0.8"
   dependencies:
     undici-types: "npm:~7.16.0"
-  checksum: 10c0/a9feeb16a6487621ef96158e7a9759f89e3c1726189c7b19a9e6d3e0d581499c62e441e120e5a334e9eb01bc4d26644f27767fd5931d6d4f177d14f4f8e3f9ab
+  checksum: 10c0/2282464cd928ab184b2310b79899c76bfaa88c8d14640dfab2f9218fdee7e2d916056492de683aa3a26050c8f3bbcade0305616a55277a7c344926c0393149e0
   languageName: node
   linkType: hard
 
@@ -7761,7 +7761,7 @@ __metadata:
     "@testing-library/user-event": "npm:14.6.1"
     "@types/jest": "npm:30.0.0"
     "@types/lodash": "npm:4.17.23"
-    "@types/node": "npm:25.0.7"
+    "@types/node": "npm:25.0.8"
     "@types/react": "npm:18.3.27"
     "@types/react-dom": "npm:18.3.7"
     "@types/react-router-dom": "npm:5.3.3"
