@@ -5,7 +5,7 @@ go 1.25
 require (
 	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.6.4
 	github.com/aws/aws-sdk-go-v2 v1.41.1
-	github.com/grafana/dskit v0.0.0-20260115221100-0ee97c59102f
+	github.com/grafana/dskit v0.0.0-20260119063514-a2b633bfa4ea
 	github.com/grafana/grafana-aws-sdk v1.4.2
 	github.com/grafana/grafana-plugin-sdk-go v0.284.0
 	github.com/grafana/infinity-libs/lib/go/csvframer v1.0.3
