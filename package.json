@@ -116,7 +116,7 @@
     "imports-loader": "5.0.0",
     "jest": "30.2.0",
     "jest-environment-jsdom": "30.2.0",
-    "prettier": "3.7.4",
+    "prettier": "3.8.0",
     "replace-in-file-webpack-plugin": "1.0.6",
     "rxjs": "7.8.2",
     "sass": "1.97.2",
