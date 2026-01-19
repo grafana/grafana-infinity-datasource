@@ -94,6 +94,7 @@ export const SeriesAdvancedOptions = ({ query, onChange }: { query: InfinitySeri
               Advanced Options <i className="fa fa-expand fa-large btn btn-small"></i>
             </label>
             <Modal
+              ariaLabel="Advanced Options"
               title={
                 <div className="modal-header-title">
                   <span className="p-l-1">Advanced Options</span>

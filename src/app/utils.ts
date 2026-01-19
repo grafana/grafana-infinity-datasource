@@ -105,9 +105,9 @@ export const toTimeSeriesLong = (data: DataFrame[]): DataFrame[] => {
             uniqueValueNamesToType[field.name] = field.type;
             uniqueValueNames.push(field.name);
           }
-          // eslint-disable-next-line no-case-declarations
+           
           const tKey = JSON.stringify(field.labels);
-          // eslint-disable-next-line no-case-declarations
+           
           const wideIndices = labelKeyToWideIndices[tKey];
 
           if (wideIndices !== undefined) {

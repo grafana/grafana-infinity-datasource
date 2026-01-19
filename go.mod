@@ -1,13 +1,13 @@
 module github.com/grafana/grafana-infinity-datasource
 
-go 1.25
+go 1.25.5
 
 require (
-	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.6.3
-	github.com/aws/aws-sdk-go-v2 v1.40.0
-	github.com/grafana/dskit v0.0.0-20251210115601-41c7cf07196b
-	github.com/grafana/grafana-aws-sdk v1.4.0
-	github.com/grafana/grafana-plugin-sdk-go v0.284.0
+	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.6.4
+	github.com/aws/aws-sdk-go-v2 v1.41.1
+	github.com/grafana/dskit v0.0.0-20260119063514-a2b633bfa4ea
+	github.com/grafana/grafana-aws-sdk v1.4.2
+	github.com/grafana/grafana-plugin-sdk-go v0.285.0
 	github.com/grafana/infinity-libs/lib/go/csvframer v1.0.3
 	github.com/grafana/infinity-libs/lib/go/framesql v1.1.0
 	github.com/grafana/infinity-libs/lib/go/gframer v1.1.2
@@ -16,9 +16,9 @@ require (
 	github.com/grafana/infinity-libs/lib/go/transformations v1.1.0
 	github.com/grafana/infinity-libs/lib/go/xmlframer v1.0.3
 	github.com/icholy/digest v1.1.0
-	go.opentelemetry.io/otel v1.38.0
-	go.opentelemetry.io/otel/trace v1.38.0
-	golang.org/x/oauth2 v0.33.0
+	go.opentelemetry.io/otel v1.39.0
+	go.opentelemetry.io/otel/trace v1.39.0
+	golang.org/x/oauth2 v0.34.0
 	moul.io/http2curl v1.0.0
 )
 
@@ -32,7 +32,7 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.20.0 // indirect
 	github.com/Azure/azure-sdk-for-go/sdk/internal v1.11.2 // indirect
 	github.com/BurntSushi/toml v1.5.0 // indirect
-	github.com/apache/arrow-go/v18 v18.4.1 // indirect
+	github.com/apache/arrow-go/v18 v18.5.0 // indirect
 	github.com/araddon/dateparse v0.0.0-20210429162001-6b43995a97de // indirect
 	github.com/aws/aws-sdk-go-v2/config v1.32.2 // indirect
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.2 // indirect
@@ -46,7 +46,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/sso v1.30.5 // indirect
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.35.10 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sts v1.41.2 // indirect
-	github.com/aws/smithy-go v1.23.2 // indirect
+	github.com/aws/smithy-go v1.24.0 // indirect
 	github.com/basgys/goxml2json v1.1.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/casbin/govaluate v1.10.0 // indirect
@@ -83,7 +83,7 @@ require (
 	github.com/jaegertracing/jaeger-idl v0.6.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/jszwedko/go-datemath v0.1.1-0.20230526204004-640a500621d6 // indirect
-	github.com/klauspost/compress v1.18.1 // indirect
+	github.com/klauspost/compress v1.18.2 // indirect
 	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
 	github.com/magefile/mage v1.15.0 // indirect
 	github.com/mattetti/filebuffer v1.0.1 // indirect
@@ -107,7 +107,7 @@ require (
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/prometheus/client_golang v1.23.2 // indirect
 	github.com/prometheus/client_model v0.6.2 // indirect
-	github.com/prometheus/common v0.67.4 // indirect
+	github.com/prometheus/common v0.67.5 // indirect
 	github.com/prometheus/procfs v0.19.2 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/shopspring/decimal v1.4.0 // indirect
@@ -122,32 +122,32 @@ require (
 	github.com/xiatechs/jsonata-go v1.8.8 // indirect
 	github.com/zeebo/xxh3 v1.0.2 // indirect
 	go.opentelemetry.io/auto/sdk v1.2.1 // indirect
-	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.63.0 // indirect
-	go.opentelemetry.io/contrib/instrumentation/net/http/httptrace/otelhttptrace v0.63.0 // indirect
-	go.opentelemetry.io/contrib/propagators/jaeger v1.38.0 // indirect
-	go.opentelemetry.io/contrib/samplers/jaegerremote v0.32.0 // indirect
-	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.38.0 // indirect
-	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc v1.38.0 // indirect
-	go.opentelemetry.io/otel/metric v1.38.0 // indirect
-	go.opentelemetry.io/otel/sdk v1.38.0 // indirect
+	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.64.0 // indirect
+	go.opentelemetry.io/contrib/instrumentation/net/http/httptrace/otelhttptrace v0.64.0 // indirect
+	go.opentelemetry.io/contrib/propagators/jaeger v1.39.0 // indirect
+	go.opentelemetry.io/contrib/samplers/jaegerremote v0.33.0 // indirect
+	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.39.0 // indirect
+	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc v1.39.0 // indirect
+	go.opentelemetry.io/otel/metric v1.39.0 // indirect
+	go.opentelemetry.io/otel/sdk v1.39.0 // indirect
 	go.opentelemetry.io/proto/otlp v1.9.0 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
 	go.yaml.in/yaml/v2 v2.4.3 // indirect
-	golang.org/x/crypto v0.45.0 // indirect
+	golang.org/x/crypto v0.46.0 // indirect
 	golang.org/x/exp v0.0.0-20251125195548-87e1e737ad39 // indirect
 	golang.org/x/mod v0.30.0 // indirect
-	golang.org/x/net v0.47.0 // indirect
-	golang.org/x/sync v0.18.0 // indirect
-	golang.org/x/sys v0.38.0 // indirect
+	golang.org/x/net v0.48.0 // indirect
+	golang.org/x/sync v0.19.0 // indirect
+	golang.org/x/sys v0.40.0 // indirect
 	golang.org/x/telemetry v0.0.0-20251124170345-55bbf377f459 // indirect
-	golang.org/x/term v0.37.0 // indirect
-	golang.org/x/text v0.31.0 // indirect
+	golang.org/x/term v0.38.0 // indirect
+	golang.org/x/text v0.32.0 // indirect
 	golang.org/x/tools v0.39.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
-	google.golang.org/genproto/googleapis/api v0.0.0-20251124214823-79d6a2a48846 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20251124214823-79d6a2a48846 // indirect
-	google.golang.org/grpc v1.77.0 // indirect
-	google.golang.org/protobuf v1.36.10 // indirect
+	google.golang.org/genproto/googleapis/api v0.0.0-20251202230838-ff82c1b0f217 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20251202230838-ff82c1b0f217 // indirect
+	google.golang.org/grpc v1.78.0 // indirect
+	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/fsnotify/fsnotify.v1 v1.4.7 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
