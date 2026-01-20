@@ -19,7 +19,7 @@ require (
 	go.opentelemetry.io/otel v1.39.0
 	go.opentelemetry.io/otel/trace v1.39.0
 	golang.org/x/oauth2 v0.34.0
-	moul.io/http2curl v1.0.0
+	moul.io/http2curl/v2 v2.3.0
 )
 
 // tests related deps
