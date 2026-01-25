@@ -119,7 +119,7 @@
     "prettier": "3.8.0",
     "replace-in-file-webpack-plugin": "1.0.6",
     "rxjs": "7.8.2",
-    "sass": "1.97.2",
+    "sass": "1.97.3",
     "sass-loader": "16.0.6",
     "semver": "7.7.3",
     "stream-browserify": "3.0.0",
