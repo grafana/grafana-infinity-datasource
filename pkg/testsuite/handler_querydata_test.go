@@ -969,7 +969,7 @@ func TestRemoteSources(t *testing.T) {
 				require.NotNil(t, frame)
 				t.Run("should have custom meta data correctly", func(t *testing.T) {
 					require.NotNil(t, frame.Meta.Custom)
-					require.Equal(t, "###############\n## URL\n###############\n\nhttps://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.json\n\n###############\n## Curl Command\n###############\n\ncurl -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' -H 'Accept-Encoding: gzip' 'https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.json'", frame.Meta.ExecutedQueryString)
+					require.Equal(t, "###############\n## URL\n###############\n\nhttps://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.json\n\n###############\n## Curl Command\n###############\n\ncurl -k -X 'GET' -H 'Accept: application/json;q=0.9,text/plain' -H 'Accept-Encoding: gzip' 'https://raw.githubusercontent.com/grafana/grafana-infinity-datasource/main/testdata/users.json'", frame.Meta.ExecutedQueryString)
 				})
 			},
 		},

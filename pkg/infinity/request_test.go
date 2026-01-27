@@ -83,25 +83,25 @@ func TestGetRequest(t *testing.T) {
 			wantReqBody: true,
 		},
 		{
-			name:     "should forward cookies correctly when set in the keepCookies settings",
-			pCtx:     &backend.PluginContext{PluginID: "hello"},
-			settings: models.InfinitySettings{KeepCookies: []string{"cookie1"}},
+			name:           "should forward cookies correctly when set in the keepCookies settings",
+			pCtx:           &backend.PluginContext{PluginID: "hello"},
+			settings:       models.InfinitySettings{KeepCookies: []string{"cookie1"}},
 			requestHeaders: map[string]string{"Cookie": "cookie1=test"},
-			wantReq:  &http.Request{URL: &url.URL{}, Header: http.Header{"Cookie": []string{"cookie1=test"}}, Method: http.MethodGet},
+			wantReq:        &http.Request{URL: &url.URL{}, Header: http.Header{"Cookie": []string{"cookie1=test"}}, Method: http.MethodGet},
 		},
 		{
-			name:     "should not forward cookies if keepCookies is not set in the settings",
-			pCtx:     &backend.PluginContext{PluginID: "hello"},
-			settings: models.InfinitySettings{},
+			name:           "should not forward cookies if keepCookies is not set in the settings",
+			pCtx:           &backend.PluginContext{PluginID: "hello"},
+			settings:       models.InfinitySettings{},
 			requestHeaders: map[string]string{"Cookie": "cookie1=test"},
-			wantReq:  &http.Request{URL: &url.URL{}, Header: http.Header{}, Method: http.MethodGet},
+			wantReq:        &http.Request{URL: &url.URL{}, Header: http.Header{}, Method: http.MethodGet},
 		},
 		{
-			name:     "handles no cookies present",
-			pCtx:     &backend.PluginContext{PluginID: "hello"},
-			settings: models.InfinitySettings{KeepCookies: []string{"cookie1"}},
+			name:           "handles no cookies present",
+			pCtx:           &backend.PluginContext{PluginID: "hello"},
+			settings:       models.InfinitySettings{KeepCookies: []string{"cookie1"}},
 			requestHeaders: map[string]string{"AnotherHeader": "test"},
-			wantReq:  &http.Request{URL: &url.URL{}, Header: http.Header{}, Method: http.MethodGet},
+			wantReq:        &http.Request{URL: &url.URL{}, Header: http.Header{}, Method: http.MethodGet},
 		},
 	}
 	for _, tt := range tests {
@@ -124,7 +124,7 @@ func TestGetRequest(t *testing.T) {
 			numberOfAdditionalHeaders := 1 // with gzip compression enabled, there will be additional header at run time.
 			assert.Equal(t, len(tt.wantReq.Header)+numberOfAdditionalHeaders, len(gotReq.Header))
 			for k := range tt.wantReq.Header {
-			require.Equal(t, tt.wantReq.Header.Get(k), gotReq.Header.Get(k))
+				require.Equal(t, tt.wantReq.Header.Get(k), gotReq.Header.Get(k))
 			}
 		})
 	}
@@ -335,37 +335,37 @@ func TestClient_GetExecutedURL(t *testing.T) {
 		{
 			query:   models.Query{URL: "https://foo.com"},
 			url:     "https://foo.com",
-			command: "curl -X 'GET' -H 'Accept-Encoding: gzip' 'https://foo.com'",
+			command: "curl -k -X 'GET' -H 'Accept-Encoding: gzip' 'https://foo.com'",
 		},
 		{
 			settings: models.InfinitySettings{UserName: "hello", Password: "world", BasicAuthEnabled: true},
 			query:    models.Query{URL: "https://foo.com"},
 			url:      "https://foo.com",
-			command:  "curl -X 'GET' -H 'Accept-Encoding: gzip' -H 'Authorization: Basic xxxxxxxx' 'https://foo.com'",
+			command:  "curl -k -X 'GET' -H 'Accept-Encoding: gzip' -H 'Authorization: Basic xxxxxxxx' 'https://foo.com'",
 		},
 		{
 			settings: models.InfinitySettings{AuthenticationMethod: "bearerToken", BearerToken: "world2"},
 			query:    models.Query{URL: "https://foo.com"},
 			url:      "https://foo.com",
-			command:  "curl -X 'GET' -H 'Accept-Encoding: gzip' -H 'Authorization: Bearer xxxxxxxx' 'https://foo.com'",
+			command:  "curl -k -X 'GET' -H 'Accept-Encoding: gzip' -H 'Authorization: Bearer xxxxxxxx' 'https://foo.com'",
 		},
 		{
 			settings: models.InfinitySettings{AuthenticationMethod: "apiKey", ApiKeyType: "header", ApiKeyKey: "hello", ApiKeyValue: "world"},
 			query:    models.Query{URL: "https://foo.com"},
 			url:      "https://foo.com",
-			command:  "curl -X 'GET' -H 'Accept-Encoding: gzip' -H 'Hello: xxxxxxxx' 'https://foo.com'",
+			command:  "curl -k -X 'GET' -H 'Accept-Encoding: gzip' -H 'Hello: xxxxxxxx' 'https://foo.com'",
 		},
 		{
 			settings: models.InfinitySettings{ForwardOauthIdentity: true},
 			query:    models.Query{URL: "https://foo.com"},
 			url:      "https://foo.com",
-			command:  "curl -X 'GET' -H 'Accept-Encoding: gzip' -H 'Authorization: xxxxxxxx' 'https://foo.com'",
+			command:  "curl -k -X 'GET' -H 'Accept-Encoding: gzip' -H 'Authorization: xxxxxxxx' 'https://foo.com'",
 		},
 		{
 			settings: models.InfinitySettings{CustomHeaders: map[string]string{"good": "bye"}, SecureQueryFields: map[string]string{"me": "too"}},
 			query:    models.Query{URL: "https://foo.com?something=${__qs.me}", Type: "json", URLOptions: models.URLOptions{Method: "POST", Body: "my request body with ${__qs.me} value", Headers: []models.URLOptionKeyValuePair{{Key: "hello", Value: "world"}}}},
 			url:      "https://foo.com?me=xxxxxxxx&something=xxxxxxxx",
-			command:  "curl -X 'POST' -d 'my request body with ${__qs.me} value' -H 'Accept: application/json;q=0.9,text/plain' -H 'Accept-Encoding: gzip' -H 'Content-Type: application/json' -H 'Good: xxxxxxxx' -H 'Hello: xxxxxxxx' 'https://foo.com?me=xxxxxxxx&something=xxxxxxxx'",
+			command:  "curl -k -X 'POST' -d 'my request body with ${__qs.me} value' -H 'Accept: application/json;q=0.9,text/plain' -H 'Accept-Encoding: gzip' -H 'Content-Type: application/json' -H 'Good: xxxxxxxx' -H 'Hello: xxxxxxxx' 'https://foo.com?me=xxxxxxxx&something=xxxxxxxx'",
 		},
 	}
 	for _, tt := range tests {
