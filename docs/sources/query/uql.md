@@ -1,40 +1,43 @@
 ---
 slug: '/uql'
-title: 'UQL Parser'
-menuTitle: UQL Parser
-description: UQL Parser
+title: 'UQL parser'
+menuTitle: UQL parser
+description: Query and transform data using UQL (Unstructured Query Language) with the Infinity data source.
 aliases:
-  - infinity
+  - /uql
 keywords:
-  - data source
   - infinity
-  - json
-  - graphql
-  - csv
-  - tsv
-  - xml
-  - html
-  - api
-  - rest
+  - uql
+  - parser
+  - query language
+
 labels:
   products:
     - oss
-weight: 310
+    - enterprise
+    - cloud
+weight: 110
 ---
 
-# UQL Parser
+# UQL parser
 
-**UQL** (Unstructured Query Language) is an advanced query format in the Infinity data source which consolidates JSON, CSV, XML and GraphQL formats. UQL also provides the ability to customize results.
+UQL (Unstructured Query Language) is a query language for transforming and manipulating data from JSON, CSV, XML, and GraphQL sources. Inspired by the [Kusto Query Language (KQL)](https://learn.microsoft.com/en-us/kusto/query/), UQL uses a pipeline syntax where commands are joined by `|`.
 
-**UQL** is an opinionated query language designed for in-memory operations. A UQL query consists of a list of commands joined by `|`, with each command on its own line.
-Most of the time, fields are referred to within double quotes, with single quotes used for string literals. UQL was inspired by the [Kusto query language](https://learn.microsoft.com/en-us/kusto/query/) 
-and uses similar syntax.
+**Syntax basics:**
+
+- Commands are separated by `|` (pipe), typically one per line
+- Field names are enclosed in double quotes: `"fieldName"`
+- String literals use single quotes: `'value'`
 
 {{< admonition type="note" >}}
-UQL is still in beta but used widely. If you encounter any issues with UQL, create a bug [in GitHub](https://github.com/yesoreyeram/uql/issues/new).
+UQL is in beta. If you encounter issues, [report them on GitHub](https://github.com/yesoreyeram/uql/issues/new).
 {{< /admonition >}}
 
-If your data looks like this:
+## Quick example
+
+The following example demonstrates how UQL transforms nested JSON data into a flat table.
+
+**Input data:**
 
 ```json
 [
@@ -53,7 +56,7 @@ If your data looks like this:
 ]
 ```
 
-then the following UQL query:
+**UQL query:**
 
 ```sql
 parse-json
@@ -62,24 +65,29 @@ parse-json
 | order by "full name" asc
 ```
 
-will produce a four column table (id, dob, city, full name).
+**Output:**
+
+| id | dob | city | full name |
+|----|-----|------|-----------|
+| 2 | 1990-12-31 | london | alice bob |
+| 1 | 1985-01-01 | chennai | john doe |
 
 ## Basic UQL commands
 
-The following commands are available in all versions of the plugin unless specified otherwise.
-
 ### project
 
-`project` is used to select columns to include in the results. If you want to select a property inside a nested object, you can use dot notation. Optionally, you can also alias the field names.
+Select specific columns to include in the output. Use dot notation to access nested properties. To rename a column, use the syntax `"new_name"="source_field"`.
 
 ```sql
 parse-json
 | project "id", "name.firstName", "date of birth"="dob"
 ```
 
+This selects `id`, the nested `name.firstName` field, and renames `dob` to `date of birth`.
+
 ### project-away
 
-`project-away` is the opposite of `project`. It drops specific columns from the data. It doesn't support aliases or the dot notation selector.
+Remove specific columns from the output. This command only accepts top-level field names — dot notation and aliases are not supported.
 
 ```sql
 parse-json
@@ -88,141 +96,235 @@ parse-json
 
 ### order by
 
-`order by` sorts the input based on any column. The sort order can be specified and should be either `asc` (ascending) or `desc` (descending).
+Sort results by a column in ascending (`asc`) or descending (`desc`) order.
 
 ```sql
 parse-json
 | order by "full name" asc
 ```
 
+### where
+
+Filter rows based on a condition. Only rows where the condition evaluates to `true` are included.
+
+```sql
+parse-json
+| where "age" > 18
+```
+
+Combine conditions with `and` or `or`:
+
+```sql
+parse-json
+| where "country" == 'USA' and "age" >= 21
+```
+
+Use `in` to match against multiple values:
+
+```sql
+parse-json
+| where "country" in ('USA', 'Canada', 'Mexico')
+```
+
+Use `!in` to exclude values:
+
+```sql
+parse-json
+| where "country" !in ('USA', 'Canada')
+```
+
+**Supported operators:** `==`, `!=`, `>`, `>=`, `<`, `<=`, `in`, `!in`
+
 ### extend
 
-`extend` is similar to `project` but instead of selecting columns, it adds or replaces columns in existing data. `extend` expects an alias and a function.
+Add new columns or transform existing columns using functions. Use the syntax `"column_name"=function("source_field")`.
 
 ```sql
 parse-json
 | extend "dob"=todatetime("dob"), "city"=toupper("city")
 ```
 
-Functions that can be used with `extend` are described in the table below.
+This converts `dob` to a datetime and transforms `city` to uppercase.
 
-| function keyword                   | syntax                                    | description                                                                                                                                                    | available from |
-| ---------------------------------- | ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
-| `trim`                             | `trim("name")`                            | trims both the start and end of the string                                                                                                                     | 0.8.0          |
-| `trim_start`                       | `trim_start("name")`                      | trims the start of the string                                                                                                                                  | 0.8.0          |
-| `trim_end`                         | `trim_end("name")`                        | trims the end of the string                                                                                                                                    | 0.8.0          |
-| `tonumber`                         | `tonumber("age")`                         | converts a string into a number                                                                                                                                | 0.8.0          |
-| `tostring`                         | `tostring("age")`                         | converts a number into a string                                                                                                                                | 0.8.0          |
-| `todatetime`                       | `todatetime("age")`                       | converts a datetime string into a datetime                                                                                                                     | 0.8.0          |
-| `unixtime_seconds_todatetime`      | `unixtime_seconds_todatetime("dob")`      | converts unix epoch (seconds) timestamp to a datetime                                                                                                          | 0.8.0          |
-| `unixtime_nanoseconds_todatetime`  | `unixtime_nanoseconds_todatetime("dob")`  | converts unix epoch (nanoseconds) timestamp to a datetime                                                                                                      | 0.8.0          |
-| `unixtime_milliseconds_todatetime` | `unixtime_milliseconds_todatetime("dob")` | converts unix epoch (milliseconds) timestamp to datetime                                                                                                       | 0.8.0          |
-| `unixtime_microseconds_todatetime` | `unixtime_microseconds_todatetime("dob")` | converts unix epoch (microseconds) timestamp to datetime                                                                                                       | 0.8.0          |
-| `format_datetime`                  | `format_datetime("dob",'DD/MM/YYYY')`     | converts a datetime to a string in a specific format                                                                                                           | 0.8.0          |
-| `add_datetime`                     | `add_datetime("dob",'-1d')`               | adds a duration to a datetime field                                                                                                                            | 0.8.0          |
-| `startofminute`                    | `startofminute("dob")`                    | rounds the datetime field to the start of the minute                                                                                                           | 0.8.0          |
-| `startofhour`                      | `startofhour("dob")`                      | rounds the datetime field to the start of the hour                                                                                                             | 0.8.0          |
-| `startofday`                       | `startofday("dob")`                       | rounds the datetime field to the start of the day                                                                                                              | 0.8.0          |
-| `startofmonth`                     | `startofmonth("dob")`                     | rounds the datetime field to the start of the month                                                                                                            | 0.8.0          |
-| `startofweek`                      | `startofweek("dob")`                      | rounds the datetime field to the start of the week                                                                                                             | 0.8.0          |
-| `startofyear`                      | `startofyear("dob")`                      | rounds the datetime field to the star of the year                                                                                                              | 0.8.0          |
-| `extract`                          | `extract('regex',index,"col1")`           | extracts part of the string field using regex and match index (0/1/..)                                                                                         | 1.0.0          |
-| `sum`                              | `sum("col1","col2")`                      | sum of two or more columns                                                                                                                                     | 0.8.0          |
-| `diff`                             | `diff("col1","col2")`                     | difference between two columns                                                                                                                                 | 0.8.0          |
-| `mul`                              | `mul("col1","col2")`                      | multiplication of two columns                                                                                                                                  | 0.8.0          |
-| `div`                              | `div("col1","col2")`                      | division of two columns (col1/col2)                                                                                                                            | 0.8.0          |
-| `percentage`                       | `percentage("col1","col2")`               | percentage of two columns ((col1/col2)\*100)                                                                                                                   | 1.0.0          |
-| `strcat`                           | `strcat("col1","col2")`                   | concatenates two or more columns                                                                                                                               | 0.8.0          |
-| `split`                            | `split("col1",'delimiter')`               | splits a string using a delimiter                                                                                                                              | 1.0.0          |
-| `replace_string`                   | `replace_string("col1",'src','replacer')` | replace a portion of string with another                                                                                                                       | 1.0.0          |
-| `reverse`                          | `reverse("col1")`                         | reverse a string                                                                                                                                               | 1.0.0          |
-| `floor`                            | `floor("col1")`                           | calculates the floor value of given numeric field                                                                                                              | 0.8.7          |
-| `ceil`                             | `ceil("col1")`                            | calculates the ceil value of given numeric field                                                                                                               | 0.8.7          |
-| `round`                            | `round("col1")`                           | calculates the round value of given numeric field                                                                                                              | 0.8.7          |
-| `sign`                             | `sign("col1")`                            | calculates the sign value of given numeric field                                                                                                               | 0.8.7          |
-| `pow`                              | `pow("col1",3)`                           | calculates the pow value of given numeric field                                                                                                                | 0.8.7          |
-| `sin`                              | `sin("col1")`                             | calculates the sin value of given numeric field                                                                                                                | 0.8.7          |
-| `cos`                              | `cos("col1")`                             | calculates the cos value of given numeric field                                                                                                                | 0.8.7          |
-| `tan`                              | `tan("col1")`                             | calculates the tan value of given numeric field                                                                                                                | 0.8.7          |
-| `log`                              | `log("col1")`                             | calculates the log value of given numeric field                                                                                                                | 0.8.7          |
-| `log2`                             | `log2("col1")`                            | calculates the log2 value of given numeric field                                                                                                               | 0.8.7          |
-| `log10`                            | `log10("col1")`                           | calculates the log10 value of given numeric field                                                                                                              | 0.8.7          |
-| `parse_url`                        | `parse_url("col1")`                       | parses the column as a URL                                                                                                                                     | 0.8.6          |
-|                                    | `parse_url("col1",'pathname')`            | returns the `pathname` of the URL. Options are `host`,`hash`,`origin`,`href`,`protocol` and `search`                                                           | 0.8.6          |
-|                                    | `parse_url("col1",'search','key1')`       | returns the query string value for `key1`. 2nd arg is always `search`                                                                                          | 0.8.6          |
-| `atob`                             | `atob("col1")`                            | returns `atob` value of a string column. ([reference](https://developer.mozilla.org/en-US/docs/Web/API/atob))                                                  | 1.3.0          |
-| `btoa`                             | `btoa("col1")`                            | returns `btoa` value of a string column. ([reference](https://developer.mozilla.org/en-US/docs/Web/API/btoa))                                                  | 1.3.0          |
-| `substring`                        | `substring("col1",1,5)`                   | returns `substring` value of a string column. ([reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/substring)) | 1.3.0          |
+The following sections describe the functions available with `extend`, organized by category.
 
-For example, running this UQL query:
+#### String functions
+
+| Function | Syntax | Description |
+|----------|--------|-------------|
+| `toupper` | `toupper("name")` | Convert to uppercase |
+| `tolower` | `tolower("name")` | Convert to lowercase |
+| `trim` | `trim("name")` | Remove whitespace from start and end |
+| `trim_start` | `trim_start("name")` | Remove whitespace from start |
+| `trim_end` | `trim_end("name")` | Remove whitespace from end |
+| `strlen` | `strlen("name")` | Return string length |
+| `strcat` | `strcat("col1","col2")` | Concatenate two or more columns |
+| `substring` | `substring("col1",1,5)` | Extract substring (start index, length) |
+| `split` | `split("col1",'delimiter')` | Split string by delimiter |
+| `replace_string` | `replace_string("col1",'find','replace')` | Replace text within a string |
+| `reverse` | `reverse("col1")` | Reverse a string |
+| `extract` | `extract('regex',index,"col1")` | Extract using regex (index: 0, 1, ...) |
+
+#### Type conversion functions
+
+| Function | Syntax | Description |
+|----------|--------|-------------|
+| `tonumber` | `tonumber("age")` | Convert to number |
+| `tostring` | `tostring("age")` | Convert to string |
+| `toint` | `toint("value")` | Convert to integer |
+| `tolong` | `tolong("value")` | Convert to long integer |
+| `todouble` | `todouble("value")` | Convert to double |
+| `tofloat` | `tofloat("value")` | Convert to float |
+| `tobool` | `tobool("value")` | Convert to boolean |
+
+#### DateTime functions
+
+| Function | Syntax | Description |
+|----------|--------|-------------|
+| `todatetime` | `todatetime("dob")` | Convert string to datetime |
+| `tounixtime` | `tounixtime("dob")` | Convert datetime to unix epoch (ms) |
+| `format_datetime` | `format_datetime("dob",'DD/MM/YYYY')` | Format datetime as string |
+| `add_datetime` | `add_datetime("dob",'-1d')` | Add duration (e.g., `-1d`, `2h`) |
+| `unixtime_seconds_todatetime` | `unixtime_seconds_todatetime("ts")` | Convert unix seconds to datetime |
+| `unixtime_milliseconds_todatetime` | `unixtime_milliseconds_todatetime("ts")` | Convert unix milliseconds to datetime |
+| `unixtime_microseconds_todatetime` | `unixtime_microseconds_todatetime("ts")` | Convert unix microseconds to datetime |
+| `unixtime_nanoseconds_todatetime` | `unixtime_nanoseconds_todatetime("ts")` | Convert unix nanoseconds to datetime |
+| `startofminute` | `startofminute("dob")` | Round to start of minute |
+| `startofhour` | `startofhour("dob")` | Round to start of hour |
+| `startofday` | `startofday("dob")` | Round to start of day |
+| `startofweek` | `startofweek("dob")` | Round to start of week |
+| `startofmonth` | `startofmonth("dob")` | Round to start of month |
+| `startofyear` | `startofyear("dob")` | Round to start of year |
+
+#### Math functions
+
+| Function | Syntax | Description |
+|----------|--------|-------------|
+| `sum` | `sum("col1","col2")` | Add two or more columns |
+| `diff` | `diff("col1","col2")` | Subtract columns (col1 - col2) |
+| `mul` | `mul("col1","col2")` | Multiply columns |
+| `div` | `div("col1","col2")` | Divide columns (col1 / col2) |
+| `percentage` | `percentage("col1","col2")` | Calculate percentage ((col1/col2) × 100) |
+| `floor` | `floor("col1")` | Round down to nearest integer |
+| `ceil` | `ceil("col1")` | Round up to nearest integer |
+| `round` | `round("col1")` | Round to nearest integer |
+| `sign` | `sign("col1")` | Return sign (-1, 0, or 1) |
+| `pow` | `pow("col1",3)` | Raise to power |
+| `log` | `log("col1")` | Natural logarithm |
+| `log2` | `log2("col1")` | Base-2 logarithm |
+| `log10` | `log10("col1")` | Base-10 logarithm |
+| `sin` | `sin("col1")` | Sine |
+| `cos` | `cos("col1")` | Cosine |
+| `tan` | `tan("col1")` | Tangent |
+
+#### URL functions
+
+| Function | Syntax | Description |
+|----------|--------|-------------|
+| `parse_url` | `parse_url("col1")` | Parse URL into components |
+| `parse_url` | `parse_url("col1",'pathname')` | Get URL part: `host`, `hash`, `origin`, `href`, `protocol`, `pathname`, `search` |
+| `parse_url` | `parse_url("col1",'search','key1')` | Get query parameter value |
+| `parse_urlquery` | `parse_urlquery("col1",'key1')` | Parse query string and get value for key |
+
+#### Encoding functions
+
+| Function | Syntax | Description |
+|----------|--------|-------------|
+| `atob` | `atob("col1")` | Decode base64 string |
+| `btoa` | `btoa("col1")` | Encode string to base64 |
+
+#### Math functions example
+
+**Input data:**
+
+```json
+[{ "a": 12, "b": 20 }, { "a": 6, "b": 32 }]
+```
+
+**UQL query:**
 
 ```sql
 parse-json
-| project "a", "triple"=sum("a","a","a"),"thrice"=mul("a",3), sum("a","b"),  diff("a","b"), mul("a","b")
+| project "a", "triple"=sum("a","a","a"), "thrice"=mul("a",3), sum("a","b"), diff("a","b"), mul("a","b")
 ```
 
-over the data 
+**Output:**
 
-```[ { "a": 12, "b" : 20 }, { "a" : 6, "b": 32} ]``` 
+| a | triple | thrice | sum | diff | mul |
+|---|--------|--------|-----|------|-----|
+| 12 | 36 | 36 | 32 | -8 | 240 |
+| 6 | 18 | 18 | 38 | -26 | 192 |
 
-yields the following output:
+#### Chain multiple transformations
 
-| a   | triple | thrice | sum | diff | mul |
-| --- | ------ | ------ | --- | ---- | --- |
-| 12  | 36     | 36     | 32  | -8   | 240 |
-| 6   | 18     | 18     | 38  | -26  | 192 |
+To apply multiple transformations to the same field, repeat the field name in the `extend` command:
 
-To apply multiple transformations over a field, repeat them with the same field name. For example, the UQL query:
+```sql
+parse-json
+| extend "name"=tolower("name"), "name"=trim("name")
+```
 
-```extend "name"=tolower("name"), "name"=trim("name")``` 
+This applies `tolower` first, then `trim` to the `name` field.
 
-applies the `tolower` function and then the `trim` function over the name field.
+#### Array functions
 
-When working with data in arrays, there are a few other extend/project functions available as follows.
+#### pack
 
-### pack
+Convert key-value pairs into an object.
 
-`pack` converts an array of key value pairs into a map. Example:
+```sql
+extend "foo"=pack('key1',"value1",'key2',"value2")
+```
 
-```extend "foo"=pack('key1',"value1",'key1',"value2")```
+**Output:** `{key1: value1, key2: value2}`
 
-yields an object:
+#### array_from_entries
 
-```{key1:value1,key2:value2}```
+Build an array of objects from a list of values.
 
-### array_from_entries
+```sql
+extend "foo"=array_from_entries('timestamp',[2010,2020,2030])
+```
 
-`array_from_entries` builds an array of objects from an array. Example:
+**Output:** `[{timestamp: 2010}, {timestamp: 2020}, {timestamp: 2030}]`
 
-```extend "foo"=array_from_entries('timestamp',[2010,2020,2030])```
+#### array_to_map
 
- yields an array: 
- 
- ```[{timestamp:2010},{timestamp:2020},{timestamp:2030}]```
+Convert an array to an object with named keys.
 
-### array_to_map
+```sql
+extend "foo"=array_to_map(['chennai','india'],'city','country')
+```
 
-`array_to_map` converts an array of entries to a map. Optionally, one can provide aliases for keys instead of their index. Example:
-
-```extend "foo"=array_to_map(['chennai','india'],'city','country')``` 
-
-yields 
-
-```{ 'city': 'chennai', 'country':'india'}```
+**Output:** `{city: 'chennai', country: 'india'}`
 
 ### summarize
 
-`summarize` aggregates the data by a string column. `summarize` expects alias, summarize by fields and summarize function arguments. The available summarization functions are listed in the table.
+Aggregate data by grouping on one or more columns. Use the syntax `"alias"=function("field") by "group_field"`.
 
-| function keyword   | syntax              | description       | available from |
-| ------------------ | ------------------- | ----------------- | -------------- |
-| `count`            | `count()`           | count of values   | 0.8.0          |
-| `sum`              | `sum("age")`        | sum of age        | 0.8.0          |
-| `min`              | `min("population")` | min of population | 0.8.0          |
-| `max`              | `max("foo")`        | max of foo        | 0.8.0          |
-| `mean`             | `mean("foo")`       | mean of foo       | 0.8.0          |
+#### Aggregation functions
 
-For example, given the following data:
+| Function | Syntax | Description |
+|----------|--------|-------------|
+| `count` | `count()` | Count of rows |
+| `sum` | `sum("age")` | Sum of values |
+| `min` | `min("population")` | Minimum value |
+| `max` | `max("foo")` | Maximum value |
+| `mean` | `mean("foo")` | Average value |
+| `first` | `first("foo")` | First value in group |
+| `last` | `last("foo")` | Last value in group |
+| `latest` | `latest("foo")` | Most recent non-null value |
+| `random` | `random("foo")` | Random value from group |
+| `dcount` | `dcount("country")` | Count of distinct values |
+| `distinct` | `distinct("country")` | List of distinct values |
+| `countif` | `countif("age", "> 18")` | Count where condition is true |
+| `sumif` | `sumif("salary", "> 1000")` | Sum where condition is true |
+| `minif` | `minif("age", "> 0")` | Minimum where condition is true |
+| `maxif` | `maxif("score", "!= null")` | Maximum where condition is true |
+
+#### Summarize example
+
+**Input data:**
 
 ```json
 [
@@ -234,7 +336,7 @@ For example, given the following data:
 ]
 ```
 
-Running this UQL query
+**UQL query:**
 
 ```sql
 parse-json
@@ -243,25 +345,25 @@ parse-json
 | order by "total population" desc
 ```
 
-produces output like this:
+**Output:**
 
 | country | number of cities | total population |
-| ------- | ---------------- | ---------------- |
-| INDIA   | 2                | 330              |
-| JAPAN   | 1                | 200              |
-| USA     | 2                | 100              |
+|---------|------------------|------------------|
+| INDIA | 2 | 330 |
+| JAPAN | 1 | 200 |
+| USA | 2 | 100 |
 
 ### pivot
 
-The `pivot` command performs pivot operations over the data. It accepts 3 arguments.
+Transform rows into columns. The `pivot` command accepts three arguments:
 
-- The 1st argument is the summarization function. Example: `count("id)` or `sum("salary")`
-- The 2nd argument is the row field name. Example: `"country"`
-- The 3rd argument is the column field name. Example: `"occupation"`
+1. **Aggregation function** — for example, `count("id")` or `sum("salary")`
+2. **Row field** — the field to use for row grouping, for example, `"country"`
+3. **Column field** — the field whose values become column headers, for example, `"occupation"`
 
-#### Pivot example 1
+##### Pivot example
 
-Given this CSV data:
+**Input data (CSV):**
 
 ```csv
 name,age,country,occupation,salary
@@ -273,7 +375,7 @@ Leanne Bell,38,USA,Senior Software Engineer,4000
 Chelsey Dietrich,32,USA,Software Engineer,3500
 ```
 
-Running the following query:
+**UQL query (pivot):**
 
 ```sql
 parse-csv
@@ -281,15 +383,15 @@ parse-csv
 | pivot sum("salary"), "country", "occupation"
 ```
 
-produces this output:
+**Output:**
 
 | country | Devops Engineer | Software Engineer | Student | Senior Software Engineer |
-| ------- | --------------- | ----------------- | ------- | ------------------------ |
-| USA     | 3000            | 5800              | 0       | 4000                     |
-| CANADA  | 0               | 0                 | 0       | 0                        |
-| UK      | 0               | 2800              | 0       | 0                        |
+|---------|-----------------|-------------------|---------|--------------------------|
+| USA | 3000 | 5800 | 0 | 4000 |
+| CANADA | 0 | 0 | 0 | 0 |
+| UK | 0 | 2800 | 0 | 0 |
 
-Whereas the following summarize query:
+**Compare with summarize:**
 
 ```sql
 parse-csv
@@ -297,37 +399,32 @@ parse-csv
 | summarize "salary"=sum("salary") by "country", "occupation"
 ```
 
-will produce:
+**Output:**
 
-| country | occupation               | salary |
-| ------- | ------------------------ | ------ |
-| USA     | Devops Engineer          | 3000   |
-| USA     | Software Engineer        | 5800   |
-| Canada  | Student                  | 0      |
-| UK      | Software Engineer        | 2800   |
-| UK      | Senior Software Engineer | 4000   |
+| country | occupation | salary |
+|---------|--------------------------|--------|
+| USA | Devops Engineer | 3000 |
+| USA | Software Engineer | 5800 |
+| Canada | Student | 0 |
+| UK | Software Engineer | 2800 |
+| UK | Senior Software Engineer | 4000 |
 
-Choose either `summarize` or `pivot` according to your needs.
+Use `pivot` when you want values to become column headers. Use `summarize` when you want grouped rows.
 
-### parse-json
+### Parser commands
 
-`parse-json` parses the response as JSON.
+These commands parse the raw response into a structured format:
 
-### parse-csv
-
-`parse-csv` parses the response as CSV.
-
-### parse-xml
-
-`parse-xml` parses the response as XML.
-
-### parse-yaml
-
-`parse-yaml` parses the response as YAML.
+| Command | Description |
+|---------|-------------|
+| `parse-json` | Parse response as JSON |
+| `parse-csv` | Parse response as CSV |
+| `parse-xml` | Parse response as XML |
+| `parse-yaml` | Parse response as YAML |
 
 ### count
 
-`count` returns the number of results.
+Return the total number of rows.
 
 ```sql
 parse-json
@@ -336,8 +433,7 @@ parse-json
 
 ### limit
 
-`limit` restricts the number of results returned.
-For example, the following query returns only the first 10 results:
+Restrict the number of rows returned.
 
 ```sql
 parse-json
@@ -346,9 +442,9 @@ parse-json
 
 ### scope
 
-`scope` sets the context (document root) of the output data. It is useful when the results are inside a nested JSON object.
+Set the document root to a nested property. Useful when your data is wrapped in a container object.
 
-example
+**Input data:**
 
 ```json
 {
@@ -358,16 +454,20 @@ example
 }
 ```
 
-and the following UQL query returns only the contents of the "users" key, ignoring the other root level properties.
+**UQL query:**
 
 ```sql
 parse-json
 | scope "users"
 ```
 
+This returns only the `users` array, ignoring `meta` and `count`.
+
 ### mv-expand
 
-`mv-expand` expands multi-value properties into their own records. For example, running the command `mv-expand "user"="users"` over this data:
+Expand multi-value arrays into separate rows. Use the syntax `mv-expand "new_column"="array_column"`.
+
+**Input data:**
 
 ```json
 [
@@ -376,7 +476,14 @@ parse-json
 ]
 ```
 
-Produces results like this:
+**UQL query:**
+
+```sql
+parse-json
+| mv-expand "user"="users"
+```
+
+**Output:**
 
 ```json
 [
@@ -386,55 +493,76 @@ Produces results like this:
 ]
 ```
 
-`mv-expand` should also work for non-string arrays.
-
 ### project kv()
 
-`project kv()` is used to convert the given object into key-value pairs.
+Convert an object into key-value pair rows.
 
-Example, given the data:
+**Input data:**
 
-```{ "a": {"name":"a1"}, "b": {"name":"b1"}, "c": {"name":"c1"} }```
+```json
+{ "a": {"name":"a1"}, "b": {"name":"b1"}, "c": {"name":"c1"} }
+```
 
-and the query 
+**UQL query:**
 
-```parse-json | project kv()```
+```sql
+parse-json
+| project kv()
+```
 
-the following table is returned:
+**Output:**
 
-| key | value           |
-| --- | --------------- |
-| a   | `{"name":"a1"}` |
-| b   | `{"name":"b1"}` |
-| c   | `{"name":"c1"}` |
+| key | value |
+|-----|-------|
+| a | `{"name":"a1"}` |
+| b | `{"name":"b1"}` |
+| c | `{"name":"c1"}` |
 
-This command can be also used with arguments. For example, given the data 
+To access a nested object, pass the property name as an argument:
 
-```{ "data": { "a": {"name":"a1"}, "b": {"name":"b1"}, "c": {"name":"c1"} } }``` 
+```sql
+parse-json
+| project kv("data")
+```
 
-and the query 
+{{< admonition type="note" >}}
+The `project kv()` command is available from plugin version 0.8.7.
+{{< /admonition >}}
 
-```parse-json | project kv("data")```
+### jsonata
 
-the same results as the previous example are returned.
+Run a [JSONata](https://jsonata.org/) expression on the data. The JSONata query language provides powerful querying and transformation capabilities.
 
-> project kv() is available from version 0.8.7 of the plugin
+**Basic example:**
 
-### JSONata
+```sql
+parse-json
+| jsonata "items[price > 100]"
+```
 
-`jsonata` accepts a [JSONata](https://jsonata.org/) query to run over the output of the previous command.
+**Complex example with chained commands:**
 
 ```sql
 parse-json
 | scope "library"
-| jsonata "library.loans@$L.books@$B[$L.isbn=$B.isbn].customers[$L.customer=id].{ 'customer': name, 'book': $B.title, 'due': $L.return}"
+| jsonata "loans@$L.books@$B[$L.isbn=$B.isbn].customers[$L.customer=id].{'customer': name, 'book': $B.title, 'due': $L.return}"
 | count
 ```
 
-Like any other command, the `jsonata` command can be combined/piped with multiple commands. You can use JSONata for filtering the data as well.
+The `jsonata` command can be combined with other UQL commands in a pipeline. Use it for filtering, transforming, or restructuring data.
 
-> JSONata support is available from version 0.8.8 of the plugin
+{{< admonition type="note" >}}
+JSONata support in UQL is available from plugin version 0.8.8.
+{{< /admonition >}}
 
 ### Comments
 
-Any new line that starts with `#` will be treated as a comment.
+Lines starting with `#` are treated as comments and ignored during execution.
+
+```sql
+parse-json
+# Filter to active users only
+| where "status" == 'active'
+# Sort by name
+| order by "name" asc
+```
