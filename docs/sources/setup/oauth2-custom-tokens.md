@@ -80,3 +80,43 @@ The `tokenTemplate` field allows you to specify a custom format for the token va
 - `${__oauth2.access_token}` (token only, no prefix)
 - `${__oauth2.token_type} ${__oauth2.access_token}` (dynamic prefix)
 - `ApiKey ${__oauth2.access_token}`
+
+### TokenHeaders
+
+The `tokenHeaders` field allows you to specify custom HTTP headers to send with OAuth2 token endpoint requests. This is useful when working with OAuth2 servers that have strict header validation requirements.
+
+**Use Case**: Some OAuth2 servers validate the `Accept` header or other headers in token requests. By default, the OAuth2 library may not set certain headers, causing authentication failures with error messages like:
+
+```
+oauth2: "invalid_request" "The header 'Accept : ' is not supported."
+```
+
+**Configuration**: Add custom headers as key-value pairs. Common headers include:
+
+- `Accept`: `application/json` - Specify the desired response format
+- `Content-Type`: `application/x-www-form-urlencoded` - Override the default content type
+- `User-Agent`: `MyApp/1.0` - Custom user agent string
+- Custom headers required by your OAuth2 provider
+
+**Example Configuration**:
+
+```json
+{
+  "oauth2": {
+    "oauth2_type": "client_credentials",
+    "client_id": "my-client-id",
+    "token_url": "https://oauth-provider.example.com/token",
+    "tokenHeaders": {
+      "Accept": "application/json",
+      "User-Agent": "Grafana-Infinity/1.0"
+    }
+  }
+}
+```
+
+**Important Notes**:
+
+- Token headers are only sent to the token endpoint URL, not to your API requests
+- Headers specified here will not override headers already set by the OAuth2 library
+- These headers are in addition to the standard OAuth2 authentication headers
+
