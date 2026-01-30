@@ -60,7 +60,7 @@
     "@grafana/ui": "12.3.1",
     "cheerio": "1.2.0",
     "csv-parse": "6.1.0",
-    "groq-js": "1.25.0",
+    "groq-js": "1.26.0",
     "json-to-pretty-yaml": "1.2.2",
     "jsonata": "2.1.0",
     "jsonpath-plus": "10.3.0",
