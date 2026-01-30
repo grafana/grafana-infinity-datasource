@@ -1,0 +1,75 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["github>grafana/grafana-renovate-config//presets/automerge"],
+  "minimumReleaseAge": "7 days",
+  "timezone": "UTC",
+  "prConcurrentLimit": 2,
+  "dependencyDashboard": false,
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "labels": ["security"],
+    "prPriority": 100,
+    "schedule": ["at any time"],
+    "additionalBranchPrefix": "security-"
+  },
+  "packageRules": [
+    {
+      "description": "Bundle all frontend dependency updates into a single weekly PR",
+      "matchManagers": ["npm"],
+      "groupName": "Frontend dependencies",
+      "groupSlug": "frontend-dependencies",
+      "schedule": ["schedule:earlyMondays"]
+    },
+    {
+      "description": "Bundle all backend dependency updates into a single weekly PR",
+      "matchManagers": ["gomod"],
+      "groupName": "Backend dependencies",
+      "groupSlug": "backend-dependencies",
+      "schedule": ["schedule:earlyMondays"]
+    },
+    {
+      "description": "Ignore major updates for dependencies that need grafana lifecycle support",
+      "enabled": false,
+      "matchDatasources": ["npm"],
+      "matchPackageNames": ["@grafana/*"],
+      "matchUpdateTypes": ["major"]
+    },
+    {
+      "description": "Ignore major updates for dependencies that need to be kept in sync with Grafana",
+      "enabled": false,
+      "matchDatasources": ["npm"],
+      "matchPackageNames": [
+        "react",
+        "react-dom",
+        "react-router-dom",
+        "react-router-dom-v5-compat",
+        "@types/react",
+        "@types/react-dom"
+      ],
+      "matchUpdateTypes": ["major"]
+    },
+    {
+      "description": "Ignore major updates for dependencies that need to be kept in sync with the Node version defined in .nvmrc",
+      "enabled": false,
+      "matchDatasources": ["npm", "node"],
+      "matchPackageNames": ["@types/node", "node"],
+      "matchUpdateTypes": ["major"]
+    },
+    {
+      "description": "Ignore all Docker image version updates",
+      "enabled": false,
+      "matchDatasources": ["docker"]
+    },
+    {
+      "description": "Ignore all GitHub Actions version updates",
+      "enabled": false,
+      "matchDatasources": ["github-actions"]
+    },
+    {
+      "description": "Automerge minor dependencies",
+      "automerge": true,
+      "matchUpdateTypes": ["minor", "patch", "pin", "pinDigest"],
+      "labels": ["automerge-minor"]
+    }
+  ]
+}
