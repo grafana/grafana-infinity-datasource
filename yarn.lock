@@ -1729,14 +1729,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grafana/e2e-selectors@npm:12.4.0-21205677807":
-  version: 12.4.0-21205677807
-  resolution: "@grafana/e2e-selectors@npm:12.4.0-21205677807"
+"@grafana/e2e-selectors@npm:12.4.0-21513454430":
+  version: 12.4.0-21513454430
+  resolution: "@grafana/e2e-selectors@npm:12.4.0-21513454430"
   dependencies:
     semver: "npm:^7.7.0"
     tslib: "npm:2.8.1"
     typescript: "npm:5.9.2"
-  checksum: 10c0/f1c699fa4bc381f4ea19315c70839dbc32c621db3ab3d771605d2e74afcf27c84e895065c3b25ab73854a70f45c3f835f3794e563c1d2f176a5ee805e0eec05a
+  checksum: 10c0/bb6722f6f535d0fc639879cba7733e1c70f7e241c2f5d2ccecbfe7cc87a449b70b477c6219e8a34f4b851a74e9ae810639053b909187206f8643ac64b7677bd4
   languageName: node
   linkType: hard
 
@@ -1796,17 +1796,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grafana/plugin-e2e@npm:3.2.0":
-  version: 3.2.0
-  resolution: "@grafana/plugin-e2e@npm:3.2.0"
+"@grafana/plugin-e2e@npm:3.2.1":
+  version: 3.2.1
+  resolution: "@grafana/plugin-e2e@npm:3.2.1"
   dependencies:
-    "@grafana/e2e-selectors": "npm:12.4.0-21205677807"
+    "@grafana/e2e-selectors": "npm:12.4.0-21513454430"
     semver: "npm:^7.5.4"
     uuid: "npm:^13.0.0"
     yaml: "npm:^2.3.4"
   peerDependencies:
     "@playwright/test": ^1.52.0
-  checksum: 10c0/9d68b5f07186ed1be3a138b66fbb4517ad11b2c74ed0842eccf8acab6778201de0fd29e515ef1b18302141e526d0fc1dc51b85308884901e978f2a5ef2bb47f1
+  checksum: 10c0/aaf5e6c176181451d2af153abc6fa04e3597049abc0f2cde41397b938091ae97660328b6015e756e671923435eeda39c294656d04a2dba3bb8accf668442303f
   languageName: node
   linkType: hard
 
@@ -7772,7 +7772,7 @@ __metadata:
     "@grafana/data": "npm:12.3.1"
     "@grafana/eslint-config": "npm:9.0.0"
     "@grafana/i18n": "npm:12.3.1"
-    "@grafana/plugin-e2e": "npm:3.2.0"
+    "@grafana/plugin-e2e": "npm:3.2.1"
     "@grafana/runtime": "npm:12.3.1"
     "@grafana/schema": "npm:12.3.1"
     "@grafana/tsconfig": "npm:2.0.1"
