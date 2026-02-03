@@ -120,8 +120,8 @@ github.com/gopherjs/gopherjs v0.0.0-20181103185306-d547d1d9531e h1:JKmoR8x90Iww1
 github.com/gopherjs/gopherjs v0.0.0-20181103185306-d547d1d9531e/go.mod h1:wJfORRmW1u3UXTncJ5qlYoELFm8eSnnEO6hX4iZ3EWY=
 github.com/grafana/dataplane/sdata v0.0.9 h1:AGL1LZnCUG4MnQtnWpBPbQ8ZpptaZs14w6kE/MWfg7s=
 github.com/grafana/dataplane/sdata v0.0.9/go.mod h1:Jvs5ddpGmn6vcxT7tCTWAZ1mgi4sbcdFt9utQx5uMAU=
-github.com/grafana/dskit v0.0.0-20260128150120-18df891bcc0a h1:6MOr9HwJR4tQkDRcRBCZ9y1pF5mIVK9NAkuM2x7K19k=
-github.com/grafana/dskit v0.0.0-20260128150120-18df891bcc0a/go.mod h1:iHZFIKfU//1Uto0gmgmGBB1oVUBcTiepUFslatTkrAs=
+github.com/grafana/dskit v0.0.0-20260203174236-88b369454b40 h1:KEt4I6ZqAxnEi+1XKF3yVbFuynsrLz0Pzl/4Bd9Wpjk=
+github.com/grafana/dskit v0.0.0-20260203174236-88b369454b40/go.mod h1:t7zsn1NdkFAbwHvZEAaDrqHv6bfWH5BU+0u8+fqESWs=
 github.com/grafana/grafana-aws-sdk v1.4.2 h1:GrUEoLbs46r8rG/GZL4L2b63Bo+rkIYKdtCT7kT5KkM=
 github.com/grafana/grafana-aws-sdk v1.4.2/go.mod h1:1qnZdYs6gQzxxF0dDodaE7Rn9fiMzuhwvtaAZ7ySnhY=
 github.com/grafana/grafana-plugin-sdk-go v0.286.0 h1:nrG/XLDpYuUONVpVVGIUxPJdWeXGHM/47qIAnuDkdjg=
