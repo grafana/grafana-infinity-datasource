@@ -2,9 +2,10 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["github>grafana/grafana-renovate-config//presets/automerge"],
   "minimumReleaseAge": "7 days",
+  "platformAutomerge": true,
   "timezone": "UTC",
   "prConcurrentLimit": 2,
-  "dependencyDashboard": false,
+  "dependencyDashboard": true,
   "vulnerabilityAlerts": {
     "enabled": true,
     "labels": ["security"],
@@ -28,13 +29,6 @@
       "schedule": ["schedule:earlyMondays"]
     },
     {
-      "description": "Ignore major updates for dependencies that need grafana lifecycle support",
-      "enabled": false,
-      "matchDatasources": ["npm"],
-      "matchPackageNames": ["@grafana/*"],
-      "matchUpdateTypes": ["major"]
-    },
-    {
       "description": "Ignore major updates for dependencies that need to be kept in sync with Grafana",
       "enabled": false,
       "matchDatasources": ["npm"],
@@ -54,16 +48,6 @@
       "matchDatasources": ["npm", "node"],
       "matchPackageNames": ["@types/node", "node"],
       "matchUpdateTypes": ["major"]
-    },
-    {
-      "description": "Ignore all Docker image version updates",
-      "enabled": false,
-      "matchDatasources": ["docker"]
-    },
-    {
-      "description": "Ignore all GitHub Actions version updates",
-      "enabled": false,
-      "matchDatasources": ["github-actions"]
     },
     {
       "description": "Automerge minor dependencies",
