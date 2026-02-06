@@ -82,6 +82,79 @@ secureJsonData:
   httpHeaderValue4: <<Header4 Value>>
 ```
 
+## AWS Authentication
+
+### Access Key & Secret Key
+
+```yaml
+- name: AWS - Access Keys
+  type: yesoreyeram-infinity-datasource
+  jsonData:
+    auth_method: 'aws'
+    aws:
+      authType: 'keys'
+      region: 'us-east-2'
+      service: 'monitoring'
+    allowedHosts:
+      - 'https://monitoring.us-east-2.amazonaws.com'
+  secureJsonData:
+    awsAccessKey: '<<YOUR_AWS_ACCESS_KEY>>'
+    awsSecretKey: '<<YOUR_AWS_SECRET_KEY>>'
+```
+
+### Access Key & Secret Key + AssumeRole
+
+```yaml
+- name: AWS - Access Keys + AssumeRole
+  type: yesoreyeram-infinity-datasource
+  jsonData:
+    auth_method: 'aws'
+    aws:
+      authType: 'keys'
+      region: 'us-east-2'
+      service: 'monitoring'
+      assumeRoleArn: 'arn:aws:iam::123456789012:role/MyRole'
+      externalId: 'my-external-id'
+    allowedHosts:
+      - 'https://monitoring.us-east-2.amazonaws.com'
+  secureJsonData:
+    awsAccessKey: '<<YOUR_AWS_ACCESS_KEY>>'
+    awsSecretKey: '<<YOUR_AWS_SECRET_KEY>>'
+```
+
+### Default Credentials / IAM Role
+
+Suitable for EC2 instance profiles, ECS task roles, and EKS IRSA. No static keys required.
+
+```yaml
+- name: AWS - Default Credentials (IAM Role)
+  type: yesoreyeram-infinity-datasource
+  jsonData:
+    auth_method: 'aws'
+    aws:
+      authType: 'default'
+      region: 'us-east-2'
+      service: 'monitoring'
+    allowedHosts:
+      - 'https://monitoring.us-east-2.amazonaws.com'
+```
+
+### Default Credentials + AssumeRole
+
+```yaml
+- name: AWS - Default Credentials + AssumeRole
+  type: yesoreyeram-infinity-datasource
+  jsonData:
+    auth_method: 'aws'
+    aws:
+      authType: 'default'
+      region: 'us-east-2'
+      service: 'monitoring'
+      assumeRoleArn: 'arn:aws:iam::123456789012:role/MyRole'
+    allowedHosts:
+      - 'https://monitoring.us-east-2.amazonaws.com'
+```
+
 ## More examples
 
 For more examples of provisioning such as `oauth2`, etc, use provisioning section of the Infinity data source config. You will be able to generate provisioning file by manually configuring the data source.
