@@ -7,7 +7,7 @@ import { AzureBlobAuthEditor } from '@/editors/config/Auth.AzureBlob';
 import { OAuthInputsEditor } from './../../editors/config/OAuthInput';
 import { OthersAuthentication } from '@/editors/config/OtherAuthProviders';
 import { AWSRegions } from '@/constants';
-import type { APIKeyType, AuthType, InfinityOptions, InfinitySecureOptions } from '@/types';
+import type { APIKeyType, AWSAuthType, AuthType, InfinityOptions, InfinitySecureOptions } from '@/types';
 
 const authTypes: Array<SelectableValue<AuthType | 'others'> & { logo?: string }> = [
   { value: 'none', label: 'No Auth' },
@@ -90,11 +90,20 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
   const onAPIKeyKeyChange = (apiKeyKey: string) => {
     onOptionsChange({ ...options, jsonData: { ...options.jsonData, apiKeyKey } });
   };
+  const onAwsAuthTypeChange = (awsAuthType: AWSAuthType) => {
+    onOptionsChange({ ...options, jsonData: { ...options.jsonData, aws: { ...options.jsonData?.aws, authType: awsAuthType } } });
+  };
   const onAwsRegionChange = (region: string) => {
     onOptionsChange({ ...options, jsonData: { ...options.jsonData, aws: { ...options.jsonData?.aws, region } } });
   };
   const onAwsServiceChange = (service: string) => {
     onOptionsChange({ ...options, jsonData: { ...options.jsonData, aws: { ...options.jsonData?.aws, service } } });
+  };
+  const onAwsAssumeRoleArnChange = (assumeRoleArn: string) => {
+    onOptionsChange({ ...options, jsonData: { ...options.jsonData, aws: { ...options.jsonData?.aws, assumeRoleArn } } });
+  };
+  const onAwsExternalIdChange = (externalId: string) => {
+    onOptionsChange({ ...options, jsonData: { ...options.jsonData, aws: { ...options.jsonData?.aws, externalId } } });
   };
   const onResetSecret = (key: keyof InfinitySecureOptions) => {
     onOptionsChange({
@@ -229,6 +238,19 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
             {authType === 'aws' && (
               <>
                 <div className="gf-form">
+                  <InlineFormLabel tooltip="Choose how to authenticate with AWS. 'Access & Secret Key' uses static credentials. 'Default Credentials / IAM Role' uses the default AWS credential chain (environment variables, EC2 instance profile, ECS task role, etc.).">
+                    Auth Provider
+                  </InlineFormLabel>
+                  <RadioButtonGroup<AWSAuthType>
+                    options={[
+                      { value: 'keys', label: 'Access & Secret Key' },
+                      { value: 'default', label: 'Default Credentials / IAM Role' },
+                    ]}
+                    value={options.jsonData?.aws?.authType || 'keys'}
+                    onChange={(awsAuthType = 'keys') => onAwsAuthTypeChange(awsAuthType)}
+                  />
+                </div>
+                <div className="gf-form">
                   <InlineFormLabel>Region</InlineFormLabel>
                   <Select width={24} options={AWSRegions} placeholder="us-east-2" onChange={(e) => onAwsRegionChange(e.value!)} value={props.options.jsonData?.aws?.region || ''} />
                 </div>
@@ -241,36 +263,64 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
                     onChange={(e) => onAwsServiceChange(e.currentTarget.value)}
                   ></FormField>
                 </div>
+                {(!options.jsonData?.aws?.authType || options.jsonData?.aws?.authType === 'keys') && (
+                  <>
+                    <div className="gf-form">
+                      <SecretFormField
+                        labelWidth={10}
+                        inputWidth={12}
+                        required
+                        value={secureJsonData.awsAccessKey || ''}
+                        isConfigured={(secureJsonFields && secureJsonFields.awsAccessKey) as boolean}
+                        onReset={() => onResetSecret('awsAccessKey')}
+                        onChange={onUpdateDatasourceSecureJsonDataOption(props, 'awsAccessKey')}
+                        label="Access Key"
+                        aria-label="aws access key"
+                        placeholder="aws access key"
+                        tooltip="aws access key"
+                      />
+                    </div>
+                    <div className="gf-form">
+                      <SecretFormField
+                        labelWidth={10}
+                        inputWidth={12}
+                        required
+                        value={secureJsonData.awsSecretKey || ''}
+                        isConfigured={(secureJsonFields && secureJsonFields.awsSecretKey) as boolean}
+                        onReset={() => onResetSecret('awsSecretKey')}
+                        onChange={onUpdateDatasourceSecureJsonDataOption(props, 'awsSecretKey')}
+                        label="Secret Key"
+                        aria-label="aws secret key"
+                        placeholder="aws secret key"
+                        tooltip="aws secret key"
+                      />
+                    </div>
+                  </>
+                )}
                 <div className="gf-form">
-                  <SecretFormField
+                  <FormField
+                    label="Assume Role ARN"
+                    placeholder="arn:aws:iam::123456789012:role/MyRole (optional)"
+                    tooltip="Optional. Specify an IAM Role ARN to assume for cross-account or role-based access."
                     labelWidth={10}
-                    inputWidth={12}
-                    required
-                    value={secureJsonData.awsAccessKey || ''}
-                    isConfigured={(secureJsonFields && secureJsonFields.awsAccessKey) as boolean}
-                    onReset={() => onResetSecret('awsAccessKey')}
-                    onChange={onUpdateDatasourceSecureJsonDataOption(props, 'awsAccessKey')}
-                    label="Access Key"
-                    aria-label="aws access key"
-                    placeholder="aws access key"
-                    tooltip="aws access key"
-                  />
+                    inputWidth={24}
+                    value={props.options.jsonData?.aws?.assumeRoleArn || ''}
+                    onChange={(e) => onAwsAssumeRoleArnChange(e.currentTarget.value)}
+                  ></FormField>
                 </div>
-                <div className="gf-form">
-                  <SecretFormField
-                    labelWidth={10}
-                    inputWidth={12}
-                    required
-                    value={secureJsonData.awsSecretKey || ''}
-                    isConfigured={(secureJsonFields && secureJsonFields.awsSecretKey) as boolean}
-                    onReset={() => onResetSecret('awsSecretKey')}
-                    onChange={onUpdateDatasourceSecureJsonDataOption(props, 'awsSecretKey')}
-                    label="Secret Key"
-                    aria-label="aws secret key"
-                    placeholder="aws secret key"
-                    tooltip="aws secret key"
-                  />
-                </div>
+                {props.options.jsonData?.aws?.assumeRoleArn && (
+                  <div className="gf-form">
+                    <FormField
+                      label="External ID"
+                      placeholder="external id (optional)"
+                      tooltip="Optional. Used for cross-account role assumption when the trust policy requires an external ID."
+                      labelWidth={10}
+                      inputWidth={24}
+                      value={props.options.jsonData?.aws?.externalId || ''}
+                      onChange={(e) => onAwsExternalIdChange(e.currentTarget.value)}
+                    ></FormField>
+                  </div>
+                )}
               </>
             )}
             {authType === 'oauth2' && <OAuthInputsEditor {...props} />}

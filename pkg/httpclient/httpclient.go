@@ -193,11 +193,13 @@ func applyAWSAuth(ctx context.Context, httpClient *http.Client, settings models.
 		}
 		httpOptions := httpclient.Options{
 			SigV4: &httpclient.SigV4Config{
-				AccessKey: settings.AWSAccessKey,
-				SecretKey: settings.AWSSecretKey,
-				AuthType:  string(authType),
-				Region:    region,
-				Service:   service,
+				AuthType:      string(authType),
+				AccessKey:     settings.AWSAccessKey,
+				SecretKey:     settings.AWSSecretKey,
+				Region:        region,
+				Service:       service,
+				AssumeRoleARN: settings.AWSSettings.AssumeRoleARN,
+				ExternalID:    settings.AWSSettings.ExternalID,
 			},
 		}
 		acceptHeaderMiddleware := func(req *http.Request) (*http.Response, error) {
