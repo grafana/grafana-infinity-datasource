@@ -1,8 +1,10 @@
 # Change Log
 
-## 3.7.0
+## 3.7.1
 
-### Minor Changes
+⚙️ **Chore**: Marked incorrect query errors as downstream errors
+
+## 3.7.0
 
 🚀 **Variable**: Added support for multi dimension / multi prop variable
 
@@ -127,7 +129,7 @@
 
 ## 2.12.2
 
-🐛 Build and publish pipelines uses latest go lang version `1.23.5` which includes security fixes to the `crypto/x509` and `net/http` packages ( CVE-2024-45341 and CVE-2024-45336 ). More details can be found [here](https://groups.google.com/g/golang-announce/c/sSaUhLA-2SI)
+🐛 Build and publish pipelines uses latest go lang version `1.23.5` which includes security fixes to the `crypto/x509` and `net/http` packages ( CVE-2024-45341 and CVE-2024-45336 ). More details can be found [in the golang announcement post](https://groups.google.com/g/golang-announce/c/sSaUhLA-2SI)
 
 🐛 **Bug fix**: Fixed error source for invalid queries
 
@@ -251,7 +253,7 @@
 
 ## 2.7.1
 
-🚀 **Time macros**: Added custom time macros `${__timeFrom}` and `${__timeTo}`. Read more about this [here](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/query/macros).
+🚀 **Time macros**: Added custom time macros `${__timeFrom}` and `${__timeTo}`. Read more about this [infinity plugin macros document](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/query/macros).
 
 ## 2.7.0
 

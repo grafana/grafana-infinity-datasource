@@ -45,7 +45,14 @@ func GetJSONBackendResponse(ctx context.Context, urlResponseObject any, query mo
 	newFrame, err := jsonframer.ToFrame(string(responseString), framerOptions)
 
 	if err != nil {
-		if errors.Is(err, jsonframer.ErrInvalidRootSelector) || errors.Is(err, jsonframer.ErrInvalidJSONContent) || errors.Is(err, jsonframer.ErrEvaluatingJSONata) {
+		if errors.Is(err, jsonframer.ErrInvalidRootSelector) ||
+			errors.Is(err, jsonframer.ErrInvalidJSONContent) ||
+			errors.Is(err, jsonframer.ErrEvaluatingJSONata) ||
+			errors.Is(err, jsonframer.ErrInvalidJQSelector) ||
+			errors.Is(err, jsonframer.ErrUnMarshalingJSON) ||
+			errors.Is(err, jsonframer.ErrMarshalingJSON) ||
+			errors.Is(err, jsonframer.ErrExecutingJQ) {
+			span.RecordError(err)
 			return frame, backend.DownstreamError(fmt.Errorf("error converting json data to frame: %w", err))
 		}
 		return frame, backend.PluginError(fmt.Errorf("error converting json data to frame: %w", err))
