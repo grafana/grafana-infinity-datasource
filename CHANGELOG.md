@@ -129,7 +129,7 @@
 
 ## 2.12.2
 
-🐛 Build and publish pipelines uses latest go lang version `1.23.5` which includes security fixes to the `crypto/x509` and `net/http` packages ( CVE-2024-45341 and CVE-2024-45336 ). More details can be found [in the golang accouncement post](https://groups.google.com/g/golang-announce/c/sSaUhLA-2SI)
+🐛 Build and publish pipelines uses latest go lang version `1.23.5` which includes security fixes to the `crypto/x509` and `net/http` packages ( CVE-2024-45341 and CVE-2024-45336 ). More details can be found [in the golang announcement post](https://groups.google.com/g/golang-announce/c/sSaUhLA-2SI)
 
 🐛 **Bug fix**: Fixed error source for invalid queries
 
