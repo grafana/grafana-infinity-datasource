@@ -14,11 +14,6 @@
   },
   "packageRules": [
     {
-      "description": "Prioritize security vulnerability fixes",
-      "matchDepTypes": ["security"],
-      "prPriority": 100
-    },
-    {
       "description": "Bundle all frontend dependency updates into a single weekly PR",
       "matchManagers": ["npm"],
       "groupName": "Frontend dependencies",
