@@ -63,6 +63,6 @@ func GetFrameForInlineSources(ctx context.Context, query models.Query) (*data.Fr
 		}
 		return PostProcessFrame(ctx, frame, query)
 	default:
-		return frame, errors.New("unknown backend query type")
+		return frame, backend.DownstreamError(errors.New("unknown backend query type"))
 	}
 }
