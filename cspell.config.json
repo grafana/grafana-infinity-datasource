@@ -21,6 +21,7 @@
     "website/out/**",
     "website/public/**",
     "renovate.json",
+    "jest*.js",
     "docker-compose-debug.yaml",
     "docker-compose.yaml"
   ],
