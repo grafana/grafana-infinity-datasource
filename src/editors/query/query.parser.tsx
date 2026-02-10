@@ -12,6 +12,8 @@ export const ParseTypeEditor = (props: { query: InfinityQuery; onChange: (value:
         <Combobox
           width={22}
           value={query.parser || 'backend'}
+          // Using 'as any' because Combobox supports grouped options with nested structure
+          // but TypeScript doesn't recognize this format in the type definition
           options={getParserOptions(query.type) as any}
           onChange={(e) => {
             if (query.parser === 'uql' && (query.type === 'json' || query.type === 'graphql')) {
