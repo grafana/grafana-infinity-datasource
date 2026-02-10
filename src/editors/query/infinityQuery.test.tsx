@@ -50,19 +50,19 @@ describe('InfinityQueryEditor', () => {
 
     // Verify that mockQuery.type shows up in UI
     const typeField = getByTestId('infinity-query-field-wrapper-type');
-    expect(within(typeField).getByText(/^CSV$/)).toBeInTheDocument();
+    expect(within(typeField).getByDisplayValue(/^CSV$/)).toBeInTheDocument();
 
     // Verify that mockQuery.parser shows up in UI
     const parserField = getByTestId('infinity-query-field-wrapper-parser');
-    expect(within(parserField).getByText(/^Frontend$/)).toBeInTheDocument();
+    expect(within(parserField).getByDisplayValue('simple')).toBeInTheDocument();
 
     // Verify that mockQuery.format shows up in UI
     const formatField = getByTestId('infinity-query-field-wrapper-format');
-    expect(within(formatField).getByText(/^Nodes - Node Graph$/)).toBeInTheDocument();
+    expect(within(formatField).getByDisplayValue(/^Nodes - Node Graph$/)).toBeInTheDocument();
 
     // Verify that mockQuery.url_options shows up in UI
     const methodField = getByTestId('infinity-query-field-wrapper-method');
-    expect(within(methodField).getByText(/^GET$/)).toBeInTheDocument();
+    expect(within(methodField).getByDisplayValue(/^GET$/)).toBeInTheDocument();
 
     expect(mockOnChange).not.toHaveBeenCalled();
     expect(mockOnRunQuery).not.toHaveBeenCalled();
