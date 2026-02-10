@@ -63,13 +63,13 @@ export const TableFilter = (props: { query: InfinityQuery; onChange: (value: any
                   <Combobox
                     width={8}
                     options={getFields() as Array<ComboboxOption<string>>}
-                    value={getFields().find((f) => f.value === filter.field)?.value || getFields()[0]?.value}
+                    value={getFields().find((f) => f.value === filter.field)?.value || getFields()[0]?.value || ''}
                     onChange={(e) => onFilterFieldChange(index, e)}
                   ></Combobox>
                   <Combobox
                     width={8}
                     options={filterOperators as Array<ComboboxOption<string>>}
-                    value={filterOperators.find((f) => f.value === filter.operator)?.value || filterOperators[0]?.value}
+                    value={filterOperators.find((f) => f.value === filter.operator)?.value || filterOperators[0]?.value || 'equals'}
                     onChange={(e) => onFilterOperatorChange(index, e)}
                   ></Combobox>
                   <input

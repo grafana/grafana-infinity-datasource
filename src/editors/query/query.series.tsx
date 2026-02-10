@@ -55,7 +55,7 @@ export const SeriesAdvancedOptions = ({ query, onChange }: { query: InfinitySeri
 
   const [popupState, setPopupState] = useState(false);
 
-  const DATA_OVERRIDE_OPERATORS = ['=', '<', '<=', '>', '>=', '!='].map((o) => {
+  const DATA_OVERRIDE_OPERATORS: Array<{ label: string; value: string }> = ['=', '<', '<=', '>', '>=', '!='].map((o) => {
     return {
       label: o,
       value: o,
@@ -133,7 +133,7 @@ export const SeriesAdvancedOptions = ({ query, onChange }: { query: InfinitySeri
                           ></input>
                           <Combobox
                             width={4}
-                            value={DATA_OVERRIDE_OPERATORS.find((options: any) => options.value === override.operator)?.value || override.operator}
+                            value={DATA_OVERRIDE_OPERATORS.find((option) => option.value === override.operator)?.value || override.operator}
                             options={DATA_OVERRIDE_OPERATORS as Array<ComboboxOption<string>>}
                             onChange={(e) => onTextChange((e.value || '') as string, `dataOverrides[${index}].operator`)}
                           ></Combobox>
