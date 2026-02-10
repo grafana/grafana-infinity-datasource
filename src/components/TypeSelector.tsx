@@ -1,5 +1,5 @@
 import React from 'react';
-import { Select } from '@grafana/ui';
+import { Combobox, type ComboboxOption } from '@grafana/ui';
 import { SCRAP_QUERY_TYPES } from '@/constants';
 import { EditorField } from '@/components/extended/EditorField';
 import type { EditorMode, InfinityQuery, InfinityQueryType } from '@/types';
@@ -25,7 +25,7 @@ export const TypeSelector = (props: { query: InfinityQuery; onChange: (e: Infini
   };
   return (
     <EditorField label="Type" tag={query.type === 'google-sheets' ? 'beta' : ''} horizontal={true}>
-      <Select width={21} options={getTypes()} onChange={(e) => onTypeChange(e.value as InfinityQueryType)} value={query.type || 'json'} menuShouldPortal={true}></Select>
+      <Combobox width={21} options={getTypes() as Array<ComboboxOption<string>>} onChange={(e) => onTypeChange(e.value as InfinityQueryType)} value={query.type || 'json'}></Combobox>
     </EditorField>
   );
 };

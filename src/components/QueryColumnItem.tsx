@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { isDataQuery, isBackendQuery } from '@/app/utils';
 import { INFINITY_COLUMN_FORMATS } from '@/constants';
-import { Select, InlineFormLabel, Input } from '@grafana/ui';
+import { Combobox, InlineFormLabel, Input, type ComboboxOption } from '@grafana/ui';
 import type { InfinityColumn, InfinityColumnFormat, InfinityQuery } from '@/types';
 
 interface QueryColumnItemProps {
@@ -45,7 +45,7 @@ export const QueryColumnItem = (props: QueryColumnItemProps) => {
       <InlineFormLabel width={2}>as</InlineFormLabel>
       <Input value={text} width={20} placeholder="Title" onChange={(e) => setText(e.currentTarget.value)} onBlur={onTextChange}></Input>
       <InlineFormLabel width={5}>format as</InlineFormLabel>
-      <Select width={24} value={column.type} options={INFINITY_COLUMN_FORMATS} onChange={(e) => onFormatChange(e.value as InfinityColumnFormat)} menuShouldPortal={true}></Select>
+      <Combobox width={24} value={column.type} options={INFINITY_COLUMN_FORMATS as Array<ComboboxOption<string>>} onChange={(e) => onFormatChange(e.value as InfinityColumnFormat)}></Combobox>
       {(isBackendQuery(query) || query.type === 'google-sheets') && column.type === 'timestamp' && (
         <>
           <div style={{ marginLeft: '5px' }}>
@@ -53,11 +53,11 @@ export const QueryColumnItem = (props: QueryColumnItemProps) => {
               Time Format (optional)
             </InlineFormLabel>
           </div>
-          <Select
+          <Combobox
             width={30}
             value={column.timestampFormat}
             placeholder="Auto"
-            allowCustomValue={true}
+            createCustomValue={true}
             options={[
               { value: '', label: 'Auto' },
               { value: '2006-01-02T15:04:05Z07:00', label: 'Default ISO' },

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Select } from '@grafana/ui';
+import { Combobox, type ComboboxOption } from '@grafana/ui';
 import { EditorField } from '@/components/extended/EditorField';
 import type { GlobalInfinityQuery, InfinityQuery } from '@/types';
 import type { SelectableValue } from '@grafana/data';
@@ -24,7 +24,7 @@ export const GlobalQuerySelector = (props: { query: InfinityQuery; instanceSetti
       <EditorField label="Source">
         {global_queries.length > 0 ? (
           <div style={{ marginRight: '5px' }}>
-            <Select options={global_queries} value={query.global_query_id} onChange={(e) => onGlobalQueryIDChange(e.value as string)} menuShouldPortal={true}></Select>
+            <Combobox options={global_queries as Array<ComboboxOption<string>>} value={query.global_query_id} onChange={(e) => onGlobalQueryIDChange(e.value as string)}></Combobox>
           </div>
         ) : (
           <label className="gf-form-label width-8">No Queries found</label>
