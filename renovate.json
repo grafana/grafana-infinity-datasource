@@ -4,7 +4,7 @@
   "minimumReleaseAge": "7 days",
   "platformAutomerge": true,
   "timezone": "UTC",
-  "prConcurrentLimit": 2,
+  "prConcurrentLimit": 3,
   "dependencyDashboard": true,
   "vulnerabilityAlerts": {
     "enabled": true,
@@ -25,6 +25,13 @@
       "matchManagers": ["gomod"],
       "groupName": "Backend dependencies",
       "groupSlug": "backend-dependencies",
+      "extends": ["schedule:earlyMondays"]
+    },
+    {
+      "description": "Bundle all Docker image updates into a single weekly PR",
+      "matchManagers": ["dockerfile", "docker-compose"],
+      "groupName": "Docker dependencies",
+      "groupSlug": "docker-dependencies",
       "extends": ["schedule:earlyMondays"]
     },
     {
