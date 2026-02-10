@@ -1,4 +1,4 @@
-import { InlineFormLabel, Modal, Select } from '@grafana/ui';
+import { InlineFormLabel, Modal, Combobox, type ComboboxOption } from '@grafana/ui';
 import React, { useState } from 'react';
 import { GuidedBasicAuthEditor } from '@/editors/config/guided-config/GuidedBasicAuthEditor';
 import { GoogleJWTEditor } from '@/editors/config/guided-config/GoogleJWT';
@@ -26,7 +26,7 @@ export const OthersAuthentication = (props: {
       <Modal title="Other Authentication" isOpen={isOpen} onDismiss={onClose}>
         <div className="gf-form">
           <InlineFormLabel width={12}>Provider</InlineFormLabel>
-          <Select value={provider} options={providers} onChange={(e) => setProvider(e?.value!)} isClearable={true} menuShouldPortal={true}></Select>
+          <Combobox value={provider} options={providers as Array<ComboboxOption<string>>} onChange={(e) => setProvider(e?.value!)} isClearable={true}></Combobox>
         </div>
         {provider === 'github' && (
           <GuidedBasicAuthEditor

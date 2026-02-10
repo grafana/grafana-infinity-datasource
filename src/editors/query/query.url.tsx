@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { InlineFormLabel, CodeEditor, Select, Input, RadioButtonGroup, Icon, Stack } from '@grafana/ui';
+import { InlineFormLabel, CodeEditor, Combobox, Input, RadioButtonGroup, Icon, Stack, type ComboboxOption } from '@grafana/ui';
 import { EditorRow } from '@/components/extended/EditorRow';
 import { EditorField } from '@/components/extended/EditorField';
 import { isDataQuery } from '@/app/utils';
@@ -76,21 +76,20 @@ export const Method = ({
       horizontal={true}
       tooltip={`By default Infinity allows GET and POST methods. To make use other methods, enable the "Allow dangerous HTTP methods" in the data source configuration.`}
     >
-      <Select<InfinityURLMethod>
+      <Combobox
         width={16}
         value={
           // If the selected URL method in query is in URL_METHODS and display it.
-          URL_METHODS.find((e) => e.value === query.url_options.method) ||
+          URL_METHODS.find((e) => e.value === query.url_options.method)?.value ||
           // If not, check if it is in DANGEROUS_URL_METHOD and display it - user will get error if they try to use it,
           // but they will learn that they need to enable it in the data source configuration.
-          DANGEROUS_URL_METHODS.find((e) => e.value === query.url_options.method) ||
+          DANGEROUS_URL_METHODS.find((e) => e.value === query.url_options.method)?.value ||
           // If not, display GET method as default.
           'GET'
         }
-        defaultValue={URL_METHODS.find((e) => e.value === 'GET')}
-        options={URL_METHODS}
-        onChange={(e) => onMethodChange(e.value || 'GET')}
-      ></Select>
+        options={URL_METHODS as Array<ComboboxOption<string>>}
+        onChange={(e) => onMethodChange(e.value as InfinityURLMethod || 'GET')}
+      ></Combobox>
     </EditorField>
   );
 };
@@ -282,7 +281,7 @@ const Body = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange:
                 <br />
                 <div className="gf-form">
                   <InlineFormLabel width={15}>Body Content Type</InlineFormLabel>
-                  <Select<QueryBodyContentType>
+                  <Combobox
                     value={query.url_options?.body_content_type || 'text/plain'}
                     options={[
                       { value: 'text/plain', label: 'Text' },
@@ -290,9 +289,9 @@ const Body = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange:
                       { value: 'application/xml', label: 'XML' },
                       { value: 'text/html', label: 'HTML' },
                       { value: 'application/javascript', label: 'JavaScript' },
-                    ]}
-                    onChange={(e) => onURLOptionsChange('body_content_type', e?.value ?? 'text/plain')}
-                  ></Select>
+                    ] as Array<ComboboxOption<string>>}
+                    onChange={(e) => onURLOptionsChange('body_content_type', e?.value as QueryBodyContentType ?? 'text/plain')}
+                  ></Combobox>
                 </div>
                 <div className="gf-form">
                   <InlineFormLabel width={15}>Body Content</InlineFormLabel>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Select } from '@grafana/ui';
+import { Combobox } from '@grafana/ui';
 import { EditorField } from '@/components/extended/EditorField';
 import type { SelectableValue } from '@grafana/data';
 import type { InfinityQuery, InfinityQueryType, InfinityParserType } from '@/types';
@@ -9,10 +9,10 @@ export const ParseTypeEditor = (props: { query: InfinityQuery; onChange: (value:
   if (query.type === 'json' || query.type === 'graphql' || query.type === 'csv' || query.type === 'tsv' || query.type === 'xml' || query.type === 'html') {
     return (
       <EditorField label="Parser" horizontal={true}>
-        <Select<typeof query.parser>
+        <Combobox
           width={22}
           value={query.parser || 'backend'}
-          options={getParserOptions(query.type)}
+          options={getParserOptions(query.type) as any}
           onChange={(e) => {
             if (query.parser === 'uql' && (query.type === 'json' || query.type === 'graphql')) {
               let uql = (query as any).uql || 'parse-json';

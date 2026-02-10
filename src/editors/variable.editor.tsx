@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { DataFrame, SelectableValue, type DataQueryRequest } from '@grafana/data';
-import { TagsInput, TextArea, RadioButtonGroup, Field, Select } from '@grafana/ui';
+import { TagsInput, TextArea, RadioButtonGroup, Field, Combobox, type ComboboxOption } from '@grafana/ui';
 import { EditorRows, EditorRow } from '@/components/extended/EditorRow';
 import { EditorField } from '@/components/extended/EditorField';
 import { migrateLegacyQuery } from '@/app/variablesQuery';
@@ -71,12 +71,10 @@ const FieldMapping = (props: Props) => {
     <EditorRows>
       <EditorRow collapsible label="Custom field mapping" title={() => ''}>
         <EditorField label="Value Field" horizontal tooltip="Field name that can be used as a value of the variable">
-          {/* eslint-disable-next-line */}
-          <Select isClearable value={query.meta?.valueField} onChange={(e) => onMetaPropChange('valueField', e?.value)} width={40} options={choices} isLoading={isLoading} />
+          <Combobox isClearable value={query.meta?.valueField} onChange={(e) => onMetaPropChange('valueField', e?.value)} width={40} options={choices as Array<ComboboxOption<string>>} loading={isLoading} />
         </EditorField>
         <EditorField label="Text Field" horizontal tooltip="Field name that can be used as a display value of the variable">
-          {/* eslint-disable-next-line */}
-          <Select isClearable value={query.meta?.textField} onChange={(e) => onMetaPropChange('textField', e?.value)} width={40} options={choices} isLoading={isLoading} />
+          <Combobox isClearable value={query.meta?.textField} onChange={(e) => onMetaPropChange('textField', e?.value)} width={40} options={choices as Array<ComboboxOption<string>>} loading={isLoading} />
         </EditorField>
       </EditorRow>
     </EditorRows>

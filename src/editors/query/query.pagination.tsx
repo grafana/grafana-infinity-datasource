@@ -1,5 +1,5 @@
 import React from 'react';
-import { FeatureBadge, InlineLabel, Input, Select, Stack } from '@grafana/ui';
+import { FeatureBadge, InlineLabel, Input, Combobox, Stack, type ComboboxOption } from '@grafana/ui';
 import { FeatureState, SelectableValue } from '@grafana/data';
 import { EditorField } from '@/components/extended/EditorField';
 import { EditorRow } from '@/components/extended/EditorRow';
@@ -34,7 +34,7 @@ export const PaginationEditor = (props: PaginationEditorProps) => {
       <Stack direction="row" wrap={'wrap'}>
         <Stack wrap={'nowrap'} direction="column">
           <EditorField label="Pagination Type">
-            <Select<PaginationType> width={30} value={query.pagination_mode || 'none'} options={paginationTypes} onChange={(e) => onChange({ ...query, pagination_mode: e.value || 'none' })} />
+            <Combobox width={30} value={query.pagination_mode || 'none'} options={paginationTypes as Array<ComboboxOption<string>>} onChange={(e) => onChange({ ...query, pagination_mode: e.value as PaginationType || 'none' })} />
           </EditorField>
           {query.pagination_mode && query.pagination_mode !== 'none' && (
             <EditorField label="Max pages" tooltip={'Enter a value up to 5 pages, or the maximum page limit set in the Grafana configuration for the Infinity plugin.'}>
@@ -62,11 +62,11 @@ export const PaginationEditor = (props: PaginationEditorProps) => {
                     placeholder="limit/size/count/... defaults to limit"
                   />
                   <InlineLabel width={12}>Field type</InlineLabel>
-                  <Select<PaginationParamType>
+                  <Combobox
                     width={20}
-                    options={paginationParamTypes}
+                    options={paginationParamTypes as Array<ComboboxOption<string>>}
                     value={query.pagination_param_size_field_type || 'query'}
-                    onChange={(e) => onChange({ ...query, pagination_param_size_field_type: e.value || 'query' })}
+                    onChange={(e) => onChange({ ...query, pagination_param_size_field_type: e.value as PaginationParamType || 'query' })}
                   />
                   <InlineLabel width={20}>Field value</InlineLabel>
                   <Input
@@ -90,11 +90,11 @@ export const PaginationEditor = (props: PaginationEditorProps) => {
                       placeholder="offset"
                     />
                     <InlineLabel width={12}>Field type</InlineLabel>
-                    <Select<PaginationParamType>
+                    <Combobox
                       width={20}
-                      options={paginationParamTypes}
+                      options={paginationParamTypes as Array<ComboboxOption<string>>}
                       value={query.pagination_param_offset_field_type || 'query'}
-                      onChange={(e) => onChange({ ...query, pagination_param_offset_field_type: e.value || 'query' })}
+                      onChange={(e) => onChange({ ...query, pagination_param_offset_field_type: e.value as PaginationParamType || 'query' })}
                     />
                     <InlineLabel width={20} tooltip={'Initial value for the first page. Defaults to 0. For the subsequent pages, it will (initialValue + ((pageNumber -1) * pageSize))'}>
                       Initial value
@@ -121,11 +121,11 @@ export const PaginationEditor = (props: PaginationEditorProps) => {
                       placeholder="page"
                     />
                     <InlineLabel width={12}>Field type</InlineLabel>
-                    <Select<PaginationParamType>
+                    <Combobox
                       width={20}
-                      options={paginationParamTypes}
+                      options={paginationParamTypes as Array<ComboboxOption<string>>}
                       value={query.pagination_param_page_field_type || 'query'}
-                      onChange={(e) => onChange({ ...query, pagination_param_page_field_type: e.value || 'query' })}
+                      onChange={(e) => onChange({ ...query, pagination_param_page_field_type: e.value as PaginationParamType || 'query' })}
                     />
                     <InlineLabel width={20} tooltip={'initial page number. Defaults to 1'}>
                       Field value
@@ -151,11 +151,11 @@ export const PaginationEditor = (props: PaginationEditorProps) => {
                       placeholder="cursor"
                     />
                     <InlineLabel width={12}>Field type</InlineLabel>
-                    <Select<PaginationParamType>
+                    <Combobox
                       width={20}
-                      options={paginationParamTypes}
+                      options={paginationParamTypes as Array<ComboboxOption<string>>}
                       value={query.pagination_param_cursor_field_type || 'query'}
-                      onChange={(e) => onChange({ ...query, pagination_param_cursor_field_type: e.value || 'query' })}
+                      onChange={(e) => onChange({ ...query, pagination_param_cursor_field_type: e.value as PaginationParamType || 'query' })}
                     />
                     <InlineLabel width={20} tooltip="selector to extract the cursor">
                       Extraction path
@@ -185,11 +185,11 @@ export const PaginationEditor = (props: PaginationEditorProps) => {
                     placeholder="id"
                   />
                   <InlineLabel width={12}>Field type</InlineLabel>
-                  <Select<PaginationParamType>
+                  <Combobox
                     width={20}
-                    options={paginationParamTypes}
+                    options={paginationParamTypes as Array<ComboboxOption<string>>}
                     value={query.pagination_param_list_field_type || 'query'}
-                    onChange={(e) => onChange({ ...query, pagination_param_list_field_type: e.value || 'query' })}
+                    onChange={(e) => onChange({ ...query, pagination_param_list_field_type: e.value as PaginationParamType || 'query' })}
                   />
                   <InlineLabel width={20} tooltip="comma separated values">
                     Field value

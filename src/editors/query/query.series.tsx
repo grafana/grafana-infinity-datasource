@@ -1,5 +1,5 @@
 import { VariableOrigin } from '@grafana/data';
-import { DataLinkInput, Modal, Select, Input } from '@grafana/ui';
+import { DataLinkInput, Modal, Combobox, Input, type ComboboxOption } from '@grafana/ui';
 import { defaultsDeep, set } from 'lodash';
 import React, { useState } from 'react';
 import { EditorRow } from '@/components/extended/EditorRow';
@@ -131,14 +131,12 @@ export const SeriesAdvancedOptions = ({ query, onChange }: { query: InfinitySeri
                             onChange={(e) => onTextChange(e.target.value, `dataOverrides[${index}].values[0]`)}
                             placeholder="Value 1"
                           ></input>
-                          <Select
-                            className="width-4"
-                            value={DATA_OVERRIDE_OPERATORS.find((options: any) => options.value === override.operator)}
-                            defaultValue={override.operator}
-                            options={DATA_OVERRIDE_OPERATORS}
+                          <Combobox
+                            width={4}
+                            value={DATA_OVERRIDE_OPERATORS.find((options: any) => options.value === override.operator)?.value || override.operator}
+                            options={DATA_OVERRIDE_OPERATORS as Array<ComboboxOption<string>>}
                             onChange={(e) => onTextChange((e.value || '') as string, `dataOverrides[${index}].operator`)}
-                            menuShouldPortal={true}
-                          ></Select>
+                          ></Combobox>
                           <input
                             type="text"
                             className="gf-form-input min-width-10 width-10"

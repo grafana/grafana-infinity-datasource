@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { InlineFormLabel, Select } from '@grafana/ui';
+import { InlineFormLabel, Combobox, type ComboboxOption } from '@grafana/ui';
 import { Datasource } from '@/datasource';
 import { isDataQuery } from '@/app/utils';
 import { EditorField } from '@/components/extended/EditorField';
@@ -60,10 +60,10 @@ export const ReferenceNameEditor = ({
         ) : refNames.length < 1 ? (
           <InlineFormLabel width={10}>No references found</InlineFormLabel>
         ) : (
-          <Select
+          <Combobox
             width={20}
             value={isDataQuery(query) && query.source === 'reference' ? query.referenceName : ''}
-            options={refNames.map((r) => ({ value: r, label: r }))}
+            options={refNames.map((r) => ({ value: r, label: r })) as Array<ComboboxOption<string>>}
             onChange={(e) => {
               onChange({ ...query, referenceName: e.value || '' });
               onRunQuery();

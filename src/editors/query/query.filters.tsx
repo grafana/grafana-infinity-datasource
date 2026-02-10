@@ -1,4 +1,4 @@
-import { Button, Select } from '@grafana/ui';
+import { Button, Combobox, type ComboboxOption } from '@grafana/ui';
 import React from 'react';
 import { EditorRow } from '@/components/extended/EditorRow';
 import { EditorField } from '@/components/extended/EditorField';
@@ -60,22 +60,18 @@ export const TableFilter = (props: { query: InfinityQuery; onChange: (value: any
               {query.filters.map((filter, index) => (
                 <div className="gf-form-inline" key={index}>
                   <label className="gf-form-label width-6">Filter {index + 1}</label>
-                  <Select
-                    className="width-8"
-                    options={getFields()}
-                    defaultValue={getFields()[0]}
-                    value={getFields().find((f) => f.value === filter.field) || getFields()[0]}
+                  <Combobox
+                    width={8}
+                    options={getFields() as Array<ComboboxOption<string>>}
+                    value={getFields().find((f) => f.value === filter.field)?.value || getFields()[0]?.value}
                     onChange={(e) => onFilterFieldChange(index, e)}
-                    menuShouldPortal={true}
-                  ></Select>
-                  <Select
-                    className="width-8"
-                    options={filterOperators}
-                    defaultValue={filterOperators[0]}
-                    value={filterOperators.find((f) => f.value === filter.operator) || filterOperators[0]}
+                  ></Combobox>
+                  <Combobox
+                    width={8}
+                    options={filterOperators as Array<ComboboxOption<string>>}
+                    value={filterOperators.find((f) => f.value === filter.operator)?.value || filterOperators[0]?.value}
                     onChange={(e) => onFilterOperatorChange(index, e)}
-                    menuShouldPortal={true}
-                  ></Select>
+                  ></Combobox>
                   <input
                     type="text"
                     className="gf-form-input min-width-10 width-10"
