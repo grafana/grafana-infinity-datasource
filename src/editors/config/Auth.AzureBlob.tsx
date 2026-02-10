@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stack, InlineLabel, Input, SecretInput, Combobox, type ComboboxOption } from '@grafana/ui';
+import { Stack, InlineLabel, Input, SecretInput, Combobox } from '@grafana/ui';
 import { onUpdateDatasourceSecureJsonDataOption, DataSourcePluginOptionsEditorProps } from '@grafana/data';
 import { Components } from '@/selectors';
 import { AzureBlobRegions, AzureBlobCloudTypeDefault } from '@/constants';
@@ -31,7 +31,7 @@ export const AzureBlobAuthEditor = (
         <Combobox
           width={24}
           aria-label={RegionSelector.ariaLabel}
-          options={AzureBlobRegions as Array<ComboboxOption<string>>}
+          options={AzureBlobRegions}
           onChange={(e) => onAzureBlobUrlChange(e.value as AzureBlobCloudType)}
           value={props.options.jsonData?.azureBlobCloudType || AzureBlobCloudTypeDefault}
         />

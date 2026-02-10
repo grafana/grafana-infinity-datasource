@@ -6,7 +6,6 @@ import { filterOperators } from '@/app/parsers/filter';
 import { isDataQuery } from '@/app/utils';
 import { FilterOperator } from '@/constants';
 import type { InfinityFilter, InfinityQuery } from '@/types';
-import type { SelectableValue } from '@grafana/data';
 
 export const TableFilter = (props: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: any }) => {
   const { query, onChange } = props;
@@ -36,12 +35,12 @@ export const TableFilter = (props: { query: InfinityQuery; onChange: (value: any
     filters.splice(index, 1);
     onChange({ ...query, filters });
   };
-  const onFilterFieldChange = (index: number, v: SelectableValue) => {
+  const onFilterFieldChange = (index: number, v: ComboboxOption<string>) => {
     const filters = [...(query.filters || [])];
-    filters[index] = { ...filters[index], field: v.value };
+    filters[index] = { ...filters[index], field: v.value as string };
     onChange({ ...query, filters });
   };
-  const onFilterOperatorChange = (index: number, v: SelectableValue) => {
+  const onFilterOperatorChange = (index: number, v: ComboboxOption<FilterOperator>) => {
     const filters = [...(query.filters || [])];
     filters[index] = { ...filters[index], operator: v.value };
     onChange({ ...query, filters });
@@ -62,13 +61,13 @@ export const TableFilter = (props: { query: InfinityQuery; onChange: (value: any
                   <label className="gf-form-label width-6">Filter {index + 1}</label>
                   <Combobox
                     width={8}
-                    options={getFields() as Array<ComboboxOption<string>>}
+                    options={getFields()}
                     value={getFields().find((f) => f.value === filter.field)?.value || getFields()[0]?.value || ''}
                     onChange={(e) => onFilterFieldChange(index, e)}
                   ></Combobox>
                   <Combobox
                     width={8}
-                    options={filterOperators as Array<ComboboxOption<string>>}
+                    options={filterOperators}
                     value={filterOperators.find((f) => f.value === filter.operator)?.value || filterOperators[0]?.value || 'equals'}
                     onChange={(e) => onFilterOperatorChange(index, e)}
                   ></Combobox>

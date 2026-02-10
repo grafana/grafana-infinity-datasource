@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { DataFrame, SelectableValue, type DataQueryRequest } from '@grafana/data';
+import { DataFrame, type DataQueryRequest } from '@grafana/data';
 import { TagsInput, TextArea, RadioButtonGroup, Field, Combobox, type ComboboxOption } from '@grafana/ui';
 import { EditorRows, EditorRow } from '@/components/extended/EditorRow';
 import { EditorField } from '@/components/extended/EditorField';
@@ -32,7 +32,7 @@ export const VariableEditor = (props: Props) => {
 
 const FieldMapping = (props: Props) => {
   const { query, datasource } = props;
-  const [choices, setChoices] = useState<SelectableValue[]>([]);
+  const [choices, setChoices] = useState<ComboboxOption<string>[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     if (query.queryType !== 'infinity' || !query.infinityQuery) {
@@ -71,10 +71,10 @@ const FieldMapping = (props: Props) => {
     <EditorRows>
       <EditorRow collapsible label="Custom field mapping" title={() => ''}>
         <EditorField label="Value Field" horizontal tooltip="Field name that can be used as a value of the variable">
-          <Combobox isClearable value={query.meta?.valueField} onChange={(e) => onMetaPropChange('valueField', e?.value)} width={40} options={choices as Array<ComboboxOption<string>>} loading={isLoading} />
+          <Combobox isClearable value={query.meta?.valueField} onChange={(e) => onMetaPropChange('valueField', e?.value)} width={40} options={choices} loading={isLoading} />
         </EditorField>
         <EditorField label="Text Field" horizontal tooltip="Field name that can be used as a display value of the variable">
-          <Combobox isClearable value={query.meta?.textField} onChange={(e) => onMetaPropChange('textField', e?.value)} width={40} options={choices as Array<ComboboxOption<string>>} loading={isLoading} />
+          <Combobox isClearable value={query.meta?.textField} onChange={(e) => onMetaPropChange('textField', e?.value)} width={40} options={choices} loading={isLoading} />
         </EditorField>
       </EditorRow>
     </EditorRows>

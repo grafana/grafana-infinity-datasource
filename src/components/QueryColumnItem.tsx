@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { isDataQuery, isBackendQuery } from '@/app/utils';
 import { INFINITY_COLUMN_FORMATS } from '@/constants';
-import { Combobox, InlineFormLabel, Input, type ComboboxOption } from '@grafana/ui';
+import { Combobox, InlineFormLabel, Input } from '@grafana/ui';
 import type { InfinityColumn, InfinityColumnFormat, InfinityQuery } from '@/types';
 
 interface QueryColumnItemProps {
@@ -45,7 +45,7 @@ export const QueryColumnItem = (props: QueryColumnItemProps) => {
       <InlineFormLabel width={2}>as</InlineFormLabel>
       <Input value={text} width={20} placeholder="Title" onChange={(e) => setText(e.currentTarget.value)} onBlur={onTextChange}></Input>
       <InlineFormLabel width={5}>format as</InlineFormLabel>
-      <Combobox width={24} value={column.type} options={INFINITY_COLUMN_FORMATS as Array<ComboboxOption<string>>} onChange={(e) => onFormatChange(e.value as InfinityColumnFormat)}></Combobox>
+      <Combobox width={24} value={column.type} options={INFINITY_COLUMN_FORMATS} onChange={(e) => onFormatChange(e.value as InfinityColumnFormat)}></Combobox>
       {(isBackendQuery(query) || query.type === 'google-sheets') && column.type === 'timestamp' && (
         <>
           <div style={{ marginLeft: '5px' }}>

@@ -1,5 +1,5 @@
 import { VariableOrigin } from '@grafana/data';
-import { DataLinkInput, Modal, Combobox, Input, type ComboboxOption } from '@grafana/ui';
+import { DataLinkInput, Modal, Combobox, Input } from '@grafana/ui';
 import { defaultsDeep, set } from 'lodash';
 import React, { useState } from 'react';
 import { EditorRow } from '@/components/extended/EditorRow';
@@ -134,7 +134,7 @@ export const SeriesAdvancedOptions = ({ query, onChange }: { query: InfinitySeri
                           <Combobox
                             width={4}
                             value={DATA_OVERRIDE_OPERATORS.find((option) => option.value === override.operator)?.value || override.operator}
-                            options={DATA_OVERRIDE_OPERATORS as Array<ComboboxOption<string>>}
+                            options={DATA_OVERRIDE_OPERATORS}
                             onChange={(e) => onTextChange((e.value || '') as string, `dataOverrides[${index}].operator`)}
                           ></Combobox>
                           <input

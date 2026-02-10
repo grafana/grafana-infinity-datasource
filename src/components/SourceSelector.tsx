@@ -1,6 +1,6 @@
 import React from 'react';
 import { INFINITY_SOURCES } from '@/constants';
-import { Combobox, type ComboboxOption } from '@grafana/ui';
+import { Combobox } from '@grafana/ui';
 import { EditorField } from '@/components/extended/EditorField';
 import type { InfinityQuery, InfinityQuerySources } from '@/types';
 
@@ -19,7 +19,7 @@ export const SourceSelector = (props: { query: InfinityQuery; onChange: (e: Infi
       <Combobox
         width={18}
         data-testid="infinity-query-source-selector"
-        options={supportedSources as Array<ComboboxOption<string>>}
+        options={supportedSources}
         value={query.source || 'url'}
         onChange={(e) => onSourceChange(e.value as InfinityQuerySources)}
       ></Combobox>

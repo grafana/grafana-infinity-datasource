@@ -1,11 +1,11 @@
 import React from 'react';
 import { FeatureBadge, InlineLabel, Input, Combobox, Stack, type ComboboxOption } from '@grafana/ui';
-import { FeatureState, SelectableValue } from '@grafana/data';
+import { FeatureState } from '@grafana/data';
 import { EditorField } from '@/components/extended/EditorField';
 import { EditorRow } from '@/components/extended/EditorRow';
 import type { InfinityQuery, PaginationParamType, PaginationType } from '@/types';
 
-const paginationTypes: Array<SelectableValue<PaginationType>> = [
+const paginationTypes: Array<ComboboxOption<PaginationType>> = [
   { value: 'none', label: 'None' },
   { value: 'offset', label: 'Offset' },
   { value: 'page', label: 'Page number' },
@@ -13,7 +13,7 @@ const paginationTypes: Array<SelectableValue<PaginationType>> = [
   { value: 'list', label: 'List of values' },
 ];
 
-const paginationParamTypes: Array<SelectableValue<PaginationParamType>> = [
+const paginationParamTypes: Array<ComboboxOption<PaginationParamType>> = [
   { value: 'query', label: 'Query param' },
   { value: 'header', label: 'Header' },
   { value: 'body_data', label: 'Body form' },
@@ -34,7 +34,7 @@ export const PaginationEditor = (props: PaginationEditorProps) => {
       <Stack direction="row" wrap={'wrap'}>
         <Stack wrap={'nowrap'} direction="column">
           <EditorField label="Pagination Type">
-            <Combobox width={30} value={query.pagination_mode || 'none'} options={paginationTypes as Array<ComboboxOption<string>>} onChange={(e) => onChange({ ...query, pagination_mode: e.value as PaginationType || 'none' })} />
+            <Combobox width={30} value={query.pagination_mode || 'none'} options={paginationTypes} onChange={(e) => onChange({ ...query, pagination_mode: e.value as PaginationType || 'none' })} />
           </EditorField>
           {query.pagination_mode && query.pagination_mode !== 'none' && (
             <EditorField label="Max pages" tooltip={'Enter a value up to 5 pages, or the maximum page limit set in the Grafana configuration for the Infinity plugin.'}>
@@ -64,7 +64,7 @@ export const PaginationEditor = (props: PaginationEditorProps) => {
                   <InlineLabel width={12}>Field type</InlineLabel>
                   <Combobox
                     width={20}
-                    options={paginationParamTypes as Array<ComboboxOption<string>>}
+                    options={paginationParamTypes}
                     value={query.pagination_param_size_field_type || 'query'}
                     onChange={(e) => onChange({ ...query, pagination_param_size_field_type: e.value as PaginationParamType || 'query' })}
                   />
@@ -92,7 +92,7 @@ export const PaginationEditor = (props: PaginationEditorProps) => {
                     <InlineLabel width={12}>Field type</InlineLabel>
                     <Combobox
                       width={20}
-                      options={paginationParamTypes as Array<ComboboxOption<string>>}
+                      options={paginationParamTypes}
                       value={query.pagination_param_offset_field_type || 'query'}
                       onChange={(e) => onChange({ ...query, pagination_param_offset_field_type: e.value as PaginationParamType || 'query' })}
                     />
@@ -123,7 +123,7 @@ export const PaginationEditor = (props: PaginationEditorProps) => {
                     <InlineLabel width={12}>Field type</InlineLabel>
                     <Combobox
                       width={20}
-                      options={paginationParamTypes as Array<ComboboxOption<string>>}
+                      options={paginationParamTypes}
                       value={query.pagination_param_page_field_type || 'query'}
                       onChange={(e) => onChange({ ...query, pagination_param_page_field_type: e.value as PaginationParamType || 'query' })}
                     />
@@ -153,7 +153,7 @@ export const PaginationEditor = (props: PaginationEditorProps) => {
                     <InlineLabel width={12}>Field type</InlineLabel>
                     <Combobox
                       width={20}
-                      options={paginationParamTypes as Array<ComboboxOption<string>>}
+                      options={paginationParamTypes}
                       value={query.pagination_param_cursor_field_type || 'query'}
                       onChange={(e) => onChange({ ...query, pagination_param_cursor_field_type: e.value as PaginationParamType || 'query' })}
                     />
@@ -187,7 +187,7 @@ export const PaginationEditor = (props: PaginationEditorProps) => {
                   <InlineLabel width={12}>Field type</InlineLabel>
                   <Combobox
                     width={20}
-                    options={paginationParamTypes as Array<ComboboxOption<string>>}
+                    options={paginationParamTypes}
                     value={query.pagination_param_list_field_type || 'query'}
                     onChange={(e) => onChange({ ...query, pagination_param_list_field_type: e.value as PaginationParamType || 'query' })}
                   />

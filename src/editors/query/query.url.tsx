@@ -5,7 +5,6 @@ import { EditorField } from '@/components/extended/EditorField';
 import { isDataQuery } from '@/app/utils';
 import { KeyValueEditor } from '@/components/KeyValuePairEditor';
 import type { InfinityQuery, InfinityQueryType, InfinityQueryWithURLSource, InfinityURLMethod, InfinityURLOptions, QueryBodyContentType, QueryBodyType } from '@/types';
-import type { SelectableValue } from '@grafana/data';
 
 export const URLEditor = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void }) => {
   return isDataQuery(query) && query.source === 'url' ? (
@@ -38,12 +37,12 @@ export const Method = ({
   if (query.source === 'inline' || query.source === 'azure-blob') {
     return <></>;
   }
-  const SAFE_URL_METHODS: Array<SelectableValue<InfinityURLMethod>> = [
+  const SAFE_URL_METHODS: Array<ComboboxOption<InfinityURLMethod>> = [
     { label: 'GET', value: 'GET' },
     { label: 'POST', value: 'POST' },
   ];
 
-  const DANGEROUS_URL_METHODS: Array<SelectableValue<InfinityURLMethod>> = [
+  const DANGEROUS_URL_METHODS: Array<ComboboxOption<InfinityURLMethod>> = [
     { label: 'PUT', value: 'PUT' },
     { label: 'PATCH', value: 'PATCH' },
     { label: 'DELETE', value: 'DELETE' },
@@ -87,7 +86,7 @@ export const Method = ({
           // If not, display GET method as default.
           'GET'
         }
-        options={URL_METHODS as Array<ComboboxOption<string>>}
+        options={URL_METHODS}
         onChange={(e) => onMethodChange(e.value as InfinityURLMethod || 'GET')}
       ></Combobox>
     </EditorField>
@@ -289,7 +288,7 @@ const Body = ({ query, onChange, onRunQuery }: { query: InfinityQuery; onChange:
                       { value: 'application/xml', label: 'XML' },
                       { value: 'text/html', label: 'HTML' },
                       { value: 'application/javascript', label: 'JavaScript' },
-                    ] as Array<ComboboxOption<string>>}
+                    ]}
                     onChange={(e) => onURLOptionsChange('body_content_type', e?.value as QueryBodyContentType ?? 'text/plain')}
                   ></Combobox>
                 </div>
