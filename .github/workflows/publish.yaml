@@ -4,6 +4,7 @@ permissions:
   attestations: write
   contents: write
   id-token: write
+  pull-requests: read
 
 on:
   workflow_dispatch:
@@ -27,7 +28,7 @@ on:
 jobs:
   cd:
     name: CD
-    uses: grafana/plugin-ci-workflows/.github/workflows/cd.yml@ci-cd-workflows/v5.1.0
+    uses: grafana/plugin-ci-workflows/.github/workflows/cd.yml@ci-cd-workflows/v6.1.0
     with:
       branch: ${{ github.event.inputs.branch }}
       environment: ${{ github.event.inputs.environment }}

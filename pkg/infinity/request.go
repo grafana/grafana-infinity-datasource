@@ -11,7 +11,7 @@ import (
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
-	"moul.io/http2curl"
+	"moul.io/http2curl/v2"
 )
 
 func GetRequest(ctx context.Context, pCtx *backend.PluginContext, settings models.InfinitySettings, body io.Reader, query models.Query, requestHeaders map[string]string, includeSect bool) (req *http.Request, err error) {

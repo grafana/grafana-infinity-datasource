@@ -5,9 +5,9 @@ go 1.25.5
 require (
 	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.6.4
 	github.com/aws/aws-sdk-go-v2 v1.41.1
-	github.com/grafana/dskit v0.0.0-20260119063514-a2b633bfa4ea
+	github.com/grafana/dskit v0.0.0-20260128150120-18df891bcc0a
 	github.com/grafana/grafana-aws-sdk v1.4.2
-	github.com/grafana/grafana-plugin-sdk-go v0.285.0
+	github.com/grafana/grafana-plugin-sdk-go v0.286.0
 	github.com/grafana/infinity-libs/lib/go/csvframer v1.0.3
 	github.com/grafana/infinity-libs/lib/go/framesql v1.1.0
 	github.com/grafana/infinity-libs/lib/go/gframer v1.1.2
@@ -19,7 +19,7 @@ require (
 	go.opentelemetry.io/otel v1.39.0
 	go.opentelemetry.io/otel/trace v1.39.0
 	golang.org/x/oauth2 v0.34.0
-	moul.io/http2curl v1.0.0
+	moul.io/http2curl/v2 v2.3.0
 )
 
 // tests related deps
