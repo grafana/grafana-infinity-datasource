@@ -4,6 +4,7 @@ permissions:
   attestations: write
   contents: write
   id-token: write
+  pull-requests: read
 
 on:
   workflow_dispatch:
