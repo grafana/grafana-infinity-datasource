@@ -1,13 +1,12 @@
 package infinity
 
 import (
-	"bytes"
 	"context"
 	"encoding/base64"
 	"fmt"
-	"mime/multipart"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
@@ -51,14 +50,8 @@ func ApplyContentTypeHeader(_ context.Context, query models.Query, settings mode
 				req.Header.Set(headerKeyContentType, query.URLOptions.BodyContentType)
 			}
 		case "form-data":
-			writer := multipart.NewWriter(&bytes.Buffer{})
-			for _, f := range query.URLOptions.BodyForm {
-				_ = writer.WriteField(f.Key, f.Value)
-			}
-			if err := writer.Close(); err != nil {
-				return req
-			}
-			req.Header.Set(headerKeyContentType, writer.FormDataContentType())
+			boundary := "----WebKitFormBoundary" + generateBoundary()
+			req.Header.Set(headerKeyContentType, "multipart/form-data; boundary="+boundary)
 		case "x-www-form-urlencoded":
 			req.Header.Set(headerKeyContentType, contentTypeFormURLEncoded)
 		case "graphql":
@@ -69,6 +62,11 @@ func ApplyContentTypeHeader(_ context.Context, query models.Query, settings mode
 	}
 	return req
 }
+
+func generateBoundary() string {
+	return fmt.Sprintf("%016x", time.Now().UnixNano())
+}
+
 
 func ApplyAcceptEncodingHeader(_ context.Context, query models.Query, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
 	req.Header.Set(headerKeyAcceptEncoding, "gzip")

@@ -16,7 +16,7 @@ func GetCSVBackendResponse(ctx context.Context, responseString string, query mod
 	_, span := tracing.DefaultTracer().Start(ctx, "GetCSVBackendResponse")
 	defer span.End()
 	frame := GetDummyFrame(query)
-	columns := []gframer.ColumnSelector{}
+	columns := make([]gframer.ColumnSelector, 0, len(query.Columns))
 	for _, c := range query.Columns {
 		columns = append(columns, gframer.ColumnSelector{
 			Selector:   c.Selector,

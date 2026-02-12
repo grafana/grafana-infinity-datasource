@@ -27,6 +27,7 @@ type Client struct {
 	HttpClient      *http.Client
 	AzureBlobClient *azblob.Client
 	IsMock          bool
+	allowedHosts    map[string]bool
 }
 
 func NewClient(ctx context.Context, settings models.InfinitySettings) (client *Client, err error) {
@@ -48,9 +49,14 @@ func NewClient(ctx context.Context, settings models.InfinitySettings) (client *C
 		logger.Error("invalid http client", "datasource uid", settings.UID, "datasource name", settings.Name)
 		return client, err
 	}
+	allowedHosts, err := GetAllowedHosts(settings.AllowedHosts)
+	if err != nil {
+		logger.Warn("error parsing allowed hosts", "error", err.Error())
+	}
 	client = &Client{
-		Settings:   settings,
-		HttpClient: httpClient,
+		Settings:     settings,
+		HttpClient:   httpClient,
+		allowedHosts: allowedHosts,
 	}
 	if settings.AuthenticationMethod == models.AuthenticationMethodAzureBlob {
 		cred, err := azblob.NewSharedKeyCredential(settings.AzureBlobAccountName, settings.AzureBlobAccountKey)
@@ -112,7 +118,7 @@ func (client *Client) req(ctx context.Context, pCtx *backend.PluginContext, url 
 		return nil, http.StatusInternalServerError, 0, backend.DownstreamError(errors.New("error preparing request. invalid request constructed"))
 	}
 	startTime := time.Now()
-	if !CanAllowURL(req.URL.String(), settings.AllowedHosts) {
+	if !client.CanAllowURL(req.URL.String()) {
 		logger.Debug("url is not in the allowed list. make sure to match the base URL with the settings", "url", req.URL.String())
 		return nil, http.StatusUnauthorized, 0, backend.DownstreamError(models.ErrInvalidConfigHostNotAllowed)
 	}
@@ -250,6 +256,27 @@ func CanParseAsJSON(queryType models.QueryType, responseHeaders http.Header) boo
 	return false
 }
 
+func (client *Client) CanAllowURL(urlString string) bool {
+	if len(client.Settings.AllowedHosts) == 0 {
+		return true
+	}
+	fullUrlString := models.FixMissingURLSchema(urlString)
+	parsedURL, err := url.Parse(fullUrlString)
+	if err != nil {
+		return false
+	}
+	parsedURLHostName := parsedURL.Hostname()
+	if !client.allowedHosts[parsedURLHostName] {
+		return false
+	}
+	for _, allowedUrl := range client.Settings.AllowedHosts {
+		if strings.HasPrefix(urlString, allowedUrl) {
+			return true
+		}
+	}
+	return false
+}
+
 func CanAllowURL(urlString string, allowedUrls []string) bool {
 	allow := false
 	if len(allowedUrls) == 0 {
@@ -261,10 +288,7 @@ func CanAllowURL(urlString string, allowedUrls []string) bool {
 		return false
 	}
 	for _, allowedUrl := range allowedUrls {
-		// Legacy Check : Make sure the URL matches the pattern / allowed list prefix
-		// This is to ensure only certain paths are allowed. Example: Should allow foo.com/a and block foo.com/b
 		matchesURL := strings.HasPrefix(urlString, allowedUrl)
-		// Updated Check : Make sure the host name matches
 		fullUrlString := models.FixMissingURLSchema(urlString)
 		parsedURL, err := url.Parse(fullUrlString)
 		if err != nil {
