@@ -51,7 +51,8 @@ func NewClient(ctx context.Context, settings models.InfinitySettings) (client *C
 	}
 	allowedHosts, err := GetAllowedHosts(settings.AllowedHosts)
 	if err != nil {
-		logger.Warn("error parsing allowed hosts", "error", err.Error())
+		logger.Warn("error parsing allowed hosts, will validate using legacy path prefix matching", "error", err.Error())
+		allowedHosts = make(map[string]bool)
 	}
 	client = &Client{
 		Settings:     settings,

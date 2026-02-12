@@ -2,6 +2,8 @@ package infinity
 
 import (
 	"context"
+	"fmt"
+	"strconv"
 	"testing"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
@@ -37,9 +39,9 @@ func BenchmarkGetJSONBackendResponse(b *testing.B) {
 		for i := 0; i < 100; i++ {
 			items[i] = map[string]interface{}{
 				"id":          i,
-				"name":        "Item " + string(rune(i)),
+				"name":        "Item " + strconv.Itoa(i),
 				"value":       i * 100,
-				"description": "Description for item " + string(rune(i)),
+				"description": "Description for item " + strconv.Itoa(i),
 			}
 		}
 		data := map[string]interface{}{
@@ -66,10 +68,10 @@ func BenchmarkGetJSONBackendResponse(b *testing.B) {
 		for i := 0; i < 1000; i++ {
 			items[i] = map[string]interface{}{
 				"id":          i,
-				"name":        "Item " + string(rune(i)),
+				"name":        "Item " + strconv.Itoa(i),
 				"value":       i * 100,
-				"description": "Description for item " + string(rune(i)),
-				"category":    "Category " + string(rune(i%10)),
+				"description": "Description for item " + strconv.Itoa(i),
+				"category":    "Category " + strconv.Itoa(i%10),
 				"status":      "active",
 			}
 		}
@@ -108,8 +110,8 @@ func BenchmarkGetJSONBackendResponse(b *testing.B) {
 		columns := make([]models.InfinityColumn, 20)
 		for i := 0; i < 20; i++ {
 			columns[i] = models.InfinityColumn{
-				Selector: "col" + string(rune(i+1)),
-				Text:     "Column " + string(rune(i+1)),
+				Selector: "col" + strconv.Itoa(i+1),
+				Text:     "Column " + strconv.Itoa(i+1),
 				Type:     "number",
 			}
 		}
@@ -147,7 +149,7 @@ func BenchmarkGetCSVBackendResponse(b *testing.B) {
 	b.Run("MediumCSV", func(b *testing.B) {
 		csvData := "id,name,value,description\n"
 		for i := 0; i < 100; i++ {
-			csvData += "1,ItemName,100,Description\n"
+			csvData += fmt.Sprintf("%d,ItemName,%d,Description\n", i, i*100)
 		}
 		query := models.Query{
 			RefID: "A",
@@ -170,8 +172,8 @@ func BenchmarkGetCSVBackendResponse(b *testing.B) {
 		columns := make([]models.InfinityColumn, 20)
 		for i := 0; i < 20; i++ {
 			columns[i] = models.InfinityColumn{
-				Selector: "c" + string(rune(i+1)),
-				Text:     "Column" + string(rune(i+1)),
+				Selector: "c" + strconv.Itoa(i+1),
+				Text:     "Column" + strconv.Itoa(i+1),
 				Type:     "number",
 			}
 		}

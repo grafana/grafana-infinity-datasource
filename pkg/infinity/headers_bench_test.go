@@ -3,6 +3,7 @@ package infinity
 import (
 	"context"
 	"net/http"
+	"strconv"
 	"testing"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
@@ -50,8 +51,8 @@ func BenchmarkApplyContentTypeHeader(b *testing.B) {
 		bodyForm := make([]models.URLOptionKeyValuePair, 20)
 		for i := 0; i < 20; i++ {
 			bodyForm[i] = models.URLOptionKeyValuePair{
-				Key:   "field" + string(rune(i)),
-				Value: "value" + string(rune(i)),
+				Key:   "field" + strconv.Itoa(i),
+				Value: "value" + strconv.Itoa(i),
 			}
 		}
 		query := models.Query{
@@ -122,8 +123,8 @@ func BenchmarkApplyHeadersFromQuery(b *testing.B) {
 		headers := make([]models.URLOptionKeyValuePair, 10)
 		for i := 0; i < 10; i++ {
 			headers[i] = models.URLOptionKeyValuePair{
-				Key:   "X-Custom-Header-" + string(rune(i)),
-				Value: "value-" + string(rune(i)),
+				Key:   "X-Custom-Header-" + strconv.Itoa(i),
+				Value: "value-" + strconv.Itoa(i),
 			}
 		}
 		query := models.Query{

@@ -2,7 +2,9 @@ package infinity
 
 import (
 	"context"
+	"crypto/rand"
 	"encoding/base64"
+	"encoding/hex"
 	"fmt"
 	"net/http"
 	"strings"
@@ -64,7 +66,12 @@ func ApplyContentTypeHeader(_ context.Context, query models.Query, settings mode
 }
 
 func generateBoundary() string {
-	return fmt.Sprintf("%016x", time.Now().UnixNano())
+	var buf [16]byte
+	_, err := rand.Read(buf[:])
+	if err != nil {
+		return fmt.Sprintf("%016x%016x", time.Now().UnixNano(), time.Now().UnixNano())
+	}
+	return hex.EncodeToString(buf[:])
 }
 
 

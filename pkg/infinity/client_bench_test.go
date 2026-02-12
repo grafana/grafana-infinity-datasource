@@ -1,6 +1,7 @@
 package infinity
 
 import (
+	"strconv"
 	"testing"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
@@ -62,7 +63,7 @@ func BenchmarkGetAllowedHosts(b *testing.B) {
 	b.Run("LargeList", func(b *testing.B) {
 		allowedUrls := make([]string, 50)
 		for i := 0; i < 50; i++ {
-			allowedUrls[i] = "https://api" + string(rune(i)) + ".example.com"
+			allowedUrls[i] = "https://api" + strconv.Itoa(i) + ".example.com"
 		}
 		for i := 0; i < b.N; i++ {
 			_, _ = GetAllowedHosts(allowedUrls)
