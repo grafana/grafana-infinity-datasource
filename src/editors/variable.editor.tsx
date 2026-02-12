@@ -32,7 +32,7 @@ export const VariableEditor = (props: Props) => {
 
 const FieldMapping = (props: Props) => {
   const { query, datasource } = props;
-  const [choices, setChoices] = useState<ComboboxOption<string>[]>([]);
+  const [choices, setChoices] = useState<Array<ComboboxOption<string>>>([]);
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     if (query.queryType !== 'infinity' || !query.infinityQuery) {

@@ -52,7 +52,7 @@ describe('QueryEditor', () => {
 
     // Verify that mockQuery.parser shows up in UI
     const parserField = getByTestId('infinity-query-field-wrapper-parser');
-    expect(within(parserField).getByDisplayValue('simple')).toBeInTheDocument();
+    expect(within(parserField).getByDisplayValue('Frontend')).toBeInTheDocument();
 
     // Verify that mockQuery.format shows up in UI
     const formatField = getByTestId('infinity-query-field-wrapper-format');

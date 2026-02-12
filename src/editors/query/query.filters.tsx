@@ -37,7 +37,7 @@ export const TableFilter = (props: { query: InfinityQuery; onChange: (value: any
   };
   const onFilterFieldChange = (index: number, v: ComboboxOption<string>) => {
     const filters = [...(query.filters || [])];
-    filters[index] = { ...filters[index], field: v.value as string };
+    filters[index] = { ...filters[index], field: v.value };
     onChange({ ...query, filters });
   };
   const onFilterOperatorChange = (index: number, v: ComboboxOption<FilterOperator>) => {
@@ -60,17 +60,17 @@ export const TableFilter = (props: { query: InfinityQuery; onChange: (value: any
                 <div className="gf-form-inline" key={index}>
                   <label className="gf-form-label width-6">Filter {index + 1}</label>
                   <Combobox
-                    width={8}
+                    width={16}
                     options={getFields()}
                     value={getFields().find((f) => f.value === filter.field)?.value || getFields()[0]?.value || ''}
                     onChange={(e) => onFilterFieldChange(index, e)}
-                  ></Combobox>
+                  />
                   <Combobox
-                    width={8}
+                    width={16}
                     options={filterOperators}
                     value={filterOperators.find((f) => f.value === filter.operator)?.value || filterOperators[0]?.value || 'equals'}
                     onChange={(e) => onFilterOperatorChange(index, e)}
-                  ></Combobox>
+                  />
                   <input
                     type="text"
                     className="gf-form-input min-width-10 width-10"

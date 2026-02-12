@@ -31,7 +31,7 @@ export const FormatSelector = (props: FormatSelectorProps) => {
   return (
     <EditorField label={Components.QueryEditor.Format.Label.Text} horizontal={true}>
       <div title={Components.QueryEditor.Format.Dropdown.PlaceHolder.Title} data-testid="infinity-query-format-selector">
-        <Combobox width={12} value={query.format} options={getFormats()} onChange={(e) => onFormatChange(e.value as InfinityQueryFormat)} />
+        <Combobox width={24} value={query.format} options={getFormats()} onChange={(e) => onFormatChange(e.value as InfinityQueryFormat)} />
       </div>
     </EditorField>
   );

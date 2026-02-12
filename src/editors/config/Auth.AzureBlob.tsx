@@ -3,7 +3,7 @@ import { Stack, InlineLabel, Input, SecretInput, Combobox } from '@grafana/ui';
 import { onUpdateDatasourceSecureJsonDataOption, DataSourcePluginOptionsEditorProps } from '@grafana/data';
 import { Components } from '@/selectors';
 import { AzureBlobRegions, AzureBlobCloudTypeDefault } from '@/constants';
-import type { InfinityOptions, InfinitySecureOptions, AzureBlobCloudType } from '@/types';
+import type { InfinityOptions, InfinitySecureOptions } from '@/types';
 
 export const AzureBlobAuthEditor = (
   props: DataSourcePluginOptionsEditorProps<InfinityOptions> & {
@@ -32,7 +32,7 @@ export const AzureBlobAuthEditor = (
           width={24}
           aria-label={RegionSelector.ariaLabel}
           options={AzureBlobRegions}
-          onChange={(e) => onAzureBlobUrlChange(e.value as AzureBlobCloudType)}
+          onChange={(e) => onAzureBlobUrlChange(e.value)}
           value={props.options.jsonData?.azureBlobCloudType || AzureBlobCloudTypeDefault}
         />
       </Stack>

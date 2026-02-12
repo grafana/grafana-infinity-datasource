@@ -20,11 +20,9 @@ export const GlobalQuerySelector = (props: { query: InfinityQuery; instanceSetti
   };
   return (
     <>
-      <EditorField label="Source">
+      <EditorField label="Source" horizontal={true}>
         {global_queries.length > 0 ? (
-          <div style={{ marginRight: '5px' }}>
-            <Combobox options={global_queries} value={query.global_query_id} onChange={(e) => onGlobalQueryIDChange(e.value as string)}></Combobox>
-          </div>
+          <Combobox options={global_queries} value={query.global_query_id} onChange={(e) => onGlobalQueryIDChange(e.value)}></Combobox>
         ) : (
           <label className="gf-form-label width-8">No Queries found</label>
         )}

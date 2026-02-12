@@ -1,5 +1,5 @@
 import { VariableOrigin } from '@grafana/data';
-import { DataLinkInput, Modal, Combobox, Input } from '@grafana/ui';
+import { DataLinkInput, Modal, Combobox, Input, ComboboxOption } from '@grafana/ui';
 import { defaultsDeep, set } from 'lodash';
 import React, { useState } from 'react';
 import { EditorRow } from '@/components/extended/EditorRow';
@@ -55,7 +55,7 @@ export const SeriesAdvancedOptions = ({ query, onChange }: { query: InfinitySeri
 
   const [popupState, setPopupState] = useState(false);
 
-  const DATA_OVERRIDE_OPERATORS: Array<{ label: string; value: string }> = ['=', '<', '<=', '>', '>=', '!='].map((o) => {
+  const DATA_OVERRIDE_OPERATORS: Array<ComboboxOption<string>> = ['=', '<', '<=', '>', '>=', '!='].map((o) => {
     return {
       label: o,
       value: o,
@@ -105,7 +105,7 @@ export const SeriesAdvancedOptions = ({ query, onChange }: { query: InfinitySeri
             >
               <div className="gf-form-inline">
                 <div className="gf-form">
-                  <label className="gf-form-label width-6">Data Overrides</label>
+                  <label className="gf-form-label width-8">Data Overrides</label>
                   {query.dataOverrides && query.dataOverrides.length > 0 ? (
                     <></>
                   ) : (
@@ -123,7 +123,7 @@ export const SeriesAdvancedOptions = ({ query, onChange }: { query: InfinitySeri
                     return (
                       <div className="gf-form-inline" key={index}>
                         <div className="gf-form">
-                          <label className="gf-form-label width-6">Override {index + 1}</label>
+                          <label className="gf-form-label width-8">Override {index + 1}</label>
                           <input
                             type="text"
                             className="gf-form-input min-width-10 width-10"
@@ -132,11 +132,11 @@ export const SeriesAdvancedOptions = ({ query, onChange }: { query: InfinitySeri
                             placeholder="Value 1"
                           ></input>
                           <Combobox
-                            width={4}
+                            width={8}
                             value={DATA_OVERRIDE_OPERATORS.find((option) => option.value === override.operator)?.value || override.operator}
                             options={DATA_OVERRIDE_OPERATORS}
                             onChange={(e) => onTextChange((e.value || '') as string, `dataOverrides[${index}].operator`)}
-                          ></Combobox>
+                          />
                           <input
                             type="text"
                             className="gf-form-input min-width-10 width-10"
