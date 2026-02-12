@@ -135,7 +135,7 @@ func ApplyPaginationItemToQuery(query models.Query, fieldType models.PaginationP
 			query.URLOptions.BodyForm[bodyFormIndex].Value = strings.ReplaceAll(bodyFormItem.Value, fieldNameUpdated, field.Value)
 		}
 	case models.PaginationParamTypeQuery:
-		fallthrough // It should go to default
+		fallthrough
 	default:
 		query.URLOptions.Params = append(query.URLOptions.Params, field)
 	}

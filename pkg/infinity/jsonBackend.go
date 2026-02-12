@@ -24,7 +24,7 @@ func GetJSONBackendResponse(ctx context.Context, urlResponseObject any, query mo
 		frame.Meta.Custom = &CustomMeta{Query: query, Error: err.Error()}
 		return frame, backend.PluginError(fmt.Errorf("error parsing json root data"))
 	}
-	columns := []jsonframer.ColumnSelector{}
+	columns := make([]jsonframer.ColumnSelector, 0, len(query.Columns))
 	for _, c := range query.Columns {
 		columns = append(columns, jsonframer.ColumnSelector{
 			Selector:   c.Selector,
