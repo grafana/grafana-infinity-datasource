@@ -37,7 +37,7 @@ func TestInterPolateCombineValueMacros(t *testing.T) {
 			got, err := models.InterPolateMacros(tt.query, backend.TimeRange{
 				From: time.Unix(0, 1500376552001*1e6).In(time.UTC),
 				To:   time.Unix(0, 1500376552002*1e6).In(time.UTC),
-			}, tt.pluginContext)
+			}, 0, tt.pluginContext)
 			if tt.wantError != nil {
 				require.NotNil(t, err)
 				require.Equal(t, tt.wantError, err)
@@ -80,7 +80,7 @@ func TestInterPolateFromToMacros(t *testing.T) {
 					To:   time.Unix(0, 1500376552002*1e6).In(time.UTC),
 				}
 			}
-			got, err := models.InterPolateMacros(tt.query, *tr, tt.pluginContext)
+			got, err := models.InterPolateMacros(tt.query, *tr, 0, tt.pluginContext)
 			if tt.wantError != nil {
 				require.NotNil(t, err)
 				require.Equal(t, tt.wantError, err)
@@ -122,7 +122,53 @@ func TestInterPolateCustomIntervalMacros(t *testing.T) {
 			if to == 0 {
 				to = 1610668800000 // Unix ms:  1610668800000 // Fri Jan 15 2021 00:00:00 GMT+0000 (Greenwich Mean Time)
 			}
-			got, err := models.InterPolateMacros(tt.query, backend.TimeRange{From: time.UnixMilli(from), To: time.UnixMilli(to)}, tt.pluginContext)
+			got, err := models.InterPolateMacros(tt.query, backend.TimeRange{From: time.UnixMilli(from), To: time.UnixMilli(to)}, 0, tt.pluginContext)
+			if tt.wantError != nil {
+				require.NotNil(t, err)
+				require.Equal(t, tt.wantError, err)
+				return
+			}
+			require.Nil(t, err)
+			require.Equal(t, tt.want, got)
+		})
+	}
+}
+
+func TestInterPolateIntervalMacros(t *testing.T) {
+	tests := []struct {
+		name          string
+		query         string
+		intervalMs    int64
+		pluginContext backend.PluginContext
+		want          string
+		wantError     error
+	}{
+		{query: "foo", intervalMs: 0, want: "foo"},
+		{query: "${__interval}", intervalMs: 0, want: "${__interval}"},
+		{query: "${__interval_ms}", intervalMs: 0, want: "${__interval_ms}"},
+		{query: "${__interval}", intervalMs: 100, want: "100ms"},
+		{query: "${__interval_ms}", intervalMs: 100, want: "100"},
+		{query: "${__interval}", intervalMs: 1000, want: "1s"},
+		{query: "${__interval_ms}", intervalMs: 1000, want: "1000"},
+		{query: "${__interval}", intervalMs: 5000, want: "5s"},
+		{query: "${__interval_ms}", intervalMs: 5000, want: "5000"},
+		{query: "${__interval}", intervalMs: 30000, want: "30s"},
+		{query: "${__interval_ms}", intervalMs: 30000, want: "30000"},
+		{query: "${__interval}", intervalMs: 60000, want: "1m"},
+		{query: "${__interval_ms}", intervalMs: 60000, want: "60000"},
+		{query: "${__interval}", intervalMs: 300000, want: "5m"},
+		{query: "${__interval_ms}", intervalMs: 300000, want: "300000"},
+		{query: "${__interval}", intervalMs: 3600000, want: "60m"},
+		{query: "${__interval_ms}", intervalMs: 3600000, want: "3600000"},
+		{query: "resolution=${__interval}&start=${__from}&end=${__to}", intervalMs: 30000, want: "resolution=30s&start=1610582400000&end=1610668800000"},
+		{query: "resolution_ms=${__interval_ms}&resolution=${__interval}", intervalMs: 15000, want: "resolution_ms=15000&resolution=15s"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := models.InterPolateMacros(tt.query, backend.TimeRange{
+				From: time.UnixMilli(1610582400000).UTC(),
+				To:   time.UnixMilli(1610668800000).UTC(),
+			}, tt.intervalMs, tt.pluginContext)
 			if tt.wantError != nil {
 				require.NotNil(t, err)
 				require.Equal(t, tt.wantError, err)
@@ -187,7 +233,7 @@ func TestApplyMacros(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := models.ApplyMacros(context.Background(), tt.query, backend.TimeRange{From: time.UnixMilli(1610582400000).UTC(), To: time.UnixMilli(1610668800000).UTC()}, tt.pluginContext)
+			got, err := models.ApplyMacros(context.Background(), tt.query, backend.TimeRange{From: time.UnixMilli(1610582400000).UTC(), To: time.UnixMilli(1610668800000).UTC()}, 0, tt.pluginContext)
 			if tt.wantErr != nil {
 				require.NotNil(t, err)
 				assert.Equal(t, tt.wantErr, err)
