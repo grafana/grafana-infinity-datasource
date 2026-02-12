@@ -18,7 +18,7 @@ type GuidedBasicAuthEditorProps = {
   passwordPlaceholder?: string;
   moreLink?: string;
 
-  children?: React.ReactChild;
+  children?: React.ReactNode;
 };
 
 export const GuidedBasicAuthEditor = (props: GuidedBasicAuthEditorProps) => {
