@@ -96,22 +96,24 @@ func InterPolateMacros(queryString string, timeRange backend.TimeRange, interval
 		}
 	}
 	// Replace ${__interval} and ${__interval_ms} with the actual interval values
+	// These use ${...} syntax instead of $__name(...) syntax used by other macros
 	if interval > 0 {
 		// Convert interval from milliseconds to seconds for ${__interval}
 		intervalInSeconds := interval / 1000
 		// Format interval as duration string (e.g., "30s", "1m", "5m", "1h")
-		intervalStr := fmt.Sprintf("%dms", interval)
-		if intervalInSeconds >= 1 {
-			if intervalInSeconds >= 3600 && intervalInSeconds%3600 == 0 {
-				// Format as hours if >= 1 hour and evenly divisible
-				intervalStr = fmt.Sprintf("%dh", intervalInSeconds/3600)
-			} else if intervalInSeconds%60 == 0 {
-				// Format as minutes if evenly divisible by 60
-				intervalStr = fmt.Sprintf("%dm", intervalInSeconds/60)
-			} else {
-				// Format as seconds
-				intervalStr = fmt.Sprintf("%ds", intervalInSeconds)
-			}
+		var intervalStr string
+		if intervalInSeconds >= 3600 && intervalInSeconds%3600 == 0 {
+			// Format as hours if >= 1 hour and evenly divisible
+			intervalStr = fmt.Sprintf("%dh", intervalInSeconds/3600)
+		} else if intervalInSeconds >= 60 && intervalInSeconds%60 == 0 {
+			// Format as minutes if evenly divisible by 60
+			intervalStr = fmt.Sprintf("%dm", intervalInSeconds/60)
+		} else if intervalInSeconds >= 1 {
+			// Format as seconds
+			intervalStr = fmt.Sprintf("%ds", intervalInSeconds)
+		} else {
+			// Format as milliseconds for sub-second intervals
+			intervalStr = fmt.Sprintf("%dms", interval)
 		}
 		queryString = strings.ReplaceAll(queryString, "${__interval}", intervalStr)
 		queryString = strings.ReplaceAll(queryString, "${__interval_ms}", fmt.Sprintf("%d", interval))

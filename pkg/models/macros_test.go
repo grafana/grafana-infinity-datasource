@@ -146,6 +146,8 @@ func TestInterPolateIntervalMacros(t *testing.T) {
 		{name: "no macros to replace", query: "foo", intervalMs: 0, want: "foo"},
 		{name: "interval zero should not replace __interval", query: "${__interval}", intervalMs: 0, want: "${__interval}"},
 		{name: "interval zero should not replace __interval_ms", query: "${__interval_ms}", intervalMs: 0, want: "${__interval_ms}"},
+		{name: "negative interval should not replace __interval", query: "${__interval}", intervalMs: -1000, want: "${__interval}"},
+		{name: "negative interval should not replace __interval_ms", query: "${__interval_ms}", intervalMs: -1000, want: "${__interval_ms}"},
 		{name: "100ms interval", query: "${__interval}", intervalMs: 100, want: "100ms"},
 		{name: "100ms interval_ms", query: "${__interval_ms}", intervalMs: 100, want: "100"},
 		{name: "1s interval", query: "${__interval}", intervalMs: 1000, want: "1s"},
