@@ -6,8 +6,10 @@ test('Config editor: should be able to add a global query', async ({ createDataS
     await page.getByRole('button', { name: 'Add Global Query' }).click();
     await page.getByRole('button', { name: 'Edit' }).click();
 
-    await page.getByTestId('infinity-query-source-selector').click();
-    await page.getByRole('option', { name: 'Reference' }).click();
-
+    const sourceDropdown = await page.getByTestId('infinity-query-source-selector');
+    await sourceDropdown.click();
+    await sourceDropdown.fill('Reference');
+    await sourceDropdown.press('ArrowDown');
+    await sourceDropdown.press('Enter');
     expect(await page.getByTestId('infinity-query-field-label-reference')).toBeVisible();
 });
