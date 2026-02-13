@@ -1,5 +1,5 @@
 import { FilterOperator } from '@/constants';
-import type { SelectableValue } from '@grafana/data';
+import type { ComboboxOption } from '@grafana/ui';
 import type { DataQuery } from '@grafana/schema';
 
 //#region Query
@@ -170,7 +170,7 @@ export type InfinityQuery = (InfinityLegacyQuery | InfinityUQLQuery | InfinityGR
 //#endregion
 
 //#region Misc
-export interface ScrapQuerySources extends SelectableValue<InfinityQuerySources> {
+export interface ScrapQuerySources extends ComboboxOption<InfinityQuerySources> {
   supported_types: InfinityQueryType[];
 }
 export interface InfinityColumn {

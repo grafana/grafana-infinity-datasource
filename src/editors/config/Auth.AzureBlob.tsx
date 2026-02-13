@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stack, InlineLabel, Input, SecretInput, Select } from '@grafana/ui';
+import { Stack, InlineLabel, Input, SecretInput, Combobox } from '@grafana/ui';
 import { onUpdateDatasourceSecureJsonDataOption, DataSourcePluginOptionsEditorProps } from '@grafana/data';
 import { Components } from '@/selectors';
 import { AzureBlobRegions, AzureBlobCloudTypeDefault } from '@/constants';
@@ -28,7 +28,7 @@ export const AzureBlobAuthEditor = (
         <InlineLabel width={24} tooltip={RegionSelector.tooltip}>
           {RegionSelector.label}
         </InlineLabel>
-        <Select
+        <Combobox
           width={24}
           aria-label={RegionSelector.ariaLabel}
           options={AzureBlobRegions}

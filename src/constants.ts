@@ -1,4 +1,4 @@
-import type { SelectableValue } from '@grafana/data';
+import type { ComboboxOption } from '@grafana/ui';
 import type { InfinityQuery, InfinityQueryType, InfinityQueryFormat, InfinityColumnFormat, ScrapQuerySources, VariableQueryType, AzureBlobCloudType } from '@/types';
 
 export const DefaultInfinityQuery: InfinityQuery = {
@@ -13,7 +13,7 @@ export const DefaultInfinityQuery: InfinityQuery = {
   filters: [],
 };
 
-export const SCRAP_QUERY_TYPES: Array<SelectableValue<InfinityQueryType>> = [
+export const SCRAP_QUERY_TYPES: Array<ComboboxOption<InfinityQueryType>> = [
   { label: 'JSON', value: 'json' },
   { label: 'CSV', value: 'csv' },
   { label: 'TSV', value: 'tsv' },
@@ -27,7 +27,7 @@ export const SCRAP_QUERY_TYPES: Array<SelectableValue<InfinityQueryType>> = [
   { label: 'Global Query', value: 'global' },
   { label: 'Transformations', value: 'transformations' },
 ];
-export const INFINITY_RESULT_FORMATS: Array<SelectableValue<InfinityQueryFormat>> = [
+export const INFINITY_RESULT_FORMATS: Array<ComboboxOption<InfinityQueryFormat>> = [
   { label: 'Data Frame', value: 'dataframe' },
   { label: 'Table', value: 'table' },
   { label: 'Logs', value: 'logs' },
@@ -45,7 +45,7 @@ export const INFINITY_SOURCES: ScrapQuerySources[] = [
   { label: 'Random Walk', value: 'random-walk', supported_types: ['series'] },
   { label: 'Expression', value: 'expression', supported_types: ['series'] },
 ];
-export const INFINITY_COLUMN_FORMATS: Array<SelectableValue<InfinityColumnFormat>> = [
+export const INFINITY_COLUMN_FORMATS: Array<ComboboxOption<InfinityColumnFormat>> = [
   { label: 'String', value: 'string' },
   { label: 'Number', value: 'number' },
   { label: 'Time', value: 'timestamp' },
@@ -54,7 +54,7 @@ export const INFINITY_COLUMN_FORMATS: Array<SelectableValue<InfinityColumnFormat
   { label: 'Boolean', value: 'boolean' },
 ];
 
-export const variableQueryTypes: Array<SelectableValue<VariableQueryType>> = [
+export const variableQueryTypes: Array<ComboboxOption<VariableQueryType>> = [
   {
     label: 'Infinity',
     value: 'infinity',
@@ -95,7 +95,7 @@ export enum FilterOperator {
   NumberGreaterThanOrEqualTo = '>=',
 }
 
-export const AWSRegions: Array<SelectableValue<string>> = [
+export const AWSRegions: Array<ComboboxOption<string>> = [
   'af-south-1',
   'ap-east-1',
   'ap-northeast-1',
@@ -127,7 +127,7 @@ export const AWSRegions: Array<SelectableValue<string>> = [
 
 export const AzureBlobCloudTypeDefault: AzureBlobCloudType = 'AzureCloud';
 
-export const AzureBlobRegions: Array<SelectableValue<AzureBlobCloudType>> = [
+export const AzureBlobRegions: Array<ComboboxOption<AzureBlobCloudType>> = [
   { value: 'AzureCloud', label: 'Azure' },
   { value: 'AzureUSGovernment', label: 'Azure US Government' },
   { value: 'AzureChinaCloud', label: 'Azure China' },

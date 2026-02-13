@@ -6,7 +6,7 @@ import type { InfinityOptions } from '@/types';
 type GoogleJWTEditorProps = {
   options: DataSourceSettings<InfinityOptions, {}>;
   onChange: (options: DataSourceSettings<InfinityOptions, {}>) => void;
-  children?: React.ReactChild;
+  children?: React.ReactNode;
   moreLink?: string;
 };
 

@@ -1,4 +1,4 @@
-import { Select } from '@grafana/ui';
+import { Combobox } from '@grafana/ui';
 import React from 'react';
 import { isDataQuery } from '@/app/utils';
 import { EditorField } from '@/components/extended/EditorField';
@@ -31,7 +31,7 @@ export const FormatSelector = (props: FormatSelectorProps) => {
   return (
     <EditorField label={Components.QueryEditor.Format.Label.Text} horizontal={true}>
       <div title={Components.QueryEditor.Format.Dropdown.PlaceHolder.Title} data-testid="infinity-query-format-selector">
-        <Select className="min-width-12 width-12" value={query.format} options={getFormats()} onChange={(e) => onFormatChange(e.value as InfinityQueryFormat)} menuShouldPortal={true} />
+        <Combobox width={24} value={query.format} options={getFormats()} onChange={(e) => onFormatChange(e.value as InfinityQueryFormat)} />
       </div>
     </EditorField>
   );

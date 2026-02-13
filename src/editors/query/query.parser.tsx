@@ -1,7 +1,6 @@
 import React from 'react';
-import { Select } from '@grafana/ui';
+import { Combobox, type ComboboxOption } from '@grafana/ui';
 import { EditorField } from '@/components/extended/EditorField';
-import type { SelectableValue } from '@grafana/data';
 import type { InfinityQuery, InfinityQueryType, InfinityParserType } from '@/types';
 
 export const ParseTypeEditor = (props: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: () => void }) => {
@@ -9,10 +8,10 @@ export const ParseTypeEditor = (props: { query: InfinityQuery; onChange: (value:
   if (query.type === 'json' || query.type === 'graphql' || query.type === 'csv' || query.type === 'tsv' || query.type === 'xml' || query.type === 'html') {
     return (
       <EditorField label="Parser" horizontal={true}>
-        <Select<typeof query.parser>
+        <Combobox
           width={22}
           value={query.parser || 'backend'}
-          options={getParserOptions(query.type)}
+          options={getParserOptions(query.type) as any}
           onChange={(e) => {
             if (query.parser === 'uql' && (query.type === 'json' || query.type === 'graphql')) {
               let uql = (query as any).uql || 'parse-json';
@@ -41,87 +40,41 @@ export const ParseTypeEditor = (props: { query: InfinityQuery; onChange: (value:
   return <></>;
 };
 
-const getParserOptions = (queryType: InfinityQueryType): Array<SelectableValue<InfinityParserType>> => {
+const getParserOptions = (queryType: InfinityQueryType): Array<ComboboxOption<InfinityParserType>> => {
   switch (queryType) {
     case 'json':
     case 'graphql':
       return [
-        {
-          label: 'Backend',
-          options: [
-            { value: 'backend', label: 'JSONata' },
-            { value: 'jq-backend', label: 'JQ' },
-          ],
-        },
-        {
-          label: 'Frontend',
-          options: [
-            { value: 'uql', label: 'UQL' },
-            { value: 'groq', label: 'GROQ' },
-            { value: 'simple', label: 'Frontend' },
-          ],
-        },
+        { value: 'backend', label: 'JSONata', group: 'Backend' },
+        { value: 'jq-backend', label: 'JQ', group: 'Backend' },
+        { value: 'uql', label: 'UQL', group: 'Frontend' },
+        { value: 'groq', label: 'GROQ', group: 'Frontend' },
+        { value: 'simple', label: 'Frontend', group: 'Frontend' },
       ];
     case 'csv':
     case 'tsv':
       return [
-        {
-          label: 'Backend',
-          options: [{ value: 'backend', label: 'Backend' }],
-        },
-        {
-          label: 'Frontend',
-          options: [
-            { value: 'uql', label: 'UQL' },
-            { value: 'simple', label: 'Frontend' },
-          ],
-        },
+        { value: 'backend', label: 'Backend', group: 'Backend' },
+        { value: 'uql', label: 'UQL', group: 'Frontend' },
+        { value: 'simple', label: 'Frontend', group: 'Frontend' },
       ];
     case 'xml':
       return [
-        {
-          label: 'Backend',
-          options: [
-            { value: 'backend', label: 'JSONata' },
-            { value: 'jq-backend', label: 'JQ' },
-          ],
-        },
-        {
-          label: 'Frontend',
-          options: [
-            { value: 'uql', label: 'UQL' },
-            { value: 'simple', label: 'Frontend' },
-          ],
-        },
+        { value: 'backend', label: 'JSONata', group: 'Backend' },
+        { value: 'jq-backend', label: 'JQ', group: 'Backend' },
+        { value: 'uql', label: 'UQL', group: 'Frontend' },
+        { value: 'simple', label: 'Frontend', group: 'Frontend' },
       ];
     case 'html':
       return [
-        {
-          label: 'Backend',
-          options: [
-            { value: 'backend', label: 'JSONata' },
-            { value: 'jq-backend', label: 'JQ' },
-          ],
-        },
-        {
-          label: 'Frontend',
-          options: [{ value: 'simple', label: 'Frontend' }],
-        },
+        { value: 'backend', label: 'JSONata', group: 'Backend' },
+        { value: 'jq-backend', label: 'JQ', group: 'Backend' },
+        { value: 'simple', label: 'Frontend', group: 'Frontend' },
       ];
     case 'uql':
-      return [
-        {
-          label: 'Frontend',
-          options: [{ value: 'uql', label: 'UQL' }],
-        },
-      ];
+      return [{ value: 'uql', label: 'UQL', group: 'Frontend' }];
     case 'groq':
-      return [
-        {
-          label: 'Frontend',
-          options: [{ value: 'groq', label: 'GROQ' }],
-        },
-      ];
+      return [{ value: 'groq', label: 'GROQ', group: 'Frontend' }];
     default:
       return [];
   }

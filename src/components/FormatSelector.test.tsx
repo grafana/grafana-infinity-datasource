@@ -1,4 +1,4 @@
-import { render, within } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import React from 'react';
 import { DefaultInfinityQuery } from '@/constants';
 import { Components } from '@/selectors';
@@ -17,7 +17,7 @@ describe('FormatSelector', () => {
     expect(wrapper).not.toBeNull();
     expect(wrapper.getByText(LabelText)).toBeInTheDocument();
     expect(wrapper.getByTitle(DropdownPlaceholderTitle)).toBeInTheDocument();
-    expect(within(wrapper.getByTitle(DropdownPlaceholderTitle)).getByText('Table')).toBeInTheDocument();
+    expect(wrapper.getByDisplayValue('Table')).toBeInTheDocument();
   });
   it('renders timeseries format', () => {
     const onChange = jest.fn();
@@ -27,6 +27,6 @@ describe('FormatSelector', () => {
     expect(wrapper).not.toBeNull();
     expect(wrapper.getByText(LabelText)).toBeInTheDocument();
     expect(wrapper.getByTitle(DropdownPlaceholderTitle)).toBeInTheDocument();
-    expect(within(wrapper.getByTitle(DropdownPlaceholderTitle)).getByText('Time Series')).toBeInTheDocument();
+    expect(wrapper.getByDisplayValue('Time Series')).toBeInTheDocument();
   });
 });

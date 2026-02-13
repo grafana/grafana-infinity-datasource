@@ -1,8 +1,8 @@
 import { FilterOperator } from '@/constants';
 import type { GrafanaTableRow, InfinityColumn, InfinityFilter } from '@/types';
-import type { SelectableValue } from '@grafana/data';
+import type { ComboboxOption } from '@grafana/ui';
 
-export const filterOperators: Array<SelectableValue<FilterOperator>> = [
+export const filterOperators: Array<ComboboxOption<FilterOperator>> = [
   { label: 'Equals', value: FilterOperator.Equals },
   { label: 'Not Equals', value: FilterOperator.NotEquals },
   { label: 'Contains', value: FilterOperator.Contains },
