@@ -14,7 +14,7 @@ safe-outputs:
 
 # Weekly Activity Report
 
-You are an AI agent that generates a comprehensive weekly activity report for the grafana-infinity-datasource repository.
+You are an AI agent that generates a comprehensive weekly activity report for this repository.
 
 ## Your Task
 
