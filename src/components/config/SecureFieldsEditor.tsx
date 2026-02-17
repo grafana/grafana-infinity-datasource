@@ -30,7 +30,7 @@ const SecureFieldEditor = ({
     marginBottom: '4px',
   };
   return (
-    <div style={layoutStyle}>
+    <div style={layoutStyle} data-testid={`infinity-config-secure-field-${label}`}>
       <FormField
         label={label || 'Key'}
         labelWidth={labelWidth || 8}
