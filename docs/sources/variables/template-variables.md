@@ -10,6 +10,7 @@ keywords:
   - variables
   - template variables
   - query variables
+  - multi-property variables
 labels:
   products:
     - oss
@@ -96,6 +97,47 @@ Configure the field mapping:
 - **Value field:** `id`
 
 The drop-down displays "Production Server", "Staging Server", etc., but the variable value is the corresponding ID.
+
+### Multi-property variables
+
+The Infinity data source supports **multi-property variables**. Use them when the same logical concept has different identifiers in different contexts (for example, an environment called `dev` in one system and `development` in another). Instead of maintaining several variables in sync, you can map all of those values to one variable and reference the property you need in each panel or query.
+
+You can create a multi-property variable with either **Type: Custom** or **Type: Query**:
+
+- **Type: Custom** - In **Custom options** > **JSON**, paste your own JSON array with the mapping. Each object in the array can have any number of properties; use `text` and `value` for the label and value shown in the drop-down, and add additional properties as needed. For the JSON format and examples, refer to [Multi-property custom variables](https://grafana.com/docs/grafana/latest/dashboards/variables/add-template-variables/#multi-property-custom-variables) in Add and manage variables.
+
+- **Type: Query** - Configure an Infinity query that returns multiple columns. In the variable editor, expand **Custom field mapping** and set **Value field** and **Text field** to the columns that supply the value and the label for the drop-down. Each additional column in the result becomes a property you can reference. In panels and queries, reference a property with `${varName.columnName}`.
+
+**Example (Type: Query):** A variable named `env` that lists environments with different identifiers per cloud provider. The API returns:
+
+```json
+[
+  {"name": "Production", "id": "prod", "aws_id": "aws-prod-001", "azure_id": "az-prod-001"},
+  {"name": "Staging", "id": "stg", "aws_id": "aws-stg-002", "azure_id": "az-stg-002"},
+  {"name": "Development", "id": "dev", "aws_id": "aws-dev-003", "azure_id": "az-dev-003"}
+]
+```
+
+Configure the Infinity variable query:
+
+- **Type:** JSON
+- **URL:** `https://api.example.com/environments`
+- **Parser:** Backend
+
+In **Custom field mapping**, set **Text field** to `name` and **Value field** to `id`.
+
+In panel queries, reference any property using dot notation:
+
+| Syntax | Result (when "Production" is selected) |
+|--------|----------------------------------------|
+| `${env}` | `prod` |
+| `${env:text}` | `Production` |
+| `${env.aws_id}` | `aws-prod-001` |
+| `${env.azure_id}` | `az-prod-001` |
+
+For example, you might use `${env.aws_id}` in an AWS-related query URL and `${env.azure_id}` in an Azure-related query URL, while both panels respond to the same variable drop-down.
+
+For more on the concept, refer to [Configure multi-property variables](https://grafana.com/docs/grafana/latest/dashboards/variables/add-template-variables/#configure-multi-property-variables) in [Add and manage variables](https://grafana.com/docs/grafana/latest/dashboards/variables/add-template-variables/).
 
 ## Random String query type
 
