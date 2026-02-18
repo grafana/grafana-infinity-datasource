@@ -102,6 +102,8 @@ The drop-down displays "Production Server", "Staging Server", etc., but the vari
 
 The Infinity data source supports **multi-property variables**. Use them when the same logical concept has different identifiers in different contexts (for example, an environment called `dev` in one system and `development` in another). Instead of maintaining several variables in sync, you can map all of those values to one variable and reference the property you need in each panel or query.
 
+{{< figure alt="Multi-property variable capability"  src="/media/docs/infinity/infinity-multi-prop-variable-v12.3.png" >}}
+
 You can create a multi-property variable with either **Type: Custom** or **Type: Query**:
 
 - **Type: Custom** - In **Custom options** > **JSON**, paste your own JSON array with the mapping. Each object in the array can have any number of properties; use `text` and `value` for the label and value shown in the drop-down, and add additional properties as needed. For the JSON format and examples, refer to [Multi-property custom variables](https://grafana.com/docs/grafana/latest/dashboards/variables/add-template-variables/#multi-property-custom-variables) in Add and manage variables.
