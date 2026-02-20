@@ -51,7 +51,7 @@ export const PaginationEditor = (props: PaginationEditorProps) => {
               {(query.pagination_mode === 'page' || query.pagination_mode === 'offset') && (
                 <Checkbox
                   label="Best effort"
-                  description="When enabled, if at least one page loads successfully, errors from subsequent pages are silently ignored and the data from successful pages is returned."
+                  description="When enabled, if at least one page loads successfully and a subsequent request fails, pagination stops immediately and returns data from the successful pages."
                   value={query.pagination_best_effort ?? false}
                   onChange={(e) => onChange({ ...query, pagination_best_effort: e.currentTarget.checked })}
                 />
