@@ -15,40 +15,40 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// paginationMocker is an http.RoundTripper that returns success for the
-// first successCount requests and HTTP 400 for all subsequent ones.
-type paginationMocker struct {
-	successCount int32
-	calls        atomic.Int32
-	body         string
+// mockTransport is an http.RoundTripper for pagination tests. It cycles
+// through the provided response bodies. When succeedFor >= 0, requests
+// beyond that count return HTTP 400. Set succeedFor to -1 to never fail.
+type mockTransport struct {
+	bodies     []string
+	succeedFor int32 // -1 means all requests succeed
+	calls      atomic.Int32
 }
 
-func (m *paginationMocker) RoundTrip(_ *http.Request) (*http.Response, error) {
+func (m *mockTransport) RoundTrip(_ *http.Request) (*http.Response, error) {
 	n := m.calls.Add(1)
-	if n <= m.successCount {
+	if m.succeedFor >= 0 && n > m.succeedFor {
 		return &http.Response{
-			StatusCode: http.StatusOK,
-			Status:     "200 OK",
-			Body:       io.NopCloser(bytes.NewBufferString(m.body)),
+			StatusCode: http.StatusBadRequest,
+			Status:     "400 Bad Request",
+			Body:       io.NopCloser(bytes.NewBufferString(`{"error":"no more pages"}`)),
 		}, nil
 	}
+	body := m.bodies[(int(n)-1)%len(m.bodies)]
 	return &http.Response{
-		StatusCode: http.StatusBadRequest,
-		Status:     "400 Bad Request",
-		Body:       io.NopCloser(bytes.NewBufferString(`{"error":"no more pages"}`)),
+		StatusCode: http.StatusOK,
+		Status:     "200 OK",
+		Body:       io.NopCloser(bytes.NewBufferString(body)),
 	}, nil
 }
 
-func newPaginationClient(t *testing.T, successCount int32, body string) Client {
+func newMockClient(t *testing.T, bodies []string, succeedFor int32) (Client, *mockTransport) {
 	t.Helper()
+	mock := &mockTransport{bodies: bodies, succeedFor: succeedFor}
 	client, err := NewClient(context.TODO(), models.InfinitySettings{})
 	require.NoError(t, err)
-	client.HttpClient.Transport = &paginationMocker{
-		successCount: successCount,
-		body:         body,
-	}
+	client.HttpClient.Transport = mock
 	client.IsMock = true
-	return *client
+	return *client, mock
 }
 
 func TestGetPaginatedResults_BestEffort(t *testing.T) {
@@ -76,7 +76,7 @@ func TestGetPaginatedResults_BestEffort(t *testing.T) {
 	t.Run("page mode best effort returns data from successful pages", func(t *testing.T) {
 		query := baseQuery
 		query.PageBestEffort = true
-		client := newPaginationClient(t, 1, jsonBody)
+		client, _ := newMockClient(t, []string{jsonBody}, 1)
 		frame, err := GetPaginatedResults(context.Background(), pCtx, query, client, map[string]string{})
 		require.NoError(t, err)
 		require.NotNil(t, frame)
@@ -86,7 +86,7 @@ func TestGetPaginatedResults_BestEffort(t *testing.T) {
 	t.Run("page mode without best effort returns error on failed page", func(t *testing.T) {
 		query := baseQuery
 		query.PageBestEffort = false
-		client := newPaginationClient(t, 1, jsonBody)
+		client, _ := newMockClient(t, []string{jsonBody}, 1)
 		frame, err := GetPaginatedResults(context.Background(), pCtx, query, client, map[string]string{})
 		require.Error(t, err)
 		assert.Nil(t, frame)
@@ -95,7 +95,7 @@ func TestGetPaginatedResults_BestEffort(t *testing.T) {
 	t.Run("page mode best effort with all pages succeeding returns all data", func(t *testing.T) {
 		query := baseQuery
 		query.PageBestEffort = true
-		client := newPaginationClient(t, 3, jsonBody)
+		client, _ := newMockClient(t, []string{jsonBody}, 3)
 		frame, err := GetPaginatedResults(context.Background(), pCtx, query, client, map[string]string{})
 		require.NoError(t, err)
 		require.NotNil(t, frame)
@@ -106,7 +106,7 @@ func TestGetPaginatedResults_BestEffort(t *testing.T) {
 	t.Run("page mode best effort still fails when first page errors", func(t *testing.T) {
 		query := baseQuery
 		query.PageBestEffort = true
-		client := newPaginationClient(t, 0, jsonBody)
+		client, _ := newMockClient(t, []string{jsonBody}, 0)
 		frame, err := GetPaginatedResults(context.Background(), pCtx, query, client, map[string]string{})
 		require.Error(t, err)
 		assert.Nil(t, frame)
@@ -119,7 +119,7 @@ func TestGetPaginatedResults_BestEffort(t *testing.T) {
 		query.PageParamOffsetFieldName = "offset"
 		query.PageParamOffsetFieldType = models.PaginationParamTypeQuery
 		query.PageParamOffsetFieldVal = 0
-		client := newPaginationClient(t, 1, jsonBody)
+		client, _ := newMockClient(t, []string{jsonBody}, 1)
 		frame, err := GetPaginatedResults(context.Background(), pCtx, query, client, map[string]string{})
 		require.NoError(t, err)
 		require.NotNil(t, frame)
@@ -133,7 +133,7 @@ func TestGetPaginatedResults_BestEffort(t *testing.T) {
 		query.PageParamOffsetFieldName = "offset"
 		query.PageParamOffsetFieldType = models.PaginationParamTypeQuery
 		query.PageParamOffsetFieldVal = 0
-		client := newPaginationClient(t, 1, jsonBody)
+		client, _ := newMockClient(t, []string{jsonBody}, 1)
 		frame, err := GetPaginatedResults(context.Background(), pCtx, query, client, map[string]string{})
 		require.Error(t, err)
 		assert.Nil(t, frame)
@@ -146,7 +146,7 @@ func TestGetPaginatedResults_BestEffort(t *testing.T) {
 		query.PageParamOffsetFieldName = "offset"
 		query.PageParamOffsetFieldType = models.PaginationParamTypeQuery
 		query.PageParamOffsetFieldVal = 0
-		client := newPaginationClient(t, 0, jsonBody)
+		client, _ := newMockClient(t, []string{jsonBody}, 0)
 		frame, err := GetPaginatedResults(context.Background(), pCtx, query, client, map[string]string{})
 		require.Error(t, err)
 		assert.Nil(t, frame)
@@ -160,7 +160,7 @@ func TestGetPaginatedResults_BestEffort(t *testing.T) {
 		query.PageParamListFieldName = "id"
 		query.PageParamListFieldType = models.PaginationParamTypeQuery
 		query.PageParamListFieldValue = "a,b,c"
-		client := newPaginationClient(t, 1, jsonBody)
+		client, _ := newMockClient(t, []string{jsonBody}, 1)
 		frame, err := GetPaginatedResults(context.Background(), pCtx, query, client, map[string]string{})
 		require.Error(t, err)
 		assert.Nil(t, frame)
@@ -191,16 +191,8 @@ func TestGetPaginatedResults_BestEffort_RequestCount(t *testing.T) {
 	}
 
 	t.Run("stops fetching after first failed page", func(t *testing.T) {
-		mock := &paginationMocker{
-			successCount: 2,
-			body:         jsonBody,
-		}
-		client, err := NewClient(context.TODO(), models.InfinitySettings{})
-		require.NoError(t, err)
-		client.HttpClient.Transport = mock
-		client.IsMock = true
-
-		frame, err := GetPaginatedResults(context.Background(), pCtx, query, *client, map[string]string{})
+		client, mock := newMockClient(t, []string{jsonBody}, 2)
+		frame, err := GetPaginatedResults(context.Background(), pCtx, query, client, map[string]string{})
 		require.NoError(t, err)
 		require.NotNil(t, frame)
 		// 2 successful pages * 1 row each = 2 rows
