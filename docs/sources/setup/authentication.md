@@ -139,6 +139,25 @@ To retrieve content from Azure blob storage, you need to provide the following i
 
 If you want to authenticate your API endpoints via Amazon AWS authentication, refer to [AWS authentication](/docs/plugins/yesoreyeram-infinity-datasource/latest/examples/aws/).
 
+The AWS authentication supports two credential providers:
+
+| Provider | Description |
+| --- | --- |
+| **Access & Secret Key** | Static IAM credentials (access key + secret key). |
+| **Default Credentials / IAM Role** | AWS SDK default credential chain (environment variables, EC2 instance profile, ECS task role, EKS IRSA). |
+
+Both providers support optional **Assume Role ARN** for cross-account or role-based access via STS `AssumeRole`, with an optional **External ID** field. Temporary credentials are automatically refreshed on expiry.
+
+{{< admonition type="note" >}}
+The Grafana server must allow the AWS auth providers via `grafana.ini`:
+```ini
+[aws]
+allowed_auth_providers = default, keys, credentials
+assume_role_enabled = true
+```
+Or via environment variables: `GF_AWS_ALLOWED_AUTH_PROVIDERS=default,keys,credentials` and `GF_AWS_ASSUME_ROLE_ENABLED=true`.
+{{< /admonition >}}
+
 ## Private data source connect (PDC)
 
 Use private data source connect (PDC) to connect to and query data within a secure network without opening that network to inbound traffic from Grafana Cloud. See [Private data source connect](https://grafana.com/docs/grafana-cloud/connect-externally-hosted/private-data-source-connect/) for more information on how PDC works and [Configure Grafana private data source connect (PDC)](https://grafana.com/docs/grafana-cloud/connect-externally-hosted/private-data-source-connect/configure-pdc/#configure-grafana-private-data-source-connect-pdc) for steps on setting up a PDC connection.
