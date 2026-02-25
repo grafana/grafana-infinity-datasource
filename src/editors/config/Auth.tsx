@@ -1,6 +1,6 @@
 import { css } from '@emotion/css';
 import { onUpdateDatasourceSecureJsonDataOption, DataSourcePluginOptionsEditorProps, SelectableValue } from '@grafana/data';
-import { Icon, InlineFormLabel, LegacyForms, RadioButtonGroup, Select, Grid, Link, useTheme2 } from '@grafana/ui';
+import { Icon, InlineFormLabel, LegacyForms, RadioButtonGroup, Combobox, Grid, Link, useTheme2 } from '@grafana/ui';
 import React, { useState } from 'react';
 import { AllowedHostsEditor } from '@/editors/config/AllowedHosts';
 import { AzureBlobAuthEditor } from '@/editors/config/Auth.AzureBlob';
@@ -252,7 +252,7 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
                 </div>
                 <div className="gf-form">
                   <InlineFormLabel>Region</InlineFormLabel>
-                  <Select width={24} options={AWSRegions} placeholder="us-east-2" onChange={(e) => onAwsRegionChange(e.value!)} value={props.options.jsonData?.aws?.region || ''} />
+                  <Combobox width={24} options={AWSRegions} placeholder="us-east-2" onChange={(e) => onAwsRegionChange(e.value!)} value={props.options.jsonData?.aws?.region || ''} />
                 </div>
                 <div className="gf-form">
                   <FormField

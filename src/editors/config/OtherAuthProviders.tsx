@@ -1,9 +1,9 @@
-import { InlineFormLabel, Modal, Select } from '@grafana/ui';
+import { InlineFormLabel, Modal, Combobox, type ComboboxOption } from '@grafana/ui';
 import React, { useState } from 'react';
 import { GuidedBasicAuthEditor } from '@/editors/config/guided-config/GuidedBasicAuthEditor';
 import { GoogleJWTEditor } from '@/editors/config/guided-config/GoogleJWT';
 import type { InfinityOptions } from '@/types';
-import type { DataSourceSettings, SelectableValue } from '@grafana/data';
+import type { DataSourceSettings } from '@grafana/data';
 
 export const OthersAuthentication = (props: {
   options: DataSourceSettings<InfinityOptions, {}>;
@@ -12,7 +12,7 @@ export const OthersAuthentication = (props: {
   onClose: () => void;
 }) => {
   const [provider, setProvider] = useState('Other');
-  const providers: Array<SelectableValue<string>> = [
+  const providers: Array<ComboboxOption<string>> = [
     { label: 'Github', value: 'github' },
     { label: 'Google JWT', value: 'google-jwt' },
   ];
@@ -26,7 +26,7 @@ export const OthersAuthentication = (props: {
       <Modal title="Other Authentication" isOpen={isOpen} onDismiss={onClose}>
         <div className="gf-form">
           <InlineFormLabel width={12}>Provider</InlineFormLabel>
-          <Select value={provider} options={providers} onChange={(e) => setProvider(e?.value!)} isClearable={true} menuShouldPortal={true}></Select>
+          <Combobox value={provider} options={providers} onChange={(e) => setProvider(e?.value!)} isClearable={true}></Combobox>
         </div>
         {provider === 'github' && (
           <GuidedBasicAuthEditor

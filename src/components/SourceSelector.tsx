@@ -1,6 +1,6 @@
 import React from 'react';
 import { INFINITY_SOURCES } from '@/constants';
-import { Select } from '@grafana/ui';
+import { Combobox } from '@grafana/ui';
 import { EditorField } from '@/components/extended/EditorField';
 import type { InfinityQuery, InfinityQuerySources } from '@/types';
 
@@ -16,14 +16,13 @@ export const SourceSelector = (props: { query: InfinityQuery; onChange: (e: Infi
   };
   return (
     <EditorField label={query.type === 'series' ? 'Scenario' : 'Source'} horizontal={true}>
-      <Select
+      <Combobox
         width={18}
         data-testid="infinity-query-source-selector"
         options={supportedSources}
         value={query.source || 'url'}
         onChange={(e) => onSourceChange(e.value as InfinityQuerySources)}
-        menuShouldPortal={true}
-      ></Select>
+      ></Combobox>
     </EditorField>
   );
 };
