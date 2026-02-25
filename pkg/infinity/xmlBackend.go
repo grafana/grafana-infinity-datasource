@@ -15,7 +15,7 @@ func GetXMLBackendResponse(ctx context.Context, inputString string, query models
 	_, span := tracing.DefaultTracer().Start(ctx, "GetXMLBackendResponse")
 	defer span.End()
 	frame := GetDummyFrame(query)
-	columns := []jsonframer.ColumnSelector{}
+	columns := make([]jsonframer.ColumnSelector, 0, len(query.Columns))
 	for _, c := range query.Columns {
 		columns = append(columns, jsonframer.ColumnSelector{
 			Selector:   c.Selector,
