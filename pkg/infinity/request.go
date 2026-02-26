@@ -36,17 +36,8 @@ func GetRequest(ctx context.Context, pCtx *backend.PluginContext, settings model
 	default:
 		req, err = http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	}
-	req = ApplyAcceptHeader(ctx, query, settings, req, includeSect)
-	req = ApplyContentTypeHeader(ctx, query, settings, req, includeSect)
-	req = ApplyAcceptEncodingHeader(ctx, query, settings, req, includeSect)
-	req = ApplyHeadersFromSettings(ctx, pCtx, requestHeaders, settings, req, includeSect)
-	req = ApplyHeadersFromQuery(ctx, query, settings, req, includeSect)
-	req = ApplyBasicAuth(ctx, settings, req, includeSect)
-	req = ApplyBearerToken(ctx, settings, req, includeSect)
-	req = ApplyApiKeyAuth(ctx, settings, req, includeSect)
-	req = ApplyForwardedOAuthIdentity(ctx, requestHeaders, settings, req, includeSect)
-	req = ApplyTraceHead(ctx, req)
-	req = ApplyForwardedCookies(ctx, settings, req, requestHeaders)
+	chain := BuildRequestModifierChain(ctx, query, settings, requestHeaders, pCtx, includeSect)
+	req = chain.Apply(ctx, req)
 	return req, err
 }
 

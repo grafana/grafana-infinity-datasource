@@ -165,32 +165,12 @@ func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, pCtx *backend.
 		}
 		return frame, cursor, err
 	}
-	if query.Type == models.QueryTypeGSheets {
-		if frame, err = GetGoogleSheetsResponse(ctx, urlResponseObject, query); err != nil {
+	registry := NewParserRegistry()
+	if parser, ok := registry.FindParser(query); ok {
+		if frame, err = parser.Parse(ctx, urlResponseObject, query); err != nil {
 			return frame, cursor, err
 		}
-	}
-	if isBackendQuery(query) {
-		if query.Type == models.QueryTypeJSON || query.Type == models.QueryTypeGraphQL {
-			if frame, err = GetJSONBackendResponse(ctx, urlResponseObject, query); err != nil {
-				return frame, cursor, err
-			}
-		}
-		if query.Type == models.QueryTypeCSV || query.Type == models.QueryTypeTSV {
-			if responseString, ok := urlResponseObject.(string); ok {
-				if frame, err = GetCSVBackendResponse(ctx, responseString, query); err != nil {
-					return frame, cursor, err
-				}
-			}
-		}
-		if query.Type == models.QueryTypeXML || query.Type == models.QueryTypeHTML {
-			if responseString, ok := urlResponseObject.(string); ok {
-				if frame, err = GetXMLBackendResponse(ctx, responseString, query); err != nil {
-					return frame, cursor, err
-				}
-			}
-		}
-		if postProcessingRequired {
+		if isBackendQuery(query) && postProcessingRequired {
 			frame, err = PostProcessFrame(ctx, frame, query)
 		}
 	}

@@ -24,6 +24,16 @@ func GetJSONBackendResponse(ctx context.Context, urlResponseObject any, query mo
 		frame.Meta.Custom = &CustomMeta{Query: query, Error: err.Error()}
 		return frame, backend.PluginError(fmt.Errorf("error parsing json root data"))
 	}
+	return getJSONFrameFromString(ctx, string(responseString), query)
+}
+
+// getJSONFrameFromString parses a JSON string into a data frame.
+// This is shared by GetJSONBackendResponse (URL sources) and
+// JSONResponseParser.Parse (inline sources) to avoid duplication.
+func getJSONFrameFromString(ctx context.Context, jsonString string, query models.Query) (*data.Frame, error) {
+	_, span := tracing.DefaultTracer().Start(ctx, "getJSONFrameFromString")
+	defer span.End()
+	frame := GetDummyFrame(query)
 	columns := []jsonframer.ColumnSelector{}
 	for _, c := range query.Columns {
 		columns = append(columns, jsonframer.ColumnSelector{
@@ -42,7 +52,7 @@ func GetJSONBackendResponse(ctx context.Context, urlResponseObject any, query mo
 	if query.Parser == models.InfinityParserJQBackend {
 		framerOptions.FramerType = jsonframer.FramerTypeJQ
 	}
-	newFrame, err := jsonframer.ToFrame(string(responseString), framerOptions)
+	newFrame, err := jsonframer.ToFrame(jsonString, framerOptions)
 
 	if err != nil {
 		if errors.Is(err, jsonframer.ErrInvalidRootSelector) ||
