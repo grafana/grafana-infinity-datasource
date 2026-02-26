@@ -217,6 +217,18 @@ const TokenCustomization = (props: DataSourcePluginOptionsEditorProps<InfinityOp
           </InlineFormLabel>
           <Input onChange={(v) => onOAuth2PropsChange('tokenTemplate', v.currentTarget.value)} value={oauth2.tokenTemplate} width={30} placeholder={TokenTemplateSelector.placeholder} />
         </Stack>
+        <div className="gf-form">
+          <SecureFieldsEditor
+            dataSourceConfig={options}
+            onChange={onOptionsChange}
+            title="Token request headers"
+            hideTile={true}
+            label="Token header"
+            labelWidth={12}
+            secureFieldName="oauth2TokenHeadersName"
+            secureFieldValue="oauth2TokenHeadersValue"
+          />
+        </div>
       </Stack>
     </div>
   );

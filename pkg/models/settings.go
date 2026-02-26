@@ -48,6 +48,7 @@ type OAuth2Settings struct {
 	AuthStyle      oauth2.AuthStyle `json:"authStyle,omitempty"`
 	AuthHeader     string           `json:"authHeader,omitempty"`
 	TokenTemplate  string           `json:"tokenTemplate,omitempty"`
+	TokenHeaders   map[string]string `json:"tokenHeaders,omitempty"`
 	ClientSecret   string
 	PrivateKey     string
 	EndpointParams map[string]string
@@ -370,6 +371,7 @@ func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings
 	settings.CustomHeaders = GetSecrets(config, "httpHeaderName", "httpHeaderValue")
 	settings.SecureQueryFields = GetSecrets(config, "secureQueryName", "secureQueryValue")
 	settings.OAuth2Settings.EndpointParams = GetSecrets(config, "oauth2EndPointParamsName", "oauth2EndPointParamsValue")
+	settings.OAuth2Settings.TokenHeaders = GetSecrets(config, "oauth2TokenHeadersName", "oauth2TokenHeadersValue")
 	if settings.AuthenticationMethod == "" {
 		settings.AuthenticationMethod = AuthenticationMethodNone
 		if settings.BasicAuthEnabled {
