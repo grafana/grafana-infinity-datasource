@@ -11,25 +11,39 @@ import (
 	"golang.org/x/oauth2/google"
 )
 
-func isGoogleWIFConfigured(settings models.InfinitySettings) bool {
-	return settings.AuthenticationMethod == models.AuthenticationMethodGoogleWIF
+func isOAuthExternalAccountConfigured(settings models.InfinitySettings) bool {
+	return settings.AuthenticationMethod == models.AuthenticationMethodOAuth &&
+		settings.OAuth2Settings.OAuth2Type == models.AuthOAuthExternalAccount
 }
 
-// applyGoogleWIF wraps the provided HTTP client with Google Workload Identity Federation
-// authentication. It accepts an external_account credentials JSON (the WIF credentials)
-// stored as a secure field and exchanges them for short-lived Google access tokens via
-// the Google STS token exchange endpoint (RFC 8693).
-func applyGoogleWIF(ctx context.Context, httpClient *http.Client, settings models.InfinitySettings) (*http.Client, error) {
-	_, span := tracing.DefaultTracer().Start(ctx, "ApplyGoogleWIF")
+// applyOAuthExternalAccount wraps the provided HTTP client with OAuth2 external account
+// token exchange (RFC 8693). It accepts an external_account credentials JSON stored as a
+// secure field and exchanges it for short-lived access tokens via the STS token exchange
+// endpoint declared inside the credentials JSON.
+//
+// The external_account format supports a wide range of external identity providers as the
+// upstream token source:
+//
+//   - Google Workload Identity Federation with any OIDC/SAML provider
+//   - AWS EC2/ECS instance credentials (credential_source.environment_id == "aws1")
+//   - GitHub Actions OIDC via URL credential source
+//   - Azure AD federated identity via URL credential source
+//   - Any OIDC/SAML provider that can produce a token accessible via URL or file
+//
+// The shape of the credentials JSON determines which external identity provider is used;
+// the Infinity plugin does not need to know the provider type in advance.
+func applyOAuthExternalAccount(ctx context.Context, httpClient *http.Client, settings models.InfinitySettings) (*http.Client, error) {
+	_, span := tracing.DefaultTracer().Start(ctx, "ApplyOAuthExternalAccount")
 	defer span.End()
-	if !isGoogleWIFConfigured(settings) {
+	if !isOAuthExternalAccountConfigured(settings) {
 		return httpClient, nil
 	}
-	credJSON := []byte(strings.TrimSpace(settings.GoogleWIFSettings.Credentials))
-	// Inject the base transport so that WIF token exchange requests also respect TLS/proxy settings.
+	credJSON := []byte(strings.TrimSpace(settings.OAuth2Settings.CredentialsJSON))
+	// Inject the base transport so that token exchange requests also respect TLS/proxy settings.
 	tokenCtx := context.WithValue(context.Background(), oauth2.HTTPClient, httpClient)
-	// Use ExternalAccount credential type to safely accept only WIF credentials.
-	creds, err := google.CredentialsFromJSONWithType(tokenCtx, credJSON, google.ExternalAccount, settings.GoogleWIFSettings.Scopes...)
+	// Use ExternalAccount type to enforce that only external_account credentials are accepted,
+	// rejecting service account keys and other credential types for security.
+	creds, err := google.CredentialsFromJSONWithType(tokenCtx, credJSON, google.ExternalAccount, settings.OAuth2Settings.Scopes...)
 	if err != nil {
 		return nil, err
 	}

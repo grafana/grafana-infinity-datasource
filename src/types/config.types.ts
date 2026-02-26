@@ -7,8 +7,8 @@ export interface GlobalInfinityQuery {
   id: string;
   query: InfinityQuery;
 }
-export type AuthType = 'none' | 'basicAuth' | 'apiKey' | 'bearerToken' | 'oauthPassThru' | 'digestAuth' | 'aws' | 'azureBlob' | 'oauth2' | 'googleWIF';
-export type OAuth2Type = 'client_credentials' | 'jwt' | 'others';
+export type AuthType = 'none' | 'basicAuth' | 'apiKey' | 'bearerToken' | 'oauthPassThru' | 'digestAuth' | 'aws' | 'azureBlob' | 'oauth2';
+export type OAuth2Type = 'client_credentials' | 'jwt' | 'external_account' | 'others';
 export type APIKeyType = 'header' | 'query';
 export type OAuth2Props = {
   oauth2_type?: OAuth2Type;
@@ -27,9 +27,6 @@ export type AWSAuthProps = {
   region?: string;
   service?: string;
 };
-export type GoogleWIFProps = {
-  scopes?: string[];
-};
 export type InfinityReferenceData = { name: string; data: string };
 export type ProxyType = 'none' | 'env' | 'url';
 export type UnsecureQueryHandling = 'warn' | 'allow' | 'deny';
@@ -40,7 +37,6 @@ export interface InfinityOptions extends DataSourceJsonData {
   apiKeyType?: APIKeyType;
   oauth2?: OAuth2Props;
   aws?: AWSAuthProps;
-  googleWIF?: GoogleWIFProps;
   tlsSkipVerify?: boolean;
   tlsAuth?: boolean;
   serverName?: string;
@@ -75,7 +71,7 @@ export interface InfinitySecureOptions {
   bearerToken?: string;
   awsAccessKey?: string;
   awsSecretKey?: string;
-  googleWIFCredentials?: string;
+  oauth2ExternalCredentials?: string;
   oauth2ClientSecret?: string;
   oauth2JWTPrivateKey?: string;
   azureBlobAccountKey?: string;

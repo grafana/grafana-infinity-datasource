@@ -1,6 +1,6 @@
 import { css } from '@emotion/css';
 import { onUpdateDatasourceSecureJsonDataOption, DataSourcePluginOptionsEditorProps, SelectableValue } from '@grafana/data';
-import { InlineFormLabel, Input, LegacyForms, LinkButton, RadioButtonGroup, Stack } from '@grafana/ui';
+import { InlineFormLabel, Input, LegacyForms, LinkButton, RadioButtonGroup, Stack, SecretTextArea } from '@grafana/ui';
 import React from 'react';
 import { Components } from '@/selectors';
 import { SecureFieldsEditor } from '@/components/config/SecureFieldsEditor';
@@ -9,6 +9,7 @@ import type { InfinityOptions, InfinitySecureOptions, OAuth2Props, OAuth2Type } 
 const oAuthTypes: Array<SelectableValue<OAuth2Type>> = [
   { value: 'client_credentials', label: 'Client Credentials' },
   { value: 'jwt', label: 'JWT' },
+  { value: 'external_account', label: 'External Account (WIF)' },
   { value: 'others', label: 'Others' },
 ];
 
@@ -173,6 +174,9 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
           <TokenCustomization options={options} onOptionsChange={onOptionsChange} />
         </>
       )}
+      {oauth2.oauth2_type === 'external_account' && (
+        <ExternalAccountEditor options={options} onOptionsChange={onOptionsChange} secureJsonFields={secureJsonFields} secureJsonData={secureJsonData} />
+      )}
       {oauth2.oauth2_type === 'others' && (
         <div style={{ margin: '15px', marginInline: '45px', textAlign: 'center' }}>
           <p>
@@ -219,5 +223,87 @@ const TokenCustomization = (props: DataSourcePluginOptionsEditorProps<InfinityOp
         </Stack>
       </Stack>
     </div>
+  );
+};
+
+type ExternalAccountEditorProps = {
+  options: DataSourcePluginOptionsEditorProps<InfinityOptions>['options'];
+  onOptionsChange: DataSourcePluginOptionsEditorProps<InfinityOptions>['onOptionsChange'];
+  secureJsonFields: DataSourcePluginOptionsEditorProps<InfinityOptions>['options']['secureJsonFields'];
+  secureJsonData: InfinitySecureOptions;
+};
+
+/**
+ * ExternalAccountEditor provides the UI for the OAuth2 "External Account" grant type.
+ *
+ * The external_account credentials JSON format supports multiple external identity providers
+ * as the upstream token source:
+ *
+ * - **Google Workload Identity Federation (any OIDC/SAML provider)**: configure a Workload
+ *   Identity Pool + Provider in Google Cloud and download the credentials JSON.
+ * - **AWS**: use an EC2/ECS instance's AWS credentials as the external token
+ *   (credential_source.environment_id == "aws1" in the JSON).
+ * - **GitHub Actions**: point the URL credential source at the GitHub OIDC endpoint to
+ *   exchange a GitHub Actions OIDC token for a Google access token.
+ * - **Azure AD / Entra ID**: point the URL credential source at the Azure OIDC endpoint.
+ * - **Any OIDC provider**: any provider that can produce a JWT accessible via a URL or file.
+ *
+ * The provider type is encoded in the credentials JSON itself; Infinity does not need
+ * separate configuration for each provider — one unified credential JSON is enough.
+ */
+const ExternalAccountEditor = ({ options, onOptionsChange, secureJsonFields, secureJsonData }: ExternalAccountEditorProps) => {
+  const oauth2: OAuth2Props = options?.jsonData?.oauth2 || {};
+  const onOAuth2PropsChange = <T extends keyof OAuth2Props, V extends OAuth2Props[T]>(key: T, value: V) => {
+    onOptionsChange({ ...options, jsonData: { ...options.jsonData, oauth2: { ...oauth2, [key]: value } } });
+  };
+  const onResetExternalCredentials = () => {
+    onOptionsChange({
+      ...options,
+      secureJsonFields: { ...options.secureJsonFields, oauth2ExternalCredentials: false },
+      secureJsonData: { ...options.secureJsonData, oauth2ExternalCredentials: '' },
+    });
+  };
+  return (
+    <Stack direction={'column'} gap={1}>
+      <div className="gf-form">
+        <InlineFormLabel
+          width={12}
+          tooltip={
+            <>
+              Paste the <strong>external_account</strong> credentials JSON here. This file is typically downloaded from your identity provider (e.g. Google Cloud → IAM &amp; Admin → Workload Identity Federation → Download configuration).
+              <br />
+              <br />
+              Supported external identity providers: Google WIF (OIDC/SAML), AWS EC2/ECS, GitHub Actions OIDC, Azure AD federated identity, and any OIDC/SAML provider.
+            </>
+          }
+          {...{ interactive: true }}
+        >
+          Credentials JSON
+        </InlineFormLabel>
+        <SecretTextArea
+          rows={8}
+          cols={50}
+          aria-label="oauth2 external account credentials json"
+          placeholder={`{\n  "type": "external_account",\n  "audience": "//iam.googleapis.com/...",\n  "subject_token_type": "urn:ietf:params:oauth:token-type:jwt",\n  "token_url": "https://sts.googleapis.com/v1/token",\n  "credential_source": { ... }\n}`}
+          isConfigured={(secureJsonFields && secureJsonFields.oauth2ExternalCredentials) as boolean}
+          onChange={onUpdateDatasourceSecureJsonDataOption({ options, onOptionsChange } as DataSourcePluginOptionsEditorProps<InfinityOptions>, 'oauth2ExternalCredentials')}
+          onReset={onResetExternalCredentials}
+        />
+      </div>
+      <div className="gf-form">
+        <InlineFormLabel
+          width={12}
+          tooltip="Comma-separated list of OAuth2 scopes to request. For Google APIs, this is typically 'https://www.googleapis.com/auth/cloud-platform'."
+        >
+          Scopes
+        </InlineFormLabel>
+        <Input
+          onChange={(v) => onOAuth2PropsChange('scopes', (v.currentTarget.value || '').split(',').map((s) => s.trim()).filter(Boolean))}
+          value={(oauth2.scopes || []).join(', ')}
+          width={50}
+          placeholder={'https://www.googleapis.com/auth/cloud-platform'}
+        />
+      </div>
+    </Stack>
   );
 };

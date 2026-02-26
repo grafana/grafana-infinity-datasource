@@ -34,10 +34,10 @@ Infinity data source supports the following authentication methods:
 - OAuth passthrough
 - OAuth 2.0 client credentials
 - OAuth 2.0 JWT authentication
+- OAuth 2.0 External Account (Workload Identity Federation — Google, AWS, GitHub, Azure, and any OIDC/SAML provider)
 - Azure authentication
 - Azure blob
 - AWS authentication
-- Google Workload Identity Federation (WIF)
 
 ## No authentication
 
@@ -140,41 +140,56 @@ To retrieve content from Azure blob storage, you need to provide the following i
 
 If you want to authenticate your API endpoints via Amazon AWS authentication, refer to [AWS authentication](/docs/plugins/yesoreyeram-infinity-datasource/latest/examples/aws/).
 
-## Google Workload Identity Federation (WIF)
+## OAuth2 External Account (Workload Identity Federation)
 
-Google Workload Identity Federation (WIF) lets applications running outside of Google Cloud (for example, Grafana running on-premises or in another cloud) access Google Cloud APIs without using long-lived service account keys.
+The **External Account** OAuth2 grant type lets any workload running outside a Google Cloud project access Google Cloud APIs without using long-lived service account keys. It implements the [RFC 8693 OAuth 2.0 Token Exchange](https://datatracker.ietf.org/doc/html/rfc8693) specification: the workload presents a short-lived *external* identity token to the Google Security Token Service (STS), which returns a short-lived Google access token.
 
-Instead of a static key, the workload presents an external identity token (such as a Kubernetes Service Account token, a GitHub Actions OIDC token, or any OIDC/SAML assertion) to the Google Security Token Service (STS), which returns a short-lived Google access token. Optionally, that token can be further exchanged for a service account access token via service account impersonation.
+### Why "External Account" instead of "Google WIF"?
 
-### How it works
+The credentials JSON format (`"type": "external_account"`) already describes *all* the information required for the token exchange — which external identity provider to use, where to retrieve the external token, and which STS endpoint to use. Infinity therefore does not need a separate configuration section per provider. You pick **OAuth2 → External Account**, paste the credentials JSON, and it works regardless of which external identity source is configured inside that JSON.
 
-1. You configure a **Workload Identity Pool** and **Provider** in Google Cloud IAM that trusts your external identity source.
-2. You download the **external account credentials JSON** for the pool provider from the Google Cloud Console.
-3. You paste that JSON into the **Credentials JSON** field in the Infinity datasource configuration.
-4. On every request, Infinity exchanges your external token for a short-lived Google access token via `https://sts.googleapis.com/v1/token` and sets it as a `Bearer` token on outgoing requests.
+### Supported external identity providers
+
+| External identity source | How the external token is obtained | Notes |
+|--------------------------|-------------------------------------|-------|
+| **Google Workload Identity Federation** (OIDC/SAML providers) | URL or file credential source containing a JWT from any OIDC/SAML provider (Okta, Ping, etc.) | Most common use case for on-prem or multi-cloud Grafana |
+| **GitHub Actions** | URL credential source pointing at the GitHub OIDC endpoint (`ACTIONS_ID_TOKEN_REQUEST_URL`) | Allows GitHub CI pipelines to query Google APIs without storing keys |
+| **AWS EC2 / ECS** | AWS SigV4-signed `GetCallerIdentity` request — `"environment_id": "aws1"` in the JSON | Cross-cloud: an AWS workload obtains Google access tokens |
+| **Azure AD / Entra ID federated identity** | URL credential source pointing at the Azure AD OIDC token endpoint | Cross-cloud: an Azure workload obtains Google access tokens |
+| **Kubernetes Service Accounts** | File credential source reading a projected volume token | Useful for Kubernetes-native Grafana deployments |
+| **Any OIDC/SAML provider** | URL or file credential source | The provider must issue a JWT or SAML assertion |
+
+### Scope and fields mapping
+
+| UI field | Stored as | Backend field | Description |
+|----------|-----------|---------------|-------------|
+| **Credentials JSON** | `oauth2ExternalCredentials` (secure) | `OAuth2Settings.CredentialsJSON` | The full `external_account` JSON file downloaded from the identity provider |
+| **Scopes** | `oauth2.scopes` (JSON) | `OAuth2Settings.Scopes` | OAuth2 scopes passed to `CredentialsFromJSONWithType` alongside the credentials JSON. For Google APIs, use `https://www.googleapis.com/auth/cloud-platform`. |
+
+The `credential_source` section inside the credentials JSON tells the library *where* to read the external identity token from (URL, file path, or AWS metadata endpoint). Infinity does not control that part — it is embedded in the credentials JSON you provide.
 
 ### Required parameters
 
-| Field                | Description                                                                                                                                                                                    |
-| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Credentials JSON** | (Secure) The `external_account` credentials JSON file downloaded from the Google Cloud Console for your Workload Identity Pool provider. Only `external_account` credential type is accepted. |
-| **Scopes**           | Comma-separated list of OAuth2 scopes to request. For example: `https://www.googleapis.com/auth/cloud-platform`.                                                                               |
+| Field                | Description |
+| -------------------- | ----------- |
+| **Credentials JSON** | (Secure) The `external_account` credentials JSON file downloaded from the identity provider. Only the `external_account` credential type is accepted; service account keys and other types are rejected for security. |
+| **Scopes**           | Comma-separated OAuth2 scopes to request. For example: `https://www.googleapis.com/auth/cloud-platform`. |
 
-### How to set up Google WIF for Infinity
+### How to set up (Google WIF example)
 
 1. In Google Cloud Console, navigate to **IAM & Admin → Workload Identity Federation**.
-2. Create a **Workload Identity Pool** and a **Provider** that matches your Grafana deployment's identity source (OIDC, AWS, Azure, etc.).
-3. Grant the pool (or a mapped service account) the IAM roles required to call your target Google API (for example, **BigQuery Data Viewer** for BigQuery).
-4. On the **Provider** page, click **Download configuration** to get the `external_account` credentials JSON file.
-5. In Grafana, open the Infinity datasource configuration, select **Google WIF** as the authentication method, and paste the downloaded JSON into the **Credentials JSON** field.
-6. Add the required OAuth2 scopes (for example `https://www.googleapis.com/auth/bigquery.readonly`) and save.
+2. Create a **Workload Identity Pool** and a **Provider** that trusts your external identity source (OIDC endpoint, GitHub OIDC, AWS, etc.).
+3. Grant the pool (or a mapped service account) the IAM roles needed to call your target Google API (for example, **BigQuery Data Viewer** for BigQuery).
+4. On the **Provider** page, click **Download configuration** to obtain the `external_account` credentials JSON file.
+5. In Grafana, open the Infinity datasource configuration, select **OAuth2** as the authentication method, then select **External Account (WIF)** as the grant type.
+6. Paste the downloaded JSON into the **Credentials JSON** field, add the required scopes, and save.
 
 {{< admonition type="note" >}}
-The credentials JSON must be of type `external_account`. Service account keys and other credential types are rejected for security reasons.
+The credentials JSON must be of type `external_account`. Service account keys (`service_account` type) and other credential types are rejected at configuration time for security reasons.
 {{< /admonition >}}
 
 {{< admonition type="tip" >}}
-If your target API returns 403 errors after authentication succeeds, verify that the IAM bindings on the Workload Identity Pool (or the impersonated service account) include the required Google Cloud roles.
+If your target Google API returns 403 errors after authentication succeeds, verify that the IAM bindings on the Workload Identity Pool (or the impersonated service account) include the necessary Google Cloud roles.
 {{< /admonition >}}
 
 ## Private data source connect (PDC)

@@ -24,7 +24,7 @@ var (
 	ErrInvalidConfigAWSAccessKey        error = errors.New("invalid/empty AWS access key")
 	ErrInvalidConfigAWSSecretKey        error = errors.New("invalid/empty AWS secret key")
 	ErrInvalidConfigHostNotAllowed      error = errors.New("requested URL not allowed. To allow this URL, update the data source config in the Security tab, Allowed hosts section")
-	ErrInvalidConfigGoogleWIFCredentials error = errors.New("invalid or empty Google Workload Identity Federation credentials")
+	ErrInvalidConfigOAuth2ExternalCredentials error = errors.New("invalid or empty OAuth2 external account credentials JSON")
 )
 
 var (

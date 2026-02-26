@@ -39,33 +39,59 @@ func TestLoadSettings(t *testing.T) {
 			},
 		},
 		{
-			name: "google WIF settings should load correctly",
+			name: "external_account (legacy googleWIF) settings should migrate and load correctly",
 			config: backend.DataSourceInstanceSettings{
 				JSONData: []byte(`{
-					"auth_method": "googleWIF",
-					"googleWIF": {
-						"scopes": ["https://www.googleapis.com/auth/cloud-platform"]
-					}
+					"auth_method": "googleWIF"
 				}`),
 				DecryptedSecureJSONData: map[string]string{
 					"googleWIFCredentials": `{"type":"external_account","audience":"//iam.googleapis.com/projects/123/locations/global/workloadIdentityPools/pool/providers/provider"}`,
 				},
 			},
 			wantSettings: models.InfinitySettings{
-				AuthenticationMethod: models.AuthenticationMethodGoogleWIF,
-				GoogleWIFSettings: models.GoogleWIFSettings{
-					Scopes:      []string{"https://www.googleapis.com/auth/cloud-platform"},
-					Credentials: `{"type":"external_account","audience":"//iam.googleapis.com/projects/123/locations/global/workloadIdentityPools/pool/providers/provider"}`,
+				// googleWIF is migrated to oauth2 + external_account at load time.
+				AuthenticationMethod: models.AuthenticationMethodOAuth,
+				OAuth2Settings: models.OAuth2Settings{
+					OAuth2Type:      models.AuthOAuthExternalAccount,
+					CredentialsJSON: `{"type":"external_account","audience":"//iam.googleapis.com/projects/123/locations/global/workloadIdentityPools/pool/providers/provider"}`,
+					EndpointParams:  map[string]string{},
 				},
 				TimeoutInSeconds:       60,
 				ApiKeyType:             "header",
 				ProxyType:              models.ProxyTypeEnv,
 				UnsecuredQueryHandling: models.UnsecuredQueryHandlingWarn,
-				OAuth2Settings: models.OAuth2Settings{
-					EndpointParams: map[string]string{},
+				CustomHeaders:          map[string]string{},
+				SecureQueryFields:      map[string]string{},
+			},
+		},
+		{
+			name: "external_account oauth2 type should load correctly from new secure field",
+			config: backend.DataSourceInstanceSettings{
+				JSONData: []byte(`{
+					"auth_method": "oauth2",
+					"oauth2": {
+						"oauth2_type": "external_account",
+						"scopes": ["https://www.googleapis.com/auth/cloud-platform"]
+					}
+				}`),
+				DecryptedSecureJSONData: map[string]string{
+					"oauth2ExternalCredentials": `{"type":"external_account","audience":"//iam.googleapis.com/projects/123/locations/global/workloadIdentityPools/pool/providers/provider"}`,
 				},
-				CustomHeaders:     map[string]string{},
-				SecureQueryFields: map[string]string{},
+			},
+			wantSettings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodOAuth,
+				OAuth2Settings: models.OAuth2Settings{
+					OAuth2Type:      models.AuthOAuthExternalAccount,
+					Scopes:          []string{"https://www.googleapis.com/auth/cloud-platform"},
+					CredentialsJSON: `{"type":"external_account","audience":"//iam.googleapis.com/projects/123/locations/global/workloadIdentityPools/pool/providers/provider"}`,
+					EndpointParams:  map[string]string{},
+				},
+				TimeoutInSeconds:       60,
+				ApiKeyType:             "header",
+				ProxyType:              models.ProxyTypeEnv,
+				UnsecuredQueryHandling: models.UnsecuredQueryHandlingWarn,
+				CustomHeaders:          map[string]string{},
+				SecureQueryFields:      map[string]string{},
 			},
 		},
 		{
@@ -424,26 +450,36 @@ func TestInfinitySettings_Validate(t *testing.T) {
 			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodBearerToken, BearerToken: "foo"},
 			wantErr:  models.ErrInvalidConfigHostNotAllowed,
 		},
-		// Google Workload Identity Federation
+		// OAuth2 External Account (Workload Identity Federation / external token exchange)
 		{
-			name:     "googleWIF without credentials should fail",
-			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodGoogleWIF},
-			wantErr:  models.ErrInvalidConfigGoogleWIFCredentials,
+			name:     "oauth2 external_account without credentials should fail",
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodOAuth, OAuth2Settings: models.OAuth2Settings{OAuth2Type: models.AuthOAuthExternalAccount}},
+			wantErr:  models.ErrInvalidConfigOAuth2ExternalCredentials,
 		},
 		{
-			name:     "googleWIF with empty credentials should fail",
-			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodGoogleWIF, GoogleWIFSettings: models.GoogleWIFSettings{Credentials: "  "}},
-			wantErr:  models.ErrInvalidConfigGoogleWIFCredentials,
+			name:     "oauth2 external_account with empty credentials should fail",
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodOAuth, OAuth2Settings: models.OAuth2Settings{OAuth2Type: models.AuthOAuthExternalAccount, CredentialsJSON: "  "}},
+			wantErr:  models.ErrInvalidConfigOAuth2ExternalCredentials,
 		},
 		{
-			name:     "googleWIF with credentials should pass validation",
-			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodGoogleWIF, GoogleWIFSettings: models.GoogleWIFSettings{Credentials: `{"type":"external_account"}`}},
+			name:     "oauth2 external_account with invalid JSON should fail",
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodOAuth, OAuth2Settings: models.OAuth2Settings{OAuth2Type: models.AuthOAuthExternalAccount, CredentialsJSON: `not-json`}},
+			wantErr:  models.ErrInvalidConfigOAuth2ExternalCredentials,
 		},
 		{
-			name: "googleWIF with credentials and allowed hosts should pass",
+			name:     "oauth2 external_account with wrong credential type should fail",
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodOAuth, OAuth2Settings: models.OAuth2Settings{OAuth2Type: models.AuthOAuthExternalAccount, CredentialsJSON: `{"type":"service_account"}`}},
+			wantErr:  models.ErrInvalidConfigOAuth2ExternalCredentials,
+		},
+		{
+			name:     "oauth2 external_account with valid credentials JSON should pass validation",
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodOAuth, OAuth2Settings: models.OAuth2Settings{OAuth2Type: models.AuthOAuthExternalAccount, CredentialsJSON: `{"type":"external_account"}`}},
+		},
+		{
+			name: "oauth2 external_account with credentials and allowed hosts should pass",
 			settings: models.InfinitySettings{
-				AuthenticationMethod: models.AuthenticationMethodGoogleWIF,
-				GoogleWIFSettings:    models.GoogleWIFSettings{Credentials: `{"type":"external_account"}`},
+				AuthenticationMethod: models.AuthenticationMethodOAuth,
+				OAuth2Settings:       models.OAuth2Settings{OAuth2Type: models.AuthOAuthExternalAccount, CredentialsJSON: `{"type":"external_account"}`},
 				AllowedHosts:         []string{"https://bigquery.googleapis.com"},
 			},
 		},

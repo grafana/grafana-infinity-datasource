@@ -44,7 +44,7 @@ func GetHTTPClient(ctx context.Context, settings models.InfinitySettings) (*http
 	if err != nil {
 		return httpClient, errors.Join(models.ErrCreatingHTTPClient, err)
 	}
-	httpClient, err = applyGoogleWIF(ctx, httpClient, settings)
+	httpClient, err = applyOAuthExternalAccount(ctx, httpClient, settings)
 	if err != nil {
 		return httpClient, errors.Join(models.ErrCreatingHTTPClient, err)
 	}
@@ -222,14 +222,12 @@ func applySecureSocksProxyConfiguration(ctx context.Context, httpClient *http.Cl
 	if isDigestAuthConfigured(settings) {
 		// if we are using Digest, the Transport is 'digest.Transport' that wraps 'http.Transport'
 		t = t.(*digest.Transport).Transport
-	} else if isOAuthCredentialsConfigured(settings) || isOAuthJWTConfigured(settings) {
+	} else if isOAuthCredentialsConfigured(settings) || isOAuthJWTConfigured(settings) || isOAuthExternalAccountConfigured(settings) {
 		if cht, ok := t.(*oauth2CustomTokenTransport); ok {
 			t = cht.Transport.(*oauth2.Transport).Base
 		} else {
 			t = t.(*oauth2.Transport).Base
 		}
-	} else if isGoogleWIFConfigured(settings) {
-		t = t.(*oauth2.Transport).Base
 	}
 	// secure socks proxy configuration - checks if enabled inside the function
 	err := proxy.New(settings.ProxyOpts.ProxyOptions).ConfigureSecureSocksHTTPProxy(t.(*http.Transport))

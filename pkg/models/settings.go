@@ -24,12 +24,12 @@ const (
 	AuthenticationMethodOAuth        = "oauth2"
 	AuthenticationMethodAWS          = "aws"
 	AuthenticationMethodAzureBlob    = "azureBlob"
-	AuthenticationMethodGoogleWIF    = "googleWIF"
 )
 
 const (
 	AuthOAuthTypeClientCredentials = "client_credentials"
 	AuthOAuthJWT                   = "jwt"
+	AuthOAuthExternalAccount       = "external_account"
 	AuthOAuthOthers                = "others"
 )
 
@@ -51,7 +51,10 @@ type OAuth2Settings struct {
 	TokenTemplate  string           `json:"tokenTemplate,omitempty"`
 	ClientSecret   string
 	PrivateKey     string
-	EndpointParams map[string]string
+	// CredentialsJSON holds the full external_account credentials JSON used for
+	// OAuth2 token exchange (RFC 8693). Stored as a secure field.
+	CredentialsJSON string
+	EndpointParams  map[string]string
 }
 
 type AWSAuthType string
@@ -64,16 +67,6 @@ type AWSSettings struct {
 	AuthType AWSAuthType `json:"authType"`
 	Region   string      `json:"region"`
 	Service  string      `json:"service"`
-}
-
-// GoogleWIFSettings contains the settings for Google Workload Identity Federation authentication.
-// WIF allows workloads running outside Google Cloud to exchange credentials for short-lived
-// Google Cloud access tokens using the OAuth 2.0 token exchange (RFC 8693).
-type GoogleWIFSettings struct {
-	// Scopes specifies the OAuth2 scopes to request (e.g. "https://www.googleapis.com/auth/cloud-platform")
-	Scopes []string `json:"scopes,omitempty"`
-	// Credentials holds the external account JSON credentials (stored as secure field)
-	Credentials string
 }
 
 type ProxyType string
@@ -105,7 +98,6 @@ type InfinitySettings struct {
 	AWSSettings               AWSSettings
 	AWSAccessKey              string
 	AWSSecretKey              string
-	GoogleWIFSettings         GoogleWIFSettings
 	URL                       string
 	BasicAuthEnabled          bool
 	UserName                  string
@@ -171,9 +163,20 @@ func (s *InfinitySettings) Validate() error {
 		}
 		return nil
 	}
-	if s.AuthenticationMethod == AuthenticationMethodGoogleWIF {
-		if strings.TrimSpace(s.GoogleWIFSettings.Credentials) == "" {
-			return ErrInvalidConfigGoogleWIFCredentials
+	if s.AuthenticationMethod == AuthenticationMethodOAuth && s.OAuth2Settings.OAuth2Type == AuthOAuthExternalAccount {
+		if strings.TrimSpace(s.OAuth2Settings.CredentialsJSON) == "" {
+			return ErrInvalidConfigOAuth2ExternalCredentials
+		}
+		// Validate that the JSON is parseable and declares the required external_account type.
+		// This surfaces mis-configuration at datasource save time rather than at query time.
+		var credType struct {
+			Type string `json:"type"`
+		}
+		if err := json.Unmarshal([]byte(strings.TrimSpace(s.OAuth2Settings.CredentialsJSON)), &credType); err != nil {
+			return ErrInvalidConfigOAuth2ExternalCredentials
+		}
+		if credType.Type != AuthOAuthExternalAccount {
+			return ErrInvalidConfigOAuth2ExternalCredentials
 		}
 		return nil
 	}
@@ -189,7 +192,7 @@ func (s *InfinitySettings) DoesAllowedHostsRequired() bool {
 		return false
 	}
 	// If there is specific authentication mechanism (except none and azure blob), then allowed hosts required
-	if s.AuthenticationMethod != "" && s.AuthenticationMethod != AuthenticationMethodNone && s.AuthenticationMethod != AuthenticationMethodAzureBlob && s.AuthenticationMethod != AuthenticationMethodGoogleWIF {
+	if s.AuthenticationMethod != "" && s.AuthenticationMethod != AuthenticationMethodNone && s.AuthenticationMethod != AuthenticationMethodAzureBlob {
 		return true
 	}
 	// If there are any TLS specific settings enabled, then allowed hosts required
@@ -258,14 +261,13 @@ type RefData struct {
 }
 
 type InfinitySettingsJson struct {
-	IsMock                    bool              `json:"is_mock,omitempty"`
-	AuthenticationMethod      string            `json:"auth_method,omitempty"`
-	APIKeyKey                 string            `json:"apiKeyKey,omitempty"`
-	APIKeyType                string            `json:"apiKeyType,omitempty"`
-	OAuth2Settings            OAuth2Settings    `json:"oauth2,omitempty"`
-	AWSSettings               AWSSettings       `json:"aws,omitempty"`
-	GoogleWIFSettings         GoogleWIFSettings `json:"googleWIF,omitempty"`
-	ForwardOauthIdentity      bool              `json:"oauthPassThru,omitempty"`
+	IsMock               bool           `json:"is_mock,omitempty"`
+	AuthenticationMethod string         `json:"auth_method,omitempty"`
+	APIKeyKey            string         `json:"apiKeyKey,omitempty"`
+	APIKeyType           string         `json:"apiKeyType,omitempty"`
+	OAuth2Settings       OAuth2Settings `json:"oauth2,omitempty"`
+	AWSSettings          AWSSettings    `json:"aws,omitempty"`
+	ForwardOauthIdentity bool           `json:"oauthPassThru,omitempty"`
 	InsecureSkipVerify        bool              `json:"tlsSkipVerify,omitempty"`
 	ServerName                string            `json:"serverName,omitempty"`
 	TLSClientAuth             bool              `json:"tlsAuth,omitempty"`
@@ -312,7 +314,6 @@ func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings
 		settings.ApiKeyKey = infJson.APIKeyKey
 		settings.ApiKeyType = infJson.APIKeyType
 		settings.AWSSettings = infJson.AWSSettings
-		settings.GoogleWIFSettings = infJson.GoogleWIFSettings
 		if settings.ApiKeyType == "" {
 			settings.ApiKeyType = "header"
 		}
@@ -381,8 +382,12 @@ func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings
 	if val, ok := config.DecryptedSecureJSONData["awsSecretKey"]; ok {
 		settings.AWSSecretKey = val
 	}
-	if val, ok := config.DecryptedSecureJSONData["googleWIFCredentials"]; ok {
-		settings.GoogleWIFSettings.Credentials = val
+	// oauth2ExternalCredentials holds the external_account JSON for OAuth2 token exchange (RFC 8693).
+	// Also accept the legacy googleWIFCredentials key for backward compatibility.
+	if val, ok := config.DecryptedSecureJSONData["oauth2ExternalCredentials"]; ok {
+		settings.OAuth2Settings.CredentialsJSON = val
+	} else if val, ok := config.DecryptedSecureJSONData["googleWIFCredentials"]; ok {
+		settings.OAuth2Settings.CredentialsJSON = val
 	}
 	if val, ok := config.DecryptedSecureJSONData["azureBlobAccountKey"]; ok {
 		settings.AzureBlobAccountKey = val
@@ -401,6 +406,11 @@ func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings
 		if settings.ForwardOauthIdentity {
 			settings.AuthenticationMethod = AuthenticationMethodForwardOauth
 		}
+	}
+	// Backward compatibility: migrate legacy "googleWIF" auth method to oauth2 + external_account.
+	if settings.AuthenticationMethod == "googleWIF" {
+		settings.AuthenticationMethod = AuthenticationMethodOAuth
+		settings.OAuth2Settings.OAuth2Type = AuthOAuthExternalAccount
 	}
 	if settings.AuthenticationMethod == AuthenticationMethodAzureBlob {
 		if settings.AzureBlobCloudType == "" {
