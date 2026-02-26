@@ -93,7 +93,7 @@ func TestOAuth2TokenHeaders(t *testing.T) {
 			resp, err := httpClient.Do(req)
 			require.NoError(t, err)
 			require.NotNil(t, resp)
-			defer resp.Body.Close()
+			defer func() { _ = resp.Body.Close() }()
 			_, _ = io.ReadAll(resp.Body)
 
 			// Verify the captured headers from token request

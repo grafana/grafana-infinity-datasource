@@ -25,13 +25,14 @@ type tokenHeadersTransport struct {
 }
 
 func (t *tokenHeadersTransport) RoundTrip(req *http.Request) (*http.Response, error) {
+	newReq := req.Clone(req.Context())
 	// Apply custom headers only if they're not already set
 	for key, value := range t.headers {
-		if req.Header.Get(key) == "" {
-			req.Header.Set(key, value)
+		if newReq.Header.Get(key) == "" {
+			newReq.Header.Set(key, value)
 		}
 	}
-	return t.base.RoundTrip(req)
+	return t.base.RoundTrip(newReq)
 }
 
 // getOAuthTokenClient returns an HTTP client with custom header middleware
