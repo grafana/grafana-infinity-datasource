@@ -4,6 +4,7 @@ import { Icon, InlineFormLabel, LegacyForms, RadioButtonGroup, Combobox, Grid, L
 import React, { useState } from 'react';
 import { AllowedHostsEditor } from '@/editors/config/AllowedHosts';
 import { AzureBlobAuthEditor } from '@/editors/config/Auth.AzureBlob';
+import { GoogleWIFAuthEditor } from '@/editors/config/Auth.GoogleWIF';
 import { OAuthInputsEditor } from './../../editors/config/OAuthInput';
 import { OthersAuthentication } from '@/editors/config/OtherAuthProviders';
 import { AWSRegions } from '@/constants';
@@ -19,6 +20,7 @@ const authTypes: Array<SelectableValue<AuthType | 'others'> & { logo?: string }>
   { value: 'oauth2', label: 'OAuth2', logo: '/public/plugins/yesoreyeram-infinity-datasource/img/oauth-2-sm.png' },
   { value: 'aws', label: 'AWS', logo: '/public/plugins/yesoreyeram-infinity-datasource/img/aws.jpg' },
   { value: 'azureBlob', label: 'Azure Blob' },
+  { value: 'googleWIF', label: 'Google WIF' },
   { value: 'others', label: 'Other Auth Providers' },
 ];
 
@@ -79,6 +81,7 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
       case 'aws':
       case 'azureBlob':
       case 'oauth2':
+      case 'googleWIF':
       case 'none':
       default:
         onOptionsChange({ ...options, basicAuth: false, jsonData: { ...options.jsonData, oauthPassThru: false, auth_method: authMethod } });
@@ -275,10 +278,11 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
             )}
             {authType === 'oauth2' && <OAuthInputsEditor {...props} />}
             {authType === 'azureBlob' && <AzureBlobAuthEditor {...props} onResetSecret={onResetSecret} />}
+            {authType === 'googleWIF' && <GoogleWIFAuthEditor {...props} onResetSecret={onResetSecret} />}
           </div>
         </>
       )}
-      {authType !== 'none' && authType !== 'azureBlob' && !othersOpen && (
+      {authType !== 'none' && authType !== 'azureBlob' && authType !== 'googleWIF' && !othersOpen && (
         <>
           <h5 className={styles.subheading}>Allowed hosts</h5>
           <AllowedHostsEditor options={options} onOptionsChange={onOptionsChange} />

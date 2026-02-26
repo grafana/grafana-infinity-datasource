@@ -15,15 +15,16 @@ var (
 )
 
 var (
-	ErrInvalidConfig               error = errors.New("invalid settings")
-	ErrInvalidConfigPassword       error = errors.New("invalid or empty password detected")
-	ErrInvalidConfigAPIKey         error = errors.New("invalid API key specified")
-	ErrInvalidConfigBearerToken    error = errors.New("invalid or empty bearer token detected")
-	ErrInvalidConfigAzBlobAccName  error = errors.New("invalid/empty azure blob account name")
-	ErrInvalidConfigAzBlobKey      error = errors.New("invalid/empty azure blob key")
-	ErrInvalidConfigAWSAccessKey   error = errors.New("invalid/empty AWS access key")
-	ErrInvalidConfigAWSSecretKey   error = errors.New("invalid/empty AWS secret key")
-	ErrInvalidConfigHostNotAllowed error = errors.New("requested URL not allowed. To allow this URL, update the data source config in the Security tab, Allowed hosts section")
+	ErrInvalidConfig                    error = errors.New("invalid settings")
+	ErrInvalidConfigPassword            error = errors.New("invalid or empty password detected")
+	ErrInvalidConfigAPIKey              error = errors.New("invalid API key specified")
+	ErrInvalidConfigBearerToken         error = errors.New("invalid or empty bearer token detected")
+	ErrInvalidConfigAzBlobAccName       error = errors.New("invalid/empty azure blob account name")
+	ErrInvalidConfigAzBlobKey           error = errors.New("invalid/empty azure blob key")
+	ErrInvalidConfigAWSAccessKey        error = errors.New("invalid/empty AWS access key")
+	ErrInvalidConfigAWSSecretKey        error = errors.New("invalid/empty AWS secret key")
+	ErrInvalidConfigHostNotAllowed      error = errors.New("requested URL not allowed. To allow this URL, update the data source config in the Security tab, Allowed hosts section")
+	ErrInvalidConfigGoogleWIFCredentials error = errors.New("invalid or empty Google Workload Identity Federation credentials")
 )
 
 var (

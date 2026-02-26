@@ -24,6 +24,7 @@ const (
 	AuthenticationMethodOAuth        = "oauth2"
 	AuthenticationMethodAWS          = "aws"
 	AuthenticationMethodAzureBlob    = "azureBlob"
+	AuthenticationMethodGoogleWIF    = "googleWIF"
 )
 
 const (
@@ -65,6 +66,16 @@ type AWSSettings struct {
 	Service  string      `json:"service"`
 }
 
+// GoogleWIFSettings contains the settings for Google Workload Identity Federation authentication.
+// WIF allows workloads running outside Google Cloud to exchange credentials for short-lived
+// Google Cloud access tokens using the OAuth 2.0 token exchange (RFC 8693).
+type GoogleWIFSettings struct {
+	// Scopes specifies the OAuth2 scopes to request (e.g. "https://www.googleapis.com/auth/cloud-platform")
+	Scopes []string `json:"scopes,omitempty"`
+	// Credentials holds the external account JSON credentials (stored as secure field)
+	Credentials string
+}
+
 type ProxyType string
 
 const (
@@ -94,6 +105,7 @@ type InfinitySettings struct {
 	AWSSettings               AWSSettings
 	AWSAccessKey              string
 	AWSSecretKey              string
+	GoogleWIFSettings         GoogleWIFSettings
 	URL                       string
 	BasicAuthEnabled          bool
 	UserName                  string
@@ -159,6 +171,12 @@ func (s *InfinitySettings) Validate() error {
 		}
 		return nil
 	}
+	if s.AuthenticationMethod == AuthenticationMethodGoogleWIF {
+		if strings.TrimSpace(s.GoogleWIFSettings.Credentials) == "" {
+			return ErrInvalidConfigGoogleWIFCredentials
+		}
+		return nil
+	}
 	if s.DoesAllowedHostsRequired() && len(s.AllowedHosts) < 1 {
 		return ErrInvalidConfigHostNotAllowed
 	}
@@ -171,7 +189,7 @@ func (s *InfinitySettings) DoesAllowedHostsRequired() bool {
 		return false
 	}
 	// If there is specific authentication mechanism (except none and azure blob), then allowed hosts required
-	if s.AuthenticationMethod != "" && s.AuthenticationMethod != AuthenticationMethodNone && s.AuthenticationMethod != AuthenticationMethodAzureBlob {
+	if s.AuthenticationMethod != "" && s.AuthenticationMethod != AuthenticationMethodNone && s.AuthenticationMethod != AuthenticationMethodAzureBlob && s.AuthenticationMethod != AuthenticationMethodGoogleWIF {
 		return true
 	}
 	// If there are any TLS specific settings enabled, then allowed hosts required
@@ -240,30 +258,31 @@ type RefData struct {
 }
 
 type InfinitySettingsJson struct {
-	IsMock                    bool           `json:"is_mock,omitempty"`
-	AuthenticationMethod      string         `json:"auth_method,omitempty"`
-	APIKeyKey                 string         `json:"apiKeyKey,omitempty"`
-	APIKeyType                string         `json:"apiKeyType,omitempty"`
-	OAuth2Settings            OAuth2Settings `json:"oauth2,omitempty"`
-	AWSSettings               AWSSettings    `json:"aws,omitempty"`
-	ForwardOauthIdentity      bool           `json:"oauthPassThru,omitempty"`
-	InsecureSkipVerify        bool           `json:"tlsSkipVerify,omitempty"`
-	ServerName                string         `json:"serverName,omitempty"`
-	TLSClientAuth             bool           `json:"tlsAuth,omitempty"`
-	TLSAuthWithCACert         bool           `json:"tlsAuthWithCACert,omitempty"`
-	TimeoutInSeconds          int64          `json:"timeoutInSeconds,omitempty"`
-	ProxyType                 ProxyType      `json:"proxy_type,omitempty"`
-	ProxyUrl                  string         `json:"proxy_url,omitempty"`
-	ProxyUserName             string         `json:"proxy_username,omitempty"`
-	ReferenceData             []RefData      `json:"refData,omitempty"`
-	CustomHealthCheckEnabled  bool           `json:"customHealthCheckEnabled,omitempty"`
-	CustomHealthCheckUrl      string         `json:"customHealthCheckUrl,omitempty"`
-	AzureBlobCloudType        string         `json:"azureBlobCloudType,omitempty"`
-	AzureBlobAccountUrl       string         `json:"azureBlobAccountUrl,omitempty"`
-	AzureBlobAccountName      string         `json:"azureBlobAccountName,omitempty"`
-	PathEncodedURLsEnabled    bool           `json:"pathEncodedUrlsEnabled,omitempty"`
-	IgnoreStatusCodeCheck     bool           `json:"ignoreStatusCodeCheck,omitempty"`
-	AllowDangerousHTTPMethods bool           `json:"allowDangerousHTTPMethods,omitempty"`
+	IsMock                    bool              `json:"is_mock,omitempty"`
+	AuthenticationMethod      string            `json:"auth_method,omitempty"`
+	APIKeyKey                 string            `json:"apiKeyKey,omitempty"`
+	APIKeyType                string            `json:"apiKeyType,omitempty"`
+	OAuth2Settings            OAuth2Settings    `json:"oauth2,omitempty"`
+	AWSSettings               AWSSettings       `json:"aws,omitempty"`
+	GoogleWIFSettings         GoogleWIFSettings `json:"googleWIF,omitempty"`
+	ForwardOauthIdentity      bool              `json:"oauthPassThru,omitempty"`
+	InsecureSkipVerify        bool              `json:"tlsSkipVerify,omitempty"`
+	ServerName                string            `json:"serverName,omitempty"`
+	TLSClientAuth             bool              `json:"tlsAuth,omitempty"`
+	TLSAuthWithCACert         bool              `json:"tlsAuthWithCACert,omitempty"`
+	TimeoutInSeconds          int64             `json:"timeoutInSeconds,omitempty"`
+	ProxyType                 ProxyType         `json:"proxy_type,omitempty"`
+	ProxyUrl                  string            `json:"proxy_url,omitempty"`
+	ProxyUserName             string            `json:"proxy_username,omitempty"`
+	ReferenceData             []RefData         `json:"refData,omitempty"`
+	CustomHealthCheckEnabled  bool              `json:"customHealthCheckEnabled,omitempty"`
+	CustomHealthCheckUrl      string            `json:"customHealthCheckUrl,omitempty"`
+	AzureBlobCloudType        string            `json:"azureBlobCloudType,omitempty"`
+	AzureBlobAccountUrl       string            `json:"azureBlobAccountUrl,omitempty"`
+	AzureBlobAccountName      string            `json:"azureBlobAccountName,omitempty"`
+	PathEncodedURLsEnabled    bool              `json:"pathEncodedUrlsEnabled,omitempty"`
+	IgnoreStatusCodeCheck     bool              `json:"ignoreStatusCodeCheck,omitempty"`
+	AllowDangerousHTTPMethods bool              `json:"allowDangerousHTTPMethods,omitempty"`
 	// Security
 	AllowedHosts           []string                   `json:"allowedHosts,omitempty"`
 	UnsecuredQueryHandling UnsecuredQueryHandlingMode `json:"unsecuredQueryHandling,omitempty"`
@@ -293,6 +312,7 @@ func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings
 		settings.ApiKeyKey = infJson.APIKeyKey
 		settings.ApiKeyType = infJson.APIKeyType
 		settings.AWSSettings = infJson.AWSSettings
+		settings.GoogleWIFSettings = infJson.GoogleWIFSettings
 		if settings.ApiKeyType == "" {
 			settings.ApiKeyType = "header"
 		}
@@ -360,6 +380,9 @@ func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings
 	}
 	if val, ok := config.DecryptedSecureJSONData["awsSecretKey"]; ok {
 		settings.AWSSecretKey = val
+	}
+	if val, ok := config.DecryptedSecureJSONData["googleWIFCredentials"]; ok {
+		settings.GoogleWIFSettings.Credentials = val
 	}
 	if val, ok := config.DecryptedSecureJSONData["azureBlobAccountKey"]; ok {
 		settings.AzureBlobAccountKey = val

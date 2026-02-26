@@ -37,6 +37,7 @@ Infinity data source supports the following authentication methods:
 - Azure authentication
 - Azure blob
 - AWS authentication
+- Google Workload Identity Federation (WIF)
 
 ## No authentication
 
@@ -138,6 +139,43 @@ To retrieve content from Azure blob storage, you need to provide the following i
 ## AWS
 
 If you want to authenticate your API endpoints via Amazon AWS authentication, refer to [AWS authentication](/docs/plugins/yesoreyeram-infinity-datasource/latest/examples/aws/).
+
+## Google Workload Identity Federation (WIF)
+
+Google Workload Identity Federation (WIF) lets applications running outside of Google Cloud (for example, Grafana running on-premises or in another cloud) access Google Cloud APIs without using long-lived service account keys.
+
+Instead of a static key, the workload presents an external identity token (such as a Kubernetes Service Account token, a GitHub Actions OIDC token, or any OIDC/SAML assertion) to the Google Security Token Service (STS), which returns a short-lived Google access token. Optionally, that token can be further exchanged for a service account access token via service account impersonation.
+
+### How it works
+
+1. You configure a **Workload Identity Pool** and **Provider** in Google Cloud IAM that trusts your external identity source.
+2. You download the **external account credentials JSON** for the pool provider from the Google Cloud Console.
+3. You paste that JSON into the **Credentials JSON** field in the Infinity datasource configuration.
+4. On every request, Infinity exchanges your external token for a short-lived Google access token via `https://sts.googleapis.com/v1/token` and sets it as a `Bearer` token on outgoing requests.
+
+### Required parameters
+
+| Field                | Description                                                                                                                                                                                    |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Credentials JSON** | (Secure) The `external_account` credentials JSON file downloaded from the Google Cloud Console for your Workload Identity Pool provider. Only `external_account` credential type is accepted. |
+| **Scopes**           | Comma-separated list of OAuth2 scopes to request. For example: `https://www.googleapis.com/auth/cloud-platform`.                                                                               |
+
+### How to set up Google WIF for Infinity
+
+1. In Google Cloud Console, navigate to **IAM & Admin → Workload Identity Federation**.
+2. Create a **Workload Identity Pool** and a **Provider** that matches your Grafana deployment's identity source (OIDC, AWS, Azure, etc.).
+3. Grant the pool (or a mapped service account) the IAM roles required to call your target Google API (for example, **BigQuery Data Viewer** for BigQuery).
+4. On the **Provider** page, click **Download configuration** to get the `external_account` credentials JSON file.
+5. In Grafana, open the Infinity datasource configuration, select **Google WIF** as the authentication method, and paste the downloaded JSON into the **Credentials JSON** field.
+6. Add the required OAuth2 scopes (for example `https://www.googleapis.com/auth/bigquery.readonly`) and save.
+
+{{< admonition type="note" >}}
+The credentials JSON must be of type `external_account`. Service account keys and other credential types are rejected for security reasons.
+{{< /admonition >}}
+
+{{< admonition type="tip" >}}
+If your target API returns 403 errors after authentication succeeds, verify that the IAM bindings on the Workload Identity Pool (or the impersonated service account) include the required Google Cloud roles.
+{{< /admonition >}}
 
 ## Private data source connect (PDC)
 

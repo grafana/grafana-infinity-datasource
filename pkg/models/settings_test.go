@@ -39,6 +39,36 @@ func TestLoadSettings(t *testing.T) {
 			},
 		},
 		{
+			name: "google WIF settings should load correctly",
+			config: backend.DataSourceInstanceSettings{
+				JSONData: []byte(`{
+					"auth_method": "googleWIF",
+					"googleWIF": {
+						"scopes": ["https://www.googleapis.com/auth/cloud-platform"]
+					}
+				}`),
+				DecryptedSecureJSONData: map[string]string{
+					"googleWIFCredentials": `{"type":"external_account","audience":"//iam.googleapis.com/projects/123/locations/global/workloadIdentityPools/pool/providers/provider"}`,
+				},
+			},
+			wantSettings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodGoogleWIF,
+				GoogleWIFSettings: models.GoogleWIFSettings{
+					Scopes:      []string{"https://www.googleapis.com/auth/cloud-platform"},
+					Credentials: `{"type":"external_account","audience":"//iam.googleapis.com/projects/123/locations/global/workloadIdentityPools/pool/providers/provider"}`,
+				},
+				TimeoutInSeconds:       60,
+				ApiKeyType:             "header",
+				ProxyType:              models.ProxyTypeEnv,
+				UnsecuredQueryHandling: models.UnsecuredQueryHandlingWarn,
+				OAuth2Settings: models.OAuth2Settings{
+					EndpointParams: map[string]string{},
+				},
+				CustomHeaders:     map[string]string{},
+				SecureQueryFields: map[string]string{},
+			},
+		},
+		{
 			name: "valid settings should parse correctly",
 			config: backend.DataSourceInstanceSettings{
 				URL:           "https://foo.com",
@@ -393,6 +423,29 @@ func TestInfinitySettings_Validate(t *testing.T) {
 		{
 			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodBearerToken, BearerToken: "foo"},
 			wantErr:  models.ErrInvalidConfigHostNotAllowed,
+		},
+		// Google Workload Identity Federation
+		{
+			name:     "googleWIF without credentials should fail",
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodGoogleWIF},
+			wantErr:  models.ErrInvalidConfigGoogleWIFCredentials,
+		},
+		{
+			name:     "googleWIF with empty credentials should fail",
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodGoogleWIF, GoogleWIFSettings: models.GoogleWIFSettings{Credentials: "  "}},
+			wantErr:  models.ErrInvalidConfigGoogleWIFCredentials,
+		},
+		{
+			name:     "googleWIF with credentials should pass validation",
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodGoogleWIF, GoogleWIFSettings: models.GoogleWIFSettings{Credentials: `{"type":"external_account"}`}},
+		},
+		{
+			name: "googleWIF with credentials and allowed hosts should pass",
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodGoogleWIF,
+				GoogleWIFSettings:    models.GoogleWIFSettings{Credentials: `{"type":"external_account"}`},
+				AllowedHosts:         []string{"https://bigquery.googleapis.com"},
+			},
 		},
 	}
 	for _, tt := range tests {
