@@ -1,5 +1,10 @@
 # Change Log
 
+## 3.7.2
+
+⚙️ **Chore**: Migrated deprecated `Select` component to `Combobox` across the plugin
+⚙️ **Chore**: Updated the required grafana version to 11.6 from 10.4
+
 ## 3.7.1
 
 ⚙️ **Chore**: Marked incorrect query errors as downstream errors

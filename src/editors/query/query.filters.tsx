@@ -1,4 +1,4 @@
-import { Button, Select } from '@grafana/ui';
+import { Button, Combobox, type ComboboxOption } from '@grafana/ui';
 import React from 'react';
 import { EditorRow } from '@/components/extended/EditorRow';
 import { EditorField } from '@/components/extended/EditorField';
@@ -6,7 +6,6 @@ import { filterOperators } from '@/app/parsers/filter';
 import { isDataQuery } from '@/app/utils';
 import { FilterOperator } from '@/constants';
 import type { InfinityFilter, InfinityQuery } from '@/types';
-import type { SelectableValue } from '@grafana/data';
 
 export const TableFilter = (props: { query: InfinityQuery; onChange: (value: any) => void; onRunQuery: any }) => {
   const { query, onChange } = props;
@@ -36,12 +35,12 @@ export const TableFilter = (props: { query: InfinityQuery; onChange: (value: any
     filters.splice(index, 1);
     onChange({ ...query, filters });
   };
-  const onFilterFieldChange = (index: number, v: SelectableValue) => {
+  const onFilterFieldChange = (index: number, v: ComboboxOption<string>) => {
     const filters = [...(query.filters || [])];
     filters[index] = { ...filters[index], field: v.value };
     onChange({ ...query, filters });
   };
-  const onFilterOperatorChange = (index: number, v: SelectableValue) => {
+  const onFilterOperatorChange = (index: number, v: ComboboxOption<FilterOperator>) => {
     const filters = [...(query.filters || [])];
     filters[index] = { ...filters[index], operator: v.value };
     onChange({ ...query, filters });
@@ -60,22 +59,18 @@ export const TableFilter = (props: { query: InfinityQuery; onChange: (value: any
               {query.filters.map((filter, index) => (
                 <div className="gf-form-inline" key={index}>
                   <label className="gf-form-label width-6">Filter {index + 1}</label>
-                  <Select
-                    className="width-8"
+                  <Combobox
+                    width={16}
                     options={getFields()}
-                    defaultValue={getFields()[0]}
-                    value={getFields().find((f) => f.value === filter.field) || getFields()[0]}
+                    value={getFields().find((f) => f.value === filter.field)?.value || getFields()[0]?.value || ''}
                     onChange={(e) => onFilterFieldChange(index, e)}
-                    menuShouldPortal={true}
-                  ></Select>
-                  <Select
-                    className="width-8"
+                  />
+                  <Combobox
+                    width={16}
                     options={filterOperators}
-                    defaultValue={filterOperators[0]}
-                    value={filterOperators.find((f) => f.value === filter.operator) || filterOperators[0]}
+                    value={filterOperators.find((f) => f.value === filter.operator)?.value || filterOperators[0]?.value || 'equals'}
                     onChange={(e) => onFilterOperatorChange(index, e)}
-                    menuShouldPortal={true}
-                  ></Select>
+                  />
                   <input
                     type="text"
                     className="gf-form-input min-width-10 width-10"
