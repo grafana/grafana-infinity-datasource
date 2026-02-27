@@ -19,6 +19,7 @@ require (
 	go.opentelemetry.io/otel v1.40.0
 	go.opentelemetry.io/otel/trace v1.40.0
 	golang.org/x/oauth2 v0.35.0
+	golang.org/x/sync v0.19.0
 	moul.io/http2curl/v2 v2.3.0
 )
 
@@ -29,6 +30,7 @@ require (
 )
 
 require (
+	cloud.google.com/go/compute/metadata v0.9.0 // indirect
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.20.0 // indirect
 	github.com/Azure/azure-sdk-for-go/sdk/internal v1.11.2 // indirect
 	github.com/BurntSushi/toml v1.5.0 // indirect
@@ -141,7 +143,6 @@ require (
 	golang.org/x/exp v0.0.0-20260218203240-3dfff04db8fa // indirect
 	golang.org/x/mod v0.33.0 // indirect
 	golang.org/x/net v0.50.0 // indirect
-	golang.org/x/sync v0.19.0 // indirect
 	golang.org/x/sys v0.41.0 // indirect
 	golang.org/x/telemetry v0.0.0-20260209163413-e7419c687ee4 // indirect
 	golang.org/x/term v0.40.0 // indirect

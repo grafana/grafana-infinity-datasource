@@ -44,6 +44,14 @@ func GetHTTPClient(ctx context.Context, settings models.InfinitySettings) (*http
 	if err != nil {
 		return httpClient, errors.Join(models.ErrCreatingHTTPClient, err)
 	}
+	httpClient, err = applyOAuthExternalAccount(ctx, httpClient, settings)
+	if err != nil {
+		return httpClient, errors.Join(models.ErrCreatingHTTPClient, err)
+	}
+	httpClient, err = applyOAuthSTSTokenExchange(ctx, httpClient, settings)
+	if err != nil {
+		return httpClient, errors.Join(models.ErrCreatingHTTPClient, err)
+	}
 	httpClient, err = applySecureSocksProxyConfiguration(ctx, httpClient, settings)
 	if err != nil {
 		return httpClient, errors.Join(models.ErrCreatingHTTPClient, err)
@@ -218,14 +226,15 @@ func applySecureSocksProxyConfiguration(ctx context.Context, httpClient *http.Cl
 	if isDigestAuthConfigured(settings) {
 		// if we are using Digest, the Transport is 'digest.Transport' that wraps 'http.Transport'
 		t = t.(*digest.Transport).Transport
-	} else if isOAuthCredentialsConfigured(settings) || isOAuthJWTConfigured(settings) {
+	} else if isOAuthCredentialsConfigured(settings) || isOAuthJWTConfigured(settings) || isOAuthExternalAccountConfigured(settings) {
 		if cht, ok := t.(*oauth2CustomTokenTransport); ok {
 			t = cht.Transport.(*oauth2.Transport).Base
 		} else {
 			t = t.(*oauth2.Transport).Base
 		}
+	} else if isOAuthSTSTokenExchangeConfigured(settings) {
+		t = t.(*stsTokenExchangeTransport).base
 	}
-	// secure socks proxy configuration - checks if enabled inside the function
 	err := proxy.New(settings.ProxyOpts.ProxyOptions).ConfigureSecureSocksHTTPProxy(t.(*http.Transport))
 	if err != nil {
 		logger.Error("error configuring secure socks proxy", "err", err.Error())

@@ -29,7 +29,11 @@ const (
 const (
 	AuthOAuthTypeClientCredentials = "client_credentials"
 	AuthOAuthJWT                   = "jwt"
-	AuthOAuthOthers                = "others"
+	AuthOAuthExternalAccount       = "external_account"
+	// AuthOAuthSTSTokenExchange exchanges the Grafana-forwarded OAuth token for a
+	// service-specific access token via an RFC 8693 STS endpoint.
+	AuthOAuthSTSTokenExchange = "sts_token_exchange"
+	AuthOAuthOthers           = "others"
 )
 
 const (
@@ -48,9 +52,16 @@ type OAuth2Settings struct {
 	AuthStyle      oauth2.AuthStyle `json:"authStyle,omitempty"`
 	AuthHeader     string           `json:"authHeader,omitempty"`
 	TokenTemplate  string           `json:"tokenTemplate,omitempty"`
+	// Audience is the STS token exchange target audience. Only used when oauth2_type == "sts_token_exchange".
+	Audience string `json:"audience,omitempty"`
+	// SubjectTokenType is the RFC 8693 token type of the Grafana-forwarded bearer token.
+	// Only used when oauth2_type == "sts_token_exchange".
+	SubjectTokenType string `json:"subject_token_type,omitempty"`
 	ClientSecret   string
 	PrivateKey     string
-	EndpointParams map[string]string
+	// CredentialsJSON holds the external_account credentials JSON (RFC 8693). Stored as a secure field.
+	CredentialsJSON string
+	EndpointParams  map[string]string
 }
 
 type AWSAuthType string
@@ -159,6 +170,30 @@ func (s *InfinitySettings) Validate() error {
 		}
 		return nil
 	}
+	if s.AuthenticationMethod == AuthenticationMethodOAuth && s.OAuth2Settings.OAuth2Type == AuthOAuthExternalAccount {
+		if strings.TrimSpace(s.OAuth2Settings.CredentialsJSON) == "" {
+			return ErrInvalidConfigOAuth2ExternalCredentials
+		}
+		var credType struct {
+			Type string `json:"type"`
+		}
+		if err := json.Unmarshal([]byte(strings.TrimSpace(s.OAuth2Settings.CredentialsJSON)), &credType); err != nil {
+			return ErrInvalidConfigOAuth2ExternalCredentials
+		}
+		if credType.Type != AuthOAuthExternalAccount {
+			return ErrInvalidConfigOAuth2ExternalCredentials
+		}
+		return nil
+	}
+	if s.AuthenticationMethod == AuthenticationMethodOAuth && s.OAuth2Settings.OAuth2Type == AuthOAuthSTSTokenExchange {
+		if strings.TrimSpace(s.OAuth2Settings.TokenURL) == "" {
+			return ErrInvalidConfigSTSTokenURL
+		}
+		if strings.TrimSpace(s.OAuth2Settings.SubjectTokenType) == "" {
+			return ErrInvalidConfigSTSSubjectTokenType
+		}
+		return nil
+	}
 	if s.DoesAllowedHostsRequired() && len(s.AllowedHosts) < 1 {
 		return ErrInvalidConfigHostNotAllowed
 	}
@@ -240,30 +275,30 @@ type RefData struct {
 }
 
 type InfinitySettingsJson struct {
-	IsMock                    bool           `json:"is_mock,omitempty"`
-	AuthenticationMethod      string         `json:"auth_method,omitempty"`
-	APIKeyKey                 string         `json:"apiKeyKey,omitempty"`
-	APIKeyType                string         `json:"apiKeyType,omitempty"`
-	OAuth2Settings            OAuth2Settings `json:"oauth2,omitempty"`
-	AWSSettings               AWSSettings    `json:"aws,omitempty"`
-	ForwardOauthIdentity      bool           `json:"oauthPassThru,omitempty"`
-	InsecureSkipVerify        bool           `json:"tlsSkipVerify,omitempty"`
-	ServerName                string         `json:"serverName,omitempty"`
-	TLSClientAuth             bool           `json:"tlsAuth,omitempty"`
-	TLSAuthWithCACert         bool           `json:"tlsAuthWithCACert,omitempty"`
-	TimeoutInSeconds          int64          `json:"timeoutInSeconds,omitempty"`
-	ProxyType                 ProxyType      `json:"proxy_type,omitempty"`
-	ProxyUrl                  string         `json:"proxy_url,omitempty"`
-	ProxyUserName             string         `json:"proxy_username,omitempty"`
-	ReferenceData             []RefData      `json:"refData,omitempty"`
-	CustomHealthCheckEnabled  bool           `json:"customHealthCheckEnabled,omitempty"`
-	CustomHealthCheckUrl      string         `json:"customHealthCheckUrl,omitempty"`
-	AzureBlobCloudType        string         `json:"azureBlobCloudType,omitempty"`
-	AzureBlobAccountUrl       string         `json:"azureBlobAccountUrl,omitempty"`
-	AzureBlobAccountName      string         `json:"azureBlobAccountName,omitempty"`
-	PathEncodedURLsEnabled    bool           `json:"pathEncodedUrlsEnabled,omitempty"`
-	IgnoreStatusCodeCheck     bool           `json:"ignoreStatusCodeCheck,omitempty"`
-	AllowDangerousHTTPMethods bool           `json:"allowDangerousHTTPMethods,omitempty"`
+	IsMock               bool           `json:"is_mock,omitempty"`
+	AuthenticationMethod string         `json:"auth_method,omitempty"`
+	APIKeyKey            string         `json:"apiKeyKey,omitempty"`
+	APIKeyType           string         `json:"apiKeyType,omitempty"`
+	OAuth2Settings       OAuth2Settings `json:"oauth2,omitempty"`
+	AWSSettings          AWSSettings    `json:"aws,omitempty"`
+	ForwardOauthIdentity bool           `json:"oauthPassThru,omitempty"`
+	InsecureSkipVerify        bool              `json:"tlsSkipVerify,omitempty"`
+	ServerName                string            `json:"serverName,omitempty"`
+	TLSClientAuth             bool              `json:"tlsAuth,omitempty"`
+	TLSAuthWithCACert         bool              `json:"tlsAuthWithCACert,omitempty"`
+	TimeoutInSeconds          int64             `json:"timeoutInSeconds,omitempty"`
+	ProxyType                 ProxyType         `json:"proxy_type,omitempty"`
+	ProxyUrl                  string            `json:"proxy_url,omitempty"`
+	ProxyUserName             string            `json:"proxy_username,omitempty"`
+	ReferenceData             []RefData         `json:"refData,omitempty"`
+	CustomHealthCheckEnabled  bool              `json:"customHealthCheckEnabled,omitempty"`
+	CustomHealthCheckUrl      string            `json:"customHealthCheckUrl,omitempty"`
+	AzureBlobCloudType        string            `json:"azureBlobCloudType,omitempty"`
+	AzureBlobAccountUrl       string            `json:"azureBlobAccountUrl,omitempty"`
+	AzureBlobAccountName      string            `json:"azureBlobAccountName,omitempty"`
+	PathEncodedURLsEnabled    bool              `json:"pathEncodedUrlsEnabled,omitempty"`
+	IgnoreStatusCodeCheck     bool              `json:"ignoreStatusCodeCheck,omitempty"`
+	AllowDangerousHTTPMethods bool              `json:"allowDangerousHTTPMethods,omitempty"`
 	// Security
 	AllowedHosts           []string                   `json:"allowedHosts,omitempty"`
 	UnsecuredQueryHandling UnsecuredQueryHandlingMode `json:"unsecuredQueryHandling,omitempty"`
@@ -361,6 +396,11 @@ func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings
 	if val, ok := config.DecryptedSecureJSONData["awsSecretKey"]; ok {
 		settings.AWSSecretKey = val
 	}
+	if val, ok := config.DecryptedSecureJSONData["oauth2ExternalCredentials"]; ok {
+		settings.OAuth2Settings.CredentialsJSON = val
+	} else if val, ok := config.DecryptedSecureJSONData["googleWIFCredentials"]; ok {
+		settings.OAuth2Settings.CredentialsJSON = val
+	}
 	if val, ok := config.DecryptedSecureJSONData["azureBlobAccountKey"]; ok {
 		settings.AzureBlobAccountKey = val
 	}
@@ -378,6 +418,10 @@ func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings
 		if settings.ForwardOauthIdentity {
 			settings.AuthenticationMethod = AuthenticationMethodForwardOauth
 		}
+	}
+	if settings.AuthenticationMethod == "googleWIF" {
+		settings.AuthenticationMethod = AuthenticationMethodOAuth
+		settings.OAuth2Settings.OAuth2Type = AuthOAuthExternalAccount
 	}
 	if settings.AuthenticationMethod == AuthenticationMethodAzureBlob {
 		if settings.AzureBlobCloudType == "" {

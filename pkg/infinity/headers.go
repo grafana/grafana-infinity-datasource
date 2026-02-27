@@ -141,7 +141,9 @@ func ApplyApiKeyAuth(_ context.Context, settings models.InfinitySettings, req *h
 }
 
 func ApplyForwardedOAuthIdentity(_ context.Context, requestHeaders map[string]string, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
-	if settings.ForwardOauthIdentity {
+	isSTSTokenExchange := settings.AuthenticationMethod == models.AuthenticationMethodOAuth &&
+		settings.OAuth2Settings.OAuth2Type == models.AuthOAuthSTSTokenExchange
+	if settings.ForwardOauthIdentity || isSTSTokenExchange {
 		authHeader := dummyHeader
 		token := dummyHeader
 		if includeSect {

@@ -1,6 +1,6 @@
 import { css } from '@emotion/css';
 import { onUpdateDatasourceSecureJsonDataOption, DataSourcePluginOptionsEditorProps, SelectableValue } from '@grafana/data';
-import { InlineFormLabel, Input, LegacyForms, LinkButton, RadioButtonGroup, Stack } from '@grafana/ui';
+import { InlineFormLabel, Input, LegacyForms, LinkButton, RadioButtonGroup, Stack, SecretTextArea } from '@grafana/ui';
 import React from 'react';
 import { Components } from '@/selectors';
 import { SecureFieldsEditor } from '@/components/config/SecureFieldsEditor';
@@ -9,8 +9,17 @@ import type { InfinityOptions, InfinitySecureOptions, OAuth2Props, OAuth2Type } 
 const oAuthTypes: Array<SelectableValue<OAuth2Type>> = [
   { value: 'client_credentials', label: 'Client Credentials' },
   { value: 'jwt', label: 'JWT' },
+  { value: 'external_account', label: 'External Account (WIF)' },
+  { value: 'sts_token_exchange', label: 'Forward Token → STS Exchange' },
   { value: 'others', label: 'Others' },
 ];
+
+/** Parses a comma-separated scopes string into an array of trimmed, non-empty scope values. */
+const parseCommaSeparatedScopes = (value: string): string[] =>
+  (value || '')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
 
 export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
   const { options, onOptionsChange } = props;
@@ -97,7 +106,7 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
           <div className="gf-form">
             <InlineFormLabel width={10}>Scopes</InlineFormLabel>
             <Input
-              onChange={(v) => onOAuth2PropsChange('scopes', (v.currentTarget.value || '').split(','))}
+              onChange={(v) => onOAuth2PropsChange('scopes', parseCommaSeparatedScopes(v.currentTarget.value))}
               value={(oauth2.scopes || []).join(',')}
               width={30}
               placeholder={'Comma separated values of scopes'}
@@ -164,7 +173,7 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
               Scopes
             </InlineFormLabel>
             <Input
-              onChange={(v) => onOAuth2PropsChange('scopes', (v.currentTarget.value || '').split(','))}
+              onChange={(v) => onOAuth2PropsChange('scopes', parseCommaSeparatedScopes(v.currentTarget.value))}
               value={(oauth2.scopes || []).join(',')}
               width={30}
               placeholder={'Comma separated values of scopes'}
@@ -172,6 +181,12 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
           </div>
           <TokenCustomization options={options} onOptionsChange={onOptionsChange} />
         </>
+      )}
+      {oauth2.oauth2_type === 'external_account' && (
+        <ExternalAccountEditor options={options} onOptionsChange={onOptionsChange} secureJsonFields={secureJsonFields} secureJsonData={secureJsonData} />
+      )}
+      {oauth2.oauth2_type === 'sts_token_exchange' && (
+        <STSTokenExchangeEditor options={options} onOptionsChange={onOptionsChange} />
       )}
       {oauth2.oauth2_type === 'others' && (
         <div style={{ margin: '15px', marginInline: '45px', textAlign: 'center' }}>
@@ -219,5 +234,229 @@ const TokenCustomization = (props: DataSourcePluginOptionsEditorProps<InfinityOp
         </Stack>
       </Stack>
     </div>
+  );
+};
+
+type ExternalAccountEditorProps = {
+  options: DataSourcePluginOptionsEditorProps<InfinityOptions>['options'];
+  onOptionsChange: DataSourcePluginOptionsEditorProps<InfinityOptions>['onOptionsChange'];
+  secureJsonFields: DataSourcePluginOptionsEditorProps<InfinityOptions>['options']['secureJsonFields'];
+  secureJsonData: InfinitySecureOptions;
+};
+
+/**
+ * ExternalAccountEditor provides the UI for the OAuth2 "External Account" grant type.
+ *
+ * The external_account credentials JSON format supports multiple external identity providers
+ * as the upstream token source:
+ *
+ * - **Google Workload Identity Federation (any OIDC/SAML provider)**: configure a Workload
+ *   Identity Pool + Provider in Google Cloud and download the credentials JSON.
+ * - **AWS**: use an EC2/ECS instance's AWS credentials as the external token
+ *   (credential_source.environment_id == "aws1" in the JSON).
+ * - **GitHub Actions**: point the URL credential source at the GitHub OIDC endpoint to
+ *   exchange a GitHub Actions OIDC token for a Google access token.
+ * - **Azure AD / Entra ID**: point the URL credential source at the Azure OIDC endpoint.
+ * - **Any OIDC provider**: any provider that can produce a JWT accessible via a URL or file.
+ *
+ * The provider type is encoded in the credentials JSON itself; Infinity does not need
+ * separate configuration for each provider — one unified credential JSON is enough.
+ */
+const ExternalAccountEditor = ({ options, onOptionsChange, secureJsonFields, secureJsonData }: ExternalAccountEditorProps) => {
+  const oauth2: OAuth2Props = options?.jsonData?.oauth2 || {};
+  const onOAuth2PropsChange = <T extends keyof OAuth2Props, V extends OAuth2Props[T]>(key: T, value: V) => {
+    onOptionsChange({ ...options, jsonData: { ...options.jsonData, oauth2: { ...oauth2, [key]: value } } });
+  };
+  const onResetExternalCredentials = () => {
+    onOptionsChange({
+      ...options,
+      secureJsonFields: { ...options.secureJsonFields, oauth2ExternalCredentials: false },
+      secureJsonData: { ...options.secureJsonData, oauth2ExternalCredentials: '' },
+    });
+  };
+  return (
+    <Stack direction={'column'} gap={1}>
+      <div className="gf-form">
+        <InlineFormLabel
+          width={12}
+          tooltip={
+            <>
+              Paste the <strong>external_account</strong> credentials JSON here. This file is typically downloaded from your identity provider (e.g. Google Cloud → IAM &amp; Admin → Workload Identity Federation → Download configuration).
+              <br />
+              <br />
+              Supported external identity providers: Google WIF (OIDC/SAML), AWS EC2/ECS, GitHub Actions OIDC, Azure AD federated identity, and any OIDC/SAML provider.
+            </>
+          }
+          {...{ interactive: true }}
+        >
+          Credentials JSON
+        </InlineFormLabel>
+        <SecretTextArea
+          rows={8}
+          cols={50}
+          aria-label="oauth2 external account credentials json"
+          placeholder={`{\n  "type": "external_account",\n  "audience": "//iam.googleapis.com/...",\n  "subject_token_type": "urn:ietf:params:oauth:token-type:jwt",\n  "token_url": "https://sts.googleapis.com/v1/token",\n  "credential_source": { ... }\n}`}
+          isConfigured={(secureJsonFields && secureJsonFields.oauth2ExternalCredentials) as boolean}
+          onChange={onUpdateDatasourceSecureJsonDataOption({ options, onOptionsChange } as DataSourcePluginOptionsEditorProps<InfinityOptions>, 'oauth2ExternalCredentials')}
+          onReset={onResetExternalCredentials}
+        />
+      </div>
+      <div className="gf-form">
+        <InlineFormLabel
+          width={12}
+          tooltip="Comma-separated list of OAuth2 scopes to request. For Google APIs, this is typically 'https://www.googleapis.com/auth/cloud-platform'."
+        >
+          Scopes
+        </InlineFormLabel>
+        <Input
+          onChange={(v) => onOAuth2PropsChange('scopes', parseCommaSeparatedScopes(v.currentTarget.value))}
+          value={(oauth2.scopes || []).join(', ')}
+          width={50}
+          placeholder={'https://www.googleapis.com/auth/cloud-platform'}
+        />
+      </div>
+    </Stack>
+  );
+};
+
+/**
+ * STSTokenExchangeEditor configures the OAuth2 "Forward Token → STS Exchange" grant type.
+ *
+ * ### How this differs from "Forward OAuth Identity" (oauthPassThru)
+ *
+ * | Aspect | Forward OAuth Identity | Forward Token → STS Exchange |
+ * |--------|----------------------|------------------------------|
+ * | What gets sent to the target API | The Grafana user's **original** IdP token | A **new, short-lived** token issued by the STS **for the target service** |
+ * | Target API requirement | Must accept the IdP's tokens directly | Only needs to accept its own STS-issued tokens |
+ * | Cross-cloud support | No — the target must trust your IdP | Yes — the STS bridges trust between your IdP and the target service |
+ * | Long-lived secrets required | No | No |
+ * | Per-user identity preserved | Yes | Yes — each user's IdP token generates a distinct STS token |
+ * | Audience scoping | Not enforced | Yes — the STS issues tokens scoped to a specific `audience` |
+ *
+ * **Forward OAuth Identity** simply re-uses the user's existing Grafana OAuth token on
+ * the outgoing request. It works only if the target API directly trusts the same IdP
+ * (e.g., calling an Azure resource when Grafana uses Azure AD auth).
+ *
+ * **Forward Token → STS Exchange** uses the Grafana user's token as proof-of-identity
+ * ("subject token") in an RFC 8693 token exchange. The STS validates the external
+ * identity and issues a new, audience-scoped access token. This is required when:
+ * - The target API lives in a different cloud/trust domain (e.g., Google APIs when
+ *   Grafana uses Okta, GitHub, or Azure AD).
+ * - You need the token to be scoped to a specific Google WIF audience or service account.
+ * - You want the target service to only ever see its own STS-issued tokens, never raw IdP tokens.
+ *
+ * ### Requirements
+ * - Grafana must be configured with an OAuth2 login provider (Okta, Azure AD, GitHub, etc.).
+ * - The datasource must have "Forward OAuth Identity" enabled in Grafana's datasource settings
+ *   so that Grafana injects the user's bearer token into plugin requests.
+ * - The external IdP must be registered as a trusted provider in the target STS
+ *   (e.g., a Google Workload Identity Pool provider that trusts your Okta OIDC endpoint).
+ */
+const STSTokenExchangeEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
+  const { options, onOptionsChange } = props;
+  const oauth2: OAuth2Props = options?.jsonData?.oauth2 || {};
+  const onOAuth2PropsChange = <T extends keyof OAuth2Props, V extends OAuth2Props[T]>(key: T, value: V) => {
+    onOptionsChange({ ...options, jsonData: { ...options.jsonData, oauth2: { ...oauth2, [key]: value } } });
+  };
+  const subjectTokenTypeOptions = [
+    { value: 'urn:ietf:params:oauth:token-type:id_token', label: 'ID Token (OIDC JWT — Azure AD, Okta, GitHub)' },
+    { value: 'urn:ietf:params:oauth:token-type:access_token', label: 'Access Token (Okta, Azure AD access_token)' },
+    { value: 'urn:ietf:params:oauth:token-type:jwt', label: 'Generic JWT' },
+  ];
+  return (
+    <Stack direction={'column'} gap={1}>
+      <div className="gf-form">
+        <InlineFormLabel
+          width={14}
+          tooltip={
+            <>
+              The STS token exchange endpoint URL. For Google Workload Identity Federation this is{' '}
+              <code>https://sts.googleapis.com/v1/token</code>.
+              <br />
+              <br />
+              The STS must be configured to trust your Grafana OAuth provider (Okta, Azure AD, GitHub, etc.)
+              as an external identity source.
+              <br />
+              <br />
+              <strong>Difference from Forward OAuth Identity:</strong> Forward OAuth Identity sends the
+              Grafana user's token directly to the target API. This option first exchanges it for a new
+              token issued specifically for the target service. Use this when the target API lives in a
+              different trust domain (e.g., Google APIs when Grafana uses Okta or Azure AD).
+            </>
+          }
+          {...{ interactive: true }}
+        >
+          STS Token URL
+        </InlineFormLabel>
+        <Input
+          onChange={(v) => onOAuth2PropsChange('token_url', v.currentTarget.value)}
+          value={oauth2.token_url || ''}
+          width={40}
+          placeholder={'https://sts.googleapis.com/v1/token'}
+        />
+      </div>
+      <div className="gf-form">
+        <InlineFormLabel
+          width={14}
+          tooltip={
+            <>
+              The audience that the exchanged token should be scoped to. For Google WIF this is the
+              full workload identity pool provider resource name, e.g.:
+              <br />
+              <code>{'//iam.googleapis.com/projects/PROJECT/locations/global/workloadIdentityPools/POOL/providers/PROVIDER'}</code>
+            </>
+          }
+          {...{ interactive: true }}
+        >
+          Audience
+        </InlineFormLabel>
+        <Input
+          onChange={(v) => onOAuth2PropsChange('audience', v.currentTarget.value)}
+          value={oauth2.audience || ''}
+          width={50}
+          placeholder={'//iam.googleapis.com/projects/123/locations/global/workloadIdentityPools/pool/providers/provider'}
+        />
+      </div>
+      <div className="gf-form">
+        <InlineFormLabel
+          width={14}
+          tooltip={
+            <>
+              The OAuth2 token type of the <strong>Grafana-forwarded</strong> bearer token (the subject_token in
+              RFC 8693 terms).
+              <br />
+              <br />
+              Use <strong>ID Token</strong> when Grafana is configured with Okta, Azure AD, or GitHub and the
+              forwarded token is an OIDC ID token (a JWT with <code>sub</code> / <code>email</code> claims).
+              <br />
+              <br />
+              Use <strong>Access Token</strong> when the forwarded token is an OAuth2 opaque or JWT access token.
+            </>
+          }
+          {...{ interactive: true }}
+        >
+          Subject Token Type
+        </InlineFormLabel>
+        <RadioButtonGroup<string>
+          options={subjectTokenTypeOptions}
+          onChange={(v) => onOAuth2PropsChange('subject_token_type', v || subjectTokenTypeOptions[0].value)}
+          value={oauth2.subject_token_type || subjectTokenTypeOptions[0].value}
+        />
+      </div>
+      <div className="gf-form">
+        <InlineFormLabel
+          width={14}
+          tooltip="Comma-separated OAuth2 scopes to request in the exchanged token. For Google APIs: 'https://www.googleapis.com/auth/cloud-platform'."
+        >
+          Scopes
+        </InlineFormLabel>
+        <Input
+          onChange={(v) => onOAuth2PropsChange('scopes', parseCommaSeparatedScopes(v.currentTarget.value))}
+          value={(oauth2.scopes || []).join(', ')}
+          width={50}
+          placeholder={'https://www.googleapis.com/auth/cloud-platform'}
+        />
+      </div>
+    </Stack>
   );
 };

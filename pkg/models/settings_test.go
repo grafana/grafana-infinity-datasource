@@ -39,6 +39,62 @@ func TestLoadSettings(t *testing.T) {
 			},
 		},
 		{
+			name: "external_account (legacy googleWIF) settings should migrate and load correctly",
+			config: backend.DataSourceInstanceSettings{
+				JSONData: []byte(`{
+					"auth_method": "googleWIF"
+				}`),
+				DecryptedSecureJSONData: map[string]string{
+					"googleWIFCredentials": `{"type":"external_account","audience":"//iam.googleapis.com/projects/123/locations/global/workloadIdentityPools/pool/providers/provider"}`,
+				},
+			},
+			wantSettings: models.InfinitySettings{
+				// googleWIF is migrated to oauth2 + external_account at load time.
+				AuthenticationMethod: models.AuthenticationMethodOAuth,
+				OAuth2Settings: models.OAuth2Settings{
+					OAuth2Type:      models.AuthOAuthExternalAccount,
+					CredentialsJSON: `{"type":"external_account","audience":"//iam.googleapis.com/projects/123/locations/global/workloadIdentityPools/pool/providers/provider"}`,
+					EndpointParams:  map[string]string{},
+				},
+				TimeoutInSeconds:       60,
+				ApiKeyType:             "header",
+				ProxyType:              models.ProxyTypeEnv,
+				UnsecuredQueryHandling: models.UnsecuredQueryHandlingWarn,
+				CustomHeaders:          map[string]string{},
+				SecureQueryFields:      map[string]string{},
+			},
+		},
+		{
+			name: "external_account oauth2 type should load correctly from new secure field",
+			config: backend.DataSourceInstanceSettings{
+				JSONData: []byte(`{
+					"auth_method": "oauth2",
+					"oauth2": {
+						"oauth2_type": "external_account",
+						"scopes": ["https://www.googleapis.com/auth/cloud-platform"]
+					}
+				}`),
+				DecryptedSecureJSONData: map[string]string{
+					"oauth2ExternalCredentials": `{"type":"external_account","audience":"//iam.googleapis.com/projects/123/locations/global/workloadIdentityPools/pool/providers/provider"}`,
+				},
+			},
+			wantSettings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodOAuth,
+				OAuth2Settings: models.OAuth2Settings{
+					OAuth2Type:      models.AuthOAuthExternalAccount,
+					Scopes:          []string{"https://www.googleapis.com/auth/cloud-platform"},
+					CredentialsJSON: `{"type":"external_account","audience":"//iam.googleapis.com/projects/123/locations/global/workloadIdentityPools/pool/providers/provider"}`,
+					EndpointParams:  map[string]string{},
+				},
+				TimeoutInSeconds:       60,
+				ApiKeyType:             "header",
+				ProxyType:              models.ProxyTypeEnv,
+				UnsecuredQueryHandling: models.UnsecuredQueryHandlingWarn,
+				CustomHeaders:          map[string]string{},
+				SecureQueryFields:      map[string]string{},
+			},
+		},
+		{
 			name: "valid settings should parse correctly",
 			config: backend.DataSourceInstanceSettings{
 				URL:           "https://foo.com",
@@ -393,6 +449,85 @@ func TestInfinitySettings_Validate(t *testing.T) {
 		{
 			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodBearerToken, BearerToken: "foo"},
 			wantErr:  models.ErrInvalidConfigHostNotAllowed,
+		},
+		// OAuth2 External Account (Workload Identity Federation / external token exchange)
+		{
+			name:     "oauth2 external_account without credentials should fail",
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodOAuth, OAuth2Settings: models.OAuth2Settings{OAuth2Type: models.AuthOAuthExternalAccount}},
+			wantErr:  models.ErrInvalidConfigOAuth2ExternalCredentials,
+		},
+		{
+			name:     "oauth2 external_account with empty credentials should fail",
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodOAuth, OAuth2Settings: models.OAuth2Settings{OAuth2Type: models.AuthOAuthExternalAccount, CredentialsJSON: "  "}},
+			wantErr:  models.ErrInvalidConfigOAuth2ExternalCredentials,
+		},
+		{
+			name:     "oauth2 external_account with invalid JSON should fail",
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodOAuth, OAuth2Settings: models.OAuth2Settings{OAuth2Type: models.AuthOAuthExternalAccount, CredentialsJSON: `not-json`}},
+			wantErr:  models.ErrInvalidConfigOAuth2ExternalCredentials,
+		},
+		{
+			name:     "oauth2 external_account with wrong credential type should fail",
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodOAuth, OAuth2Settings: models.OAuth2Settings{OAuth2Type: models.AuthOAuthExternalAccount, CredentialsJSON: `{"type":"service_account"}`}},
+			wantErr:  models.ErrInvalidConfigOAuth2ExternalCredentials,
+		},
+		{
+			name:     "oauth2 external_account with valid credentials JSON should pass validation",
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodOAuth, OAuth2Settings: models.OAuth2Settings{OAuth2Type: models.AuthOAuthExternalAccount, CredentialsJSON: `{"type":"external_account"}`}},
+		},
+		{
+			name: "oauth2 external_account with credentials and allowed hosts should pass",
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodOAuth,
+				OAuth2Settings:       models.OAuth2Settings{OAuth2Type: models.AuthOAuthExternalAccount, CredentialsJSON: `{"type":"external_account"}`},
+				AllowedHosts:         []string{"https://bigquery.googleapis.com"},
+			},
+		},
+		// OAuth2 STS Token Exchange
+		{
+			name:     "oauth2 sts_token_exchange without token_url should fail",
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodOAuth, OAuth2Settings: models.OAuth2Settings{OAuth2Type: models.AuthOAuthSTSTokenExchange, SubjectTokenType: "urn:ietf:params:oauth:token-type:id_token"}},
+			wantErr:  models.ErrInvalidConfigSTSTokenURL,
+		},
+		{
+			name:     "oauth2 sts_token_exchange with empty token_url should fail",
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodOAuth, OAuth2Settings: models.OAuth2Settings{OAuth2Type: models.AuthOAuthSTSTokenExchange, TokenURL: "  ", SubjectTokenType: "urn:ietf:params:oauth:token-type:id_token"}},
+			wantErr:  models.ErrInvalidConfigSTSTokenURL,
+		},
+		{
+			name:     "oauth2 sts_token_exchange without subject_token_type should fail",
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodOAuth, OAuth2Settings: models.OAuth2Settings{OAuth2Type: models.AuthOAuthSTSTokenExchange, TokenURL: "https://sts.googleapis.com/v1/token"}},
+			wantErr:  models.ErrInvalidConfigSTSSubjectTokenType,
+		},
+		{
+			name:     "oauth2 sts_token_exchange with empty subject_token_type should fail",
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodOAuth, OAuth2Settings: models.OAuth2Settings{OAuth2Type: models.AuthOAuthSTSTokenExchange, TokenURL: "https://sts.googleapis.com/v1/token", SubjectTokenType: "  "}},
+			wantErr:  models.ErrInvalidConfigSTSSubjectTokenType,
+		},
+		{
+			name: "oauth2 sts_token_exchange with token_url and subject_token_type should pass",
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodOAuth,
+				OAuth2Settings: models.OAuth2Settings{
+					OAuth2Type:       models.AuthOAuthSTSTokenExchange,
+					TokenURL:         "https://sts.googleapis.com/v1/token",
+					SubjectTokenType: "urn:ietf:params:oauth:token-type:id_token",
+				},
+			},
+		},
+		{
+			name: "oauth2 sts_token_exchange with all optional fields should pass",
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodOAuth,
+				OAuth2Settings: models.OAuth2Settings{
+					OAuth2Type:       models.AuthOAuthSTSTokenExchange,
+					TokenURL:         "https://sts.googleapis.com/v1/token",
+					SubjectTokenType: "urn:ietf:params:oauth:token-type:id_token",
+					Audience:         "//iam.googleapis.com/projects/123/locations/global/workloadIdentityPools/pool/providers/provider",
+					Scopes:           []string{"https://www.googleapis.com/auth/cloud-platform"},
+				},
+				AllowedHosts: []string{"https://bigquery.googleapis.com"},
+			},
 		},
 	}
 	for _, tt := range tests {
