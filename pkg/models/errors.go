@@ -25,6 +25,8 @@ var (
 	ErrInvalidConfigAWSSecretKey        error = errors.New("invalid/empty AWS secret key")
 	ErrInvalidConfigHostNotAllowed      error = errors.New("requested URL not allowed. To allow this URL, update the data source config in the Security tab, Allowed hosts section")
 	ErrInvalidConfigOAuth2ExternalCredentials error = errors.New("invalid or empty OAuth2 external account credentials JSON")
+	ErrInvalidConfigSTSTokenURL               error = errors.New("invalid or empty STS token URL for OAuth2 token exchange")
+	ErrInvalidConfigSTSSubjectTokenType       error = errors.New("invalid or empty subject token type for OAuth2 token exchange")
 )
 
 var (

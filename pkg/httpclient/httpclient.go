@@ -48,6 +48,10 @@ func GetHTTPClient(ctx context.Context, settings models.InfinitySettings) (*http
 	if err != nil {
 		return httpClient, errors.Join(models.ErrCreatingHTTPClient, err)
 	}
+	httpClient, err = applyOAuthSTSTokenExchange(ctx, httpClient, settings)
+	if err != nil {
+		return httpClient, errors.Join(models.ErrCreatingHTTPClient, err)
+	}
 	httpClient, err = applySecureSocksProxyConfiguration(ctx, httpClient, settings)
 	if err != nil {
 		return httpClient, errors.Join(models.ErrCreatingHTTPClient, err)
@@ -228,6 +232,8 @@ func applySecureSocksProxyConfiguration(ctx context.Context, httpClient *http.Cl
 		} else {
 			t = t.(*oauth2.Transport).Base
 		}
+	} else if isOAuthSTSTokenExchangeConfigured(settings) {
+		t = t.(*stsTokenExchangeTransport).base
 	}
 	// secure socks proxy configuration - checks if enabled inside the function
 	err := proxy.New(settings.ProxyOpts.ProxyOptions).ConfigureSecureSocksHTTPProxy(t.(*http.Transport))

@@ -30,7 +30,12 @@ const (
 	AuthOAuthTypeClientCredentials = "client_credentials"
 	AuthOAuthJWT                   = "jwt"
 	AuthOAuthExternalAccount       = "external_account"
-	AuthOAuthOthers                = "others"
+	// AuthOAuthSTSTokenExchange enables RFC 8693 token exchange using the Grafana-forwarded
+	// OAuth token as the subject_token. This allows a Grafana instance configured with an
+	// external OAuth provider (Okta, Azure AD, GitHub, etc.) to exchange its user tokens
+	// for tokens issued by a different STS (e.g., Google STS for Workload Identity Federation).
+	AuthOAuthSTSTokenExchange = "sts_token_exchange"
+	AuthOAuthOthers           = "others"
 )
 
 const (
@@ -49,6 +54,17 @@ type OAuth2Settings struct {
 	AuthStyle      oauth2.AuthStyle `json:"authStyle,omitempty"`
 	AuthHeader     string           `json:"authHeader,omitempty"`
 	TokenTemplate  string           `json:"tokenTemplate,omitempty"`
+	// Audience is the target audience for the STS token exchange (RFC 8693).
+	// For Google WIF: "//iam.googleapis.com/projects/PROJECT/locations/global/workloadIdentityPools/POOL/providers/PROVIDER"
+	// Only used when oauth2_type == "sts_token_exchange".
+	Audience string `json:"audience,omitempty"`
+	// SubjectTokenType describes the type of the forwarded Grafana OAuth token used as the
+	// subject_token in RFC 8693 exchanges. Common values:
+	//   "urn:ietf:params:oauth:token-type:access_token" — Okta/Azure AD access tokens
+	//   "urn:ietf:params:oauth:token-type:id_token"     — OIDC ID tokens (Azure AD, Okta, GitHub)
+	//   "urn:ietf:params:oauth:token-type:jwt"          — any JWT
+	// Only used when oauth2_type == "sts_token_exchange".
+	SubjectTokenType string `json:"subject_token_type,omitempty"`
 	ClientSecret   string
 	PrivateKey     string
 	// CredentialsJSON holds the full external_account credentials JSON used for
@@ -177,6 +193,15 @@ func (s *InfinitySettings) Validate() error {
 		}
 		if credType.Type != AuthOAuthExternalAccount {
 			return ErrInvalidConfigOAuth2ExternalCredentials
+		}
+		return nil
+	}
+	if s.AuthenticationMethod == AuthenticationMethodOAuth && s.OAuth2Settings.OAuth2Type == AuthOAuthSTSTokenExchange {
+		if strings.TrimSpace(s.OAuth2Settings.TokenURL) == "" {
+			return ErrInvalidConfigSTSTokenURL
+		}
+		if strings.TrimSpace(s.OAuth2Settings.SubjectTokenType) == "" {
+			return ErrInvalidConfigSTSSubjectTokenType
 		}
 		return nil
 	}

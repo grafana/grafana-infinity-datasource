@@ -483,6 +483,52 @@ func TestInfinitySettings_Validate(t *testing.T) {
 				AllowedHosts:         []string{"https://bigquery.googleapis.com"},
 			},
 		},
+		// OAuth2 STS Token Exchange
+		{
+			name:     "oauth2 sts_token_exchange without token_url should fail",
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodOAuth, OAuth2Settings: models.OAuth2Settings{OAuth2Type: models.AuthOAuthSTSTokenExchange, SubjectTokenType: "urn:ietf:params:oauth:token-type:id_token"}},
+			wantErr:  models.ErrInvalidConfigSTSTokenURL,
+		},
+		{
+			name:     "oauth2 sts_token_exchange with empty token_url should fail",
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodOAuth, OAuth2Settings: models.OAuth2Settings{OAuth2Type: models.AuthOAuthSTSTokenExchange, TokenURL: "  ", SubjectTokenType: "urn:ietf:params:oauth:token-type:id_token"}},
+			wantErr:  models.ErrInvalidConfigSTSTokenURL,
+		},
+		{
+			name:     "oauth2 sts_token_exchange without subject_token_type should fail",
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodOAuth, OAuth2Settings: models.OAuth2Settings{OAuth2Type: models.AuthOAuthSTSTokenExchange, TokenURL: "https://sts.googleapis.com/v1/token"}},
+			wantErr:  models.ErrInvalidConfigSTSSubjectTokenType,
+		},
+		{
+			name:     "oauth2 sts_token_exchange with empty subject_token_type should fail",
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodOAuth, OAuth2Settings: models.OAuth2Settings{OAuth2Type: models.AuthOAuthSTSTokenExchange, TokenURL: "https://sts.googleapis.com/v1/token", SubjectTokenType: "  "}},
+			wantErr:  models.ErrInvalidConfigSTSSubjectTokenType,
+		},
+		{
+			name: "oauth2 sts_token_exchange with token_url and subject_token_type should pass",
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodOAuth,
+				OAuth2Settings: models.OAuth2Settings{
+					OAuth2Type:       models.AuthOAuthSTSTokenExchange,
+					TokenURL:         "https://sts.googleapis.com/v1/token",
+					SubjectTokenType: "urn:ietf:params:oauth:token-type:id_token",
+				},
+			},
+		},
+		{
+			name: "oauth2 sts_token_exchange with all optional fields should pass",
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodOAuth,
+				OAuth2Settings: models.OAuth2Settings{
+					OAuth2Type:       models.AuthOAuthSTSTokenExchange,
+					TokenURL:         "https://sts.googleapis.com/v1/token",
+					SubjectTokenType: "urn:ietf:params:oauth:token-type:id_token",
+					Audience:         "//iam.googleapis.com/projects/123/locations/global/workloadIdentityPools/pool/providers/provider",
+					Scopes:           []string{"https://www.googleapis.com/auth/cloud-platform"},
+				},
+				AllowedHosts: []string{"https://bigquery.googleapis.com"},
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

@@ -139,3 +139,49 @@ func TestApplyGrafanaHeaders(t *testing.T) {
 		})
 	}
 }
+
+func TestApplyForwardedOAuthIdentity_STSTokenExchange(t *testing.T) {
+	const forwardedToken = "Bearer okta-user-id-token"
+
+	t.Run("forwards token when sts_token_exchange is configured", func(t *testing.T) {
+		settings := models.InfinitySettings{
+			AuthenticationMethod: models.AuthenticationMethodOAuth,
+			OAuth2Settings: models.OAuth2Settings{
+				OAuth2Type:       models.AuthOAuthSTSTokenExchange,
+				TokenURL:         "https://sts.googleapis.com/v1/token",
+				SubjectTokenType: "urn:ietf:params:oauth:token-type:id_token",
+			},
+		}
+		requestHeaders := map[string]string{"Authorization": forwardedToken}
+		req, _ := http.NewRequest("GET", "http://example.com", nil)
+		got := ApplyForwardedOAuthIdentity(context.TODO(), requestHeaders, settings, req, true)
+		require.Equal(t, forwardedToken, got.Header.Get("Authorization"),
+			"Authorization header must be set for the stsTokenExchangeTransport to have a subject token")
+	})
+
+	t.Run("does not forward token when sts_token_exchange is NOT configured", func(t *testing.T) {
+		settings := models.InfinitySettings{
+			AuthenticationMethod: models.AuthenticationMethodOAuth,
+			OAuth2Settings: models.OAuth2Settings{
+				OAuth2Type: models.AuthOAuthTypeClientCredentials,
+			},
+		}
+		requestHeaders := map[string]string{"Authorization": forwardedToken}
+		req, _ := http.NewRequest("GET", "http://example.com", nil)
+		got := ApplyForwardedOAuthIdentity(context.TODO(), requestHeaders, settings, req, true)
+		require.Empty(t, got.Header.Get("Authorization"),
+			"Authorization header must NOT be set for oauth2 types that do not use forwarded tokens")
+	})
+
+	t.Run("forwards token when ForwardOauthIdentity is true regardless of oauth2 type", func(t *testing.T) {
+		settings := models.InfinitySettings{
+			ForwardOauthIdentity: true,
+			AuthenticationMethod: models.AuthenticationMethodNone,
+		}
+		requestHeaders := map[string]string{"Authorization": forwardedToken}
+		req, _ := http.NewRequest("GET", "http://example.com", nil)
+		got := ApplyForwardedOAuthIdentity(context.TODO(), requestHeaders, settings, req, true)
+		require.Equal(t, forwardedToken, got.Header.Get("Authorization"),
+			"ForwardOauthIdentity=true must still forward the token as before")
+	})
+}

@@ -8,7 +8,7 @@ export interface GlobalInfinityQuery {
   query: InfinityQuery;
 }
 export type AuthType = 'none' | 'basicAuth' | 'apiKey' | 'bearerToken' | 'oauthPassThru' | 'digestAuth' | 'aws' | 'azureBlob' | 'oauth2';
-export type OAuth2Type = 'client_credentials' | 'jwt' | 'external_account' | 'others';
+export type OAuth2Type = 'client_credentials' | 'jwt' | 'external_account' | 'sts_token_exchange' | 'others';
 export type APIKeyType = 'header' | 'query';
 export type OAuth2Props = {
   oauth2_type?: OAuth2Type;
@@ -21,6 +21,10 @@ export type OAuth2Props = {
   authStyle?: number;
   authHeader?: string;
   tokenTemplate?: string;
+  /** Target audience for RFC 8693 STS token exchange. Only used with sts_token_exchange. */
+  audience?: string;
+  /** OAuth2 token type of the Grafana-forwarded bearer token. Only used with sts_token_exchange. */
+  subject_token_type?: string;
 };
 export type AWSAuthProps = {
   authType?: 'keys';
