@@ -1,6 +1,6 @@
 {
   "name": "grafana-infinity-datasource",
-  "version": "3.7.2",
+  "version": "3.7.3",
   "description": "JSON, CSV, XML, GraphQL, HTML and REST API datasource for Grafana. Do infinite things with Grafana. Transform data with UQL/GROQ. Visualize data from many apis, RSS/ATOM feeds directly",
   "keywords": [
     "grafana",
@@ -136,6 +136,11 @@
     "webpack-livereload-plugin": "3.0.2",
     "webpack-subresource-integrity": "5.1.0",
     "webpack-virtual-modules": "0.6.2"
+  },
+  "resolutions": {
+    "fast-xml-parser": "5.4.1",
+    "minimatch": "10.2.4",
+    "tar": "7.5.9"
   },
   "packageManager": "yarn@4.12.0"
 }
