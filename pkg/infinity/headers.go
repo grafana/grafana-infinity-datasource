@@ -141,9 +141,6 @@ func ApplyApiKeyAuth(_ context.Context, settings models.InfinitySettings, req *h
 }
 
 func ApplyForwardedOAuthIdentity(_ context.Context, requestHeaders map[string]string, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
-	// Also forward the Grafana user's OAuth token when sts_token_exchange is configured,
-	// even if ForwardOauthIdentity is not explicitly set. The stsTokenExchangeTransport
-	// needs the forwarded token as the subject_token for the RFC 8693 exchange.
 	isSTSTokenExchange := settings.AuthenticationMethod == models.AuthenticationMethodOAuth &&
 		settings.OAuth2Settings.OAuth2Type == models.AuthOAuthSTSTokenExchange
 	if settings.ForwardOauthIdentity || isSTSTokenExchange {

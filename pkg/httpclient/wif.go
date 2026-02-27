@@ -39,10 +39,7 @@ func applyOAuthExternalAccount(ctx context.Context, httpClient *http.Client, set
 		return httpClient, nil
 	}
 	credJSON := []byte(strings.TrimSpace(settings.OAuth2Settings.CredentialsJSON))
-	// Inject the base transport so that token exchange requests also respect TLS/proxy settings.
 	tokenCtx := context.WithValue(context.Background(), oauth2.HTTPClient, httpClient)
-	// Use ExternalAccount type to enforce that only external_account credentials are accepted,
-	// rejecting service account keys and other credential types for security.
 	creds, err := google.CredentialsFromJSONWithType(tokenCtx, credJSON, google.ExternalAccount, settings.OAuth2Settings.Scopes...)
 	if err != nil {
 		return nil, err

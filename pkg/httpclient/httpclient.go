@@ -235,7 +235,6 @@ func applySecureSocksProxyConfiguration(ctx context.Context, httpClient *http.Cl
 	} else if isOAuthSTSTokenExchangeConfigured(settings) {
 		t = t.(*stsTokenExchangeTransport).base
 	}
-	// secure socks proxy configuration - checks if enabled inside the function
 	err := proxy.New(settings.ProxyOpts.ProxyOptions).ConfigureSecureSocksHTTPProxy(t.(*http.Transport))
 	if err != nil {
 		logger.Error("error configuring secure socks proxy", "err", err.Error())

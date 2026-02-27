@@ -215,7 +215,7 @@ Grafana server
        │
        │  Forward OAuth Identity injects Bearer <idp_token> into requests
        ▼
-Infinity plugin (stsTokenExchangeTransport.RoundTrip)
+Infinity plugin
        │
        │  POST /token  grant_type=token-exchange
        │               subject_token=<idp_token>
