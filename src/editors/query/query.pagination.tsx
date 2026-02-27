@@ -1,5 +1,5 @@
 import React from 'react';
-import { FeatureBadge, InlineLabel, Input, Combobox, Stack, type ComboboxOption } from '@grafana/ui';
+import { Checkbox, FeatureBadge, InlineLabel, Input, Combobox, Stack, type ComboboxOption } from '@grafana/ui';
 import { FeatureState } from '@grafana/data';
 import { EditorField } from '@/components/extended/EditorField';
 import { EditorRow } from '@/components/extended/EditorRow';
@@ -37,16 +37,26 @@ export const PaginationEditor = (props: PaginationEditorProps) => {
             <Combobox width={30} value={query.pagination_mode || 'none'} options={paginationTypes} onChange={(e) => onChange({ ...query, pagination_mode: e.value as PaginationType || 'none' })} />
           </EditorField>
           {query.pagination_mode && query.pagination_mode !== 'none' && (
-            <EditorField label="Max pages" tooltip={'Enter a value up to 5 pages, or the maximum page limit set in the Grafana configuration for the Infinity plugin.'}>
-              <Input
-                type={'number'}
-                min={0}
-                width={30}
-                value={query.pagination_max_pages}
-                onChange={(e) => onChange({ ...query, pagination_max_pages: e.currentTarget.valueAsNumber || 1 })}
-                placeholder="1"
-              />
-            </EditorField>
+            <>
+              <EditorField label="Max pages" tooltip={'Enter a value up to 5 pages, or the maximum page limit set in the Grafana configuration for the Infinity plugin.'}>
+                <Input
+                  type={'number'}
+                  min={0}
+                  width={30}
+                  value={query.pagination_max_pages}
+                  onChange={(e) => onChange({ ...query, pagination_max_pages: e.currentTarget.valueAsNumber || 1 })}
+                  placeholder="1"
+                />
+              </EditorField>
+              {(query.pagination_mode === 'page' || query.pagination_mode === 'offset') && (
+                <Checkbox
+                  label="Best effort"
+                  description="When enabled, if at least one page loads successfully and a subsequent request fails, pagination stops immediately and returns data from the successful pages."
+                  value={query.pagination_best_effort ?? false}
+                  onChange={(e) => onChange({ ...query, pagination_best_effort: e.currentTarget.checked })}
+                />
+              )}
+            </>
           )}
         </Stack>
         {(query.pagination_mode === 'offset' || query.pagination_mode === 'page' || query.pagination_mode === 'cursor') && (
