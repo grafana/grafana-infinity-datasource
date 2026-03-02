@@ -1,8 +1,15 @@
 # Change Log
 
+## 3.7.3
+
+🐛 Updated backend/go version to 1.26.0 from 1.25.6 which resolves CVE-2025-68121
+
+⚙️ Updated frontend & backend dependencies
+
 ## 3.7.2
 
 ⚙️ **Chore**: Migrated deprecated `Select` component to `Combobox` across the plugin
+
 ⚙️ **Chore**: Updated the required grafana version to 11.6 from 10.4
 
 ## 3.7.1
