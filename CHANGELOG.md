@@ -2,9 +2,9 @@
 
 ## 3.7.3
 
-🐛 Updated backend/go version to 1.26.0 which resolves CVE-2025-68121
+🐛 Updated backend/go version to 1.26.0 from 1.25.6 which resolves CVE-2025-68121
 
-🐛 Updated frontend dependencies
+⚙️ Updated frontend & backend dependencies
 
 ## 3.7.2
 

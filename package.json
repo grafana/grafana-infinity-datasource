@@ -140,6 +140,7 @@
   "resolutions": {
     "fast-xml-parser": "5.4.1",
     "minimatch": "10.2.4",
+    "serialize-javascript": "7.0.3",
     "tar": "7.5.9"
   },
   "packageManager": "yarn@4.12.0"
