@@ -2,9 +2,11 @@ import React from 'react';
 import { config } from '@grafana/runtime';
 import { gte } from 'semver';
 import { css } from '@emotion/css';
-import { useTheme2, InlineLabel, Input, RadioButtonGroup, InlineField, Switch, Stack, SecretInput } from '@grafana/ui';
+import { useTheme2, InlineLabel, Input, RadioButtonGroup, InlineField, Switch, Stack, LegacyForms } from '@grafana/ui';
 import { FeatureToggles, onUpdateDatasourceSecureJsonDataOption, type DataSourcePluginOptionsEditorProps } from '@grafana/data';
 import { Components } from './../../selectors';
+import { VaultSecretNameInput } from '@/components/config/SecureTextArea';
+import { useVaultConfig } from '@/components/config/useVaultConfig';
 import type { InfinityOptions, InfinitySecureOptions, ProxyType } from '@/types';
 
 const styles = {
@@ -17,9 +19,11 @@ const styles = {
 type ProxyEditorProps = DataSourcePluginOptionsEditorProps<InfinityOptions>;
 
 export const ProxyEditor = (props: ProxyEditorProps) => {
+  const { SecretFormField } = LegacyForms;
   const theme = useTheme2();
   const { options, onOptionsChange } = props;
   const { jsonData, secureJsonFields } = options;
+  const { isVaultEnabled, secretMapping, onSecretMappingChange } = useVaultConfig(props);
   const { URL: URLSelector, UserName: UserNameSelector, Password: PasswordSelector } = Components.ConfigEditor.Network.Proxy.ProxyCustomURL;
   const onProxyTypeChange = (proxy_type: ProxyType = 'env') => {
     onOptionsChange({ ...options, jsonData: { ...jsonData, proxy_type } });
@@ -80,18 +84,30 @@ export const ProxyEditor = (props: ProxyEditorProps) => {
             />
           </Stack>
           <Stack gap={0}>
-            <InlineLabel width={20} tooltip={PasswordSelector.tooltip}>
-              {PasswordSelector.label}
-            </InlineLabel>
-            <SecretInput
-              role="input"
-              width={40}
-              aria-label={PasswordSelector.ariaLabel}
-              placeholder={PasswordSelector.placeholder}
-              isConfigured={(secureJsonFields && secureJsonFields.proxyUserPassword) as boolean}
-              onChange={onUpdateDatasourceSecureJsonDataOption(props, 'proxyUserPassword')}
-              onReset={() => onResetSecret('proxyUserPassword')}
-            />
+            {isVaultEnabled ? (
+              <>
+                <InlineLabel width={20} tooltip={PasswordSelector.tooltip}>
+                  {PasswordSelector.label}
+                </InlineLabel>
+                <VaultSecretNameInput
+                  fieldName="proxyUserPassword"
+                  vaultSecretName={secretMapping['proxyUserPassword'] || ''}
+                  onVaultMappingChange={onSecretMappingChange}
+                  width={40}
+                  placeholder="Password vault name"
+                />
+              </>
+            ) : (
+              <SecretFormField
+                label={PasswordSelector.label}
+                labelWidth={20}
+                inputWidth={40}
+                placeholder={PasswordSelector.placeholder}
+                isConfigured={(secureJsonFields && secureJsonFields.proxyUserPassword) as boolean}
+                onChange={onUpdateDatasourceSecureJsonDataOption(props, 'proxyUserPassword')}
+                onReset={() => onResetSecret('proxyUserPassword')}
+              />
+            )}
           </Stack>
         </>
       )}

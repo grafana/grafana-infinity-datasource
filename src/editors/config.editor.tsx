@@ -3,6 +3,7 @@ import { cloneDeep, defaultsDeep } from 'lodash';
 import { css } from '@emotion/css';
 import { InlineFormLabel, Input, Button, LinkButton, useTheme2, Collapse as CollapseOriginal, Stack, Grid } from '@grafana/ui';
 import { SecureFieldsEditor } from '@/components/config/SecureFieldsEditor';
+import { useVaultConfig } from '@/components/config/useVaultConfig';
 import { AuthEditor } from '@/editors/config/Auth';
 import { ProxyEditor } from '@/editors/config/ProxyEditor';
 import { AllowedHostsEditor } from '@/editors/config/AllowedHosts';
@@ -16,6 +17,7 @@ import { CustomHealthCheckEditor } from '@/editors/config/CustomHealthCheckEdito
 import type { DataSourcePluginOptionsEditorProps, DataSourceSettings } from '@grafana/data';
 import type { InfinityOptions } from '@/types';
 import { KeepCookiesEditor } from './config/KeepCookies';
+import { VaultConfigEditor } from './config/VaultConfigEditor';
 
 const Collapse = CollapseOriginal as any;
 
@@ -76,16 +78,37 @@ export const MainEditor = (
 
 export const HeadersEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOptions>) => {
   const { options, onOptionsChange } = props;
+  const { isVaultEnabled, secretMapping, onSecretMappingChange } = useVaultConfig(props);
   return (
     <>
       <Collapse isOpen={true} collapsible={true} label="Base URL">
         <URLEditor options={options} onOptionsChange={onOptionsChange} />
       </Collapse>
       <Collapse isOpen={true} collapsible={true} label="Custom HTTP Headers">
-        <SecureFieldsEditor dataSourceConfig={options} onChange={onOptionsChange} title="Custom HTTP Header" secureFieldName="httpHeaderName" secureFieldValue="httpHeaderValue" hideTile={true} />
+        <SecureFieldsEditor
+          dataSourceConfig={options}
+          onChange={onOptionsChange}
+          title="Custom HTTP Header"
+          secureFieldName="httpHeaderName"
+          secureFieldValue="httpHeaderValue"
+          hideTile={true}
+          isVaultEnabled={isVaultEnabled}
+          secretMapping={secretMapping}
+          onSecretMappingChange={onSecretMappingChange}
+        />
       </Collapse>
       <Collapse isOpen={true} collapsible={true} label="URL Query Param">
-        <SecureFieldsEditor dataSourceConfig={options} onChange={onOptionsChange} title="URL Query Param" secureFieldName="secureQueryName" secureFieldValue="secureQueryValue" hideTile={true} />
+        <SecureFieldsEditor
+          dataSourceConfig={options}
+          onChange={onOptionsChange}
+          title="URL Query Param"
+          secureFieldName="secureQueryName"
+          secureFieldValue="secureQueryValue"
+          hideTile={true}
+          isVaultEnabled={isVaultEnabled}
+          secretMapping={secretMapping}
+          onSecretMappingChange={onSecretMappingChange}
+        />
       </Collapse>
       <Collapse isOpen={true} collapsible={true} label="URL settings">
         <URLSettingsEditor options={options} onOptionsChange={onOptionsChange} />
@@ -144,6 +167,7 @@ const config_sections: Array<{ value: string; label: string }> = [
   { value: 'headers_and_params', label: 'URL, Headers & Params' },
   { value: 'network', label: 'Network' },
   { value: 'security', label: 'Security' },
+  { value: 'vault', label: 'Secrets Vault' },
   { value: 'health_check', label: 'Health check' },
   { value: 'reference_data', label: 'Reference data' },
   { value: 'global_queries', label: 'Global queries' },
@@ -242,6 +266,8 @@ export const InfinityConfigEditor = (props: DataSourcePluginOptionsEditorProps<I
             <NetworkEditor options={optionsWithDefaults} onOptionsChange={onOptionsChange} />
           ) : activeTab === 'security' ? (
             <SecurityEditor options={optionsWithDefaults} onOptionsChange={onOptionsChange} />
+          ) : activeTab === 'vault' ? (
+            <VaultConfigEditor options={optionsWithDefaults} onOptionsChange={onOptionsChange} />
           ) : activeTab === 'global_queries' ? (
             <GlobalQueryEditor options={optionsWithDefaults} onOptionsChange={onOptionsChange} />
           ) : activeTab === 'reference_data' ? (
