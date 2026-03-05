@@ -141,6 +141,17 @@ Random(A,B,C)
 Set the variable to refresh **On time range change** so that a new random value is selected each time the dashboard refreshes.
 {{< /admonition >}}
 
+## Random String query type
+
+The **Random String** query type lets you define a list of values directly in the variable editor. Each time the dashboard loads or refreshes, a random value from the list is selected.
+
+This is useful for testing or demo scenarios where you want different values on each refresh without making an API call.
+
+To use the Random String query type:
+
+1. Select **Random String** as the Query Type.
+1. Enter your values in the **Values** field (press Enter after each value).
+
 ## UnixTimeStamp
 
 Use `UnixTimeStamp()` to return the current Unix timestamp, optionally with a relative time shift.

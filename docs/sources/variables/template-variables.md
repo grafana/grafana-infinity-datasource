@@ -41,8 +41,6 @@ To create a query variable with the Infinity data source:
 1. Select your **Infinity** data source.
 1. Select a **Query Type**:
    - **Infinity** - Use a standard Infinity query (JSON, CSV, XML, etc.) to fetch variable options
-   - **Legacy** - Use utility functions like `Collection()`, `Join()`, etc. (see [Utility variables](/docs/plugins/yesoreyeram-infinity-datasource/latest/variables/utility-variables/))
-   - **Random String** - Enter a list of values and get a random selection on each refresh
 1. Configure your query to return the values you want in the drop-down.
 1. Click **Apply**.
 
@@ -100,15 +98,15 @@ The drop-down displays "Production Server", "Staging Server", etc., but the vari
 
 ### Multi-property variables
 
+{{< admonition type="note" >}}
+Multi-property variables require Grafana v12.4 or later.
+{{< /admonition >}}
+
 The Infinity data source supports **multi-property variables**. Use them when the same logical concept has different identifiers in different contexts (for example, an environment called `dev` in one system and `development` in another). Instead of maintaining several variables in sync, you can map all of those values to one variable and reference the property you need in each panel or query.
 
 {{< figure alt="Multi-property variable capability"  src="/media/docs/infinity/infinity-multi-prop-variable-v12.3.png" >}}
 
-You can create a multi-property variable with either **Type: Custom** or **Type: Query**:
-
-- **Type: Custom** - In **Custom options** > **JSON**, paste your own JSON array with the mapping. Each object in the array can have any number of properties; use `text` and `value` for the label and value shown in the drop-down, and add additional properties as needed. For the JSON format and examples, refer to [Multi-property custom variables](https://grafana.com/docs/grafana/latest/dashboards/variables/add-template-variables/#multi-property-custom-variables) in Add and manage variables.
-
-- **Type: Query** - Configure an Infinity query that returns multiple columns. In the variable editor, expand **Custom field mapping** and set **Value field** and **Text field** to the columns that supply the value and the label for the drop-down. Each additional column in the result becomes a property you can reference. In panels and queries, reference a property with `${varName.columnName}`.
+To create a multi-property variable with the Infinity data source, use **Type: Query**. Configure an Infinity query that returns multiple columns. In the variable editor, expand **Custom field mapping** and set **Value field** and **Text field** to the columns that supply the value and the label for the drop-down. Each additional column in the result becomes a property you can reference. In panels and queries, reference a property with `${varName.columnName}`.
 
 **Example (Type: Query):** A variable named `env` that lists environments with different identifiers per cloud provider. The API returns:
 
@@ -141,51 +139,17 @@ For example, you might use `${env.aws_id}` in an AWS-related query URL and `${en
 
 For more on the concept, refer to [Configure multi-property variables](https://grafana.com/docs/grafana/latest/dashboards/variables/add-template-variables/#configure-multi-property-variables) in [Add and manage variables](https://grafana.com/docs/grafana/latest/dashboards/variables/add-template-variables/).
 
-## Random String query type
-
-The **Random String** query type lets you define a list of values directly in the variable editor. Each time the dashboard loads or refreshes, a random value from the list is selected.
-
-This is useful for testing or demo scenarios where you want different values on each refresh without making an API call.
-
-To use the Random String query type:
-
-1. Select **Random String** as the Query Type.
-1. Enter your values in the **Values** field (press Enter after each value).
-
 ## Use variables in queries
 
 You can use template variables in your Infinity queries to create dynamic dashboards. Variables can be used in:
 
 - **URL:** Include variables in the API endpoint
+- **Query parameters:** Use variables in query parameter values
 - **Request body:** Use variables in POST/PUT request bodies
 - **Headers:** Include variables in custom headers
-- **UQL/JSONata/GROQ:** Use variables in transformation expressions
+- **Root selector:** Use variables in the root selector where you enter your JSONata, JQ, or UQL query
 
-Grafana supports two syntaxes for using variables in queries:
-
-### $varname syntax
-
-Use the dollar sign followed by the variable name:
-
-```
-https://api.example.com/data?server=$server&env=$environment
-```
-
-### ${varname} syntax
-
-Use curly braces for clarity or when the variable name is adjacent to other text:
-
-```
-https://api.example.com/servers/${server}/metrics
-```
-
-### [[varname]] syntax
-
-Use double square brackets as an alternative syntax:
-
-```
-https://api.example.com/data?server=[[server]]
-```
+For the full list of supported variable syntaxes (`$varname`, `${varname}`, `[[varname]]`) and formatting options, refer to [Variable syntax](https://grafana.com/docs/grafana/latest/dashboards/variables/variable-syntax/) in the Grafana documentation.
 
 ## Multi-value variables
 
@@ -206,15 +170,22 @@ If `$servers` has values `server01` and `server02` selected:
 
 ## Chained variables
 
-You can create chained (or dependent) variables where one variable's options depend on the value of another variable.
+Chained variables let you filter one variable's options based on the current selection of another variable. When the parent variable changes, the dependent variable automatically re-queries and updates its options.
 
-**Example:**
+To create chained variables:
 
-1. Create a variable `$region` that returns a list of regions.
-2. Create a second variable `$server` with a query that includes `$region`:
+1. Create a parent variable. For example, a variable named `region` that queries an API for a list of regions:
 
-```
-https://api.example.com/servers?region=$region
-```
+   ```
+   https://api.example.com/regions
+   ```
 
-When the user selects a different region, the server drop-down automatically updates to show only servers in that region.
+1. Create a dependent variable. For example, a variable named `server` that references the parent variable in the query URL:
+
+   ```
+   https://api.example.com/servers?region=$region
+   ```
+
+When a user selects a different value in the `region` drop-down, the Infinity data source re-runs the `server` query with the updated region value. The `server` drop-down then displays only the servers that belong to the selected region.
+
+For more information about chaining variables, refer to [Chained variables](https://grafana.com/docs/grafana/latest/dashboards/variables/add-template-variables/#chained-variables) in the Grafana documentation.
