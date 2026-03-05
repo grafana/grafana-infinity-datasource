@@ -1,13 +1,13 @@
 module github.com/grafana/grafana-infinity-datasource
 
-go 1.25.6
+go 1.26.0
 
 require (
 	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.6.4
 	github.com/aws/aws-sdk-go-v2 v1.41.1
-	github.com/grafana/dskit v0.0.0-20260225082927-fe6fa33a9cc1
+	github.com/grafana/dskit v0.0.0-20260228091820-49ab18c8ab1e
 	github.com/grafana/grafana-aws-sdk v1.4.3
-	github.com/grafana/grafana-plugin-sdk-go v0.289.0
+	github.com/grafana/grafana-plugin-sdk-go v0.290.0
 	github.com/grafana/infinity-libs/lib/go/csvframer v1.0.3
 	github.com/grafana/infinity-libs/lib/go/framesql v1.1.0
 	github.com/grafana/infinity-libs/lib/go/gframer v1.1.2
@@ -31,7 +31,7 @@ require (
 require (
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.20.0 // indirect
 	github.com/Azure/azure-sdk-for-go/sdk/internal v1.11.2 // indirect
-	github.com/BurntSushi/toml v1.5.0 // indirect
+	github.com/BurntSushi/toml v1.6.0 // indirect
 	github.com/apache/arrow-go/v18 v18.5.1 // indirect
 	github.com/araddon/dateparse v0.0.0-20210429162001-6b43995a97de // indirect
 	github.com/aws/aws-sdk-go-v2/config v1.32.7 // indirect
@@ -140,7 +140,7 @@ require (
 	golang.org/x/crypto v0.48.0 // indirect
 	golang.org/x/exp v0.0.0-20260218203240-3dfff04db8fa // indirect
 	golang.org/x/mod v0.33.0 // indirect
-	golang.org/x/net v0.50.0 // indirect
+	golang.org/x/net v0.51.0 // indirect
 	golang.org/x/sync v0.19.0 // indirect
 	golang.org/x/sys v0.41.0 // indirect
 	golang.org/x/telemetry v0.0.0-20260209163413-e7419c687ee4 // indirect
