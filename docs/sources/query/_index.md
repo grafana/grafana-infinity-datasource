@@ -32,7 +32,7 @@ The query editor consists of several key components:
 | Component | Description |
 |-----------|-------------|
 | **Type** | The data format to query: JSON, CSV, TSV, XML, GraphQL, or HTML |
-| **Parser** | How to process the data: Default, JSONata, JQ, UQL, or GROQ |
+| **Parser** | How to process the data: JSONata, JQ, or UQL |
 | **Source** | Where to get the data: URL, Inline, Azure Blob, or Reference |
 | **Format** | Output format: Table, Time series, Data frame, Logs, Trace, or Node graph |
 
