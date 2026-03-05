@@ -12,7 +12,6 @@ keywords:
   - csv
   - tsv
   - xml
-  - html
   - api
   - rest
 labels:
@@ -37,11 +36,9 @@ The following resources will help you get started with the Infinity data source:
 
 ## Key capabilities
 
-{{< shared id="infinity-data-source-advantages" >}}
-
 The Infinity data source supports:
 
-- **Multiple data formats:** Query JSON, CSV, TSV, XML, HTML, GraphQL endpoints, and Google Sheets.
+- **Multiple data formats:** Query JSON, CSV, TSV, XML, and GraphQL endpoints.
 - **Flexible data manipulation:** Transform data with UQL, JSONata, and GROQ.
 - **Various authentication methods:** Basic, Bearer token, API key, OAuth passthrough, OAuth2 client credentials, OAuth2 JWT, AWS/Azure/GCP authentication, and Digest authentication.
 - **Backend features:** Alerting, recorded queries, shared dashboards, and query caching (in backend parsing mode).
@@ -61,14 +58,14 @@ Before you configure the Infinity data source, you need:
 
 This data source supports the following formats:
 
-- [JSON](/docs/plugins/yesoreyeram-infinity-datasource/latest/json/) - Query JSON APIs and inline JSON data
+- [JSON](/docs/plugins/yesoreyeram-infinity-datasource/latest/json/) - Query JSON APIs
 - [CSV / TSV](/docs/plugins/yesoreyeram-infinity-datasource/latest/csv/) - Query CSV, TSV, or any delimited content
 - [XML / HTML](/docs/plugins/yesoreyeram-infinity-datasource/latest/xml/) - Query XML and HTML endpoints
 - [GraphQL](/docs/plugins/yesoreyeram-infinity-datasource/latest/graphql/) - Query GraphQL APIs
 
 ## Known limitations
 
-- Backend features such as alerting, shared dashboards, recorded queries, or enterprise query caching are only available in **backend** parsing mode.
+- Grafana features such as alerting, shared dashboards, recorded queries, and enterprise query caching are only available when using a **backend** parser (JSONata or JQ).
 - Infinity is not designed for handling large amounts of data. When inlining data, ensure snippets are less than 1MB in size.
 - For a list of all known issues, refer to [GitHub issues](https://github.com/grafana/grafana-infinity-datasource/issues).
 
