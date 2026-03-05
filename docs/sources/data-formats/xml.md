@@ -51,72 +51,13 @@ XML selectors use dot notation to navigate the document structure. Special synta
 
 **Configuration**:
 
-| Setting | Value |
-|---------|-------|
-| **Root selector** | `users.user` |
+| Setting | JSONata parser | JQ parser |
+|---------|----------------|-----------|
+| **Root selector** | `$.users.user` | `.users.user` |
 
 | Column selector | Title | Description |
 |-----------------|-------|-------------|
 | `name` | Name | Selects the `<name>` child element |
-| `$.age` | Age | Selects the `age` attribute |
+| `-age` | Age | Selects the `age` attribute |
 
-## Example: Text content with attributes
 
-When the element's text content is the value you need, use `_` as the selector.
-
-**XML data**:
-
-```xml
-<users>
-    <user age="20">User A</user>
-    <user age="21">User B</user>
-    <user age="18">User C</user>
-</users>
-```
-
-**Configuration**:
-
-| Setting | Value |
-|---------|-------|
-| **Root selector** | `users.user` |
-
-| Column selector | Title | Description |
-|-----------------|-------|-------------|
-| `_` | Name | Selects the text inside `<user>` |
-| `$.age` | Age | Selects the `age` attribute |
-
-## Example: Simple text-only elements
-
-**XML data**:
-
-```xml
-<users>
-    <user>User A</user>
-    <user>User B</user>
-    <user>User C</user>
-</users>
-```
-
-**Configuration**:
-
-| Setting | Value |
-|---------|-------|
-| **Root selector** | `users.user` |
-
-| Column selector | Title |
-|-----------------|-------|
-| `_` | Name |
-
-## Query XML from a URL
-
-Enter the URL of your XML endpoint or file in the query editor. The plugin fetches and parses the XML data automatically.
-
-**Example URL**: `https://example.com/data.xml`
-
-## Use inline XML data
-
-To provide XML data directly:
-
-1. Set **Source** to **Inline**.
-1. Enter your XML data in the data field.
-1. Configure the root selector and columns.

@@ -42,7 +42,15 @@ When your data is nested within a property, use the **Root selector** field to s
 
 **Example URL**: `https://thingspeak.com/channels/38629/feed.json`
 
-If the data is in the `feeds` property, set the root selector to `feeds`. Then add columns to define the fields and their types.
+If the data is in the `feeds` property, set the root selector based on your parser:
+
+| Parser | Root selector |
+|--------|---------------|
+| JSONata | `$.feeds` |
+| JQ | `.feeds` |
+| UQL | `parse-json \| project "feeds"` |
+
+Then add columns to define the fields and their types.
 
 ## Query data without a time field
 
@@ -78,9 +86,9 @@ Instead of querying a URL, you can provide JSON data directly in the query edito
 ]
 ```
 
-## Use JSONPath in the root selector
+## Use JSONata in the root selector
 
-The root selector supports JSONPath syntax for complex data extraction. Any selector starting with `$` is treated as a JSONPath expression.
+The root selector supports JSONata syntax for complex data extraction. Any selector starting with `$` is treated as a JSONata expression.
 
 **Example data**:
 
@@ -105,10 +113,6 @@ The root selector supports JSONPath syntax for complex data extraction. Any sele
 
 The Infinity data source offers multiple parsers for JSON data:
 
-### Default parser
-
-The default parser handles most JSON structures. Use this for simple queries without advanced transformations.
-
 ### UQL parser
 
 Use the [UQL parser](/docs/plugins/yesoreyeram-infinity-datasource/latest/query/uql/) for advanced operations like grouping, ordering, and field manipulation.
@@ -121,15 +125,29 @@ parse-json
 | project "ts"=todatetime("created_at"), "Density"=tonumber("field1")
 ```
 
-### Backend parser
+### JSONata parser
 
-Use the **Backend** parser when you need:
+Use the **JSONata** parser when you need:
 
 - Alerting support
 - Recorded queries
 - Server-side processing
+- Complex data transformations using [JSONata syntax](https://jsonata.org/)
 
-When using the backend parser:
+For more information, refer to [JSONata parser](/docs/plugins/yesoreyeram-infinity-datasource/latest/query/backend/).
+
+### JQ parser
+
+Use the **JQ** parser when you need:
+
+- Alerting support
+- Recorded queries
+- Server-side processing
+- Data transformations using [JQ syntax](https://jqlang.github.io/jq/manual/)
+
+For more information, refer to [JQ parser](/docs/plugins/yesoreyeram-infinity-datasource/latest/query/jq-backend/).
+
+When using JSONata or JQ parsers:
 
 - Timestamp fields must use ISO 8601 format (for example, `2006-01-02T15:04:05Z07:00`) or specify a custom layout using [Go time format](https://www.geeksforgeeks.org/time-formatting-in-golang/).
 - Use the **Summarize** field to aggregate numeric values with functions like `sum`, `min`, `max`, `mean`, `first`, and `last`.

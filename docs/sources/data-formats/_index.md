@@ -31,7 +31,7 @@ The Infinity data source can query and visualize data from multiple formats. Eac
 | [XML](/docs/plugins/yesoreyeram-infinity-datasource/latest/data-formats/xml/) | Query XML APIs and files | SOAP APIs, RSS feeds, legacy systems |
 | [GraphQL](/docs/plugins/yesoreyeram-infinity-datasource/latest/data-formats/graphql/) | Query GraphQL endpoints | GraphQL APIs |
 | [HTML](/docs/plugins/yesoreyeram-infinity-datasource/latest/data-formats/html/) | Extract data from HTML pages | Web scraping, legacy systems without APIs |
-| [Azure Blob Storage](/docs/plugins/yesoreyeram-infinity-datasource/latest/data-formats/azure-blob-storage/) | Query data from Azure Blob Storage | Cloud storage, Azure integrations |
+| [Azure Blob Storage](/docs/plugins/yesoreyeram-infinity-datasource/latest/data-formats/azure-blob-storage/) | Query data from Azure Blob Storage | Cloud storage, Azure |
 
 ## Common concepts
 
@@ -42,4 +42,4 @@ All data format queries share these common configuration options:
 - **Columns**: Define which fields to extract and their data types
 - **Format**: Output format (table, time series, data frame, etc.)
 
-For advanced data transformation, you can use [UQL](/docs/plugins/yesoreyeram-infinity-datasource/latest/query/uql/) or [GROQ](/docs/plugins/yesoreyeram-infinity-datasource/latest/query/groq/) parsers with any data format.
+For advanced data transformation, you can use [JSONata](/docs/plugins/yesoreyeram-infinity-datasource/latest/query/backend/), [JQ](/docs/plugins/yesoreyeram-infinity-datasource/latest/query/jq-backend/), or [UQL](/docs/plugins/yesoreyeram-infinity-datasource/latest/query/uql/) parsers with any data format.

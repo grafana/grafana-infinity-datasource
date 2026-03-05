@@ -1,5 +1,5 @@
 ---
-slug: '/integrations/github'
+slug: '/examples/github'
 title: GitHub GraphQL API
 menuTitle: GitHub
 description: Query GitHub repositories and issues using the Infinity data source.

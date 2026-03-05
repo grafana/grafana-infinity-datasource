@@ -1,5 +1,5 @@
 ---
-slug: '/integrations/azure'
+slug: '/examples/azure'
 title: Azure API
 menuTitle: Azure
 description: Connect the Infinity data source to Azure management APIs.

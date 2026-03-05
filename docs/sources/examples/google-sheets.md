@@ -1,5 +1,5 @@
 ---
-slug: '/integrations/google-sheets'
+slug: '/examples/google-sheets'
 title: Google Sheets
 menuTitle: Google Sheets
 description: Query Google Sheets data directly using the Infinity data source.

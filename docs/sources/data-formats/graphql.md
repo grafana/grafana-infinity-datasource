@@ -87,8 +87,8 @@ query($code: ID!) {
 
 GraphQL responses are JSON, so all JSON parser options are available:
 
-- **Default parser**: For simple queries
-- **Backend parser**: For alerting and recorded queries
-- **UQL parser**: For advanced transformations
+- **JSONata parser**: For data transformations, alerting, and recorded queries
+- **JQ parser**: For data transformations, alerting, and recorded queries
+- **UQL parser**: For advanced in-memory transformations
 
 Refer to [JSON](/docs/plugins/yesoreyeram-infinity-datasource/latest/data-formats/json/) for details on parser options.

@@ -1,5 +1,5 @@
 ---
-slug: '/integrations/thingspeak'
+slug: '/examples/thingspeak'
 title: ThingSpeak API
 menuTitle: ThingSpeak
 description: Visualize IoT sensor data from ThingSpeak using the Infinity data source.

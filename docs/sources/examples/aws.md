@@ -1,5 +1,5 @@
 ---
-slug: '/integrations/aws'
+slug: '/examples/aws'
 title: AWS API
 menuTitle: AWS
 description: Connect the Infinity data source to AWS management APIs.

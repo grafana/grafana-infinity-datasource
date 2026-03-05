@@ -1,5 +1,5 @@
 ---
-slug: '/integrations/rss-feeds'
+slug: '/examples/rss-feeds'
 title: RSS and status feeds
 menuTitle: RSS feeds
 description: Visualize RSS feeds and status pages using the Infinity data source.
