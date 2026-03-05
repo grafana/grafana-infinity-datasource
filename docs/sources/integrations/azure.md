@@ -47,7 +47,7 @@ Connect the Infinity data source to Azure management APIs to query subscriptions
 ## Configure the data source
 
 1. In Grafana, navigate to **Connections** > **Data sources**.
-1. Click **Add data source** and select **Infinity**.
+1. Click **Add new data source** and select **Infinity**.
 1. Expand the **Authentication** section and select **OAuth2**.
 1. Select **Client Credentials** as the grant type.
 1. Configure the following settings:

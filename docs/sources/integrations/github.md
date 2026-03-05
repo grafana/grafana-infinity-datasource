@@ -30,7 +30,7 @@ Query GitHub repositories, issues, pull requests, and organization data using th
 ## Configure the data source
 
 1. In Grafana, navigate to **Connections** > **Data sources**.
-1. Click **Add data source** and select **Infinity**.
+1. Click **Add new data source** and select **Infinity**.
 1. Expand the **Authentication** section and select **Bearer Token**.
 1. Enter your GitHub Personal Access Token.
 1. In **Allowed hosts**, enter `https://api.github.com`.

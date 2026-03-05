@@ -34,7 +34,7 @@ This guide uses the public [traffic monitor channel](https://thingspeak.com/chan
 ## Configure the data source
 
 1. In Grafana, navigate to **Connections** > **Data sources**.
-1. Click **Add data source** and select **Infinity**.
+1. Click **Add new data source** and select **Infinity**.
 1. In **Allowed hosts**, enter `https://thingspeak.com`.
 1. For private channels, expand **Authentication** and select **API Key**.
    - Set **Key** to `api_key` and add your ThingSpeak Read API Key.

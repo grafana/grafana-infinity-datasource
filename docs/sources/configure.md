@@ -52,7 +52,7 @@ Before you configure the Infinity data source, you need:
 To add the Infinity data source to Grafana:
 
 1. In Grafana, navigate to **Connections** > **Data sources**.
-1. Click **Add data source**.
+1. Click **Add new data source**.
 1. Search for **Infinity**.
 1. Click the **Infinity** data source to configure it.
 1. Enter a **Name** for the data source.
@@ -74,7 +74,7 @@ The following sections describe the available configuration options for the Infi
 | Setting | Description |
 |---------|-------------|
 | **Base URL** | Optional. The base URL for all queries. If configured, this URL is prefixed to all query URLs. For example, if you set `https://example.com/api` as the base URL and `/users` as the query URL, the final URL will be `https://example.com/api/users`. |
-| **Allowed hosts** | Optional. A list of hosts that the data source is allowed to connect to. If configured, requests to other hosts will be blocked. |
+| **Allowed hosts** | A list of hosts that the data source is allowed to connect to. Required when authentication, custom headers, or TLS certificates are configured. If no allowed hosts are specified and none of these features are in use, all hosts are allowed by default. |
 
 For more information about URL configuration, refer to [URL reference](/docs/plugins/yesoreyeram-infinity-datasource/latest/references/url/).
 

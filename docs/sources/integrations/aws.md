@@ -31,7 +31,7 @@ Connect the Infinity data source to AWS management APIs to query metrics, list r
 ## Configure the data source
 
 1. In Grafana, navigate to **Connections** > **Data sources**.
-1. Click **Add data source** and select **Infinity**.
+1. Click **Add new data source** and select **Infinity**.
 1. Expand the **Authentication** section and select **AWS**.
 1. Configure the following settings:
 

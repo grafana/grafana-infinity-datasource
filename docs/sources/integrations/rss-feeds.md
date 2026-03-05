@@ -33,7 +33,7 @@ Visualize RSS feeds, Atom feeds, and status pages as Grafana annotations or tabl
 ## Configure the data source
 
 1. In Grafana, navigate to **Connections** > **Data sources**.
-1. Click **Add data source** and select **Infinity**.
+1. Click **Add new data source** and select **Infinity**.
 1. In **Allowed hosts**, add the feed domain (for example, `https://status.aws.amazon.com`).
 1. Click **Save & test**.
 

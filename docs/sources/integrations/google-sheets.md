@@ -58,7 +58,7 @@ The service account needs access to your spreadsheet:
 ## Configure the data source
 
 1. In Grafana, navigate to **Connections** > **Data sources**.
-1. Click **Add data source** and select **Infinity**.
+1. Click **Add new data source** and select **Infinity**.
 1. Expand the **Authentication** section.
 1. Click **Guided auth config providers** and select **Google JWT**.
 1. Paste the contents of your service account JSON key file.
