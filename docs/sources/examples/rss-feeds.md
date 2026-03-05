@@ -1,83 +1,162 @@
 ---
-slug: '/aws-status-feeds'
-title: 'AWS Status feeds as Grafana annotations'
-menuTitle: RSS Status feeds (AWS status)
-description: Visualizing data from AWS Status feeds
+slug: '/examples/rss-feeds'
+title: RSS and status feeds
+menuTitle: RSS feeds
+description: Visualize RSS feeds and status pages using the Infinity data source.
+aliases:
+  - /docs/plugins/yesoreyeram-infinity-datasource/latest/examples/aws-status-feeds/
 keywords:
-  - data source
   - infinity
-  - json
-  - graphql
-  - csv
-  - tsv
-  - xml
-  - html
-  - api
-  - rest
+  - RSS
+  - Atom
+  - XML
+  - status feeds
+  - annotations
 labels:
   products:
     - oss
-weight: 8003
+    - enterprise
+    - cloud
+weight: 400
 ---
 
-# Visualizing data from AWS Status feeds
+# RSS and status feeds integration
 
-In this example, you use AWS status feeds as Grafana annotations.
-This can be useful when you are dealing with any AWS outages.
-For this, you're going to use the [AWS RSS feed](https://status.aws.amazon.com/rss/all.rss).
-You can find more feeds at [AWS Status page](https://status.aws.amazon.com/)
+Visualize RSS feeds, Atom feeds, and status pages as Grafana annotations or table data. This is useful for monitoring service status pages and correlating outages with your metrics.
 
-![image](https://user-images.githubusercontent.com/153843/151575227-20088546-4368-4066-a91b-64058982544b.png#center)
+## Before you begin
 
-## Connection setup
+- Identify the RSS or Atom feed URL you want to query
+- Most status feeds are publicly accessible and don't require authentication
+- For private feeds, configure appropriate authentication in the data source settings
 
-[AWS status feeds](https://status.aws.amazon.com/rss/all.rss) are open and no authentication is required, so you can simply create a data source using Infinity without any additional configuration.
+## Configure the data source
 
-## Annotation setup
+1. In Grafana, navigate to **Connections** > **Data sources**.
+1. Click **Add new data source** and select **Infinity**.
+1. In **Allowed hosts**, add the feed domain (for example, `https://status.aws.amazon.com`).
+1. Click **Save & test**.
 
-After you've created an annotation in your dashboard, follow the steps below: 
+## Query examples
 
-1. Create a annotation and select your Infinity data source.
-1. Select **XML** as query type, **URL** as source and Format **Data Frame**.
-1. Provide `https://status.aws.amazon.com/rss/all.rss` as the URL.
-1. You need to specify `rss.channel[0].item` as the URL. You can find this path from the original RSS feed.
-1. Create `title`, `description` as columns and provide the string type.
-1. Create `pubDate` column and mark this as 'DateTime'.
-1. Select `guid[0]._` as string. This is your link, so you can alias it as "link".
+### AWS status feed
 
-![image](https://user-images.githubusercontent.com/153843/151575928-4fc9f188-7f9a-43c5-a92a-6069fe434e6a.png)
+Use the [AWS status RSS feed](https://status.aws.amazon.com/rss/all.rss) to display service incidents.
 
-The following XML is a reference feed item:
+**Configuration:**
 
-```xml
-<item>
-    <title><![CDATA[Service is operating normally: [RESOLVED] SMS Delivery Delays]]></title>
-    <link>http://status.aws.amazon.com/</link>
-    <pubDate>Fri, 14 Jan 2022 14:44:00 PST</pubDate>
-    <guid isPermaLink="false">http://status.aws.amazon.com/#sns-us-east-1_1642200240</guid>
-    <description><![CDATA[Between 5:14 AM and 11:38 AM PST, we experienced increased delivery latency while delivering SMS messages using US toll-free numbers. Also starting at 5:14 AM, SMS message delivery receipts were delayed, which created a backlog of undelivered delivery receipts. We are continuing to work with our downstream partners to clear this backlog. Receipts for new SMS deliveries will also be delayed until this backlog clears. The issues have been resolved and the service is operating normally.]]></description>
-    </item>
-```
+| Setting | Value |
+|---------|-------|
+| **Type** | XML |
+| **Source** | URL |
+| **URL** | `https://status.aws.amazon.com/rss/all.rss` |
+| **Parser** | Backend |
+| **Root selector** | `rss.channel.item` |
 
-## Table view of status items
+**Columns:**
 
-You can follow the same query procedure in your table panel to get the results as Table:
+| Selector | Alias | Type |
+|----------|-------|------|
+| `title` | Title | String |
+| `description` | Description | String |
+| `pubDate` | Published | Timestamp |
+| `link` | Link | String |
 
-![image](https://user-images.githubusercontent.com/153843/151576874-6f4d73d2-9331-4473-a7aa-a3eae0bec880.png#center)
+### GitHub status feed
 
-## Alternate query method
+**Configuration:**
 
-If you are familiar with [UQL query](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/query/uql/), you can achieve this with a simple query. Instead of selecting "XML" as your query type, you will choose "UQL" in this method and write the following UQL query.
+| Setting | Value |
+|---------|-------|
+| **Type** | XML |
+| **URL** | `https://www.githubstatus.com/history.rss` |
+| **Root selector** | `rss.channel.item` |
 
-![image](https://user-images.githubusercontent.com/153843/151577609-d2e5a7c3-aaf8-412b-83b8-965ca676eef4.png#center)
+### Google Cloud status (Atom feed)
+
+Atom feeds have a different structure than RSS feeds.
+
+**Configuration:**
+
+| Setting | Value |
+|---------|-------|
+| **Type** | XML |
+| **URL** | `https://status.cloud.google.com/en/feed.atom` |
+| **Root selector** | `feed.entry` |
+
+**Columns for Atom feeds:**
+
+| Selector | Alias | Type |
+|----------|-------|------|
+| `title` | Title | String |
+| `updated` | Updated | Timestamp |
+| `link.href` | Link | String |
+| `content` | Content | String |
+
+## Use UQL for advanced parsing
+
+For more control over data transformation, use UQL:
 
 ```sql
 parse-xml
 | scope "rss.channel.item"
-| extend "published date"=todatetime("pubDate")
-| project "title", "published date", "description", "link"
+| extend "published"=todatetime("pubDate")
+| project "title", "published", "description", "link"
+```
+
+## Display as annotations
+
+Use RSS feeds to add context to your dashboards by displaying events as annotations.
+
+1. In your dashboard, click **Settings** (gear icon).
+1. Navigate to **Annotations** and click **Add annotation query**.
+1. Select your Infinity data source.
+1. Configure the query using the settings above.
+1. Map the columns:
+   - **Time**: Use the `pubDate` or `updated` column
+   - **Title**: Use the `title` column
+   - **Text**: Use the `description` or `content` column
+
+## RSS item structure reference
+
+**RSS format:**
+
+```xml
+<item>
+  <title>Service is operating normally: [RESOLVED] SMS Delivery Delays</title>
+  <link>http://status.aws.amazon.com/</link>
+  <pubDate>Fri, 14 Jan 2022 14:44:00 PST</pubDate>
+  <guid>http://status.aws.amazon.com/#sns-us-east-1_1642200240</guid>
+  <description>Description of the incident...</description>
+</item>
+```
+
+**Atom format:**
+
+```xml
+<entry>
+  <title>Google Cloud Console outage</title>
+  <updated>2024-01-15T10:30:00Z</updated>
+  <link href="https://status.cloud.google.com/incident/..." />
+  <content type="html">Description of the incident...</content>
+</entry>
 ```
 
 ## More status feeds
 
-With this approach, you can monitor not only AWS status feeds but also any RSS feeds. 
+| Service | Feed URL | Format |
+|---------|----------|--------|
+| AWS | `https://status.aws.amazon.com/rss/all.rss` | RSS |
+| GitHub | `https://www.githubstatus.com/history.rss` | RSS |
+| Google Cloud | `https://status.cloud.google.com/en/feed.atom` | Atom |
+| Azure | `https://azure.status.microsoft/en-us/status/feed/` | RSS |
+| Cloudflare | `https://www.cloudflarestatus.com/history.rss` | RSS |
+| Datadog | `https://status.datadoghq.com/history.rss` | RSS |
+
+## Troubleshoot
+
+| Issue | Cause | Solution |
+|-------|-------|----------|
+| Empty response | Wrong root selector | Use `rss.channel.item` for RSS or `feed.entry` for Atom |
+| CORS error | Browser request blocked | The Infinity data source makes requests from the server, not browser—check allowed hosts |
+| Date parsing error | Invalid timestamp format | Use UQL with `todatetime()` to convert non-standard date formats |

@@ -1,36 +1,45 @@
 ---
-title: 'Examples'
+title: Examples
 menuTitle: Examples
-description: Examples
+description: Learn how to connect the Infinity data source to popular platforms and APIs.
 aliases:
-  - infinity
+  - /docs/plugins/yesoreyeram-infinity-datasource/latest/integrations/
 keywords:
-  - data source
   - infinity
-  - json
-  - graphql
-  - csv
-  - tsv
-  - xml
-  - html
-  - api
-  - rest
+  - examples
+  - AWS
+  - Azure
+  - GitHub
+  - API
 labels:
   products:
     - oss
-weight: 8000
+    - enterprise
+    - cloud
+weight: 600
 ---
 
-## Examples for using Infinity datasource plugin
+# Examples
+
+The Infinity data source can connect to virtually any API that returns JSON, CSV, XML, or GraphQL data. This section provides step-by-step guides for connecting to popular platforms.
 
 {{< docs/play title="Infinity plugin demo" url="https://play.grafana.org/d/infinity" >}}
 
-Following examples explains different use cases for the infinity datasource plugin.
+## Available examples
 
-- **[ThingSpeak API](./thingspeak)** - Visualizing timeseries data from Thingspeak IOT platform
-- **[Azure](./azure)** - Example to retrieve data from azure management APIs such as cloud cost, security, etc
-- **[AWS](./aws)** - Example about retrieving data from AWS management APIs such as cost, security, etc
-- **[RSS Feeds](./aws-status-feeds)** - Example about visualizing XML / RSS feed data from AWS status feeds
-- **[Github GraphQL](./github)** - Example about querying Github GraphQL APIs
+| Example | Description |
+|---------|-------------|
+| [AWS API](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/examples/aws/) | Connect to AWS management APIs for metrics, cost data, and more |
+| [Azure API](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/examples/azure/) | Query Azure management APIs for subscriptions, resources, and monitoring |
+| [GitHub GraphQL](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/examples/github/) | Query GitHub repositories, issues, and pull requests using GraphQL |
+| [Google Sheets](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/examples/google-sheets/) | Query data directly from Google Sheets spreadsheets |
+| [RSS feeds](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/examples/rss-feeds/) | Visualize RSS and Atom feeds, including status pages |
+| [ThingSpeak](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/examples/thingspeak/) | Connect to ThingSpeak IoT platform for sensor data |
 
-More examples can be found in the [Github Discussions](https://github.com/grafana/grafana-infinity-datasource/discussions) page.
+## Community examples
+
+Find more examples and community contributions in the [GitHub Discussions](https://github.com/grafana/grafana-infinity-datasource/discussions) page.
+
+## Request an example guide
+
+If you'd like to see a guide for a specific platform, open a discussion on GitHub or contribute your own guide.
