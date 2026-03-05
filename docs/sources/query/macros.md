@@ -41,14 +41,14 @@ You can use macros in the following query fields:
 
 | Macro | Description |
 |-------|-------------|
-| `$__customInterval()` | Return different values based on dashboard time range |
-| `$__combineValues()` | Combine multiple values with prefix, suffix, and separator |
 | `${__timeFrom}` | Dashboard start time (backend-interpolated) |
 | `${__timeTo}` | Dashboard end time (backend-interpolated) |
 | `${__user.*}` | User context (login, email, name) |
 | `${__ds.*}` | Data source context (uid, name) |
 | `${__org.id}` | Grafana organization ID |
 | `${__plugin.*}` | Plugin context (id, version) |
+| `$__customInterval()` | Return different values based on dashboard time range |
+| `$__combineValues()` | Combine multiple values with prefix, suffix, and separator |
 
 ## Custom interval macro
 

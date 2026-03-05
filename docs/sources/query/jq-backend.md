@@ -110,13 +110,13 @@ Result:
 
 ### Filter array elements
 
-Root selector: `.[] | select(.age > 100)`
+Root selector: `.data[] | select(.age > 100)`
 
 This returns only elements where `age` is greater than 100.
 
 ### Select specific fields
 
-Root selector: `.[] | {name, age}`
+Root selector: `.data[] | {name, age}`
 
 This returns only the `name` and `age` fields from each element.
 
@@ -138,33 +138,11 @@ Root selector: `.data[].items[]`
 
 This flattens nested arrays into a single result set.
 
-## Computed columns
+## Computed columns, filter, and summarize
 
-Computed columns work the same way as with the JSONata parser. You can create new fields that calculate values based on existing data.
+Computed columns, filter, and summarize are shared backend parser features that work the same way in both the JQ and JSONata parsers.
 
-For example, `price * qty` multiplies the values of the `price` and `qty` columns.
-
-For details on available operators and expression syntax, refer to the [Computed columns](./backend/#computed-columns) section in the JSONata parser documentation.
-
-## Filter
-
-Filter expressions let you include or exclude rows based on conditions. The expression must evaluate to `true` or `false`.
-
-For example:
-- `price > 500` — Include rows where price exceeds 500
-- `name != 'MacBook' && price != null` — Exclude specific values and null prices
-
-For complete filter syntax, refer to the [Filter](./backend/#filter) section in the JSONata parser documentation.
-
-## Summarize
-
-The JQ parser supports summarizing fields into aggregated metrics using the same syntax as the JSONata parser.
-
-Available functions: `sum`, `min`, `max`, `mean`, `count`, `first`, `last`
-
-For example: `sum(salary)` calculates the total of all salary values.
-
-For complete summarize options including group by, refer to the [Summarize](./backend/#summarize) section in the JSONata parser documentation.
+For the full reference on these features — including available operators, expression syntax, filter examples, aggregation functions, and group-by options — refer to [Computed columns, filter, and summarize](./backend/#computed-columns-filter-and-summarize) in the JSONata parser documentation.
 
 ## JQ vs JSONata
 

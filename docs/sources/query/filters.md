@@ -31,8 +31,8 @@ For better performance, use filtering provided by the API when possible (for exa
 
 | Parser | Filter method |
 |--------|---------------|
-| Backend (JSONata) | Filter expression field |
-| Backend (JQ) | Filter expression field |
+| Backend (JSONata) | Native JSONata filtering (preferred) / Filter expression field |
+| Backend (JQ) | Native JQ filtering (preferred) / Filter expression field |
 | Frontend | Visual filter editor |
 | UQL | `where` clause in query |
 | GROQ | Native GROQ filtering |

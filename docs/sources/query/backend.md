@@ -62,27 +62,31 @@ The root selector allows you to manipulate the data received from the server. Us
 
 You can use JSONata functions directly in the root selector. For example:
 
-- `orders` — Select the `orders` array from the response
-- `orders.price` — Extract all `price` values from the `orders` array
-- `$sum(orders.price)` — Calculate the sum of all prices
-- `$avg(orders.quantity)` — Calculate the average quantity
+- `$.orders` — Select the `orders` array from the response
+- `$.orders.price` — Extract all `price` values from the `orders` array
+- `$sum($.orders.price)` — Calculate the sum of all prices
+- `$avg($.orders.quantity)` — Calculate the average quantity
 
 Refer to the [JSONata functions documentation](https://docs.jsonata.org/string-functions) for a complete list of available functions.
 
-## Computed columns
+## Computed columns, filter, and summarize
+
+The following features are available in all backend parsers (JSONata and JQ).
+
+### Computed columns
 
 Computed columns let you create new fields that calculate values based on existing data. This is similar to the **Add field from calculation → Binary Operation** transformation but enhanced with a powerful expression language.
 
 For example, `price * qty` multiplies the values of the `price` and `qty` columns to create a new computed field.
 
-### Referencing field names
+#### Referencing field names
 
 You can reference field names in two ways:
 
 - **Directly**: Use the field name as-is, matching is case-insensitive. For example, `horsepower` matches a field named `Horsepower`.
 - **Brackets**: Use square brackets for exact matching or when field names contain special characters. For example, `[Cylinders] + [Horsepower]`.
 
-### Available operators
+#### Available operators
 
 Computed columns support a wide range of operators and functions for creating expressions.
 
@@ -96,7 +100,7 @@ Computed columns support a wide range of operators and functions for creating ex
 | Regex | `=~`, `!~` | Match, not match |
 | Ternary | `? :` | Conditional expression |
 
-### Supported types
+#### Supported types
 
 - Numeric types (integer, float)
 - Boolean types
@@ -105,7 +109,7 @@ Computed columns support a wide range of operators and functions for creating ex
 
 For more details on expression syntax and advanced usage, refer to the [govaluate documentation](https://pkg.go.dev/gopkg.in/Knetic/govaluate.v3).
 
-## Filter
+### Filter
 
 Filter expressions let you include or exclude rows based on conditions. The expression must evaluate to `true` or `false`.
 
@@ -116,11 +120,11 @@ Filter expressions let you include or exclude rows based on conditions. The expr
 - `name IN ('MacBook','MacBook Air')` — Include only MacBook or MacBook Air
 - `!(name IN ('MacBook','MacBook Air'))` — Exclude MacBook and MacBook Air
 
-## Summarize
+### Summarize
 
-The JSONata parser supports summarizing fields into aggregated metrics. You can calculate values like `count(something)`, `max(some-other-thing)`, or `mean([some other thing])` from your data.
+Backend parsers support summarizing fields into aggregated metrics. You can calculate values like `count(something)`, `max(some-other-thing)`, or `mean([some other thing])` from your data.
 
-### Available aggregation functions
+#### Available aggregation functions
 
 | Function | Description |
 |----------|-------------|
@@ -134,14 +138,14 @@ The JSONata parser supports summarizing fields into aggregated metrics. You can 
 
 You can also combine functions in expressions, such as `sum(price) / count(id)`.
 
-### Field name syntax
+#### Field name syntax
 
 When specifying field names in summarize expressions:
 
 - **Standard format**: Replace special characters with `-` and use lowercase. For example, `Something Else!` becomes `something-else-`. Field names are matched case-insensitively in this format.
 - **Bracket format**: Enclose the original field name in square brackets to preserve exact casing and special characters. For example, `min([Something Else!])`.
 
-### Summarize by (group by)
+#### Summarize by (group by)
 
 Use the **Summarize By** option to group your aggregation by a specific field, similar to SQL's `GROUP BY` clause.
 
@@ -155,6 +159,6 @@ For data containing employee records with `department` and `salary` fields:
 
 This produces one row per unique value in the grouping field, with the aggregated result for each group.
 
-### Summarize alias
+#### Summarize alias
 
 Use the **Summarize alias** option to specify a custom name for the aggregated result. If not specified, `summary` is used as the default alias. Custom aliases are useful when merging results from different queries using transformations.
