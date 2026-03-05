@@ -220,6 +220,15 @@ You can add custom HTTP headers to all requests made by the data source.
 | **Header name** | The name of the custom header. |
 | **Header value** | The value of the custom header. |
 
+### Query parameters
+
+You can add query parameters that are sent with every request made by the data source. This works similarly to custom HTTP headers, but the parameters are appended to the URL as query strings.
+
+| Setting | Description |
+|---------|-------------|
+| **Parameter name** | The name of the query parameter. |
+| **Parameter value** | The value of the query parameter. |
+
 ### Additional settings
 
 Configure additional options for request handling and HTTP methods.

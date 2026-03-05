@@ -149,7 +149,9 @@ User macros (`${__user.*}`) are not available in alerts, recorded queries, or pu
 
 ## Allowed hosts
 
-By default, the Infinity data source can connect to any URL. To restrict access to specific hosts:
+Allowed hosts restrict which URLs the Infinity data source can connect to. When authentication, custom headers, or TLS certificates are configured, allowed hosts are **required**. If none of these features are in use and no allowed hosts are specified, all hosts are allowed by default.
+
+To configure allowed hosts:
 
 1. Navigate to the data source configuration.
 2. In the **Network** section, add allowed host names.
@@ -160,4 +162,4 @@ By default, the Infinity data source can connect to any URL. To restrict access 
 - Use the full host name including protocol (for example, `https://api.example.com`)
 - Multiple hosts can be configured
 
-When allowed hosts are configured, queries to other hosts will be blocked.
+When allowed hosts are configured, queries to other hosts are blocked.

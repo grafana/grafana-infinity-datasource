@@ -38,7 +38,7 @@ These errors occur when the data source cannot connect to the target URL.
 1. Click **Save & test**.
 
 {{< admonition type="note" >}}
-If the Allowed hosts field is empty, all hosts are allowed by default.
+Allowed hosts are required when authentication, custom headers, or TLS certificates are configured. If none of these features are in use and the allowed hosts field is empty, all hosts are allowed by default.
 {{< /admonition >}}
 
 ### Connection timeout
