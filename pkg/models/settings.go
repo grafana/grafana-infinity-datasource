@@ -9,8 +9,10 @@ import (
 	urllib "net/url"
 	"strings"
 
+	"github.com/grafana/grafana-infinity-datasource/pkg/secretsmanager"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/httpclient"
+	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
 	"golang.org/x/oauth2"
 )
 
@@ -129,32 +131,45 @@ type InfinitySettings struct {
 	ProxyOpts httpclient.Options
 	// Specific cookies included by Grafana for forwarding
 	KeepCookies []string
+	// VaultConfig holds the external vault configuration for use in validation.
+	VaultConfig secretsmanager.VaultConfig
 }
 
 func (s *InfinitySettings) Validate() error {
+	vaultCovers := s.isSecretCoveredByVault
 	if (s.BasicAuthEnabled || s.AuthenticationMethod == AuthenticationMethodBasic || s.AuthenticationMethod == AuthenticationMethodDigestAuth) && s.Password == "" {
-		return ErrInvalidConfigPassword
+		if !vaultCovers("basicAuthPassword") {
+			return ErrInvalidConfigPassword
+		}
 	}
-	if s.AuthenticationMethod == AuthenticationMethodApiKey && (s.ApiKeyValue == "" || s.ApiKeyKey == "") {
-		return ErrInvalidConfigAPIKey
+	if s.AuthenticationMethod == AuthenticationMethodApiKey {
+		// ApiKeyKey is a non-secret config field — it is never vault-resolved, so always required.
+		if s.ApiKeyKey == "" {
+			return ErrInvalidConfigAPIKey
+		}
+		if s.ApiKeyValue == "" && !vaultCovers("apiKeyValue") {
+			return ErrInvalidConfigAPIKey
+		}
 	}
 	if s.AuthenticationMethod == AuthenticationMethodBearerToken && s.BearerToken == "" {
-		return ErrInvalidConfigBearerToken
+		if !vaultCovers("bearerToken") {
+			return ErrInvalidConfigBearerToken
+		}
 	}
 	if s.AuthenticationMethod == AuthenticationMethodAzureBlob {
 		if strings.TrimSpace(s.AzureBlobAccountName) == "" {
 			return ErrInvalidConfigAzBlobAccName
 		}
-		if strings.TrimSpace(s.AzureBlobAccountKey) == "" {
+		if strings.TrimSpace(s.AzureBlobAccountKey) == "" && !vaultCovers("azureBlobAccountKey") {
 			return ErrInvalidConfigAzBlobKey
 		}
 		return nil
 	}
 	if s.AuthenticationMethod == AuthenticationMethodAWS && s.AWSSettings.AuthType == AWSAuthTypeKeys {
-		if strings.TrimSpace(s.AWSAccessKey) == "" {
+		if strings.TrimSpace(s.AWSAccessKey) == "" && !vaultCovers("awsAccessKey") {
 			return ErrInvalidConfigAWSAccessKey
 		}
-		if strings.TrimSpace(s.AWSSecretKey) == "" {
+		if strings.TrimSpace(s.AWSSecretKey) == "" && !vaultCovers("awsSecretKey") {
 			return ErrInvalidConfigAWSSecretKey
 		}
 		return nil
@@ -165,10 +180,35 @@ func (s *InfinitySettings) Validate() error {
 	return ValidateAllowedHosts(s.AllowedHosts)
 }
 
+// isSecretCoveredByVault returns true if the given secret field is expected to
+// be resolved from the vault — either via an explicit mapping or implicitly
+// (the field name is used as the vault key when no mapping is configured).
+func (s *InfinitySettings) isSecretCoveredByVault(fieldName string) bool {
+	if s.VaultConfig.Provider == "" || s.VaultConfig.Provider == secretsmanager.ProviderTypeNone {
+		return false
+	}
+	// If there is an explicit mapping for this field, it's covered.
+	if s.VaultConfig.SecretMapping != nil {
+		if mapped, ok := s.VaultConfig.SecretMapping[fieldName]; ok && mapped != "" {
+			return true
+		}
+	}
+	// Even without an explicit mapping, the vault will try to resolve using the
+	// field name as the key. So if vault is configured, the field is potentially
+	// covered.
+	return true
+}
+
 func (s *InfinitySettings) DoesAllowedHostsRequired() bool {
 	// If base url is configured, there is no need for allowed hosts
 	if strings.TrimSpace(s.URL) != "" {
 		return false
+	}
+	// When vault integration is enabled, secrets come from an external source and
+	// can be changed without re-saving the datasource. Allowed hosts act as a
+	// safety net to limit where those secrets can be sent.
+	if s.VaultConfig.Provider != "" && s.VaultConfig.Provider != secretsmanager.ProviderTypeNone {
+		return true
 	}
 	// If there is specific authentication mechanism (except none and azure blob), then allowed hosts required
 	if s.AuthenticationMethod != "" && s.AuthenticationMethod != AuthenticationMethodNone && s.AuthenticationMethod != AuthenticationMethodAzureBlob {
@@ -268,6 +308,8 @@ type InfinitySettingsJson struct {
 	AllowedHosts           []string                   `json:"allowedHosts,omitempty"`
 	UnsecuredQueryHandling UnsecuredQueryHandlingMode `json:"unsecuredQueryHandling,omitempty"`
 	KeepCookies            []string                   `json:"keepCookies,omitempty"`
+	// Secrets Vault
+	VaultConfig secretsmanager.VaultConfig `json:"vaultConfig,omitempty"`
 }
 
 func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings) (settings InfinitySettings, err error) {
@@ -334,42 +376,82 @@ func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings
 	settings.AzureBlobCloudType = infJson.AzureBlobCloudType
 	settings.AzureBlobAccountUrl = infJson.AzureBlobAccountUrl
 	settings.AzureBlobAccountName = infJson.AzureBlobAccountName
-	if val, ok := config.DecryptedSecureJSONData["basicAuthPassword"]; ok {
-		settings.Password = val
+
+	// Store vault config in settings for use in validation
+	settings.VaultConfig = infJson.VaultConfig
+
+	// Initialize vault secret provider if configured
+	var vaultProvider secretsmanager.SecretProvider
+	vaultConfig := infJson.VaultConfig
+	if vaultConfig.Provider != "" && vaultConfig.Provider != secretsmanager.ProviderTypeNone {
+		logger := log.DefaultLogger.FromContext(ctx)
+		provider, providerErr := secretsmanager.NewSecretProvider(ctx, vaultConfig, config.DecryptedSecureJSONData)
+		if providerErr != nil {
+			return settings, fmt.Errorf("vault provider initialization failed: %w", providerErr)
+		}
+		vaultProvider = provider
+		logger.Info("vault secret provider initialized", "provider", vaultConfig.Provider)
 	}
-	if val, ok := config.DecryptedSecureJSONData["oauth2ClientSecret"]; ok {
-		settings.OAuth2Settings.ClientSecret = val
+
+	// resolveSecret is a helper that resolves a secret from the vault (if configured) or from local secureJsonData.
+	resolveSecret := func(fieldName string) (string, error) {
+		localVal := config.DecryptedSecureJSONData[fieldName]
+		return secretsmanager.ResolveSecretWithError(ctx, vaultProvider, vaultConfig, fieldName, localVal)
 	}
-	if val, ok := config.DecryptedSecureJSONData["oauth2JWTPrivateKey"]; ok {
-		settings.OAuth2Settings.PrivateKey = val
+
+	if settings.Password, err = resolveSecret("basicAuthPassword"); err != nil {
+		return settings, err
 	}
-	if val, ok := config.DecryptedSecureJSONData["tlsCACert"]; ok {
-		settings.TLSCACert = val
+	if settings.OAuth2Settings.ClientSecret, err = resolveSecret("oauth2ClientSecret"); err != nil {
+		return settings, err
 	}
-	if val, ok := config.DecryptedSecureJSONData["tlsClientCert"]; ok {
-		settings.TLSClientCert = val
+	if settings.OAuth2Settings.PrivateKey, err = resolveSecret("oauth2JWTPrivateKey"); err != nil {
+		return settings, err
 	}
-	if val, ok := config.DecryptedSecureJSONData["tlsClientKey"]; ok {
-		settings.TLSClientKey = val
+	if settings.TLSCACert, err = resolveSecret("tlsCACert"); err != nil {
+		return settings, err
 	}
-	if val, ok := config.DecryptedSecureJSONData["bearerToken"]; ok {
-		settings.BearerToken = val
+	if settings.TLSClientCert, err = resolveSecret("tlsClientCert"); err != nil {
+		return settings, err
 	}
-	if val, ok := config.DecryptedSecureJSONData["awsAccessKey"]; ok {
-		settings.AWSAccessKey = val
+	if settings.TLSClientKey, err = resolveSecret("tlsClientKey"); err != nil {
+		return settings, err
 	}
-	if val, ok := config.DecryptedSecureJSONData["awsSecretKey"]; ok {
-		settings.AWSSecretKey = val
+	if settings.BearerToken, err = resolveSecret("bearerToken"); err != nil {
+		return settings, err
 	}
-	if val, ok := config.DecryptedSecureJSONData["azureBlobAccountKey"]; ok {
-		settings.AzureBlobAccountKey = val
+	if settings.AWSAccessKey, err = resolveSecret("awsAccessKey"); err != nil {
+		return settings, err
 	}
-	if val, ok := config.DecryptedSecureJSONData["proxyUserPassword"]; ok {
-		settings.ProxyUserPassword = val
+	if settings.AWSSecretKey, err = resolveSecret("awsSecretKey"); err != nil {
+		return settings, err
 	}
-	settings.CustomHeaders = GetSecrets(config, "httpHeaderName", "httpHeaderValue")
-	settings.SecureQueryFields = GetSecrets(config, "secureQueryName", "secureQueryValue")
-	settings.OAuth2Settings.EndpointParams = GetSecrets(config, "oauth2EndPointParamsName", "oauth2EndPointParamsValue")
+	if settings.AzureBlobAccountKey, err = resolveSecret("azureBlobAccountKey"); err != nil {
+		return settings, err
+	}
+	if settings.ProxyUserPassword, err = resolveSecret("proxyUserPassword"); err != nil {
+		return settings, err
+	}
+	if settings.ApiKeyValue == "" {
+		if settings.ApiKeyValue, err = resolveSecret("apiKeyValue"); err != nil {
+			return settings, err
+		}
+	}
+	if vaultProvider != nil {
+		if settings.CustomHeaders, err = GetSecretsFromVault(ctx, config, "httpHeaderName", "httpHeaderValue", vaultProvider, vaultConfig); err != nil {
+			return settings, err
+		}
+		if settings.SecureQueryFields, err = GetSecretsFromVault(ctx, config, "secureQueryName", "secureQueryValue", vaultProvider, vaultConfig); err != nil {
+			return settings, err
+		}
+		if settings.OAuth2Settings.EndpointParams, err = GetSecretsFromVault(ctx, config, "oauth2EndPointParamsName", "oauth2EndPointParamsValue", vaultProvider, vaultConfig); err != nil {
+			return settings, err
+		}
+	} else {
+		settings.CustomHeaders = GetSecrets(config, "httpHeaderName", "httpHeaderValue")
+		settings.SecureQueryFields = GetSecrets(config, "secureQueryName", "secureQueryValue")
+		settings.OAuth2Settings.EndpointParams = GetSecrets(config, "oauth2EndPointParamsName", "oauth2EndPointParamsValue")
+	}
 	if settings.AuthenticationMethod == "" {
 		settings.AuthenticationMethod = AuthenticationMethodNone
 		if settings.BasicAuthEnabled {
@@ -420,4 +502,32 @@ func GetSecrets(config backend.DataSourceInstanceSettings, secretType string, se
 		}
 	}
 	return headers
+}
+
+// GetSecretsFromVault resolves dynamic secret fields (like custom headers, query params)
+// through the vault provider. For each field, it uses the secret mapping if available
+// (e.g. "httpHeaderValue1" → mapped vault name), otherwise uses the local secure field
+// key as the vault secret name.
+func GetSecretsFromVault(ctx context.Context, config backend.DataSourceInstanceSettings, secretType string, secretValue string, provider secretsmanager.SecretProvider, vaultConfig secretsmanager.VaultConfig) (map[string]string, error) {
+	headers := make(map[string]string)
+	JsonData := make(map[string]any)
+	if err := json.Unmarshal(config.JSONData, &JsonData); err != nil {
+		return headers, nil
+	}
+	if JsonData == nil {
+		return headers, nil
+	}
+	for key, value := range JsonData {
+		if strings.HasPrefix(key, secretType) {
+			headerKey := fmt.Sprintf("%v", value)
+			secureFieldKey := strings.Replace(key, secretType, secretValue, 1)
+			localVal := config.DecryptedSecureJSONData[secureFieldKey]
+			resolvedVal, err := secretsmanager.ResolveSecretWithError(ctx, provider, vaultConfig, secureFieldKey, localVal)
+			if err != nil {
+				return nil, err
+			}
+			headers[headerKey] = resolvedVal
+		}
+	}
+	return headers, nil
 }

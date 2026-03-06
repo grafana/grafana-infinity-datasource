@@ -1,8 +1,10 @@
 import React from 'react';
-import { Stack, InlineLabel, Input, SecretInput, Combobox } from '@grafana/ui';
+import { Stack, InlineLabel, Input, Combobox, LegacyForms } from '@grafana/ui';
 import { onUpdateDatasourceSecureJsonDataOption, DataSourcePluginOptionsEditorProps } from '@grafana/data';
 import { Components } from '@/selectors';
 import { AzureBlobRegions, AzureBlobCloudTypeDefault } from '@/constants';
+import { VaultSecretNameInput } from '@/components/config/SecureTextArea';
+import { useVaultConfig } from '@/components/config/useVaultConfig';
 import type { InfinityOptions, InfinitySecureOptions } from '@/types';
 
 export const AzureBlobAuthEditor = (
@@ -10,8 +12,10 @@ export const AzureBlobAuthEditor = (
     onResetSecret: (key: keyof InfinitySecureOptions) => void;
   }
 ) => {
+  const { SecretFormField } = LegacyForms;
   const { options, onOptionsChange, onResetSecret } = props;
   const { secureJsonFields } = options;
+  const { isVaultEnabled, secretMapping, onSecretMappingChange } = useVaultConfig(props);
   const { Region: RegionSelector, StorageAccountName: StorageAccountNameSelector, StorageAccountKey: StorageAccountKeySelector } = Components.ConfigEditor.Auth.AzureBlob;
   const onAzureBlobUrlChange = (azureBlobCloudType = AzureBlobCloudTypeDefault) => {
     onOptionsChange({ ...options, jsonData: { ...options.jsonData, azureBlobCloudType } });
@@ -51,19 +55,31 @@ export const AzureBlobAuthEditor = (
         ></Input>
       </Stack>
       <Stack>
-        <InlineLabel width={24} tooltip={StorageAccountKeySelector.tooltip}>
-          {StorageAccountKeySelector.label}
-        </InlineLabel>
-        <SecretInput
-          required
-          role="input"
-          aria-label={StorageAccountKeySelector.ariaLabel}
-          placeholder={StorageAccountKeySelector.placeholder}
-          width={24}
-          isConfigured={(secureJsonFields && secureJsonFields.azureBlobAccountKey) as boolean}
-          onChange={onUpdateDatasourceSecureJsonDataOption(props, 'azureBlobAccountKey')}
-          onReset={() => onResetSecret('azureBlobAccountKey')}
-        />
+        {isVaultEnabled ? (
+          <>
+            <InlineLabel width={24} tooltip={StorageAccountKeySelector.tooltip}>
+              {StorageAccountKeySelector.label}
+            </InlineLabel>
+            <VaultSecretNameInput
+              fieldName="azureBlobAccountKey"
+              vaultSecretName={secretMapping['azureBlobAccountKey'] || ''}
+              onVaultMappingChange={onSecretMappingChange}
+              width={24}
+              placeholder="Account Key vault name"
+            />
+          </>
+        ) : (
+          <SecretFormField
+            required
+            label={StorageAccountKeySelector.label}
+            labelWidth={24}
+            inputWidth={24}
+            placeholder={StorageAccountKeySelector.placeholder}
+            isConfigured={(secureJsonFields && secureJsonFields.azureBlobAccountKey) as boolean}
+            onChange={onUpdateDatasourceSecureJsonDataOption(props, 'azureBlobAccountKey')}
+            onReset={() => onResetSecret('azureBlobAccountKey')}
+          />
+        )}
       </Stack>
     </Stack>
   );

@@ -144,6 +144,7 @@ func ApplyForwardedOAuthIdentity(_ context.Context, requestHeaders map[string]st
 	if settings.ForwardOauthIdentity {
 		authHeader := dummyHeader
 		token := dummyHeader
+		backend.Logger.Error("DEBUG", HeaderKeyIdToken, getQueryReqHeader(requestHeaders, HeaderKeyIdToken))
 		if includeSect {
 			authHeader = getQueryReqHeader(requestHeaders, HeaderKeyAuthorization)
 			token = getQueryReqHeader(requestHeaders, HeaderKeyIdToken)

@@ -4,6 +4,8 @@ import { InlineFormLabel, Input, LegacyForms, LinkButton, RadioButtonGroup, Stac
 import React from 'react';
 import { Components } from '@/selectors';
 import { SecureFieldsEditor } from '@/components/config/SecureFieldsEditor';
+import { VaultSecretNameInput } from '@/components/config/SecureTextArea';
+import { useVaultConfig } from '@/components/config/useVaultConfig';
 import type { InfinityOptions, InfinitySecureOptions, OAuth2Props, OAuth2Type } from '@/types';
 
 const oAuthTypes: Array<SelectableValue<OAuth2Type>> = [
@@ -17,6 +19,7 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
   const { secureJsonFields } = options;
   const secureJsonData = (options.secureJsonData || {}) as InfinitySecureOptions;
   let oauth2: OAuth2Props = options?.jsonData?.oauth2 || {};
+  const { isVaultEnabled, secretMapping, onSecretMappingChange } = useVaultConfig(props);
   const onOAuth2PropsChange = <T extends keyof OAuth2Props, V extends OAuth2Props[T]>(key: T, value: V) => {
     onOptionsChange({ ...options, jsonData: { ...options.jsonData, oauth2: { ...oauth2, [key]: value } } });
   };
@@ -77,18 +80,31 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
             <Input onChange={(v) => onOAuth2PropsChange('client_id', v.currentTarget.value)} value={oauth2.client_id} width={30} placeholder={'Client ID'} />
           </div>
           <div className="gf-form">
-            <LegacyForms.SecretFormField
-              labelWidth={10}
-              inputWidth={15}
-              required
-              value={secureJsonData.oauth2ClientSecret || ''}
-              isConfigured={(secureJsonFields && secureJsonFields.oauth2ClientSecret) as boolean}
-              onReset={onResetClientSecret}
-              onChange={onUpdateDatasourceSecureJsonDataOption(props, 'oauth2ClientSecret')}
-              label="Client Secret"
-              aria-label="client secret"
-              placeholder="Client secret"
-            />
+            {isVaultEnabled ? (
+              <>
+                <InlineFormLabel width={10}>Client Secret</InlineFormLabel>
+                <VaultSecretNameInput
+                  fieldName="oauth2ClientSecret"
+                  vaultSecretName={secretMapping['oauth2ClientSecret'] || ''}
+                  onVaultMappingChange={onSecretMappingChange}
+                  width={15}
+                  placeholder="Client secret vault name"
+                />
+              </>
+            ) : (
+              <LegacyForms.SecretFormField
+                labelWidth={10}
+                inputWidth={15}
+                required
+                value={secureJsonData.oauth2ClientSecret || ''}
+                isConfigured={(secureJsonFields && secureJsonFields.oauth2ClientSecret) as boolean}
+                onReset={onResetClientSecret}
+                onChange={onUpdateDatasourceSecureJsonDataOption(props, 'oauth2ClientSecret')}
+                label="Client Secret"
+                aria-label="client secret"
+                placeholder="Client secret"
+              />
+            )}
           </div>
           <div className="gf-form">
             <InlineFormLabel width={10}>Token URL</InlineFormLabel>
@@ -113,6 +129,9 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
               labelWidth={10}
               secureFieldName="oauth2EndPointParamsName"
               secureFieldValue="oauth2EndPointParamsValue"
+              isVaultEnabled={isVaultEnabled}
+              secretMapping={secretMapping}
+              onSecretMappingChange={onSecretMappingChange}
             />
           </div>
           <TokenCustomization options={options} onOptionsChange={onOptionsChange} />
@@ -133,19 +152,32 @@ export const OAuthInputsEditor = (props: DataSourcePluginOptionsEditorProps<Infi
             <Input onChange={(v) => onOAuth2PropsChange('private_key_id', v.currentTarget.value)} value={oauth2.private_key_id} width={30} placeholder={'(optional) private key identifier'} />
           </div>
           <div className="gf-form">
-            <LegacyForms.SecretFormField
-              labelWidth={10}
-              inputWidth={15}
-              required
-              value={secureJsonData.oauth2JWTPrivateKey || ''}
-              tooltip="PrivateKey contains the contents of an RSA private key or the contents of a PEM file that contains a private key. The provided private key is used to sign JWT payloads"
-              isConfigured={(secureJsonFields && secureJsonFields.oauth2JWTPrivateKey) as boolean}
-              onReset={onResetJWTPrivateKey}
-              onChange={onUpdateDatasourceSecureJsonDataOption(props, 'oauth2JWTPrivateKey')}
-              label="Private Key"
-              aria-label="Private Key"
-              placeholder="Private Key"
-            />
+            {isVaultEnabled ? (
+              <>
+                <InlineFormLabel width={10}>Private Key</InlineFormLabel>
+                <VaultSecretNameInput
+                  fieldName="oauth2JWTPrivateKey"
+                  vaultSecretName={secretMapping['oauth2JWTPrivateKey'] || ''}
+                  onVaultMappingChange={onSecretMappingChange}
+                  width={15}
+                  placeholder="Private Key vault name"
+                />
+              </>
+            ) : (
+              <LegacyForms.SecretFormField
+                labelWidth={10}
+                inputWidth={15}
+                required
+                value={secureJsonData.oauth2JWTPrivateKey || ''}
+                tooltip="PrivateKey contains the contents of an RSA private key or the contents of a PEM file that contains a private key. The provided private key is used to sign JWT payloads"
+                isConfigured={(secureJsonFields && secureJsonFields.oauth2JWTPrivateKey) as boolean}
+                onReset={onResetJWTPrivateKey}
+                onChange={onUpdateDatasourceSecureJsonDataOption(props, 'oauth2JWTPrivateKey')}
+                label="Private Key"
+                aria-label="Private Key"
+                placeholder="Private Key"
+              />
+            )}
           </div>
           <div className="gf-form">
             <InlineFormLabel width={10} tooltip="TokenURL is the endpoint required to complete the 2-legged JWT flow.">

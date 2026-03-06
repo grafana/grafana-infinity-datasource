@@ -6,6 +6,8 @@ import { AllowedHostsEditor } from '@/editors/config/AllowedHosts';
 import { AzureBlobAuthEditor } from '@/editors/config/Auth.AzureBlob';
 import { OAuthInputsEditor } from './../../editors/config/OAuthInput';
 import { OthersAuthentication } from '@/editors/config/OtherAuthProviders';
+import { VaultSecretNameInput } from '@/components/config/SecureTextArea';
+import { useVaultConfig } from '@/components/config/useVaultConfig';
 import { AWSRegions } from '@/constants';
 import type { APIKeyType, AuthType, InfinityOptions, InfinitySecureOptions } from '@/types';
 
@@ -96,6 +98,7 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
   const onAwsServiceChange = (service: string) => {
     onOptionsChange({ ...options, jsonData: { ...options.jsonData, aws: { ...options.jsonData?.aws, service } } });
   };
+  const { isVaultEnabled, secretMapping, onSecretMappingChange } = useVaultConfig(props);
   const onResetSecret = (key: keyof InfinitySecureOptions) => {
     onOptionsChange({
       ...options,
@@ -148,19 +151,26 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
                   <FormField label="User Name" placeholder="username" labelWidth={10} value={props.options.basicAuthUser || ''} onChange={(e) => onUserNameChange(e.currentTarget.value)}></FormField>
                 </div>
                 <div className="gf-form">
-                  <SecretFormField
-                    labelWidth={10}
-                    inputWidth={12}
-                    required
-                    value={secureJsonData.basicAuthPassword || ''}
-                    isConfigured={(secureJsonFields && secureJsonFields.basicAuthPassword) as boolean}
-                    onReset={() => onResetSecret('basicAuthPassword')}
-                    onChange={onUpdateDatasourceSecureJsonDataOption(props, 'basicAuthPassword')}
-                    label="Password"
-                    aria-label="password"
-                    placeholder="password"
-                    tooltip="password"
-                  />
+                  {isVaultEnabled ? (
+                    <>
+                      <InlineFormLabel width={10}>Password</InlineFormLabel>
+                      <VaultSecretNameInput fieldName="basicAuthPassword" vaultSecretName={secretMapping['basicAuthPassword'] || ''} onVaultMappingChange={onSecretMappingChange} width={12} />
+                    </>
+                  ) : (
+                    <SecretFormField
+                      labelWidth={10}
+                      inputWidth={12}
+                      required
+                      value={secureJsonData.basicAuthPassword || ''}
+                      isConfigured={(secureJsonFields && secureJsonFields.basicAuthPassword) as boolean}
+                      onReset={() => onResetSecret('basicAuthPassword')}
+                      onChange={onUpdateDatasourceSecureJsonDataOption(props, 'basicAuthPassword')}
+                      label="Password"
+                      aria-label="password"
+                      placeholder="password"
+                      tooltip="password"
+                    />
+                  )}
                 </div>
                 <ConfigPreview jsonData={options.jsonData} authType={authType} />
               </>
@@ -168,19 +178,26 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
             {authType === 'bearerToken' && (
               <>
                 <div className="gf-form">
-                  <SecretFormField
-                    labelWidth={10}
-                    inputWidth={12}
-                    required
-                    value={secureJsonData.bearerToken || ''}
-                    isConfigured={(secureJsonFields && secureJsonFields.bearerToken) as boolean}
-                    onReset={() => onResetSecret('bearerToken')}
-                    onChange={onUpdateDatasourceSecureJsonDataOption(props, 'bearerToken')}
-                    label="Bearer token"
-                    aria-label="bearer token"
-                    placeholder="bearer token"
-                    tooltip="bearer token"
-                  />
+                  {isVaultEnabled ? (
+                    <>
+                      <InlineFormLabel width={10}>Bearer token</InlineFormLabel>
+                      <VaultSecretNameInput fieldName="bearerToken" vaultSecretName={secretMapping['bearerToken'] || ''} onVaultMappingChange={onSecretMappingChange} width={12} />
+                    </>
+                  ) : (
+                    <SecretFormField
+                      labelWidth={10}
+                      inputWidth={12}
+                      required
+                      value={secureJsonData.bearerToken || ''}
+                      isConfigured={(secureJsonFields && secureJsonFields.bearerToken) as boolean}
+                      onReset={() => onResetSecret('bearerToken')}
+                      onChange={onUpdateDatasourceSecureJsonDataOption(props, 'bearerToken')}
+                      label="Bearer token"
+                      aria-label="bearer token"
+                      placeholder="bearer token"
+                      tooltip="bearer token"
+                    />
+                  )}
                 </div>
                 <ConfigPreview jsonData={options.jsonData} authType={authType} />
               </>
@@ -198,19 +215,26 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
                   ></FormField>
                 </div>
                 <div className="gf-form">
-                  <SecretFormField
-                    labelWidth={10}
-                    inputWidth={12}
-                    required
-                    value={secureJsonData.apiKeyValue || ''}
-                    isConfigured={(secureJsonFields && secureJsonFields.apiKeyValue) as boolean}
-                    onReset={() => onResetSecret('apiKeyValue')}
-                    onChange={onUpdateDatasourceSecureJsonDataOption(props, 'apiKeyValue')}
-                    label="Value"
-                    aria-label="api key value"
-                    placeholder="api key value"
-                    tooltip="api key value"
-                  />
+                  {isVaultEnabled ? (
+                    <>
+                      <InlineFormLabel width={10}>Value</InlineFormLabel>
+                      <VaultSecretNameInput fieldName="apiKeyValue" vaultSecretName={secretMapping['apiKeyValue'] || ''} onVaultMappingChange={onSecretMappingChange} width={12} />
+                    </>
+                  ) : (
+                    <SecretFormField
+                      labelWidth={10}
+                      inputWidth={12}
+                      required
+                      value={secureJsonData.apiKeyValue || ''}
+                      isConfigured={(secureJsonFields && secureJsonFields.apiKeyValue) as boolean}
+                      onReset={() => onResetSecret('apiKeyValue')}
+                      onChange={onUpdateDatasourceSecureJsonDataOption(props, 'apiKeyValue')}
+                      label="Value"
+                      aria-label="api key value"
+                      placeholder="api key value"
+                      tooltip="api key value"
+                    />
+                  )}
                 </div>
                 <div className="gf-form">
                   <InlineFormLabel tooltip="Add api key to header/query params.">Add to</InlineFormLabel>
@@ -242,34 +266,48 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
                   ></FormField>
                 </div>
                 <div className="gf-form">
-                  <SecretFormField
-                    labelWidth={10}
-                    inputWidth={12}
-                    required
-                    value={secureJsonData.awsAccessKey || ''}
-                    isConfigured={(secureJsonFields && secureJsonFields.awsAccessKey) as boolean}
-                    onReset={() => onResetSecret('awsAccessKey')}
-                    onChange={onUpdateDatasourceSecureJsonDataOption(props, 'awsAccessKey')}
-                    label="Access Key"
-                    aria-label="aws access key"
-                    placeholder="aws access key"
-                    tooltip="aws access key"
-                  />
+                  {isVaultEnabled ? (
+                    <>
+                      <InlineFormLabel width={10}>Access Key</InlineFormLabel>
+                      <VaultSecretNameInput fieldName="awsAccessKey" vaultSecretName={secretMapping['awsAccessKey'] || ''} onVaultMappingChange={onSecretMappingChange} width={12} />
+                    </>
+                  ) : (
+                    <SecretFormField
+                      labelWidth={10}
+                      inputWidth={12}
+                      required
+                      value={secureJsonData.awsAccessKey || ''}
+                      isConfigured={(secureJsonFields && secureJsonFields.awsAccessKey) as boolean}
+                      onReset={() => onResetSecret('awsAccessKey')}
+                      onChange={onUpdateDatasourceSecureJsonDataOption(props, 'awsAccessKey')}
+                      label="Access Key"
+                      aria-label="aws access key"
+                      placeholder="aws access key"
+                      tooltip="aws access key"
+                    />
+                  )}
                 </div>
                 <div className="gf-form">
-                  <SecretFormField
-                    labelWidth={10}
-                    inputWidth={12}
-                    required
-                    value={secureJsonData.awsSecretKey || ''}
-                    isConfigured={(secureJsonFields && secureJsonFields.awsSecretKey) as boolean}
-                    onReset={() => onResetSecret('awsSecretKey')}
-                    onChange={onUpdateDatasourceSecureJsonDataOption(props, 'awsSecretKey')}
-                    label="Secret Key"
-                    aria-label="aws secret key"
-                    placeholder="aws secret key"
-                    tooltip="aws secret key"
-                  />
+                  {isVaultEnabled ? (
+                    <>
+                      <InlineFormLabel width={10}>Secret Key</InlineFormLabel>
+                      <VaultSecretNameInput fieldName="awsSecretKey" vaultSecretName={secretMapping['awsSecretKey'] || ''} onVaultMappingChange={onSecretMappingChange} width={12} />
+                    </>
+                  ) : (
+                    <SecretFormField
+                      labelWidth={10}
+                      inputWidth={12}
+                      required
+                      value={secureJsonData.awsSecretKey || ''}
+                      isConfigured={(secureJsonFields && secureJsonFields.awsSecretKey) as boolean}
+                      onReset={() => onResetSecret('awsSecretKey')}
+                      onChange={onUpdateDatasourceSecureJsonDataOption(props, 'awsSecretKey')}
+                      label="Secret Key"
+                      aria-label="aws secret key"
+                      placeholder="aws secret key"
+                      tooltip="aws secret key"
+                    />
+                  )}
                 </div>
               </>
             )}

@@ -27,6 +27,12 @@
   ],
   "words": [
     "ANSIC",
+    "azsecrets",
+    "azidentity",
+    "usgovcloudapi",
+    "azcore",
+    "keyvault",
+    "unparseable",
     "awsauth",
     "awsds",
     "azblob",

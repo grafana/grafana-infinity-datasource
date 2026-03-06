@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
+	"github.com/grafana/grafana-infinity-datasource/pkg/secretsmanager"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/httpclient"
 	"github.com/stretchr/testify/assert"
@@ -256,6 +257,24 @@ func TestAllSettingsAgainstFrontEnd(t *testing.T) {
 		},
 		KeepCookies: []string{"cookie1", "cookie2"},
 	}, gotSettings)
+}
+
+func TestLoadSettings_VaultFailsOnProviderInitError(t *testing.T) {
+	config := backend.DataSourceInstanceSettings{
+		JSONData: []byte(`{
+			"vaultConfig": {
+				"provider": "azure-keyvault",
+				"azure": {
+					"vaultUrl": "http://invalid.vault.azure.net/",
+					"authMethod": "managed-identity"
+				}
+			}
+		}`),
+	}
+
+	_, err := models.LoadSettings(context.Background(), config)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "vault provider initialization failed")
 }
 
 func Test_getSecrets(t *testing.T) {
@@ -578,6 +597,336 @@ func TestValidateAllowedHosts(t *testing.T) {
 			} else {
 				require.NoError(t, err, "Expected no error but got: %v", err)
 			}
+		})
+	}
+}
+
+func TestValidate_VaultAwareSecrets(t *testing.T) {
+	vaultEnabled := secretsmanager.VaultConfig{
+		Provider: secretsmanager.ProviderTypeAzureKeyVault,
+		Azure: &secretsmanager.AzureKeyVaultConfig{
+			VaultURL: "https://my-vault.vault.azure.net",
+		},
+	}
+	vaultWithMapping := secretsmanager.VaultConfig{
+		Provider: secretsmanager.ProviderTypeAzureKeyVault,
+		Azure: &secretsmanager.AzureKeyVaultConfig{
+			VaultURL: "https://my-vault.vault.azure.net",
+		},
+		SecretMapping: map[string]string{
+			"basicAuthPassword": "my-password-secret",
+		},
+	}
+
+	tests := []struct {
+		name     string
+		settings models.InfinitySettings
+		wantErr  error
+	}{
+		// --- Basic Auth ---
+		{
+			name: "basicAuth without password and no vault => error",
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodBasic,
+				Password:             "",
+			},
+			wantErr: models.ErrInvalidConfigPassword,
+		},
+		{
+			name: "basicAuth without password but vault enabled => no secret error, requires allowed hosts",
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodBasic,
+				Password:             "",
+				VaultConfig:          vaultEnabled,
+			},
+			wantErr: models.ErrInvalidConfigHostNotAllowed, // passes secret check but fails allowed hosts
+		},
+		{
+			name: "basicAuth without password, vault enabled, allowed hosts set => passes",
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodBasic,
+				Password:             "",
+				VaultConfig:          vaultEnabled,
+				AllowedHosts:         []string{"https://example.com"},
+			},
+			wantErr: nil,
+		},
+		{
+			name: "basicAuth without password, vault with explicit mapping => passes secret check",
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodBasic,
+				Password:             "",
+				VaultConfig:          vaultWithMapping,
+				AllowedHosts:         []string{"https://example.com"},
+			},
+			wantErr: nil,
+		},
+		// --- Digest Auth ---
+		{
+			name: "digestAuth without password and no vault => error",
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodDigestAuth,
+				Password:             "",
+			},
+			wantErr: models.ErrInvalidConfigPassword,
+		},
+		{
+			name: "digestAuth without password, vault enabled, allowed hosts set => passes",
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodDigestAuth,
+				Password:             "",
+				VaultConfig:          vaultEnabled,
+				AllowedHosts:         []string{"https://example.com"},
+			},
+			wantErr: nil,
+		},
+		// --- API Key ---
+		{
+			name: "apiKey without key name and no vault => error",
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodApiKey,
+				ApiKeyKey:            "",
+				ApiKeyValue:          "",
+			},
+			wantErr: models.ErrInvalidConfigAPIKey,
+		},
+		{
+			name: "apiKey with key name but no value and no vault => error",
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodApiKey,
+				ApiKeyKey:            "X-Api-Key",
+				ApiKeyValue:          "",
+			},
+			wantErr: models.ErrInvalidConfigAPIKey,
+		},
+		{
+			name: "apiKey without key name but vault enabled => error (key name is never vault-resolved)",
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodApiKey,
+				ApiKeyKey:            "",
+				ApiKeyValue:          "",
+				VaultConfig:          vaultEnabled,
+			},
+			wantErr: models.ErrInvalidConfigAPIKey,
+		},
+		{
+			name: "apiKey with key name, no value, vault enabled => passes secret check",
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodApiKey,
+				ApiKeyKey:            "X-Api-Key",
+				ApiKeyValue:          "",
+				VaultConfig:          vaultEnabled,
+				AllowedHosts:         []string{"https://example.com"},
+			},
+			wantErr: nil,
+		},
+		// --- Bearer Token ---
+		{
+			name: "bearerToken without token and no vault => error",
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodBearerToken,
+				BearerToken:          "",
+			},
+			wantErr: models.ErrInvalidConfigBearerToken,
+		},
+		{
+			name: "bearerToken without token, vault enabled, allowed hosts set => passes",
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodBearerToken,
+				BearerToken:          "",
+				VaultConfig:          vaultEnabled,
+				AllowedHosts:         []string{"https://example.com"},
+			},
+			wantErr: nil,
+		},
+		// --- Azure Blob ---
+		{
+			name: "azureBlob without account name and vault => still error (account name is not a secret)",
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodAzureBlob,
+				AzureBlobAccountName: "",
+				AzureBlobAccountKey:  "",
+				VaultConfig:          vaultEnabled,
+			},
+			wantErr: models.ErrInvalidConfigAzBlobAccName,
+		},
+		{
+			name: "azureBlob with account name, no key, no vault => error",
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodAzureBlob,
+				AzureBlobAccountName: "myaccount",
+				AzureBlobAccountKey:  "",
+			},
+			wantErr: models.ErrInvalidConfigAzBlobKey,
+		},
+		{
+			name: "azureBlob with account name, no key, vault enabled => passes",
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodAzureBlob,
+				AzureBlobAccountName: "myaccount",
+				AzureBlobAccountKey:  "",
+				VaultConfig:          vaultEnabled,
+			},
+			wantErr: nil,
+		},
+		// --- AWS ---
+		{
+			name: "aws keys auth without access key and no vault => error",
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodAWS,
+				AWSSettings:          models.AWSSettings{AuthType: models.AWSAuthTypeKeys},
+				AWSAccessKey:         "",
+				AWSSecretKey:         "",
+			},
+			wantErr: models.ErrInvalidConfigAWSAccessKey,
+		},
+		{
+			name: "aws keys auth with access key, no secret key, no vault => error",
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodAWS,
+				AWSSettings:          models.AWSSettings{AuthType: models.AWSAuthTypeKeys},
+				AWSAccessKey:         "AKIA...",
+				AWSSecretKey:         "",
+			},
+			wantErr: models.ErrInvalidConfigAWSSecretKey,
+		},
+		{
+			name: "aws keys auth without access key, vault enabled => passes",
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodAWS,
+				AWSSettings:          models.AWSSettings{AuthType: models.AWSAuthTypeKeys},
+				AWSAccessKey:         "",
+				AWSSecretKey:         "",
+				VaultConfig:          vaultEnabled,
+			},
+			wantErr: nil,
+		},
+		// --- Vault none / empty ---
+		{
+			name: "vault provider 'none' does not cover secrets",
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodBasic,
+				Password:             "",
+				VaultConfig: secretsmanager.VaultConfig{
+					Provider: secretsmanager.ProviderTypeNone,
+				},
+			},
+			wantErr: models.ErrInvalidConfigPassword,
+		},
+		{
+			name: "vault provider empty string does not cover secrets",
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodBasic,
+				Password:             "",
+				VaultConfig: secretsmanager.VaultConfig{
+					Provider: "",
+				},
+			},
+			wantErr: models.ErrInvalidConfigPassword,
+		},
+		// --- Existing secret provided locally (vault should not interfere) ---
+		{
+			name: "basicAuth with password provided locally, no vault => passes",
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodBasic,
+				Password:             "local-pw",
+				AllowedHosts:         []string{"https://example.com"},
+			},
+			wantErr: nil,
+		},
+		{
+			name: "basicAuth with password provided locally and vault enabled => passes",
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodBasic,
+				Password:             "local-pw",
+				VaultConfig:          vaultEnabled,
+				AllowedHosts:         []string{"https://example.com"},
+			},
+			wantErr: nil,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := tt.settings.Validate()
+			if tt.wantErr != nil {
+				require.NotNil(t, err, "expected error %v", tt.wantErr)
+				assert.Equal(t, tt.wantErr, err)
+				return
+			}
+			require.Nil(t, err, "unexpected error: %v", err)
+		})
+	}
+}
+
+func TestDoesAllowedHostsRequired_VaultEnabled(t *testing.T) {
+	tests := []struct {
+		name     string
+		settings models.InfinitySettings
+		want     bool
+	}{
+		{
+			name: "vault enabled with no auth and no base URL => required",
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodNone,
+				VaultConfig: secretsmanager.VaultConfig{
+					Provider: secretsmanager.ProviderTypeAzureKeyVault,
+				},
+			},
+			want: true,
+		},
+		{
+			name: "vault enabled with base URL set => not required",
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodNone,
+				URL:                  "https://base.example.com",
+				VaultConfig: secretsmanager.VaultConfig{
+					Provider: secretsmanager.ProviderTypeAzureKeyVault,
+				},
+			},
+			want: false,
+		},
+		{
+			name: "vault provider none with no auth => not required",
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodNone,
+				VaultConfig: secretsmanager.VaultConfig{
+					Provider: secretsmanager.ProviderTypeNone,
+				},
+			},
+			want: false,
+		},
+		{
+			name: "vault provider empty with no auth => not required",
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodNone,
+				VaultConfig: secretsmanager.VaultConfig{
+					Provider: "",
+				},
+			},
+			want: false,
+		},
+		{
+			name: "no vault, no auth, no base URL => not required",
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodNone,
+			},
+			want: false,
+		},
+		{
+			name: "vault enabled with auth => required (both conditions met)",
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodBasic,
+				VaultConfig: secretsmanager.VaultConfig{
+					Provider: secretsmanager.ProviderTypeAzureKeyVault,
+				},
+			},
+			want: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := tt.settings.DoesAllowedHostsRequired()
+			assert.Equal(t, tt.want, got)
 		})
 	}
 }

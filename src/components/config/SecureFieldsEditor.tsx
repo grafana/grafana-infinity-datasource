@@ -2,6 +2,7 @@ import { Button, LegacyForms } from '@grafana/ui';
 import uniqueId from 'lodash/uniqueId';
 import React, { PureComponent } from 'react';
 import { InfinityOptions, SecureField } from '@/types';
+import { VaultSecretNameInput } from '@/components/config/SecureTextArea';
 import type { DataSourceSettings } from '@grafana/data';
 
 const SecureFieldEditor = ({
@@ -57,6 +58,61 @@ const SecureFieldEditor = ({
   );
 };
 
+/**
+ * Vault-aware version of SecureFieldEditor.
+ * When vault is enabled, shows: key name input + vault secret name input (instead of a password input).
+ */
+const VaultFieldEditor = ({
+  title,
+  secureField,
+  vaultSecretName,
+  onBlur,
+  onChange,
+  onRemove,
+  onVaultMappingChange,
+  label,
+  labelWidth,
+  secureFieldValue,
+  index,
+}: {
+  title: string;
+  secureField: SecureField;
+  vaultSecretName: string;
+  onRemove: (id: string) => void;
+  onChange: (value: SecureField) => void;
+  onBlur: () => void;
+  onVaultMappingChange: (fieldName: string, vaultSecretName: string) => void;
+  labelWidth?: number;
+  label?: string;
+  secureFieldValue: string;
+  index: number;
+}) => {
+  const { FormField } = LegacyForms;
+  const layoutStyle: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: '4px',
+  };
+  const secureFieldKey = `${secureFieldValue}${index + 1}`;
+  return (
+    <div style={layoutStyle}>
+      <FormField
+        label={label || 'Key'}
+        labelWidth={labelWidth || 8}
+        name="name"
+        placeholder="key"
+        value={secureField.name || ''}
+        onChange={(e) => onChange({ ...secureField, name: e.target.value })}
+        onBlur={onBlur}
+      ></FormField>
+      <div style={{ marginInlineStart: '4px' }}>
+        <VaultSecretNameInput fieldName={secureFieldKey} vaultSecretName={vaultSecretName} onVaultMappingChange={onVaultMappingChange} width={20} placeholder={secureFieldKey} />
+      </div>
+      <Button style={{ marginInlineStart: '4px' }} aria-label={`Remove ${title}`} icon="trash-alt" variant="destructive" fill="outline" onClick={(_e) => onRemove(secureField.id)} />
+    </div>
+  );
+};
+
 interface Props {
   title: string;
   hideTile?: boolean;
@@ -66,6 +122,12 @@ interface Props {
   onChange: (config: DataSourceSettings<InfinityOptions>) => void;
   label?: string;
   labelWidth?: number;
+  /** Whether vault is enabled — when true, shows vault mapping inputs instead of secret value inputs */
+  isVaultEnabled?: boolean;
+  /** Current secret mapping from vault config */
+  secretMapping?: Record<string, string>;
+  /** Callback to update a secret mapping entry */
+  onSecretMappingChange?: (fieldName: string, vaultSecretName: string) => void;
 }
 
 interface State {
@@ -159,25 +221,43 @@ export class SecureFieldsEditor extends PureComponent<Props, State> {
 
   render() {
     const { secureFields } = this.state;
+    const { isVaultEnabled, secretMapping, onSecretMappingChange } = this.props;
     return (
       <>
         {!this.props.hideTile && <h6>{this.props.title}s</h6>}
         <div className="gf-form-inline">
           <div className="gf-form">
             <div>
-              {secureFields.map((sf, i) => (
-                <SecureFieldEditor
-                  title={this.props.title}
-                  key={sf.id}
-                  secureField={sf}
-                  onChange={(h) => this.onSecureFieldChange(i, h)}
-                  onBlur={this.updateSettings}
-                  onRemove={this.onSecureFieldRemove}
-                  onReset={this.onSecureFieldReset}
-                  label={this.props.label}
-                  labelWidth={this.props.labelWidth}
-                />
-              ))}
+              {secureFields.map((sf, i) =>
+                isVaultEnabled && onSecretMappingChange ? (
+                  <VaultFieldEditor
+                    title={this.props.title}
+                    key={sf.id}
+                    secureField={sf}
+                    vaultSecretName={(secretMapping || {})[`${this.props.secureFieldValue}${i + 1}`] || ''}
+                    onChange={(h) => this.onSecureFieldChange(i, h)}
+                    onBlur={this.updateSettings}
+                    onRemove={this.onSecureFieldRemove}
+                    onVaultMappingChange={onSecretMappingChange}
+                    label={this.props.label}
+                    labelWidth={this.props.labelWidth}
+                    secureFieldValue={this.props.secureFieldValue}
+                    index={i}
+                  />
+                ) : (
+                  <SecureFieldEditor
+                    title={this.props.title}
+                    key={sf.id}
+                    secureField={sf}
+                    onChange={(h) => this.onSecureFieldChange(i, h)}
+                    onBlur={this.updateSettings}
+                    onRemove={this.onSecureFieldRemove}
+                    onReset={this.onSecureFieldReset}
+                    label={this.props.label}
+                    labelWidth={this.props.labelWidth}
+                  />
+                )
+              )}
             </div>
           </div>
         </div>

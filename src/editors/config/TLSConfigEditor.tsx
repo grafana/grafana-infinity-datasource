@@ -1,6 +1,7 @@
 import { InlineFormLabel, Switch, useTheme2, InlineField, Input, Stack } from '@grafana/ui';
 import React from 'react';
 import { SecureTextArea } from '@/components/config/SecureTextArea';
+import { useVaultConfig } from '@/components/config/useVaultConfig';
 import type { InfinityOptions, InfinitySecureOptions } from '@/types';
 import type { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 
@@ -13,6 +14,7 @@ export const TLSConfigEditor = (props: TLSConfigEditorProps) => {
   const { options, onOptionsChange } = props;
   const { jsonData, secureJsonFields } = options;
   const secureJsonData = (options.secureJsonData || {}) as InfinitySecureOptions;
+  const { isVaultEnabled, secretMapping, onSecretMappingChange } = useVaultConfig(props);
   const onTLSSettingsChange = (key: keyof Pick<InfinityOptions, 'tlsSkipVerify' | 'tlsAuth' | 'tlsAuthWithCACert'>, value: boolean) => {
     onOptionsChange({
       ...options,
@@ -86,6 +88,10 @@ export const TLSConfigEditor = (props: TLSConfigEditorProps) => {
           rows={5}
           onChange={(e) => onCertificateChange('tlsCACert', e.currentTarget.value)}
           onReset={() => onCertificateReset('tlsCACert')}
+          isVaultEnabled={isVaultEnabled}
+          vaultSecretName={secretMapping['tlsCACert'] || ''}
+          onVaultMappingChange={onSecretMappingChange}
+          fieldName="tlsCACert"
         />
       )}
       <Stack>
@@ -109,6 +115,10 @@ export const TLSConfigEditor = (props: TLSConfigEditorProps) => {
             rows={5}
             onChange={(e) => onCertificateChange('tlsClientCert', e.currentTarget.value)}
             onReset={() => onCertificateReset('tlsClientCert')}
+            isVaultEnabled={isVaultEnabled}
+            vaultSecretName={secretMapping['tlsClientCert'] || ''}
+            onVaultMappingChange={onSecretMappingChange}
+            fieldName="tlsClientCert"
           />
           <SecureTextArea
             configured={!!secureJsonFields?.tlsClientKey}
@@ -118,6 +128,10 @@ export const TLSConfigEditor = (props: TLSConfigEditorProps) => {
             rows={5}
             onChange={(e) => onCertificateChange('tlsClientKey', e.currentTarget.value)}
             onReset={() => onCertificateReset('tlsClientKey')}
+            isVaultEnabled={isVaultEnabled}
+            vaultSecretName={secretMapping['tlsClientKey'] || ''}
+            onVaultMappingChange={onSecretMappingChange}
+            fieldName="tlsClientKey"
           />
         </>
       )}
