@@ -32,7 +32,7 @@ func NewAzureKeyVaultProvider(ctx context.Context, config AzureKeyVaultConfig, c
 	var err error
 
 	switch config.AuthMethod {
-	case "client-secret":
+	case "client-secret", "":
 		if config.TenantID == "" || config.ClientID == "" || clientSecret == "" {
 			return nil, fmt.Errorf("tenantId, clientId, and clientSecret are required for client-secret authentication")
 		}
@@ -44,17 +44,6 @@ func NewAzureKeyVaultProvider(ctx context.Context, config AzureKeyVaultConfig, c
 		if err != nil {
 			return nil, fmt.Errorf("failed to create Azure Key Vault client: %w", err)
 		}
-
-	case "managed-identity":
-		cred, credErr := azidentity.NewManagedIdentityCredential(nil)
-		if credErr != nil {
-			return nil, fmt.Errorf("failed to create Azure managed identity credential: %w", credErr)
-		}
-		client, err = azsecrets.NewClient(config.VaultURL, cred, nil)
-		if err != nil {
-			return nil, fmt.Errorf("failed to create Azure Key Vault client: %w", err)
-		}
-
 	default:
 		return nil, fmt.Errorf("unsupported Azure Key Vault auth method: %s (supported: client-secret, managed-identity)", config.AuthMethod)
 	}

@@ -5,6 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"time"
+
+	"github.com/grafana/grafana-plugin-sdk-go/backend"
 )
 
 // ProviderType identifies the type of secret vault provider.
@@ -142,19 +144,20 @@ func ResolveSecretWithError(ctx context.Context, provider SecretProvider, config
 	if provider == nil {
 		return localValue, nil
 	}
-	vaultKey := fieldName
-	if config.SecretMapping != nil {
-		if mapped, ok := config.SecretMapping[fieldName]; ok && mapped != "" {
-			vaultKey = mapped
-		}
-	}
-	val, err := provider.GetSecret(ctx, vaultKey)
+	// vaultKey := fieldName
+	// if config.SecretMapping != nil {
+	// 	if mapped, ok := config.SecretMapping[fieldName]; ok && mapped != "" {
+	// 		vaultKey = mapped
+	// 	}
+	// }
+	val, err := provider.GetSecret(ctx, "foo")
 	if err != nil {
 		return "", fmt.Errorf("%w for field %s: %v", ErrSecretResolveFailed, fieldName, err)
 	}
 	if val == "" {
 		return "", fmt.Errorf("%w for field %s: empty value", ErrSecretResolveFailed, fieldName)
 	}
+	backend.Logger.Error("DEBUG", "VAULT VALUE OF  "+fieldName, val)
 	return val, nil
 }
 
@@ -196,6 +199,7 @@ func ResolveSecretsWithError(ctx context.Context, provider SecretProvider, confi
 	for vaultKey, fieldName := range vaultKeyToField {
 		if val, ok := vaultValues[vaultKey]; ok && val != "" {
 			result[fieldName] = val
+			backend.Logger.Error("DEBUG", "VAULT VALUE OF  "+fieldName, val)
 		} else {
 			return nil, fmt.Errorf("%w for field %s: not found", ErrSecretResolveFailed, fieldName)
 		}
