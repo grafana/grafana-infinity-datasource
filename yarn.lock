@@ -2607,10 +2607,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@openfeature/core@npm:^1.9.0":
-  version: 1.9.1
-  resolution: "@openfeature/core@npm:1.9.1"
-  checksum: 10c0/983c651484621e6e5a3b4bf83fce5398a1adc2ace6162ff5a13a8eaf6d285b7c6b15f5c0a477ece9010ca88b28799985d810047ea0c18324d7a51ac4d04e18d6
+"@openfeature/core@npm:1.9.2":
+  version: 1.9.2
+  resolution: "@openfeature/core@npm:1.9.2"
+  checksum: 10c0/a0600c16f9c9e8721964643d2b0ccf5501767eee34908eec1a2a4d8fdb47c5f8224bdc254067a18d069bf7d57d9bdbc7b9cdf50cb1cb8d253778c43c11ed760b
   languageName: node
   linkType: hard
 
@@ -2641,6 +2641,15 @@ __metadata:
     "@openfeature/web-sdk": ^1.5.0
     react: ">=16.8.0"
   checksum: 10c0/6a0de5240bc3dd4140cfe8dd8b96a4f34ea11dde0b4eed8d85c921ff5461b6c7c54048740e791f001453a1b19c608aa2ea4540abbfd4cffd2f80975f1b3d06eb
+  languageName: node
+  linkType: hard
+
+"@openfeature/web-sdk@npm:1.7.3":
+  version: 1.7.3
+  resolution: "@openfeature/web-sdk@npm:1.7.3"
+  peerDependencies:
+    "@openfeature/core": ^1.9.2
+  checksum: 10c0/e3e409f7cff6ff83fcc9a6251dbc7ed22b1d9caab82b60675c8764e34ac61a50877d404d4f13136993fc4a456702b8aea8eb1a0789e6e5df586fc1ad4482f0d7
   languageName: node
   linkType: hard
 
@@ -7958,6 +7967,7 @@ __metadata:
     "@grafana/schema": "npm:12.4.0"
     "@grafana/tsconfig": "npm:2.0.1"
     "@grafana/ui": "npm:12.4.0"
+    "@openfeature/web-sdk": "npm:1.7.3"
     "@playwright/test": "npm:1.58.2"
     "@stylistic/eslint-plugin-ts": "npm:4.4.1"
     "@swc/core": "npm:1.15.18"

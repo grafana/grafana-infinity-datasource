@@ -80,6 +80,7 @@
     "@grafana/eslint-config": "9.0.0",
     "@grafana/plugin-e2e": "3.4.2",
     "@grafana/tsconfig": "2.0.1",
+    "@openfeature/web-sdk": "1.7.3",
     "@playwright/test": "1.58.2",
     "@stylistic/eslint-plugin-ts": "4.4.1",
     "@swc/core": "1.15.18",
@@ -140,6 +141,7 @@
   "resolutions": {
     "fast-xml-parser": "5.4.2",
     "minimatch": "10.2.4",
+    "@openfeature/core": "1.9.2",
     "serialize-javascript": "7.0.4",
     "tar": "7.5.10"
   },
