@@ -25,6 +25,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@axe-core/playwright@npm:4.11.1":
+  version: 4.11.1
+  resolution: "@axe-core/playwright@npm:4.11.1"
+  dependencies:
+    axe-core: "npm:~4.11.1"
+  peerDependencies:
+    playwright-core: ">= 1.0.0"
+  checksum: 10c0/8c916cd2dd831d91f8c2ab9e3a07ef19837415bb41d40439e4acb88ed0009af2479696b865670199b13ccad984a247868610fbb34d520fca9f7c02de0f7a9439
+  languageName: node
+  linkType: hard
+
 "@babel/code-frame@npm:^7.0.0, @babel/code-frame@npm:^7.10.4, @babel/code-frame@npm:^7.16.7, @babel/code-frame@npm:^7.27.1, @babel/code-frame@npm:^7.28.6, @babel/code-frame@npm:^7.29.0":
   version: 7.29.0
   resolution: "@babel/code-frame@npm:7.29.0"
@@ -5053,6 +5064,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"axe-core@npm:~4.11.1":
+  version: 4.11.1
+  resolution: "axe-core@npm:4.11.1"
+  checksum: 10c0/1e6997454b61c7c9a4d740f395952835dcf87f2c04fd81577217d68634d197d602c224f9e8f17b22815db4c117a2519980cfc8911fc0027c54a6d8ebca47c6a7
+  languageName: node
+  linkType: hard
+
 "babel-jest@npm:30.2.0":
   version: 30.2.0
   resolution: "babel-jest@npm:30.2.0"
@@ -7954,6 +7972,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "grafana-infinity-datasource@workspace:."
   dependencies:
+    "@axe-core/playwright": "npm:4.11.1"
     "@babel/core": "npm:7.29.0"
     "@changesets/cli": "npm:2.30.0"
     "@changesets/types": "npm:6.1.0"
