@@ -1,7 +1,7 @@
 # AI Coding Agent Instructions
 
 > Canonical AI/LLM instructions for the Grafana Infinity Datasource project.
-> Other AI config files (CLAUDE.md, SKILLS.md, .cursorrules, .clinerules, .windsurfrules) are symlinks to this file.
+> Other AI config files (CLAUDE.md, SKILLS.md, .cursorrules, .clinerules, .windsurfrules, .github/copilot-instructions.md) are symlinks to this file.
 
 ## Project Overview
 
@@ -186,6 +186,7 @@ Workflow skills provide step-by-step procedures for common multi-file tasks. Det
 | Skill | Description | File |
 |-------|-------------|------|
 | `add-auth-type` | Add a new authentication type (frontend + backend) | `.github/skills/add-auth-type/SKILL.md` |
+| `debug-plugin` | Debug frontend and/or backend issues (runtime errors, query failures, UI bugs) | `.github/skills/debug-plugin/SKILL.md` |
 
 ## Contextual Instructions
 
