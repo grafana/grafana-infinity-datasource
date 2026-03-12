@@ -1,63 +1,160 @@
 ---
-slug: '/thingspeak'
-title: 'Thingspeak API'
-menuTitle: Thingspeak API
-description: Visualizing data from ThingSpeak API
+slug: '/examples/thingspeak'
+title: ThingSpeak API
+menuTitle: ThingSpeak
+description: Visualize IoT sensor data from ThingSpeak using the Infinity data source.
+aliases:
+  - /docs/plugins/yesoreyeram-infinity-datasource/latest/examples/thingspeak/
 keywords:
-  - data source
   - infinity
-  - json
-  - graphql
-  - csv
-  - tsv
-  - xml
-  - html
-  - api
-  - rest
+  - ThingSpeak
+  - IoT
+  - sensors
+  - time series
 labels:
   products:
     - oss
-weight: 8001
+    - enterprise
+    - cloud
+weight: 500
 ---
 
-# Visualizing data from ThingSpeak REST API
+# ThingSpeak API integration
 
-In this example, you'll learn how to visualize data from ThingSpeak API.
+Connect to the ThingSpeak IoT platform to visualize sensor data and metrics from your IoT devices.
 
-For demo purposes, the [traffic monitor public channel](https://thingspeak.com/channels/38629) (Channel ID : 38629) is being used.  ThingSpeak APIs are available in different formats such as JSON, CSV, and XML, and we are going to see how to use all of those different API formats.
+## Before you begin
 
-## JSON Example
+- A ThingSpeak channel with data (public channels work without authentication)
+- For private channels, your ThingSpeak Read API Key
+- Know your channel ID
 
-As you can see in the picture below, we're using the [JSON feed URL](https://thingspeak.com/channels/38629/feed.json) of the channel. According to this JSON schema, the data points are under the node called `feeds`, so we'll specify the same as our `Rows/Root` selector. Then for the columns, we need to first specify our time column which is `created_at` field in our JSON feed. Then, we can specify one or more metrics (number) fields as shown in the picture below.
+This guide uses the public [traffic monitor channel](https://thingspeak.com/channels/38629) (Channel ID: 38629) for examples.
 
-![image](https://user-images.githubusercontent.com/153843/108479371-9030bb00-728d-11eb-8ae5-f186c78db64e.png#center)
+## Configure the data source
 
-## CSV Example
+1. In Grafana, navigate to **Connections** > **Data sources**.
+1. Click **Add new data source** and select **Infinity**.
+1. In **Allowed hosts**, enter `https://thingspeak.com`.
+1. For private channels, expand **Authentication** and select **API Key**.
+   - Set **Key** to `api_key` and add your ThingSpeak Read API Key.
+   - Set **Add to** to **Query String**.
+1. Click **Save & test**.
 
-If you prefer CSV format over JSON, here is the example settings of the same channel. We are using the [CSV feed URL](https://thingspeak.com/channels/38629/feed.csv) of the channel. In the query, choose `CSV` as your type, specify the CSV feed URL and then, the fields you needed along with time field.
+## Query examples
 
-![image](https://user-images.githubusercontent.com/153843/108479976-4b595400-728e-11eb-868e-b2d550f496f3.png#center)
+ThingSpeak provides data in JSON, CSV, and XML formats. Choose the format that best fits your needs.
 
-## XML Example
+### JSON format
 
-You are not limited to CSV or JSON. You can also use XML format as well in your query if your prefer that. We are using the [XML feed URL](https://thingspeak.com/channels/38629/feed.xml) of the channel. The query setup is almost same as for CSV/JSON. Notable configurations are your rows/root field and timestamp field. As shown in the picture below, we are using `channel.feeds[0].feed` as root/rows selector and then for selecting timestamp, we use `created-at[0]._`
+**Configuration:**
 
-![image](https://user-images.githubusercontent.com/153843/108480329-b99e1680-728e-11eb-91f3-38c5585477e2.png#center)
+| Setting | Value |
+|---------|-------|
+| **Type** | JSON |
+| **URL** | `https://thingspeak.com/channels/38629/feed.json` |
+| **Parser** | Backend |
+| **Root selector** | `feeds` |
 
-## Using Grafana's time filter
+**Columns:**
 
-After you set up the query, you may find that your are always querying recent data in the graphs, regardless of the time range chosen in Grafana. To solve this issue, you need to pass the Grafana's dynamic time range in the URL. As per the [ThingSpeak API specification](https://community.thingspeak.com/documentation%20.../api/), you should to pass the start and end time to the URL as query string params. To do that, append `?start=${__from:date:YYYY-MM-DD HH:NN:SS}&end=${__to:date:YYYY-MM-DD HH:NN:SS}` to the URL. You can use any variable as specified in the [grafana doc](https://grafana.com/docs/grafana/latest/variables/variable-types/global-variables/)
+| Selector | Alias | Type |
+|----------|-------|------|
+| `created_at` | Time | Timestamp |
+| `field1` | Field 1 | Number |
+| `field2` | Field 2 | Number |
 
-The full URL now becomes `https://thingspeak.com/channels/38629/feed.json?start=${__from:date:YYYY-MM-DD HH:NN:SS}&end=${__to:date:YYYY-MM-DD HH:NN:SS}`.
+### CSV format
 
-![image](https://user-images.githubusercontent.com/153843/108482298-392ce500-7291-11eb-9137-888fc4b3515b.png#center#center)
+**Configuration:**
 
-## Long time range
+| Setting | Value |
+|---------|-------|
+| **Type** | CSV |
+| **URL** | `https://thingspeak.com/channels/38629/feed.csv` |
 
-Typically you can retrieve all the metrics without any aggregation for up to 2 hours. If you are looking for a longer time range, you may need to pass an aggregation filter to your URL. Here in the below example, we are looking for data of the last 180 days, so we are pulling the aggregated data using the URL `https://thingspeak.com/channels/38629/feed.json?start=${__from:date:YYYY-MM-DD HH:NN:SS}&end=${__to:date:YYYY-MM-DD HH:NN:SS}&average=1440`. An important thing to note here is **average=1440**, where it specifies to take average of each 1440 minutes/1day. You can specify more granular time aggregations. As per the document, 10, 15, 20, 30, 60, 240, 720, 1440 are the valid time range in minutes. Also, instead average you can use sum/timescale/median functions.
+The CSV format automatically detects column headers.
 
-![image](https://user-images.githubusercontent.com/153843/108484741-0cc69800-7294-11eb-956b-8dfb74123301.png#center)
+### XML format
 
-## Note
+**Configuration:**
 
-> This post was originally posted in [a GitHub discussion](https://github.com/grafana/grafana-infinity-datasource/discussions/38)
+| Setting | Value |
+|---------|-------|
+| **Type** | XML |
+| **URL** | `https://thingspeak.com/channels/38629/feed.xml` |
+| **Root selector** | `channel.feeds.feed` |
+
+**Columns:**
+
+| Selector | Alias | Type |
+|----------|-------|------|
+| `created-at` | Time | Timestamp |
+| `field1` | Field 1 | Number |
+
+## Filter by dashboard time range
+
+By default, ThingSpeak returns recent data regardless of your Grafana time range. To filter by the dashboard time range, add time parameters to the URL:
+
+```
+https://thingspeak.com/channels/38629/feed.json?start=${__from:date:YYYY-MM-DD HH:NN:SS}&end=${__to:date:YYYY-MM-DD HH:NN:SS}
+```
+
+This uses Grafana's time variables to pass the selected time range to the API.
+
+## Query long time ranges
+
+For time ranges longer than 2 hours, ThingSpeak requires data aggregation. Add an aggregation parameter:
+
+```
+https://thingspeak.com/channels/38629/feed.json?start=${__from:date:YYYY-MM-DD HH:NN:SS}&end=${__to:date:YYYY-MM-DD HH:NN:SS}&average=60
+```
+
+### Aggregation options
+
+| Parameter | Description |
+|-----------|-------------|
+| `average=N` | Average values over N minutes |
+| `sum=N` | Sum values over N minutes |
+| `median=N` | Median values over N minutes |
+| `timescale=N` | Timescale values over N minutes |
+
+### Valid aggregation intervals
+
+| Minutes | Duration |
+|---------|----------|
+| 10 | 10 minutes |
+| 15 | 15 minutes |
+| 20 | 20 minutes |
+| 30 | 30 minutes |
+| 60 | 1 hour |
+| 240 | 4 hours |
+| 720 | 12 hours |
+| 1440 | 1 day |
+
+For example, `average=1440` calculates the daily average.
+
+## ThingSpeak URL parameters
+
+| Parameter | Description | Example |
+|-----------|-------------|---------|
+| `results` | Number of results to return | `results=100` |
+| `start` | Start date/time | `start=2024-01-01` |
+| `end` | End date/time | `end=2024-01-31` |
+| `timezone` | Timezone for timestamps | `timezone=America/New_York` |
+| `status` | Include status field | `status=true` |
+
+## Troubleshoot
+
+| Issue | Cause | Solution |
+|-------|-------|----------|
+| Empty response | Private channel without API key | Add your Read API Key in authentication settings |
+| No data for time range | Time range > 2 hours without aggregation | Add an aggregation parameter (average, sum, median) |
+| Field values are null | Sensor not reporting that field | Verify the field exists in your ThingSpeak channel |
+| 400 Bad Request | Invalid aggregation interval | Use a valid interval (10, 15, 20, 30, 60, 240, 720, 1440) |
+
+## Additional resources
+
+- [ThingSpeak REST API documentation](https://www.mathworks.com/help/thingspeak/rest-api.html)
+- [Public ThingSpeak channels](https://thingspeak.com/channels/public)
+- [ThingSpeak Read a Channel Feed](https://www.mathworks.com/help/thingspeak/readdata.html)
