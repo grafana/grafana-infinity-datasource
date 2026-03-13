@@ -7,4 +7,27 @@ services:
       - ./provisioning/dashboards-actual/:/dashboards/
       - ./conf:/grafana-config
     environment:
-      - GF_PATHS_CONFIG=/grafana-config/grafana.ini 
+      - GF_PATHS_CONFIG=/grafana-config/grafana.ini
+    depends_on:
+      - httpbin
+    networks:
+      - infinity-test-network
+
+  httpbin:
+    image: mccutchen/go-httpbin:latest
+    container_name: 'infinity-httpbin'
+    ports:
+      - "8888:8080"
+    networks:
+      - infinity-test-network
+    environment:
+      - MAX_BODY_SIZE=10485760
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/status/200"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+
+networks:
+  infinity-test-network:
+    driver: bridge 
