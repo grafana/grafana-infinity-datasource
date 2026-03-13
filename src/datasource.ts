@@ -10,7 +10,7 @@ import { getUpdatedDataRequest, interpolateVariablesInQueries } from '@/app/quer
 import { InfinityVariableSupport } from '@/app/variablesQuery';
 import { AnnotationsEditor } from '@/editors/annotation.editor';
 import { interpolateQuery } from '@/interpolate';
-import { isBackendQuery } from '@/app/utils';
+import { isBackendQuery, isInfinityQueryWithUrlSource } from '@/app/utils';
 import type { InfinityInstanceSettings, InfinityOptions, InfinityQuery } from '@/types';
 
 export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOptions> {
@@ -41,13 +41,10 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
     return interpolateVariablesInQueries(queries, scopedVars);
   }
   getQueryDisplayText(query: InfinityQuery) {
-    return (
-      query.type.toUpperCase() +
-      ((query.type === 'json' || query.type === 'csv' || query.type === 'xml' || query.type === 'uql' || query.type === 'graphql' || query.type === 'groq' || query.type === 'tsv') &&
-      query.source === 'url'
-        ? ` ${query.url}`
-        : '')
-    );
+    const queryType = query.type?.toUpperCase() || "JSON"
+    const queryMethod = isInfinityQueryWithUrlSource(query) ? query.url_options?.method : ''
+    const queryURL = isInfinityQueryWithUrlSource(query) ? query.url : ''
+    return [queryType, queryMethod, queryURL].filter(v => v).join(" : ");
   }
   filterQuery(query: InfinityQuery) {
     if (query.hide) {

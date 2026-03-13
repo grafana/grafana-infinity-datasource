@@ -2,10 +2,11 @@ import { firstValueFrom } from 'rxjs';
 import { PluginType, DataSourceInstanceSettings, DataQueryRequest, DataFrame } from '@grafana/data';
 import { Datasource } from '@/datasource';
 import { InfinityVariableSupport } from '@/app/variablesQuery';
+import { InfinityQuery } from '@/types';
 
 jest.mock('@grafana/runtime', () => ({
   ...(jest.requireActual('@grafana/runtime') as unknown as object),
-  reportInteraction: () => {},
+  reportInteraction: () => { },
   getTemplateSrv: () => {
     return {
       replace: (s: string) => s,
@@ -106,5 +107,17 @@ describe('metricFindQuery', () => {
       expect(frame.fields.find((f) => f.name === 'value')?.values).toStrictEqual(['nonprod-server']);
       expect(frame.fields.find((f) => f.name === 'text')?.values).toStrictEqual(['nonprod-server']);
     });
+  });
+});
+
+describe('getQueryDisplayText', () => {
+  const ds = new Datasource(DummyDatasource);
+  it('should return display text for a empty query', () => {
+    const query = {} as InfinityQuery;
+    expect(ds.getQueryDisplayText(query)).toBe('JSON');
+  });
+  it('should return display text for a JSON URL query with GET method', () => {
+    const query = { type: 'json', source: 'url', url: 'https://example.com/api', url_options: { method: 'GET' } } as InfinityQuery;
+    expect(ds.getQueryDisplayText(query)).toBe('JSON : GET : https://example.com/api');
   });
 });
