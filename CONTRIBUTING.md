@@ -39,3 +39,17 @@ To create a new release, execute `yarn changeset version`. This will update the 
 ## Testing the PDC
 
 To test the PDC functionality with Infinity, you can use the `docker compose -f docker-compose-debug.yaml up`. This debug docker compose file comes with **microsocks** proxy, PDC enabled and configured. [Provisioned datasources](./provisioning/datasources/default.yml) file also have some examples of datasource instances with secure socks proxy enabled and with different authentication mechanisms.(You can find the PDC enabled datasources with the prefix **PDC**.)
+
+## Running pre-built plugin from zip file
+
+To run a specific version of the plugin without building locally, you can use the following command to run the following docker command. The following command run plugin version3.7.3 against the latest version of grafana.
+
+```sh
+V=3.7.3 docker compose -f ./docker-compose-zip.yaml up
+```
+
+If you want to run this against a specific version of grafana use the following command
+
+```sh
+V=3.7.3 GF_VERSION=12.4.0 docker compose -f ./docker-compose-zip.yaml up
+```
