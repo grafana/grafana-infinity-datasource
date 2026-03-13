@@ -110,3 +110,19 @@ From v2.7.1, you can use time macros `${__timeFrom}` and `${__timeTo}` which wil
 | `${__timeFrom:date:YYYY-MM-DD}`       | `2020-07-13`               |
 
 In infinity 2.7.1+, This is the preferred time macro over [grafana global variable](https://grafana.com/docs/grafana/latest/dashboards/variables/add-template-variables/#__from-and-__to) time macros (`${__from}` and `${__to}`) due to the limitations of grafana global macros being handled in the frontend.
+
+## Interval Macros (`${__interval}` and `${__interval_ms}`)
+
+From v2.13+, you can use interval macros `${__interval}` and `${__interval_ms}` which will be interpolated in the backend. These macros resolve to the recommended minimum time interval for the query based on the panel width and time range. This is particularly useful for public dashboards where frontend variable resolution may not work correctly.
+
+| Macro              | Description                                      | Example Output |
+| ------------------ | ------------------------------------------------ | -------------- |
+| `${__interval}`    | Interval formatted as duration string            | `30s`, `5m`    |
+| `${__interval_ms}` | Interval in milliseconds as a numeric string     | `30000`, `300000` |
+
+**Example usage:**
+```
+https://api.example.com/data?resolution=${__interval}&from=${__timeFrom}&to=${__timeTo}
+```
+
+These backend-interpolated interval macros work seamlessly in both regular and public dashboards, making them the preferred choice over Grafana's frontend global variables.
