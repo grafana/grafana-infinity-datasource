@@ -111,7 +111,7 @@ export type InfinityGROQQuery = { groq: string; format: InfinityQueryFormat } & 
 export type InfinityGSheetsQuery = { spreadsheet: string; sheetName?: string; sheetRange: string; columns: InfinityColumn[] } & InfinityQueryBase<'google-sheets'>;
 export type PaginationType = 'none' | 'offset' | 'page' | 'cursor' | 'list';
 export type PaginationParamType = 'query' | 'header' | 'body_data' | 'body_json' | 'replace';
-export type PaginationBase<T extends PaginationType> = { pagination_mode?: T; pagination_max_pages?: number };
+export type PaginationBase<T extends PaginationType> = { pagination_mode?: T; pagination_max_pages?: number; pagination_best_effort?: boolean };
 export type PaginationNone = {} & PaginationBase<'none'>;
 export type PaginationOffset = {
   pagination_param_size_field_name?: string;
