@@ -31,6 +31,27 @@ export type InfinityReferenceData = { name: string; data: string };
 export type ProxyType = 'none' | 'env' | 'url';
 export type UnsecureQueryHandling = 'warn' | 'allow' | 'deny';
 export type AzureBlobCloudType = 'AzureCloud' | 'AzureUSGovernment' | 'AzureChinaCloud';
+//#region Vault Config
+export type VaultProviderType = 'none' | 'azure-keyvault';
+// Future providers: 'hashicorp-vault' | 'aws-secrets-manager' | 'gcp-secret-manager'
+
+export type AzureKeyVaultAuthMethod = 'client-secret';
+
+export interface AzureKeyVaultConfig {
+  vaultUrl?: string;
+  authMethod?: AzureKeyVaultAuthMethod;
+  tenantId?: string;
+  clientId?: string;
+}
+
+export interface VaultConfig {
+  provider?: VaultProviderType;
+  cacheTTL?: string;
+  azure?: AzureKeyVaultConfig;
+  secretMapping?: Record<string, string>;
+}
+//#endregion
+
 export interface InfinityOptions extends DataSourceJsonData {
   auth_method?: AuthType;
   apiKeyKey?: string;
@@ -60,6 +81,7 @@ export interface InfinityOptions extends DataSourceJsonData {
   ignoreStatusCodeCheck?: boolean;
   allowDangerousHTTPMethods?: boolean;
   keepCookies?: string[];
+  vaultConfig?: VaultConfig;
 }
 
 export interface InfinitySecureOptions {
@@ -75,6 +97,7 @@ export interface InfinitySecureOptions {
   oauth2JWTPrivateKey?: string;
   azureBlobAccountKey?: string;
   proxyUserPassword?: string;
+  vaultAzureClientSecret?: string;
 }
 export interface SecureField {
   id: string;
