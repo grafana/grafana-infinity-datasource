@@ -146,9 +146,15 @@ func (client *Client) req(ctx context.Context, pCtx *backend.PluginContext, url 
 		return nil, http.StatusInternalServerError, duration, backend.DownstreamError(fmt.Errorf("invalid response received for the URL %s", url))
 	}
 	if res.StatusCode >= http.StatusBadRequest && !settings.IgnoreStatusCodeCheck {
-		err = fmt.Errorf("%w\nstatus code : %s", models.ErrUnsuccessfulHTTPResponseStatus, res.Status)
-		// Infinity can query anything and users are responsible for ensuring that endpoint/auth is correct
-		// therefore any incoming error is considered downstream
+		var err error
+		switch res.StatusCode {
+		case http.StatusUnauthorized:
+			err = fmt.Errorf("%w. %w", models.ErrAuthenticationFailed, models.ErrAuthSuggestion)
+		case http.StatusForbidden:
+			err = fmt.Errorf("%w. %w", models.ErrAccessForbidden, models.ErrAuthSuggestion)
+		default:
+			err = fmt.Errorf("%w\nstatus code : %s", models.ErrUnsuccessfulHTTPResponseStatus, res.Status)
+		}
 		return nil, res.StatusCode, duration, backend.DownstreamError(err)
 	}
 	bodyBytes, err := getBodyBytes(res, logger)

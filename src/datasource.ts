@@ -104,10 +104,14 @@ export class Datasource extends DataSourceWithBackend<InfinityQuery, InfinityOpt
                   frame.meta.preferredVisualisationType = 'trace';
                 }
                 if (error || (responseCodeFromServer && responseCodeFromServer >= 400)) {
+                  const isAuthError = responseCodeFromServer === 401 || responseCodeFromServer === 403;
+                  const authSuggestion = isAuthError
+                    ? ' Consider configuring authentication in the data source settings.'
+                    : '';
                   frame.meta.notices = [
                     {
                       severity: 'error',
-                      text: `Response code from server : ${responseCodeFromServer}. Error Message : ${error || '-'}`,
+                      text: `Response code from server : ${responseCodeFromServer}. Error Message : ${error || '-'}${authSuggestion}`,
                     },
                   ];
                 } else if (responseCodeFromServer && responseCodeFromServer > 300) {

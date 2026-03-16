@@ -57,6 +57,9 @@ func CheckHealth(ctx context.Context, client *infinity.Client, req *backend.Chec
 			},
 		}, req.Headers)
 		if err != nil {
+			if errors.Is(err, models.ErrAuthenticationFailed) || errors.Is(err, models.ErrAccessForbidden) {
+				return healthCheckError("Authentication error: configure authentication in data source settings", err.Error(), "https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/setup/authentication/")
+			}
 			if errors.Is(err, models.ErrUnsuccessfulHTTPResponseStatus) {
 				if unwrappedErr := errors.Unwrap(err); unwrappedErr != nil {
 					return healthCheckError(unwrappedErr.Error(), err.Error(), "")
@@ -85,6 +88,10 @@ func CheckHealth(ctx context.Context, client *infinity.Client, req *backend.Chec
 			return healthCheckError("", err.Error(), "")
 		}
 		if statusCode != http.StatusOK {
+			if statusCode == http.StatusUnauthorized || statusCode == http.StatusForbidden {
+				msg := fmt.Sprintf("Authentication error (HTTP %d): configure authentication in data source settings", statusCode)
+				return healthCheckError(msg, msg, "https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/setup/authentication/")
+			}
 			msg := fmt.Sprintf("%s : %d", models.ErrUnsuccessfulHTTPResponseStatus, statusCode)
 			return healthCheckError("", msg, "")
 		}

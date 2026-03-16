@@ -15,6 +15,12 @@ var (
 )
 
 var (
+	ErrAuthenticationFailed error = errors.New("authentication failed (HTTP 401)")
+	ErrAccessForbidden      error = errors.New("access forbidden (HTTP 403)")
+	ErrAuthSuggestion       error = errors.New("the resource requires authentication. To fix this, configure authentication in the data source settings under the Authentication section. Supported methods include: Basic Auth, API Key, Bearer Token, OAuth2, and more")
+)
+
+var (
 	ErrInvalidConfig               error = errors.New("invalid settings")
 	ErrInvalidConfigPassword       error = errors.New("invalid or empty password detected")
 	ErrInvalidConfigAPIKey         error = errors.New("invalid API key specified")
