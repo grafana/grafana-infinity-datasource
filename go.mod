@@ -4,8 +4,8 @@ go 1.26.1
 
 require (
 	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.6.4
-	github.com/aws/aws-sdk-go-v2 v1.41.2
-	github.com/grafana/dskit v0.0.0-20260309085619-6415010b752c
+	github.com/aws/aws-sdk-go-v2 v1.41.3
+	github.com/grafana/dskit v0.0.0-20260312141034-c3cfcb4a37bc
 	github.com/grafana/grafana-aws-sdk v1.4.3
 	github.com/grafana/grafana-plugin-sdk-go v0.290.0
 	github.com/grafana/infinity-libs/lib/go/csvframer v1.0.3
@@ -16,8 +16,8 @@ require (
 	github.com/grafana/infinity-libs/lib/go/transformations v1.1.0
 	github.com/grafana/infinity-libs/lib/go/xmlframer v1.0.3
 	github.com/icholy/digest v1.1.0
-	go.opentelemetry.io/otel v1.41.0
-	go.opentelemetry.io/otel/trace v1.41.0
+	go.opentelemetry.io/otel v1.42.0
+	go.opentelemetry.io/otel/trace v1.42.0
 	golang.org/x/oauth2 v0.36.0
 	moul.io/http2curl/v2 v2.3.0
 )
@@ -46,7 +46,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/sso v1.30.9 // indirect
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.35.13 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sts v1.41.6 // indirect
-	github.com/aws/smithy-go v1.24.1 // indirect
+	github.com/aws/smithy-go v1.24.2 // indirect
 	github.com/basgys/goxml2json v1.1.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/casbin/govaluate v1.10.0 // indirect
@@ -132,7 +132,7 @@ require (
 	go.opentelemetry.io/contrib/samplers/jaegerremote v0.35.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.41.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc v1.41.0 // indirect
-	go.opentelemetry.io/otel/metric v1.41.0 // indirect
+	go.opentelemetry.io/otel/metric v1.42.0 // indirect
 	go.opentelemetry.io/otel/sdk v1.41.0 // indirect
 	go.opentelemetry.io/proto/otlp v1.9.0 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
