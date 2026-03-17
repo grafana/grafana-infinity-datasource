@@ -317,7 +317,9 @@ func LoadQuery(ctx context.Context, backendQuery backend.DataQuery, pluginContex
 		// Downstream error as user input is not correct
 		return query, backend.DownstreamError(errors.New("pagination_param_list_field_name cannot be empty"))
 	}
-	return ApplyMacros(ctx, query, backendQuery.TimeRange, pluginContext)
+	// Convert interval from time.Duration to milliseconds
+	intervalMs := backendQuery.Interval.Milliseconds()
+	return ApplyMacros(ctx, query, backendQuery.TimeRange, intervalMs, pluginContext)
 }
 
 func GetPaginationMaxPagesValue(ctx context.Context, pCtx *backend.PluginContext, query Query) int {
