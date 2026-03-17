@@ -71,9 +71,9 @@ The following sections describe the available configuration options for the Infi
 
 ### Connection
 
-| Setting | Description |
-|---------|-------------|
-| **Base URL** | Optional. The base URL for all queries. If configured, this URL is prefixed to all query URLs. For example, if you set `https://example.com/api` as the base URL and `/users` as the query URL, the final URL will be `https://example.com/api/users`. |
+| Setting           | Description                                                                                                                                                                                                                                                 |
+|-------------------|-------------                                                                                                                                                                                                                                                |
+| **Base URL**      | Optional. The base URL for all queries. If configured, this URL is prefixed to all query URLs. For example, if you set `https://example.com/api` as the base URL and `/users` as the query URL, the final URL will be `https://example.com/api/users`.      |
 | **Allowed hosts** | A list of hosts that the data source is allowed to connect to. Required when authentication, custom headers, or TLS certificates are configured. If no allowed hosts are specified and none of these features are in use, all hosts are allowed by default. |
 
 For more information about URL configuration, refer to [URL reference](/docs/plugins/yesoreyeram-infinity-datasource/latest/references/url/).
@@ -102,17 +102,17 @@ If your APIs don't require any authentication, select the **No Authentication** 
 
 Basic authentication sends a username and password with your request. In the request headers, the `Authorization` header uses the `Basic <BASE64_ENCODED_USERNAME_AND_PASSWORD>` format.
 
-| Setting | Description |
-|---------|-------------|
-| **User** | The username for authentication. |
-| **Password** | The password for authentication. |
+| Setting       | Description                       |
+|---------------|-------------                      |
+| **User**      | The username for authentication.  |
+| **Password**  | The password for authentication.  |
 
 #### Bearer token
 
 Bearer token authentication enables requests to authenticate using an access key, such as a JSON Web Token (JWT) or personal access token. In the request headers, the `Authorization` header uses the `Bearer <API_KEY>` format.
 
-| Setting | Description |
-|---------|-------------|
+| Setting   | Description             |
+|-----------|-------------            |
 | **Token** | The bearer token value. |
 
 {{< admonition type="tip" >}}
@@ -123,11 +123,11 @@ If you need a custom prefix instead of `Bearer`, use API key authentication with
 
 With API key authentication, you can send a key-value pair to the API via request headers or query parameters.
 
-| Setting | Description |
-|---------|-------------|
-| **Key** | The key of the API token. This becomes the key of the header or query parameter. |
-| **Value** | The value of the API token. |
-| **In** | Where to send the API key: `header` or `query`. Most APIs accept API keys via headers. |
+| Setting   | Description                                                                             |
+|---------  |-------------                                                                            |
+| **Key**   | The key of the API token. This becomes the key of the header or query parameter.        |
+| **Value** | The value of the API token.                                                             |
+| **In**    | Where to send the API key: `header` or `query`. Most APIs accept API keys via headers.  |
 
 {{< admonition type="tip" >}}
 It's easy to confuse API key authentication with Bearer token authentication. Ensure you are using the correct authentication mechanism for your API.
@@ -137,10 +137,10 @@ It's easy to confuse API key authentication with Bearer token authentication. En
 
 Digest authentication enables requests to authenticate using the [RFC7616 HTTP Digest Access Authentication protocol](https://www.rfc-editor.org/rfc/rfc7616.txt).
 
-| Setting | Description |
-|---------|-------------|
-| **User** | The username for digest authentication. |
-| **Password** | The password for digest authentication. |
+| Setting       | Description                             |
+|---------      |-------------                            |
+| **User**      | The username for digest authentication. |
+| **Password**  | The password for digest authentication. |
 
 #### OAuth passthrough
 
@@ -150,13 +150,13 @@ If your Grafana user is already authenticated via OAuth, this authentication met
 
 OAuth 2.0 client credentials authentication requires the following settings:
 
-| Setting | Description |
-|---------|-------------|
-| **Client ID** | The application's ID. |
-| **Client Secret** | The application's secret. |
-| **Token URL** | The resource server's token endpoint URL. This is a constant specific to each server. |
-| **Scopes** | Optional. Specifies requested permissions. |
-| **Endpoint params** | Optional. Additional parameters for requests to the token endpoint. |
+| Setting             | Description                                                                           |
+|---------            |-------------                                                                          |
+| **Client ID**       | The application's ID.                                                                 |
+| **Client Secret**   | The application's secret.                                                             |
+| **Token URL**       | The resource server's token endpoint URL. This is a constant specific to each server. |
+| **Scopes**          | Optional. Specifies requested permissions.                                            |
+| **Endpoint params** | Optional. Additional parameters for requests to the token endpoint.                   |
 
 For advanced token customization, refer to [OAuth2 Custom Tokens](/docs/plugins/yesoreyeram-infinity-datasource/latest/advanced-features/oauth2-custom-tokens/). Key customization options include:
 
@@ -168,14 +168,14 @@ For advanced token customization, refer to [OAuth2 Custom Tokens](/docs/plugins/
 
 OAuth 2.0 JWT authentication requires the following settings:
 
-| Setting | Description |
-|---------|-------------|
-| **Email** | The OAuth client identifier used when communicating with the configured OAuth provider. |
-| **Private Key** | The contents of an RSA private key or a PEM file that contains a private key. |
-| **Private Key Identifier** | Optional. A hint indicating which key to use. |
-| **Token URL** | The endpoint required to complete the 2-legged JWT flow. |
-| **Subject** | Optional. The user to impersonate. |
-| **Scopes** | Optional. A comma-separated list of requested permission scopes. |
+| Setting                     | Description                                                                             |
+|---------                    |-------------                                                                            |
+| **Email**                   | The OAuth client identifier used when communicating with the configured OAuth provider. |
+| **Private Key**             | The contents of an RSA private key or a PEM file that contains a private key.           |
+| **Private Key Identifier**  | Optional. A hint indicating which key to use.                                           |
+| **Token URL**               | The endpoint required to complete the 2-legged JWT flow.                                |
+| **Subject**                 | Optional. The user to impersonate.                                                      |
+| **Scopes**                  | Optional. A comma-separated list of requested permission scopes.                        |
 
 OAuth 2.0 JWT authentication also supports token customization. Refer to [OAuth2 Custom Tokens](/docs/plugins/yesoreyeram-infinity-datasource/latest/advanced-features/oauth2-custom-tokens/) for details.
 
@@ -187,11 +187,11 @@ To authenticate your API endpoints via Microsoft Azure authentication, refer to 
 
 To retrieve content from Azure Blob storage, configure the following settings:
 
-| Setting | Description |
-|---------|-------------|
-| **Azure Cloud** | Optional. The Azure cloud environment. Options include Azure Cloud, Azure US Government, or Azure China. |
-| **Storage account name** | Required. The name of your Azure storage account. |
-| **Storage account key** | Required. The primary or secondary key for your storage account. |
+| Setting                   | Description                                                                                               |
+|---------                  |-------------                                                                                              |
+| **Azure Cloud**           | Optional. The Azure cloud environment. Options include Azure Cloud, Azure US Government, or Azure China.  |
+| **Storage account name**  | Required. The name of your Azure storage account.                                                         |
+| **Storage account key**   | Required. The primary or secondary key for your storage account.                                          |
 
 #### AWS authentication
 
@@ -201,32 +201,32 @@ To authenticate your API endpoints via Amazon AWS authentication, refer to [AWS 
 
 Configure TLS settings if your API requires client certificates or custom CA certificates.
 
-| Setting | Description |
-|---------|-------------|
-| **Skip TLS verification** | Skip TLS certificate verification. Not recommended for production. |
-| **TLS client authentication** | Enable TLS client authentication. |
-| **With CA cert** | Use a custom CA certificate. |
-| **Server name** | The server name that matches the certificate (required for TLS with CA cert). |
-| **CA cert** | The CA certificate content. |
-| **Client cert** | The client certificate content. |
-| **Client key** | The client key content. |
+| Setting                       | Description                                                                   |
+|---------                      |-------------                                                                  |
+| **Skip TLS verification**     | Skip TLS certificate verification. Not recommended for production.            |
+| **TLS client authentication** | Enable TLS client authentication.                                             |
+| **With CA cert**              | Use a custom CA certificate.                                                  |
+| **Server name**               | The server name that matches the certificate (required for TLS with CA cert). |
+| **CA cert**                   | The CA certificate content.                                                   |
+| **Client cert**               | The client certificate content.                                               |
+| **Client key**                | The client key content.                                                       |
 
 ### HTTP headers
 
 You can add custom HTTP headers to all requests made by the data source.
 
-| Setting | Description |
-|---------|-------------|
-| **Header name** | The name of the custom header. |
-| **Header value** | The value of the custom header. |
+| Setting           | Description                     |
+|---------          |-------------                    |
+| **Header name**   | The name of the custom header.  |
+| **Header value**  | The value of the custom header. |
 
 ### Query parameters
 
 You can add query parameters that are sent with every request made by the data source. This works similarly to custom HTTP headers, but the parameters are appended to the URL as query strings.
 
-| Setting | Description |
-|---------|-------------|
-| **Parameter name** | The name of the query parameter. |
+| Setting             | Description                       |
+|---------            |-------------                      |
+| **Parameter name**  | The name of the query parameter.  |
 | **Parameter value** | The value of the query parameter. |
 
 ### Additional settings
@@ -235,17 +235,17 @@ Configure additional options for request handling and HTTP methods.
 
 #### Timeout
 
-| Setting | Description |
-|---------|-------------|
+| Setting     | Description                                                     |
+|---------    |-------------                                                    |
 | **Timeout** | The timeout in seconds for API requests. Default is 60 seconds. |
 
 #### Dangerous HTTP methods
 
 By default, the Infinity data source only allows GET and POST HTTP methods to reduce the risk of destructive payloads. You can enable other methods such as `PATCH`, `PUT`, and `DELETE` for unconventional use cases.
 
-| Setting | Description |
-|---------|-------------|
-| **Allow dangerous HTTP methods** | Enable PATCH, PUT, and DELETE methods. |
+| Setting                           | Description                            |
+|---------                          |-------------                           |
+| **Allow dangerous HTTP methods**  | Enable PATCH, PUT, and DELETE methods. |
 
 {{< admonition type="warning" >}}
 Infinity doesn't validate any permissions against the underlying API. Enable this setting with caution as this can potentially perform destructive actions in the underlying API.
@@ -263,13 +263,13 @@ The Infinity data source sends all API requests from the Grafana server, not fro
 
 You can configure proxy settings for routing requests through a proxy server.
 
-| Setting | Description |
-|---------|-------------|
-| **Proxy from environment variable** | Default. Uses the `HTTP_PROXY`, `HTTPS_PROXY`, and `NO_PROXY` environment variables. |
-| **No proxy** | Requests skip the proxy and go directly to the underlying API. |
-| **Proxy URL** | Configure a specific proxy URL for this data source. |
-| **Proxy user name** | Optional. Username for proxy authentication. |
-| **Proxy password** | Optional. Password for proxy authentication. |
+| Setting                             | Description                                                                           |
+|---------                            |-------------                                                                          |
+| **Proxy from environment variable** | Default. Uses the `HTTP_PROXY`, `HTTPS_PROXY`, and `NO_PROXY` environment variables.  |
+| **No proxy**                        | Requests skip the proxy and go directly to the underlying API.                        |
+| **Proxy URL**                       | Configure a specific proxy URL for this data source.                                  |
+| **Proxy user name**                 | Optional. Username for proxy authentication.                                          |
+| **Proxy password**                  | Optional. Password for proxy authentication.                                          |
 
 {{< admonition type="warning" >}}
 Setting up username and password for proxy authentication should only be used with legacy sites. RFC 2396 warns that passing authentication information in clear text is **not recommended** due to security risks.
@@ -281,9 +281,9 @@ Use private data source connect (PDC) to connect to and query data within a secu
 
 If you use PDC with AWS Authentication, the PDC agent must allow internet egress to `sts.<region>.amazonaws.com:443`.
 
-| Setting | Description |
-|---------|-------------|
-| **Private data source connect** | Select a PDC connection from the drop-down or create a new connection. |
+| Setting                         | Description                                                             |
+|---------                        |-------------                                                            |
+| **Private data source connect** | Select a PDC connection from the drop-down or create a new connection.  |
 
 ### Health check
 

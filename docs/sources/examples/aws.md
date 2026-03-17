@@ -39,7 +39,7 @@ Connect the Infinity data source to AWS management APIs to query metrics, list r
    |---------|-------------|---------|
    | **Region** | AWS region for your resources | `us-east-1` |
    | **Service** | AWS service identifier | `monitoring` |
-   | **Access Key** | Your IAM access key ID | `AKIA...` |
+   | **Access Key** | Your IAM access key ID | `KEY...` |
    | **Secret Key** | Your IAM secret access key | (stored securely) |
 
 1. In **Allowed hosts**, enter your AWS endpoint (for example, `https://monitoring.us-east-1.amazonaws.com`).
@@ -65,7 +65,7 @@ Find the appropriate service name in the [AWS service endpoints documentation](h
 
 1. Set the **URL** to:
 
-   ```
+   ```sh
    https://monitoring.us-east-1.amazonaws.com?Action=ListMetrics&Version=2010-08-01
    ```
 
@@ -87,7 +87,7 @@ parse-xml
 
 **URL:**
 
-```
+```sh
 https://ec2.us-east-1.amazonaws.com?Action=DescribeInstances&Version=2016-11-15
 ```
 
@@ -107,7 +107,7 @@ Cost Explorer API requires the `ce` service and is only available in `us-east-1`
 
 **URL:**
 
-```
+```sh
 https://ce.us-east-1.amazonaws.com
 ```
 
@@ -122,7 +122,7 @@ https://ce.us-east-1.amazonaws.com
     "End": "${__to:date:YYYY-MM-DD}"
   },
   "Granularity": "DAILY",
-  "Metrics": ["UnblendedCost"]
+  "Metrics": ["UnBlendedCost"]
 }
 ```
 

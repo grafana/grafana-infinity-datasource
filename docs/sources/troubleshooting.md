@@ -179,9 +179,11 @@ These errors occur when processing the query or parsing the response.
 
 1. Use **Format as** > **As Is** to see the raw response structure.
 1. Verify the root selector path matches your data. For example, if your JSON is:
+
    ```json
    { "data": { "items": [...] } }
    ```
+
    The root selector should be `data.items`.
 1. For arrays at the root level, leave the root selector empty or use `$` for JSONata.
 1. Use JSONata expressions for complex data extraction.
@@ -311,8 +313,8 @@ The following issues don't produce specific error messages but are commonly enco
 
 1. Verify column types match your data (string, number, timestamp).
 1. Check for null values that might affect calculations.
-2. Use explicit column aliases to ensure consistent naming.
-3. For numeric data stored as strings, use UQL's `tonumber()` or `toint()` functions.
+1. Use explicit column aliases to ensure consistent naming.
+1. For numeric data stored as strings, use UQL's `tonumber()` or `toint()` functions.
 
 ### Requests originate from server, not browser
 

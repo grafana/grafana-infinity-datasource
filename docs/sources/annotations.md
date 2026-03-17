@@ -69,7 +69,7 @@ Use time macros to filter your API data to the dashboard's time range. This impr
 
 Include `${__timeFrom}` and `${__timeTo}` in your URL or query parameters:
 
-```
+```sh
 https://api.example.com/events?start=${__timeFrom}&end=${__timeTo}
 ```
 
