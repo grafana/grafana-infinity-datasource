@@ -1,4 +1,4 @@
-import type { InfinityQuery } from '@/types';
+import type { InfinityQuery, InfinityURLOptions } from '@/types';
 import type { DataSourceInstanceSettings, DataSourceJsonData } from '@grafana/data';
 
 //#region Config
@@ -51,6 +51,7 @@ export interface InfinityOptions extends DataSourceJsonData {
   refData?: InfinityReferenceData[];
   customHealthCheckEnabled?: boolean;
   customHealthCheckUrl?: string;
+  customHealthCheckUrlOptions?: InfinityURLOptions;
   azureBlobCloudType?: AzureBlobCloudType;
   azureBlobAccountUrl?: string;
   azureBlobAccountName?: string;
