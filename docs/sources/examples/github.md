@@ -81,12 +81,12 @@ Use GraphQL queries to retrieve GitHub data. The GitHub GraphQL endpoint is `htt
 
 **Columns:**
 
-| Selector | Alias |
-|----------|-------|
-| `node.title` | Title |
-| `node.state` | State |
-| `node.author.login` | Author |
-| `node.url` | URL |
+| Selector            | Alias   |
+|----------           |-------  |
+| `node.title`        | Title   |
+| `node.state`        | State   |
+| `node.author.login` | Author  |
+| `node.url`          | URL     |
 
 ### Organization repository summary
 
@@ -115,12 +115,12 @@ Query multiple repositories in an organization:
 
 **Columns:**
 
-| Selector | Alias | Type |
-|----------|-------|------|
-| `name` | Repository | string |
-| `stargazerCount` | Stars | number |
-| `issues.totalCount` | Open Issues | number |
-| `pullRequests.totalCount` | Open PRs | number |
+| Selector                  | Alias       | Type    |
+|----------                 |-------      |------   |
+| `name`                    | Repository  | string  |
+| `stargazerCount`          | Stars       | number  |
+| `issues.totalCount`       | Open Issues | number  |
+| `pullRequests.totalCount` | Open PRs    | number  |
 
 ### Pull request metrics
 
@@ -185,12 +185,12 @@ datasources:
 
 ## Troubleshoot
 
-| Issue | Cause | Solution |
-|-------|-------|----------|
-| 401 Bad credentials | Invalid or expired PAT | Generate a new Personal Access Token |
-| 403 Forbidden | Insufficient PAT scopes | Add required scopes (repo, read:org) to your PAT |
-| Empty response | Wrong root selector | Check the GraphQL response structure and update selector |
-| Rate limit exceeded | Too many requests | Wait for rate limit reset or use a PAT with higher limits |
+| Issue               | Cause                   | Solution                                                  |
+|-------              |-------                  |----------                                                 |
+| 401 Bad credentials | Invalid or expired PAT  | Generate a new Personal Access Token                      |
+| 403 Forbidden       | Insufficient PAT scopes | Add required scopes (repo, read:org) to your PAT          |
+| Empty response      | Wrong root selector     | Check the GraphQL response structure and update selector  |
+| Rate limit exceeded | Too many requests       | Wait for rate limit reset or use a PAT with higher limits |
 
 ## Limitations
 

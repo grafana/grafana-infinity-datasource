@@ -83,18 +83,18 @@ Alternatively, configure OAuth2 manually:
 1. In the query editor, select **Google Sheets** as the **Type**.
 1. Configure the query settings:
 
-| Setting | Description | Example |
-|---------|-------------|---------|
-| **Sheet ID** | The spreadsheet ID from the URL | `1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms` |
-| **Sheet Name** | The name of the specific sheet tab (optional) | `Sheet1` |
-| **Range** | The cell range to query | `A1:D100` or `A:D` |
+| Setting         | Description                                   | Example                                       |
+|---------        |-------------                                  |---------                                      |
+| **Sheet ID**    | The spreadsheet ID from the URL               | `xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`  |
+| **Sheet Name**  | The name of the specific sheet tab (optional) | `Sheet1`                                      |
+| **Range**       | The cell range to query                       | `A1:D100` or `A:D`                            |
 
 ### Find the Sheet ID
 
 The Sheet ID is the long string in your Google Sheets URL:
 
-```
-https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
+```sh
+https://docs.google.com/spreadsheets/d/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/edit
                                       └──────────────── Sheet ID ────────────────┘
 ```
 
@@ -114,7 +114,7 @@ The first row of your range is used as column headers.
 
 You can use Grafana template variables in all Google Sheets query fields:
 
-```
+```sh
 Sheet ID: ${spreadsheet_id}
 Sheet Name: ${sheet_name}
 Range: A1:D${row_count}
@@ -124,7 +124,7 @@ Range: A1:D${row_count}
 
 To query sales data from a spreadsheet:
 
-1. **Sheet ID**: `1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms`
+1. **Sheet ID**: `xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
 1. **Sheet Name**: `Sales`
 1. **Range**: `A1:E100`
 1. **Columns**:
@@ -147,6 +147,7 @@ To query sales data from a spreadsheet:
 **Cause**: The service account doesn't have access to the spreadsheet.
 
 **Solution**:
+
 1. Share the spreadsheet with the service account email.
 1. Verify the service account has at least Viewer access.
 
@@ -155,6 +156,7 @@ To query sales data from a spreadsheet:
 **Cause**: The Sheet ID is incorrect or the spreadsheet doesn't exist.
 
 **Solution**:
+
 1. Verify the Sheet ID from the spreadsheet URL.
 1. Ensure the spreadsheet hasn't been deleted or moved.
 
@@ -163,5 +165,6 @@ To query sales data from a spreadsheet:
 **Cause**: The range doesn't contain data or column selectors don't match headers.
 
 **Solution**:
+
 1. Verify the range includes data (for example, `A1:D100`, not `A2:D100` if you need headers).
 1. Ensure column selectors exactly match the header text in your spreadsheet.
