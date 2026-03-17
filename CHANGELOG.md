@@ -1,5 +1,11 @@
 # Change Log
 
+## 3.7.4
+
+🐛 Fixes the crash in query display text when the query type is empty. Fixes [#1525](https://github.com/grafana/grafana-infinity-datasource/issues/1525)
+
+🐛 Updated go/backend version to 1.26.1
+
 ## 3.7.3
 
 🐛 Updated backend/go version to 1.26.0 from 1.25.6 which resolves CVE-2025-68121
