@@ -18,7 +18,7 @@ labels:
 weight: 300
 ---
 
-# GitHub GraphQL API integration
+# GitHub GraphQL API
 
 Query GitHub repositories, issues, pull requests, and organization data using the GitHub GraphQL API.
 

@@ -17,7 +17,7 @@ labels:
 weight: 30
 ---
 
-# Visualize data in logs format
+# Logs format
 
 Transform API responses into log data that can be displayed in Grafana's Logs panel. This is useful for visualizing application logs, audit trails, or any timestamped text data from REST APIs.
 

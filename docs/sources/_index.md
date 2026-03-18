@@ -22,7 +22,7 @@ labels:
 weight: 10
 ---
 
-# Infinity data source
+# Infinity data source plugin for Grafana
 
 The Infinity data source is a universal plugin for pulling data from various systems into Grafana using existing REST APIs. It's Grafana's go-to plugin for cases when a native plugin doesn't exist yet.
 

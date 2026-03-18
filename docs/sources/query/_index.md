@@ -16,7 +16,7 @@ labels:
 weight: 40
 ---
 
-# Infinity query editor
+# Query editor
 
 The Infinity query editor allows you to retrieve data from HTTP endpoints and transform it for visualization in Grafana. This document explains the query editor interface and how to build queries.
 

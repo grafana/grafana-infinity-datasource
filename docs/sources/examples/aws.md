@@ -18,7 +18,7 @@ labels:
 weight: 100
 ---
 
-# AWS API integration
+# AWS API
 
 Connect the Infinity data source to AWS management APIs to query metrics, list resources, and retrieve cost data.
 
