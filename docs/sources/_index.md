@@ -44,8 +44,6 @@ The Infinity data source supports:
 - **Backend features:** Alerting, recorded queries, shared dashboards, and query caching (in backend parsing mode).
 - **Grafana integrations:** Node graph panel, annotations, and template variables.
 
-{{< /shared >}}
-
 ## Before you begin
 
 Before you configure the Infinity data source, you need:
