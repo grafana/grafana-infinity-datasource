@@ -7409,25 +7409,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-xml-builder@npm:^1.1.3":
-  version: 1.1.3
-  resolution: "fast-xml-builder@npm:1.1.3"
+"fast-xml-builder@npm:^1.1.4":
+  version: 1.1.4
+  resolution: "fast-xml-builder@npm:1.1.4"
   dependencies:
     path-expression-matcher: "npm:^1.1.3"
-  checksum: 10c0/353a2b3695f66f2b0717fcb1a59d2c4108a3b29e7e4f125a51accaccade509dc6fb7e2777da62fb3b339487753ece01eaa270542b10a68dfd43f48d607a6b10e
+  checksum: 10c0/d5dfc0660f7f886b9f42747e6aa1d5e16c090c804b322652f65a5d7ffb93aa00153c3e1276cd053629f9f4c4f625131dc6886677394f7048e827e63b97b18927
   languageName: node
   linkType: hard
 
-"fast-xml-parser@npm:5.5.4":
-  version: 5.5.4
-  resolution: "fast-xml-parser@npm:5.5.4"
+"fast-xml-parser@npm:5.5.6":
+  version: 5.5.6
+  resolution: "fast-xml-parser@npm:5.5.6"
   dependencies:
-    fast-xml-builder: "npm:^1.1.3"
+    fast-xml-builder: "npm:^1.1.4"
     path-expression-matcher: "npm:^1.1.3"
     strnum: "npm:^2.1.2"
   bin:
     fxparser: src/cli/cli.js
-  checksum: 10c0/ef890801f69272434e7591ff62edfe0a8f6fc9c4f56aa99588de99b463770fb2e4bbc5f241c898b7d1b01ddcd3d512ed450ecf19527383b1a4be1a419afb2c71
+  checksum: 10c0/b7aed4f561f57fe4eba91c5e4a4438cb7eb09ac885b32d912eec257b84e6587dea88a7afd5738fd36c1e6a0bce778dfd8fcefea829fcc44ef019753b92e36402
   languageName: node
   linkType: hard
 
