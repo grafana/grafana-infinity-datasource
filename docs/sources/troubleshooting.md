@@ -16,7 +16,7 @@ labels:
 weight: 700
 ---
 
-# Troubleshoot Infinity data source issues
+# Troubleshoot the Infinity data source
 
 This guide helps you diagnose and resolve common issues with the Grafana Infinity data source. Issues are organized by category: connection errors, authentication errors, query and parsing errors, and performance issues.
 

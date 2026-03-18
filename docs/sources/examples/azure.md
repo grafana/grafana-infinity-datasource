@@ -19,7 +19,7 @@ labels:
 weight: 200
 ---
 
-# Azure API integration
+# Azure API
 
 Connect the Infinity data source to Azure management APIs to query subscriptions, resources, cost data, and security information.
 

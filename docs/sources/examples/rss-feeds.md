@@ -20,7 +20,7 @@ labels:
 weight: 400
 ---
 
-# RSS and status feeds integration
+# RSS and status feeds
 
 Visualize RSS feeds, Atom feeds, and status pages as Grafana annotations or table data. This is useful for monitoring service status pages and correlating outages with your metrics.
 

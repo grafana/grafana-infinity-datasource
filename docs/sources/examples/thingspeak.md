@@ -19,7 +19,7 @@ labels:
 weight: 500
 ---
 
-# ThingSpeak API integration
+# ThingSpeak API
 
 Connect to the ThingSpeak IoT platform to visualize sensor data and metrics from your IoT devices.
 

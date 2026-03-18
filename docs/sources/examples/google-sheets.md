@@ -16,7 +16,7 @@ labels:
 weight: 250
 ---
 
-# Google Sheets integration
+# Google Sheets
 
 Query data directly from Google Sheets spreadsheets without exporting to CSV. The Infinity data source connects to the Google Sheets API to retrieve live data.
 
