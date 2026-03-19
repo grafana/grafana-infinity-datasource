@@ -1,8 +1,15 @@
+/// <reference types="node" />
 import type { PluginOptions } from '@grafana/plugin-e2e';
 import { defineConfig, devices } from '@playwright/test';
 import { dirname } from 'node:path';
 
 const pluginE2eAuth = `${dirname(require.resolve('@grafana/plugin-e2e'))}/auth`;
+
+// Test auth server URL for authentication E2E tests
+// Health checks are executed by the Grafana backend (inside Docker),
+// so the URL must be reachable from within the Docker network.
+// In Docker: http://httpbin:8080 (service name + internal port)
+export const testAuthServerUrl = process.env.TEST_AUTH_SERVER_URL || 'http://httpbin:8080';
 
 /**
  * Read environment variables from file.
