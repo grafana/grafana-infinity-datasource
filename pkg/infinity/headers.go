@@ -56,7 +56,6 @@ var sensitiveHeaders = map[string]bool{
 	"forwarded":                true,
 	"via":                      true,
 	"expect":                   true,
-	"access-control-allow-origin": true,
 }
 
 // isSensitiveHeader returns true when headerKey matches a header that must

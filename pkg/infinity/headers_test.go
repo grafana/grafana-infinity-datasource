@@ -217,7 +217,8 @@ func TestApplyHeadersFromSettings_BlocksSensitiveHeaders(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			req, _ := http.NewRequest("GET", "http://example.com", nil)
+			req, err := http.NewRequest("GET", "http://example.com", nil)
+			require.NoError(t, err)
 			settings := models.InfinitySettings{CustomHeaders: tt.customHeaders}
 			pCtx := &backend.PluginContext{}
 			got := ApplyHeadersFromSettings(context.TODO(), pCtx, map[string]string{}, settings, req, true)
@@ -272,7 +273,8 @@ func TestApplyHeadersFromQuery_BlocksSensitiveHeaders(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			req, _ := http.NewRequest("GET", "http://example.com", nil)
+			req, err := http.NewRequest("GET", "http://example.com", nil)
+			require.NoError(t, err)
 			query := models.Query{
 				URLOptions: models.URLOptions{
 					Headers: tt.headers,
