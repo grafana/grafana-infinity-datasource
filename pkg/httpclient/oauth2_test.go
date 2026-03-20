@@ -21,6 +21,7 @@ func TestOAuth2TokenHeaders(t *testing.T) {
 		name         string
 		tokenHeaders map[string]string
 		wantHeaders  map[string]string
+		wantAbsent   []string
 	}{
 		{
 			name: "should apply custom Accept header to token request",
@@ -48,6 +49,18 @@ func TestOAuth2TokenHeaders(t *testing.T) {
 			name:         "should not apply custom headers when empty",
 			tokenHeaders: map[string]string{},
 			wantHeaders:  map[string]string{},
+		},
+		{
+			name: "should block sensitive headers in token request",
+			tokenHeaders: map[string]string{
+				"Transfer-Encoding": "chunked",
+				"Connection":        "keep-alive",
+				"Accept":            "application/json",
+			},
+			wantHeaders: map[string]string{
+				"Accept": "application/json",
+			},
+			wantAbsent: []string{"Transfer-Encoding"},
 		},
 	}
 
@@ -100,6 +113,9 @@ func TestOAuth2TokenHeaders(t *testing.T) {
 			for key, expectedValue := range tt.wantHeaders {
 				actualValue := capturedTokenHeaders.Get(key)
 				assert.Equal(t, expectedValue, actualValue, "Header %s should be %s but got %s", key, expectedValue, actualValue)
+			}
+			for _, key := range tt.wantAbsent {
+				assert.Empty(t, capturedTokenHeaders.Get(key), "Header %s should not be present in token request", key)
 			}
 		})
 	}
