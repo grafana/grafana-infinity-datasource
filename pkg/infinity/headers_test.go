@@ -8,6 +8,7 @@ import (
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
@@ -135,6 +136,154 @@ func TestApplyGrafanaHeaders(t *testing.T) {
 			require.Equal(t, len(tt.want), len(got.Header))
 			for k, v := range tt.want {
 				require.Equal(t, v, got.Header.Get(k))
+			}
+		})
+	}
+}
+
+func TestIsSensitiveHeader(t *testing.T) {
+	tests := []struct {
+		name      string
+		headerKey string
+		want      bool
+	}{
+		{name: "Content-Length is sensitive", headerKey: "Content-Length", want: true},
+		{name: "content-length lowercase is sensitive", headerKey: "content-length", want: true},
+		{name: "CONTENT-LENGTH uppercase is sensitive", headerKey: "CONTENT-LENGTH", want: true},
+		{name: "Host is sensitive", headerKey: "Host", want: true},
+		{name: "Transfer-Encoding is sensitive", headerKey: "Transfer-Encoding", want: true},
+		{name: "Connection is sensitive", headerKey: "Connection", want: true},
+		{name: "Keep-Alive is sensitive", headerKey: "Keep-Alive", want: true},
+		{name: "Upgrade is sensitive", headerKey: "Upgrade", want: true},
+		{name: "Proxy-Authorization is sensitive", headerKey: "Proxy-Authorization", want: true},
+		{name: "Te is sensitive", headerKey: "Te", want: true},
+		{name: "Trailer is sensitive", headerKey: "Trailer", want: true},
+		{name: "X-Forwarded-For is sensitive", headerKey: "X-Forwarded-For", want: true},
+		{name: "Expect is sensitive", headerKey: "Expect", want: true},
+		{name: "Content-Length with spaces is sensitive", headerKey: "  Content-Length  ", want: true},
+		{name: "Accept is not sensitive", headerKey: "Accept", want: false},
+		{name: "Content-Type is not sensitive", headerKey: "Content-Type", want: false},
+		{name: "Authorization is not sensitive", headerKey: "Authorization", want: false},
+		{name: "X-Custom-Header is not sensitive", headerKey: "X-Custom-Header", want: false},
+		{name: "empty string is not sensitive", headerKey: "", want: false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equal(t, tt.want, isSensitiveHeader(tt.headerKey))
+		})
+	}
+}
+
+func TestApplyHeadersFromSettings_BlocksSensitiveHeaders(t *testing.T) {
+	tests := []struct {
+		name        string
+		customHeaders map[string]string
+		wantPresent []string
+		wantAbsent  []string
+	}{
+		{
+			name: "blocks Content-Length from settings",
+			customHeaders: map[string]string{
+				"Content-Length":   "999",
+				"X-Custom-Header": "allowed-value",
+			},
+			wantPresent: []string{"X-Custom-Header"},
+			wantAbsent:  []string{"Content-Length"},
+		},
+		{
+			name: "blocks Host from settings",
+			customHeaders: map[string]string{
+				"Host":          "evil.example.com",
+				"X-Request-ID":  "abc123",
+			},
+			wantPresent: []string{"X-Request-ID"},
+			wantAbsent:  []string{"Host"},
+		},
+		{
+			name: "blocks Transfer-Encoding from settings",
+			customHeaders: map[string]string{
+				"Transfer-Encoding": "chunked",
+			},
+			wantAbsent: []string{"Transfer-Encoding"},
+		},
+		{
+			name: "allows safe headers from settings",
+			customHeaders: map[string]string{
+				"X-Api-Key":    "my-key",
+				"X-Request-ID": "123",
+			},
+			wantPresent: []string{"X-Api-Key", "X-Request-ID"},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			req, _ := http.NewRequest("GET", "http://example.com", nil)
+			settings := models.InfinitySettings{CustomHeaders: tt.customHeaders}
+			pCtx := &backend.PluginContext{}
+			got := ApplyHeadersFromSettings(context.TODO(), pCtx, map[string]string{}, settings, req, true)
+			for _, h := range tt.wantPresent {
+				assert.NotEmpty(t, got.Header.Get(h), "expected header %s to be present", h)
+			}
+			for _, h := range tt.wantAbsent {
+				assert.Empty(t, got.Header.Get(h), "expected header %s to be absent", h)
+			}
+		})
+	}
+}
+
+func TestApplyHeadersFromQuery_BlocksSensitiveHeaders(t *testing.T) {
+	tests := []struct {
+		name        string
+		headers     []models.URLOptionKeyValuePair
+		wantPresent []string
+		wantAbsent  []string
+	}{
+		{
+			name: "blocks Content-Length from query",
+			headers: []models.URLOptionKeyValuePair{
+				{Key: "Content-Length", Value: "999"},
+				{Key: "X-Custom", Value: "allowed"},
+			},
+			wantPresent: []string{"X-Custom"},
+			wantAbsent:  []string{"Content-Length"},
+		},
+		{
+			name: "blocks Host from query",
+			headers: []models.URLOptionKeyValuePair{
+				{Key: "Host", Value: "evil.example.com"},
+			},
+			wantAbsent: []string{"Host"},
+		},
+		{
+			name: "blocks Connection from query",
+			headers: []models.URLOptionKeyValuePair{
+				{Key: "connection", Value: "keep-alive"},
+			},
+			wantAbsent: []string{"Connection"},
+		},
+		{
+			name: "allows Accept and Content-Type from query",
+			headers: []models.URLOptionKeyValuePair{
+				{Key: "Accept", Value: "text/html"},
+				{Key: "Content-Type", Value: "text/plain"},
+			},
+			wantPresent: []string{"Accept", "Content-Type"},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			req, _ := http.NewRequest("GET", "http://example.com", nil)
+			query := models.Query{
+				URLOptions: models.URLOptions{
+					Headers: tt.headers,
+				},
+			}
+			got := ApplyHeadersFromQuery(context.TODO(), query, models.InfinitySettings{}, req, true)
+			for _, h := range tt.wantPresent {
+				assert.NotEmpty(t, got.Header.Get(h), "expected header %s to be present", h)
+			}
+			for _, h := range tt.wantAbsent {
+				assert.Empty(t, got.Header.Get(h), "expected header %s to be absent", h)
 			}
 		})
 	}

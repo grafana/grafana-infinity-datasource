@@ -30,6 +30,41 @@ const (
 	HeaderKeyIdToken        = "X-Id-Token"
 )
 
+// sensitiveHeaders is a set of HTTP headers that users must not override via
+// custom header configuration. These are transport-level or hop-by-hop headers
+// whose values are controlled by the HTTP stack; allowing arbitrary values
+// could lead to request-smuggling or other abuse.
+var sensitiveHeaders = map[string]bool{
+	"content-length":           true,
+	"host":                     true,
+	"transfer-encoding":        true,
+	"connection":               true,
+	"keep-alive":               true,
+	"upgrade":                  true,
+	"proxy-authorization":      true,
+	"proxy-connection":         true,
+	"te":                       true,
+	"trailer":                  true,
+	"proxy-authenticate":       true,
+	"www-authenticate":         true,
+	"http2-settings":           true,
+	"alternate-protocol":       true,
+	"alt-svc":                  true,
+	"x-forwarded-for":          true,
+	"x-forwarded-host":         true,
+	"x-forwarded-proto":        true,
+	"forwarded":                true,
+	"via":                      true,
+	"expect":                   true,
+	"access-control-allow-origin": true,
+}
+
+// isSensitiveHeader returns true when headerKey matches a header that must
+// not be set by users through custom header configuration.
+func isSensitiveHeader(headerKey string) bool {
+	return sensitiveHeaders[strings.ToLower(strings.TrimSpace(headerKey))]
+}
+
 func ApplyAcceptHeader(_ context.Context, query models.Query, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
 	if query.Type == models.QueryTypeJSON || query.Type == models.QueryTypeGraphQL {
 		req.Header.Set(headerKeyAccept, `application/json;q=0.9,text/plain`)
@@ -82,7 +117,7 @@ func ApplyHeadersFromSettings(_ context.Context, pCtx *backend.PluginContext, re
 			headerValue = value
 		}
 		headerValue = interpolateGrafanaMetaDataMacros(headerValue, pCtx)
-		if key != "" {
+		if key != "" && !isSensitiveHeader(key) {
 			req.Header.Set(key, headerValue)
 		}
 	}
@@ -95,7 +130,7 @@ func ApplyHeadersFromQuery(_ context.Context, query models.Query, settings model
 		if includeSect {
 			value = replaceSect(header.Value, settings, includeSect)
 		}
-		if header.Key != "" {
+		if header.Key != "" && !isSensitiveHeader(header.Key) {
 			req.Header.Add(header.Key, value)
 			if strings.EqualFold(header.Key, headerKeyAccept) || strings.EqualFold(header.Key, headerKeyContentType) {
 				req.Header.Set(header.Key, value)
