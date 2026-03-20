@@ -3,7 +3,7 @@ import { render, within } from '@testing-library/react';
 import { QueryEditorProps } from '@grafana/data';
 import { Datasource } from '@/datasource';
 import { InfinityQuery, InfinityQueryFormat } from '@/types';
-import { QueryEditor } from './query.editor';
+import { QueryEditor } from '@/editors/query.editor';
 
 // Mock react-router-dom Link component
 jest.mock('react-router-dom', () => ({

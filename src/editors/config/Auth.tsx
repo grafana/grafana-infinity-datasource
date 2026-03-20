@@ -4,7 +4,7 @@ import { Icon, InlineFormLabel, LegacyForms, RadioButtonGroup, Combobox, Grid, L
 import React, { useState } from 'react';
 import { AllowedHostsEditor } from '@/editors/config/AllowedHosts';
 import { AzureBlobAuthEditor } from '@/editors/config/Auth.AzureBlob';
-import { OAuthInputsEditor } from './../../editors/config/OAuthInput';
+import { OAuthInputsEditor } from '@/editors/config/OAuthInput';
 import { OthersAuthentication } from '@/editors/config/OtherAuthProviders';
 import { AWSRegions } from '@/constants';
 import type { APIKeyType, AuthType, InfinityOptions, InfinitySecureOptions } from '@/types';
