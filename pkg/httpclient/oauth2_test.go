@@ -60,7 +60,7 @@ func TestOAuth2TokenHeaders(t *testing.T) {
 			wantHeaders: map[string]string{
 				"Accept": "application/json",
 			},
-			wantAbsent: []string{"Transfer-Encoding"},
+			wantAbsent: []string{"Transfer-Encoding", "Connection"},
 		},
 	}
 

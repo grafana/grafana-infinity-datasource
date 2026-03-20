@@ -18,7 +18,7 @@ var SensitiveHeaders = []string{
 	"Te",
 	"Trailer",
 	"Proxy-Authenticate",
-	"Www-Authenticate",
+	"WWW-Authenticate",
 	"Http2-Settings",
 	"Alternate-Protocol",
 	"Alt-Svc",
