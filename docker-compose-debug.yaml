@@ -33,7 +33,7 @@ services:
     ports:
       - "3100:3100"
   tempo:
-    image: grafana/tempo:latest@sha256:83a65e895103edd96f4a43a42fcb8b312e54031469b62ff08db1c608cd1a2c64
+    image: grafana/tempo:latest@sha256:fe822b3d5a73c1fa224e65502f24d914090506d8385d01f80429f6c5d3cf5c64
     depends_on:
       - loki
     command:
