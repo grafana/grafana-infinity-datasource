@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { SeriesAdvancedOptions, SeriesEditor } from './query.series';
-import type { DataOverride, InfinitySeriesQuery } from '../../types';
+import { SeriesAdvancedOptions, SeriesEditor } from '@/editors/query/query.series';
+import type { DataOverride, InfinitySeriesQuery } from '@/types';
 
 describe('SeriesEditor', () => {
   const mockOnChange = jest.fn();
