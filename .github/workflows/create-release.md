@@ -97,17 +97,26 @@ Review the `CHANGELOG.md` to verify the new entry follows the existing format wi
 
 Create a pull request with the version bump and changelog updates. Use the `create-pull-request` safe output with:
 
-- **title**: `Release v<new-version>` (read the new version from `package.json`)
-- **branch**: `release/v<new-version>`
+First, read the new version from `package.json`:
+
+```bash
+node -p "require('./package.json').version"
+```
+
+Then use that version (referred to as `NEW_VERSION` below) to create the pull request via the `create-pull-request` safe output:
+
+- **title**: `Release vNEW_VERSION`
+- **branch**: `release/vNEW_VERSION`
 - **body**: Include the new CHANGELOG entry for this version in the PR description
 - **base**: `main`
 
 Stage and commit all changed files before creating the PR:
 
 ```bash
-git checkout -b release/v<new-version>
+NEW_VERSION=$(node -p "require('./package.json').version")
+git checkout -b "release/v${NEW_VERSION}"
 git add package.json CHANGELOG.md .changeset/
-git commit -m "Release v<new-version>"
+git commit -m "Release v${NEW_VERSION}"
 ```
 
 ## Guidelines
