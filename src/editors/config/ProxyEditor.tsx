@@ -4,7 +4,7 @@ import { gte } from 'semver';
 import { css } from '@emotion/css';
 import { useTheme2, InlineLabel, Input, RadioButtonGroup, InlineField, Switch, Stack, SecretInput } from '@grafana/ui';
 import { FeatureToggles, onUpdateDatasourceSecureJsonDataOption, type DataSourcePluginOptionsEditorProps } from '@grafana/data';
-import { Components } from './../../selectors';
+import { Components } from '@/selectors';
 import type { InfinityOptions, InfinitySecureOptions, ProxyType } from '@/types';
 
 const styles = {
