@@ -28,7 +28,7 @@ func (t *tokenHeadersTransport) RoundTrip(req *http.Request) (*http.Response, er
 	newReq := req.Clone(req.Context())
 	// Apply custom headers only if they're not already set
 	for key, value := range t.headers {
-		if newReq.Header.Get(key) == "" {
+		if !models.IsSensitiveHeader(key) && newReq.Header.Get(key) == "" {
 			newReq.Header.Set(key, value)
 		}
 	}
@@ -83,7 +83,9 @@ func (t *oauth2CustomTokenTransport) RoundTrip(req *http.Request) (*http.Respons
 	tokenValue := strings.ReplaceAll(tokenTemplate, OAuth2AccessTokenReplacer, token.AccessToken)
 	tokenValue = strings.ReplaceAll(tokenValue, OAuth2RefreshTokenReplacer, token.RefreshToken)
 	tokenValue = strings.ReplaceAll(tokenValue, OAuth2TokenTypeReplacer, token.TokenType)
-	newReq.Header.Set(authHeader, tokenValue)
+	if !models.IsSensitiveHeader(authHeader) {
+		newReq.Header.Set(authHeader, tokenValue)
+	}
 	return t.Base(newReq.Context()).RoundTrip(newReq)
 }
 
