@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { StringArrayInput } from './StringArrayInput';
+import { StringArrayInput } from '@/components/extended/StringArrayInput';
 
 describe('StringArrayInput', () => {
   const mockOnChange = jest.fn();
