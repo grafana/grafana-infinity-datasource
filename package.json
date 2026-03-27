@@ -143,7 +143,7 @@
     "fast-xml-parser": "5.5.7",
     "minimatch": "10.2.4",
     "@openfeature/core": "1.9.2",
-    "serialize-javascript": "7.0.4",
+    "serialize-javascript": "7.0.5",
     "tar": "7.5.12"
   },
   "packageManager": "yarn@4.13.0"
