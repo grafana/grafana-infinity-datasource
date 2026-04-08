@@ -16,8 +16,8 @@ require (
 	github.com/grafana/infinity-libs/lib/go/transformations v1.1.0
 	github.com/grafana/infinity-libs/lib/go/xmlframer v1.0.3
 	github.com/icholy/digest v1.1.0
-	go.opentelemetry.io/otel v1.42.0
-	go.opentelemetry.io/otel/trace v1.42.0
+	go.opentelemetry.io/otel v1.43.0
+	go.opentelemetry.io/otel/trace v1.43.0
 	golang.org/x/oauth2 v0.36.0
 	moul.io/http2curl/v2 v2.3.0
 )
@@ -132,8 +132,8 @@ require (
 	go.opentelemetry.io/contrib/samplers/jaegerremote v0.36.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.42.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc v1.42.0 // indirect
-	go.opentelemetry.io/otel/metric v1.42.0 // indirect
-	go.opentelemetry.io/otel/sdk v1.42.0 // indirect
+	go.opentelemetry.io/otel/metric v1.43.0 // indirect
+	go.opentelemetry.io/otel/sdk v1.43.0 // indirect
 	go.opentelemetry.io/proto/otlp v1.9.0 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
 	go.yaml.in/yaml/v2 v2.4.3 // indirect
