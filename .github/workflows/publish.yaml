@@ -34,4 +34,5 @@ jobs:
       environment: ${{ github.event.inputs.environment }}
       docs-only: ${{ fromJSON(github.event.inputs.docs-only) }}
       run-playwright: true
+      run-playwright-with-skip-grafana-dev-image: true
       github-draft-release: false
