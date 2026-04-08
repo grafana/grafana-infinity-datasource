@@ -1,3 +1,46 @@
 {
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "github.copilot.chat.terminalCommands.allowList": [
+    "yarn build",
+    "yarn dev",
+    "yarn test",
+    "yarn test:ci",
+    "yarn typecheck",
+    "yarn lint",
+    "yarn lint:fix",
+    "yarn spellcheck",
+    "yarn jest",
+    "go test",
+    "go vet",
+    "go build",
+    "mage -v",
+    "mage build",
+    "docker-compose up",
+    "docker compose up",
+    "npx playwright test",
+    "git status",
+    "git log",
+    "git diff",
+    "git show",
+    "git branch",
+    "git blame"
+  ],
+  "files.exclude": {
+    "node_modules": true,
+    "dist": true,
+    "coverage": true,
+    "artifacts": true,
+    "ci": true,
+    "blob-report": true,
+    "playwright/.cache": true,
+    "playwright/.auth": true,
+    ".data": true,
+    ".turbo": true,
+    ".idea": true,
+    "work": true,
+    "pids": true,
+    ".env": true,
+    "provisioning/datasources/prod.yml": true,
+    "docker/blocks/tempo/tempo-data": true
+  }
 }
