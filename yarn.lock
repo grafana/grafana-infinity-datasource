@@ -7985,7 +7985,7 @@ __metadata:
     jsonata: "npm:2.1.0"
     jsonpath-plus: "npm:10.4.0"
     lodash: "npm:4.18.1"
-    mathjs: "npm:15.1.1"
+    mathjs: "npm:15.2.0"
     prettier: "npm:3.8.1"
     react: "npm:18.3.1"
     react-dom: "npm:18.3.1"
@@ -9928,9 +9928,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mathjs@npm:15.1.1":
-  version: 15.1.1
-  resolution: "mathjs@npm:15.1.1"
+"mathjs@npm:15.2.0":
+  version: 15.2.0
+  resolution: "mathjs@npm:15.2.0"
   dependencies:
     "@babel/runtime": "npm:^7.26.10"
     complex.js: "npm:^2.2.5"
@@ -9943,7 +9943,7 @@ __metadata:
     typed-function: "npm:^4.2.1"
   bin:
     mathjs: bin/cli.js
-  checksum: 10c0/532298d9796d1441903d0004b786304f8bacda8ce14ae85caf83c88874bfd50f308844ef2be3413b280dccfd7ffe0ab476d86978f6de5f117514b2a4f7d31f3f
+  checksum: 10c0/78913fc64501166185a6118975ef475bddf23151adcfce5ecac10085b0fa1df880c3d191d54f1184289dc646823eda4807bf73a46286760247230997694697d3
   languageName: node
   linkType: hard
 
