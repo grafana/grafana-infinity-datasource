@@ -140,7 +140,7 @@
     "webpack-virtual-modules": "0.6.2"
   },
   "resolutions": {
-    "fast-xml-parser": "5.5.11",
+    "fast-xml-parser": "5.7.0",
     "minimatch": "10.2.5",
     "@openfeature/core": "1.9.2",
     "serialize-javascript": "7.0.5",
