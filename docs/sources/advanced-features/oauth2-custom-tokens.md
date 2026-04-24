@@ -7,6 +7,7 @@ aliases:
   - /docs/plugins/yesoreyeram-infinity-datasource/latest/setup/oauth2-custom-tokens/
   - /docs/plugins/yesoreyeram-infinity-datasource/latest/setup/oauth2-token-customization/
   - /docs/plugins/yesoreyeram-infinity-datasource/latest/oauth2-custom-tokens/
+  - /docs/plugins/yesoreyeram-infinity-datasource/latest/advanced-features/advanced-features/oauth2-custom-tokens/
 keywords:
   - infinity
   - oauth2
