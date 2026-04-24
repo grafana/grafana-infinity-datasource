@@ -1,5 +1,4 @@
 ---
-slug: '/advanced-features/oauth2-custom-tokens'
 title: OAuth2 token customization
 menuTitle: OAuth2 tokens
 description: Customize OAuth2 token headers and formats for the Infinity data source.
@@ -7,6 +6,7 @@ aliases:
   - /docs/plugins/yesoreyeram-infinity-datasource/latest/setup/oauth2-custom-tokens/
   - /docs/plugins/yesoreyeram-infinity-datasource/latest/setup/oauth2-token-customization/
   - /docs/plugins/yesoreyeram-infinity-datasource/latest/oauth2-custom-tokens/
+  - /docs/plugins/yesoreyeram-infinity-datasource/latest/advanced-features/advanced-features/oauth2-custom-tokens/
 keywords:
   - infinity
   - oauth2
