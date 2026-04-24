@@ -1,4 +1,5 @@
 ---
+slug: '/advanced-features/oauth2-custom-tokens'
 title: OAuth2 token customization
 menuTitle: OAuth2 tokens
 description: Customize OAuth2 token headers and formats for the Infinity data source.
