@@ -1,68 +1,179 @@
 ---
-slug: '/azure'
-title: 'Azure API'
-menuTitle: Azure API
-description: Azure API
+slug: '/examples/azure'
+title: Azure API
+menuTitle: Azure
+description: Connect the Infinity data source to Azure management APIs.
 aliases:
-  - infinity
+  - /docs/plugins/yesoreyeram-infinity-datasource/latest/examples/azure/
 keywords:
-  - data source
   - infinity
-  - json
-  - graphql
-  - csv
-  - tsv
-  - xml
-  - html
-  - api
-  - rest
+  - Azure
+  - Microsoft
+  - API
+  - OAuth2
 labels:
   products:
     - oss
-weight: 8200
+    - enterprise
+    - cloud
+weight: 200
 ---
 
-# Azure Authentication
+# Azure API
 
-Here are the detailed steps on how to connect Microsoft Azure APIs:
+Connect the Infinity data source to Azure management APIs to query subscriptions, resources, cost data, and security information.
 
-1. Create a new service client in [Azure portal](https://portal.azure.com/#view/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/~/RegisteredApps)
-2. Create a client secret for the client created above
-3. Note down the Client ID, Client Secret and Tenant ID
-4. Give reader/monitoring reader access to the resources/subscriptions as necessary
-5. Install the infinity plugin in Grafana and add data source for the same
-   1. Expand Authentication section and select "OAuth2"
-   2. Select "Client Credentials" as OAuth2 type
-   3. Specify the Client ID
-   4. Specify the Client Secret
-   5. Specify the Token URL `https://login.microsoftonline.com/<TENANT_ID>/oauth2/token`. Replace `<TENANT_ID>` with yours
-   6. Leave the Scopes section empty
-   7. Add the following Endpoint param
-      1. Key : `resource` Value: `https://management.azure.com/`
-   8. If you are using Infinity 1.0.0+, then also specify `https://management.azure.com/` as an allowed URL.
-6. Click Save and Test.
-7. Click the `Explore` button
-8. Configure the query
-   1. Specify `json` as query type
-   2. Specify `url` as source
-   3. Specify `default` parser (only applicable for Infinity 1.0.0+)
-   4. Specify `table` as format
-   5. Method : GET
-   6. URL : `https://management.azure.com/subscriptions?api-version=2020-01-01`
-9. Click **Run Query** to see the results
+## Before you begin
 
-## Config Editor
+- Access to the Azure portal with permissions to create app registrations
+- Note your Azure Tenant ID
 
-![Config Editor](https://user-images.githubusercontent.com/153843/190214740-c8b548f9-ef64-4399-941f-41df5f631fdc.png)
+## Create an Azure app registration
 
-## Query using Default Parser
+1. In the [Azure portal](https://portal.azure.com/#view/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/~/RegisteredApps), navigate to **Microsoft Entra ID** > **App registrations**.
+1. Click **New registration** and create an application.
+1. Navigate to **Certificates & secrets** and create a new client secret.
+1. Note down the following values:
 
-![Query using Default Parser](https://user-images.githubusercontent.com/153843/190215987-d21424dd-f12e-4ea3-be79-f2959e960dc0.png)
+   | Value | Location |
+   |-------|----------|
+   | **Client ID** | Overview > Application (client) ID |
+   | **Client Secret** | Certificates & secrets > Client secrets > Value |
+   | **Tenant ID** | Overview > Directory (tenant) ID |
 
-## Query using Backend Parser
+1. Navigate to **API permissions** and verify the app has the required permissions.
+1. Assign the app a role (for example, **Reader** or **Monitoring Reader**) on the subscriptions or resources you want to query.
 
-![Query using Backend Parser](https://user-images.githubusercontent.com/153843/190216309-12a8f8f7-3a9d-4b90-bc48-0919b0a94e72.png)
+## Configure the data source
 
-## Query using UQL Parser
+1. In Grafana, navigate to **Connections** > **Data sources**.
+1. Click **Add new data source** and select **Infinity**.
+1. Expand the **Authentication** section and select **OAuth2**.
+1. Select **Client Credentials** as the grant type.
+1. Configure the following settings:
 
-![UQL](https://user-images.githubusercontent.com/153843/190216710-d39d779c-d984-4fe8-b450-f55ebfcd6496.png)
+   | Setting | Value |
+   |---------|-------|
+   | **Client ID** | Your Azure app client ID |
+   | **Client Secret** | Your Azure app client secret |
+   | **Token URL** | `https://login.microsoftonline.com/<TENANT_ID>/oauth2/token` |
+   | **Scopes** | Leave empty |
+
+1. Add an **Endpoint parameter**:
+   - **Key**: `resource`
+   - **Value**: `https://management.azure.com/`
+
+1. In **Allowed hosts**, enter `https://management.azure.com`.
+1. Click **Save & test**.
+
+## Query examples
+
+### List subscriptions
+
+**URL:**
+
+```
+https://management.azure.com/subscriptions?api-version=2020-01-01
+```
+
+**Configuration:**
+- **Type**: JSON
+- **Parser**: Backend or UQL
+- **Root selector**: `value`
+
+### List resource groups
+
+**URL:**
+
+```
+https://management.azure.com/subscriptions/{subscriptionId}/resourcegroups?api-version=2021-04-01
+```
+
+**UQL query:**
+
+```sql
+parse-json
+| scope "value"
+| project "Name"="name", "Location"="location", "Provisioning State"="properties.provisioningState"
+```
+
+### List virtual machines
+
+**URL:**
+
+```
+https://management.azure.com/subscriptions/{subscriptionId}/providers/Microsoft.Compute/virtualMachines?api-version=2023-03-01
+```
+
+**UQL query:**
+
+```sql
+parse-json
+| scope "value"
+| project "Name"="name", "Location"="location", "VM Size"="properties.hardwareProfile.vmSize", "OS"="properties.storageProfile.osDisk.osType"
+```
+
+### Query cost data
+
+**URL:**
+
+```
+https://management.azure.com/subscriptions/{subscriptionId}/providers/Microsoft.CostManagement/query?api-version=2023-03-01
+```
+
+**Method:** POST
+
+**Body (JSON):**
+
+```json
+{
+  "type": "Usage",
+  "timeframe": "MonthToDate",
+  "dataset": {
+    "granularity": "Daily",
+    "aggregation": {
+      "totalCost": {
+        "name": "Cost",
+        "function": "Sum"
+      }
+    }
+  }
+}
+```
+
+## Provision the data source
+
+Configure Azure OAuth2 authentication through provisioning:
+
+```yaml
+apiVersion: 1
+datasources:
+  - name: Azure Infinity
+    type: yesoreyeram-infinity-datasource
+    jsonData:
+      auth_method: oauth2
+      oauth2:
+        oauth2_type: client_credentials
+        client_id: YOUR_CLIENT_ID
+        token_url: https://login.microsoftonline.com/YOUR_TENANT_ID/oauth2/token
+      oauthPassThru: false
+      allowedHosts:
+        - https://management.azure.com
+    secureJsonData:
+      oauth2ClientSecret: YOUR_CLIENT_SECRET
+```
+
+## Troubleshoot
+
+| Issue | Cause | Solution |
+|-------|-------|----------|
+| 401 Unauthorized | Invalid or expired credentials | Regenerate client secret and update configuration |
+| 403 Forbidden | Missing role assignment | Assign Reader role to the app on the target subscription |
+| Invalid token | Wrong token URL | Verify tenant ID in the token URL |
+| Empty response | Wrong API version | Check Azure REST API docs for the correct `api-version` |
+
+## Additional resources
+
+- [Azure REST API documentation](https://learn.microsoft.com/en-us/rest/api/azure/)
+- [Azure Resource Manager API reference](https://learn.microsoft.com/en-us/rest/api/resources/)
+- [Azure Cost Management API](https://learn.microsoft.com/en-us/rest/api/cost-management/)

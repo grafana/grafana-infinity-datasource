@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, within } from '@testing-library/react';
 import { EditorMode, InfinityQuery, InfinityQueryFormat } from '@/types';
-import { InfinityEditorProps, InfinityQueryEditor } from './infinityQuery';
+import { InfinityEditorProps, InfinityQueryEditor } from '@/editors/query/infinityQuery';
 import { Datasource } from '@/datasource';
 
 // Mock react-router-dom Link component

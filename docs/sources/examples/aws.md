@@ -1,30 +1,26 @@
 ---
-slug: '/aws'
-title: 'AWS API'
-menuTitle: AWS API
-description: AWS API
+slug: '/examples/aws'
+title: AWS API
+menuTitle: AWS
+description: Connect the Infinity data source to AWS management APIs.
 aliases:
-  - infinity
+  - /docs/plugins/yesoreyeram-infinity-datasource/latest/examples/aws/
 keywords:
-  - data source
   - infinity
-  - json
-  - graphql
-  - csv
-  - tsv
-  - xml
-  - html
-  - api
-  - rest
+  - AWS
+  - CloudWatch
+  - API
 labels:
   products:
     - oss
-weight: 8100
+    - enterprise
+    - cloud
+weight: 100
 ---
 
-# AWS Authentication
+# AWS API
 
-Support for connecting to AWS API is available from version 1.3.0
+Connect the Infinity data source to AWS management APIs to query metrics, list resources, and retrieve cost data.
 
 The Infinity data source supports two AWS authentication providers and optional IAM role assumption for cross-account or role-based access.
 
@@ -45,8 +41,8 @@ Both authentication providers support optional IAM role assumption via STS `Assu
 
 | Field | Description |
 | --- | --- |
-| **Assume Role ARN** | Optional. The ARN of the IAM role to assume (e.g., `arn:aws:iam::123456789012:role/MyRole`). |
-| **External ID** | Optional. Used when the target role's trust policy requires an external ID for cross-account access. Only shown when Assume Role ARN is set. |
+| **Assume Role ARN** | Optional. The ARN of the IAM role to assume (for example, `arn:aws:iam::123456789012:role/MyRole`). |
+| **External ID** | Optional. Used when the target role's trust policy requires an external ID for cross-account access. |
 
 Temporary credentials obtained via `AssumeRole` are automatically refreshed by the AWS SDK when they expire.
 
@@ -67,41 +63,57 @@ GF_AWS_ALLOWED_AUTH_PROVIDERS=default,keys,credentials
 GF_AWS_ASSUME_ROLE_ENABLED=true
 ```
 
-## Steps to connect using Access & Secret Key
+## Before you begin
 
-1. Create a new IAM user in [AWS console](https://us-east-1.console.aws.amazon.com/iam/home#/users$new?step=details) (AWS Console -> IAM -> Access Management -> Users -> Add users).
-   1. Select **Access key - Programmatic access** as AWS Credentials type.
-   2. Set required permissions (preferably CloudWatch ReadOnly Permission).
-   3. Copy the access key and secret key.
-2. Install the Infinity plugin in Grafana and add a data source.
-3. Expand the Authentication section and select **AWS**.
-4. Select **Access & Secret Key** as the Auth Provider.
-5. Select region. Example: `us-east-2`.
-6. Enter the service name. Example: `monitoring`. You can find the appropriate service name [here](https://docs.aws.amazon.com/general/latest/gr/aws-service-information.html).
-7. Enter the access key and secret key you copied in step 1.
-8. Enter `https://monitoring.us-east-2.amazonaws.com` as an allowed URL (replace the service name and region as necessary).
-9. Click **Save and Test**.
+For **Access & Secret Key** authentication:
 
-## Steps to connect using Default Credentials / IAM Role
+- Create an AWS IAM user with programmatic access
+- Note down your Access Key ID and Secret Access Key
+- Assign appropriate IAM permissions for the APIs you want to query (for example, CloudWatch ReadOnly, Cost Explorer ReadOnly)
+
+For **Default Credentials / IAM Role** authentication:
+
+- Ensure the Grafana instance has an IAM role attached (instance profile, task role, or IRSA service account) with the required permissions
+
+## Configure the data source
+
+### Using Access & Secret Key
+
+1. In Grafana, navigate to **Connections** > **Data sources**.
+1. Click **Add new data source** and select **Infinity**.
+1. Expand the **Authentication** section and select **AWS**.
+1. Select **Access & Secret Key** as the **Auth Provider**.
+1. Configure the following settings:
+
+   | Setting | Description | Example |
+   |---------|-------------|---------|
+   | **Region** | AWS region for your resources | `us-east-1` |
+   | **Service** | AWS service identifier | `monitoring` |
+   | **Access Key** | Your IAM access key ID | `KEY...` |
+   | **Secret Key** | Your IAM secret access key | (stored securely) |
+
+1. In **Allowed hosts**, enter your AWS endpoint (for example, `https://monitoring.us-east-1.amazonaws.com`).
+1. Click **Save & test**.
+
+### Using Default Credentials / IAM Role
 
 This method is suitable for EC2 instances, ECS tasks, and EKS pods with IRSA.
 
-1. Ensure the Grafana instance has an IAM role attached (instance profile, task role, or IRSA service account) with the required permissions.
-2. Install the Infinity plugin in Grafana and add a data source.
-3. Expand the Authentication section and select **AWS**.
-4. Select **Default Credentials / IAM Role** as the Auth Provider.
-5. Select region. Example: `us-east-2`.
-6. Enter the service name. Example: `monitoring`.
-7. Optionally, enter an **Assume Role ARN** if you need to assume a different role (e.g., cross-account access).
-8. Enter the allowed URL.
-9. Click **Save and Test**.
+1. In Grafana, navigate to **Connections** > **Data sources**.
+1. Click **Add new data source** and select **Infinity**.
+1. Expand the **Authentication** section and select **AWS**.
+1. Select **Default Credentials / IAM Role** as the **Auth Provider**.
+1. Select **Region** and enter **Service**.
+1. Optionally, enter an **Assume Role ARN** for cross-account access.
+1. In **Allowed hosts**, enter your AWS endpoint.
+1. Click **Save & test**.
 
-### EKS IRSA example
+#### EKS IRSA example
 
 When running on EKS with [IAM Roles for Service Accounts (IRSA)](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html):
 
 1. Create an IAM role with the required permissions and a trust policy that allows the Kubernetes service account.
-2. Annotate the Kubernetes service account:
+1. Annotate the Kubernetes service account:
    ```yaml
    apiVersion: v1
    kind: ServiceAccount
@@ -110,28 +122,174 @@ When running on EKS with [IAM Roles for Service Accounts (IRSA)](https://docs.aw
      annotations:
        eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/GrafanaRole
    ```
-3. Configure the data source with **Default Credentials / IAM Role**. No static keys are needed — the AWS SDK automatically picks up IRSA credentials from the pod environment.
-4. If the IRSA role is a "bridge" role with only `sts:AssumeRole` permissions, set the **Assume Role ARN** to the target role that has the actual API permissions.
+1. Configure the data source with **Default Credentials / IAM Role**. No static keys are needed.
+1. If the IRSA role only has `sts:AssumeRole` permissions, set the **Assume Role ARN** to the target role.
 
-## Query example
+{{< admonition type="tip" >}}
+Find the appropriate service name in the [AWS service endpoints documentation](https://docs.aws.amazon.com/general/latest/gr/aws-service-information.html).
+{{< /admonition >}}
 
-### Query with Backend parser
+## Common AWS service identifiers
 
-![image](https://user-images.githubusercontent.com/153843/210788954-e8bf3fab-e1c7-426d-8e87-610315c6afee.png#center)
+| Service | Identifier | Endpoint pattern |
+|---------|------------|------------------|
+| CloudWatch | `monitoring` | `monitoring.<region>.amazonaws.com` |
+| Cost Explorer | `ce` | `ce.us-east-1.amazonaws.com` |
+| EC2 | `ec2` | `ec2.<region>.amazonaws.com` |
+| S3 | `s3` | `s3.<region>.amazonaws.com` |
+| Lambda | `lambda` | `lambda.<region>.amazonaws.com` |
 
-### Query with UQL parser
+## Query examples
 
-![image](https://user-images.githubusercontent.com/153843/210791302-178391c9-93f9-4449-8f5a-8e14a3db1eff.png#center)
+### List CloudWatch metrics
 
-Sample UQL query:
+1. Set the **URL** to:
+
+   ```sh
+   https://monitoring.us-east-1.amazonaws.com?Action=ListMetrics&Version=2010-08-01
+   ```
+
+1. Set **Type** to **XML** (AWS returns XML by default).
+1. Set **Parser** to **Backend**.
+1. Set the **Root selector** to extract the metrics array.
+
+### CloudWatch metrics with UQL
+
+Use UQL to transform and filter the AWS XML response:
 
 ```sql
-parse-json
-| scope "ListMetricsResponse.ListMetricsResult.Metrics"
-| mv-expand "dimension"="Dimensions"
-| project "Namespace", "MeasureName", "Dimension Name"="dimension.Name", "Dimension Value"="dimension.Value"
+parse-xml
+| scope "ListMetricsResponse.ListMetricsResult.Metrics.member"
+| project "Namespace", "MetricName", "Dimensions"
 ```
 
-### Query with Default/Frontend parser
+### List EC2 instances
 
-![image](https://user-images.githubusercontent.com/153843/210790702-af822bdc-e974-4410-83b2-8e7776f03516.png#center)
+**URL:**
+
+```sh
+https://ec2.us-east-1.amazonaws.com?Action=DescribeInstances&Version=2016-11-15
+```
+
+**UQL query:**
+
+```sql
+parse-xml
+| scope "DescribeInstancesResponse.reservationSet.item.instancesSet.item"
+| project "InstanceId"="instanceId", "State"="instanceState.name", "Type"="instanceType"
+```
+
+### Cost Explorer data
+
+{{< admonition type="note" >}}
+Cost Explorer API requires the `ce` service and is only available in `us-east-1`.
+{{< /admonition >}}
+
+**URL:**
+
+```sh
+https://ce.us-east-1.amazonaws.com
+```
+
+**Method:** POST
+
+**Body (JSON):**
+
+```json
+{
+  "TimePeriod": {
+    "Start": "${__from:date:YYYY-MM-DD}",
+    "End": "${__to:date:YYYY-MM-DD}"
+  },
+  "Granularity": "DAILY",
+  "Metrics": ["UnBlendedCost"]
+}
+```
+
+## Provision the data source
+
+### Access Key & Secret Key
+
+```yaml
+apiVersion: 1
+datasources:
+  - name: AWS Infinity
+    type: yesoreyeram-infinity-datasource
+    jsonData:
+      auth_method: aws
+      aws:
+        authType: keys
+        region: us-east-1
+        service: monitoring
+      allowedHosts:
+        - https://monitoring.us-east-1.amazonaws.com
+    secureJsonData:
+      awsAccessKey: YOUR_ACCESS_KEY
+      awsSecretKey: YOUR_SECRET_KEY
+```
+
+### Access Key & Secret Key + AssumeRole
+
+```yaml
+apiVersion: 1
+datasources:
+  - name: AWS Infinity (AssumeRole)
+    type: yesoreyeram-infinity-datasource
+    jsonData:
+      auth_method: aws
+      aws:
+        authType: keys
+        region: us-east-1
+        service: monitoring
+        assumeRoleArn: arn:aws:iam::123456789012:role/MyRole
+        externalId: my-external-id
+      allowedHosts:
+        - https://monitoring.us-east-1.amazonaws.com
+    secureJsonData:
+      awsAccessKey: YOUR_ACCESS_KEY
+      awsSecretKey: YOUR_SECRET_KEY
+```
+
+### Default Credentials / IAM Role
+
+```yaml
+apiVersion: 1
+datasources:
+  - name: AWS Infinity (IAM Role)
+    type: yesoreyeram-infinity-datasource
+    jsonData:
+      auth_method: aws
+      aws:
+        authType: default
+        region: us-east-1
+        service: monitoring
+      allowedHosts:
+        - https://monitoring.us-east-1.amazonaws.com
+```
+
+### Default Credentials + AssumeRole
+
+```yaml
+apiVersion: 1
+datasources:
+  - name: AWS Infinity (IAM Role + AssumeRole)
+    type: yesoreyeram-infinity-datasource
+    jsonData:
+      auth_method: aws
+      aws:
+        authType: default
+        region: us-east-1
+        service: monitoring
+        assumeRoleArn: arn:aws:iam::123456789012:role/MyRole
+      allowedHosts:
+        - https://monitoring.us-east-1.amazonaws.com
+```
+
+## Troubleshoot
+
+| Issue | Cause | Solution |
+|-------|-------|----------|
+| 403 Forbidden | Missing IAM permissions | Verify your IAM user or role has the required permissions |
+| SignatureDoesNotMatch | Incorrect credentials or region | Verify access key, secret key, and region |
+| Connection timeout | Wrong endpoint | Verify the allowed hosts match your endpoint URL |
+| Empty response | Wrong service identifier | Check the [AWS service endpoints](https://docs.aws.amazon.com/general/latest/gr/aws-service-information.html) for the correct identifier |
