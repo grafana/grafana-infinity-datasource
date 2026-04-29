@@ -159,11 +159,11 @@ func isOAuthJWTConfigured(settings models.InfinitySettings) bool {
 // Google Service Account credentials) as well as keys with Windows-style CRLF
 // or old Mac-style CR-only line endings.
 func normalizePrivateKey(key string) string {
-	key = strings.ReplaceAll(key, `\r\n`, "\n")
-	key = strings.ReplaceAll(key, `\n`, "\n")
-	key = strings.ReplaceAll(key, `\r`, "")
-	key = strings.ReplaceAll(key, "\r\n", "\n")
-	key = strings.ReplaceAll(key, "\r", "")
+	key = strings.ReplaceAll(key, `\r\n`, "\n") // escaped CRLF (e.g. from JSON files) → LF
+	key = strings.ReplaceAll(key, `\n`, "\n")   // escaped LF → LF
+	key = strings.ReplaceAll(key, `\r`, "")     // escaped standalone CR (e.g. old Mac line endings in escaped form) → strip
+	key = strings.ReplaceAll(key, "\r\n", "\n") // actual CRLF (Windows line endings) → LF
+	key = strings.ReplaceAll(key, "\r", "")     // actual standalone CR → strip
 	return key
 }
 
