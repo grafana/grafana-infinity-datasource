@@ -154,17 +154,17 @@ func isOAuthJWTConfigured(settings models.InfinitySettings) bool {
 	return settings.AuthenticationMethod == models.AuthenticationMethodOAuth && settings.OAuth2Settings.OAuth2Type == models.AuthOAuthJWT
 }
 
-// normalizePrivateKey normalizes line endings in a PEM private key string.
-// It handles keys stored with escaped line endings (e.g. from JSON files like
-// Google Service Account credentials) as well as keys with Windows-style CRLF
-// or old Mac-style CR-only line endings.
-func normalizePrivateKey(key string) string {
-	key = strings.ReplaceAll(key, `\r\n`, "\n") // escaped CRLF (e.g. from JSON files) → LF
-	key = strings.ReplaceAll(key, `\n`, "\n")   // escaped LF → LF
-	key = strings.ReplaceAll(key, `\r`, "")     // escaped standalone CR (e.g. old Mac line endings in escaped form) → strip
-	key = strings.ReplaceAll(key, "\r\n", "\n") // actual CRLF (Windows line endings) → LF
-	key = strings.ReplaceAll(key, "\r", "")     // actual standalone CR → strip
-	return key
+// normalizePEMContent normalizes line endings in a PEM-encoded string (private
+// keys, certificates, CA bundles, etc.). It handles content stored with escaped
+// line endings (e.g. from JSON files like Google Service Account credentials)
+// as well as Windows-style CRLF or old Mac-style CR-only line endings.
+func normalizePEMContent(s string) string {
+	s = strings.ReplaceAll(s, `\r\n`, "\n") // escaped CRLF (e.g. from JSON files) → LF
+	s = strings.ReplaceAll(s, `\n`, "\n")   // escaped LF → LF
+	s = strings.ReplaceAll(s, `\r`, "")     // escaped standalone CR (e.g. old Mac line endings in escaped form) → strip
+	s = strings.ReplaceAll(s, "\r\n", "\n") // actual CRLF (Windows line endings) → LF
+	s = strings.ReplaceAll(s, "\r", "")     // actual standalone CR → strip
+	return s
 }
 
 func applyOAuthJWT(ctx context.Context, httpClient *http.Client, settings models.InfinitySettings) (*http.Client, error) {
@@ -174,7 +174,7 @@ func applyOAuthJWT(ctx context.Context, httpClient *http.Client, settings models
 		jwtConfig := jwt.Config{
 			Email:        settings.OAuth2Settings.Email,
 			TokenURL:     settings.OAuth2Settings.TokenURL,
-			PrivateKey:   []byte(normalizePrivateKey(settings.OAuth2Settings.PrivateKey)),
+			PrivateKey:   []byte(normalizePEMContent(settings.OAuth2Settings.PrivateKey)),
 			PrivateKeyID: settings.OAuth2Settings.PrivateKeyID,
 			Subject:      settings.OAuth2Settings.Subject,
 			Scopes:       []string{},

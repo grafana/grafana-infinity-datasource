@@ -17,7 +17,7 @@ func GetTLSConfigFromSettings(settings models.InfinitySettings) (*tls.Config, er
 		if settings.TLSClientCert == "" || settings.TLSClientKey == "" {
 			return nil, errors.New("invalid Client cert or key")
 		}
-		cert, err := tls.X509KeyPair([]byte(settings.TLSClientCert), []byte(settings.TLSClientKey))
+		cert, err := tls.X509KeyPair([]byte(normalizePEMContent(settings.TLSClientCert)), []byte(normalizePEMContent(settings.TLSClientKey)))
 		if err != nil {
 			return nil, err
 		}
@@ -25,7 +25,7 @@ func GetTLSConfigFromSettings(settings models.InfinitySettings) (*tls.Config, er
 	}
 	if settings.TLSAuthWithCACert && settings.TLSCACert != "" {
 		caPool := x509.NewCertPool()
-		ok := caPool.AppendCertsFromPEM([]byte(settings.TLSCACert))
+		ok := caPool.AppendCertsFromPEM([]byte(normalizePEMContent(settings.TLSCACert)))
 		if !ok {
 			return nil, errors.New("invalid TLS CA certificate")
 		}

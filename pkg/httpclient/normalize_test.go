@@ -38,7 +38,7 @@ JIoTknAYsX8acOy3XzTdA+mN139mLnG+Tpu1bbjcJLihtPieo5NVWBi/jZedo0Ex
 l7aV0Ij7+2S+ynhQUspKZ+fu3Ng+UuMauX9RpkMsfxRyKuj4WrOMVfI=
 -----END RSA PRIVATE KEY-----`
 
-func Test_normalizePrivateKey(t *testing.T) {
+func Test_normalizePEMContent(t *testing.T) {
 	tests := []struct {
 		name  string
 		input string
@@ -83,13 +83,13 @@ func Test_normalizePrivateKey(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := normalizePrivateKey(tt.input)
+			got := normalizePEMContent(tt.input)
 			assert.Equal(t, tt.want, got)
 		})
 	}
 }
 
-func Test_normalizePrivateKey_pemParseable(t *testing.T) {
+func Test_normalizePEMContent_pemParseable(t *testing.T) {
 	tests := []struct {
 		name  string
 		input string
@@ -114,7 +114,7 @@ func Test_normalizePrivateKey_pemParseable(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			normalized := normalizePrivateKey(tt.input)
+			normalized := normalizePEMContent(tt.input)
 			block, _ := pem.Decode([]byte(normalized))
 			require.NotNil(t, block, "pem.Decode should succeed after normalization")
 			_, err := x509.ParsePKCS1PrivateKey(block.Bytes)
