@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"strings"
 	"time"
 
 	v4 "github.com/aws/aws-sdk-go-v2/aws/signer/v4"
@@ -154,19 +153,6 @@ func isOAuthJWTConfigured(settings models.InfinitySettings) bool {
 	return settings.AuthenticationMethod == models.AuthenticationMethodOAuth && settings.OAuth2Settings.OAuth2Type == models.AuthOAuthJWT
 }
 
-// normalizePEMContent normalizes line endings in a PEM-encoded string (private
-// keys, certificates, CA bundles, etc.). It handles content stored with escaped
-// line endings (e.g. from JSON files like Google Service Account credentials)
-// as well as Windows-style CRLF or old Mac-style CR-only line endings.
-func normalizePEMContent(s string) string {
-	s = strings.ReplaceAll(s, `\r\n`, "\n") // escaped CRLF (e.g. from JSON files) → LF
-	s = strings.ReplaceAll(s, `\n`, "\n")   // escaped LF → LF
-	s = strings.ReplaceAll(s, `\r`, "")     // escaped standalone CR (e.g. old Mac line endings in escaped form) → strip
-	s = strings.ReplaceAll(s, "\r\n", "\n") // actual CRLF (Windows line endings) → LF
-	s = strings.ReplaceAll(s, "\r", "")     // actual standalone CR → strip
-	return s
-}
-
 func applyOAuthJWT(ctx context.Context, httpClient *http.Client, settings models.InfinitySettings) (*http.Client, error) {
 	_, span := tracing.DefaultTracer().Start(ctx, "ApplyOAuthJWT")
 	defer span.End()
@@ -174,7 +160,7 @@ func applyOAuthJWT(ctx context.Context, httpClient *http.Client, settings models
 		jwtConfig := jwt.Config{
 			Email:        settings.OAuth2Settings.Email,
 			TokenURL:     settings.OAuth2Settings.TokenURL,
-			PrivateKey:   []byte(normalizePEMContent(settings.OAuth2Settings.PrivateKey)),
+			PrivateKey:   []byte(settings.OAuth2Settings.PrivateKey),
 			PrivateKeyID: settings.OAuth2Settings.PrivateKeyID,
 			Subject:      settings.OAuth2Settings.Subject,
 			Scopes:       []string{},
