@@ -160,8 +160,8 @@ func isOAuthJWTConfigured(settings models.InfinitySettings) bool {
 // or old Mac-style CR-only line endings.
 func normalizePrivateKey(key string) string {
 	key = strings.ReplaceAll(key, `\r\n`, "\n")
-	key = strings.ReplaceAll(key, `\r`, "")
 	key = strings.ReplaceAll(key, `\n`, "\n")
+	key = strings.ReplaceAll(key, `\r`, "")
 	key = strings.ReplaceAll(key, "\r\n", "\n")
 	key = strings.ReplaceAll(key, "\r", "")
 	return key
