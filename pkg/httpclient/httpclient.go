@@ -154,6 +154,19 @@ func isOAuthJWTConfigured(settings models.InfinitySettings) bool {
 	return settings.AuthenticationMethod == models.AuthenticationMethodOAuth && settings.OAuth2Settings.OAuth2Type == models.AuthOAuthJWT
 }
 
+// normalizePrivateKey normalizes line endings in a PEM private key string.
+// It handles keys stored with escaped line endings (e.g. from JSON files like
+// Google Service Account credentials) as well as keys with Windows-style CRLF
+// or old Mac-style CR-only line endings.
+func normalizePrivateKey(key string) string {
+	key = strings.ReplaceAll(key, `\r\n`, "\n")
+	key = strings.ReplaceAll(key, `\r`, "")
+	key = strings.ReplaceAll(key, `\n`, "\n")
+	key = strings.ReplaceAll(key, "\r\n", "\n")
+	key = strings.ReplaceAll(key, "\r", "")
+	return key
+}
+
 func applyOAuthJWT(ctx context.Context, httpClient *http.Client, settings models.InfinitySettings) (*http.Client, error) {
 	_, span := tracing.DefaultTracer().Start(ctx, "ApplyOAuthJWT")
 	defer span.End()
@@ -161,7 +174,7 @@ func applyOAuthJWT(ctx context.Context, httpClient *http.Client, settings models
 		jwtConfig := jwt.Config{
 			Email:        settings.OAuth2Settings.Email,
 			TokenURL:     settings.OAuth2Settings.TokenURL,
-			PrivateKey:   []byte(strings.ReplaceAll(settings.OAuth2Settings.PrivateKey, "\\n", "\n")),
+			PrivateKey:   []byte(normalizePrivateKey(settings.OAuth2Settings.PrivateKey)),
 			PrivateKeyID: settings.OAuth2Settings.PrivateKeyID,
 			Subject:      settings.OAuth2Settings.Subject,
 			Scopes:       []string{},
