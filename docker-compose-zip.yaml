@@ -1,0 +1,13 @@
+services:
+  grafana:
+    image: grafana/grafana-enterprise:${GF_VERSION:-latest}
+    ports:
+      - '3000:3000'
+    volumes:
+      - ../provisioning:/etc/grafana/provisioning
+    environment:
+      - GF_ENTERPRISE_LICENSE_TEXT=$GF_ENTERPRISE_LICENSE_TEXT
+      - GF_PLUGINS_PREINSTALL_SYNC=yesoreyeram-infinity-datasource@@https://github.com/grafana/grafana-infinity-datasource/releases/download/v${V:-2.0.0}/yesoreyeram-infinity-datasource-${V:-2.0.0}.zip
+      - GF_LOG_FILTERS=plugin.yesoreyeram-infinity-datasource:debug
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
