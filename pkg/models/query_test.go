@@ -135,6 +135,61 @@ func TestLoadQuery(t *testing.T) {
 	}
 }
 
+func TestLoadQuery_PaginationBestEffort(t *testing.T) {
+	tests := []struct {
+		name      string
+		queryJSON string
+		want      bool
+	}{
+		{
+			name: "should parse pagination_best_effort as true",
+			queryJSON: `{
+				"type": "json",
+				"source": "url",
+				"parser": "backend",
+				"url": "https://example.com/api",
+				"pagination_mode": "page",
+				"pagination_max_pages": 3,
+				"pagination_best_effort": true
+			}`,
+			want: true,
+		},
+		{
+			name: "should parse pagination_best_effort as false",
+			queryJSON: `{
+				"type": "json",
+				"source": "url",
+				"parser": "backend",
+				"url": "https://example.com/api",
+				"pagination_mode": "page",
+				"pagination_max_pages": 3,
+				"pagination_best_effort": false
+			}`,
+			want: false,
+		},
+		{
+			name: "should default pagination_best_effort to false when omitted",
+			queryJSON: `{
+				"type": "json",
+				"source": "url",
+				"parser": "backend",
+				"url": "https://example.com/api",
+				"pagination_mode": "page",
+				"pagination_max_pages": 3
+			}`,
+			want: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			q := &backend.DataQuery{JSON: []byte(tt.queryJSON)}
+			got, err := models.LoadQuery(context.Background(), *q, backend.PluginContext{}, models.InfinitySettings{})
+			require.NoError(t, err)
+			assert.Equal(t, tt.want, got.PageBestEffort)
+		})
+	}
+}
+
 func TestGetPaginationMaxPagesValue(t *testing.T) {
 	tests := []struct {
 		name    string
