@@ -342,16 +342,16 @@ func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings
 		settings.OAuth2Settings.ClientSecret = val
 	}
 	if val, ok := config.DecryptedSecureJSONData["oauth2JWTPrivateKey"]; ok {
-		settings.OAuth2Settings.PrivateKey = val
+		settings.OAuth2Settings.PrivateKey = normalizePEMContent(val)
 	}
 	if val, ok := config.DecryptedSecureJSONData["tlsCACert"]; ok {
-		settings.TLSCACert = val
+		settings.TLSCACert = normalizePEMContent(val)
 	}
 	if val, ok := config.DecryptedSecureJSONData["tlsClientCert"]; ok {
-		settings.TLSClientCert = val
+		settings.TLSClientCert = normalizePEMContent(val)
 	}
 	if val, ok := config.DecryptedSecureJSONData["tlsClientKey"]; ok {
-		settings.TLSClientKey = val
+		settings.TLSClientKey = normalizePEMContent(val)
 	}
 	if val, ok := config.DecryptedSecureJSONData["bearerToken"]; ok {
 		settings.BearerToken = val
