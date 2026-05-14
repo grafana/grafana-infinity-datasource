@@ -57,13 +57,16 @@ type OAuth2Settings struct {
 type AWSAuthType string
 
 const (
-	AWSAuthTypeKeys AWSAuthType = "keys"
+	AWSAuthTypeKeys    AWSAuthType = "keys"
+	AWSAuthTypeDefault AWSAuthType = "default"
 )
 
 type AWSSettings struct {
-	AuthType AWSAuthType `json:"authType"`
-	Region   string      `json:"region"`
-	Service  string      `json:"service"`
+	AuthType      AWSAuthType `json:"authType"`
+	Region        string      `json:"region"`
+	Service       string      `json:"service"`
+	AssumeRoleARN string      `json:"assumeRoleArn,omitempty"`
+	ExternalID    string      `json:"externalId,omitempty"`
 }
 
 type ProxyType string
@@ -151,12 +154,18 @@ func (s *InfinitySettings) Validate() error {
 		}
 		return nil
 	}
-	if s.AuthenticationMethod == AuthenticationMethodAWS && s.AWSSettings.AuthType == AWSAuthTypeKeys {
-		if strings.TrimSpace(s.AWSAccessKey) == "" {
-			return ErrInvalidConfigAWSAccessKey
+	if s.AuthenticationMethod == AuthenticationMethodAWS {
+		authType := s.AWSSettings.AuthType
+		if authType == "" {
+			authType = AWSAuthTypeKeys
 		}
-		if strings.TrimSpace(s.AWSSecretKey) == "" {
-			return ErrInvalidConfigAWSSecretKey
+		if authType == AWSAuthTypeKeys {
+			if strings.TrimSpace(s.AWSAccessKey) == "" {
+				return ErrInvalidConfigAWSAccessKey
+			}
+			if strings.TrimSpace(s.AWSSecretKey) == "" {
+				return ErrInvalidConfigAWSSecretKey
+			}
 		}
 		return nil
 	}
