@@ -8,9 +8,10 @@ export const CustomHealthCheckEditor = (props: DataSourcePluginOptionsEditorProp
   const { jsonData = {} } = options;
   return (
     <>
-      <div className="gf-form">
+      <div className="gf-form" data-testid="enable_custom_healthcheck_wrapper">
         <InlineLabel width={36}>Enable custom health check</InlineLabel>
         <InlineSwitch
+          data-testid="enable_custom_healthcheck_switch"
           value={jsonData.customHealthCheckEnabled || false}
           onChange={(e) => onOptionsChange({ ...options, jsonData: { ...jsonData, customHealthCheckEnabled: e.currentTarget.checked } })}
         />
