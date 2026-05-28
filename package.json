@@ -146,5 +146,8 @@
     "serialize-javascript": "7.0.5",
     "tar": "7.5.13"
   },
-  "packageManager": "yarn@4.13.0"
+  "packageManager": "yarn@4.15.0",
+  "engines": {
+    "node": ">=24"
+  }
 }
