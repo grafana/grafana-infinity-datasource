@@ -1823,9 +1823,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grafana/plugin-e2e@npm:3.8.0":
-  version: 3.8.0
-  resolution: "@grafana/plugin-e2e@npm:3.8.0"
+"@grafana/plugin-e2e@npm:3.9.0":
+  version: 3.9.0
+  resolution: "@grafana/plugin-e2e@npm:3.9.0"
   dependencies:
     "@grafana/e2e-selectors": "npm:13.1.0-25644485979"
     semver: "npm:^7.5.4"
@@ -1837,7 +1837,7 @@ __metadata:
   peerDependenciesMeta:
     "@axe-core/playwright":
       optional: true
-  checksum: 10c0/c34e3ac6ce6790cf1ad72ff0e73f8dd39af4322cfbc5f4b66e56e511282db411491f32f68f54af4dba95c5f7c4f554a3ac526a234721e14690df40cd45d1d169
+  checksum: 10c0/850429638e7898ef20404696857a151658c5668617adfb15de1fbf161efbd05a4f22f685c83ef2e3ef6b3298adbf8349d78bf5998f531804b1a02b2f57e5000b
   languageName: node
   linkType: hard
 
@@ -7943,7 +7943,7 @@ __metadata:
     "@grafana/data": "npm:12.4.2"
     "@grafana/eslint-config": "npm:9.0.0"
     "@grafana/i18n": "npm:12.4.2"
-    "@grafana/plugin-e2e": "npm:3.8.0"
+    "@grafana/plugin-e2e": "npm:3.9.0"
     "@grafana/runtime": "npm:12.4.2"
     "@grafana/schema": "npm:12.4.2"
     "@grafana/tsconfig": "npm:2.0.1"
