@@ -4,18 +4,17 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '0 0 1 * *' # run once a month on the 1st day
-
 permissions:
-  contents: write
-  id-token: write # Needed for create-github-app-token
-  pull-requests: write
+  contents: read # create-plugin-update has a checkout step that requires read: https://github.com/grafana/plugin-actions/blob/244c3bc9c6eb94bc1dd6458ade2462499bbf0f5b/create-plugin-update/action.yml#L31
+  id-token: write # necessary for GATB get-github-token step (which is necessary for create-plugin-update)
+
 
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
       - id: get-github-token
-        uses: grafana/shared-workflows/actions/create-github-app-token@ae92934a14a48b94494dbc06d74a81d47fe08a40 # create-github-app-token/v0.2.2
+        uses: grafana/shared-workflows/actions/create-github-app-token@259ba21cb3ff07724f331e26d926d655d24b317b # create-github-app-token/v0.2.3
         with:
           github_app: grafana-oss-big-tent
       - uses: grafana/plugin-actions/create-plugin-update@244c3bc9c6eb94bc1dd6458ade2462499bbf0f5b #create-plugin-update/v2.0.1
