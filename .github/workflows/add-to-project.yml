@@ -1,4 +1,4 @@
-name: Add issues to OSS Big Tent team project
+name: Add issues & PRs to Grafana Data Source Plugins Squad project
 on:
   issues:
     types:
@@ -17,11 +17,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - id: get-github-token
-        uses: grafana/shared-workflows/actions/create-github-app-token@ae92934a14a48b94494dbc06d74a81d47fe08a40 # create-github-app-token/v0.2.2
+        uses: grafana/shared-workflows/actions/create-github-app-token@46f48da11e78ebdba7a8747ae456b11062fac83e # create-github-app-token/v0.3.1
         with:
           github_app: grafana-oss-big-tent
       - name: Add to project
-        uses: actions/add-to-project@244f685bbc3b7adfa8466e08b698b5577571133e # v1.0.2
+        uses: actions/add-to-project@5afcf98fcd03f1c2f92c3c83f58ae24323cc57fd # v2.0.0
         with:
-          project-url: https://github.com/orgs/grafana/projects/457
+          project-url: https://github.com/orgs/grafana/projects/1085
           github-token: ${{ steps.get-github-token.outputs.token }}
