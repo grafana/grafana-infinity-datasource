@@ -117,6 +117,34 @@ func TestLoadSettings(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "grafana cloud authentication method should enable basic auth",
+			config: backend.DataSourceInstanceSettings{
+				BasicAuthUser: "stack-user",
+				JSONData: []byte(`{
+					"auth_method":"grafanaCloud"
+				}`),
+				DecryptedSecureJSONData: map[string]string{
+					"basicAuthPassword": "token",
+				},
+			},
+			wantSettings: models.InfinitySettings{
+				UserName:               "stack-user",
+				Password:               "token",
+				TimeoutInSeconds:       60,
+				ApiKeyType:             "header",
+				BasicAuthEnabled:       true,
+				AuthenticationMethod:   models.AuthenticationMethodGrafanaCloud,
+				ProxyType:              models.ProxyTypeEnv,
+				UnsecuredQueryHandling: models.UnsecuredQueryHandlingWarn,
+				OAuth2Settings: models.OAuth2Settings{
+					EndpointParams: map[string]string{},
+					TokenHeaders:   map[string]string{},
+				},
+				CustomHeaders:     map[string]string{},
+				SecureQueryFields: map[string]string{},
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -396,6 +424,14 @@ func TestInfinitySettings_Validate(t *testing.T) {
 		},
 		{
 			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodBearerToken, BearerToken: "foo"},
+			wantErr:  models.ErrInvalidConfigHostNotAllowed,
+		},
+		{
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodGrafanaCloud},
+			wantErr:  errors.New("invalid or empty password detected"),
+		},
+		{
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodGrafanaCloud, Password: "foo"},
 			wantErr:  models.ErrInvalidConfigHostNotAllowed,
 		},
 	}

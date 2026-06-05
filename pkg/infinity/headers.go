@@ -106,7 +106,7 @@ func ApplyHeadersFromQuery(_ context.Context, query models.Query, settings model
 }
 
 func ApplyBasicAuth(_ context.Context, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
-	if settings.BasicAuthEnabled && (settings.UserName != "" || settings.Password != "") {
+	if (settings.BasicAuthEnabled || settings.AuthenticationMethod == models.AuthenticationMethodGrafanaCloud) && (settings.UserName != "" || settings.Password != "") {
 		basicAuthHeader := fmt.Sprintf("Basic %s", dummyHeader)
 		if includeSect {
 			basicAuthHeader = "Basic " + base64.StdEncoding.EncodeToString([]byte(settings.UserName+":"+settings.Password))

@@ -136,6 +136,9 @@ func (client *Client) GetExecutedURL(ctx context.Context, query models.Query) st
 	if client.Settings.AuthenticationMethod == models.AuthenticationMethodAzureBlob {
 		out = append(out, "###############", "> Authentication steps not included for azure blob authentication")
 	}
+	if client.Settings.AuthenticationMethod == models.AuthenticationMethodGrafanaCloud {
+		out = append(out, "###############", "> Authentication steps not included for grafana cloud authentication")
+	}
 	return strings.Join(out, "\n")
 }
 

@@ -24,6 +24,7 @@ const (
 	AuthenticationMethodOAuth        = "oauth2"
 	AuthenticationMethodAWS          = "aws"
 	AuthenticationMethodAzureBlob    = "azureBlob"
+	AuthenticationMethodGrafanaCloud = "grafanaCloud"
 )
 
 const (
@@ -38,16 +39,16 @@ const (
 )
 
 type OAuth2Settings struct {
-	OAuth2Type     string           `json:"oauth2_type,omitempty"`
-	ClientID       string           `json:"client_id,omitempty"`
-	TokenURL       string           `json:"token_url,omitempty"`
-	Email          string           `json:"email,omitempty"`
-	PrivateKeyID   string           `json:"private_key_id,omitempty"`
-	Subject        string           `json:"subject,omitempty"`
-	Scopes         []string         `json:"scopes,omitempty"`
-	AuthStyle      oauth2.AuthStyle `json:"authStyle,omitempty"`
-	AuthHeader     string           `json:"authHeader,omitempty"`
-	TokenTemplate  string           `json:"tokenTemplate,omitempty"`
+	OAuth2Type     string            `json:"oauth2_type,omitempty"`
+	ClientID       string            `json:"client_id,omitempty"`
+	TokenURL       string            `json:"token_url,omitempty"`
+	Email          string            `json:"email,omitempty"`
+	PrivateKeyID   string            `json:"private_key_id,omitempty"`
+	Subject        string            `json:"subject,omitempty"`
+	Scopes         []string          `json:"scopes,omitempty"`
+	AuthStyle      oauth2.AuthStyle  `json:"authStyle,omitempty"`
+	AuthHeader     string            `json:"authHeader,omitempty"`
+	TokenTemplate  string            `json:"tokenTemplate,omitempty"`
 	TokenHeaders   map[string]string `json:"tokenHeaders,omitempty"`
 	ClientSecret   string
 	PrivateKey     string
@@ -133,7 +134,7 @@ type InfinitySettings struct {
 }
 
 func (s *InfinitySettings) Validate() error {
-	if (s.BasicAuthEnabled || s.AuthenticationMethod == AuthenticationMethodBasic || s.AuthenticationMethod == AuthenticationMethodDigestAuth) && s.Password == "" {
+	if (s.BasicAuthEnabled || s.AuthenticationMethod == AuthenticationMethodBasic || s.AuthenticationMethod == AuthenticationMethodDigestAuth || s.AuthenticationMethod == AuthenticationMethodGrafanaCloud) && s.Password == "" {
 		return ErrInvalidConfigPassword
 	}
 	if s.AuthenticationMethod == AuthenticationMethodApiKey && (s.ApiKeyValue == "" || s.ApiKeyKey == "") {
@@ -380,6 +381,9 @@ func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings
 		if settings.ForwardOauthIdentity {
 			settings.AuthenticationMethod = AuthenticationMethodForwardOauth
 		}
+	}
+	if settings.AuthenticationMethod == AuthenticationMethodGrafanaCloud {
+		settings.BasicAuthEnabled = true
 	}
 	if settings.AuthenticationMethod == AuthenticationMethodAzureBlob {
 		if settings.AzureBlobCloudType == "" {

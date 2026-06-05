@@ -103,6 +103,12 @@ func TestGetRequest(t *testing.T) {
 			requestHeaders: map[string]string{"AnotherHeader": "test"},
 			wantReq:        &http.Request{URL: &url.URL{}, Header: http.Header{}, Method: http.MethodGet},
 		},
+		{
+			name:     "should apply grafana cloud auth as basic authorization header",
+			pCtx:     &backend.PluginContext{PluginID: "hello"},
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodGrafanaCloud, UserName: "stack-user", Password: "stack-token"},
+			wantReq:  &http.Request{URL: &url.URL{}, Header: http.Header{"Authorization": []string{"Basic c3RhY2stdXNlcjpzdGFjay10b2tlbg=="}}, Method: http.MethodGet},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -354,6 +360,12 @@ func TestClient_GetExecutedURL(t *testing.T) {
 			query:    models.Query{URL: "https://foo.com"},
 			url:      "https://foo.com",
 			command:  "curl -k -X 'GET' -H 'Accept-Encoding: gzip' -H 'Hello: xxxxxxxx' 'https://foo.com'",
+		},
+		{
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodGrafanaCloud, UserName: "hello", Password: "world"},
+			query:    models.Query{URL: "https://foo.com"},
+			url:      "https://foo.com",
+			command:  "curl -k -X 'GET' -H 'Accept-Encoding: gzip' -H 'Authorization: Basic xxxxxxxx' 'https://foo.com'\n###############\n> Authentication steps not included for grafana cloud authentication",
 		},
 		{
 			settings: models.InfinitySettings{ForwardOauthIdentity: true},

@@ -84,6 +84,7 @@ The Infinity data source supports the following authentication methods:
 
 - [No authentication](#no-authentication)
 - [Basic authentication](#basic-authentication)
+- [Grafana Cloud authentication](#grafana-cloud-authentication)
 - [Bearer token](#bearer-token)
 - [API key](#api-key)
 - [Digest authentication](#digest-authentication)
@@ -106,6 +107,15 @@ Basic authentication sends a username and password with your request. In the req
 |---------------|-------------                      |
 | **User**      | The username for authentication.  |
 | **Password**  | The password for authentication.  |
+
+#### Grafana Cloud authentication
+
+Grafana Cloud authentication uses the same HTTP basic authentication mechanism, with field names tailored for Grafana Cloud credentials.
+
+| Setting                     | Description                                       |
+|---------------              |-------------                                      |
+| **User ID**                 | The Grafana Cloud user ID for your stack.         |
+| **Access policy token**     | The Grafana Cloud access policy token.            |
 
 #### Bearer token
 

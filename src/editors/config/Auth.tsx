@@ -19,6 +19,7 @@ const authTypes: Array<SelectableValue<AuthType | 'others'> & { logo?: string }>
   { value: 'oauth2', label: 'OAuth2', logo: '/public/plugins/yesoreyeram-infinity-datasource/img/oauth-2-sm.png' },
   { value: 'aws', label: 'AWS', logo: '/public/plugins/yesoreyeram-infinity-datasource/img/aws.jpg' },
   { value: 'azureBlob', label: 'Azure Blob' },
+  { value: 'grafanaCloud', label: 'Grafana Cloud' },
   { value: 'others', label: 'Other Auth Providers' },
 ];
 
@@ -69,6 +70,9 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
     switch (authMethod) {
       case 'basicAuth':
         onOptionsChange({ ...options, basicAuth: true, jsonData: { ...options.jsonData, oauthPassThru: false, auth_method: 'basicAuth' } });
+        break;
+      case 'grafanaCloud':
+        onOptionsChange({ ...options, basicAuth: true, jsonData: { ...options.jsonData, oauthPassThru: false, auth_method: 'grafanaCloud' } });
         break;
       case 'oauthPassThru':
         onOptionsChange({ ...options, basicAuth: false, jsonData: { ...options.jsonData, oauthPassThru: true, auth_method: 'oauthPassThru' } });
@@ -142,10 +146,16 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
         <>
           <h5 className={styles.subheading}>Auth details</h5>
           <div>
-            {(authType === 'basicAuth' || authType === 'digestAuth') && (
+            {(authType === 'basicAuth' || authType === 'digestAuth' || authType === 'grafanaCloud') && (
               <>
                 <div className="gf-form">
-                  <FormField label="User Name" placeholder="username" labelWidth={10} value={props.options.basicAuthUser || ''} onChange={(e) => onUserNameChange(e.currentTarget.value)}></FormField>
+                  <FormField
+                    label={authType === 'grafanaCloud' ? 'User ID' : 'User Name'}
+                    placeholder={authType === 'grafanaCloud' ? 'grafana cloud user id' : 'username'}
+                    labelWidth={10}
+                    value={props.options.basicAuthUser || ''}
+                    onChange={(e) => onUserNameChange(e.currentTarget.value)}
+                  ></FormField>
                 </div>
                 <div className="gf-form">
                   <SecretFormField
@@ -156,10 +166,10 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
                     isConfigured={(secureJsonFields && secureJsonFields.basicAuthPassword) as boolean}
                     onReset={() => onResetSecret('basicAuthPassword')}
                     onChange={onUpdateDatasourceSecureJsonDataOption(props, 'basicAuthPassword')}
-                    label="Password"
-                    aria-label="password"
-                    placeholder="password"
-                    tooltip="password"
+                    label={authType === 'grafanaCloud' ? 'Access policy token' : 'Password'}
+                    aria-label={authType === 'grafanaCloud' ? 'access policy token' : 'password'}
+                    placeholder={authType === 'grafanaCloud' ? 'grafana cloud access policy token' : 'password'}
+                    tooltip={authType === 'grafanaCloud' ? 'grafana cloud access policy token' : 'password'}
                   />
                 </div>
               </>
