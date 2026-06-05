@@ -176,15 +176,15 @@ func TestIsSensitiveHeader(t *testing.T) {
 
 func TestApplyHeadersFromSettings_BlocksSensitiveHeaders(t *testing.T) {
 	tests := []struct {
-		name        string
+		name          string
 		customHeaders map[string]string
-		wantPresent []string
-		wantAbsent  []string
+		wantPresent   []string
+		wantAbsent    []string
 	}{
 		{
 			name: "blocks Content-Length from settings",
 			customHeaders: map[string]string{
-				"Content-Length":   "999",
+				"Content-Length":  "999",
 				"X-Custom-Header": "allowed-value",
 			},
 			wantPresent: []string{"X-Custom-Header"},
@@ -193,8 +193,8 @@ func TestApplyHeadersFromSettings_BlocksSensitiveHeaders(t *testing.T) {
 		{
 			name: "blocks Host from settings",
 			customHeaders: map[string]string{
-				"Host":          "evil.example.com",
-				"X-Request-ID":  "abc123",
+				"Host":         "evil.example.com",
+				"X-Request-ID": "abc123",
 			},
 			wantPresent: []string{"X-Request-ID"},
 			wantAbsent:  []string{"Host"},
@@ -271,6 +271,7 @@ func TestApplyHeadersFromQuery_BlocksSensitiveHeaders(t *testing.T) {
 			wantPresent: []string{"Accept", "Content-Type"},
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			req, err := http.NewRequest("GET", "http://example.com", nil)
@@ -289,4 +290,18 @@ func TestApplyHeadersFromQuery_BlocksSensitiveHeaders(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestApplyBearerToken_GitHubTokenAuth(t *testing.T) {
+	req, err := http.NewRequest("GET", "http://example.com", nil)
+	require.NoError(t, err)
+	settings := models.InfinitySettings{
+		AuthenticationMethod: models.AuthenticationMethodGitHub,
+		GitHubSettings: models.GitHubSettings{
+			AuthType: models.GitHubAuthTypeToken,
+			Token:    "github-token",
+		},
+	}
+	req = ApplyBearerToken(context.Background(), settings, req, true)
+	assert.Equal(t, "Bearer github-token", req.Header.Get(HeaderKeyAuthorization))
 }

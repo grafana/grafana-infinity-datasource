@@ -136,6 +136,9 @@ func (client *Client) GetExecutedURL(ctx context.Context, query models.Query) st
 	if client.Settings.AuthenticationMethod == models.AuthenticationMethodAzureBlob {
 		out = append(out, "###############", "> Authentication steps not included for azure blob authentication")
 	}
+	if client.Settings.AuthenticationMethod == models.AuthenticationMethodGitHub && client.Settings.GitHubSettings.AuthType == models.GitHubAuthTypeApp {
+		out = append(out, "###############", "> Authentication steps not included for GitHub App authentication")
+	}
 	return strings.Join(out, "\n")
 }
 

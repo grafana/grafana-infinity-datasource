@@ -177,6 +177,7 @@ func TestAllSettingsAgainstFrontEnd(t *testing.T) {
 				"token_url":"TOKEN_URL",
 				"scopes":["scope1","scope2"]
 			}
+
 		}`),
 		DecryptedSecureJSONData: map[string]string{
 			"tlsCACert":                  "myTlsCACert",
@@ -260,6 +261,29 @@ func TestAllSettingsAgainstFrontEnd(t *testing.T) {
 		},
 		KeepCookies: []string{"cookie1", "cookie2"},
 	}, gotSettings)
+}
+
+func TestLoadSettings_GitHubAuthDefaults(t *testing.T) {
+	config := backend.DataSourceInstanceSettings{
+		JSONData: []byte(`{
+			"auth_method": "github",
+			"github": {
+				"appId": "1001",
+				"installationId": "2002"
+			}
+		}`),
+		DecryptedSecureJSONData: map[string]string{
+			"githubToken":         "ghp_token",
+			"githubAppPrivateKey": "private-key",
+		},
+	}
+	gotSettings, err := models.LoadSettings(context.Background(), config)
+	require.NoError(t, err)
+	assert.Equal(t, models.AuthenticationMethodGitHub, gotSettings.AuthenticationMethod)
+	assert.Equal(t, models.GitHubAuthTypeToken, gotSettings.GitHubSettings.AuthType)
+	assert.Equal(t, "https://api.github.com", gotSettings.GitHubSettings.APIURL)
+	assert.Equal(t, "ghp_token", gotSettings.GitHubSettings.Token)
+	assert.Equal(t, "private-key", gotSettings.GitHubSettings.AppPrivateKeyPEM)
 }
 
 func Test_getSecrets(t *testing.T) {
@@ -397,6 +421,30 @@ func TestInfinitySettings_Validate(t *testing.T) {
 		{
 			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodBearerToken, BearerToken: "foo"},
 			wantErr:  models.ErrInvalidConfigHostNotAllowed,
+		},
+		{
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodGitHub},
+			wantErr:  errors.New("invalid or empty bearer token detected"),
+		},
+		{
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodGitHub, GitHubSettings: models.GitHubSettings{AuthType: models.GitHubAuthTypeToken, Token: "foo"}},
+			wantErr:  models.ErrInvalidConfigHostNotAllowed,
+		},
+		{
+			settings: models.InfinitySettings{AuthenticationMethod: models.AuthenticationMethodGitHub, GitHubSettings: models.GitHubSettings{AuthType: models.GitHubAuthTypeApp}},
+			wantErr:  errors.New("invalid GitHub App authentication settings"),
+		},
+		{
+			settings: models.InfinitySettings{
+				AuthenticationMethod: models.AuthenticationMethodGitHub,
+				GitHubSettings: models.GitHubSettings{
+					AuthType:         models.GitHubAuthTypeApp,
+					AppID:            "123",
+					InstallationID:   "456",
+					AppPrivateKeyPEM: "private",
+				},
+				AllowedHosts: []string{"https://api.github.com"},
+			},
 		},
 	}
 	for _, tt := range tests {

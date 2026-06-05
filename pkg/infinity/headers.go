@@ -117,10 +117,15 @@ func ApplyBasicAuth(_ context.Context, settings models.InfinitySettings, req *ht
 }
 
 func ApplyBearerToken(_ context.Context, settings models.InfinitySettings, req *http.Request, includeSect bool) *http.Request {
-	if settings.AuthenticationMethod == models.AuthenticationMethodBearerToken {
+	isGitHubTokenAuth := settings.AuthenticationMethod == models.AuthenticationMethodGitHub && (settings.GitHubSettings.AuthType == models.GitHubAuthTypeToken || settings.GitHubSettings.AuthType == "")
+	if settings.AuthenticationMethod == models.AuthenticationMethodBearerToken || isGitHubTokenAuth {
+		tokenValue := settings.BearerToken
+		if isGitHubTokenAuth {
+			tokenValue = settings.GitHubSettings.Token
+		}
 		bearerAuthHeader := fmt.Sprintf("Bearer %s", dummyHeader)
 		if includeSect {
-			bearerAuthHeader = fmt.Sprintf("Bearer %s", settings.BearerToken)
+			bearerAuthHeader = fmt.Sprintf("Bearer %s", tokenValue)
 		}
 		req.Header.Add(HeaderKeyAuthorization, bearerAuthHeader)
 	}

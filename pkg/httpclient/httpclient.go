@@ -40,6 +40,10 @@ func GetHTTPClient(ctx context.Context, settings models.InfinitySettings) (*http
 	if err != nil {
 		return httpClient, errors.Join(models.ErrCreatingHTTPClient, err)
 	}
+	httpClient, err = applyGitHubAppAuth(ctx, httpClient, settings)
+	if err != nil {
+		return httpClient, errors.Join(models.ErrCreatingHTTPClient, err)
+	}
 	httpClient, err = applyAWSAuth(ctx, httpClient, settings)
 	if err != nil {
 		return httpClient, errors.Join(models.ErrCreatingHTTPClient, err)
@@ -193,6 +197,34 @@ func isAwsAuthConfigured(settings models.InfinitySettings) bool {
 	return settings.AuthenticationMethod == models.AuthenticationMethodAWS
 }
 
+func isGitHubAppAuthConfigured(settings models.InfinitySettings) bool {
+	if settings.AuthenticationMethod != models.AuthenticationMethodGitHub {
+		return false
+	}
+	return settings.GitHubSettings.AuthType == models.GitHubAuthTypeApp
+}
+
+func applyGitHubAppAuth(ctx context.Context, httpClient *http.Client, settings models.InfinitySettings) (*http.Client, error) {
+	_, span := tracing.DefaultTracer().Start(ctx, "ApplyGitHubAppAuth")
+	defer span.End()
+	if !isGitHubAppAuthConfigured(settings) {
+		return httpClient, nil
+	}
+	tokenClient := &http.Client{
+		Transport: httpClient.Transport,
+		Timeout:   httpClient.Timeout,
+	}
+	tokenSource, err := newGitHubAppTokenSource(tokenClient, settings.GitHubSettings)
+	if err != nil {
+		return nil, err
+	}
+	httpClient.Transport = &githubAppAuthTransport{
+		base:        httpClient.Transport,
+		tokenSource: oauth2.ReuseTokenSource(nil, tokenSource),
+	}
+	return httpClient, nil
+}
+
 func applyAWSAuth(ctx context.Context, httpClient *http.Client, settings models.InfinitySettings) (*http.Client, error) {
 	ctx, span := tracing.DefaultTracer().Start(ctx, "ApplyAWSAuth")
 	defer span.End()
@@ -245,6 +277,10 @@ func applySecureSocksProxyConfiguration(ctx context.Context, httpClient *http.Cl
 			t = cht.Transport.(*oauth2.Transport).Base
 		} else {
 			t = t.(*oauth2.Transport).Base
+		}
+	} else if isGitHubAppAuthConfigured(settings) {
+		if ght, ok := t.(*githubAppAuthTransport); ok {
+			t = ght.base
 		}
 	}
 	// secure socks proxy configuration - checks if enabled inside the function

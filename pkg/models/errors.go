@@ -19,6 +19,7 @@ var (
 	ErrInvalidConfigPassword       error = errors.New("invalid or empty password detected")
 	ErrInvalidConfigAPIKey         error = errors.New("invalid API key specified")
 	ErrInvalidConfigBearerToken    error = errors.New("invalid or empty bearer token detected")
+	ErrInvalidConfigGitHubApp      error = errors.New("invalid GitHub App authentication settings")
 	ErrInvalidConfigAzBlobAccName  error = errors.New("invalid/empty azure blob account name")
 	ErrInvalidConfigAzBlobKey      error = errors.New("invalid/empty azure blob key")
 	ErrInvalidConfigAWSAccessKey   error = errors.New("invalid/empty AWS access key")

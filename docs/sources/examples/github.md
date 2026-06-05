@@ -31,13 +31,14 @@ Query GitHub repositories, issues, pull requests, and organization data using th
 
 1. In Grafana, navigate to **Connections** > **Data sources**.
 1. Click **Add new data source** and select **Infinity**.
-1. Expand the **Authentication** section and select **Bearer Token**.
+1. Expand the **Authentication** section and select **GitHub**.
+1. Keep **Auth mode** as **Token auth** (default).
 1. Enter your GitHub Personal Access Token.
 1. In **Allowed hosts**, enter `https://api.github.com`.
 1. Click **Save & test**.
 
 {{< admonition type="tip" >}}
-You can also use **Basic Authentication** with your GitHub username and PAT as the password, but Bearer Token is the recommended approach.
+You can also use **GitHub App auth** by switching **Auth mode** to **GitHub App auth** and providing your app details.
 {{< /admonition >}}
 
 ## Query GitHub data

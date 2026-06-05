@@ -7,9 +7,16 @@ export interface GlobalInfinityQuery {
   id: string;
   query: InfinityQuery;
 }
-export type AuthType = 'none' | 'basicAuth' | 'apiKey' | 'bearerToken' | 'oauthPassThru' | 'digestAuth' | 'aws' | 'azureBlob' | 'oauth2';
+export type AuthType = 'none' | 'basicAuth' | 'apiKey' | 'bearerToken' | 'oauthPassThru' | 'digestAuth' | 'aws' | 'azureBlob' | 'oauth2' | 'github';
 export type OAuth2Type = 'client_credentials' | 'jwt' | 'others';
 export type APIKeyType = 'header' | 'query';
+export type GitHubAuthType = 'token' | 'app';
+export type GitHubAuthProps = {
+  authType?: GitHubAuthType;
+  appId?: string;
+  installationId?: string;
+  apiUrl?: string;
+};
 export type OAuth2Props = {
   oauth2_type?: OAuth2Type;
   client_id?: string;
@@ -36,6 +43,7 @@ export interface InfinityOptions extends DataSourceJsonData {
   apiKeyKey?: string;
   apiKeyType?: APIKeyType;
   oauth2?: OAuth2Props;
+  github?: GitHubAuthProps;
   aws?: AWSAuthProps;
   tlsSkipVerify?: boolean;
   tlsAuth?: boolean;
@@ -73,6 +81,8 @@ export interface InfinitySecureOptions {
   awsSecretKey?: string;
   oauth2ClientSecret?: string;
   oauth2JWTPrivateKey?: string;
+  githubToken?: string;
+  githubAppPrivateKey?: string;
   azureBlobAccountKey?: string;
   proxyUserPassword?: string;
 }
