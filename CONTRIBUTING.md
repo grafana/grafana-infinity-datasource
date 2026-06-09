@@ -23,6 +23,12 @@ Once you clone the repo locally in the grafana's plugin folder. Do the following
 - `mage -v` - This will help to build the backend part of the plugin. Do this once if you are contributing only the frontend. There is no significant code is in the backend. So no much changes expected
 - `docker-compose up` - To run the plugin with grafana locally. ( use infinity:infinity as the credentials ). You can also enable traces and logs with debug mode. Refer the **Setting up grafana in debug mode** section below
 
+## Dependencies
+
+Note that some packages have no direct `import` in `src/` but are still required:
+
+- **`@openfeature/web-sdk`** — required by Grafana's feature toggle system. Even though the plugin does not import it directly, removing it might breaks feature flag evaluation at runtime, so we keep it.
+
 ## Submitting PR
 
 If you are creating a PR, ensure to run `yarn changeset` from your branch. Provide the details accordingly. It will create `*.md` file inside `./.changeset` folder. Later during the release, based on these changesets, package version will be bumped and changelog will be generated.
