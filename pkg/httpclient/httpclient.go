@@ -226,9 +226,19 @@ func applyAWSAuth(ctx context.Context, httpClient *http.Client, settings models.
 			req.Header.Add("Accept", "application/json")
 			return tempHttpClient.Do(req)
 		}
-		httpClient.Transport = awsauth.NewSignerRoundTripper(httpOptions, httpclient.RoundTripperFunc(acceptHeaderMiddleware), v4.NewSigner())
+		httpClient.Transport = awsauth.NewSignerRoundTripper(httpOptions, httpclient.RoundTripperFunc(acceptHeaderMiddleware), getSigV4Signer(service))
 	}
 	return httpClient, nil
+}
+
+func getSigV4Signer(service string) v4.HTTPSigner {
+	if strings.EqualFold(strings.TrimSpace(service), "s3") {
+		return v4.NewSigner(func(signer *v4.SignerOptions) {
+			signer.DisableURIPathEscaping = true
+		})
+	}
+
+	return v4.NewSigner()
 }
 
 func applySecureSocksProxyConfiguration(ctx context.Context, httpClient *http.Client, settings models.InfinitySettings) (*http.Client, error) {
