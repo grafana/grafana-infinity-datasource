@@ -24,7 +24,7 @@ jobs:
         id: add-to-project
         uses: actions/add-to-project@244f685bbc3b7adfa8466e08b698b5577571133e # v1.0.2
         with:
-          project-url: https://github.com/orgs/grafana/projects/457
+          project-url: https://github.com/orgs/grafana/projects/1085 # Grafana Data Source Plugins Squad 🐴
           github-token: ${{ steps.get-github-token.outputs.token }}
       - uses: titoportas/update-project-fields@421a54430b3cdc9eefd8f14f9ce0142ab7678751 # v0.1.0
         id: update-project-fields
