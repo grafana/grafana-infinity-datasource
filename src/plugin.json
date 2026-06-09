@@ -98,6 +98,17 @@
     "grafanaVersion": "11.6.x",
     "plugins": []
   },
-  "includes": [],
+  "includes": [
+    {
+      "type": "skill",
+      "name": "configuring-infinity-datasource",
+      "path": "skills/configuring-infinity-datasource/SKILL.md"
+    },
+    {
+      "type": "skill",
+      "name": "querying-infinity-datasource",
+      "path": "skills/querying-infinity-datasource/SKILL.md"
+    }
+  ],
   "routes": []
 }
