@@ -7,10 +7,6 @@ on:
     types:
       - opened
 
-permissions:
-  contents: read
-  id-token: write
-
 jobs:
   add-to-project:
     name: Add issue to project
