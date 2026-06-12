@@ -19,6 +19,8 @@ func isBackendQuery(query models.Query) bool {
 	return query.Parser == models.InfinityParserBackend || query.Parser == models.InfinityParserJQBackend
 }
 
+const pageRequestRetries = 2
+
 func canPaginateQuery(query models.Query) bool {
 	if !isBackendQuery(query) || query.PageMode == "" || query.PageMode == models.PaginationModeNone {
 		return false
@@ -53,7 +55,6 @@ func GetPaginatedResults(ctx context.Context, pCtx *backend.PluginContext, query
 	defer span.End()
 	frames := []*data.Frame{}
 	queries := []models.Query{}
-	var errs error
 	switch query.PageMode {
 	case models.PaginationModeOffset:
 		for pageNumber := 1; pageNumber <= query.PageMaxPages; pageNumber++ {
@@ -92,37 +93,51 @@ func GetPaginatedResults(ctx context.Context, pCtx *backend.PluginContext, query
 	}
 	if query.PageMode != models.PaginationModeCursor {
 		for _, currentQuery := range queries {
-			frame, _, err := GetFrameForURLSourcesWithPostProcessing(ctx, pCtx, currentQuery, infClient, requestHeaders, false)
+			frame, _, err := GetFrameForURLSourcesWithRetries(ctx, pCtx, currentQuery, infClient, requestHeaders, false)
+			if err != nil {
+				return nil, err
+			}
 			frames = append(frames, frame)
-			errs = errors.Join(errs, err)
 		}
 	}
 	if query.PageMode == models.PaginationModeCursor {
-		i := 0
 		oCursor := ""
-		for {
+		for pageNumber := 0; pageNumber < query.PageMaxPages; pageNumber++ {
 			currentQuery := query
-			if i > 0 && oCursor != "" {
+			if pageNumber > 0 {
+				if oCursor == "" {
+					break
+				}
 				currentQuery = ApplyPaginationItemToQuery(currentQuery, query.PageParamCursorFieldType, query.PageParamCursorFieldName, oCursor)
 			}
-			if i > query.PageMaxPages || (i > 0 && oCursor == "") {
-				break
+			frame, cursor, err := GetFrameForURLSourcesWithRetries(ctx, pCtx, currentQuery, infClient, requestHeaders, false)
+			if err != nil {
+				return nil, err
 			}
-			i++
-			frame, cursor, err := GetFrameForURLSourcesWithPostProcessing(ctx, pCtx, currentQuery, infClient, requestHeaders, false)
 			oCursor = cursor
 			frames = append(frames, frame)
-			errs = errors.Join(errs, err)
 		}
-	}
-	if errs != nil {
-		return nil, errs
 	}
 	mergedFrame, err := transformations.Merge(frames, transformations.MergeFramesOptions{})
 	if err != nil {
 		return nil, err
 	}
 	return PostProcessFrame(ctx, mergedFrame, query)
+}
+
+func GetFrameForURLSourcesWithRetries(ctx context.Context, pCtx *backend.PluginContext, query models.Query, infClient Client, requestHeaders map[string]string, postProcessingRequired bool) (*data.Frame, string, error) {
+	var (
+		frame  *data.Frame
+		cursor string
+		err    error
+	)
+	for attempt := 0; attempt <= pageRequestRetries; attempt++ {
+		frame, cursor, err = GetFrameForURLSourcesWithPostProcessing(ctx, pCtx, query, infClient, requestHeaders, postProcessingRequired)
+		if err == nil {
+			return frame, cursor, nil
+		}
+	}
+	return frame, cursor, err
 }
 
 func ApplyPaginationItemToQuery(query models.Query, fieldType models.PaginationParamType, fieldName string, fieldValue string) models.Query {
