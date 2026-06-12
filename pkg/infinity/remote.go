@@ -19,10 +19,29 @@ func isBackendQuery(query models.Query) bool {
 	return query.Parser == models.InfinityParserBackend || query.Parser == models.InfinityParserJQBackend
 }
 
+func canPaginateQuery(query models.Query) bool {
+	if !isBackendQuery(query) || query.PageMode == "" || query.PageMode == models.PaginationModeNone {
+		return false
+	}
+	switch query.PageMode {
+	case models.PaginationModeCursor:
+		return query.Type == models.QueryTypeJSON || query.Type == models.QueryTypeGraphQL
+	case models.PaginationModeOffset, models.PaginationModePage, models.PaginationModeList:
+		return query.Type == models.QueryTypeJSON ||
+			query.Type == models.QueryTypeGraphQL ||
+			query.Type == models.QueryTypeCSV ||
+			query.Type == models.QueryTypeTSV ||
+			query.Type == models.QueryTypeXML ||
+			query.Type == models.QueryTypeHTML
+	default:
+		return false
+	}
+}
+
 func GetFrameForURLSources(ctx context.Context, pCtx *backend.PluginContext, query models.Query, infClient Client, requestHeaders map[string]string) (*data.Frame, error) {
 	ctx, span := tracing.DefaultTracer().Start(ctx, "GetFrameForURLSources")
 	defer span.End()
-	if query.Type == models.QueryTypeJSON && isBackendQuery(query) && query.PageMode != models.PaginationModeNone && query.PageMode != "" {
+	if canPaginateQuery(query) {
 		return GetPaginatedResults(ctx, pCtx, query, infClient, requestHeaders)
 	}
 	frame, _, err := GetFrameForURLSourcesWithPostProcessing(ctx, pCtx, query, infClient, requestHeaders, true)
