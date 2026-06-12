@@ -180,3 +180,22 @@ func TestGetPaginationMaxPagesValue(t *testing.T) {
 		})
 	}
 }
+
+func TestApplyDefaultsToQueryAppliesPaginationDefaultsForJQBackend(t *testing.T) {
+	query := models.Query{
+		Parser:       models.InfinityParserJQBackend,
+		Source:       "url",
+		PageMode:     models.PaginationModePage,
+		PageMaxPages: 100,
+	}
+
+	got := models.ApplyDefaultsToQuery(context.Background(), nil, query, models.InfinitySettings{})
+
+	require.Equal(t, 5, got.PageMaxPages)
+	require.Equal(t, "limit", got.PageParamSizeFieldName)
+	require.Equal(t, models.PaginationParamTypeQuery, got.PageParamSizeFieldType)
+	require.Equal(t, 1000, got.PageParamSizeFieldVal)
+	require.Equal(t, "page", got.PageParamPageFieldName)
+	require.Equal(t, models.PaginationParamTypeQuery, got.PageParamPageFieldType)
+	require.Equal(t, 1, got.PageParamPageFieldVal)
+}
