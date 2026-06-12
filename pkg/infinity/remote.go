@@ -104,6 +104,9 @@ func GetPaginatedResults(ctx context.Context, pCtx *backend.PluginContext, query
 		oCursor := ""
 		for pageNumber := 0; pageNumber < query.PageMaxPages; pageNumber++ {
 			currentQuery := query
+			if pageNumber == 0 && query.PageParamCursorFieldType == models.PaginationParamTypeReplace {
+				currentQuery = ApplyPaginationItemToQuery(currentQuery, query.PageParamCursorFieldType, query.PageParamCursorFieldName, "")
+			}
 			if pageNumber > 0 {
 				if oCursor == "" {
 					break
@@ -141,7 +144,10 @@ func GetFrameForURLSourcesWithRetries(ctx context.Context, pCtx *backend.PluginC
 }
 
 func ApplyPaginationItemToQuery(query models.Query, fieldType models.PaginationParamType, fieldName string, fieldValue string) models.Query {
-	if strings.TrimSpace(fieldValue) == "" {
+	if strings.TrimSpace(fieldName) == "" {
+		return query
+	}
+	if strings.TrimSpace(fieldValue) == "" && fieldType != models.PaginationParamTypeReplace {
 		return query
 	}
 	field := models.URLOptionKeyValuePair{Key: fieldName, Value: fieldValue}
@@ -152,6 +158,10 @@ func ApplyPaginationItemToQuery(query models.Query, fieldType models.PaginationP
 		query.URLOptions.BodyForm = append(query.URLOptions.BodyForm, field)
 	case models.PaginationParamTypeReplace:
 		fieldNameUpdated := fmt.Sprintf(`${__pagination.%s}`, fieldName)
+		if fieldValue == "" {
+			quotedToken := fmt.Sprintf(`"%s"`, fieldNameUpdated)
+			query.URLOptions.BodyGraphQLVariables = strings.ReplaceAll(query.URLOptions.BodyGraphQLVariables, quotedToken, "null")
+		}
 		query.URL = strings.ReplaceAll(query.URL, fieldNameUpdated, field.Value)
 		query.URLOptions.Body = strings.ReplaceAll(query.URLOptions.Body, fieldNameUpdated, field.Value)
 		query.URLOptions.BodyGraphQLQuery = strings.ReplaceAll(query.URLOptions.BodyGraphQLQuery, fieldNameUpdated, fieldValue)
@@ -264,6 +274,13 @@ func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, pCtx *backend.
 		cursor, err = jsonframer.GetRootData(string(body), query.PageParamCursorFieldExtractionPath, framerType)
 		if err != nil {
 			return frame, cursor, backend.PluginError(errors.New("error while extracting the cursor value"))
+		}
+		hasNextPath := strings.TrimSuffix(query.PageParamCursorFieldExtractionPath, ".endCursor")
+		if hasNextPath != query.PageParamCursorFieldExtractionPath {
+			hasNextValue, hasNextErr := jsonframer.GetRootData(string(body), hasNextPath+".hasNextPage", framerType)
+			if hasNextErr == nil && strings.EqualFold(strings.TrimSpace(hasNextValue), "false") {
+				cursor = ""
+			}
 		}
 	}
 	return frame, cursor, nil

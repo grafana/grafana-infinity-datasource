@@ -278,6 +278,11 @@ func TestApplyPaginationItemToQuery(t *testing.T) {
 					require.Equal(t, tt.want, got)
 				})
 			}
+			t.Run("should replace quoted graphql cursor token with null when field value is empty", func(t *testing.T) {
+				query := models.Query{URLOptions: models.URLOptions{BodyGraphQLVariables: `{ "after" : "${__pagination.cursor}" }`}}
+				got := ApplyPaginationItemToQuery(query, models.PaginationParamTypeReplace, "cursor", "")
+				require.Equal(t, `{ "after" : null }`, got.URLOptions.BodyGraphQLVariables)
+			})
 		})
 		t.Run("replace params in URL Headers", func(t *testing.T) {
 			tests := []struct {

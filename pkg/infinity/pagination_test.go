@@ -2,7 +2,9 @@ package infinity
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"strconv"
@@ -208,5 +210,75 @@ func TestGetPaginatedResultsCursorHonorsMaxPagesBoundary(t *testing.T) {
 
 	mu.Lock()
 	assert.Equal(t, 5, requests)
+	mu.Unlock()
+}
+
+func TestGetPaginatedResultsGraphQLCursorReplaceStartsWithNullAndStopsOnHasNextPageFalse(t *testing.T) {
+	type graphQLRequest struct {
+		Variables map[string]any `json:"variables"`
+	}
+	var (
+		mu                sync.Mutex
+		requests          int
+		firstAfterValue   any
+		secondAfterValue  any
+		thirdRequestCount int
+	)
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		body, _ := io.ReadAll(r.Body)
+		req := graphQLRequest{}
+		_ = json.Unmarshal(body, &req)
+		after := req.Variables["after"]
+
+		mu.Lock()
+		requests++
+		switch requests {
+		case 1:
+			firstAfterValue = after
+		case 2:
+			secondAfterValue = after
+		case 3:
+			thirdRequestCount++
+		}
+		mu.Unlock()
+
+		w.Header().Set("Content-Type", "application/json")
+		if requests == 1 {
+			_, _ = w.Write([]byte(`{"data":{"search":{"edges":[{"node":{"id":1}}],"pageInfo":{"hasNextPage":true,"endCursor":"c1"}}}}`))
+			return
+		}
+		_, _ = w.Write([]byte(`{"data":{"search":{"edges":[{"node":{"id":2}}],"pageInfo":{"hasNextPage":false,"endCursor":"c2"}}}}`))
+	}))
+	defer server.Close()
+
+	query := models.Query{
+		Type:   models.QueryTypeGraphQL,
+		Source: "url",
+		Parser: models.InfinityParserBackend,
+		URL:    server.URL,
+		URLOptions: models.URLOptions{
+			Method:               http.MethodPost,
+			BodyType:             "graphql",
+			BodyGraphQLQuery:     `query($q: String!, $first: Int!, $after: String) { search(query: $q, type: REPOSITORY, first: $first, after: $after) { edges { node { id } } pageInfo { hasNextPage endCursor } } }`,
+			BodyGraphQLVariables: `{ "q":"org:grafana", "first": 1, "after":"${__pagination.cursor}" }`,
+		},
+		RootSelector:                       "data.search.edges",
+		Columns:                            []models.InfinityColumn{{Text: "id", Selector: "node.id", Type: "number"}},
+		PageMode:                           models.PaginationModeCursor,
+		PageMaxPages:                       10,
+		PageParamCursorFieldType:           models.PaginationParamTypeReplace,
+		PageParamCursorFieldName:           "cursor",
+		PageParamCursorFieldExtractionPath: "data.search.pageInfo.endCursor",
+	}
+	client := Client{Settings: models.InfinitySettings{}, HttpClient: server.Client(), IsMock: true}
+	frame, err := GetPaginatedResults(context.Background(), nil, query, client, map[string]string{})
+	require.NoError(t, err)
+	require.NotNil(t, frame)
+
+	mu.Lock()
+	require.Equal(t, 2, requests)
+	require.Nil(t, firstAfterValue)
+	require.Equal(t, "c1", secondAfterValue)
+	require.Equal(t, 0, thirdRequestCount)
 	mu.Unlock()
 }
