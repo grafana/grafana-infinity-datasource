@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
 	v4 "github.com/aws/aws-sdk-go-v2/aws/signer/v4"
 
 	"github.com/grafana/grafana-aws-sdk/pkg/awsauth"
@@ -233,12 +234,23 @@ func applyAWSAuth(ctx context.Context, httpClient *http.Client, settings models.
 
 func getSigV4Signer(service string) v4.HTTPSigner {
 	if strings.EqualFold(strings.TrimSpace(service), "s3") {
-		return v4.NewSigner(func(signer *v4.SignerOptions) {
-			signer.DisableURIPathEscaping = true
-		})
+		return s3Signer{
+			HTTPSigner: v4.NewSigner(func(signer *v4.SignerOptions) {
+				signer.DisableURIPathEscaping = true
+			}),
+		}
 	}
 
 	return v4.NewSigner()
+}
+
+type s3Signer struct {
+	v4.HTTPSigner
+}
+
+func (s s3Signer) SignHTTP(ctx context.Context, credentials aws.Credentials, req *http.Request, payloadHash, service, region string, signingTime time.Time, optFns ...func(*v4.SignerOptions)) error {
+	req.Header.Set("X-Amz-Content-Sha256", payloadHash)
+	return s.HTTPSigner.SignHTTP(ctx, credentials, req, payloadHash, service, region, signingTime, optFns...)
 }
 
 func applySecureSocksProxyConfiguration(ctx context.Context, httpClient *http.Client, settings models.InfinitySettings) (*http.Client, error) {
