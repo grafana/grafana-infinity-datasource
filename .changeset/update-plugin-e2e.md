@@ -2,4 +2,4 @@
 'grafana-infinity-datasource': patch
 ---
 
-Chore: remove unused dependencies
+Chore: update @grafana/plugin-e2e to 3.9.1
