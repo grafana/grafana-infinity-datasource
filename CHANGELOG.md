@@ -1,5 +1,9 @@
 # Change Log
 
+## 3.8.1
+
+🚀 add dsconfig schema, apiserver schema and configuration and querying skills
+
 ## 3.8.0
 
 🚀 Updated the AllowedHosts UI component from TagsInput to custom editor
