@@ -1,0 +1,145 @@
+//  🌟 This was machine generated.  Do not edit. 🌟
+//  
+//  Frame[0] {
+//      "typeVersion": [
+//          0,
+//          0
+//      ],
+//      "custom": {
+//          "query": {
+//              "refId": "q1",
+//              "type": "uql",
+//              "format": "table",
+//              "source": "inline",
+//              "url": "",
+//              "url_options": {
+//                  "method": "",
+//                  "params": null,
+//                  "headers": null,
+//                  "data": "",
+//                  "body_type": "",
+//                  "body_content_type": "",
+//                  "body_form": null,
+//                  "body_graphql_query": "",
+//                  "body_graphql_variables": ""
+//              },
+//              "data": "[1,2,3]",
+//              "parser": "",
+//              "filterExpression": "",
+//              "summarizeExpression": "",
+//              "summarizeBy": "",
+//              "summarizeAlias": "",
+//              "uql": "parse-json | count",
+//              "groq": "",
+//              "csv_options": {
+//                  "delimiter": "",
+//                  "skip_empty_lines": false,
+//                  "skip_lines_with_error": false,
+//                  "relax_column_count": false,
+//                  "columns": "",
+//                  "comment": ""
+//              },
+//              "json_options": {
+//                  "root_is_not_array": false,
+//                  "columnar": false
+//              },
+//              "root_selector": "",
+//              "columns": [],
+//              "computed_columns": [],
+//              "filters": null,
+//              "seriesCount": 0,
+//              "expression": "",
+//              "alias": "",
+//              "dataOverrides": null,
+//              "global_query_id": "",
+//              "query_mode": ""
+//          },
+//          "data": "[1,2,3]",
+//          "responseCodeFromServer": 0,
+//          "duration": 0,
+//          "error": ""
+//      },
+//      "executedQueryString": "This feature is not available for this type of query yet"
+//  }
+//  Name: q1
+//  Dimensions: 0 Fields by 0 Rows
+//  +
+//  +
+//  
+//  
+//  🌟 This was machine generated.  Do not edit. 🌟
+{
+  "status": 200,
+  "frames": [
+    {
+      "schema": {
+        "name": "q1",
+        "meta": {
+          "typeVersion": [
+            0,
+            0
+          ],
+          "custom": {
+            "query": {
+              "refId": "q1",
+              "type": "uql",
+              "format": "table",
+              "source": "inline",
+              "url": "",
+              "url_options": {
+                "method": "",
+                "params": null,
+                "headers": null,
+                "data": "",
+                "body_type": "",
+                "body_content_type": "",
+                "body_form": null,
+                "body_graphql_query": "",
+                "body_graphql_variables": ""
+              },
+              "data": "[1,2,3]",
+              "parser": "",
+              "filterExpression": "",
+              "summarizeExpression": "",
+              "summarizeBy": "",
+              "summarizeAlias": "",
+              "uql": "parse-json | count",
+              "groq": "",
+              "csv_options": {
+                "delimiter": "",
+                "skip_empty_lines": false,
+                "skip_lines_with_error": false,
+                "relax_column_count": false,
+                "columns": "",
+                "comment": ""
+              },
+              "json_options": {
+                "root_is_not_array": false,
+                "columnar": false
+              },
+              "root_selector": "",
+              "columns": [],
+              "computed_columns": [],
+              "filters": null,
+              "seriesCount": 0,
+              "expression": "",
+              "alias": "",
+              "dataOverrides": null,
+              "global_query_id": "",
+              "query_mode": ""
+            },
+            "data": "[1,2,3]",
+            "responseCodeFromServer": 0,
+            "duration": 0,
+            "error": ""
+          },
+          "executedQueryString": "This feature is not available for this type of query yet"
+        },
+        "fields": []
+      },
+      "data": {
+        "values": []
+      }
+    }
+  ]
+}

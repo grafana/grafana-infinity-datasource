@@ -1,0 +1,177 @@
+//  🌟 This was machine generated.  Do not edit. 🌟
+//  
+//  Frame[0] {
+//      "typeVersion": [
+//          0,
+//          0
+//      ],
+//      "custom": {
+//          "query": {
+//              "refId": "",
+//              "type": "xml",
+//              "format": "",
+//              "source": "inline",
+//              "url": "",
+//              "url_options": {
+//                  "method": "",
+//                  "params": null,
+//                  "headers": null,
+//                  "data": "",
+//                  "body_type": "",
+//                  "body_content_type": "",
+//                  "body_form": null,
+//                  "body_graphql_query": "",
+//                  "body_graphql_variables": ""
+//              },
+//              "data": "\u003c?xml version=\"1.0\" encoding=\"UTF-8\"?\u003e\u003croot\u003e\u003crow\u003e\u003cname\u003efoo\u003c/name\u003e\u003cage\u003e123\u003c/age\u003e\u003c/row\u003e\u003crow\u003e\u003cname\u003ebar\u003c/name\u003e\u003cage\u003e456\u003c/age\u003e\u003c/row\u003e\u003c/root\u003e",
+//              "parser": "backend",
+//              "filterExpression": "",
+//              "summarizeExpression": "",
+//              "summarizeBy": "",
+//              "summarizeAlias": "",
+//              "uql": "",
+//              "groq": "",
+//              "csv_options": {
+//                  "delimiter": "",
+//                  "skip_empty_lines": false,
+//                  "skip_lines_with_error": false,
+//                  "relax_column_count": false,
+//                  "columns": "",
+//                  "comment": ""
+//              },
+//              "json_options": {
+//                  "root_is_not_array": false,
+//                  "columnar": false
+//              },
+//              "root_selector": "$.root.row",
+//              "columns": [],
+//              "computed_columns": [],
+//              "filters": null,
+//              "seriesCount": 0,
+//              "expression": "",
+//              "alias": "",
+//              "dataOverrides": null,
+//              "global_query_id": "",
+//              "query_mode": ""
+//          },
+//          "data": "\u003c?xml version=\"1.0\" encoding=\"UTF-8\"?\u003e\u003croot\u003e\u003crow\u003e\u003cname\u003efoo\u003c/name\u003e\u003cage\u003e123\u003c/age\u003e\u003c/row\u003e\u003crow\u003e\u003cname\u003ebar\u003c/name\u003e\u003cage\u003e456\u003c/age\u003e\u003c/row\u003e\u003c/root\u003e",
+//          "responseCodeFromServer": 0,
+//          "duration": 0,
+//          "error": ""
+//      },
+//      "executedQueryString": "This feature is not available for this type of query yet"
+//  }
+//  Name: response
+//  Dimensions: 2 Fields by 2 Rows
+//  +-----------------+-----------------+
+//  | Name: age       | Name: name      |
+//  | Labels:         | Labels:         |
+//  | Type: []*string | Type: []*string |
+//  +-----------------+-----------------+
+//  | 123             | foo             |
+//  | 456             | bar             |
+//  +-----------------+-----------------+
+//  
+//  
+//  🌟 This was machine generated.  Do not edit. 🌟
+{
+  "status": 200,
+  "frames": [
+    {
+      "schema": {
+        "name": "response",
+        "meta": {
+          "typeVersion": [
+            0,
+            0
+          ],
+          "custom": {
+            "query": {
+              "refId": "",
+              "type": "xml",
+              "format": "",
+              "source": "inline",
+              "url": "",
+              "url_options": {
+                "method": "",
+                "params": null,
+                "headers": null,
+                "data": "",
+                "body_type": "",
+                "body_content_type": "",
+                "body_form": null,
+                "body_graphql_query": "",
+                "body_graphql_variables": ""
+              },
+              "data": "\u003c?xml version=\"1.0\" encoding=\"UTF-8\"?\u003e\u003croot\u003e\u003crow\u003e\u003cname\u003efoo\u003c/name\u003e\u003cage\u003e123\u003c/age\u003e\u003c/row\u003e\u003crow\u003e\u003cname\u003ebar\u003c/name\u003e\u003cage\u003e456\u003c/age\u003e\u003c/row\u003e\u003c/root\u003e",
+              "parser": "backend",
+              "filterExpression": "",
+              "summarizeExpression": "",
+              "summarizeBy": "",
+              "summarizeAlias": "",
+              "uql": "",
+              "groq": "",
+              "csv_options": {
+                "delimiter": "",
+                "skip_empty_lines": false,
+                "skip_lines_with_error": false,
+                "relax_column_count": false,
+                "columns": "",
+                "comment": ""
+              },
+              "json_options": {
+                "root_is_not_array": false,
+                "columnar": false
+              },
+              "root_selector": "$.root.row",
+              "columns": [],
+              "computed_columns": [],
+              "filters": null,
+              "seriesCount": 0,
+              "expression": "",
+              "alias": "",
+              "dataOverrides": null,
+              "global_query_id": "",
+              "query_mode": ""
+            },
+            "data": "\u003c?xml version=\"1.0\" encoding=\"UTF-8\"?\u003e\u003croot\u003e\u003crow\u003e\u003cname\u003efoo\u003c/name\u003e\u003cage\u003e123\u003c/age\u003e\u003c/row\u003e\u003crow\u003e\u003cname\u003ebar\u003c/name\u003e\u003cage\u003e456\u003c/age\u003e\u003c/row\u003e\u003c/root\u003e",
+            "responseCodeFromServer": 0,
+            "duration": 0,
+            "error": ""
+          },
+          "executedQueryString": "This feature is not available for this type of query yet"
+        },
+        "fields": [
+          {
+            "name": "age",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          }
+        ]
+      },
+      "data": {
+        "values": [
+          [
+            "123",
+            "456"
+          ],
+          [
+            "foo",
+            "bar"
+          ]
+        ]
+      }
+    }
+  ]
+}

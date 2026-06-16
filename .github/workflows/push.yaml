@@ -1,0 +1,20 @@
+name: Plugins - CI
+permissions:
+  contents: read
+  id-token: write
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  ci:
+    name: CI
+    uses: grafana/plugin-ci-workflows/.github/workflows/ci.yml@ci-cd-workflows/v8.0.1
+    with:
+      plugin-version-suffix: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || '' }}
+      run-playwright-with-skip-grafana-dev-image: true
+      run-playwright-with-skip-grafana-react-19-preview-image: true
+      run-playwright: true

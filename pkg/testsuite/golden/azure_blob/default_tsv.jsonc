@@ -1,0 +1,146 @@
+//  🌟 This was machine generated.  Do not edit. 🌟
+//  
+//  Frame[0] {
+//      "typeVersion": [
+//          0,
+//          0
+//      ],
+//      "custom": {
+//          "query": {
+//              "refId": "",
+//              "type": "tsv",
+//              "format": "",
+//              "source": "azure-blob",
+//              "url": "",
+//              "url_options": {
+//                  "method": "",
+//                  "params": null,
+//                  "headers": null,
+//                  "data": "",
+//                  "body_type": "",
+//                  "body_content_type": "",
+//                  "body_form": null,
+//                  "body_graphql_query": ""
+//              },
+//              "data": "",
+//              "parser": "",
+//              "filterExpression": "",
+//              "summarizeExpression": "",
+//              "summarizeBy": "",
+//              "uql": "",
+//              "groq": "",
+//              "csv_options": {
+//                  "delimiter": "",
+//                  "skip_empty_lines": false,
+//                  "skip_lines_with_error": false,
+//                  "relax_column_count": false,
+//                  "columns": "",
+//                  "comment": ""
+//              },
+//              "json_options": {
+//                  "root_is_not_array": false,
+//                  "columnar": false
+//              },
+//              "root_selector": "",
+//              "columns": [],
+//              "computed_columns": [],
+//              "filters": null,
+//              "seriesCount": 0,
+//              "expression": "",
+//              "alias": "",
+//              "dataOverrides": null,
+//              "global_query_id": "",
+//              "query_mode": "",
+//              "azContainerName": "my-azContainerName",
+//              "azBlobName": "folder/users.tsv"
+//          },
+//          "data": "name\tage\tcountry\toccupation\tsalary\nLeanne Graham\t38\tUSA\tDevops Engineer\t3000\nErvin Howell\t27\tUSA\tSoftware Engineer\t2300\nClementine Bauch\t17\tCanada\tStudent\t\nPatricia Lebsack\t42\tUK\tSoftware Engineer\t2800\nLeanne Bell\t38\tUSA\tSenior Software Engineer\t4000\nChelsey Dietrich\t32\tUSA\tSoftware Engineer\t3500\n",
+//          "responseCodeFromServer": 200,
+//          "duration": 123,
+//          "error": ""
+//      },
+//      "executedQueryString": "###############\n\u003e Authentication steps not included for azure blob authentication"
+//  }
+//  Name: response
+//  Dimensions: 0 Fields by 0 Rows
+//  +
+//  +
+//  
+//  
+//  🌟 This was machine generated.  Do not edit. 🌟
+{
+  "status": 200,
+  "frames": [
+    {
+      "schema": {
+        "name": "response",
+        "meta": {
+          "typeVersion": [
+            0,
+            0
+          ],
+          "custom": {
+            "query": {
+              "refId": "",
+              "type": "tsv",
+              "format": "",
+              "source": "azure-blob",
+              "url": "",
+              "url_options": {
+                "method": "",
+                "params": null,
+                "headers": null,
+                "data": "",
+                "body_type": "",
+                "body_content_type": "",
+                "body_form": null,
+                "body_graphql_query": "",
+                "body_graphql_variables": ""
+              },
+              "data": "",
+              "parser": "",
+              "filterExpression": "",
+              "summarizeExpression": "",
+              "summarizeBy": "",
+              "uql": "",
+              "groq": "",
+              "csv_options": {
+                "delimiter": "",
+                "skip_empty_lines": false,
+                "skip_lines_with_error": false,
+                "relax_column_count": false,
+                "columns": "",
+                "comment": ""
+              },
+              "json_options": {
+                "root_is_not_array": false,
+                "columnar": false
+              },
+              "root_selector": "",
+              "columns": [],
+              "computed_columns": [],
+              "filters": null,
+              "seriesCount": 0,
+              "expression": "",
+              "alias": "",
+              "dataOverrides": null,
+              "global_query_id": "",
+              "query_mode": "",
+              "azContainerName": "my-azContainerName",
+              "azBlobName": "folder/users.tsv"
+            },
+            "data": "name\tage\tcountry\toccupation\tsalary\nLeanne Graham\t38\tUSA\tDevops Engineer\t3000\nErvin Howell\t27\tUSA\tSoftware Engineer\t2300\nClementine Bauch\t17\tCanada\tStudent\t\nPatricia Lebsack\t42\tUK\tSoftware Engineer\t2800\nLeanne Bell\t38\tUSA\tSenior Software Engineer\t4000\nChelsey Dietrich\t32\tUSA\tSoftware Engineer\t3500\n",
+            "responseCodeFromServer": 200,
+            "duration": 123,
+            "error": ""
+          },
+          "executedQueryString": "###############\n\u003e Authentication steps not included for azure blob authentication"
+        },
+        "fields": []
+      },
+      "data": {
+        "values": []
+      }
+    }
+  ]
+}

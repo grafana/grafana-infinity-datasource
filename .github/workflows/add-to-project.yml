@@ -1,0 +1,36 @@
+name: Add issues & PRs to Grafana Data Source Plugins Squad project
+on:
+  issues:
+    types:
+      - opened
+  pull_request:
+    types:
+      - opened
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  add-to-project:
+    name: Add issue to project
+    runs-on: ubuntu-latest
+    steps:
+      - id: get-github-token
+        uses: grafana/shared-workflows/actions/create-github-app-token@ae92934a14a48b94494dbc06d74a81d47fe08a40 # create-github-app-token/v0.2.2
+        with:
+          github_app: grafana-oss-big-tent
+      - name: Add to project
+        id: add-to-project
+        uses: actions/add-to-project@244f685bbc3b7adfa8466e08b698b5577571133e # v1.0.2
+        with:
+          project-url: https://github.com/orgs/grafana/projects/1085 # Grafana Data Source Plugins Squad 🐴
+          github-token: ${{ steps.get-github-token.outputs.token }}
+      - uses: titoportas/update-project-fields@421a54430b3cdc9eefd8f14f9ce0142ab7678751 # v0.1.0
+        id: update-project-fields
+        with:
+          project-url: https://github.com/orgs/grafana/projects/1085 # Grafana Data Source Plugins Squad 🐴
+          github-token: ${{ steps.get-github-token.outputs.token }}
+          item-id: ${{ steps.add-to-project.outputs.itemId }}        # https://github.com/actions/add-to-project/blob/8b5d8dd2895c251002b427e4688a6115b5ed2f09/action.yml#L21
+          field-keys: Status
+          field-values: Incoming

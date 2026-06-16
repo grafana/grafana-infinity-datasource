@@ -1,0 +1,145 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": 6,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": "Infinity",
+      "gridPos": {
+        "h": 19,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "pluginVersion": "8.2.0",
+      "targets": [
+        {
+          "columns": [
+            {
+              "selector": "id",
+              "text": "",
+              "type": "string"
+            },
+            {
+              "selector": "title",
+              "text": "",
+              "type": "string"
+            },
+            {
+              "selector": "sub-title",
+              "text": "subTitle",
+              "type": "string"
+            },
+            {
+              "selector": "cpu",
+              "text": "mainStat",
+              "type": "number"
+            },
+            {
+              "selector": "memory",
+              "text": "secondaryStat",
+              "type": "number"
+            },
+            {
+              "selector": "c_disk_size",
+              "text": "arc__cpu",
+              "type": "number"
+            },
+            {
+              "selector": "d",
+              "text": "arc__memory",
+              "type": "number"
+            },
+            {
+              "selector": "c_disk_size color",
+              "text": "arc__cpu_color",
+              "type": "string"
+            },
+            {
+              "selector": "d color",
+              "text": "arc__memory_color",
+              "type": "string"
+            },
+            {
+              "selector": "detail__hello",
+              "text": "",
+              "type": "string"
+            }
+          ],
+          "data": "id,title,sub-title,cpu,memory,c_disk_size,d,c_disk_size color,d color,detail__hello\nA,Server A,Application Server,12,10,0.1,0.9,blue,red,world\nB,Server B,DB Server,90,87,0.1,0.9,blue,red,hello\nC,Server C,Application Server,20,23,0.20,0.80,blue,red,hello\nD,Server D,Middleware Server,47,98,0.90,0.10,blue,red,world",
+          "filters": [],
+          "format": "node-graph-nodes",
+          "global_query_id": "",
+          "refId": "A",
+          "root_selector": "",
+          "source": "inline",
+          "type": "csv",
+          "url": "",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        },
+        {
+          "columns": [],
+          "data": "id,source,target,mainStat,secondaryStat,detail__one\n1,A,B,30,mb/s,abc\n2,A,C,20,mb/s,def\n3,B,D,24.2,mb/s,ghi",
+          "filters": [],
+          "format": "node-graph-edges",
+          "global_query_id": "",
+          "hide": false,
+          "refId": "B",
+          "root_selector": "",
+          "source": "inline",
+          "type": "csv",
+          "url": "",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "Sample node graph",
+      "type": "nodeGraph"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 31,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Node Graph",
+  "uid": "node-graph",
+  "version": 7
+}

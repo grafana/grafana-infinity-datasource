@@ -1,0 +1,203 @@
+//  🌟 This was machine generated.  Do not edit. 🌟
+//  
+//  Frame[0] {
+//      "typeVersion": [
+//          0,
+//          0
+//      ],
+//      "custom": {
+//          "query": {
+//              "refId": "",
+//              "type": "html",
+//              "format": "",
+//              "source": "inline",
+//              "url": "",
+//              "url_options": {
+//                  "method": "",
+//                  "params": null,
+//                  "headers": null,
+//                  "data": "",
+//                  "body_type": "",
+//                  "body_content_type": "",
+//                  "body_form": null,
+//                  "body_graphql_query": "",
+//                  "body_graphql_variables": ""
+//              },
+//              "data": "\u003chtml\u003e\u003chead\u003e\u003c/head\u003e\u003cbody\u003e\u003ctable class=\"table table-bordered table-hover table-condensed\"\u003e\u003cthead\u003e\u003ctr\u003e\u003cth title=\"Field #1\"\u003ename\u003c/th\u003e\u003cth title=\"Field #2\"\u003eage\u003c/th\u003e\u003c/tr\u003e\u003c/thead\u003e\u003ctbody\u003e\u003ctr\u003e\u003ctd\u003efoo\u003c/td\u003e\u003ctd align=\"right\"\u003e123\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003ebar\u003c/td\u003e\u003ctd align=\"right\"\u003e456\u003c/td\u003e\u003c/tr\u003e\u003c/tbody\u003e\u003c/table\u003e\u003c/body\u003e\u003c/html\u003e",
+//              "parser": "jq-backend",
+//              "filterExpression": "",
+//              "summarizeExpression": "",
+//              "summarizeBy": "",
+//              "summarizeAlias": "",
+//              "uql": "",
+//              "groq": "",
+//              "csv_options": {
+//                  "delimiter": "",
+//                  "skip_empty_lines": false,
+//                  "skip_lines_with_error": false,
+//                  "relax_column_count": false,
+//                  "columns": "",
+//                  "comment": ""
+//              },
+//              "json_options": {
+//                  "root_is_not_array": false,
+//                  "columnar": false
+//              },
+//              "root_selector": ".html.body.table.tbody.tr",
+//              "columns": [
+//                  {
+//                      "selector": "td.0",
+//                      "text": "name",
+//                      "type": "string",
+//                      "timestampFormat": ""
+//                  },
+//                  {
+//                      "selector": "td.1.#content",
+//                      "text": "age",
+//                      "type": "number",
+//                      "timestampFormat": ""
+//                  }
+//              ],
+//              "computed_columns": [],
+//              "filters": null,
+//              "seriesCount": 0,
+//              "expression": "",
+//              "alias": "",
+//              "dataOverrides": null,
+//              "global_query_id": "",
+//              "query_mode": ""
+//          },
+//          "data": "\u003chtml\u003e\u003chead\u003e\u003c/head\u003e\u003cbody\u003e\u003ctable class=\"table table-bordered table-hover table-condensed\"\u003e\u003cthead\u003e\u003ctr\u003e\u003cth title=\"Field #1\"\u003ename\u003c/th\u003e\u003cth title=\"Field #2\"\u003eage\u003c/th\u003e\u003c/tr\u003e\u003c/thead\u003e\u003ctbody\u003e\u003ctr\u003e\u003ctd\u003efoo\u003c/td\u003e\u003ctd align=\"right\"\u003e123\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003ebar\u003c/td\u003e\u003ctd align=\"right\"\u003e456\u003c/td\u003e\u003c/tr\u003e\u003c/tbody\u003e\u003c/table\u003e\u003c/body\u003e\u003c/html\u003e",
+//          "responseCodeFromServer": 0,
+//          "duration": 0,
+//          "error": ""
+//      },
+//      "executedQueryString": "This feature is not available for this type of query yet"
+//  }
+//  Name: response
+//  Dimensions: 2 Fields by 2 Rows
+//  +------------------+-----------------+
+//  | Name: age        | Name: name      |
+//  | Labels:          | Labels:         |
+//  | Type: []*float64 | Type: []*string |
+//  +------------------+-----------------+
+//  | 123              | foo             |
+//  | 456              | bar             |
+//  +------------------+-----------------+
+//  
+//  
+//  🌟 This was machine generated.  Do not edit. 🌟
+{
+  "status": 200,
+  "frames": [
+    {
+      "schema": {
+        "name": "response",
+        "meta": {
+          "typeVersion": [
+            0,
+            0
+          ],
+          "custom": {
+            "query": {
+              "refId": "",
+              "type": "html",
+              "format": "",
+              "source": "inline",
+              "url": "",
+              "url_options": {
+                "method": "",
+                "params": null,
+                "headers": null,
+                "data": "",
+                "body_type": "",
+                "body_content_type": "",
+                "body_form": null,
+                "body_graphql_query": "",
+                "body_graphql_variables": ""
+              },
+              "data": "\u003chtml\u003e\u003chead\u003e\u003c/head\u003e\u003cbody\u003e\u003ctable class=\"table table-bordered table-hover table-condensed\"\u003e\u003cthead\u003e\u003ctr\u003e\u003cth title=\"Field #1\"\u003ename\u003c/th\u003e\u003cth title=\"Field #2\"\u003eage\u003c/th\u003e\u003c/tr\u003e\u003c/thead\u003e\u003ctbody\u003e\u003ctr\u003e\u003ctd\u003efoo\u003c/td\u003e\u003ctd align=\"right\"\u003e123\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003ebar\u003c/td\u003e\u003ctd align=\"right\"\u003e456\u003c/td\u003e\u003c/tr\u003e\u003c/tbody\u003e\u003c/table\u003e\u003c/body\u003e\u003c/html\u003e",
+              "parser": "jq-backend",
+              "filterExpression": "",
+              "summarizeExpression": "",
+              "summarizeBy": "",
+              "summarizeAlias": "",
+              "uql": "",
+              "groq": "",
+              "csv_options": {
+                "delimiter": "",
+                "skip_empty_lines": false,
+                "skip_lines_with_error": false,
+                "relax_column_count": false,
+                "columns": "",
+                "comment": ""
+              },
+              "json_options": {
+                "root_is_not_array": false,
+                "columnar": false
+              },
+              "root_selector": ".html.body.table.tbody.tr",
+              "columns": [
+                {
+                  "selector": "td.0",
+                  "text": "name",
+                  "type": "string",
+                  "timestampFormat": ""
+                },
+                {
+                  "selector": "td.1.#content",
+                  "text": "age",
+                  "type": "number",
+                  "timestampFormat": ""
+                }
+              ],
+              "computed_columns": [],
+              "filters": null,
+              "seriesCount": 0,
+              "expression": "",
+              "alias": "",
+              "dataOverrides": null,
+              "global_query_id": "",
+              "query_mode": ""
+            },
+            "data": "\u003chtml\u003e\u003chead\u003e\u003c/head\u003e\u003cbody\u003e\u003ctable class=\"table table-bordered table-hover table-condensed\"\u003e\u003cthead\u003e\u003ctr\u003e\u003cth title=\"Field #1\"\u003ename\u003c/th\u003e\u003cth title=\"Field #2\"\u003eage\u003c/th\u003e\u003c/tr\u003e\u003c/thead\u003e\u003ctbody\u003e\u003ctr\u003e\u003ctd\u003efoo\u003c/td\u003e\u003ctd align=\"right\"\u003e123\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003ebar\u003c/td\u003e\u003ctd align=\"right\"\u003e456\u003c/td\u003e\u003c/tr\u003e\u003c/tbody\u003e\u003c/table\u003e\u003c/body\u003e\u003c/html\u003e",
+            "responseCodeFromServer": 0,
+            "duration": 0,
+            "error": ""
+          },
+          "executedQueryString": "This feature is not available for this type of query yet"
+        },
+        "fields": [
+          {
+            "name": "age",
+            "type": "number",
+            "typeInfo": {
+              "frame": "float64",
+              "nullable": true
+            }
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          }
+        ]
+      },
+      "data": {
+        "values": [
+          [
+            123,
+            456
+          ],
+          [
+            "foo",
+            "bar"
+          ]
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+__debug_bin
+.data/
+.env
+.pnpm-debug.log*
+.turbo/
+*.log
+*.pid
+*.pid.lock
+*.seed
+artifacts/
+ci/
+coverage/
+dist/
+e2e-results/
+logs
+mage_output_file.go
+node_modules/
+.yarn/install-state.gz
+npm-debug.log*
+pids
+provisioning/datasources/prod.yml
+temp_test.go
+work/
+yarn-debug.log*
+yarn-error.log*
+docker/blocks/tempo/tempo-data
+# IDE
+.idea
+.eslintcache
+
+# playwright
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+playwright/.auth/

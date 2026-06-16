@@ -1,0 +1,146 @@
+//  🌟 This was machine generated.  Do not edit. 🌟
+//  
+//  Frame[0] {
+//      "typeVersion": [
+//          0,
+//          0
+//      ],
+//      "custom": {
+//          "query": {
+//              "refId": "",
+//              "type": "xml",
+//              "format": "",
+//              "source": "azure-blob",
+//              "url": "",
+//              "url_options": {
+//                  "method": "",
+//                  "params": null,
+//                  "headers": null,
+//                  "data": "",
+//                  "body_type": "",
+//                  "body_content_type": "",
+//                  "body_form": null,
+//                  "body_graphql_query": ""
+//              },
+//              "data": "",
+//              "parser": "uql",
+//              "filterExpression": "",
+//              "summarizeExpression": "",
+//              "summarizeBy": "",
+//              "uql": "parse-xml",
+//              "groq": "",
+//              "csv_options": {
+//                  "delimiter": "",
+//                  "skip_empty_lines": false,
+//                  "skip_lines_with_error": false,
+//                  "relax_column_count": false,
+//                  "columns": "",
+//                  "comment": ""
+//              },
+//              "json_options": {
+//                  "root_is_not_array": false,
+//                  "columnar": false
+//              },
+//              "root_selector": "",
+//              "columns": [],
+//              "computed_columns": [],
+//              "filters": null,
+//              "seriesCount": 0,
+//              "expression": "",
+//              "alias": "",
+//              "dataOverrides": null,
+//              "global_query_id": "",
+//              "query_mode": "",
+//              "azContainerName": "my-azContainerName",
+//              "azBlobName": "folder/users.xml"
+//          },
+//          "data": "\u003c?xml version=\"1.0\" encoding=\"UTF-8\" ?\u003e\n\u003croot\u003e\n  \u003crow\u003e\n    \u003cname\u003eLeanne Graham\u003c/name\u003e\n    \u003cage\u003e38\u003c/age\u003e\n    \u003ccountry\u003eUSA\u003c/country\u003e\n    \u003coccupation\u003eDevops Engineer\u003c/occupation\u003e\n    \u003csalary\u003e3000\u003c/salary\u003e\n  \u003c/row\u003e\n  \u003crow\u003e\n    \u003cname\u003eErvin Howell\u003c/name\u003e\n    \u003cage\u003e27\u003c/age\u003e\n    \u003ccountry\u003eUSA\u003c/country\u003e\n    \u003coccupation\u003eSoftware Engineer\u003c/occupation\u003e\n    \u003csalary\u003e2300\u003c/salary\u003e\n  \u003c/row\u003e\n  \u003crow\u003e\n    \u003cname\u003eClementine Bauch\u003c/name\u003e\n    \u003cage\u003e17\u003c/age\u003e\n    \u003ccountry\u003eCanada\u003c/country\u003e\n    \u003coccupation\u003eStudent\u003c/occupation\u003e\n    \u003csalary /\u003e\n  \u003c/row\u003e\n  \u003crow\u003e\n    \u003cname\u003ePatricia Lebsack\u003c/name\u003e\n    \u003cage\u003e42\u003c/age\u003e\n    \u003ccountry\u003eUK\u003c/country\u003e\n    \u003coccupation\u003eSoftware Engineer\u003c/occupation\u003e\n    \u003csalary\u003e2800\u003c/salary\u003e\n  \u003c/row\u003e\n  \u003crow\u003e\n    \u003cname\u003eLeanne Bell\u003c/name\u003e\n    \u003cage\u003e38\u003c/age\u003e\n    \u003ccountry\u003eUSA\u003c/country\u003e\n    \u003coccupation\u003eSenior Software Engineer\u003c/occupation\u003e\n    \u003csalary\u003e4000\u003c/salary\u003e\n  \u003c/row\u003e\n  \u003crow\u003e\n    \u003cname\u003eChelsey Dietrich\u003c/name\u003e\n    \u003cage\u003e32\u003c/age\u003e\n    \u003ccountry\u003eUSA\u003c/country\u003e\n    \u003coccupation\u003eSoftware Engineer\u003c/occupation\u003e\n    \u003csalary\u003e3500\u003c/salary\u003e\n  \u003c/row\u003e\n\u003c/root\u003e\n",
+//          "responseCodeFromServer": 200,
+//          "duration": 123,
+//          "error": ""
+//      },
+//      "executedQueryString": "\n###############\n## UQL\n###############\n\nparse-xml\n###############\n\u003e Authentication steps not included for azure blob authentication"
+//  }
+//  Name: response
+//  Dimensions: 0 Fields by 0 Rows
+//  +
+//  +
+//  
+//  
+//  🌟 This was machine generated.  Do not edit. 🌟
+{
+  "status": 200,
+  "frames": [
+    {
+      "schema": {
+        "name": "response",
+        "meta": {
+          "typeVersion": [
+            0,
+            0
+          ],
+          "custom": {
+            "query": {
+              "refId": "",
+              "type": "xml",
+              "format": "",
+              "source": "azure-blob",
+              "url": "",
+              "url_options": {
+                "method": "",
+                "params": null,
+                "headers": null,
+                "data": "",
+                "body_type": "",
+                "body_content_type": "",
+                "body_form": null,
+                "body_graphql_query": "",
+                "body_graphql_variables": ""
+              },
+              "data": "",
+              "parser": "uql",
+              "filterExpression": "",
+              "summarizeExpression": "",
+              "summarizeBy": "",
+              "uql": "parse-xml",
+              "groq": "",
+              "csv_options": {
+                "delimiter": "",
+                "skip_empty_lines": false,
+                "skip_lines_with_error": false,
+                "relax_column_count": false,
+                "columns": "",
+                "comment": ""
+              },
+              "json_options": {
+                "root_is_not_array": false,
+                "columnar": false
+              },
+              "root_selector": "",
+              "columns": [],
+              "computed_columns": [],
+              "filters": null,
+              "seriesCount": 0,
+              "expression": "",
+              "alias": "",
+              "dataOverrides": null,
+              "global_query_id": "",
+              "query_mode": "",
+              "azContainerName": "my-azContainerName",
+              "azBlobName": "folder/users.xml"
+            },
+            "data": "\u003c?xml version=\"1.0\" encoding=\"UTF-8\" ?\u003e\n\u003croot\u003e\n  \u003crow\u003e\n    \u003cname\u003eLeanne Graham\u003c/name\u003e\n    \u003cage\u003e38\u003c/age\u003e\n    \u003ccountry\u003eUSA\u003c/country\u003e\n    \u003coccupation\u003eDevops Engineer\u003c/occupation\u003e\n    \u003csalary\u003e3000\u003c/salary\u003e\n  \u003c/row\u003e\n  \u003crow\u003e\n    \u003cname\u003eErvin Howell\u003c/name\u003e\n    \u003cage\u003e27\u003c/age\u003e\n    \u003ccountry\u003eUSA\u003c/country\u003e\n    \u003coccupation\u003eSoftware Engineer\u003c/occupation\u003e\n    \u003csalary\u003e2300\u003c/salary\u003e\n  \u003c/row\u003e\n  \u003crow\u003e\n    \u003cname\u003eClementine Bauch\u003c/name\u003e\n    \u003cage\u003e17\u003c/age\u003e\n    \u003ccountry\u003eCanada\u003c/country\u003e\n    \u003coccupation\u003eStudent\u003c/occupation\u003e\n    \u003csalary /\u003e\n  \u003c/row\u003e\n  \u003crow\u003e\n    \u003cname\u003ePatricia Lebsack\u003c/name\u003e\n    \u003cage\u003e42\u003c/age\u003e\n    \u003ccountry\u003eUK\u003c/country\u003e\n    \u003coccupation\u003eSoftware Engineer\u003c/occupation\u003e\n    \u003csalary\u003e2800\u003c/salary\u003e\n  \u003c/row\u003e\n  \u003crow\u003e\n    \u003cname\u003eLeanne Bell\u003c/name\u003e\n    \u003cage\u003e38\u003c/age\u003e\n    \u003ccountry\u003eUSA\u003c/country\u003e\n    \u003coccupation\u003eSenior Software Engineer\u003c/occupation\u003e\n    \u003csalary\u003e4000\u003c/salary\u003e\n  \u003c/row\u003e\n  \u003crow\u003e\n    \u003cname\u003eChelsey Dietrich\u003c/name\u003e\n    \u003cage\u003e32\u003c/age\u003e\n    \u003ccountry\u003eUSA\u003c/country\u003e\n    \u003coccupation\u003eSoftware Engineer\u003c/occupation\u003e\n    \u003csalary\u003e3500\u003c/salary\u003e\n  \u003c/row\u003e\n\u003c/root\u003e\n",
+            "responseCodeFromServer": 200,
+            "duration": 123,
+            "error": ""
+          },
+          "executedQueryString": "\n###############\n## UQL\n###############\n\nparse-xml\n###############\n\u003e Authentication steps not included for azure blob authentication"
+        },
+        "fields": []
+      },
+      "data": {
+        "values": []
+      }
+    }
+  ]
+}

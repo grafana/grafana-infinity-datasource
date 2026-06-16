@@ -1,0 +1,7 @@
+apiVersion: 1
+
+providers:
+  - name: Default Dashboards
+    type: file
+    options:
+      path: /dashboards

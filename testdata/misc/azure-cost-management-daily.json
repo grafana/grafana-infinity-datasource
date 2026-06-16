@@ -1,0 +1,70 @@
+{
+  "id": "subscriptions/my-subscription-id/providers/Microsoft.CostManagement/query/my-query-id1",
+  "name": "my-query-id1",
+  "type": "Microsoft.CostManagement/query",
+  "location": null,
+  "sku": null,
+  "eTag": null,
+  "properties": {
+    "nextLink": null,
+    "columns": [
+      { "name": "Cost", "type": "Number" },
+      { "name": "CostUSD", "type": "Number" },
+      { "name": "UsageDate", "type": "Number" },
+      { "name": "Currency", "type": "String" }
+    ],
+    "rows": [
+      [0.0, 0.0, 20230101, "USD"],
+      [0.0, 0.0, 20230102, "USD"],
+      [0.0, 0.0, 20230103, "USD"],
+      [0.0, 0.0, 20230104, "USD"],
+      [0.0, 0.0, 20230105, "USD"],
+      [0.0, 0.0, 20230106, "USD"],
+      [0.0, 0.0, 20230107, "USD"],
+      [0.0, 0.0, 20230108, "USD"],
+      [0.0175, 0.0175, 20230109, "USD"],
+      [0.0025, 0.0025, 20230110, "USD"],
+      [0.0025, 0.0025, 20230111, "USD"],
+      [0.01015625, 0.01015625, 20230112, "USD"],
+      [0.01484375, 0.01484375, 20230113, "USD"],
+      [0.0, 0.0, 20230114, "USD"],
+      [0.0, 0.0, 20230115, "USD"],
+      [0.02, 0.02, 20230116, "USD"],
+      [0.0275, 0.0275, 20230117, "USD"],
+      [0.01, 0.01, 20230118, "USD"],
+      [0.035, 0.035, 20230119, "USD"],
+      [0.0125, 0.0125, 20230120, "USD"],
+      [0.0, 0.0, 20230121, "USD"],
+      [0.0, 0.0, 20230122, "USD"],
+      [0.0075, 0.0075, 20230123, "USD"]
+    ]
+  },
+  "__url": "https://management.azure.com/subscriptions/<my-subscription-id>/providers/Microsoft.CostManagement/query?api-version=2021-10-01&$top=5000",
+  "__payload": {
+    "type": "ActualCost",
+    "dataSet": {
+      "granularity": "Daily",
+      "aggregation": {
+        "totalCost": {
+          "name": "Cost",
+          "function": "Sum"
+        },
+        "totalCostUSD": {
+          "name": "CostUSD",
+          "function": "Sum"
+        }
+      },
+      "sorting": [
+        {
+          "direction": "ascending",
+          "name": "UsageDate"
+        }
+      ]
+    },
+    "timeframe": "Custom",
+    "timePeriod": {
+      "from": "2023-01-01T00:00:00+00:00",
+      "to": "2023-01-31T23:59:59+00:00"
+    }
+  }
+}
