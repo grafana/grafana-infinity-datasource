@@ -2,7 +2,7 @@
 
 ## 3.8.1
 
-🚀 add dsconfig schema, apiserver schema and configuration and querying skills
+🚀 add dsconfig schema, apiserver schema, configuration and querying skills
 
 ## 3.8.0
 
