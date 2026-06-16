@@ -38,6 +38,8 @@ type ConfigField struct {
 
 	ValueType    ValueType    `json:"valueType"`
 	SemanticType SemanticType `json:"semanticType,omitempty"`
+	DefaultValue any          `json:"defaultValue,omitempty"`
+	Required     bool         `json:"required,omitempty"`
 
 	// Target is the storage location (required for storage fields).
 	Target *TargetLocation `json:"target,omitempty"`
@@ -61,14 +63,11 @@ type ConfigField struct {
 
 	// Conditional behavior (CEL expressions), surfaced as vendor extensions.
 	DependsOn    string `json:"dependsOn,omitempty"`
-	Required     bool   `json:"required,omitempty"`
 	RequiredWhen string `json:"requiredWhen,omitempty"`
 	DisabledWhen string `json:"disabledWhen,omitempty"`
 
 	// Item is the element schema (required when ValueType is array; optional for object).
 	Item *FieldItemSchema `json:"item,omitempty"`
-
-	DefaultValue any `json:"defaultValue,omitempty"`
 }
 
 // FieldItemSchema defines the schema for array elements or object sub-fields.

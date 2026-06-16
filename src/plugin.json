@@ -100,14 +100,26 @@
   },
   "includes": [
     {
+      "type": "schema",
+      "name": "apiserver",
+      "path": "schema/v0alpha1.json"
+    },
+    {
+      "type": "schema",
+      "name": "dsconfig",
+      "path": "schema/settings.schema.json"
+    },
+    {
       "type": "skill",
       "name": "configuring-infinity-datasource",
-      "path": "skills/configuring-infinity-datasource/SKILL.md"
+      "path": "skills/configuring-infinity-datasource/SKILL.md",
+      "includes": []
     },
     {
       "type": "skill",
       "name": "querying-infinity-datasource",
-      "path": "skills/querying-infinity-datasource/SKILL.md"
+      "path": "skills/querying-infinity-datasource/SKILL.md",
+      "includes": []
     }
   ],
   "routes": []
