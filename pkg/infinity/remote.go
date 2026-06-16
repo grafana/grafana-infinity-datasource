@@ -22,6 +22,7 @@ func isBackendQuery(query models.Query) bool {
 const pageRequestRetries = 2
 
 func canPaginateQuery(query models.Query) bool {
+	// Keep pagination generic: allow any backend-parsed URL query type that our backend framers support.
 	if !isBackendQuery(query) || query.PageMode == "" || query.PageMode == models.PaginationModeNone {
 		return false
 	}
@@ -104,6 +105,7 @@ func GetPaginatedResults(ctx context.Context, pCtx *backend.PluginContext, query
 		oCursor := ""
 		for pageNumber := 0; pageNumber < query.PageMaxPages; pageNumber++ {
 			currentQuery := query
+			// For replace-mode GraphQL cursors, page 1 should send null instead of a literal macro token.
 			if pageNumber == 0 && query.PageParamCursorFieldType == models.PaginationParamTypeReplace {
 				currentQuery = ApplyPaginationItemToQuery(currentQuery, query.PageParamCursorFieldType, query.PageParamCursorFieldName, "")
 			}
@@ -135,6 +137,7 @@ func GetFrameForURLSourcesWithRetries(ctx context.Context, pCtx *backend.PluginC
 		err    error
 	)
 	for attempt := 0; attempt <= pageRequestRetries; attempt++ {
+		// Retry each page independently; on final failure we return the last page error.
 		frame, cursor, err = GetFrameForURLSourcesWithPostProcessing(ctx, pCtx, query, infClient, requestHeaders, postProcessingRequired)
 		if err == nil {
 			return frame, cursor, nil
@@ -159,6 +162,7 @@ func ApplyPaginationItemToQuery(query models.Query, fieldType models.PaginationP
 	case models.PaginationParamTypeReplace:
 		fieldNameUpdated := fmt.Sprintf(`${__pagination.%s}`, fieldName)
 		if fieldValue == "" {
+			// Replace quoted placeholder with JSON null to keep GraphQL variables payload valid.
 			quotedToken := fmt.Sprintf(`"%s"`, fieldNameUpdated)
 			query.URLOptions.BodyGraphQLVariables = strings.ReplaceAll(query.URLOptions.BodyGraphQLVariables, quotedToken, "null")
 		}
@@ -277,6 +281,7 @@ func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, pCtx *backend.
 		}
 		hasNextPath := strings.TrimSuffix(query.PageParamCursorFieldExtractionPath, ".endCursor")
 		if hasNextPath != query.PageParamCursorFieldExtractionPath {
+			// If the payload exposes pageInfo.hasNextPage alongside endCursor, respect it as an explicit stop signal.
 			hasNextValue, hasNextErr := jsonframer.GetRootData(string(body), hasNextPath+".hasNextPage", framerType)
 			if hasNextErr == nil && strings.EqualFold(strings.TrimSpace(hasNextValue), "false") {
 				cursor = ""

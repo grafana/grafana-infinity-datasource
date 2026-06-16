@@ -17,6 +17,7 @@ import (
 )
 
 func TestGetPaginatedResultsCursorStopsWhenCursorEnds(t *testing.T) {
+	// Verifies cursor pagination stops as soon as extracted endCursor becomes empty.
 	var (
 		mu       sync.Mutex
 		requests int
@@ -65,6 +66,7 @@ func TestGetPaginatedResultsCursorStopsWhenCursorEnds(t *testing.T) {
 }
 
 func TestGetPaginatedResultsPageModeRetriesAndSucceeds(t *testing.T) {
+	// Verifies per-page retries recover from transient failures and continue pagination.
 	var (
 		mu          sync.Mutex
 		page2Errors int
@@ -121,6 +123,7 @@ func TestGetPaginatedResultsPageModeRetriesAndSucceeds(t *testing.T) {
 }
 
 func TestGetPaginatedResultsPageModeFailsAfterRetryExhaustion(t *testing.T) {
+	// Verifies query fails fast when a page keeps failing after all retry attempts.
 	var (
 		mu          sync.Mutex
 		page2Errors int
@@ -176,6 +179,7 @@ func TestGetPaginatedResultsPageModeFailsAfterRetryExhaustion(t *testing.T) {
 }
 
 func TestGetPaginatedResultsCursorHonorsMaxPagesBoundary(t *testing.T) {
+	// Verifies cursor mode never exceeds pagination_max_pages.
 	var (
 		mu       sync.Mutex
 		requests int
@@ -214,6 +218,7 @@ func TestGetPaginatedResultsCursorHonorsMaxPagesBoundary(t *testing.T) {
 }
 
 func TestGetPaginatedResultsGraphQLCursorReplaceStartsWithNullAndStopsOnHasNextPageFalse(t *testing.T) {
+	// Verifies GraphQL replace-mode sends null cursor on first request and stops when hasNextPage=false.
 	type graphQLRequest struct {
 		Variables map[string]any `json:"variables"`
 	}
