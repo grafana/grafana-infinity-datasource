@@ -120,6 +120,7 @@
     "notequals",
     "notin",
     "offcanvas",
+    "openfeature",
     "openissues",
     "openpr",
     "opentelemetry",
