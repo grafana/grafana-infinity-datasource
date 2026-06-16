@@ -97,9 +97,9 @@ func TestApplyGrafanaHeaders(t *testing.T) {
 				},
 			},
 			pCtx: &backend.PluginContext{
-				OrgID:         12345,
 				PluginID:      "my-plugin-id",
 				PluginVersion: "0.0.0-preview.1",
+				Namespace:     "12345",
 				DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{
 					ID:   123,
 					UID:  "my-ds-uid",
@@ -176,15 +176,15 @@ func TestIsSensitiveHeader(t *testing.T) {
 
 func TestApplyHeadersFromSettings_BlocksSensitiveHeaders(t *testing.T) {
 	tests := []struct {
-		name        string
+		name          string
 		customHeaders map[string]string
-		wantPresent []string
-		wantAbsent  []string
+		wantPresent   []string
+		wantAbsent    []string
 	}{
 		{
 			name: "blocks Content-Length from settings",
 			customHeaders: map[string]string{
-				"Content-Length":   "999",
+				"Content-Length":  "999",
 				"X-Custom-Header": "allowed-value",
 			},
 			wantPresent: []string{"X-Custom-Header"},
@@ -193,8 +193,8 @@ func TestApplyHeadersFromSettings_BlocksSensitiveHeaders(t *testing.T) {
 		{
 			name: "blocks Host from settings",
 			customHeaders: map[string]string{
-				"Host":          "evil.example.com",
-				"X-Request-ID":  "abc123",
+				"Host":         "evil.example.com",
+				"X-Request-ID": "abc123",
 			},
 			wantPresent: []string{"X-Request-ID"},
 			wantAbsent:  []string{"Host"},
