@@ -1,5 +1,5 @@
 ---
-name: querying-infinity-datasource
+name: querying-yesoreyeram-infinity-datasource
 description: Build queries with the Infinity data source — the query types (JSON, CSV, TSV, XML, GraphQL, HTML, UQL, GROQ, Google Sheets, Series, Transformations), the parsers (Frontend/simple, Backend JSONata, JQ, UQL, GROQ) and which support alerting, the sources (URL, Inline, Reference, Azure Blob, Random walk), output formats (table, timeseries, logs, trace, node graph, dataframe), root selector and columns, computed columns/filters/summarize, pagination, and template variables. Use when a user asks how to query Infinity; how to fetch JSON/CSV/XML/GraphQL/HTML from a URL or inline; how to select rows and columns; how to transform data with UQL/GROQ/JSONata/JQ; how to make a query work with alerting; how to paginate; or how to use variables in a query.
 ---
 
@@ -186,5 +186,5 @@ that query an API for dropdown values. See
 
 ## See also
 
-- `configuring-infinity-datasource` — set up the data source, authentication, allowed
+- `configuring-yesoreyeram-infinity-datasource` — set up the data source, authentication, allowed
   hosts, TLS, network settings, the health check, and provisioning.
