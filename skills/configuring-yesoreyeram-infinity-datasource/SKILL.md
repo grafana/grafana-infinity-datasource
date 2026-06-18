@@ -1,6 +1,6 @@
 ---
 name: configuring-yesoreyeram-infinity-datasource
-description: Configure the Infinity data source — base URL and allowed hosts, the authentication methods (basic, bearer token, API key, digest, OAuth passthrough, OAuth 2.0 client credentials/JWT, Azure, Azure Blob, AWS), TLS, custom HTTP headers, network and security settings, the custom health check, and provisioning with a config file. Use when a user asks how to set up, configure, or change settings for the Infinity data source; how to authenticate to an API; how to allow hosts; how to provision it as YAML; or how to troubleshoot connection, authentication, or health-check issues.
+description: Configure the Infinity data source — base URL and allowed hosts, the authentication methods (basic, bearer token, API key, digest, OAuth passthrough, OAuth 2.0 client credentials/JWT, Azure, Azure Blob, AWS), TLS, custom HTTP headers, network and security settings, the custom health check, and provisioning with a YAML config file or Terraform. Use when a user asks how to set up, configure, or change settings for the Infinity data source; how to authenticate to an API; how to allow hosts; how to provision it as YAML or with Terraform; or how to troubleshoot connection, authentication, or health-check issues.
 ---
 
 # Configuring the Infinity data source
@@ -468,10 +468,17 @@ Two configuration features support reusable queries:
 - **Global queries** — Define named queries you can reuse across panels. See
   [Global queries](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/advanced-features/global-queries/).
 
-## Provisioning with a config file
+## Provisioning
 
-Instead of using the UI, provision the Infinity data source from a YAML file in
-Grafana's `provisioning/datasources/` directory. The data source `type` is
+Instead of using the UI, you can provision the Infinity data source as code, either with
+a Grafana YAML config file or with Terraform. Both approaches use the same data source
+`type` (`yesoreyeram-infinity-datasource`) and the same `jsonData` / `secureJsonData`
+keys documented throughout this skill; only the surrounding syntax differs.
+
+### Provisioning with a config file
+
+Provision the Infinity data source from a YAML file in Grafana's
+`provisioning/datasources/` directory. The data source `type` is
 `yesoreyeram-infinity-datasource`.
 
 Minimal example (public endpoints, no auth):
@@ -508,6 +515,89 @@ example `apiKeyValue`, `bearerToken`, `basicAuthPassword`, `oauth2ClientSecret`,
 
 Provisioning changes are applied when Grafana starts or when you reload provisioning, so
 restart Grafana (or trigger a provisioning reload) after editing the file.
+
+### Provisioning with Terraform
+
+Use the [`grafana_data_source`](https://registry.terraform.io/providers/grafana/grafana/latest/docs/resources/data_source)
+resource from the official [Grafana Terraform provider](https://registry.terraform.io/providers/grafana/grafana/latest/docs).
+Set `type` to `yesoreyeram-infinity-datasource`. The same `jsonData` and `secureJsonData`
+keys used in YAML are passed as JSON via `json_data_encoded` and
+`secure_json_data_encoded` (use `jsonencode(...)`).
+
+```hcl
+terraform {
+  required_providers {
+    grafana = {
+      source = "grafana/grafana"
+    }
+  }
+}
+
+provider "grafana" {
+  url  = "https://grafana.example.com"
+  auth = var.grafana_auth # service account token or basic auth
+}
+```
+
+Minimal example (public endpoints, no auth):
+
+```hcl
+resource "grafana_data_source" "infinity" {
+  type = "yesoreyeram-infinity-datasource"
+  name = "Infinity"
+}
+```
+
+Example with API key authentication and an allowed host:
+
+```hcl
+variable "api_key" {
+  type      = string
+  sensitive = true
+}
+
+resource "grafana_data_source" "infinity" {
+  type = "yesoreyeram-infinity-datasource"
+  name = "Infinity"
+
+  json_data_encoded = jsonencode({
+    auth_method  = "apiKey"
+    apiKeyKey    = "X-API-Key"
+    apiKeyType   = "header"
+    allowedHosts = ["https://api.example.com"]
+  })
+
+  secure_json_data_encoded = jsonencode({
+    apiKeyValue = var.api_key
+  })
+}
+```
+
+Mapping from the YAML keys used throughout this skill:
+
+| YAML field            | Terraform field                                              |
+| --------------------- | ------------------------------------------------------------ |
+| `type`                | `type`                                                       |
+| `name`                | `name`                                                       |
+| `jsonData.url` (Base URL) | `json_data_encoded` key `url`, or the top-level `url` argument |
+| `jsonData.*`          | keys inside `json_data_encoded = jsonencode({ ... })`        |
+| `secureJsonData.*`    | keys inside `secure_json_data_encoded = jsonencode({ ... })` |
+| `basicAuth: true`     | `json_data_encoded` is unaffected; basic-auth credentials still go under `auth_method` / `secureJsonData` as documented above |
+
+Notes specific to Terraform:
+
+- Pass secrets through `sensitive` variables (or a secrets backend) rather than
+  hard-coding them; they land in `secure_json_data_encoded`. Grafana never returns secret
+  values, so Terraform cannot detect drift on them.
+- Numeric and boolean `jsonData` values (for example `authStyle`, `timeoutInSeconds`,
+  `tlsSkipVerify`) are passed as real numbers/booleans inside `jsonencode`, not strings.
+- Nested objects such as `oauth2`, `aws`, and arrays like `allowedHosts` / `scopes` map
+  directly to HCL maps and lists inside `jsonencode`.
+- For numbered headers/params, use the same indexed keys (`httpHeaderName1`,
+  `secureQueryName1`, `httpHeaderValue1`, …) as in the YAML examples.
+
+Apply changes with `terraform apply`; the provider creates or updates the data source
+through Grafana's HTTP API, so no Grafana restart or provisioning reload is needed.
 
 ## After saving
 
@@ -581,6 +671,7 @@ below.
 - [Configure the Infinity data source](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/configure/)
 - [Grafana data source management](https://grafana.com/docs/grafana/latest/administration/data-source-management/)
 - [Provisioning data sources](https://grafana.com/docs/grafana/latest/administration/provisioning/#data-sources)
+- [Grafana Terraform provider — `grafana_data_source`](https://registry.terraform.io/providers/grafana/grafana/latest/docs/resources/data_source)
 
 ## See also
 

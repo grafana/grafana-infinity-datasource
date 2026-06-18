@@ -1,5 +1,13 @@
 # Change Log
 
+## 3.9.1
+
+### Patch Changes
+
+🚀 Add support for provisioning via terraform with skill
+
+### Patch Changes
+
 ## 3.9.0
 
 ### Minor Changes
