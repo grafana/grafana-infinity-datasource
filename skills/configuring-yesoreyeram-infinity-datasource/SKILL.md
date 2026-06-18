@@ -1,5 +1,5 @@
 ---
-name: configuring-infinity-datasource
+name: configuring-yesoreyeram-infinity-datasource
 description: Configure the Infinity data source — base URL and allowed hosts, the authentication methods (basic, bearer token, API key, digest, OAuth passthrough, OAuth 2.0 client credentials/JWT, Azure, Azure Blob, AWS), TLS, custom HTTP headers, network and security settings, the custom health check, and provisioning with a config file. Use when a user asks how to set up, configure, or change settings for the Infinity data source; how to authenticate to an API; how to allow hosts; how to provision it as YAML; or how to troubleshoot connection, authentication, or health-check issues.
 ---
 
@@ -584,5 +584,5 @@ below.
 
 ## See also
 
-- `querying-infinity-datasource` — build queries, choose types/parsers/sources, and
+- `querying-yesoreyeram-infinity-datasource` — build queries, choose types/parsers/sources, and
   shape results into data frames.
