@@ -21,7 +21,7 @@ var configSchemaJSON []byte
 func DSConfigSchema() (*dsconfig.Schema, error) {
 	var s dsconfig.Schema
 	if err := json.Unmarshal(configSchemaJSON, &s); err != nil {
-		return nil, fmt.Errorf("parse settings.schema.json: %w", err)
+		return nil, fmt.Errorf("parse dsconfig.json: %w", err)
 	}
 	return &s, nil
 }
