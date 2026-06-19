@@ -13,12 +13,31 @@ const config = async (env: any): Promise<Configuration> => {
       }),
       new CopyWebpackPlugin({
         patterns: [
-          { from: '../skills/**/*', to: './skills', noErrorOnMissing: true },
-          // Grafana's data source API server loads schema/{apiVersion}.json, so the
-          // generated apiserver.schema.json bundle is shipped as schema/v0alpha1.json.
-          { from: '../pkg/pluginschema/apiserver.schema.json', to: './schema/v0alpha1.json', noErrorOnMissing: true },
-          // dsconfig semantic source of truth (UI / LLM hints), shipped as-is.
-          { from: '../pkg/pluginschema/settings.schema.json', to: './schema/settings.schema.json', noErrorOnMissing: true },
+          {
+            from: '../skills/**/*',
+            to: './skills',
+            noErrorOnMissing: true
+          },
+          {
+            from: '../pkg/schema/dsconfig.json',
+            to: './schema/settings.schema.json',
+            noErrorOnMissing: true
+          },
+          {
+            from: '../pkg/schema/schema.gen.json',
+            to: './schema/v0alpha1.json',
+            noErrorOnMissing: true
+          },
+          {
+            from: '../pkg/schema/settings.gen.json',
+            to: './schema/v0alpha1/settings.json',
+            noErrorOnMissing: true
+          },
+          {
+            from: '../pkg/schema/settings.examples.gen.json',
+            to: './schema/v0alpha1/settings.examples.json',
+            noErrorOnMissing: true
+          },
         ]
       })
     ],

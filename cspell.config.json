@@ -43,6 +43,7 @@
     "Collapsable",
     "pluginschema",
     "dsconfig",
+    "dsschema",
     "apiserver",
     "sdkschema",
     "keyvalue",

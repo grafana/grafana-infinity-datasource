@@ -1,4 +1,5 @@
 {
+    "$schema": "https://raw.githubusercontent.com/grafana/dsconfig/refs/heads/main/dsconfig/schema.json",
     "schemaVersion": "v1",
     "pluginType": "yesoreyeram-infinity-datasource",
     "pluginName": "Infinity",
@@ -10,7 +11,6 @@
             "label": "Base URL",
             "description": "Base URL prefixed to every query URL.",
             "valueType": "string",
-            "semanticType": "url",
             "target": "root"
         },
         {
@@ -238,7 +238,6 @@
             "label": "TLS server name",
             "description": "Server name used for TLS certificate verification (SNI).",
             "valueType": "string",
-            "semanticType": "hostname",
             "target": "jsonData"
         },
         {
@@ -454,93 +453,96 @@
             "key": "basicAuthPassword",
             "description": "Password for basic or digest authentication.",
             "valueType": "string",
-            "semanticType": "password",
-            "target": "secureJsonData"
+            "target": "secureJsonData",
+            "requiredWhen": "root.basicAuth == true || jsonData.auth_method == 'basicAuth' || jsonData.auth_method == 'digestAuth'"
         },
         {
             "id": "secure.apiKeyValue",
             "key": "apiKeyValue",
             "description": "API key value (API key auth).",
             "valueType": "string",
-            "semanticType": "token",
-            "target": "secureJsonData"
+            "target": "secureJsonData",
+            "requiredWhen": "jsonData.auth_method == 'apiKey'"
         },
         {
             "id": "secure.bearerToken",
             "key": "bearerToken",
             "description": "Bearer token (bearer token auth).",
             "valueType": "string",
-            "semanticType": "token",
-            "target": "secureJsonData"
+            "target": "secureJsonData",
+            "requiredWhen": "jsonData.auth_method == 'bearerToken'"
         },
         {
             "id": "secure.oauth2ClientSecret",
             "key": "oauth2ClientSecret",
             "description": "OAuth 2.0 client secret.",
             "valueType": "string",
-            "semanticType": "password",
-            "target": "secureJsonData"
+            "target": "secureJsonData",
+            "requiredWhen": "jsonData.auth_method == 'oauth2' && jsonData.oauth2.oauth2_type != 'jwt'"
         },
         {
             "id": "secure.oauth2JWTPrivateKey",
             "key": "oauth2JWTPrivateKey",
             "description": "OAuth 2.0 JWT private key.",
             "valueType": "string",
-            "semanticType": "password",
-            "target": "secureJsonData"
+            "target": "secureJsonData",
+            "requiredWhen": "jsonData.auth_method == 'oauth2' && jsonData.oauth2.oauth2_type == 'jwt'"
         },
         {
             "id": "secure.tlsCACert",
             "key": "tlsCACert",
             "description": "TLS CA certificate (PEM).",
             "valueType": "string",
-            "target": "secureJsonData"
+            "target": "secureJsonData",
+            "requiredWhen": "jsonData.tlsAuthWithCACert == true"
         },
         {
             "id": "secure.tlsClientCert",
             "key": "tlsClientCert",
             "description": "TLS client certificate (PEM).",
             "valueType": "string",
-            "target": "secureJsonData"
+            "target": "secureJsonData",
+            "requiredWhen": "jsonData.tlsAuth == true"
         },
         {
             "id": "secure.tlsClientKey",
             "key": "tlsClientKey",
             "description": "TLS client key (PEM).",
             "valueType": "string",
-            "target": "secureJsonData"
+            "target": "secureJsonData",
+            "requiredWhen": "jsonData.tlsAuth == true"
         },
         {
             "id": "secure.awsAccessKey",
             "key": "awsAccessKey",
             "description": "AWS access key ID.",
             "valueType": "string",
-            "semanticType": "token",
-            "target": "secureJsonData"
+            "target": "secureJsonData",
+            "requiredWhen": "jsonData.auth_method == 'aws' && jsonData.aws.authType == 'keys'"
         },
         {
             "id": "secure.awsSecretKey",
             "key": "awsSecretKey",
             "description": "AWS secret access key.",
             "valueType": "string",
-            "semanticType": "password",
-            "target": "secureJsonData"
+            "target": "secureJsonData",
+            "requiredWhen": "jsonData.auth_method == 'aws' && jsonData.aws.authType == 'keys'"
         },
         {
             "id": "secure.azureBlobAccountKey",
             "key": "azureBlobAccountKey",
             "description": "Azure Blob storage account key.",
             "valueType": "string",
-            "semanticType": "password",
-            "target": "secureJsonData"
+            "target": "secureJsonData",
+            "requiredWhen": "jsonData.auth_method == 'azureBlob'"
         },
         {
             "id": "secure.proxyUserPassword",
             "key": "proxyUserPassword",
             "description": "Password for the configured proxy user.",
             "valueType": "string",
-            "semanticType": "password",
-            "target": "secureJsonData"
+            "target": "secureJsonData",
+            "requiredWhen": "jsonData.proxy_type == 'url' && jsonData.proxy_username != ''"
         }
     ]
 }

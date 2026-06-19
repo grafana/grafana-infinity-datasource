@@ -1,0 +1,71 @@
+{
+  "examples": {
+    "apiKey": {
+      "summary": "API key",
+      "description": "API key sent as a request header.",
+      "value": {
+        "jsonData": {
+          "allowedHosts": [
+            "https://api.example.com"
+          ],
+          "apiKeyKey": "X-API-Key",
+          "apiKeyType": "header",
+          "auth_method": "apiKey"
+        },
+        "secureJsonData": {
+          "apiKeyValue": "xxxx"
+        },
+        "url": "https://api.example.com"
+      }
+    },
+    "bearerToken": {
+      "summary": "Bearer token",
+      "description": "Bearer token authentication with an allowed host.",
+      "value": {
+        "jsonData": {
+          "allowedHosts": [
+            "https://api.example.com"
+          ],
+          "auth_method": "bearerToken"
+        },
+        "secureJsonData": {
+          "bearerToken": "xxxx"
+        },
+        "url": "https://api.example.com"
+      }
+    },
+    "none": {
+      "summary": "No authentication",
+      "description": "Public endpoint, no authentication.",
+      "value": {
+        "jsonData": {
+          "auth_method": "none"
+        }
+      }
+    },
+    "oauth2ClientCredentials": {
+      "summary": "OAuth 2.0 client credentials",
+      "description": "OAuth 2.0 client-credentials grant.",
+      "value": {
+        "jsonData": {
+          "allowedHosts": [
+            "https://api.example.com"
+          ],
+          "auth_method": "oauth2",
+          "oauth2": {
+            "client_id": "my-client-id",
+            "oauth2_type": "client_credentials",
+            "scopes": [
+              "read"
+            ],
+            "token_url": "https://login.example.com/oauth2/token"
+          }
+        },
+        "secureJsonData": {
+          "oauth2ClientSecret": "xxxx"
+        },
+        "url": "https://api.example.com"
+      }
+    }
+  }
+}
