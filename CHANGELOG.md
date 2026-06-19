@@ -1,12 +1,12 @@
 # Change Log
 
+## 3.9.1
+
+🚀 Chore: Added plugin schema and artifacts
+
 ## 3.9.0
 
-### Minor Changes
-
-🚀 Renames skill files to make it more easy to discover them via agents
-
-### Patch Changes
+⚙️ Chore: Renames skill files to make it more easy to discover them via agents
 
 ⚙️ Chore: remove unused dependencies
 
