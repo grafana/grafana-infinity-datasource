@@ -11,7 +11,7 @@ services:
       - 1080:1080
   prometheus:
     container_name: prometheus
-    image: prom/prometheus@sha256:5550dc63da361dc30f6fe02ac0e4dfc736ededfef3c8d12a634db04a67824d78
+    image: prom/prometheus@sha256:a75c5a35bc21d7afe69551eefa3cb1e1fb1775fe759408007a66b54ec3de1f29
     command:
       - --web.enable-remote-write-receiver
       - --enable-feature=native-histograms
@@ -33,7 +33,7 @@ services:
     ports:
       - "3100:3100"
   tempo:
-    image: grafana/tempo:latest@sha256:7c3b77910e7b17af25e2e50888d5e0fbf01b9a569372ec5b531da699e2b89c73
+    image: grafana/tempo:latest@sha256:1ce31d6d7ffab62189685e8c47881d4a561c5d38bd0dbd66e40ca83cef07923d
     depends_on:
       - loki
     command:
