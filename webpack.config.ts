@@ -1,4 +1,5 @@
 import webpack, { Configuration } from 'webpack';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
 import { mergeWithRules } from 'webpack-merge';
 import path from 'path';
 import grafanaConfig from './.config/webpack/webpack.config';
@@ -10,6 +11,16 @@ const config = async (env: any): Promise<Configuration> => {
       new webpack.ProvidePlugin({
         Buffer: ['buffer', 'Buffer'],
       }),
+      new CopyWebpackPlugin({
+        patterns: [
+          { from: '../skills/**/*', to: './skills', noErrorOnMissing: true },
+          // Grafana's data source API server loads schema/{apiVersion}.json, so the
+          // generated apiserver.schema.json bundle is shipped as schema/v0alpha1.json.
+          { from: '../pkg/pluginschema/apiserver.schema.json', to: './schema/v0alpha1.json', noErrorOnMissing: true },
+          // dsconfig semantic source of truth (UI / LLM hints), shipped as-is.
+          { from: '../pkg/pluginschema/settings.schema.json', to: './schema/settings.schema.json', noErrorOnMissing: true },
+        ]
+      })
     ],
     module: {
       rules: [

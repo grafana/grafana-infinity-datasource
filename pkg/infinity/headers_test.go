@@ -97,9 +97,9 @@ func TestApplyGrafanaHeaders(t *testing.T) {
 				},
 			},
 			pCtx: &backend.PluginContext{
+				Namespace:     "12345",
 				PluginID:      "my-plugin-id",
 				PluginVersion: "0.0.0-preview.1",
-				Namespace:     "12345",
 				DataSourceInstanceSettings: &backend.DataSourceInstanceSettings{
 					ID:   123,
 					UID:  "my-ds-uid",

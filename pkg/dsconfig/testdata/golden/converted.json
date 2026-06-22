@@ -1,0 +1,141 @@
+{
+  "targetApiVersion": "v0alpha1",
+  "settings": {
+    "spec": {
+      "type": "object",
+      "required": [
+        "url"
+      ],
+      "properties": {
+        "jsonData": {
+          "type": "object",
+          "properties": {
+            "allowed": {
+              "type": "string",
+              "enum": [
+                "a",
+                "b"
+              ]
+            },
+            "anyField": {},
+            "aws": {
+              "type": "object",
+              "required": [
+                "region"
+              ],
+              "properties": {
+                "region": {
+                  "type": "string"
+                }
+              }
+            },
+            "boolean": {
+              "type": "boolean"
+            },
+            "cond": {
+              "type": "string",
+              "x-dsconfig-depends-on": "a == 1",
+              "x-dsconfig-disabled-when": "c == 3",
+              "x-dsconfig-required-when": "b == 2"
+            },
+            "dsUID": {
+              "type": "string",
+              "format": "datasource-uid"
+            },
+            "dur": {
+              "type": "string",
+              "format": "duration"
+            },
+            "host": {
+              "type": "string",
+              "format": "hostname"
+            },
+            "len": {
+              "type": "string",
+              "maxLength": 5,
+              "minLength": 2
+            },
+            "mapField": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "mode": {
+              "type": "string",
+              "enum": [
+                "on",
+                "off"
+              ]
+            },
+            "num": {
+              "type": "number"
+            },
+            "oauth2": {
+              "type": "object",
+              "properties": {
+                "clientId": {
+                  "type": "string"
+                },
+                "endpoints": {
+                  "type": "object",
+                  "properties": {
+                    "tokenUrl": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "pat": {
+              "type": "string",
+              "pattern": "^x"
+            },
+            "query": {
+              "type": "string",
+              "format": "query"
+            },
+            "refData": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name"
+                ],
+                "properties": {
+                  "data": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "rng": {
+              "type": "number",
+              "maximum": 10,
+              "minimum": 1
+            },
+            "str": {
+              "type": "string"
+            },
+            "tok": {
+              "type": "string",
+              "format": "token"
+            }
+          }
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    },
+    "secureValues": [
+      {
+        "key": "apiKeyValue",
+        "description": "secret",
+        "required": true
+      }
+    ]
+  }
+}
