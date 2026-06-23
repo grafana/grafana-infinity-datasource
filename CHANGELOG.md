@@ -1,5 +1,15 @@
 # Change Log
 
+## 3.10.0
+
+### Minor Changes
+
+🚀 Add llm instructions for authentication to dsconfig schema
+
+### Patch Changes
+
+🐛 Updated github.com/grafana/grafana-aws-sdk to v1.4.6 for fixing the AWS S3 file retreival error introduced in 3.3.0. Fixes [#1299](https://github.com/grafana/grafana-infinity-datasource/issues/1299)
+
 ## 3.9.0
 
 ### Minor Changes
