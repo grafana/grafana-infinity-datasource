@@ -1,5 +1,11 @@
 # Change Log
 
+## 3.10.1
+
+### Patch Changes
+
+🐛 Updated golang.org/x/crypto to v0.53.0 to address CVE-2026-46595 / GO-2026-5023.
+
 ## 3.10.0
 
 ### Minor Changes
