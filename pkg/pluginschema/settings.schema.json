@@ -542,5 +542,11 @@
             "semanticType": "password",
             "target": "secureJsonData"
         }
+    ],
+    "instructions": [
+        {
+            "message": "Supports no auth, basic auth, bearer token, API key value pair, digest auth, forward oauth, oauth2, AWS, Azure Blob, Other auth providers — ask which. But never ask for credentials themselves. Those should be entered in the UI",
+            "tags": ["llm"]
+        }
     ]
 }
