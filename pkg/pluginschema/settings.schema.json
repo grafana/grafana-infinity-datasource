@@ -545,7 +545,7 @@
     ],
     "instructions": [
         {
-            "message": "Supports no auth, basic auth, bearer token, API key value pair, digest auth, forward oauth, oauth2, AWS, Azure Blob, Other auth providers — ask which. But never ask for credentials themselves. Those should be entered in the UI",
+            "message": "Supports no auth, basic auth (none), bearer token (bearerToken), API key value pair (apiKey), digest auth (digestAuth), forward oauth (oauthPassThru), oauth2 (oauth2), AWS (aws), Azure Blob (azureBlob) — ask which. But never ask for credentials themselves. Those should be entered in the UI",
             "tags": ["llm"]
         }
     ]
