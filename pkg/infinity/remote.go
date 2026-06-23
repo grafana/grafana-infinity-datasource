@@ -99,11 +99,30 @@ func GetPaginatedResults(ctx context.Context, pCtx *backend.PluginContext, query
 	if errs != nil {
 		return nil, errs
 	}
-	mergedFrame, err := transformations.Merge(frames, transformations.MergeFramesOptions{})
+	// Filter out empty frames (nil or no fields) to prevent merge errors
+	// when paginated API responses return empty pages
+	nonEmptyFrames := filterNonEmptyFrames(frames)
+	if len(nonEmptyFrames) == 0 {
+		return GetDummyFrame(query), nil
+	}
+	mergedFrame, err := transformations.Merge(nonEmptyFrames, transformations.MergeFramesOptions{})
 	if err != nil {
 		return nil, err
 	}
 	return PostProcessFrame(ctx, mergedFrame, query)
+}
+
+// filterNonEmptyFrames removes nil frames and frames with no fields from the slice.
+// This handles cases where paginated API responses return empty pages (no data),
+// which would otherwise cause merge errors due to mismatched field counts.
+func filterNonEmptyFrames(frames []*data.Frame) []*data.Frame {
+	result := make([]*data.Frame, 0, len(frames))
+	for _, frame := range frames {
+		if frame != nil && len(frame.Fields) > 0 {
+			result = append(result, frame)
+		}
+	}
+	return result
 }
 
 func ApplyPaginationItemToQuery(query models.Query, fieldType models.PaginationParamType, fieldName string, fieldValue string) models.Query {
@@ -221,7 +240,9 @@ func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, pCtx *backend.
 	if query.PageMode == models.PaginationModeCursor && strings.TrimSpace(query.PageParamCursorFieldExtractionPath) != "" {
 		body, err := json.Marshal(urlResponseObject)
 		if err != nil {
-			return frame, cursor, backend.PluginError(errors.New("error while finding the cursor value"))
+			// If we cannot marshal the response, stop pagination gracefully
+			logger.Debug("error marshaling response for cursor extraction, stopping pagination", "error", err.Error())
+			return frame, "", nil
 		}
 		framerType := jsonframer.FramerTypeGJSON
 		if query.Parser == models.InfinityParserJQBackend {
@@ -229,7 +250,11 @@ func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, pCtx *backend.
 		}
 		cursor, err = jsonframer.GetRootData(string(body), query.PageParamCursorFieldExtractionPath, framerType)
 		if err != nil {
-			return frame, cursor, backend.PluginError(errors.New("error while extracting the cursor value"))
+			// If cursor extraction fails (e.g., field not present in response),
+			// treat it as end of pagination rather than returning an error.
+			// This handles APIs that omit the cursor field on the last page.
+			logger.Debug("cursor extraction failed, treating as end of pagination", "error", err.Error())
+			return frame, "", nil
 		}
 	}
 	return frame, cursor, nil
