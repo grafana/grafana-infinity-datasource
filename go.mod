@@ -5,6 +5,7 @@ go 1.26.3
 require (
 	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.6.4
 	github.com/aws/aws-sdk-go-v2 v1.41.5
+	github.com/golang-jwt/jwt/v5 v5.3.0
 	github.com/grafana/dskit v0.0.0-20260402131538-8d0d211734c0
 	github.com/grafana/grafana-aws-sdk v1.4.6
 	github.com/grafana/grafana-plugin-sdk-go v0.292.1

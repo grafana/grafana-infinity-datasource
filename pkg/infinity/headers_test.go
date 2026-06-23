@@ -271,6 +271,7 @@ func TestApplyHeadersFromQuery_BlocksSensitiveHeaders(t *testing.T) {
 			wantPresent: []string{"Accept", "Content-Type"},
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			req, err := http.NewRequest("GET", "http://example.com", nil)
@@ -289,4 +290,18 @@ func TestApplyHeadersFromQuery_BlocksSensitiveHeaders(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestApplyBearerToken_GitHubTokenAuth(t *testing.T) {
+	req, err := http.NewRequest("GET", "http://example.com", nil)
+	require.NoError(t, err)
+	settings := models.InfinitySettings{
+		AuthenticationMethod: models.AuthenticationMethodGitHub,
+		GitHubSettings: models.GitHubSettings{
+			AuthType: models.GitHubAuthTypeToken,
+			Token:    "github-token",
+		},
+	}
+	req = ApplyBearerToken(context.Background(), settings, req, true)
+	assert.Equal(t, "Bearer github-token", req.Header.Get(HeaderKeyAuthorization))
 }

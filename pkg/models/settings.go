@@ -22,6 +22,7 @@ const (
 	AuthenticationMethodForwardOauth = "oauthPassThru"
 	AuthenticationMethodDigestAuth   = "digestAuth"
 	AuthenticationMethodOAuth        = "oauth2"
+	AuthenticationMethodGitHub       = "github"
 	AuthenticationMethodAWS          = "aws"
 	AuthenticationMethodAzureBlob    = "azureBlob"
 )
@@ -38,20 +39,36 @@ const (
 )
 
 type OAuth2Settings struct {
-	OAuth2Type     string           `json:"oauth2_type,omitempty"`
-	ClientID       string           `json:"client_id,omitempty"`
-	TokenURL       string           `json:"token_url,omitempty"`
-	Email          string           `json:"email,omitempty"`
-	PrivateKeyID   string           `json:"private_key_id,omitempty"`
-	Subject        string           `json:"subject,omitempty"`
-	Scopes         []string         `json:"scopes,omitempty"`
-	AuthStyle      oauth2.AuthStyle `json:"authStyle,omitempty"`
-	AuthHeader     string           `json:"authHeader,omitempty"`
-	TokenTemplate  string           `json:"tokenTemplate,omitempty"`
+	OAuth2Type     string            `json:"oauth2_type,omitempty"`
+	ClientID       string            `json:"client_id,omitempty"`
+	TokenURL       string            `json:"token_url,omitempty"`
+	Email          string            `json:"email,omitempty"`
+	PrivateKeyID   string            `json:"private_key_id,omitempty"`
+	Subject        string            `json:"subject,omitempty"`
+	Scopes         []string          `json:"scopes,omitempty"`
+	AuthStyle      oauth2.AuthStyle  `json:"authStyle,omitempty"`
+	AuthHeader     string            `json:"authHeader,omitempty"`
+	TokenTemplate  string            `json:"tokenTemplate,omitempty"`
 	TokenHeaders   map[string]string `json:"tokenHeaders,omitempty"`
 	ClientSecret   string
 	PrivateKey     string
 	EndpointParams map[string]string
+}
+
+type GitHubAuthType string
+
+const (
+	GitHubAuthTypeToken GitHubAuthType = "token"
+	GitHubAuthTypeApp   GitHubAuthType = "app"
+)
+
+type GitHubSettings struct {
+	AuthType         GitHubAuthType `json:"authType,omitempty"`
+	AppID            string         `json:"appId,omitempty"`
+	InstallationID   string         `json:"installationId,omitempty"`
+	APIURL           string         `json:"apiUrl,omitempty"`
+	Token            string
+	AppPrivateKeyPEM string
 }
 
 type AWSAuthType string
@@ -88,6 +105,7 @@ type InfinitySettings struct {
 	IsMock                    bool
 	AuthenticationMethod      string
 	OAuth2Settings            OAuth2Settings
+	GitHubSettings            GitHubSettings
 	BearerToken               string
 	ApiKeyKey                 string
 	ApiKeyType                string
@@ -141,6 +159,19 @@ func (s *InfinitySettings) Validate() error {
 	}
 	if s.AuthenticationMethod == AuthenticationMethodBearerToken && s.BearerToken == "" {
 		return ErrInvalidConfigBearerToken
+	}
+	if s.AuthenticationMethod == AuthenticationMethodGitHub {
+		authType := s.GitHubSettings.AuthType
+		if authType == "" {
+			authType = GitHubAuthTypeToken
+		}
+		if authType == GitHubAuthTypeApp {
+			if strings.TrimSpace(s.GitHubSettings.AppID) == "" || strings.TrimSpace(s.GitHubSettings.InstallationID) == "" || strings.TrimSpace(s.GitHubSettings.AppPrivateKeyPEM) == "" {
+				return ErrInvalidConfigGitHubApp
+			}
+		} else if strings.TrimSpace(s.GitHubSettings.Token) == "" {
+			return ErrInvalidConfigBearerToken
+		}
 	}
 	if s.AuthenticationMethod == AuthenticationMethodAzureBlob {
 		if strings.TrimSpace(s.AzureBlobAccountName) == "" {
@@ -264,6 +295,7 @@ type InfinitySettingsJson struct {
 	APIKeyKey                 string         `json:"apiKeyKey,omitempty"`
 	APIKeyType                string         `json:"apiKeyType,omitempty"`
 	OAuth2Settings            OAuth2Settings `json:"oauth2,omitempty"`
+	GitHubSettings            GitHubSettings `json:"github,omitempty"`
 	AWSSettings               AWSSettings    `json:"aws,omitempty"`
 	ForwardOauthIdentity      bool           `json:"oauthPassThru,omitempty"`
 	InsecureSkipVerify        bool           `json:"tlsSkipVerify,omitempty"`
@@ -306,8 +338,15 @@ func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings
 		settings.IsMock = infJson.IsMock
 		settings.AuthenticationMethod = infJson.AuthenticationMethod
 		settings.OAuth2Settings = infJson.OAuth2Settings
+		settings.GitHubSettings = infJson.GitHubSettings
 		if settings.AuthenticationMethod == "oauth2" && settings.OAuth2Settings.OAuth2Type == "" {
 			settings.OAuth2Settings.OAuth2Type = "client_credentials"
+		}
+		if settings.AuthenticationMethod == AuthenticationMethodGitHub && settings.GitHubSettings.AuthType == "" {
+			settings.GitHubSettings.AuthType = GitHubAuthTypeToken
+		}
+		if settings.AuthenticationMethod == AuthenticationMethodGitHub && strings.TrimSpace(settings.GitHubSettings.APIURL) == "" {
+			settings.GitHubSettings.APIURL = "https://api.github.com"
 		}
 		settings.ApiKeyKey = infJson.APIKeyKey
 		settings.ApiKeyType = infJson.APIKeyType
@@ -373,6 +412,12 @@ func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings
 	}
 	if val, ok := config.DecryptedSecureJSONData["bearerToken"]; ok {
 		settings.BearerToken = val
+	}
+	if val, ok := config.DecryptedSecureJSONData["githubToken"]; ok {
+		settings.GitHubSettings.Token = val
+	}
+	if val, ok := config.DecryptedSecureJSONData["githubAppPrivateKey"]; ok {
+		settings.GitHubSettings.AppPrivateKeyPEM = val
 	}
 	if val, ok := config.DecryptedSecureJSONData["awsAccessKey"]; ok {
 		settings.AWSAccessKey = val

@@ -4,6 +4,7 @@ import { Icon, InlineFormLabel, LegacyForms, RadioButtonGroup, Combobox, Grid, L
 import React, { useState } from 'react';
 import { AllowedHostsEditor } from '@/editors/config/AllowedHosts';
 import { AzureBlobAuthEditor } from '@/editors/config/Auth.AzureBlob';
+import { GitHubAuthEditor } from '@/editors/config/Auth.GitHub';
 import { OAuthInputsEditor } from '@/editors/config/OAuthInput';
 import { OthersAuthentication } from '@/editors/config/OtherAuthProviders';
 import { AWSRegions } from '@/constants';
@@ -17,6 +18,7 @@ const authTypes: Array<SelectableValue<AuthType | 'others'> & { logo?: string }>
   { value: 'digestAuth', label: 'Digest Auth' },
   { value: 'oauthPassThru', label: 'Forward OAuth' },
   { value: 'oauth2', label: 'OAuth2', logo: '/public/plugins/yesoreyeram-infinity-datasource/img/oauth-2-sm.png' },
+  { value: 'github', label: 'GitHub' },
   { value: 'aws', label: 'AWS', logo: '/public/plugins/yesoreyeram-infinity-datasource/img/aws.jpg' },
   { value: 'azureBlob', label: 'Azure Blob' },
   { value: 'others', label: 'Other Auth Providers' },
@@ -79,6 +81,7 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
       case 'aws':
       case 'azureBlob':
       case 'oauth2':
+      case 'github':
       case 'none':
       default:
         onOptionsChange({ ...options, basicAuth: false, jsonData: { ...options.jsonData, oauthPassThru: false, auth_method: authMethod } });
@@ -271,6 +274,7 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
               </>
             )}
             {authType === 'oauth2' && <OAuthInputsEditor {...props} />}
+            {authType === 'github' && <GitHubAuthEditor {...props} onResetSecret={onResetSecret} />}
             {authType === 'azureBlob' && <AzureBlobAuthEditor {...props} onResetSecret={onResetSecret} />}
           </div>
         </>
