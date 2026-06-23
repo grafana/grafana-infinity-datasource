@@ -18,9 +18,9 @@ const config = async (env: any): Promise<Configuration> => {
           // generated apiserver.schema.json bundle is shipped as schema/v0alpha1.json.
           { from: '../pkg/pluginschema/apiserver.schema.json', to: './schema/v0alpha1.json', noErrorOnMissing: true },
           // dsconfig semantic source of truth (UI / LLM hints), shipped as-is.
-          { from: '../pkg/pluginschema/settings.schema.json', to: './schema/settings.schema.json', noErrorOnMissing: true },
-        ]
-      })
+          { from: '../pkg/pluginschema/dsconfig.json', to: './schema/dsconfig.json', noErrorOnMissing: true },
+        ],
+      }),
     ],
     module: {
       rules: [
