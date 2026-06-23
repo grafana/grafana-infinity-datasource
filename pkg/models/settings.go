@@ -244,7 +244,7 @@ type RefData struct {
 //
 // Adding a new config property (workflow):
 //  1. Add the field + json tag here and read it in LoadSettings below.
-//  2. Add a matching field to pkg/pluginschema/settings.schema.json with the
+//  2. Add a matching field to pkg/pluginschema/dsconfig.json with the
 //     same `key` and `target: "jsonData"` (the schema is the single source of
 //     truth for editors, validation, and docs). Make sure `valueType` matches
 //     the Go kind (string→string, bool→boolean, int*/float*→number,
