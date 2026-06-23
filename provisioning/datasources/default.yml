@@ -81,6 +81,59 @@ datasources:
     uid: tempo
     type: tempo
     url: http://tempo:3200
+  - name: AWS - Access Keys
+    uid: infinity-aws-keys
+    type: yesoreyeram-infinity-datasource
+    jsonData:
+      auth_method: 'aws'
+      aws:
+        authType: 'keys'
+        region: 'us-east-2'
+        service: 'monitoring'
+      allowedHosts:
+        - 'https://monitoring.us-east-2.amazonaws.com'
+    secureJsonData:
+      awsAccessKey: 'xxxxxxx' ## Replace with actual AWS access key
+      awsSecretKey: 'xxxxxxx' ## Replace with actual AWS secret key
+  - name: AWS - Access Keys + AssumeRole
+    uid: infinity-aws-keys-role
+    type: yesoreyeram-infinity-datasource
+    jsonData:
+      auth_method: 'aws'
+      aws:
+        authType: 'keys'
+        region: 'us-east-2'
+        service: 'monitoring'
+        assumeRoleArn: 'arn:aws:iam::123456789012:role/MyRole' ## Replace with actual role ARN
+        externalId: 'my-external-id' ## Optional, replace or remove
+      allowedHosts:
+        - 'https://monitoring.us-east-2.amazonaws.com'
+    secureJsonData:
+      awsAccessKey: 'xxxxxxx' ## Replace with actual AWS access key
+      awsSecretKey: 'xxxxxxx' ## Replace with actual AWS secret key
+  - name: AWS - Default Credentials (IAM Role)
+    uid: infinity-aws-default
+    type: yesoreyeram-infinity-datasource
+    jsonData:
+      auth_method: 'aws'
+      aws:
+        authType: 'default'
+        region: 'us-east-2'
+        service: 'monitoring'
+      allowedHosts:
+        - 'https://monitoring.us-east-2.amazonaws.com'
+  - name: AWS - Default Credentials + AssumeRole
+    uid: infinity-aws-default-role
+    type: yesoreyeram-infinity-datasource
+    jsonData:
+      auth_method: 'aws'
+      aws:
+        authType: 'default'
+        region: 'us-east-2'
+        service: 'monitoring'
+        assumeRoleArn: 'arn:aws:iam::123456789012:role/MyRole' ## Replace with actual role ARN
+      allowedHosts:
+        - 'https://monitoring.us-east-2.amazonaws.com'
   - name: 🔗 PDC - No Auth
     uid: pdc-no-auth
     type: yesoreyeram-infinity-datasource
