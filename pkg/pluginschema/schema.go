@@ -1,7 +1,7 @@
 // Package pluginschema defines the static configuration (settings) schema for the
 // Infinity data source.
 //
-// The single source of truth is settings.schema.json — a declarative
+// The single source of truth is dsconfig.json — a declarative
 // dsconfig DatasourceConfigSchema describing every config field, its storage
 // location (root / jsonData / secureJsonData), type, and validation. NewSchema
 // converts it (via pkg/dsconfig.ToSettings) into the grafana-plugin-sdk-go
@@ -11,7 +11,7 @@
 // dist/schema/v0alpha1.json — the {apiVersion}.json name Grafana's data source
 // API server loads. schema_test.go asserts the committed artifact has not drifted
 // from NewSchema. It lives alongside the dsconfig single source of truth
-// (settings.schema.json, joined later by query.schema.json etc.); the webpack
+// (dsconfig.json, joined later by query.schema.json etc.); the webpack
 // build ships both into dist/schema.
 package pluginschema
 
@@ -33,7 +33,7 @@ const TargetAPIVersion = "v0alpha1"
 // configSchemaJSON is the declarative dsconfig schema — the single source of truth
 // for the Infinity data source configuration.
 //
-//go:embed settings.schema.json
+//go:embed dsconfig.json
 var configSchemaJSON []byte
 
 // OutputPath is the location of the generated SDK PluginSchema bundle (settings,
@@ -52,7 +52,7 @@ var OutputPath = "apiserver.schema.json"
 func ConfigSchema() (*dsconfig.DatasourceConfigSchema, error) {
 	var s dsconfig.DatasourceConfigSchema
 	if err := json.Unmarshal(configSchemaJSON, &s); err != nil {
-		return nil, fmt.Errorf("parse settings.schema.json: %w", err)
+		return nil, fmt.Errorf("parse dsconfig.json: %w", err)
 	}
 	return &s, nil
 }

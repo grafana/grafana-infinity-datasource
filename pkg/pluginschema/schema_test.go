@@ -39,7 +39,7 @@ func TestSchemaSpecHasNoSecureJSON(t *testing.T) {
 
 // TestSchemaRoundTrip loads the committed artifact through the production provider
 // that Grafana uses (NewSchemaProvider reads {apiVersion}.json). The generated
-// source file is settings.schema.json; the webpack build ships it as
+// source file is dsconfig.json; the webpack build ships it as
 // {apiVersion}.json, so we stage it under that name in a temp dir to load it
 // through the real provider exactly as Grafana would.
 func TestSchemaRoundTrip(t *testing.T) {
@@ -87,7 +87,7 @@ func TestJSONDataMatchesStruct(t *testing.T) {
 	sort.Strings(schemaKeys)
 	sort.Strings(structKeys)
 	require.ElementsMatch(t, structKeys, schemaKeys,
-		"jsonData fields in settings.schema.json are out of sync with models.InfinitySettingsJson JSON tags")
+		"jsonData fields in dsconfig.json are out of sync with models.InfinitySettingsJson JSON tags")
 }
 
 // TestJSONDataTypesMatchStruct closes the type-drift gap left by
@@ -116,7 +116,7 @@ func TestJSONDataTypesMatchStruct(t *testing.T) {
 		}
 		want := valueTypesForKind(kind)
 		require.Contains(t, want, vt,
-			"jsonData field %q is declared as %q in settings.schema.json but the struct field has Go kind %q",
+			"jsonData field %q is declared as %q in dsconfig.json but the struct field has Go kind %q",
 			key, vt, kind)
 	}
 }
@@ -144,7 +144,7 @@ func TestSecureValuesMatchLoadSettings(t *testing.T) {
 	sort.Strings(schemaKeys)
 	sort.Strings(loadKeys)
 	require.ElementsMatch(t, loadKeys, schemaKeys,
-		"secureJsonData fields in settings.schema.json are out of sync with secrets read in models.LoadSettings")
+		"secureJsonData fields in dsconfig.json are out of sync with secrets read in models.LoadSettings")
 }
 
 // jsonTagKeys returns the JSON field names declared on a struct, skipping fields
