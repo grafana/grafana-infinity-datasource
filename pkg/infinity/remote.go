@@ -116,6 +116,19 @@ func ApplyPaginationItemToQuery(query models.Query, fieldType models.PaginationP
 		query.URLOptions.Headers = append(query.URLOptions.Headers, field)
 	case models.PaginationParamTypeBodyData:
 		query.URLOptions.BodyForm = append(query.URLOptions.BodyForm, field)
+	case models.PaginationParamTypeBodyJson:
+		body := map[string]any{}
+		if trimmed := strings.TrimSpace(query.URLOptions.Body); trimmed != "" {
+			if err := json.Unmarshal([]byte(trimmed), &body); err != nil {
+				// Body isn't a valid JSON object; leave it untouched rather than
+				// overwriting the user's payload with just the cursor field.
+				return query
+			}
+		}
+		body[fieldName] = fieldValue
+		if b, err := json.Marshal(body); err == nil {
+			query.URLOptions.Body = string(b)
+		}
 	case models.PaginationParamTypeReplace:
 		fieldNameUpdated := fmt.Sprintf(`${__pagination.%s}`, fieldName)
 		query.URL = strings.ReplaceAll(query.URL, fieldNameUpdated, field.Value)
@@ -229,7 +242,11 @@ func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, pCtx *backend.
 		}
 		cursor, err = jsonframer.GetRootData(string(body), query.PageParamCursorFieldExtractionPath, framerType)
 		if err != nil {
-			return frame, cursor, backend.PluginError(errors.New("error while extracting the cursor value"))
+			// Many cursor-based APIs omit the cursor field entirely on the last
+			// page (instead of returning an empty value). In that case the
+			// extraction yields no result, which we treat as "no more pages"
+			// rather than a fatal error so pagination stops gracefully.
+			return frame, "", nil
 		}
 	}
 	return frame, cursor, nil
