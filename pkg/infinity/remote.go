@@ -19,10 +19,32 @@ func isBackendQuery(query models.Query) bool {
 	return query.Parser == models.InfinityParserBackend || query.Parser == models.InfinityParserJQBackend
 }
 
+const pageRequestRetries = 2
+
+func canPaginateQuery(query models.Query) bool {
+	// Keep pagination generic: allow any backend-parsed URL query type that our backend framers support.
+	if !isBackendQuery(query) || query.PageMode == "" || query.PageMode == models.PaginationModeNone {
+		return false
+	}
+	switch query.PageMode {
+	case models.PaginationModeCursor:
+		return query.Type == models.QueryTypeJSON || query.Type == models.QueryTypeGraphQL
+	case models.PaginationModeOffset, models.PaginationModePage, models.PaginationModeList:
+		return query.Type == models.QueryTypeJSON ||
+			query.Type == models.QueryTypeGraphQL ||
+			query.Type == models.QueryTypeCSV ||
+			query.Type == models.QueryTypeTSV ||
+			query.Type == models.QueryTypeXML ||
+			query.Type == models.QueryTypeHTML
+	default:
+		return false
+	}
+}
+
 func GetFrameForURLSources(ctx context.Context, pCtx *backend.PluginContext, query models.Query, infClient Client, requestHeaders map[string]string) (*data.Frame, error) {
 	ctx, span := tracing.DefaultTracer().Start(ctx, "GetFrameForURLSources")
 	defer span.End()
-	if query.Type == models.QueryTypeJSON && isBackendQuery(query) && query.PageMode != models.PaginationModeNone && query.PageMode != "" {
+	if canPaginateQuery(query) {
 		return GetPaginatedResults(ctx, pCtx, query, infClient, requestHeaders)
 	}
 	frame, _, err := GetFrameForURLSourcesWithPostProcessing(ctx, pCtx, query, infClient, requestHeaders, true)
@@ -34,7 +56,6 @@ func GetPaginatedResults(ctx context.Context, pCtx *backend.PluginContext, query
 	defer span.End()
 	frames := []*data.Frame{}
 	queries := []models.Query{}
-	var errs error
 	switch query.PageMode {
 	case models.PaginationModeOffset:
 		for pageNumber := 1; pageNumber <= query.PageMaxPages; pageNumber++ {
@@ -73,31 +94,34 @@ func GetPaginatedResults(ctx context.Context, pCtx *backend.PluginContext, query
 	}
 	if query.PageMode != models.PaginationModeCursor {
 		for _, currentQuery := range queries {
-			frame, _, err := GetFrameForURLSourcesWithPostProcessing(ctx, pCtx, currentQuery, infClient, requestHeaders, false)
+			frame, _, err := GetFrameForURLSourcesWithRetries(ctx, pCtx, currentQuery, infClient, requestHeaders, false)
+			if err != nil {
+				return nil, err
+			}
 			frames = append(frames, frame)
-			errs = errors.Join(errs, err)
 		}
 	}
 	if query.PageMode == models.PaginationModeCursor {
-		i := 0
 		oCursor := ""
-		for {
+		for pageNumber := 0; pageNumber < query.PageMaxPages; pageNumber++ {
 			currentQuery := query
-			if i > 0 && oCursor != "" {
+			// For replace-mode GraphQL cursors, page 1 should send null instead of a literal macro token.
+			if pageNumber == 0 && query.PageParamCursorFieldType == models.PaginationParamTypeReplace {
+				currentQuery = ApplyPaginationItemToQuery(currentQuery, query.PageParamCursorFieldType, query.PageParamCursorFieldName, "")
+			}
+			if pageNumber > 0 {
+				if oCursor == "" {
+					break
+				}
 				currentQuery = ApplyPaginationItemToQuery(currentQuery, query.PageParamCursorFieldType, query.PageParamCursorFieldName, oCursor)
 			}
-			if i > query.PageMaxPages || (i > 0 && oCursor == "") {
-				break
+			frame, cursor, err := GetFrameForURLSourcesWithRetries(ctx, pCtx, currentQuery, infClient, requestHeaders, false)
+			if err != nil {
+				return nil, err
 			}
-			i++
-			frame, cursor, err := GetFrameForURLSourcesWithPostProcessing(ctx, pCtx, currentQuery, infClient, requestHeaders, false)
 			oCursor = cursor
 			frames = append(frames, frame)
-			errs = errors.Join(errs, err)
 		}
-	}
-	if errs != nil {
-		return nil, errs
 	}
 	mergedFrame, err := transformations.Merge(frames, transformations.MergeFramesOptions{})
 	if err != nil {
@@ -106,8 +130,27 @@ func GetPaginatedResults(ctx context.Context, pCtx *backend.PluginContext, query
 	return PostProcessFrame(ctx, mergedFrame, query)
 }
 
+func GetFrameForURLSourcesWithRetries(ctx context.Context, pCtx *backend.PluginContext, query models.Query, infClient Client, requestHeaders map[string]string, postProcessingRequired bool) (*data.Frame, string, error) {
+	var (
+		frame  *data.Frame
+		cursor string
+		err    error
+	)
+	for attempt := 0; attempt <= pageRequestRetries; attempt++ {
+		// Retry each page independently; on final failure we return the last page error.
+		frame, cursor, err = GetFrameForURLSourcesWithPostProcessing(ctx, pCtx, query, infClient, requestHeaders, postProcessingRequired)
+		if err == nil {
+			return frame, cursor, nil
+		}
+	}
+	return frame, cursor, err
+}
+
 func ApplyPaginationItemToQuery(query models.Query, fieldType models.PaginationParamType, fieldName string, fieldValue string) models.Query {
-	if strings.TrimSpace(fieldValue) == "" {
+	if strings.TrimSpace(fieldName) == "" {
+		return query
+	}
+	if strings.TrimSpace(fieldValue) == "" && fieldType != models.PaginationParamTypeReplace {
 		return query
 	}
 	field := models.URLOptionKeyValuePair{Key: fieldName, Value: fieldValue}
@@ -118,6 +161,11 @@ func ApplyPaginationItemToQuery(query models.Query, fieldType models.PaginationP
 		query.URLOptions.BodyForm = append(query.URLOptions.BodyForm, field)
 	case models.PaginationParamTypeReplace:
 		fieldNameUpdated := fmt.Sprintf(`${__pagination.%s}`, fieldName)
+		if fieldValue == "" {
+			// Replace quoted placeholder with JSON null to keep GraphQL variables payload valid.
+			quotedToken := fmt.Sprintf(`"%s"`, fieldNameUpdated)
+			query.URLOptions.BodyGraphQLVariables = strings.ReplaceAll(query.URLOptions.BodyGraphQLVariables, quotedToken, "null")
+		}
 		query.URL = strings.ReplaceAll(query.URL, fieldNameUpdated, field.Value)
 		query.URLOptions.Body = strings.ReplaceAll(query.URLOptions.Body, fieldNameUpdated, field.Value)
 		query.URLOptions.BodyGraphQLQuery = strings.ReplaceAll(query.URLOptions.BodyGraphQLQuery, fieldNameUpdated, fieldValue)
@@ -230,6 +278,14 @@ func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, pCtx *backend.
 		cursor, err = jsonframer.GetRootData(string(body), query.PageParamCursorFieldExtractionPath, framerType)
 		if err != nil {
 			return frame, cursor, backend.PluginError(errors.New("error while extracting the cursor value"))
+		}
+		hasNextPath := strings.TrimSuffix(query.PageParamCursorFieldExtractionPath, ".endCursor")
+		if hasNextPath != query.PageParamCursorFieldExtractionPath {
+			// If the payload exposes pageInfo.hasNextPage alongside endCursor, respect it as an explicit stop signal.
+			hasNextValue, hasNextErr := jsonframer.GetRootData(string(body), hasNextPath+".hasNextPage", framerType)
+			if hasNextErr == nil && strings.EqualFold(strings.TrimSpace(hasNextValue), "false") {
+				cursor = ""
+			}
 		}
 	}
 	return frame, cursor, nil
