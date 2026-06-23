@@ -72,8 +72,12 @@ func GetPaginatedResults(ctx context.Context, pCtx *backend.PluginContext, query
 		return frame, err
 	}
 	if query.PageMode != models.PaginationModeCursor {
+		bestEffort := query.PageBestEffort && (query.PageMode == models.PaginationModePage || query.PageMode == models.PaginationModeOffset)
 		for _, currentQuery := range queries {
 			frame, _, err := GetFrameForURLSourcesWithPostProcessing(ctx, pCtx, currentQuery, infClient, requestHeaders, false)
+			if err != nil && bestEffort && len(frames) > 0 {
+				break
+			}
 			frames = append(frames, frame)
 			errs = errors.Join(errs, err)
 		}
