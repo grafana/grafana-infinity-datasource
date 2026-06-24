@@ -1,4 +1,5 @@
 {
+    "$schema": "https://raw.githubusercontent.com/grafana/dsconfig/refs/heads/main/dsconfig/schema.json",
     "schemaVersion": "v1",
     "pluginType": "yesoreyeram-infinity-datasource",
     "pluginName": "Infinity",
@@ -10,7 +11,7 @@
             "label": "Base URL",
             "description": "Base URL prefixed to every query URL.",
             "valueType": "string",
-            "semanticType": "url",
+            "role": "endpoint.baseUrl",
             "target": "root"
         },
         {
@@ -238,7 +239,7 @@
             "label": "TLS server name",
             "description": "Server name used for TLS certificate verification (SNI).",
             "valueType": "string",
-            "semanticType": "hostname",
+            "role": "tls.serverName",
             "target": "jsonData"
         },
         {
@@ -454,7 +455,7 @@
             "key": "basicAuthPassword",
             "description": "Password for basic or digest authentication.",
             "valueType": "string",
-            "semanticType": "password",
+            "role": "auth.basic.password",
             "target": "secureJsonData"
         },
         {
@@ -462,7 +463,7 @@
             "key": "apiKeyValue",
             "description": "API key value (API key auth).",
             "valueType": "string",
-            "semanticType": "token",
+            "role": "auth.api.keyValue",
             "target": "secureJsonData"
         },
         {
@@ -470,7 +471,7 @@
             "key": "bearerToken",
             "description": "Bearer token (bearer token auth).",
             "valueType": "string",
-            "semanticType": "token",
+            "role": "auth.bearer.token",
             "target": "secureJsonData"
         },
         {
@@ -478,7 +479,7 @@
             "key": "oauth2ClientSecret",
             "description": "OAuth 2.0 client secret.",
             "valueType": "string",
-            "semanticType": "password",
+            "role": "auth.oauth2.clientSecret",
             "target": "secureJsonData"
         },
         {
@@ -486,7 +487,7 @@
             "key": "oauth2JWTPrivateKey",
             "description": "OAuth 2.0 JWT private key.",
             "valueType": "string",
-            "semanticType": "password",
+            "role": "auth.oauth2.jwtPrivateKey",
             "target": "secureJsonData"
         },
         {
@@ -515,7 +516,7 @@
             "key": "awsAccessKey",
             "description": "AWS access key ID.",
             "valueType": "string",
-            "semanticType": "token",
+            "role": "auth.aws.accessKeyId",
             "target": "secureJsonData"
         },
         {
@@ -523,7 +524,7 @@
             "key": "awsSecretKey",
             "description": "AWS secret access key.",
             "valueType": "string",
-            "semanticType": "password",
+            "role": "auth.aws.accessKeySecret",
             "target": "secureJsonData"
         },
         {
@@ -531,7 +532,7 @@
             "key": "azureBlobAccountKey",
             "description": "Azure Blob storage account key.",
             "valueType": "string",
-            "semanticType": "password",
+            "role": "auth.azureBlob.storageAccountKey",
             "target": "secureJsonData"
         },
         {
@@ -539,13 +540,13 @@
             "key": "proxyUserPassword",
             "description": "Password for the configured proxy user.",
             "valueType": "string",
-            "semanticType": "password",
+            "role": "password",
             "target": "secureJsonData"
         }
     ],
     "instructions": [
         {
-            "message": "Supports no auth (none), basic auth (basicAuth), bearer token (bearerToken), API key value pair (apiKey), digest auth (digestAuth), forward oauth (oauthPassThru), oauth2 (oauth2), AWS (aws), Azure Blob (azureBlob) — ask which. But never ask for credentials themselves. Those should be entered in the UI",
+            "msg": "Supports no auth (none), basic auth (basicAuth), bearer token (bearerToken), API key value pair (apiKey), digest auth (digestAuth), forward oauth (oauthPassThru), oauth2 (oauth2), AWS (aws), Azure Blob (azureBlob) — ask which. But never ask for credentials themselves. Those should be entered in the UI",
             "tags": ["llm"]
         }
     ]
