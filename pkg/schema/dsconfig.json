@@ -60,7 +60,8 @@
             "label": "API key name",
             "description": "Name of the API key header or query parameter (API key auth).",
             "valueType": "string",
-            "target": "jsonData"
+            "target": "jsonData",
+            "role": "auth.apiKey.key"
         },
         {
             "id": "jsonData.apiKeyType",
@@ -463,7 +464,7 @@
             "key": "apiKeyValue",
             "description": "API key value (API key auth).",
             "valueType": "string",
-            "role": "auth.api.keyValue",
+            "role": "auth.apiKey.value",
             "target": "secureJsonData"
         },
         {
@@ -524,7 +525,7 @@
             "key": "awsSecretKey",
             "description": "AWS secret access key.",
             "valueType": "string",
-            "role": "auth.aws.accessKeySecret",
+            "role": "auth.aws.secretAccessKey",
             "target": "secureJsonData"
         },
         {
@@ -540,7 +541,6 @@
             "key": "proxyUserPassword",
             "description": "Password for the configured proxy user.",
             "valueType": "string",
-            "role": "password",
             "target": "secureJsonData"
         }
     ],
