@@ -208,8 +208,7 @@
             },
             "serverName": {
               "description": "Server name used for TLS certificate verification (SNI).",
-              "type": "string",
-              "format": "hostname"
+              "type": "string"
             },
             "timeoutInSeconds": {
               "description": "Outgoing request timeout in seconds.",
@@ -241,8 +240,7 @@
         },
         "url": {
           "description": "Base URL prefixed to every query URL.",
-          "type": "string",
-          "format": "uri"
+          "type": "string"
         },
         "user": {
           "description": "Username for basic authentication.",
@@ -300,64 +298,5 @@
         "description": "Password for the configured proxy user."
       }
     ]
-  },
-  "settingsExamples": {
-    "examples": {
-      "apiKey": {
-        "summary": "API key",
-        "description": "API key sent as a request header.",
-        "value": {
-          "jsonData": {
-            "allowedHosts": [
-              "https://api.example.com"
-            ],
-            "apiKeyKey": "X-API-Key",
-            "apiKeyType": "header",
-            "auth_method": "apiKey"
-          }
-        }
-      },
-      "bearerToken": {
-        "summary": "Bearer token",
-        "description": "Bearer token authentication with an allowed host.",
-        "value": {
-          "jsonData": {
-            "allowedHosts": [
-              "https://api.example.com"
-            ],
-            "auth_method": "bearerToken"
-          }
-        }
-      },
-      "none": {
-        "summary": "No authentication",
-        "description": "Public endpoint, no authentication.",
-        "value": {
-          "jsonData": {
-            "auth_method": "none"
-          }
-        }
-      },
-      "oauth2ClientCredentials": {
-        "summary": "OAuth 2.0 client credentials",
-        "description": "OAuth 2.0 client-credentials grant.",
-        "value": {
-          "jsonData": {
-            "allowedHosts": [
-              "https://api.example.com"
-            ],
-            "auth_method": "oauth2",
-            "oauth2": {
-              "client_id": "my-client-id",
-              "oauth2_type": "client_credentials",
-              "scopes": [
-                "read"
-              ],
-              "token_url": "https://login.example.com/oauth2/token"
-            }
-          }
-        }
-      }
-    }
   }
 }
