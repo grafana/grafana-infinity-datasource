@@ -5,7 +5,7 @@ go 1.26.4
 require (
 	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.6.4
 	github.com/aws/aws-sdk-go-v2 v1.41.5
-	github.com/grafana/dsconfig/schema v0.0.4
+	github.com/grafana/dsconfig/schema v0.0.5
 	github.com/grafana/dskit v0.0.0-20260402131538-8d0d211734c0
 	github.com/grafana/grafana-aws-sdk v1.4.6
 	github.com/grafana/grafana-plugin-sdk-go v0.292.1
@@ -79,7 +79,7 @@ require (
 	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/grafana/dataplane/sdata v0.0.9 // indirect
-	github.com/grafana/dsconfig/dsconfig v0.0.4 // indirect
+	github.com/grafana/dsconfig/dsconfig v0.0.5 // indirect
 	github.com/grafana/infinity-libs/lib/go/utils v1.0.1 // indirect
 	github.com/grafana/otel-profiling-go v0.5.1 // indirect
 	github.com/grafana/pyroscope-go/godeltaprof v0.1.9 // indirect
@@ -101,7 +101,7 @@ require (
 	github.com/mattetti/filebuffer v1.0.1 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
-	github.com/mattn/go-runewidth v0.0.20 // indirect
+	github.com/mattn/go-runewidth v0.0.24 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mithrandie/csvq v1.18.1 // indirect
 	github.com/mithrandie/csvq-driver v1.7.0 // indirect

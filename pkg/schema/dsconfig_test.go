@@ -16,7 +16,7 @@ func TestPlugin(t *testing.T) {
 	schema.RunPluginTests(t, schema.PluginUnderTest{
 		ID:                "yesoreyeram-infinity-datasource",
 		ConfigSchemaJSON:  configSchemaJSON,
-		SettingsJSONModel: models.InfinitySettings{},
+		SettingsJSONModel: models.InfinitySettingsJson{},
 		SecureKeys: []string{
 			"apiKeyValue",
 			"basicAuthPassword",
