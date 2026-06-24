@@ -13,7 +13,7 @@
 // from NewSchema. It lives alongside the dsconfig single source of truth
 // (dsconfig.json, joined later by query.schema.json etc.); the webpack
 // build ships both into dist/schema.
-package pluginschema
+package schema
 
 import (
 	_ "embed"
