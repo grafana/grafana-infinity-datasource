@@ -19,6 +19,7 @@ labels:
     - oss
     - enterprise
     - cloud
+review_date: 2026-06-25
 weight: 10
 ---
 
@@ -48,7 +49,7 @@ The Infinity data source supports:
 
 Before you configure the Infinity data source, you need:
 
-- Grafana version 10.0 or later
+- Grafana version 11.6 or later
 - Network access from Grafana to your target API endpoints
 - Appropriate credentials for authenticated endpoints (API keys, OAuth credentials, etc.)
 
