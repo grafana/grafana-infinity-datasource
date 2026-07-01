@@ -99,14 +99,42 @@ func TestApplyPaginationItemToQuery(t *testing.T) {
 		}
 	})
 	t.Run(string(models.PaginationParamTypeBodyJson), func(t *testing.T) {
-		t.Skip() // TODO: NOT IMPLEMENTED YET
 		tests := []struct {
 			name       string
 			query      models.Query
 			fieldName  string
 			fieldValue string
 			want       models.Query
-		}{}
+		}{
+			{
+				name:       "should inject pagination cursor into empty body",
+				query:      models.Query{URLOptions: models.URLOptions{Body: ""}},
+				fieldName:  "nextPageToken",
+				fieldValue: "abc123",
+				want:       models.Query{URLOptions: models.URLOptions{Body: `{"nextPageToken":"abc123"}`}},
+			},
+			{
+				name:       "should inject pagination cursor into existing JSON body",
+				query:      models.Query{URLOptions: models.URLOptions{Body: `{"filter":"active"}`}},
+				fieldName:  "nextPageToken",
+				fieldValue: "page2",
+				want:       models.Query{URLOptions: models.URLOptions{Body: `{"filter":"active","nextPageToken":"page2"}`}},
+			},
+			{
+				name:       "should overwrite existing cursor key in JSON body",
+				query:      models.Query{URLOptions: models.URLOptions{Body: `{"nextPageToken":"old","filter":"active"}`}},
+				fieldName:  "nextPageToken",
+				fieldValue: "new",
+				want:       models.Query{URLOptions: models.URLOptions{Body: `{"filter":"active","nextPageToken":"new"}`}},
+			},
+			{
+				name:       "should not overwrite a non-JSON body",
+				query:      models.Query{URLOptions: models.URLOptions{Body: `not a json body`}},
+				fieldName:  "nextPageToken",
+				fieldValue: "abc123",
+				want:       models.Query{URLOptions: models.URLOptions{Body: `not a json body`}},
+			},
+		}
 		for _, tt := range tests {
 			t.Run(tt.name, func(t *testing.T) {
 				got := ApplyPaginationItemToQuery(tt.query, models.PaginationParamTypeBodyJson, tt.fieldName, tt.fieldValue)
