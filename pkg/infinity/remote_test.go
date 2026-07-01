@@ -4,8 +4,48 @@ import (
 	"testing"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
+	"github.com/grafana/grafana-plugin-sdk-go/data"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
+
+func TestFilterNonEmptyFrames(t *testing.T) {
+	t.Run("should return empty slice when all frames are nil", func(t *testing.T) {
+		frames := []*data.Frame{nil, nil, nil}
+		result := filterNonEmptyFrames(frames)
+		assert.Empty(t, result)
+	})
+	t.Run("should return empty slice when all frames have no fields", func(t *testing.T) {
+		frames := []*data.Frame{
+			data.NewFrame("empty1"),
+			data.NewFrame("empty2"),
+		}
+		result := filterNonEmptyFrames(frames)
+		assert.Empty(t, result)
+	})
+	t.Run("should return only frames with fields", func(t *testing.T) {
+		frameWithData := data.NewFrame("with-data",
+			data.NewField("name", nil, []string{"Alice", "Bob"}),
+		)
+		frameEmpty := data.NewFrame("empty")
+		frames := []*data.Frame{frameWithData, frameEmpty, nil}
+		result := filterNonEmptyFrames(frames)
+		assert.Len(t, result, 1)
+		assert.Equal(t, "with-data", result[0].Name)
+	})
+	t.Run("should return all frames when none are empty", func(t *testing.T) {
+		frame1 := data.NewFrame("frame1", data.NewField("id", nil, []int64{1, 2}))
+		frame2 := data.NewFrame("frame2", data.NewField("id", nil, []int64{3, 4}))
+		frames := []*data.Frame{frame1, frame2}
+		result := filterNonEmptyFrames(frames)
+		assert.Len(t, result, 2)
+	})
+	t.Run("should return empty slice when input is empty", func(t *testing.T) {
+		frames := []*data.Frame{}
+		result := filterNonEmptyFrames(frames)
+		assert.Empty(t, result)
+	})
+}
 
 func TestApplyPaginationItemToQuery(t *testing.T) {
 	t.Run(string(models.PaginationParamTypeQuery), func(t *testing.T) {
