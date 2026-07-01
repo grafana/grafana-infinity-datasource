@@ -10,6 +10,7 @@ export const QueryWarning = ({ query }: { query: InfinityQuery }) => {
     query.type === 'uql' ||
     query.type === 'groq' ||
     ((query.type === 'json' || query.type === 'graphql' || query.type === 'csv' || query.type === 'tsv' || query.type === 'xml' || query.type === 'html') &&
+      query.parser !== undefined &&
       query.parser !== 'backend' &&
       query.parser !== 'jq-backend')
   ) {
@@ -32,6 +33,7 @@ const warningMessage = (query: InfinityQuery) => {
   }
   if (
     (query.type === 'json' || query.type === 'graphql' || query.type === 'csv' || query.type === 'tsv' || query.type === 'xml' || query.type === 'html') &&
+    query.parser !== undefined &&
     query.parser !== 'backend' &&
     query.parser !== 'jq-backend'
   ) {
