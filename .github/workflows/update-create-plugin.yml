@@ -3,7 +3,10 @@ name: Create Plugin Update
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 1 * *' # run once a month on the 1st day
+    - cron: "0 0 1 * *" # run once a month on the 1st day
+permissions:
+  contents: read # create-plugin-update has a checkout step that requires read: https://github.com/grafana/plugin-actions/blob/244c3bc9c6eb94bc1dd6458ade2462499bbf0f5b/create-plugin-update/action.yml#L31
+  id-token: write # necessary for GATB get-github-token step (which is necessary for create-plugin-update)
 
 jobs:
   release:
