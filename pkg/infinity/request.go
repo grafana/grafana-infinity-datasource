@@ -141,7 +141,7 @@ func (client *Client) GetExecutedURL(ctx context.Context, query models.Query) st
 
 func interpolateGrafanaMetaDataMacros(value string, pCtx *backend.PluginContext) string {
 	if pCtx != nil {
-		value = strings.ReplaceAll(value, "${__org.id}", fmt.Sprintf("%d", pCtx.OrgID))
+		value = strings.ReplaceAll(value, "${__org.id}", pCtx.Namespace)
 		value = strings.ReplaceAll(value, "${__plugin.id}", pCtx.PluginID)
 		value = strings.ReplaceAll(value, "${__plugin.version}", pCtx.PluginVersion)
 		if pCtx.DataSourceInstanceSettings != nil {
