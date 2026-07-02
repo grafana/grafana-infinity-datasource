@@ -1,5 +1,11 @@
 # Contributing
 
+## Signed commits are required
+
+> [!IMPORTANT]
+> All commits must be [signed](https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits) (GPG, SSH, or S/MIME) to be merged into this repository. Pull requests with unsigned commits will need to be re-committed with signatures before they can be merged.
+
+
 If you want to contribute to the plugin, you can contribute in one of the following ways
 
 - [Test different APIs](https://github.com/grafana/grafana-infinity-datasource/discussions/categories/specific-apis) and create bugs if not working as expected
