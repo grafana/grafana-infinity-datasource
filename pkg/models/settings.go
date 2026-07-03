@@ -240,6 +240,24 @@ type RefData struct {
 	Data string `json:"data,omitempty"`
 }
 
+// InfinitySettingsJson is the runtime data model for the datasource's jsonData.
+//
+// Adding a new config property (workflow):
+//  1. Add the field + json tag here and read it in LoadSettings below.
+//  2. Add a matching field to pkg/pluginschema/dsconfig.json with the
+//     same `key` and `target: "jsonData"` (the schema is the single source of
+//     truth for editors, validation, and docs). Make sure `valueType` matches
+//     the Go kind (string→string, bool→boolean, int*/float*→number,
+//     slice→array, struct/map→object).
+//  3. Regenerate the SDK bundle: `go generate ./pkg/pluginschema` and commit
+//     the updated pkg/pluginschema/apiserver.schema.json.
+//
+// For a secret instead, read it via config.DecryptedSecureJSONData["yourKey"]
+// in LoadSettings, add a `target: "secureJsonData"` field to the schema, and
+// add "yourKey" to the loadKeys list in TestSecureValuesMatchLoadSettings.
+//
+// The drift guards in pkg/pluginschema/schema_test.go fail if these get out of
+// sync (key set, JSON type, and secret list are all checked).
 type InfinitySettingsJson struct {
 	IsMock                    bool           `json:"is_mock,omitempty"`
 	AuthenticationMethod      string         `json:"auth_method,omitempty"`

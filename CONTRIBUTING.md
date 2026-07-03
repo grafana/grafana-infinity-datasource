@@ -1,5 +1,11 @@
 # Contributing
 
+## Signed commits are required
+
+> [!IMPORTANT]
+> All commits must be [signed](https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits) (GPG, SSH, or S/MIME) to be merged into this repository. Pull requests with unsigned commits will need to be re-committed with signatures before they can be merged.
+
+
 If you want to contribute to the plugin, you can contribute in one of the following ways
 
 - [Test different APIs](https://github.com/grafana/grafana-infinity-datasource/discussions/categories/specific-apis) and create bugs if not working as expected
@@ -22,6 +28,12 @@ Once you clone the repo locally in the grafana's plugin folder. Do the following
 - `yarn build` - For building the frontend components
 - `mage -v` - This will help to build the backend part of the plugin. Do this once if you are contributing only the frontend. There is no significant code is in the backend. So no much changes expected
 - `docker-compose up` - To run the plugin with grafana locally. ( use infinity:infinity as the credentials ). You can also enable traces and logs with debug mode. Refer the **Setting up grafana in debug mode** section below
+
+## Dependencies
+
+Note that some packages have no direct `import` in `src/` but are still required:
+
+- **`@openfeature/web-sdk`** — required by Grafana's feature toggle system. Even though the plugin does not import it directly, removing it might breaks feature flag evaluation at runtime, so we keep it.
 
 ## Submitting PR
 
