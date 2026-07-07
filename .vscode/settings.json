@@ -1,4 +1,3 @@
 {
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "specstory.cloudSync.enabled": "never"
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
