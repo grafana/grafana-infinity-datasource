@@ -253,6 +253,44 @@
                 }
               }
             },
+            "oauth2EndPointParams": {
+              "description": "OAuth2 endpoint params",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                }
+              },
+              "x-dsconfig-depends-on": "jsonData_authMethod == 'oauth2' \u0026\u0026 (jsonData_oauth2Type == 'client_credentials')"
+            },
+            "oauth2TokenHeaders": {
+              "description": "OAuth2 token request headers",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                }
+              },
+              "x-dsconfig-depends-on": "jsonData_authMethod == 'oauth2'"
+            },
             "oauthPassThru": {
               "type": "boolean",
               "default": false

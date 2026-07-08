@@ -561,6 +561,55 @@
             }
         },
         {
+            "id": "jsonData_oauth2EndPointParams",
+            "key": "oauth2EndPointParams",
+            "label": "OAuth2 endpoint params",
+            "description": "OAuth2 endpoint params",
+            "valueType": "array",
+            "target": "jsonData",
+            "dependsOn": "jsonData_authMethod == 'oauth2' && (jsonData_oauth2Type == 'client_credentials')",
+            "item": {
+                "valueType": "object",
+                "fields": [
+                    {
+                        "id": "jsonData_oauth2EndPointParams.item.name",
+                        "key": "name",
+                        "label": "Param",
+                        "valueType": "string",
+                        "isItemField": true,
+                        "required": true,
+                        "ui": {
+                            "component": "input",
+                            "placeholder": "key"
+                        }
+                    },
+                    {
+                        "id": "jsonData_oauth2EndPointParams.item.value",
+                        "key": "value",
+                        "label": "Value",
+                        "valueType": "string",
+                        "isItemField": true,
+                        "ui": {
+                            "component": "input",
+                            "placeholder": "value"
+                        }
+                    }
+                ]
+            },
+            "storage": {
+                "type": "indexedPair",
+                "key": {
+                    "target": "jsonData",
+                    "pattern": "oauth2EndPointParamsName{index}"
+                },
+                "value": {
+                    "target": "secureJsonData",
+                    "pattern": "oauth2EndPointParamsValue{index}"
+                },
+                "startIndex": 1
+            }
+        },
+        {
             "id": "jsonData_oauth2Email",
             "key": "email",
             "section": "oauth2",
@@ -644,6 +693,55 @@
             "ui": {
                 "component": "input",
                 "placeholder": "Bearer ${__oauth2.access_token}"
+            }
+        },
+        {
+            "id": "jsonData_oauth2TokenHeaders",
+            "key": "oauth2TokenHeaders",
+            "label": "Token request headers",
+            "description": "OAuth2 token request headers",
+            "valueType": "array",
+            "target": "jsonData",
+            "dependsOn": "jsonData_authMethod == 'oauth2'",
+            "item": {
+                "valueType": "object",
+                "fields": [
+                    {
+                        "id": "jsonData_oauth2TokenHeaders.item.name",
+                        "key": "name",
+                        "label": "Param",
+                        "valueType": "string",
+                        "isItemField": true,
+                        "required": true,
+                        "ui": {
+                            "component": "input",
+                            "placeholder": "key"
+                        }
+                    },
+                    {
+                        "id": "jsonData_oauth2TokenHeaders.item.value",
+                        "key": "value",
+                        "label": "Value",
+                        "valueType": "string",
+                        "isItemField": true,
+                        "ui": {
+                            "component": "input",
+                            "placeholder": "value"
+                        }
+                    }
+                ]
+            },
+            "storage": {
+                "type": "indexedPair",
+                "key": {
+                    "target": "jsonData",
+                    "pattern": "oauth2TokenHeadersName{index}"
+                },
+                "value": {
+                    "target": "secureJsonData",
+                    "pattern": "oauth2TokenHeadersValue{index}"
+                },
+                "startIndex": 1
             }
         },
         {
@@ -1216,7 +1314,10 @@
             "id": "main",
             "title": "Main",
             "order": 1,
-            "fieldRefs": []
+            "fieldRefs": [
+                "root_url",
+                "jsonData_allowedHosts"
+            ]
         },
         {
             "id": "authentication",
@@ -1245,11 +1346,12 @@
                 "jsonData_oauth2Email",
                 "jsonData_oauth2PrivateKeyId",
                 "secureJsonData_oauth2JWTPrivateKey",
+                "jsonData_oauth2EndPointParams",
                 "jsonData_oauth2Subject",
+                "jsonData_oauth2TokenHeaders",
                 "jsonData_azureBlobCloudType",
                 "jsonData_azureBlobAccountName",
-                "secureJsonData_azureBlobAccountKey",
-                "jsonData_allowedHosts"
+                "secureJsonData_azureBlobAccountKey"
             ]
         },
         {
@@ -1258,13 +1360,12 @@
             "order": 3,
             "optional": true,
             "fieldRefs": [
-                "root_url",
+                "jsonData_httpHeaders",
+                "jsonData_secureQuery",
                 "jsonData_ignoreStatusCodeCheck",
                 "jsonData_allowDangerousHTTPMethods",
                 "jsonData_pathEncodedUrlsEnabled",
-                "jsonData_keepCookies",
-                "jsonData_httpHeaders",
-                "jsonData_secureQuery"
+                "jsonData_keepCookies"
             ]
         },
         {
@@ -1307,20 +1408,12 @@
             ]
         },
         {
-            "id": "reference-data",
-            "title": "Reference data",
+            "id": "misc",
+            "title": "Advanced configuration",
             "order": 7,
             "optional": true,
             "fieldRefs": [
-                "jsonData_refData"
-            ]
-        },
-        {
-            "id": "global-queries",
-            "title": "Global queries",
-            "order": 8,
-            "optional": true,
-            "fieldRefs": [
+                "jsonData_refData",
                 "jsonData_globalQueries"
             ]
         }
