@@ -1,10 +1,10 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { AzureBlobAuthEditor } from './Auth.AzureBlob';
-import { Components } from './../../selectors';
-import { AzureBlobCloudTypeDefault } from './../../constants';
+import { AzureBlobAuthEditor } from '@/editors/config/Auth.AzureBlob';
+import { Components } from '@/selectors';
+import { AzureBlobCloudTypeDefault } from '@/constants';
 import type { DataSourceSettings, KeyValue } from '@grafana/data';
-import type { InfinityOptions } from './../../types';
+import type { InfinityOptions } from '@/types';
 
 const { Region: RegionSelector, StorageAccountName: StorageAccountNameSelector, StorageAccountKey: StorageAccountKeySelector } = Components.ConfigEditor.Auth.AzureBlob;
 

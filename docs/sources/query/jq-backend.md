@@ -1,97 +1,164 @@
 ---
 slug: '/jq-backend'
-title: 'JQ backend parser'
-menuTitle: JQ backend parser
-description: JQ backend parser
+title: 'JQ parser'
+menuTitle: JQ parser
+description: Transform and manipulate data using JQ syntax with the Infinity data source JQ parser.
+aliases:
+  - /jq-backend
 keywords:
-  - data source
   - infinity
-  - json
-  - graphql
-  - csv
-  - tsv
-  - xml
-  - html
-  - api
-  - rest
   - jq
+  - parser
+  - json query
+  - data transformation
 labels:
   products:
     - oss
-weight: 302
+    - enterprise
+    - cloud
+weight: 120
 ---
 
-# JQ backend parser
+# JQ parser
 
-JQ backend parser helps you to manipulate the data using JQ style syntax. You have to select JQ/jq-backend as the parser type in the query editor.
+The JQ parser allows you to transform and manipulate data using [JQ syntax](https://jqlang.org/). JQ is a lightweight command-line JSON processor that provides powerful filtering and transformation capabilities.
 
-Setting the parser to JQ enables features such as [Alerting](https://grafana.com/docs/grafana/latest/alerting/), [Shared Dashboards](https://grafana.com/docs/grafana/latest/dashboards/share-dashboards-panels/shared-dashboards/), [SQL Expressions](https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/sql-expressions/), [Query Caching](https://grafana.com/docs/grafana/latest/administration/data-source-management/#query-and-resource-caching), [Recorded Queries](https://grafana.com/docs/grafana/latest/administration/recorded-queries/).
+To use JQ, select **Backend → JQ** as the parser type in the query editor.
 
-This parser is very similar to JSONata backend parser where you use [JSONata style syntax](https://docs.jsonata.org/overview.html) in root selector. With JQ backend parser, you use [jq style syntax](https://jqlang.org/tutorial/) in the root selector.
+## Benefits of using the JQ parser
+
+Using the JQ parser enables the following Grafana features:
+
+- [Alerting](https://grafana.com/docs/grafana/latest/alerting/)
+- [Shared dashboards](https://grafana.com/docs/grafana/latest/dashboards/share-dashboards-panels/shared-dashboards/)
+- [SQL expressions](https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/sql-expressions/)
+- [Query caching](https://grafana.com/docs/grafana/latest/administration/data-source-management/#query-and-resource-caching)
+- [Recorded queries](https://grafana.com/docs/grafana/latest/administration/recorded-queries/)
+
+## Supported data formats
+
+The JQ parser is available for the following data formats:
+
+| Data format | Available |
+|-------------|-----------|
+| JSON | Yes |
+| GraphQL | Yes |
+| XML | Yes |
+| HTML | Yes |
+| CSV | No |
+| TSV | No |
+
+## Root selector
+
+The root selector uses JQ syntax to extract and transform data. Enter your JQ expression in the **Rows / Root** field.
+
+### Basic syntax
+
+| Syntax | Description | Example |
+|--------|-------------|---------|
+| `.` | Current element | `.` |
+| `.[]` | Iterate array | `.[]` |
+| `.field` | Access field | `.name` |
+| `.field[]` | Iterate nested array | `.data[]` |
+| `.[0]` | Access array index | `.[0]` |
+| `.field.nested` | Access nested field | `.user.address` |
 
 ## Examples
 
-### Manipulating simple JSON array
+### Extract array elements
+
+For JSON data:
 
 ```json
 [
-  {
-    "name": "foo",
-    "age": 123
-  },
-  {
-    "name": "bar",
-    "age": 456
-  }
+  { "name": "foo", "age": 123 },
+  { "name": "bar", "age": 456 }
 ]
 ```
 
-and the root selector `.[]` will produce the following output
+Root selector: `.[]`
+
+Result:
 
 | age | name |
-| --- | ---- |
-| 123 | foo  |
-| 456 | bar  |
+|-----|------|
+| 123 | foo |
+| 456 | bar |
 
-### Manipulating nested JSON object
+### Extract from nested object
+
+For JSON data:
 
 ```json
 {
-  "meta": {
-    "hello": "world"
-  },
+  "meta": { "hello": "world" },
   "data": [
-    {
-      "name": "foo",
-      "age": 123
-    },
-    {
-      "name": "bar",
-      "age": 456
-    }
+    { "name": "foo", "age": 123 },
+    { "name": "bar", "age": 456 }
   ]
 }
 ```
 
-and the root selector `.data[]` will produce the following output
+Root selector: `.data[]`
+
+Result:
 
 | age | name |
-| --- | ---- |
-| 123 | foo  |
-| 456 | bar  |
+|-----|------|
+| 123 | foo |
+| 456 | bar |
 
-For more examples and to learn more about jq syntax, refer official [jq documentation](https://jqlang.org/tutorial).
+### Filter array elements
 
-## Computed columns
+Root selector: `.data[] | select(.age > 100)`
 
-Computed columns option with JQ parser works similar to JSONata parser. Computed columns let you create new fields that calculate their values based on your existing data.
+This returns only elements where `age` is greater than 100.
 
-For details on available operators and expression syntax, refer to the [Computed columns section in the JSONata backend parser documentation](../backend/#computed-columns).
+### Select specific fields
 
-## Filter
+Root selector: `.data[] | {name, age}`
 
-Filter option with JQ parser works similar to JSONata parser
+This returns only the `name` and `age` fields from each element.
 
-## Summarize
+### Transform field values
 
-Summarize option with JQ parser works similar to JSONata parser
+Root selector: `.[] | {name: .name, ageInMonths: (.age * 12)}`
+
+This transforms the `age` field to months.
+
+### Access first element
+
+Root selector: `.[0]`
+
+This returns only the first element of the array.
+
+### Flatten nested arrays
+
+Root selector: `.data[].items[]`
+
+This flattens nested arrays into a single result set.
+
+## Computed columns, filter, and summarize
+
+Computed columns, filter, and summarize are shared backend parser features that work the same way in both the JQ and JSONata parsers.
+
+For the full reference on these features — including available operators, expression syntax, filter examples, aggregation functions, and group-by options — refer to [Computed columns, filter, and summarize](./backend/#computed-columns-filter-and-summarize) in the JSONata parser documentation.
+
+## JQ vs JSONata
+
+Both parsers are backend parsers with the same post-processing features (computed columns, filter, summarize). The main difference is the root selector syntax:
+
+| Feature | JQ | JSONata |
+|---------|-----|---------|
+| Iterate array | `.[]` | `$` (automatic) |
+| Access nested data | `.data[]` | `data` |
+| Filter in selector | `.[] \| select(.age > 20)` | `$[age > 20]` |
+| Select fields | `.[] \| {name}` | `$.name` |
+
+Choose the parser based on which syntax you're more familiar with.
+
+## Additional resources
+
+- [JQ manual](https://jqlang.org/manual/)
+- [JQ tutorial](https://jqlang.org/tutorial/)
+- [JQ playground](https://jqplay.org/)

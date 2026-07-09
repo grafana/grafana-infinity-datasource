@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { ComputedColumnsEditor } from './query.computedColumns';
-import type { InfinityColumn, InfinityColumnFormat, InfinityQuery, InfinityQueryFormat, InfinityURLOptions } from '../../types';
+import { ComputedColumnsEditor } from '@/editors/query/query.computedColumns';
+import type { InfinityColumn, InfinityColumnFormat, InfinityQuery, InfinityQueryFormat, InfinityURLOptions } from '@/types';
 
 describe('ComputedColumnsEditor', () => {
   // Freezing the object so that any mutations throw errors

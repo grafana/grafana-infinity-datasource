@@ -5,7 +5,7 @@ test('Config editor: should be able to add a global query', async ({ createDataS
     await createDataSourceConfigPage({ type: 'yesoreyeram-infinity-datasource' });
     await page.getByRole('button', { name: 'Global queries' }).click();
     await page.getByRole('button', { name: 'Add Global Query' }).click();
-    await page.getByRole('button', { name: 'Edit' }).click();
+    await page.getByRole('button', { name: 'Edit', exact: true }).click();
     const sourceDropdownWrapper = await page.getByTestId('infinity-query-field-wrapper-source');
     const sourceDropdown = await sourceDropdownWrapper.getByRole('combobox');
     await sourceDropdown.click();

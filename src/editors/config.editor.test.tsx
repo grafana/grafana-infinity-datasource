@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 import { InfinityOptions } from '@/types';
-import { InfinityConfigEditor } from './config.editor';
+import { InfinityConfigEditor } from '@/editors/config.editor';
 
 // Mock react-router-dom Link component
 jest.mock('react-router-dom', () => ({

@@ -1,5 +1,41 @@
 # Change Log
 
+## 3.10.1
+
+### Patch Changes
+
+🐛 Updated golang.org/x/crypto to v0.53.0 to address CVE-2026-46595 / GO-2026-5023.
+
+## 3.10.0
+
+### Minor Changes
+
+🚀 Add llm instructions for authentication to dsconfig schema
+
+### Patch Changes
+
+🐛 Updated github.com/grafana/grafana-aws-sdk to v1.4.6 for fixing the AWS S3 file retrieval error introduced in 3.3.0. Fixes [#1299](https://github.com/grafana/grafana-infinity-datasource/issues/1299)
+
+## 3.9.0
+
+### Minor Changes
+
+🚀 Renames skill files to make it more easy to discover them via agents
+
+### Patch Changes
+
+⚙️ Chore: remove unused dependencies
+
+## 3.8.1
+
+🚀 add dsconfig schema, apiserver schema, configuration and querying skills
+
+## 3.8.0
+
+🚀 Updated the AllowedHosts UI component from TagsInput to custom editor
+
+🐛 Add configurable TokenHeaders for OAuth2 token endpoint requests. Users can now specify custom headers (such as Accept, Content-Type, etc.) to send with OAuth2 token requests, fixing compatibility with strict OAuth2 servers that validate headers.
+
 ## 3.7.4
 
 🐛 Fixes the crash in query display text when the query type is empty. Fixes [#1525](https://github.com/grafana/grafana-infinity-datasource/issues/1525)

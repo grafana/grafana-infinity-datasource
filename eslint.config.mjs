@@ -40,4 +40,20 @@ export default defineConfig([
     ],
   },
   ...baseConfig,
+  {
+    files: ['src/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['./*', './**/*', '../*', '../**/*'],
+              message: 'Relative imports are not allowed. Use @/ path aliases instead (e.g., @/components/..., @/utils/...).',
+            },
+          ],
+        },
+      ],
+    },
+  },
 ]);

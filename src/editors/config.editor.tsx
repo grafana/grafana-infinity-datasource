@@ -15,7 +15,7 @@ import { ReferenceDataEditor } from '@/editors/config/ReferenceData';
 import { CustomHealthCheckEditor } from '@/editors/config/CustomHealthCheckEditor';
 import type { DataSourcePluginOptionsEditorProps, DataSourceSettings } from '@grafana/data';
 import type { InfinityOptions } from '@/types';
-import { KeepCookiesEditor } from './config/KeepCookies';
+import { KeepCookiesEditor } from '@/editors/config/KeepCookies';
 
 const Collapse = CollapseOriginal as any;
 

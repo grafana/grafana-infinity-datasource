@@ -1,7 +1,8 @@
-import { InlineFormLabel, TagsInput } from '@grafana/ui';
 import React from 'react';
-import type { InfinityOptions } from '@/types';
+import { InlineFormLabel } from '@grafana/ui';
+import { StringArrayInput } from '@/components/extended/StringArrayInput';
 import type { DataSourcePluginOptionsEditorProps } from '@grafana/data';
+import type { InfinityOptions } from '@/types';
 
 type AllowedHostsEditorProps = {} & DataSourcePluginOptionsEditorProps<InfinityOptions>;
 
@@ -10,18 +11,16 @@ export const AllowedHostsEditor = ({ options, onOptionsChange }: AllowedHostsEdi
     return <></>;
   }
   return (
-    <>
-      <p>For the enhanced security, enter list of allowed hosts in this section. The host URLs can include path and the URLs are case sensitive</p>
-      <div className="gf-form">
-        <InlineFormLabel width={10} tooltip="List of allowed host names. Enter the base URL names. ex: https://foo.com">
-          Allowed hosts
-        </InlineFormLabel>
-        <TagsInput
-          placeholder="Enter the host names with domain prefix (enter key to add)"
-          tags={options.jsonData.allowedHosts || []}
-          onChange={(allowedHosts = []) => onOptionsChange({ ...options, jsonData: { ...options.jsonData, allowedHosts } })}
-        />
-      </div>
-    </>
+    <div className="gf-form">
+      <InlineFormLabel width={10} tooltip="List of allowed host names. Enter the base URL names. ex: https://example.com">
+        Allowed hosts
+      </InlineFormLabel>
+      <StringArrayInput
+        placeholder="https://example.com"
+        value={options.jsonData.allowedHosts || ['']}
+        onChange={(allowedHosts) => onOptionsChange({ ...options, jsonData: { ...options.jsonData, allowedHosts } })}
+        addButtonText="Add"
+      />
+    </div>
   );
 };

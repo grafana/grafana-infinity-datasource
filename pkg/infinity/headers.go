@@ -82,7 +82,7 @@ func ApplyHeadersFromSettings(_ context.Context, pCtx *backend.PluginContext, re
 			headerValue = value
 		}
 		headerValue = interpolateGrafanaMetaDataMacros(headerValue, pCtx)
-		if key != "" {
+		if key != "" && !models.IsSensitiveHeader(key) {
 			req.Header.Set(key, headerValue)
 		}
 	}
@@ -95,7 +95,7 @@ func ApplyHeadersFromQuery(_ context.Context, query models.Query, settings model
 		if includeSect {
 			value = replaceSect(header.Value, settings, includeSect)
 		}
-		if header.Key != "" {
+		if header.Key != "" && !models.IsSensitiveHeader(header.Key) {
 			req.Header.Add(header.Key, value)
 			if strings.EqualFold(header.Key, headerKeyAccept) || strings.EqualFold(header.Key, headerKeyContentType) {
 				req.Header.Set(header.Key, value)

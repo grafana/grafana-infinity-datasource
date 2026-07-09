@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { ComputedColumn } from './ComputedColumn';
-import type { InfinityColumn, InfinityColumnFormat, InfinityQuery, InfinityQueryFormat, InfinityURLOptions } from '../types';
+import { ComputedColumn } from '@/components/ComputedColumn';
+import type { InfinityColumn, InfinityColumnFormat, InfinityQuery, InfinityQueryFormat, InfinityURLOptions } from '@/types';
 
 describe('ComputedColumn', () => {
   // Freezing the object so that any mutations throw errors

@@ -48,6 +48,7 @@ type OAuth2Settings struct {
 	AuthStyle      oauth2.AuthStyle `json:"authStyle,omitempty"`
 	AuthHeader     string           `json:"authHeader,omitempty"`
 	TokenTemplate  string           `json:"tokenTemplate,omitempty"`
+	TokenHeaders   map[string]string `json:"tokenHeaders,omitempty"`
 	ClientSecret   string
 	PrivateKey     string
 	EndpointParams map[string]string
@@ -240,6 +241,24 @@ type RefData struct {
 	Data string `json:"data,omitempty"`
 }
 
+// InfinitySettingsJson is the runtime data model for the datasource's jsonData.
+//
+// Adding a new config property (workflow):
+//  1. Add the field + json tag here and read it in LoadSettings below.
+//  2. Add a matching field to pkg/pluginschema/dsconfig.json with the
+//     same `key` and `target: "jsonData"` (the schema is the single source of
+//     truth for editors, validation, and docs). Make sure `valueType` matches
+//     the Go kind (string→string, bool→boolean, int*/float*→number,
+//     slice→array, struct/map→object).
+//  3. Regenerate the SDK bundle: `go generate ./pkg/pluginschema` and commit
+//     the updated pkg/pluginschema/apiserver.schema.json.
+//
+// For a secret instead, read it via config.DecryptedSecureJSONData["yourKey"]
+// in LoadSettings, add a `target: "secureJsonData"` field to the schema, and
+// add "yourKey" to the loadKeys list in TestSecureValuesMatchLoadSettings.
+//
+// The drift guards in pkg/pluginschema/schema_test.go fail if these get out of
+// sync (key set, JSON type, and secret list are all checked).
 type InfinitySettingsJson struct {
 	IsMock                      bool           `json:"is_mock,omitempty"`
 	AuthenticationMethod        string         `json:"auth_method,omitempty"`
@@ -344,16 +363,16 @@ func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings
 		settings.OAuth2Settings.ClientSecret = val
 	}
 	if val, ok := config.DecryptedSecureJSONData["oauth2JWTPrivateKey"]; ok {
-		settings.OAuth2Settings.PrivateKey = val
+		settings.OAuth2Settings.PrivateKey = normalizePEMContent(val)
 	}
 	if val, ok := config.DecryptedSecureJSONData["tlsCACert"]; ok {
-		settings.TLSCACert = val
+		settings.TLSCACert = normalizePEMContent(val)
 	}
 	if val, ok := config.DecryptedSecureJSONData["tlsClientCert"]; ok {
-		settings.TLSClientCert = val
+		settings.TLSClientCert = normalizePEMContent(val)
 	}
 	if val, ok := config.DecryptedSecureJSONData["tlsClientKey"]; ok {
-		settings.TLSClientKey = val
+		settings.TLSClientKey = normalizePEMContent(val)
 	}
 	if val, ok := config.DecryptedSecureJSONData["bearerToken"]; ok {
 		settings.BearerToken = val
@@ -373,6 +392,7 @@ func LoadSettings(ctx context.Context, config backend.DataSourceInstanceSettings
 	settings.CustomHeaders = GetSecrets(config, "httpHeaderName", "httpHeaderValue")
 	settings.SecureQueryFields = GetSecrets(config, "secureQueryName", "secureQueryValue")
 	settings.OAuth2Settings.EndpointParams = GetSecrets(config, "oauth2EndPointParamsName", "oauth2EndPointParamsValue")
+	settings.OAuth2Settings.TokenHeaders = GetSecrets(config, "oauth2TokenHeadersName", "oauth2TokenHeadersValue")
 	if settings.AuthenticationMethod == "" {
 		settings.AuthenticationMethod = AuthenticationMethodNone
 		if settings.BasicAuthEnabled {

@@ -1,44 +1,66 @@
 ---
-slug: '/github'
-title: 'Github GraphQL API'
-menuTitle: Github GraphQL API
-description: Visualizing data from Github GraphQL API using Infinity
+slug: '/examples/github'
+title: GitHub GraphQL API
+menuTitle: GitHub
+description: Query GitHub repositories and issues using the Infinity data source.
+aliases:
+  - /docs/plugins/yesoreyeram-infinity-datasource/latest/examples/github/
 keywords:
-  - data source
   - infinity
-  - json
-  - graphql
-  - csv
-  - tsv
-  - xml
-  - html
-  - api
-  - rest
+  - GitHub
+  - GraphQL
+  - API
 labels:
   products:
     - oss
-weight: 8002
+    - enterprise
+    - cloud
+weight: 300
 ---
 
-# Visualizing data from Github GraphQL API
+# GitHub GraphQL API
 
-![image](https://user-images.githubusercontent.com/153843/93846498-1d9abf80-fc9c-11ea-90ed-4c569b088d99.png#center)
+Query GitHub repositories, issues, pull requests, and organization data using the GitHub GraphQL API.
 
-We can use the [GitHub GraphQL API](https://docs.github.com/en/graphql) to query the GitHub stats with the Infinity plugin GraphQL API.
+## Before you begin
 
-A sample query is provided in the example below, but you can customize your query to bring the stats you needed:
+- A GitHub account
+- A [Personal Access Token (PAT)](https://github.com/settings/tokens) with appropriate scopes (for example, `repo`, `read:org`)
 
-## Query Editor
+## Configure the data source
 
-![image](https://user-images.githubusercontent.com/153843/93736996-d3510a00-fbd9-11ea-8c05-065758d66e82.png#center)
+1. In Grafana, navigate to **Connections** > **Data sources**.
+1. Click **Add new data source** and select **Infinity**.
+1. Expand the **Authentication** section and select **Bearer Token**.
+1. Enter your GitHub Personal Access Token.
+1. In **Allowed hosts**, enter `https://api.github.com`.
+1. Click **Save & test**.
 
-![image](https://user-images.githubusercontent.com/153843/93737011-e1068f80-fbd9-11ea-8c82-ea516f83cf3d.png#center)
+{{< admonition type="tip" >}}
+You can also use **Basic Authentication** with your GitHub username and PAT as the password, but Bearer Token is the recommended approach.
+{{< /admonition >}}
 
-Query Used:
+## Query GitHub data
+
+Use GraphQL queries to retrieve GitHub data. The GitHub GraphQL endpoint is `https://api.github.com/graphql`.
+
+### Basic query setup
+
+1. In the query editor, set **Type** to **GraphQL**.
+2. Set **URL** to `https://api.github.com/graphql`.
+3. Set **Parser** to **Backend** or **UQL**.
+4. Enter your GraphQL query.
+5. Set the **Root selector** to extract your data (for example, `data.repository.issues.edges`).
+
+## Query examples
+
+### List repository issues
+
+**GraphQL query:**
 
 ```graphql
 {
-  repository(owner: "$GithubUser", name: "$GithubRepo") {
+  repository(owner: "grafana", name: "grafana") {
     issues(last: 20) {
       edges {
         node {
@@ -55,31 +77,32 @@ Query Used:
 }
 ```
 
-## Datasource Configuration
+**Root selector:** `data.repository.issues.edges`
 
-Select **Basic user authentication** mode and use your GitHub username as the username and your Personal Access Token (PAT) as the password.
+**Columns:**
 
-![image](https://user-images.githubusercontent.com/153843/93736929-b1578780-fbd9-11ea-9413-5585ff79d3a8.png#center)
+| Selector            | Alias   |
+|----------           |-------  |
+| `node.title`        | Title   |
+| `node.state`        | State   |
+| `node.author.login` | Author  |
+| `node.url`          | URL     |
 
-## Github Organization Summary example
+### Organization repository summary
 
-![image](https://user-images.githubusercontent.com/153843/93846498-1d9abf80-fc9c-11ea-90ed-4c569b088d99.png#center)
-
-The preceding image uses the following query:
+Query multiple repositories in an organization:
 
 ```graphql
 {
-  repositoryOwner(login: "$GithubUser") {
+  repositoryOwner(login: "grafana") {
     repositories(first: 100) {
-      data: nodes {
+      nodes {
         name
-        stargazers {
+        stargazerCount
+        issues(states: OPEN) {
           totalCount
         }
-        openissues: issues(states: OPEN) {
-          totalCount
-        }
-        openpr: pullRequests(states: OPEN) {
+        pullRequests(states: OPEN) {
           totalCount
         }
       }
@@ -88,8 +111,95 @@ The preceding image uses the following query:
 }
 ```
 
-Note:
+**Root selector:** `data.repositoryOwner.repositories.nodes`
 
-- Queries aren't paginated.
-- Github rate limits apply.
-- If you need a paginated and full set of results, use Grafana [GitHub stats plugin](https://grafana.com/grafana/plugins/grafana-github-datasource).
+**Columns:**
+
+| Selector                  | Alias       | Type    |
+|----------                 |-------      |------   |
+| `name`                    | Repository  | string  |
+| `stargazerCount`          | Stars       | number  |
+| `issues.totalCount`       | Open Issues | number  |
+| `pullRequests.totalCount` | Open PRs    | number  |
+
+### Pull request metrics
+
+```graphql
+{
+  repository(owner: "grafana", name: "grafana") {
+    pullRequests(last: 50, states: MERGED) {
+      nodes {
+        title
+        mergedAt
+        author {
+          login
+        }
+        additions
+        deletions
+      }
+    }
+  }
+}
+```
+
+**Root selector:** `data.repository.pullRequests.nodes`
+
+## Use template variables
+
+Replace hardcoded values with Grafana template variables:
+
+```graphql
+{
+  repository(owner: "${GithubOrg}", name: "${GithubRepo}") {
+    issues(last: 20, states: OPEN) {
+      edges {
+        node {
+          title
+          state
+          createdAt
+        }
+      }
+    }
+  }
+}
+```
+
+Create dashboard variables for `GithubOrg` and `GithubRepo` to make the dashboard dynamic.
+
+## Provision the data source
+
+Configure GitHub authentication through provisioning:
+
+```yaml
+apiVersion: 1
+datasources:
+  - name: GitHub Infinity
+    type: yesoreyeram-infinity-datasource
+    jsonData:
+      auth_method: bearerToken
+      allowedHosts:
+        - https://api.github.com
+    secureJsonData:
+      bearerToken: YOUR_GITHUB_PAT
+```
+
+## Troubleshoot
+
+| Issue               | Cause                   | Solution                                                  |
+|-------              |-------                  |----------                                                 |
+| 401 Bad credentials | Invalid or expired PAT  | Generate a new Personal Access Token                      |
+| 403 Forbidden       | Insufficient PAT scopes | Add required scopes (repo, read:org) to your PAT          |
+| Empty response      | Wrong root selector     | Check the GraphQL response structure and update selector  |
+| Rate limit exceeded | Too many requests       | Wait for rate limit reset or use a PAT with higher limits |
+
+## Limitations
+
+- Queries are not automatically paginated. For large result sets, use cursor-based pagination in your GraphQL query.
+- GitHub API rate limits apply (5,000 requests per hour for authenticated requests).
+- For comprehensive GitHub analytics with built-in pagination, consider the [GitHub data source](https://grafana.com/grafana/plugins/grafana-github-datasource).
+
+## Additional resources
+
+- [GitHub GraphQL API documentation](https://docs.github.com/en/graphql)
+- [GitHub GraphQL Explorer](https://docs.github.com/en/graphql/overview/explorer)
+- [Creating a Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)

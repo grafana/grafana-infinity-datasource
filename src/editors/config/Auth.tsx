@@ -4,7 +4,7 @@ import { Icon, InlineFormLabel, LegacyForms, RadioButtonGroup, Combobox, Grid, L
 import React, { useState } from 'react';
 import { AllowedHostsEditor } from '@/editors/config/AllowedHosts';
 import { AzureBlobAuthEditor } from '@/editors/config/Auth.AzureBlob';
-import { OAuthInputsEditor } from './../../editors/config/OAuthInput';
+import { OAuthInputsEditor } from '@/editors/config/OAuthInput';
 import { OthersAuthentication } from '@/editors/config/OtherAuthProviders';
 import { AWSRegions } from '@/constants';
 import type { APIKeyType, AuthType, InfinityOptions, InfinitySecureOptions } from '@/types';
@@ -162,7 +162,6 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
                     tooltip="password"
                   />
                 </div>
-                <ConfigPreview jsonData={options.jsonData} authType={authType} />
               </>
             )}
             {authType === 'bearerToken' && (
@@ -182,7 +181,6 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
                     tooltip="bearer token"
                   />
                 </div>
-                <ConfigPreview jsonData={options.jsonData} authType={authType} />
               </>
             )}
             {authType === 'apiKey' && (
@@ -223,7 +221,6 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
                     onChange={(apiKeyType = 'header') => onOptionsChange({ ...options, jsonData: { ...options.jsonData, apiKeyType } })}
                   />
                 </div>
-                <ConfigPreview jsonData={options.jsonData} authType={authType} />
               </>
             )}
             {authType === 'aws' && (
@@ -286,45 +283,4 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
       )}
     </>
   );
-};
-
-const ConfigPreview = (props: { jsonData: InfinityOptions; authType: string }) => {
-  const { jsonData, authType } = props;
-  return (
-    <>
-      <br />
-      <h5>Preview / Sample request</h5>
-      <br />
-      <code>{configToCurl(jsonData, authType)}</code>
-    </>
-  );
-};
-
-const configToCurl = (jsonData: InfinityOptions, authType = 'unknown') => {
-  const headerKeys = Object.keys(jsonData || {})
-    .filter((key) => key.startsWith('httpHeaderName'))
-    .filter(Boolean)
-    .map((k) => (jsonData as any)[k])
-    .filter(Boolean)
-    .map((k) => `--header '${k || 'header_key'}: xxx'`)
-    .join(` `);
-  const queryKeys = Object.keys(jsonData || {})
-    .filter((key) => key.startsWith('secureQueryName'))
-    .filter(Boolean)
-    .map((k) => (jsonData as any)[k])
-    .filter(Boolean)
-    .map((k) => `${k || 'header_key'}=xxx`)
-    .join(`&`);
-  if (authType === 'basicAuth' || authType === 'digestAuth') {
-    return `curl --location 'https://your_url.com?${queryKeys}' --header 'Authorization: Basic <YOUR_USERNAME_PASSWORD_ENCODED>' ${headerKeys}`;
-  } else if (authType === 'bearerToken') {
-    return `curl --location 'https://your_url.com?${queryKeys}' --header 'Authorization: Bearer <YOUR_TOKEN_GOES_HERE>' ${headerKeys}`;
-  } else if (authType === 'apiKey') {
-    if (jsonData.apiKeyType === 'query') {
-      return `curl --location 'https://your_url.com?${jsonData.apiKeyKey}=<YOUR_API_KEY_VALUED>&${queryKeys}' ${headerKeys}`;
-    } else {
-      return `curl --location 'https://your_url.com?${queryKeys}' --header '${jsonData.apiKeyKey || '<YOUR_API_KEY>'}: <YOUR_API_VALUE>' ${headerKeys}`;
-    }
-  }
-  return '';
 };

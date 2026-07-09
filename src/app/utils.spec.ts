@@ -1,5 +1,5 @@
 import { FieldType, MutableDataFrame } from '@grafana/data';
-import { toTimeSeriesLong, toTimeSeriesMulti } from './utils';
+import { toTimeSeriesLong, toTimeSeriesMulti } from '@/app/utils';
 
 describe('utils', () => {
   describe('Time Series Transformations', () => {
