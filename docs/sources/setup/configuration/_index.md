@@ -53,7 +53,7 @@ For configuring network settings such as proxy setting, Refer the [Network Docum
 The settings for the Infinity data source on the configuration page don't automatically validate the URL. To ensure that your settings, including authentication and API keys, are valid, you need to enable the custom health check in the **Health check** section of the **Configuration** page.
 
 {{< admonition type="note" >}}
-Custom health check only verifies the response status code and  specifically looking for HTTP 200 status. Doesn't validate the response.
+Custom health check only verifies the response status code and specifically looks for a HTTP 200 status. Does not validate the response.
 {{< /admonition >}}
 {{< /shared >}}
 
