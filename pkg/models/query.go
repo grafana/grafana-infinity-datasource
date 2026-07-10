@@ -115,6 +115,7 @@ type Query struct {
 	DataOverrides                      []InfinityDataOverride `json:"dataOverrides"`
 	GlobalQueryID                      string                 `json:"global_query_id"`
 	QueryMode                          string                 `json:"query_mode"`
+	Method                             string                 `json:"method,omitempty"`
 	Spreadsheet                        string                 `json:"spreadsheet,omitempty"`
 	SheetName                          string                 `json:"sheetName,omitempty"`
 	SheetRange                         string                 `json:"sheetRange,omitempty"`
@@ -215,7 +216,10 @@ func ApplyDefaultsToQuery(ctx context.Context, pCtx *backend.PluginContext, quer
 		}
 	}
 	if query.Source == "url" && strings.TrimSpace(query.URLOptions.Method) == "" {
-		query.URLOptions.Method = http.MethodGet
+		query.URLOptions.Method = strings.TrimSpace(query.Method)
+		if query.URLOptions.Method == "" {
+			query.URLOptions.Method = http.MethodGet
+		}
 	}
 	if query.Source == "url" && (!strings.EqualFold(query.URLOptions.Method, http.MethodGet)) {
 		if query.URLOptions.BodyType == "" {
