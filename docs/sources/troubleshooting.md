@@ -51,7 +51,7 @@ An entry matches only when it's a prefix of the final URL, including the scheme,
 To add or correct an allowed host:
 
 1. Open the data source configuration in Grafana.
-1. Navigate to the **Network** section.
+1. Navigate to the **Security** section.
 1. Add the full host, including the scheme, to the **Allowed hosts** field, for example `https://api.example.com`.
 1. Click **Save & test**.
 
