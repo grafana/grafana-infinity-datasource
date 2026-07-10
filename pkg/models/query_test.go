@@ -173,6 +173,21 @@ func TestLoadQueryMethodFallback(t *testing.T) {
 			wantTopLevelMethod: http.MethodPost,
 		},
 		{
+			name: "trims url options method before applying defaults",
+			queryJSON: `{
+				"type": "json",
+				"source": "url",
+				"method": "GET",
+				"url_options": {
+					"method": " POST "
+				}
+			}`,
+			wantMethod:         http.MethodPost,
+			wantBodyType:       "raw",
+			wantContentType:    "text/plain",
+			wantTopLevelMethod: http.MethodGet,
+		},
+		{
 			name: "defaults to GET when both methods are empty",
 			queryJSON: `{
 				"type": "json",
