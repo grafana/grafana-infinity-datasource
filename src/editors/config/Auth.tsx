@@ -268,7 +268,7 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
                         inputWidth={12}
                         required
                         value={secureJsonData.awsAccessKey || ''}
-                        isConfigured={(secureJsonFields && secureJsonFields.awsAccessKey) as boolean}
+                        isConfigured={Boolean(secureJsonFields?.awsAccessKey)}
                         onReset={() => onResetSecret('awsAccessKey')}
                         onChange={onUpdateDatasourceSecureJsonDataOption(props, 'awsAccessKey')}
                         label="Access Key"
