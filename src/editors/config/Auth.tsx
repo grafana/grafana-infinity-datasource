@@ -236,7 +236,7 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
               <>
                 <div className="gf-form">
                   <InlineFormLabel tooltip="Choose how to authenticate with AWS. 'Access & Secret Key' uses static credentials. 'Default Credentials / IAM Role' uses the default AWS credential chain (environment variables, EC2 instance profile, ECS task role, etc.).">
-                    Auth Provider
+                    Authentication Provider
                   </InlineFormLabel>
                   <RadioButtonGroup<AWSAuthType>
                     options={[
