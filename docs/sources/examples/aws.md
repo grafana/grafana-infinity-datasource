@@ -28,8 +28,8 @@ The Infinity data source supports two AWS authentication providers and optional 
 
 | Provider | Description |
 | --- | --- |
-| **Access & Secret Key** | Static credentials. Provide an AWS access key and secret key directly. |
-| **Default Credentials / IAM Role** | Uses the AWS SDK default credential chain: environment variables, shared credentials file, EC2 instance profile, ECS task role, or EKS IRSA. No static keys required. |
+| **Access and secret key** | Static credentials. Provide an AWS access key and secret key directly. |
+| **AWS SDK Default** | Uses the AWS SDK default credential chain: environment variables, shared credentials file, EC2 instance profile, ECS task role, or EKS IRSA. No static keys required. |
 
 ## IAM role assumption (AssumeRole)
 
@@ -65,44 +65,44 @@ GF_AWS_ASSUME_ROLE_ENABLED=true
 
 ## Before you begin
 
-For **Access & Secret Key** authentication:
+For **Access and secret key** authentication:
 
 - Create an AWS IAM user with programmatic access
 - Note down your Access Key ID and Secret Access Key
 - Assign appropriate IAM permissions for the APIs you want to query (for example, CloudWatch ReadOnly, Cost Explorer ReadOnly)
 
-For **Default Credentials / IAM Role** authentication:
+For **AWS SDK Default** authentication:
 
 - Ensure the Grafana instance has an IAM role attached (instance profile, task role, or IRSA service account) with the required permissions
 
 ## Configure the data source
 
-### Using Access & Secret Key
+### Using Access and secret key
 
 1. In Grafana, navigate to **Connections** > **Data sources**.
 1. Click **Add new data source** and select **Infinity**.
 1. Expand the **Authentication** section and select **AWS**.
-1. Select **Access & Secret Key** as the **Auth Provider**.
+1. Select **Access and secret key** as the **Authentication Provider**.
 1. Configure the following settings:
 
    | Setting | Description | Example |
    |---------|-------------|---------|
    | **Region** | AWS region for your resources | `us-east-1` |
    | **Service** | AWS service identifier | `monitoring` |
-   | **Access Key** | Your IAM access key ID | `KEY...` |
-   | **Secret Key** | Your IAM secret access key | (stored securely) |
+   | **Access Key ID** | Your IAM access key ID | `KEY...` |
+   | **Secret Access Key** | Your IAM secret access key | (stored securely) |
 
 1. In **Allowed hosts**, enter your AWS endpoint (for example, `https://monitoring.us-east-1.amazonaws.com`).
 1. Click **Save & test**.
 
-### Using Default Credentials / IAM Role
+### Using AWS SDK Default
 
 This method is suitable for EC2 instances, ECS tasks, and EKS pods with IRSA.
 
 1. In Grafana, navigate to **Connections** > **Data sources**.
 1. Click **Add new data source** and select **Infinity**.
 1. Expand the **Authentication** section and select **AWS**.
-1. Select **Default Credentials / IAM Role** as the **Auth Provider**.
+1. Select **AWS SDK Default** as the **Authentication Provider**.
 1. Select **Region** and enter **Service**.
 1. Optionally, enter an **Assume Role ARN** for cross-account access.
 1. In **Allowed hosts**, enter your AWS endpoint.
@@ -122,7 +122,7 @@ When running on EKS with [IAM Roles for Service Accounts (IRSA)](https://docs.aw
      annotations:
        eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/GrafanaRole
    ```
-1. Configure the data source with **Default Credentials / IAM Role**. No static keys are needed.
+1. Configure the data source with **AWS SDK Default**. No static keys are needed.
 1. If the IRSA role only has `sts:AssumeRole` permissions, set the **Assume Role ARN** to the target role.
 
 {{< admonition type="tip" >}}
@@ -250,7 +250,7 @@ datasources:
       awsSecretKey: YOUR_SECRET_KEY
 ```
 
-### Default Credentials / IAM Role
+### AWS SDK Default
 
 ```yaml
 apiVersion: 1

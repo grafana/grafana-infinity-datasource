@@ -1,6 +1,7 @@
 import { css } from '@emotion/css';
 import { onUpdateDatasourceSecureJsonDataOption, DataSourcePluginOptionsEditorProps, SelectableValue } from '@grafana/data';
 import { Icon, InlineFormLabel, LegacyForms, RadioButtonGroup, Combobox, Grid, Link, useTheme2 } from '@grafana/ui';
+import { config } from '@grafana/runtime';
 import React, { useState } from 'react';
 import { AllowedHostsEditor } from '@/editors/config/AllowedHosts';
 import { AzureBlobAuthEditor } from '@/editors/config/Auth.AzureBlob';
@@ -235,14 +236,16 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
             {authType === 'aws' && (
               <>
                 <div className="gf-form">
-                  <InlineFormLabel tooltip="Choose how to authenticate with AWS. 'Access & Secret Key' uses static credentials. 'Default Credentials / IAM Role' uses the default AWS credential chain (environment variables, EC2 instance profile, ECS task role, etc.).">
+                  <InlineFormLabel tooltip="Choose how to authenticate with AWS. 'Access and secret key' uses static credentials. 'AWS SDK Default' uses the default AWS credential chain (environment variables, EC2 instance profile, ECS task role, etc.).">
                     Authentication Provider
                   </InlineFormLabel>
                   <RadioButtonGroup<AWSAuthType>
-                    options={[
-                      { value: 'keys', label: 'Access & Secret Key' },
-                      { value: 'default', label: 'Default Credentials / IAM Role' },
-                    ]}
+                    options={(
+                      [
+                        { value: 'keys', label: 'Access and secret key' },
+                        { value: 'default', label: 'AWS SDK Default' },
+                      ] as Array<{ value: AWSAuthType; label: string }>
+                    ).filter((o) => (config.awsAllowedAuthProviders ?? []).includes(o.value))}
                     value={options.jsonData?.aws?.authType || 'keys'}
                     onChange={(awsAuthType = 'keys') => onAwsAuthTypeChange(awsAuthType)}
                   />
@@ -271,9 +274,6 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
                         isConfigured={Boolean(secureJsonFields?.awsAccessKey)}
                         onReset={() => onResetSecret('awsAccessKey')}
                         onChange={onUpdateDatasourceSecureJsonDataOption(props, 'awsAccessKey')}
-                        label="Access Key"
-                        aria-label="aws access key"
-                        placeholder="aws access key"
                         label="Access Key ID"
                         aria-label="Access Key ID"
                         placeholder="Access Key ID"
@@ -295,29 +295,33 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
                     </div>
                   </>
                 )}
-                <div className="gf-form">
-                  <FormField
-                    label="Assume Role ARN"
-                    placeholder="arn:aws:iam::123456789012:role/MyRole (optional)"
-                    tooltip="Optional. Specify an IAM Role ARN to assume for cross-account or role-based access."
-                    labelWidth={10}
-                    inputWidth={24}
-                    value={props.options.jsonData?.aws?.assumeRoleArn || ''}
-                    onChange={(e) => onAwsAssumeRoleArnChange(e.currentTarget.value)}
-                  ></FormField>
-                </div>
-                {props.options.jsonData?.aws?.assumeRoleArn && (
-                  <div className="gf-form">
-                    <FormField
-                      label="External ID"
-                      placeholder="external id (optional)"
-                      tooltip="Optional. Used for cross-account role assumption when the trust policy requires an external ID."
-                      labelWidth={10}
-                      inputWidth={24}
-                      value={props.options.jsonData?.aws?.externalId || ''}
-                      onChange={(e) => onAwsExternalIdChange(e.currentTarget.value)}
-                    ></FormField>
-                  </div>
+                {config.awsAssumeRoleEnabled && (
+                  <>
+                    <div className="gf-form">
+                      <FormField
+                        label="Assume Role ARN"
+                        placeholder="arn:aws:iam::123456789012:role/MyRole (optional)"
+                        tooltip="Optional. Specify an IAM Role ARN to assume for cross-account or role-based access."
+                        labelWidth={10}
+                        inputWidth={24}
+                        value={props.options.jsonData?.aws?.assumeRoleArn || ''}
+                        onChange={(e) => onAwsAssumeRoleArnChange(e.currentTarget.value)}
+                      ></FormField>
+                    </div>
+                    {props.options.jsonData?.aws?.assumeRoleArn && (
+                      <div className="gf-form">
+                        <FormField
+                          label="External ID"
+                          placeholder="external id (optional)"
+                          tooltip="Optional. Used for cross-account role assumption when the trust policy requires an external ID."
+                          labelWidth={10}
+                          inputWidth={24}
+                          value={props.options.jsonData?.aws?.externalId || ''}
+                          onChange={(e) => onAwsExternalIdChange(e.currentTarget.value)}
+                        ></FormField>
+                      </div>
+                    )}
+                  </>
                 )}
               </>
             )}
