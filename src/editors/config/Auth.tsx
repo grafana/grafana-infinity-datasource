@@ -288,10 +288,9 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
                         isConfigured={Boolean(secureJsonFields?.awsSecretKey)}
                         onReset={() => onResetSecret('awsSecretKey')}
                         onChange={onUpdateDatasourceSecureJsonDataOption(props, 'awsSecretKey')}
-                        label="Secret Key"
-                        aria-label="aws secret key"
-                        placeholder="aws secret key"
-                        tooltip="aws secret key"
+                        label="Secret Access Key"
+                        aria-label="Secret Access Key"
+                        placeholder="Secret Access Key"
                       />
                     </div>
                   </>
