@@ -274,7 +274,9 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
                         label="Access Key"
                         aria-label="aws access key"
                         placeholder="aws access key"
-                        tooltip="aws access key"
+                        label="Access Key ID"
+                        aria-label="Access Key ID"
+                        placeholder="Access Key ID"
                       />
                     </div>
                     <div className="gf-form">
