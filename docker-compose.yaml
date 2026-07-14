@@ -8,3 +8,5 @@ services:
       - ./conf:/grafana-config
     environment:
       - GF_PATHS_CONFIG=/grafana-config/grafana.ini 
+      - GF_DATABASE_QUERY_RETRIES=5
+      - GF_DATABASE_TRANSACTION_RETRIES=10
