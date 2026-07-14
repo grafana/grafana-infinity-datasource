@@ -120,6 +120,7 @@
     "notequals",
     "notin",
     "offcanvas",
+    "omitempty",
     "openfeature",
     "openissues",
     "openpr",
