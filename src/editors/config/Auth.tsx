@@ -88,6 +88,21 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
   const onUserNameChange = (basicAuthUser: string) => {
     onOptionsChange({ ...options, basicAuthUser });
   };
+  const allowedAwsAuthOptions = AWS_AUTH_OPTIONS.filter((option) => option.value === 'keys' || (config.awsAllowedAuthProviders ?? []).includes(option.value));
+  const configuredAwsAuthType = options.jsonData.aws?.authType;
+  const effectiveAwsAuthType = allowedAwsAuthOptions.some((option) => option.value === configuredAwsAuthType) ? configuredAwsAuthType : 'keys';
+
+  useEffect(() => {
+    if (authType === 'aws' && configuredAwsAuthType && configuredAwsAuthType !== effectiveAwsAuthType) {
+      onOptionsChange({
+        ...options,
+        jsonData: {
+          ...options.jsonData,
+          aws: { ...options.jsonData.aws, authType: effectiveAwsAuthType },
+        },
+      });
+    }
+  }, [authType, configuredAwsAuthType, effectiveAwsAuthType, onOptionsChange, options]);
   const onAPIKeyKeyChange = (apiKeyKey: string) => {
     onOptionsChange({ ...options, jsonData: { ...options.jsonData, apiKeyKey } });
   };
