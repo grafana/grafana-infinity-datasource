@@ -53,12 +53,38 @@ describe('AWS auth editor', () => {
       expect(screen.getByText('AWS SDK Default')).toBeInTheDocument();
     });
 
-    it('renders no provider options when none are allowed', () => {
+    it('always renders the existing keys provider when no providers are allowed', () => {
       config.awsAllowedAuthProviders = [];
       config.awsAssumeRoleEnabled = false;
       renderAws();
-      expect(screen.queryByText('Access and secret key')).not.toBeInTheDocument();
+      expect(screen.getByText('Access and secret key')).toBeInTheDocument();
       expect(screen.queryByText('AWS SDK Default')).not.toBeInTheDocument();
+    });
+
+    it('defaults to the existing keys provider when the saved provider is missing', () => {
+      config.awsAllowedAuthProviders = ['default'];
+      config.awsAssumeRoleEnabled = false;
+      const { onOptionsChange } = renderAws();
+
+      expect(screen.getByRole('radio', { name: 'Access and secret key' })).toBeChecked();
+      expect(screen.getByText('Access Key ID')).toBeInTheDocument();
+      expect(screen.getByText('Secret Access Key')).toBeInTheDocument();
+      expect(onOptionsChange).not.toHaveBeenCalled();
+    });
+
+    it('falls back to keys when the saved default provider is no longer allowed', () => {
+      config.awsAllowedAuthProviders = [];
+      config.awsAssumeRoleEnabled = false;
+      const { onOptionsChange } = renderAws({ authType: 'default' });
+
+      expect(screen.getByRole('radio', { name: 'Access and secret key' })).toBeChecked();
+      expect(onOptionsChange).toHaveBeenCalledWith(
+        expect.objectContaining({
+          jsonData: expect.objectContaining({
+            aws: expect.objectContaining({ authType: 'keys' }),
+          }),
+        })
+      );
     });
   });
 
