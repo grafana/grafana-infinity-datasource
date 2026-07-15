@@ -48,20 +48,24 @@ Temporary credentials obtained via `AssumeRole` are automatically refreshed by t
 
 ## Grafana server configuration
 
-The Grafana server must allow the AWS authentication providers used by the plugin. Add the following to `grafana.ini` or set equivalent environment variables:
+The Grafana server must allow the AWS authentication providers used by the plugin and forward its AWS settings to the Infinity data source. Add the following to `grafana.ini` or set equivalent environment variables:
 
 ```ini
 [aws]
-allowed_auth_providers = default, keys, credentials
+allowed_auth_providers = default,keys
 assume_role_enabled = true
+forward_settings_to_plugins = yesoreyeram-infinity-datasource
 ```
 
 Or via environment variables:
 
 ```
-GF_AWS_ALLOWED_AUTH_PROVIDERS=default,keys,credentials
+GF_AWS_ALLOWED_AUTH_PROVIDERS=default,keys
 GF_AWS_ASSUME_ROLE_ENABLED=true
+GF_AWS_FORWARD_SETTINGS_TO_PLUGINS=yesoreyeram-infinity-datasource
 ```
+
+If `forward_settings_to_plugins` already contains other data source plugin IDs, append `yesoreyeram-infinity-datasource` to the existing comma-separated list instead of replacing it.
 
 ## Before you begin
 
