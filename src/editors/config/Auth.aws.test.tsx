@@ -16,15 +16,16 @@ jest.mock('@grafana/ui', () => ({
 }));
 
 const renderAws = (aws: Record<string, unknown> = {}, secureJsonFields: Record<string, boolean> = {}) => {
+  const onOptionsChange = jest.fn();
   const props = {
-    onOptionsChange: jest.fn(),
+    onOptionsChange,
     options: {
       jsonData: { auth_method: 'aws', aws },
       secureJsonFields,
       secureJsonData: {},
     },
   } as unknown as DataSourcePluginOptionsEditorProps<InfinityOptions>;
-  return render(<AuthEditor {...props} />);
+  return { ...render(<AuthEditor {...props} />), onOptionsChange };
 };
 
 describe('AWS auth editor', () => {
