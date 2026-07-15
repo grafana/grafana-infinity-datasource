@@ -329,7 +329,7 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
                           label="External ID"
                           placeholder="external id (optional)"
                           tooltip="Optional. Used for cross-account role assumption when the trust policy requires an external ID."
-                          labelWidth={10}
+                          labelWidth={AWS_LABEL_WIDTH}
                           inputWidth={24}
                           value={props.options.jsonData?.aws?.externalId || ''}
                           onChange={(e) => onAwsExternalIdChange(e.currentTarget.value)}
