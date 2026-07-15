@@ -2,13 +2,19 @@ import { css } from '@emotion/css';
 import { onUpdateDatasourceSecureJsonDataOption, DataSourcePluginOptionsEditorProps, SelectableValue } from '@grafana/data';
 import { Icon, InlineFormLabel, LegacyForms, RadioButtonGroup, Combobox, Grid, Link, useTheme2 } from '@grafana/ui';
 import { config } from '@grafana/runtime';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AllowedHostsEditor } from '@/editors/config/AllowedHosts';
 import { AzureBlobAuthEditor } from '@/editors/config/Auth.AzureBlob';
 import { OAuthInputsEditor } from '@/editors/config/OAuthInput';
 import { OthersAuthentication } from '@/editors/config/OtherAuthProviders';
 import { AWSRegions } from '@/constants';
 import type { APIKeyType, AWSAuthType, AuthType, InfinityOptions, InfinitySecureOptions } from '@/types';
+
+const AWS_LABEL_WIDTH = 12;
+const AWS_AUTH_OPTIONS: Array<{ value: AWSAuthType; label: string }> = [
+  { value: 'keys', label: 'Access and secret key' },
+  { value: 'default', label: 'AWS SDK Default' },
+];
 
 const authTypes: Array<SelectableValue<AuthType | 'others'> & { logo?: string }> = [
   { value: 'none', label: 'No Auth' },
@@ -267,7 +273,7 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
                   <FormField
                     label="Service"
                     placeholder="monitoring"
-                    labelWidth={10}
+                    labelWidth={AWS_LABEL_WIDTH}
                     value={props.options.jsonData?.aws?.service || ''}
                     onChange={(e) => onAwsServiceChange(e.currentTarget.value)}
                   ></FormField>
@@ -276,7 +282,7 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
                   <>
                     <div className="gf-form">
                       <SecretFormField
-                        labelWidth={10}
+                        labelWidth={AWS_LABEL_WIDTH}
                         inputWidth={12}
                         required
                         value={secureJsonData.awsAccessKey || ''}
@@ -290,7 +296,7 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
                     </div>
                     <div className="gf-form">
                       <SecretFormField
-                        labelWidth={10}
+                        labelWidth={AWS_LABEL_WIDTH}
                         inputWidth={12}
                         required
                         value={secureJsonData.awsSecretKey || ''}
@@ -342,7 +348,11 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
       {authType !== 'none' && authType !== 'azureBlob' && !othersOpen && (
         <>
           <h5 className={styles.subheading}>Allowed hosts</h5>
-          <AllowedHostsEditor options={options} onOptionsChange={onOptionsChange} />
+          <AllowedHostsEditor
+            options={options}
+            onOptionsChange={onOptionsChange}
+            labelWidth={authType === 'aws' ? AWS_LABEL_WIDTH : undefined}
+          />
         </>
       )}
     </>
