@@ -251,19 +251,13 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
             {authType === 'aws' && (
               <>
                 <div className="gf-form">
-                  <InlineFormLabel tooltip="Choose how to authenticate with AWS. 'Access and secret key' uses static credentials. 'AWS SDK Default' uses the default AWS credential chain (environment variables, EC2 instance profile, ECS task role, etc.).">
+                  <InlineFormLabel
+                    width={AWS_LABEL_WIDTH}
+                    tooltip="Choose how to authenticate with AWS. 'Access and secret key' uses static credentials. 'AWS SDK Default' uses the default AWS credential chain (environment variables, EC2 instance profile, ECS task role, etc.)."
+                  >
                     Authentication Provider
                   </InlineFormLabel>
-                  <RadioButtonGroup<AWSAuthType>
-                    options={(
-                      [
-                        { value: 'keys', label: 'Access and secret key' },
-                        { value: 'default', label: 'AWS SDK Default' },
-                      ] as Array<{ value: AWSAuthType; label: string }>
-                    ).filter((o) => (config.awsAllowedAuthProviders ?? []).includes(o.value))}
-                    value={options.jsonData?.aws?.authType || 'keys'}
-                    onChange={(awsAuthType = 'keys') => onAwsAuthTypeChange(awsAuthType)}
-                  />
+                  <RadioButtonGroup<AWSAuthType> options={allowedAwsAuthOptions} value={effectiveAwsAuthType} onChange={(awsAuthType) => awsAuthType && onAwsAuthTypeChange(awsAuthType)} />
                 </div>
                 <div className="gf-form">
                   <InlineFormLabel width={AWS_LABEL_WIDTH}>Region</InlineFormLabel>
