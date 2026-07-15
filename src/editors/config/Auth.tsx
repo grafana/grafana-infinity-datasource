@@ -278,7 +278,7 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
                     onChange={(e) => onAwsServiceChange(e.currentTarget.value)}
                   ></FormField>
                 </div>
-                {(!options.jsonData?.aws?.authType || options.jsonData?.aws?.authType === 'keys') && (
+                {effectiveAwsAuthType === 'keys' && (
                   <>
                     <div className="gf-form">
                       <SecretFormField
