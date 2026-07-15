@@ -266,7 +266,7 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
                   />
                 </div>
                 <div className="gf-form">
-                  <InlineFormLabel>Region</InlineFormLabel>
+                  <InlineFormLabel width={AWS_LABEL_WIDTH}>Region</InlineFormLabel>
                   <Combobox width={24} options={AWSRegions} placeholder="us-east-2" onChange={(e) => onAwsRegionChange(e.value!)} value={props.options.jsonData?.aws?.region || ''} />
                 </div>
                 <div className="gf-form">
