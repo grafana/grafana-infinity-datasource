@@ -317,7 +317,7 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
                         label="Assume Role ARN"
                         placeholder="arn:aws:iam::123456789012:role/MyRole (optional)"
                         tooltip="Optional. Specify an IAM Role ARN to assume for cross-account or role-based access."
-                        labelWidth={10}
+                        labelWidth={AWS_LABEL_WIDTH}
                         inputWidth={24}
                         value={props.options.jsonData?.aws?.assumeRoleArn || ''}
                         onChange={(e) => onAwsAssumeRoleArnChange(e.currentTarget.value)}
