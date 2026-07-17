@@ -16,6 +16,7 @@ labels:
     - oss
     - enterprise
     - cloud
+review_date: 2026-06-25
 weight: 120
 ---
 
@@ -142,7 +143,7 @@ This flattens nested arrays into a single result set.
 
 Computed columns, filter, and summarize are shared backend parser features that work the same way in both the JQ and JSONata parsers.
 
-For the full reference on these features — including available operators, expression syntax, filter examples, aggregation functions, and group-by options — refer to [Computed columns, filter, and summarize](./backend/#computed-columns-filter-and-summarize) in the JSONata parser documentation.
+For the full reference on these features, including available operators, expression syntax, filter examples, aggregation functions, and group-by options, refer to [Computed columns, filter, and summarize](/docs/plugins/yesoreyeram-infinity-datasource/latest/query/backend/#computed-columns-filter-and-summarize) in the JSONata parser documentation.
 
 ## JQ vs JSONata
 

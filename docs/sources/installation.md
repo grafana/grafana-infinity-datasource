@@ -17,6 +17,7 @@ labels:
     - oss
     - enterprise
     - cloud
+review_date: 2026-06-25
 weight: 15
 ---
 
@@ -26,7 +27,7 @@ You can install the Infinity data source plugin using several methods, depending
 
 ## Before you begin
 
-- Grafana 10.4.8 or later.
+- Grafana 11.6 or later.
 - Administrator access to your Grafana instance.
 
 ## Grafana Cloud

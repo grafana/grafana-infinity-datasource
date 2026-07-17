@@ -22,6 +22,7 @@ labels:
     - oss
     - enterprise
     - cloud
+review_date: 2026-06-25
 weight: 20
 ---
 
@@ -42,7 +43,7 @@ This page explains how to:
 
 Before you configure the Infinity data source, you need:
 
-- Grafana version 10.0 or later
+- Grafana version 11.6 or later
 - [Organization admin permissions](https://grafana.com/docs/grafana/latest/administration/roles-and-permissions/#organization-roles) in Grafana, or equivalent [RBAC permissions](https://grafana.com/docs/grafana/latest/administration/roles-and-permissions/access-control/) to manage data sources
 - Network access from Grafana to your target API endpoints
 - Appropriate credentials for authenticated endpoints (API keys, OAuth credentials, etc.)
