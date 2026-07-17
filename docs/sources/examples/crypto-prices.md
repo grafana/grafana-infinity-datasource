@@ -3,6 +3,8 @@ slug: '/examples/crypto-prices'
 title: Crypto prices
 menuTitle: Crypto prices
 description: Visualize cryptocurrency prices from the CoinPaprika API using the Infinity data source.
+aliases:
+  - /docs/plugins/yesoreyeram-infinity-datasource/latest/examples/crypto-prices/
 keywords:
   - infinity
   - CoinPaprika
