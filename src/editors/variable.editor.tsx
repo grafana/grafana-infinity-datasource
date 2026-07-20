@@ -48,7 +48,11 @@ const FieldMapping = (props: Props) => {
         if (!isActive) {
           return;
         }
-        const fieldNames = ((response.data[0] || { fields: [] }) as DataFrame).fields.map((f) => f.name);
+        // Backend parser queries with unnamed columns yield fields whose name is omitted
+        // on the wire, and Combobox options must have a defined value
+        const fieldNames = ((response.data[0] || { fields: [] }) as DataFrame).fields
+          .map((f) => f.name)
+          .filter((name): name is string => typeof name === 'string' && name !== '');
         setChoices(fieldNames.map((f) => ({ value: f, label: f })));
         setIsLoading(false);
       },
