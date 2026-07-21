@@ -16,12 +16,17 @@ labels:
     - oss
     - enterprise
     - cloud
+review_date: 2026-06-25
 weight: 60
 ---
 
 # URL configuration
 
 The Infinity data source supports advanced URL configuration options including HTTP methods, custom headers, query parameters, and request bodies. Use these options to connect to any REST API or web endpoint.
+
+{{< admonition type="note" >}}
+If you specify a URL without an `http://` or `https://` scheme, the Infinity data source defaults to `https://` for non-localhost URLs. To use `http://` instead, include the scheme explicitly in the URL.
+{{< /admonition >}}
 
 ## Before you begin
 

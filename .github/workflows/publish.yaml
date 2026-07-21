@@ -35,5 +35,4 @@ jobs:
       docs-only: ${{ fromJSON(github.event.inputs.docs-only) }}
       run-playwright: true
       run-playwright-with-skip-grafana-dev-image: true
-      run-playwright-with-skip-grafana-react-19-preview-image: true
       github-draft-release: false
