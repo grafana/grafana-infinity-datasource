@@ -1,13 +1,20 @@
 import { css } from '@emotion/css';
 import { onUpdateDatasourceSecureJsonDataOption, DataSourcePluginOptionsEditorProps, SelectableValue } from '@grafana/data';
 import { Icon, InlineFormLabel, LegacyForms, RadioButtonGroup, Combobox, Grid, Link, useTheme2 } from '@grafana/ui';
-import React, { useState } from 'react';
+import { config } from '@grafana/runtime';
+import React, { useEffect, useState } from 'react';
 import { AllowedHostsEditor } from '@/editors/config/AllowedHosts';
 import { AzureBlobAuthEditor } from '@/editors/config/Auth.AzureBlob';
 import { OAuthInputsEditor } from '@/editors/config/OAuthInput';
 import { OthersAuthentication } from '@/editors/config/OtherAuthProviders';
 import { AWSRegions } from '@/constants';
-import type { APIKeyType, AuthType, InfinityOptions, InfinitySecureOptions } from '@/types';
+import type { APIKeyType, AWSAuthType, AuthType, InfinityOptions, InfinitySecureOptions } from '@/types';
+
+const AWS_LABEL_WIDTH = 12;
+const AWS_AUTH_OPTIONS: Array<{ value: AWSAuthType; label: string }> = [
+  { value: 'keys', label: 'Access and secret key' },
+  { value: 'default', label: 'AWS SDK Default' },
+];
 
 const authTypes: Array<SelectableValue<AuthType | 'others'> & { logo?: string }> = [
   { value: 'none', label: 'No Auth' },
@@ -87,14 +94,38 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
   const onUserNameChange = (basicAuthUser: string) => {
     onOptionsChange({ ...options, basicAuthUser });
   };
+  const allowedAwsAuthOptions = AWS_AUTH_OPTIONS.filter((option) => option.value === 'keys' || (config.awsAllowedAuthProviders ?? []).includes(option.value));
+  const configuredAwsAuthType = options.jsonData.aws?.authType;
+  const effectiveAwsAuthType = allowedAwsAuthOptions.some((option) => option.value === configuredAwsAuthType) ? configuredAwsAuthType : 'keys';
+
+  useEffect(() => {
+    if (authType === 'aws' && configuredAwsAuthType && configuredAwsAuthType !== effectiveAwsAuthType) {
+      onOptionsChange({
+        ...options,
+        jsonData: {
+          ...options.jsonData,
+          aws: { ...options.jsonData.aws, authType: effectiveAwsAuthType },
+        },
+      });
+    }
+  }, [authType, configuredAwsAuthType, effectiveAwsAuthType, onOptionsChange, options]);
   const onAPIKeyKeyChange = (apiKeyKey: string) => {
     onOptionsChange({ ...options, jsonData: { ...options.jsonData, apiKeyKey } });
+  };
+  const onAwsAuthTypeChange = (awsAuthType: AWSAuthType) => {
+    onOptionsChange({ ...options, jsonData: { ...options.jsonData, aws: { ...options.jsonData?.aws, authType: awsAuthType } } });
   };
   const onAwsRegionChange = (region: string) => {
     onOptionsChange({ ...options, jsonData: { ...options.jsonData, aws: { ...options.jsonData?.aws, region } } });
   };
   const onAwsServiceChange = (service: string) => {
     onOptionsChange({ ...options, jsonData: { ...options.jsonData, aws: { ...options.jsonData?.aws, service } } });
+  };
+  const onAwsAssumeRoleArnChange = (assumeRoleArn: string) => {
+    onOptionsChange({ ...options, jsonData: { ...options.jsonData, aws: { ...options.jsonData?.aws, assumeRoleArn } } });
+  };
+  const onAwsExternalIdChange = (externalId: string) => {
+    onOptionsChange({ ...options, jsonData: { ...options.jsonData, aws: { ...options.jsonData?.aws, externalId } } });
   };
   const onResetSecret = (key: keyof InfinitySecureOptions) => {
     onOptionsChange({
@@ -226,48 +257,87 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
             {authType === 'aws' && (
               <>
                 <div className="gf-form">
-                  <InlineFormLabel>Region</InlineFormLabel>
+                  <InlineFormLabel
+                    width={AWS_LABEL_WIDTH}
+                    tooltip="Choose how to authenticate with AWS. 'Access and secret key' uses static credentials. 'AWS SDK Default' uses the default AWS credential chain (environment variables, EC2 instance profile, ECS task role, etc.)."
+                  >
+                    Authentication Provider
+                  </InlineFormLabel>
+                  <RadioButtonGroup<AWSAuthType> options={allowedAwsAuthOptions} value={effectiveAwsAuthType} onChange={(awsAuthType) => awsAuthType && onAwsAuthTypeChange(awsAuthType)} />
+                </div>
+                <div className="gf-form">
+                  <InlineFormLabel width={AWS_LABEL_WIDTH}>Region</InlineFormLabel>
                   <Combobox width={24} options={AWSRegions} placeholder="us-east-2" onChange={(e) => onAwsRegionChange(e.value!)} value={props.options.jsonData?.aws?.region || ''} />
                 </div>
                 <div className="gf-form">
                   <FormField
                     label="Service"
                     placeholder="monitoring"
-                    labelWidth={10}
+                    labelWidth={AWS_LABEL_WIDTH}
                     value={props.options.jsonData?.aws?.service || ''}
                     onChange={(e) => onAwsServiceChange(e.currentTarget.value)}
                   ></FormField>
                 </div>
-                <div className="gf-form">
-                  <SecretFormField
-                    labelWidth={10}
-                    inputWidth={12}
-                    required
-                    value={secureJsonData.awsAccessKey || ''}
-                    isConfigured={(secureJsonFields && secureJsonFields.awsAccessKey) as boolean}
-                    onReset={() => onResetSecret('awsAccessKey')}
-                    onChange={onUpdateDatasourceSecureJsonDataOption(props, 'awsAccessKey')}
-                    label="Access Key"
-                    aria-label="aws access key"
-                    placeholder="aws access key"
-                    tooltip="aws access key"
-                  />
-                </div>
-                <div className="gf-form">
-                  <SecretFormField
-                    labelWidth={10}
-                    inputWidth={12}
-                    required
-                    value={secureJsonData.awsSecretKey || ''}
-                    isConfigured={(secureJsonFields && secureJsonFields.awsSecretKey) as boolean}
-                    onReset={() => onResetSecret('awsSecretKey')}
-                    onChange={onUpdateDatasourceSecureJsonDataOption(props, 'awsSecretKey')}
-                    label="Secret Key"
-                    aria-label="aws secret key"
-                    placeholder="aws secret key"
-                    tooltip="aws secret key"
-                  />
-                </div>
+                {effectiveAwsAuthType === 'keys' && (
+                  <>
+                    <div className="gf-form">
+                      <SecretFormField
+                        labelWidth={AWS_LABEL_WIDTH}
+                        inputWidth={12}
+                        required
+                        value={secureJsonData.awsAccessKey || ''}
+                        isConfigured={Boolean(secureJsonFields?.awsAccessKey)}
+                        onReset={() => onResetSecret('awsAccessKey')}
+                        onChange={onUpdateDatasourceSecureJsonDataOption(props, 'awsAccessKey')}
+                        label="Access Key ID"
+                        aria-label="Access Key ID"
+                        placeholder="Access Key ID"
+                      />
+                    </div>
+                    <div className="gf-form">
+                      <SecretFormField
+                        labelWidth={AWS_LABEL_WIDTH}
+                        inputWidth={12}
+                        required
+                        value={secureJsonData.awsSecretKey || ''}
+                        isConfigured={Boolean(secureJsonFields?.awsSecretKey)}
+                        onReset={() => onResetSecret('awsSecretKey')}
+                        onChange={onUpdateDatasourceSecureJsonDataOption(props, 'awsSecretKey')}
+                        label="Secret Access Key"
+                        aria-label="Secret Access Key"
+                        placeholder="Secret Access Key"
+                      />
+                    </div>
+                  </>
+                )}
+                {config.awsAssumeRoleEnabled && (
+                  <>
+                    <div className="gf-form">
+                      <FormField
+                        label="Assume Role ARN"
+                        placeholder="arn:aws:iam::123456789012:role/MyRole (optional)"
+                        tooltip="Optional. Specify an IAM Role ARN to assume for cross-account or role-based access."
+                        labelWidth={AWS_LABEL_WIDTH}
+                        inputWidth={24}
+                        value={props.options.jsonData?.aws?.assumeRoleArn || ''}
+                        onChange={(e) => onAwsAssumeRoleArnChange(e.currentTarget.value)}
+                      ></FormField>
+                    </div>
+                    {props.options.jsonData?.aws?.assumeRoleArn && (
+                      <div className="gf-form">
+                        <FormField
+                          label="External ID"
+                          placeholder="external id (optional)"
+                          tooltip="Optional. Used for cross-account role assumption when the trust policy requires an external ID."
+                          labelWidth={AWS_LABEL_WIDTH}
+                          inputWidth={24}
+                          value={props.options.jsonData?.aws?.externalId || ''}
+                          onChange={(e) => onAwsExternalIdChange(e.currentTarget.value)}
+                        ></FormField>
+                      </div>
+                    )}
+                  </>
+                )}
               </>
             )}
             {authType === 'oauth2' && <OAuthInputsEditor {...props} />}
@@ -278,7 +348,11 @@ export const AuthEditor = (props: DataSourcePluginOptionsEditorProps<InfinityOpt
       {authType !== 'none' && authType !== 'azureBlob' && !othersOpen && (
         <>
           <h5 className={styles.subheading}>Allowed hosts</h5>
-          <AllowedHostsEditor options={options} onOptionsChange={onOptionsChange} />
+          <AllowedHostsEditor
+            options={options}
+            onOptionsChange={onOptionsChange}
+            labelWidth={authType === 'aws' ? AWS_LABEL_WIDTH : undefined}
+          />
         </>
       )}
     </>
