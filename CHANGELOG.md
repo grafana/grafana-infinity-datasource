@@ -1,5 +1,11 @@
 # Change Log
 
+## 3.11.1
+
+### Patch Changes
+
+🐛 Update downstream error classification
+
 ## 3.11.0
 
 ### Minor Changes
