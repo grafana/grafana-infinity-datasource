@@ -40,7 +40,7 @@
     "dev": "webpack -w -c ./webpack.config.ts --env development",
     "e2e": "playwright test",
     "lint": "eslint --cache .",
-    "lint:fix": "yarn run lint --fix && prettier --write --list-different .",
+    "lint:fix": "npm run lint -- --fix && prettier --write --list-different .",
     "docs": "cd docs && make docs",
     "server": "docker compose up --build",
     "sign": "npx --yes @grafana/sign-plugin@latest",
@@ -48,7 +48,7 @@
     "test": "jest --watch --onlyChanged",
     "test:ci": "jest --passWithNoTests --maxWorkers 4",
     "typecheck": "tsc --noEmit",
-    "watch": "yarn dev"
+    "watch": "npm run dev"
   },
   "dependencies": {
     "@emotion/css": "11.13.5",
@@ -135,12 +135,12 @@
     "webpack-subresource-integrity": "5.1.0",
     "webpack-virtual-modules": "0.6.2"
   },
-  "resolutions": {
+  "overrides": {
     "fast-xml-parser": "5.7.0",
     "minimatch": "10.2.5",
     "@openfeature/core": "1.9.2",
     "serialize-javascript": "7.0.5",
     "tar": "7.5.13"
   },
-  "packageManager": "yarn@4.13.0"
+  "packageManager": "npm@11.18.0"
 }
