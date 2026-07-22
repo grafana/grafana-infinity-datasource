@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, within } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { EditorMode, InfinityQuery, InfinityQueryFormat } from '@/types';
 import { InfinityEditorProps, InfinityQueryEditor } from '@/editors/query/infinityQuery';
 import { Datasource } from '@/datasource';
@@ -66,5 +66,51 @@ describe('InfinityQueryEditor', () => {
 
     expect(mockOnChange).not.toHaveBeenCalled();
     expect(mockOnRunQuery).not.toHaveBeenCalled();
+  });
+
+  it('shows pagination editor for graphql backend URL queries', () => {
+    const query = {
+      refId: 'A',
+      type: 'graphql',
+      parser: 'backend',
+      source: 'url',
+      url: 'https://api.github.com/graphql',
+      root_selector: 'data.search.edges',
+      format: 'table',
+    } as InfinityQuery;
+    const props: InfinityEditorProps = {
+      query,
+      onChange: mockOnChange,
+      onRunQuery: mockOnRunQuery,
+      instanceSettings: { jsonData: {} },
+      mode: 'standard' as EditorMode,
+      datasource: {} as Datasource,
+    };
+
+    render(<InfinityQueryEditor {...props} />);
+    expect(screen.getByText('Pagination')).toBeInTheDocument();
+  });
+
+  it('does not show pagination editor for non-backend graphql queries', () => {
+    const query = {
+      refId: 'A',
+      type: 'graphql',
+      parser: 'simple',
+      source: 'url',
+      url: 'https://api.github.com/graphql',
+      root_selector: 'data.search.edges',
+      format: 'table',
+    } as InfinityQuery;
+    const props: InfinityEditorProps = {
+      query,
+      onChange: mockOnChange,
+      onRunQuery: mockOnRunQuery,
+      instanceSettings: { jsonData: {} },
+      mode: 'standard' as EditorMode,
+      datasource: {} as Datasource,
+    };
+
+    render(<InfinityQueryEditor {...props} />);
+    expect(screen.queryByText('Pagination')).not.toBeInTheDocument();
   });
 });

@@ -7,6 +7,50 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func TestCanPaginateQuery(t *testing.T) {
+	tests := []struct {
+		name  string
+		query models.Query
+		want  bool
+	}{
+		{
+			name:  "supports graphql page mode for backend parser",
+			query: models.Query{Type: models.QueryTypeGraphQL, Parser: models.InfinityParserBackend, PageMode: models.PaginationModePage},
+			want:  true,
+		},
+		{
+			name:  "supports csv list mode for jq-backend parser",
+			query: models.Query{Type: models.QueryTypeCSV, Parser: models.InfinityParserJQBackend, PageMode: models.PaginationModeList},
+			want:  true,
+		},
+		{
+			name:  "supports graphql cursor mode for jq-backend parser",
+			query: models.Query{Type: models.QueryTypeGraphQL, Parser: models.InfinityParserJQBackend, PageMode: models.PaginationModeCursor},
+			want:  true,
+		},
+		{
+			name:  "does not support csv cursor mode",
+			query: models.Query{Type: models.QueryTypeCSV, Parser: models.InfinityParserBackend, PageMode: models.PaginationModeCursor},
+			want:  false,
+		},
+		{
+			name:  "does not support pagination for simple parser",
+			query: models.Query{Type: models.QueryTypeJSON, Parser: models.InfinityParserSimple, PageMode: models.PaginationModePage},
+			want:  false,
+		},
+		{
+			name:  "does not support pagination with none page mode",
+			query: models.Query{Type: models.QueryTypeJSON, Parser: models.InfinityParserBackend, PageMode: models.PaginationModeNone},
+			want:  false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			require.Equal(t, tt.want, canPaginateQuery(tt.query))
+		})
+	}
+}
+
 func TestApplyPaginationItemToQuery(t *testing.T) {
 	t.Run(string(models.PaginationParamTypeQuery), func(t *testing.T) {
 		tests := []struct {
@@ -234,6 +278,11 @@ func TestApplyPaginationItemToQuery(t *testing.T) {
 					require.Equal(t, tt.want, got)
 				})
 			}
+			t.Run("should replace quoted graphql cursor token with null when field value is empty", func(t *testing.T) {
+				query := models.Query{URLOptions: models.URLOptions{BodyGraphQLVariables: `{ "after" : "${__pagination.cursor}" }`}}
+				got := ApplyPaginationItemToQuery(query, models.PaginationParamTypeReplace, "cursor", "")
+				require.Equal(t, `{ "after" : null }`, got.URLOptions.BodyGraphQLVariables)
+			})
 		})
 		t.Run("replace params in URL Headers", func(t *testing.T) {
 			tests := []struct {

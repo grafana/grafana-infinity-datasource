@@ -59,6 +59,10 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
     query.type !== 'groq' &&
     query.columns &&
     query.columns.length > 0;
+  const canShowPaginationEditor =
+    query.source === 'url' &&
+    ['json', 'graphql', 'csv', 'tsv', 'xml', 'html'].includes(query.type) &&
+    (query.parser === 'backend' || query.parser === 'jq-backend');
   return (
     <div className="infinity-query-editor" data-testid="infinity-query-editor" style={{ marginBottom: '5px' }}>
       <EditorRows>
@@ -94,9 +98,7 @@ export const InfinityQueryEditor = (props: InfinityEditorProps) => {
         )}
         {(query.type === 'json' || query.type === 'graphql' || query.type === 'csv' || query.type === 'tsv' || query.type === 'xml') &&
           (query.parser === 'backend' || query.parser === 'jq-backend') && <ExperimentalFeatures query={query} onChange={onChange} onRunQuery={onRunQuery} />}
-        {query.type === 'json' && (query.parser === 'backend' || query.parser === 'jq-backend') && query.source === 'url' && (
-          <PaginationEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />
-        )}
+        {canShowPaginationEditor && <PaginationEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />}
         {query.type === 'transformations' && <TransformationsEditor query={query} onChange={onChange} onRunQuery={onRunQuery} />}
         <QueryWarning query={query} />
       </EditorRows>
