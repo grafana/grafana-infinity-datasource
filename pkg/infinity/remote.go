@@ -46,9 +46,6 @@ func GetPaginatedResults(ctx context.Context, pCtx *backend.PluginContext, query
 		}
 	case models.PaginationModePage:
 		initialPageNumber := query.PageParamPageFieldVal
-		if initialPageNumber == 0 {
-			initialPageNumber = 1
-		}
 		for pageNumber := 0; pageNumber < query.PageMaxPages; pageNumber++ {
 			currentQuery := query
 			currentQuery = ApplyPaginationItemToQuery(currentQuery, query.PageParamSizeFieldType, query.PageParamSizeFieldName, fmt.Sprintf("%d", query.PageParamSizeFieldVal))
