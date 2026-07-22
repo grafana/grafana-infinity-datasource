@@ -32,6 +32,7 @@ The Infinity data source can connect to virtually any API that returns JSON, CSV
 |---------|-------------|
 | [AWS API](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/examples/aws/) | Connect to AWS management APIs for metrics, cost data, and more |
 | [Azure API](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/examples/azure/) | Query Azure management APIs for subscriptions, resources, and monitoring |
+| [Crypto prices](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/examples/crypto-prices/) | Visualize cryptocurrency prices from the CoinPaprika API, no API key required |
 | [GitHub GraphQL](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/examples/github/) | Query GitHub repositories, issues, and pull requests using GraphQL |
 | [Google Sheets](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/examples/google-sheets/) | Query data directly from Google Sheets spreadsheets |
 | [RSS feeds](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/examples/rss-feeds/) | Visualize RSS and Atom feeds, including status pages |
