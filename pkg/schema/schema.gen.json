@@ -22,12 +22,11 @@
               "default": false
             },
             "allowedHosts": {
-              "description": "A list of hosts that the data source is allowed to connect to. Required when authentication, custom headers, or TLS certificates are configured. If no allowed hosts are specified and none of these features are in use, all hosts are allowed by default.",
+              "description": "List of allowed host names. Enter the base URL names. ex: https://example.com",
               "type": "array",
               "items": {
                 "type": "string"
               },
-              "x-dsconfig-required-when": "(jsonData.auth_method != '' \u0026\u0026 jsonData.auth_method != 'none' \u0026\u0026 jsonData.auth_method != 'azureBlob') || jsonData.tlsAuth == true || jsonData.tlsAuthWithCACert == true",
               "x-dsconfig-depends-on": "jsonData_authMethod != 'none' \u0026\u0026 jsonData_authMethod != 'azureBlob'"
             },
             "apiKeyKey": {
@@ -143,6 +142,29 @@
               "x-dsconfig-depends-on": "jsonData_customHealthCheckEnabled == true",
               "x-dsconfig-required-when": "jsonData_customHealthCheckEnabled == true"
             },
+            "customHealthCheckUrlOptions": {
+              "type": "object",
+              "properties": {
+                "body_content_type": {
+                  "type": "string"
+                },
+                "body_graphql_query": {
+                  "type": "string"
+                },
+                "body_graphql_variables": {
+                  "type": "string"
+                },
+                "body_type": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "string"
+                },
+                "method": {
+                  "type": "string"
+                }
+              }
+            },
             "global_queries": {
               "description": "Named datasource-level saved queries that other queries can reference via type='global'. The individual InfinityQuery shape is defined by the query editor and is intentionally opaque at the datasource-config level.",
               "type": "array",
@@ -164,29 +186,6 @@
                   "value": {
                     "type": "string"
                   }
-                }
-              }
-            },
-            "customHealthCheckUrlOptions": {
-              "type": "object",
-              "properties": {
-                "body_content_type": {
-                  "type": "string"
-                },
-                "body_graphql_query": {
-                  "type": "string"
-                },
-                "body_graphql_variables": {
-                  "type": "string"
-                },
-                "body_type": {
-                  "type": "string"
-                },
-                "data": {
-                  "type": "string"
-                },
-                "method": {
-                  "type": "string"
                 }
               }
             },
