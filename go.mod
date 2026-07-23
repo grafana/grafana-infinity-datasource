@@ -4,7 +4,7 @@ go 1.26.4
 
 require (
 	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.6.4
-	github.com/aws/aws-sdk-go-v2 v1.42.0
+	github.com/aws/aws-sdk-go-v2 v1.42.1
 	github.com/grafana/dsconfig/schema v0.0.12
 	github.com/grafana/dskit v0.0.0-20260402131538-8d0d211734c0
 	github.com/grafana/grafana-aws-sdk v1.4.6
@@ -63,7 +63,6 @@ require (
 	github.com/go-openapi/swag/cmdutils v0.27.0 // indirect
 	github.com/go-openapi/swag/conv v0.27.0 // indirect
 	github.com/go-openapi/swag/fileutils v0.27.0 // indirect
-	github.com/go-openapi/swag/jsonname v0.27.0 // indirect
 	github.com/go-openapi/swag/jsonutils v0.27.0 // indirect
 	github.com/go-openapi/swag/loading v0.27.0 // indirect
 	github.com/go-openapi/swag/mangling v0.27.0 // indirect
