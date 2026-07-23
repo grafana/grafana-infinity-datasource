@@ -14,6 +14,8 @@ import (
 	"golang.org/x/oauth2"
 )
 
+const PluginID = "yesoreyeram-infinity-datasource"
+
 const (
 	AuthenticationMethodNone         = "none"
 	AuthenticationMethodBasic        = "basicAuth"
@@ -38,17 +40,17 @@ const (
 )
 
 type OAuth2Settings struct {
-	OAuth2Type     string           `json:"oauth2_type,omitempty"`
-	ClientID       string           `json:"client_id,omitempty"`
-	TokenURL       string           `json:"token_url,omitempty"`
-	Email          string           `json:"email,omitempty"`
-	PrivateKeyID   string           `json:"private_key_id,omitempty"`
-	Subject        string           `json:"subject,omitempty"`
-	Scopes         []string         `json:"scopes,omitempty"`
-	AuthStyle      oauth2.AuthStyle `json:"authStyle,omitempty"`
-	AuthHeader     string           `json:"authHeader,omitempty"`
-	TokenTemplate  string           `json:"tokenTemplate,omitempty"`
-	TokenHeaders   map[string]string `json:"tokenHeaders,omitempty"`
+	OAuth2Type     string            `json:"oauth2_type,omitempty"`
+	ClientID       string            `json:"client_id,omitempty"`
+	TokenURL       string            `json:"token_url,omitempty"`
+	Email          string            `json:"email,omitempty"`
+	PrivateKeyID   string            `json:"private_key_id,omitempty"`
+	Subject        string            `json:"subject,omitempty"`
+	Scopes         []string          `json:"scopes,omitempty"`
+	AuthStyle      oauth2.AuthStyle  `json:"authStyle,omitempty"`
+	AuthHeader     string            `json:"authHeader,omitempty"`
+	TokenTemplate  string            `json:"tokenTemplate,omitempty"`
+	TokenHeaders   map[string]string `json:"-"`
 	ClientSecret   string
 	PrivateKey     string
 	EndpointParams map[string]string
@@ -276,6 +278,7 @@ type InfinitySettingsJson struct {
 	ProxyUrl                    string         `json:"proxy_url,omitempty"`
 	ProxyUserName               string         `json:"proxy_username,omitempty"`
 	ReferenceData               []RefData      `json:"refData,omitempty"`
+	GlobalQueries             []any          `json:"global_queries,omitempty"`
 	CustomHealthCheckEnabled    bool           `json:"customHealthCheckEnabled,omitempty"`
 	CustomHealthCheckUrl        string         `json:"customHealthCheckUrl,omitempty"`
 	CustomHealthCheckUrlOptions URLOptions     `json:"customHealthCheckUrlOptions,omitempty"`
