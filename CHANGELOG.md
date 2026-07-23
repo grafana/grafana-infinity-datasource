@@ -1,5 +1,22 @@
 # Change Log
 
+## 3.11.1
+
+### Patch Changes
+
+🐛 Update downstream error classification
+
+## 3.11.0
+
+### Minor Changes
+
+🚀 Add support for POST method in configuration custom health check
+
+### Patch Changes
+
+🐛 Fix JWT OAuth2: normalize private key line endings before PEM parsing
+🐛 Fix variable editor crash when the query returns a field without a name, such as when adding a new column with an empty selector while using the JSONata or JQ backend parsers
+
 ## 3.10.1
 
 ### Patch Changes

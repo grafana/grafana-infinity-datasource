@@ -95,6 +95,29 @@
               "description": "URL queried when the custom health check is enabled.",
               "type": "string"
             },
+            "customHealthCheckUrlOptions": {
+              "type": "object",
+              "properties": {
+                "body_content_type": {
+                  "type": "string"
+                },
+                "body_graphql_query": {
+                  "type": "string"
+                },
+                "body_graphql_variables": {
+                  "type": "string"
+                },
+                "body_type": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "string"
+                },
+                "method": {
+                  "type": "string"
+                }
+              }
+            },
             "ignoreStatusCodeCheck": {
               "description": "Do not fail requests based on non-2xx HTTP status codes.",
               "type": "boolean"

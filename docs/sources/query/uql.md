@@ -16,6 +16,7 @@ labels:
     - oss
     - enterprise
     - cloud
+review_date: 2026-06-25
 weight: 110
 ---
 
@@ -184,7 +185,7 @@ The following sections describe the functions available with `extend`, organized
 | `todatetime` | `todatetime("dob")` | Convert string to datetime |
 | `tounixtime` | `tounixtime("dob")` | Convert datetime to unix epoch (ms) |
 | `format_datetime` | `format_datetime("dob",'DD/MM/YYYY')` | Format datetime as string |
-| `add_datetime` | `add_datetime("dob",'-1d')` | Add duration (e.g., `-1d`, `2h`) |
+| `add_datetime` | `add_datetime("dob",'-1d')` | Add duration (for example, `-1d`, `2h`) |
 | `unixtime_seconds_todatetime` | `unixtime_seconds_todatetime("ts")` | Convert unix seconds to datetime |
 | `unixtime_milliseconds_todatetime` | `unixtime_milliseconds_todatetime("ts")` | Convert unix milliseconds to datetime |
 | `unixtime_microseconds_todatetime` | `unixtime_microseconds_todatetime("ts")` | Convert unix microseconds to datetime |

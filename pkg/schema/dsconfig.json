@@ -346,6 +346,54 @@
             "target": "jsonData"
         },
         {
+            "id": "jsonData.customHealthCheckUrlOptions",
+            "key": "customHealthCheckUrlOptions",
+            "target": "jsonData",
+            "valueType": "object",
+            "label": "Custom health check URL options",
+            "item": {
+                "valueType": "object",
+                "fields": [
+                    {
+                        "id": "jsonData.customHealthCheckUrlOptions.method",
+                        "key": "method",
+                        "valueType": "string",
+                        "isItemField": true
+                    },
+                    {
+                        "id": "jsonData.customHealthCheckUrlOptions.data",
+                        "key": "data",
+                        "valueType": "string",
+                        "isItemField": true
+                    },
+                    {
+                        "id": "jsonData.customHealthCheckUrlOptions.body_type",
+                        "key": "body_type",
+                        "valueType": "string",
+                        "isItemField": true
+                    },
+                    {
+                        "id": "jsonData.customHealthCheckUrlOptions.body_content_type",
+                        "key": "body_content_type",
+                        "valueType": "string",
+                        "isItemField": true
+                    },
+                    {
+                        "id": "jsonData.customHealthCheckUrlOptions.body_graphql_query",
+                        "key": "body_graphql_query",
+                        "valueType": "string",
+                        "isItemField": true
+                    },
+                    {
+                        "id": "jsonData.customHealthCheckUrlOptions.body_graphql_variables",
+                        "key": "body_graphql_variables",
+                        "valueType": "string",
+                        "isItemField": true
+                    }
+                ]
+            }
+        },
+        {
             "id": "jsonData.azureBlobCloudType",
             "key": "azureBlobCloudType",
             "label": "Azure cloud",
@@ -546,8 +594,10 @@
     ],
     "instructions": [
         {
-            "msg": "Supports no auth (none), basic auth (basicAuth), bearer token (bearerToken), API key value pair (apiKey), digest auth (digestAuth), forward oauth (oauthPassThru), oauth2 (oauth2), AWS (aws), Azure Blob (azureBlob) — ask which. But never ask for credentials themselves. Those should be entered in the UI",
-            "tags": ["llm"]
+            "message": "Supports no auth (none), basic auth (basicAuth), bearer token (bearerToken), API key value pair (apiKey), digest auth (digestAuth), forward oauth (oauthPassThru), oauth2 (oauth2), AWS (aws), Azure Blob (azureBlob) — ask which. But never ask for credentials themselves. Those should be entered in the UI",
+            "tags": [
+                "llm"
+            ]
         }
     ]
 }
