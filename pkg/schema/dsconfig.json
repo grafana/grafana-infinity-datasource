@@ -500,15 +500,7 @@
             }
         },
         {
-            "id": "jsonData.customHealthCheckUrl",
-            "key": "customHealthCheckUrl",
-            "label": "Custom health check URL",
-            "description": "URL queried when the custom health check is enabled.",
-            "valueType": "string",
-            "target": "jsonData"
-        },
-        {
-            "id": "jsonData.customHealthCheckUrlOptions",
+            "id": "jsonData_customHealthCheckUrlOptions",
             "key": "customHealthCheckUrlOptions",
             "target": "jsonData",
             "valueType": "object",
@@ -517,37 +509,37 @@
                 "valueType": "object",
                 "fields": [
                     {
-                        "id": "jsonData.customHealthCheckUrlOptions.method",
+                        "id": "jsonData_customHealthCheckUrlOptions.item.method",
                         "key": "method",
                         "valueType": "string",
                         "isItemField": true
                     },
                     {
-                        "id": "jsonData.customHealthCheckUrlOptions.data",
+                        "id": "jsonData_customHealthCheckUrlOptions.item.data",
                         "key": "data",
                         "valueType": "string",
                         "isItemField": true
                     },
                     {
-                        "id": "jsonData.customHealthCheckUrlOptions.body_type",
+                        "id": "jsonData_customHealthCheckUrlOptions.item.body_type",
                         "key": "body_type",
                         "valueType": "string",
                         "isItemField": true
                     },
                     {
-                        "id": "jsonData.customHealthCheckUrlOptions.body_content_type",
+                        "id": "jsonData_customHealthCheckUrlOptions.item.body_content_type",
                         "key": "body_content_type",
                         "valueType": "string",
                         "isItemField": true
                     },
                     {
-                        "id": "jsonData.customHealthCheckUrlOptions.body_graphql_query",
+                        "id": "jsonData_customHealthCheckUrlOptions.item.body_graphql_query",
                         "key": "body_graphql_query",
                         "valueType": "string",
                         "isItemField": true
                     },
                     {
-                        "id": "jsonData.customHealthCheckUrlOptions.body_graphql_variables",
+                        "id": "jsonData_customHealthCheckUrlOptions.item.body_graphql_variables",
                         "key": "body_graphql_variables",
                         "valueType": "string",
                         "isItemField": true
