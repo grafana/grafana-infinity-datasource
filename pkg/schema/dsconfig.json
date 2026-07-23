@@ -455,9 +455,10 @@
             "id": "jsonData.allowedHosts",
             "key": "allowedHosts",
             "label": "Allowed hosts",
-            "description": "Hosts the data source is allowed to query.",
+            "description": "A list of hosts that the data source is allowed to connect to. Required when authentication, custom headers, or TLS certificates are configured. If no allowed hosts are specified and none of these features are in use, all hosts are allowed by default.",
             "valueType": "array",
             "target": "jsonData",
+            "requiredWhen": "(jsonData.auth_method != '' && jsonData.auth_method != 'none' && jsonData.auth_method != 'azureBlob') || jsonData.tlsAuth == true || jsonData.tlsAuthWithCACert == true",
             "item": {
                 "valueType": "string"
             }

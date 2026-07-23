@@ -14,11 +14,12 @@
             "type": "boolean"
           },
           "allowedHosts": {
-            "description": "Hosts the data source is allowed to query.",
+            "description": "A list of hosts that the data source is allowed to connect to. Required when authentication, custom headers, or TLS certificates are configured. If no allowed hosts are specified and none of these features are in use, all hosts are allowed by default.",
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "x-dsconfig-required-when": "(jsonData.auth_method != '' \u0026\u0026 jsonData.auth_method != 'none' \u0026\u0026 jsonData.auth_method != 'azureBlob') || jsonData.tlsAuth == true || jsonData.tlsAuthWithCACert == true"
           },
           "apiKeyKey": {
             "description": "Name of the API key header or query parameter (API key auth).",
@@ -92,6 +93,29 @@
           "customHealthCheckUrl": {
             "description": "URL queried when the custom health check is enabled.",
             "type": "string"
+          },
+          "customHealthCheckUrlOptions": {
+            "type": "object",
+            "properties": {
+              "body_content_type": {
+                "type": "string"
+              },
+              "body_graphql_query": {
+                "type": "string"
+              },
+              "body_graphql_variables": {
+                "type": "string"
+              },
+              "body_type": {
+                "type": "string"
+              },
+              "data": {
+                "type": "string"
+              },
+              "method": {
+                "type": "string"
+              }
+            }
           },
           "ignoreStatusCodeCheck": {
             "description": "Do not fail requests based on non-2xx HTTP status codes.",
