@@ -66,7 +66,7 @@
     "mathjs": "15.2.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "react-use": "17.6.0",
+    "react-use": "17.6.1",
     "tslib": "2.8.1",
     "uql": "0.0.24",
     "xml2js": "0.6.2"
@@ -134,13 +134,6 @@
     "webpack-livereload-plugin": "3.0.2",
     "webpack-subresource-integrity": "5.1.0",
     "webpack-virtual-modules": "0.6.2"
-  },
-  "resolutions": {
-    "fast-xml-parser": "5.7.0",
-    "minimatch": "10.2.5",
-    "@openfeature/core": "1.9.2",
-    "serialize-javascript": "7.0.5",
-    "tar": "7.5.13"
   },
   "packageManager": "yarn@4.13.0"
 }
