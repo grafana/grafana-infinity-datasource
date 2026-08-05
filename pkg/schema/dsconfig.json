@@ -1,5 +1,5 @@
 {
-    "$schema": "https://raw.githubusercontent.com/grafana/dsconfig/refs/tags/dsconfig/v0.0.10/dsconfig/schema.json",
+    "$schema": "https://raw.githubusercontent.com/grafana/dsconfig/refs/tags/dsconfig/v0.0.12/dsconfig/schema.json",
     "schemaVersion": "v1",
     "pluginType": "yesoreyeram-infinity-datasource",
     "pluginName": "Infinity",
@@ -1492,7 +1492,7 @@
                 "secureJsonData_awsAccessKey",
                 "secureJsonData_awsSecretKey"
             ],
-            "description": "AWS SigV4 credentials. All five fields go together when auth_method is 'aws'. Note that region, service, and authType live under the nested jsonData.aws object."
+            "description": "AWS SigV4 credentials. All five fields go together when auth_method is 'aws'. Note that region, service, and authType live under the nested jsonData_aws object."
         },
         {
             "type": "group",
@@ -1501,7 +1501,7 @@
                 "secureJsonData_oauth2ClientSecret",
                 "jsonData_oauth2TokenUrl"
             ],
-            "description": "OAuth2 client credentials grant: client_id + client secret + token URL. All under jsonData.oauth2 except the secret."
+            "description": "OAuth2 client credentials grant: client_id + client secret + token URL. All under jsonData_oauth2 except the secret."
         },
         {
             "type": "group",
@@ -1528,7 +1528,7 @@
                 "secureJsonData_tlsClientCert",
                 "secureJsonData_tlsClientKey"
             ],
-            "description": "TLS mutual auth: enabling jsonData.tlsAuth requires serverName + client cert + client key."
+            "description": "TLS mutual auth: enabling jsonData_tlsAuth requires serverName + client cert + client key."
         },
         {
             "type": "pair",
@@ -1536,7 +1536,7 @@
                 "jsonData_tlsAuthWithCACert",
                 "secureJsonData_tlsCACert"
             ],
-            "description": "Self-signed / custom CA verification: enabling jsonData.tlsAuthWithCACert requires the CA certificate PEM in secureJsonData.tlsCACert."
+            "description": "Self-signed / custom CA verification: enabling jsonData_tlsAuthWithCACert requires the CA certificate PEM in secureJsonData_tlsCACert."
         },
         {
             "type": "pair",
