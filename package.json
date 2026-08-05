@@ -135,5 +135,8 @@
     "webpack-subresource-integrity": "5.1.0",
     "webpack-virtual-modules": "0.6.2"
   },
+  "resolutions": {
+    "fast-xml-parser": "5.7.0"
+  },
   "packageManager": "yarn@4.13.0"
 }
