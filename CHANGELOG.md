@@ -4,7 +4,7 @@
 
 ### Patch Changes
 
-🐛 Fix build to externalise `react/jsx-runtime` so it matches the host Grafana React version
+🐛 Fix build to externalize `react/jsx-runtime` so it matches the host Grafana React version
 🐛 Update dependencies to address security vulnerabilities (CVEs)
 ⚙️ Chore: bump `@grafana/*` dependencies to 13.1.1 and update backend dependencies
 ⚙️ Chore: bump `@babel/core` from 7.29.0 to 7.29.7
