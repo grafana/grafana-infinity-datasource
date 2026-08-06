@@ -37,7 +37,7 @@ The Infinity data source supports two AWS authentication providers and optional 
 Both authentication providers support optional IAM role assumption via STS `AssumeRole`. This is useful for:
 
 - **Cross-account access**: reach resources in a different AWS account.
-- **Least-privilege** — use a base identity with minimal permissions and assume a role with specific permissions.
+- **Least privilege**: use a base identity with minimal permissions and assume a role that has the specific permissions.
 - **EKS IRSA** — the pod authenticates via IRSA (default credentials) and then assumes a target role that has the required permissions.
 
 | Field | Description |
