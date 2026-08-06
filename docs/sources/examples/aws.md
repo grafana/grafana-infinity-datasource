@@ -82,7 +82,7 @@ For **AWS SDK Default** authentication:
 
 ## Configure the data source
 
-### Using Access and secret key
+### Configure with access and secret key
 
 1. In Grafana, navigate to **Connections** > **Data sources**.
 1. Click **Add new data source** and select **Infinity**.
