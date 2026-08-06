@@ -1,5 +1,11 @@
 # Change Log
 
+## 3.11.3
+
+### Patch Changes
+
+🐛 Security: bump `jsonata` from 1.8.7 to 1.8.9 (CVE-2026-52746)
+
 ## 3.11.2
 
 ### Patch Changes
