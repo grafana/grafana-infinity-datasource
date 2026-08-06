@@ -108,7 +108,8 @@ This method is suitable for EC2 instances, ECS tasks, and EKS pods with IRSA.
 1. Click **Add new data source** and select **Infinity**.
 1. Expand the **Authentication** section and select **AWS**.
 1. Select **AWS SDK Default** as the **Authentication Provider**.
-1. Select **Region** and enter **Service**.
+1. Select a **Region**.
+1. Enter a **Service**.
 1. Optionally, enter an **Assume Role ARN** for cross-account access.
 1. In **Allowed hosts**, enter your AWS endpoint.
 1. Click **Save & test**.
