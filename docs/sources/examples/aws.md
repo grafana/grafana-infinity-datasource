@@ -100,7 +100,7 @@ For **AWS SDK Default** authentication:
 1. In **Allowed hosts**, enter your AWS endpoint (for example, `https://monitoring.us-east-1.amazonaws.com`).
 1. Click **Save & test**.
 
-### Using AWS SDK Default
+### AWS SDK Default
 
 This method is suitable for EC2 instances, ECS tasks, and EKS pods with IRSA.
 
