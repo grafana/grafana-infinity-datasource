@@ -70,6 +70,8 @@ If `forward_settings_to_plugins` already contains other data source plugin IDs, 
 
 ## Before you begin
 
+The AWS authentication options depend on the Grafana server configuration described in [Grafana server configuration](#grafana-server-configuration). If the server doesn't allow the `default` provider, the **AWS SDK Default** option isn't shown, and if `assume_role_enabled` is disabled, the **Assume Role ARN** and **External ID** fields aren't shown. On Grafana Cloud you can't edit `grafana.ini`, so contact Grafana Support to find out whether these settings are enabled for the Infinity data source.
+
 For **Access and secret key** authentication:
 
 - Create an AWS IAM user with programmatic access
@@ -81,6 +83,8 @@ For **AWS SDK Default** authentication:
 - Ensure the Grafana instance has an IAM role attached (instance profile, task role, or IRSA service account) with the required permissions
 
 ## Configure the data source
+
+Choose the authentication provider that matches your environment, then configure the data source.
 
 ### Configure with access and secret key
 
