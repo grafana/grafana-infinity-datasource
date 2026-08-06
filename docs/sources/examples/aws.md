@@ -38,7 +38,7 @@ Both authentication providers support optional IAM role assumption via STS `Assu
 
 - **Cross-account access**: reach resources in a different AWS account.
 - **Least privilege**: use a base identity with minimal permissions and assume a role that has the specific permissions.
-- **EKS IRSA** — the pod authenticates via IRSA (default credentials) and then assumes a target role that has the required permissions.
+- **EKS IRSA**: the pod authenticates through IRSA (default credentials) and then assumes a target role that has the required permissions.
 
 | Field | Description |
 | --- | --- |
