@@ -136,7 +136,8 @@
     "webpack-virtual-modules": "0.6.2"
   },
   "resolutions": {
-    "fast-xml-parser": "5.7.0"
+    "fast-xml-parser": "5.7.0",
+    "jsonata@npm:1.8.7": "1.8.9"
   },
   "packageManager": "yarn@4.13.0"
 }
