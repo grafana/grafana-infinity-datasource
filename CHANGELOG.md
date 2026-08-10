@@ -1,5 +1,20 @@
 # Change Log
 
+## 3.11.3
+
+### Patch Changes
+
+🐛 Security: bump `jsonata` from 1.8.7 to 1.8.9 (CVE-2026-52746)
+
+## 3.11.2
+
+### Patch Changes
+
+🐛 Fix build to externalize `react/jsx-runtime` so it matches the host Grafana React version
+🐛 Update dependencies to address security vulnerabilities (CVEs)
+⚙️ Chore: bump `@grafana/*` dependencies to 13.1.1 and update backend dependencies
+⚙️ Chore: bump `@babel/core` from 7.29.0 to 7.29.7
+
 ## 3.11.1
 
 ### Patch Changes
