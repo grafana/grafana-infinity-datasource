@@ -1,5 +1,11 @@
 # Change Log
 
+## 4.0.0
+
+### Major Changes
+
+💥 **BREAKING CHANGE**: update `grafanaDependency` from `>=11.6.0-0` to `>=11.6.11 <12 || >=12.0.10 <12.1 || >=12.1.7 <12.2 || >=12.2.5` for compatibility with `react/jsx-runtime` externalization
+
 ## 3.11.3
 
 ### Patch Changes
