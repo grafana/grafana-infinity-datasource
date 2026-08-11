@@ -4,7 +4,7 @@
 
 ### Major Changes
 
-💥 **BREAKING CHANGE**: update `grafanaDependency` from `>=11.6.0-0` to `>=11.6.11 <12 || >=12.0.10 <12.1 || >=12.1.7 <12.2 || >=12.2.5` for compatibility with `react/jsx-runtime` externalization
+💥 **BREAKING CHANGE**: update `grafanaDependency` from `>=11.6.0-0` to `>=11.6.11-0 <12 || >=12.0.10-0 <12.1 || >=12.1.7-0 <12.2 || >=12.2.5-0` for compatibility with `react/jsx-runtime` externalization
 
 ## 3.11.3
 
