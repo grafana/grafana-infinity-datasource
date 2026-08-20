@@ -137,7 +137,11 @@
   },
   "overrides": {
     "fast-xml-parser": "5.7.0",
-    "jsonata@npm:1.8.7": "1.8.9"
+    "jsonata": "1.8.9"
+  },
+  "engines": {
+    "node": ">=24",
+    "npm": ">=11.16.0"
   },
   "packageManager": "npm@11.18.0"
 }
