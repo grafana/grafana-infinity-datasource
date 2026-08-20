@@ -135,6 +135,86 @@ func TestLoadQuery(t *testing.T) {
 	}
 }
 
+func TestLoadQueryMethodFallback(t *testing.T) {
+	tests := []struct {
+		name               string
+		queryJSON          string
+		wantMethod         string
+		wantBodyType       string
+		wantContentType    string
+		wantTopLevelMethod string
+	}{
+		{
+			name: "uses top-level method when url options method is empty",
+			queryJSON: `{
+				"type": "json",
+				"source": "url",
+				"method": " POST ",
+				"url_options": {}
+			}`,
+			wantMethod:         http.MethodPost,
+			wantBodyType:       "raw",
+			wantContentType:    "text/plain",
+			wantTopLevelMethod: " POST ",
+		},
+		{
+			name: "prefers url options method over top-level method",
+			queryJSON: `{
+				"type": "json",
+				"source": "url",
+				"method": "POST",
+				"url_options": {
+					"method": "PATCH"
+				}
+			}`,
+			wantMethod:         http.MethodPatch,
+			wantBodyType:       "raw",
+			wantContentType:    "text/plain",
+			wantTopLevelMethod: http.MethodPost,
+		},
+		{
+			name: "trims url options method before applying defaults",
+			queryJSON: `{
+				"type": "json",
+				"source": "url",
+				"method": "GET",
+				"url_options": {
+					"method": " POST "
+				}
+			}`,
+			wantMethod:         http.MethodPost,
+			wantBodyType:       "raw",
+			wantContentType:    "text/plain",
+			wantTopLevelMethod: http.MethodGet,
+		},
+		{
+			name: "defaults to GET when both methods are empty",
+			queryJSON: `{
+				"type": "json",
+				"source": "url",
+				"method": " ",
+				"url_options": {}
+			}`,
+			wantMethod:         http.MethodGet,
+			wantTopLevelMethod: " ",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			backendQuery := backend.DataQuery{JSON: []byte(tt.queryJSON)}
+
+			got, err := models.LoadQuery(context.Background(), backendQuery, backend.PluginContext{}, models.InfinitySettings{})
+
+			require.NoError(t, err)
+			assert.Equal(t, tt.wantMethod, got.URLOptions.Method)
+			assert.Equal(t, tt.wantBodyType, got.URLOptions.BodyType)
+			assert.Equal(t, tt.wantContentType, got.URLOptions.BodyContentType)
+			assert.Equal(t, tt.wantTopLevelMethod, got.Method)
+		})
+	}
+}
+
 func TestGetPaginationMaxPagesValue(t *testing.T) {
 	tests := []struct {
 		name    string

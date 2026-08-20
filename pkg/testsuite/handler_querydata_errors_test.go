@@ -77,5 +77,31 @@ func TestErrors(t *testing.T) {
 			require.ErrorIs(t, res.Error, jsonframer.ErrInvalidRootSelector)
 			require.Equal(t, "error while performing the infinity query. error converting json data to frame: failed to compile JSONata expression\nsyntax error: 'bar', position: 4", res.Error.Error())
 		})
+		t.Run("fail with root selector evaluating to no results", func(t *testing.T) {
+			server := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				w.WriteHeader(http.StatusOK)
+				_, _ = w.Write([]byte(`{"foo":"bar"}`))
+			}))
+			server.Start()
+			defer server.Close()
+			client, _ := infinity.NewClient(context.TODO(), models.InfinitySettings{})
+			res := queryData(t, context.Background(), backend.DataQuery{
+				JSON: []byte(fmt.Sprintf(`{ "url":  "%s", "parser": "backend", "root_selector": "items"}`, server.URL)),
+			}, *client, map[string]string{}, backend.PluginContext{})
+			require.NotNil(t, res.Error)
+			require.Equal(t, backend.ErrorSourceDownstream, res.ErrorSource)
+			require.ErrorIs(t, res.Error, jsonframer.ErrEvaluatingJSONata)
+		})
+	})
+	t.Run("inline query", func(t *testing.T) {
+		t.Run("fail with inline jq-backend selector as downstream", func(t *testing.T) {
+			client, _ := infinity.NewClient(context.TODO(), models.InfinitySettings{})
+			res := queryData(t, context.Background(), backend.DataQuery{
+				JSON: []byte(`{ "type": "json", "source": "inline", "parser": "jq-backend", "data": "{\"foo\":\"bar\"}", "root_selector": ".foo + 1" }`),
+			}, *client, map[string]string{}, backend.PluginContext{})
+			require.NotNil(t, res.Error)
+			require.Equal(t, backend.ErrorSourceDownstream, res.ErrorSource)
+			require.ErrorIs(t, res.Error, jsonframer.ErrExecutingJQ)
+		})
 	})
 }

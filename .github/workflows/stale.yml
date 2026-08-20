@@ -1,0 +1,13 @@
+name: 'Close stale issues and PRs'
+on:
+  schedule:
+    - cron: '30 1 * * *'
+
+permissions: {}
+
+jobs:
+  stale:
+    permissions:
+      issues: write
+      pull-requests: write
+    uses: grafana/data-sources-ci-workflows/.github/workflows/reusable-stale.yml@main # zizmor: ignore[unpinned-uses]

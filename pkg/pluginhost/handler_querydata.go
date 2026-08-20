@@ -10,12 +10,33 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/tracing"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
+	"github.com/grafana/infinity-libs/lib/go/jsonframer"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/trace"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/infinity"
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
 )
+
+// isDownstreamError reports whether the error should be classified as a downstream
+// (user-data) error. In addition to the SDK's own downstream detection, it treats
+// jsonframer sentinel errors (JSONata/root-selector/JSON framing failures) as
+// downstream since they stem from user data rather than the plugin.
+func isDownstreamError(err error) bool {
+	if err == nil {
+		return false
+	}
+	if backend.IsDownstreamError(err) {
+		return true
+	}
+	return errors.Is(err, jsonframer.ErrEvaluatingJSONata) ||
+		errors.Is(err, jsonframer.ErrInvalidRootSelector) ||
+		errors.Is(err, jsonframer.ErrInvalidJSONContent) ||
+		errors.Is(err, jsonframer.ErrInvalidJQSelector) ||
+		errors.Is(err, jsonframer.ErrUnMarshalingJSON) ||
+		errors.Is(err, jsonframer.ErrMarshalingJSON) ||
+		errors.Is(err, jsonframer.ErrExecutingJQ)
+}
 
 // QueryData handles multiple queries and returns multiple responses.
 func (ds *DataSource) QueryData(ctx context.Context, req *backend.QueryDataRequest) (*backend.QueryDataResponse, error) {
@@ -127,7 +148,7 @@ func QueryDataQuery(ctx context.Context, pluginContext backend.PluginContext, qu
 			wrappedError := fmt.Errorf("%s: %w", "error getting data frame from google sheets", err)
 			response.Error = wrappedError
 			// We should have error source from the original error, but in a case it is not there, we are using the plugin error as the default source
-			if backend.IsDownstreamError(err) {
+			if isDownstreamError(err) {
 				response.ErrorSource = backend.ErrorSourceDownstream
 			} else {
 				response.ErrorSource = backend.ErrorSourcePlugin
@@ -161,7 +182,7 @@ func QueryDataQuery(ctx context.Context, pluginContext backend.PluginContext, qu
 					response.Frames = append(response.Frames, frame)
 				}
 				response.Error = fmt.Errorf("error while performing the infinity query. %w", err)
-				if backend.IsDownstreamError(err) {
+				if isDownstreamError(err) {
 					response.ErrorSource = backend.ErrorSourceDownstream
 				} else {
 					response.ErrorSource = backend.ErrorSourcePlugin
@@ -187,7 +208,7 @@ func QueryDataQuery(ctx context.Context, pluginContext backend.PluginContext, qu
 				response.Frames = append(response.Frames, frame)
 				response.Error = fmt.Errorf("error while performing the infinity inline query. %w", err)
 				// We should have error source from the original error, but in a case it is not there, we are using the plugin error as the default source
-				if backend.IsDownstreamError(err) {
+				if isDownstreamError(err) {
 					response.ErrorSource = backend.ErrorSourceDownstream
 				} else {
 					response.ErrorSource = backend.ErrorSourcePlugin

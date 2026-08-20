@@ -48,13 +48,15 @@ func CheckHealth(ctx context.Context, client *infinity.Client, req *backend.Chec
 		return checkHealthAzureBlobStorage(ctx, client)
 	}
 	if client.Settings.CustomHealthCheckEnabled && client.Settings.CustomHealthCheckUrl != "" {
+		urlOptions := client.Settings.CustomHealthCheckUrlOptions
+		if urlOptions.Method == "" {
+			urlOptions.Method = http.MethodGet
+		}
 		_, statusCode, _, err := client.GetResults(ctx, &backend.PluginContext{}, models.Query{
-			Type:   models.QueryTypeUQL,
-			Source: "url",
-			URL:    client.Settings.CustomHealthCheckUrl,
-			URLOptions: models.URLOptions{
-				Method: http.MethodGet,
-			},
+			Type:       models.QueryTypeUQL,
+			Source:     "url",
+			URL:        client.Settings.CustomHealthCheckUrl,
+			URLOptions: urlOptions,
 		}, req.Headers)
 		if err != nil {
 			if errors.Is(err, models.ErrUnsuccessfulHTTPResponseStatus) {
