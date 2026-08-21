@@ -21,11 +21,11 @@ You need following tools in your local machine for development
 
 Once you clone the repo locally in the grafana's plugin folder. Do the following steps
 
-- `yarn` - This will install the frontend dependencies. Do this once
-- `yarn test` - To make sure all the existing tests passed
+- `npm install` - This will install the frontend dependencies. Do this once
+- `npm test` - To make sure all the existing tests passed
 - `go test -v ./...` - To make sure all the backend tests passed
-- `yarn dev` - For continuously watching the front-end changes and build
-- `yarn build` - For building the frontend components
+- `npm run dev` - For continuously watching the front-end changes and build
+- `npm run build` - For building the frontend components
 - `mage -v` - This will help to build the backend part of the plugin. Do this once if you are contributing only the frontend. There is no significant code is in the backend. So no much changes expected
 - `docker-compose up` - To run the plugin with grafana locally. ( use infinity:infinity as the credentials ). You can also enable traces and logs with debug mode. Refer the **Setting up grafana in debug mode** section below
 
@@ -37,11 +37,11 @@ Note that some packages have no direct `import` in `src/` but are still required
 
 ## Submitting PR
 
-If you are creating a PR, ensure to run `yarn changeset` from your branch. Provide the details accordingly. It will create `*.md` file inside `./.changeset` folder. Later during the release, based on these changesets, package version will be bumped and changelog will be generated.
+If you are creating a PR, ensure to run `npx changeset` from your branch. Provide the details accordingly. It will create `*.md` file inside `./.changeset` folder. Later during the release, based on these changesets, package version will be bumped and changelog will be generated.
 
 ## Releasing & Bumping version
 
-To create a new release, execute `yarn changeset version`. This will update the Changelog and bump the version in `package.json` file. Commit those changes.
+To create a new release, execute `npx changeset version`. This will update the Changelog and bump the version in `package.json` file. Commit those changes.
 
 ## Setting up grafana in debug mode
 
