@@ -137,7 +137,7 @@
   },
   "overrides": {
     "fast-xml-parser": "5.7.0",
-    "jsonata": "1.8.9"
+    "jsonata": "2.2.2"
   },
   "engines": {
     "node": ">=24",
