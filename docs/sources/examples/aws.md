@@ -49,7 +49,7 @@ Temporary credentials obtained via `AssumeRole` are automatically refreshed by t
 
 ## Grafana server configuration
 
-The Grafana server must allow the AWS authentication providers used by the plugin and forward its AWS settings to the Infinity data source. Add the following to `grafana.ini` or set equivalent environment variables:
+The Grafana server controls which AWS authentication providers the data source offers. Add the following to `grafana.ini` or set equivalent environment variables:
 
 ```ini
 [aws]
@@ -68,9 +68,13 @@ GF_AWS_FORWARD_SETTINGS_TO_PLUGINS=yesoreyeram-infinity-datasource
 
 If `forward_settings_to_plugins` already contains other data source plugin IDs, append `yesoreyeram-infinity-datasource` to the existing comma-separated list instead of replacing it.
 
+`forward_settings_to_plugins` is what applies `allowed_auth_providers` and `assume_role_enabled` to the plugin backend. If the plugin isn't listed, the backend falls back to the AWS SDK defaults, which permit the `default`, `keys`, and `credentials` providers and allow role assumption, regardless of the server settings. Include the plugin so that your server settings are enforced end to end.
+
 ## Before you begin
 
-The AWS authentication options depend on the Grafana server configuration described in [Grafana server configuration](#grafana-server-configuration). If the server doesn't allow the `default` provider, the **AWS SDK Default** option isn't shown, and if `assume_role_enabled` is disabled, the **Assume Role ARN** and **External ID** fields aren't shown. On Grafana Cloud you can't edit `grafana.ini`, so contact Grafana Support to find out whether these settings are enabled for the Infinity data source.
+The AWS authentication options depend on the Grafana server configuration described in [Grafana server configuration](#grafana-server-configuration). If the server doesn't allow the `default` provider, the **AWS SDK Default** option isn't shown, and if `assume_role_enabled` is disabled, the **Assume Role ARN** and **External ID** fields aren't shown.
+
+On Grafana Cloud, the `default` provider isn't allowed, so **AWS SDK Default** isn't offered. Use **Access and secret key**, optionally with an **Assume Role ARN**, which is supported because role assumption is enabled there.
 
 For **Access and secret key** authentication:
 
