@@ -3,8 +3,9 @@ module github.com/grafana/grafana-infinity-datasource
 go 1.26.5
 
 require (
-	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.8.0
+	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.6.4
 	github.com/aws/aws-sdk-go-v2 v1.43.0
+	github.com/grafana/dsconfig/schema v0.0.12
 	github.com/grafana/dskit v0.0.0-20260402131538-8d0d211734c0
 	github.com/grafana/grafana-aws-sdk v1.5.1
 	github.com/grafana/grafana-plugin-sdk-go v0.294.0
@@ -79,6 +80,7 @@ require (
 	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/grafana/dataplane/sdata v0.0.9 // indirect
+	github.com/grafana/dsconfig/dsconfig v0.0.12 // indirect
 	github.com/grafana/infinity-libs/lib/go/utils v1.0.1 // indirect
 	github.com/grafana/otel-profiling-go v0.6.0 // indirect
 	github.com/grafana/pyroscope-go/godeltaprof v0.1.12 // indirect

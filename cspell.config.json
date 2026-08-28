@@ -41,6 +41,8 @@
     "clsx",
     "cmdk",
     "Collapsable",
+    "akia",
+    "unconfigured",
     "pluginschema",
     "dsconfig",
     "apiserver",
@@ -201,6 +203,8 @@
     "xinsnake",
     "xmlframer",
     "yesoreyeram",
-    "youtube"
+    "youtube",
+    "struct",
+    "Struct"
   ]
 }
