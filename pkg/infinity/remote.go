@@ -74,8 +74,26 @@ func GetPaginatedResults(ctx context.Context, pCtx *backend.PluginContext, query
 	if query.PageMode != models.PaginationModeCursor {
 		for _, currentQuery := range queries {
 			frame, _, err := GetFrameForURLSourcesWithPostProcessing(ctx, pCtx, currentQuery, infClient, requestHeaders, false)
-			frames = append(frames, frame)
 			errs = errors.Join(errs, err)
+			if err != nil {
+				continue
+			}
+			if isEmptyPage(frame) {
+				// An empty page carries no fields and would break the merge.
+				// Keep it only if it is the very first page (so the query still
+				// returns an empty result), otherwise drop it and stop fetching:
+				// nothing after an empty page can have data.
+				if len(frames) == 0 {
+					frames = append(frames, frame)
+				}
+				break
+			}
+			frames = append(frames, frame)
+			// In offset/page mode a page shorter than the requested size is the
+			// last page, so there's no point requesting the following ones.
+			if isSizedPageMode(query.PageMode) && query.PageParamSizeFieldVal > 0 && frame.Rows() < query.PageParamSizeFieldVal {
+				break
+			}
 		}
 	}
 	if query.PageMode == models.PaginationModeCursor {
@@ -92,8 +110,17 @@ func GetPaginatedResults(ctx context.Context, pCtx *backend.PluginContext, query
 			i++
 			frame, cursor, err := GetFrameForURLSourcesWithPostProcessing(ctx, pCtx, currentQuery, infClient, requestHeaders, false)
 			oCursor = cursor
-			frames = append(frames, frame)
 			errs = errors.Join(errs, err)
+			if err != nil {
+				continue
+			}
+			if isEmptyPage(frame) {
+				if len(frames) == 0 {
+					frames = append(frames, frame)
+				}
+				break
+			}
+			frames = append(frames, frame)
 		}
 	}
 	if errs != nil {
@@ -104,6 +131,19 @@ func GetPaginatedResults(ctx context.Context, pCtx *backend.PluginContext, query
 		return nil, err
 	}
 	return PostProcessFrame(ctx, mergedFrame, query)
+}
+
+// isEmptyPage reports whether a paginated response produced no usable frame.
+// The JSON framer returns a frame with zero fields for an empty array, which
+// the merge step rejects as "different fields".
+func isEmptyPage(frame *data.Frame) bool {
+	return frame == nil || len(frame.Fields) == 0 || frame.Rows() == 0
+}
+
+// isSizedPageMode reports whether the pagination mode carries a page size we
+// can compare against the number of rows returned.
+func isSizedPageMode(mode models.PaginationMode) bool {
+	return mode == models.PaginationModeOffset || mode == models.PaginationModePage
 }
 
 func ApplyPaginationItemToQuery(query models.Query, fieldType models.PaginationParamType, fieldName string, fieldValue string) models.Query {
