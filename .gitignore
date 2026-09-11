@@ -15,14 +15,11 @@ e2e-results/
 logs
 mage_output_file.go
 node_modules/
-.yarn/install-state.gz
 npm-debug.log*
 pids
 provisioning/datasources/prod.yml
 temp_test.go
 work/
-yarn-debug.log*
-yarn-error.log*
 docker/blocks/tempo/tempo-data
 # IDE
 .idea

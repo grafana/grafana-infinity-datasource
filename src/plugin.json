@@ -94,7 +94,7 @@
     ]
   },
   "dependencies": {
-    "grafanaDependency": ">=11.6.0-0",
+    "grafanaDependency": ">=11.6.11-0 <12 || >=12.0.10-0 <12.1 || >=12.1.7-0 <12.2 || >=12.2.5-0",
     "grafanaVersion": "11.6.x",
     "plugins": []
   },
