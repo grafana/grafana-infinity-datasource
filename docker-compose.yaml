@@ -3,6 +3,10 @@ services:
     extends:
       file: .config/docker-compose-base.yaml
       service: grafana
+    build:
+      args:
+        # react/jsx-runtime externalization requires Grafana >=12.2.5 (see grafanaDependency)
+        grafana_version: ${GRAFANA_VERSION:-12.3.0}
     volumes:
       - ./provisioning/dashboards-actual/:/dashboards/
       - ./conf:/grafana-config
