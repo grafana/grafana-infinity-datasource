@@ -32,17 +32,17 @@ export const VariableEditor = (props: Props) => {
 
 const FieldMapping = (props: Props) => {
   const { query, datasource } = props;
-  const [choices, setChoices] = useState<Array<ComboboxOption<string>>>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const infinityQuery = query.queryType === 'infinity' ? query.infinityQuery : undefined;
+  const hasInfinityQuery = !!infinityQuery;
+  const refId = query.refId || infinityQuery?.refId || 'field-mapping-query';
+  const querySignature = infinityQuery ? JSON.stringify({ infinityQuery, refId }) : '';
+  const [result, setResult] = useState<{ signature: string; choices: Array<ComboboxOption<string>> }>({ signature: '', choices: [] });
   useEffect(() => {
-    if (query.queryType !== 'infinity' || !query.infinityQuery) {
-      setChoices([]);
-      setIsLoading(false);
+    if (!infinityQuery) {
       return;
     }
     let isActive = true;
-    setIsLoading(true);
-    const target: InfinityQuery = { ...query.infinityQuery, refId: query.refId || query.infinityQuery.refId || 'field-mapping-query' };
+    const target: InfinityQuery = { ...infinityQuery, refId };
     const subscription = datasource.query({ targets: [target] } as DataQueryRequest<InfinityQuery>).subscribe({
       next: (response) => {
         if (!isActive) {
@@ -50,16 +50,12 @@ const FieldMapping = (props: Props) => {
         }
         // Backend parser queries with unnamed columns yield fields whose name is omitted
         // on the wire, and Combobox options must have a defined value
-        const fieldNames = ((response.data[0] || { fields: [] }) as DataFrame).fields
-          .map((f) => f.name)
-          .filter((name): name is string => typeof name === 'string' && name !== '');
-        setChoices(fieldNames.map((f) => ({ value: f, label: f })));
-        setIsLoading(false);
+        const fieldNames = ((response.data[0] || { fields: [] }) as DataFrame).fields.map((f) => f.name).filter((name): name is string => typeof name === 'string' && name !== '');
+        setResult({ signature: querySignature, choices: fieldNames.map((f) => ({ value: f, label: f })) });
       },
       error: () => {
         if (isActive) {
-          setChoices([]);
-          setIsLoading(false);
+          setResult({ signature: querySignature, choices: [] });
         }
       },
     });
@@ -67,7 +63,9 @@ const FieldMapping = (props: Props) => {
       isActive = false;
       subscription.unsubscribe();
     };
-  }, [datasource, query]);
+  }, [datasource, refId, querySignature, infinityQuery]);
+  const choices = hasInfinityQuery && result.signature === querySignature ? result.choices : [];
+  const isLoading = hasInfinityQuery && result.signature !== querySignature;
   const onMetaPropChange = <Key extends keyof VariableMeta, Value extends VariableMeta[Key]>(key: Key, value: Value, meta = query.meta || {}) => {
     props.onChange({ ...query, meta: { ...meta, [key]: value } }, '');
   };
