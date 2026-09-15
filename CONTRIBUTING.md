@@ -16,7 +16,7 @@ If you want to contribute to the plugin, you can contribute in one of the follow
 You need following tools in your local machine for development
 
 - NodeJS v24.0+
-- Go 1.26
+- Go 1.27
 - Mage
 
 Once you clone the repo locally in the grafana's plugin folder. Do the following steps

@@ -33,6 +33,5 @@ jobs:
       branch: ${{ github.event.inputs.branch }}
       environment: ${{ github.event.inputs.environment }}
       docs-only: ${{ fromJSON(github.event.inputs.docs-only) }}
-      run-playwright: true
-      run-playwright-with-skip-grafana-dev-image: true
+      golangci-lint-version: '2.13.2'
       github-draft-release: false
