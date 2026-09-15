@@ -6,8 +6,8 @@ import { EditorRow } from '@/components/extended/EditorRow';
 import { EditorField } from '@/components/extended/EditorField';
 import type { InfinitySeriesQuery, DataOverride } from '@/types';
 
-export const SeriesEditor = ({ query, onChange }: { query: InfinitySeriesQuery; onChange: (value: any) => void }) => {
-  query = defaultsDeep({}, query, { alias: 'Random Walk' });
+export const SeriesEditor = ({ query: queryProp, onChange }: { query: InfinitySeriesQuery; onChange: (value: any) => void }) => {
+  const query = defaultsDeep({}, queryProp, { alias: 'Random Walk' });
   const onInputTextChange = <T extends InfinitySeriesQuery, K extends keyof T, V extends T[K]>(value: V, field: K | 'expression') => {
     set(query, field, value);
     onChange(query);
@@ -50,8 +50,8 @@ export const SeriesEditor = ({ query, onChange }: { query: InfinitySeriesQuery; 
 };
 
 // exported for testing purposes only
-export const SeriesAdvancedOptions = ({ query, onChange }: { query: InfinitySeriesQuery; onChange: (value: any) => void }) => {
-  query = defaultsDeep({}, query, { dataOverrides: [] });
+export const SeriesAdvancedOptions = ({ query: queryProp, onChange }: { query: InfinitySeriesQuery; onChange: (value: any) => void }) => {
+  const query = defaultsDeep({}, queryProp, { dataOverrides: [] });
 
   const [popupState, setPopupState] = useState(false);
 
@@ -74,7 +74,7 @@ export const SeriesAdvancedOptions = ({ query, onChange }: { query: InfinitySeri
   };
   const removeDataOverride = (index: number) => {
     const queryDataOverrides = query.dataOverrides || [];
-    const dataOverrides = queryDataOverrides.filter((_, i) => i !== index);
+    const dataOverrides = queryDataOverrides.filter((_: any, i: number) => i !== index);
     onChange({ ...query, dataOverrides });
   };
 
