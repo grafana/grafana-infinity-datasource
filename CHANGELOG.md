@@ -1,66 +1,56 @@
 # Change Log
 
-## 4.0.0
+## 4.1.0
 
-### Major Changes
+🚀 Add optional AWS IAM role authentication (AssumeRole) alongside existing Access Key/Secret Key method. Supports both "keys" and "default" (EC2/ECS instance profile) credential providers, with optional AssumeRoleARN and ExternalID fields. Temporary credentials are automatically refreshed on expiry via AWS SDK CredentialsCache.
+
+⚙️ **Chore**: updated frontend & backend dependencies
+
+## 4.0.0
 
 💥 **BREAKING CHANGE**: update `grafanaDependency` from `>=11.6.0-0` to `>=11.6.11-0 <12 || >=12.0.10-0 <12.1 || >=12.1.7-0 <12.2 || >=12.2.5-0` for compatibility with `react/jsx-runtime` externalization
 
 ## 3.11.3
 
-### Patch Changes
 
 🐛 Security: bump `jsonata` from 1.8.7 to 1.8.9 (CVE-2026-52746)
 
 ## 3.11.2
 
-### Patch Changes
-
 🐛 Fix build to externalize `react/jsx-runtime` so it matches the host Grafana React version
+
 🐛 Update dependencies to address security vulnerabilities (CVEs)
+
 ⚙️ Chore: bump `@grafana/*` dependencies to 13.1.1 and update backend dependencies
+
 ⚙️ Chore: bump `@babel/core` from 7.29.0 to 7.29.7
 
 ## 3.11.1
-
-### Patch Changes
 
 🐛 Update downstream error classification
 
 ## 3.11.0
 
-### Minor Changes
-
 🚀 Add support for POST method in configuration custom health check
 
-### Patch Changes
-
 🐛 Fix JWT OAuth2: normalize private key line endings before PEM parsing
+
 🐛 Fix variable editor crash when the query returns a field without a name, such as when adding a new column with an empty selector while using the JSONata or JQ backend parsers
 
 ## 3.10.1
 
-### Patch Changes
 
 🐛 Updated golang.org/x/crypto to v0.53.0 to address CVE-2026-46595 / GO-2026-5023.
 
 ## 3.10.0
 
-### Minor Changes
-
 🚀 Add llm instructions for authentication to dsconfig schema
-
-### Patch Changes
 
 🐛 Updated github.com/grafana/grafana-aws-sdk to v1.4.6 for fixing the AWS S3 file retrieval error introduced in 3.3.0. Fixes [#1299](https://github.com/grafana/grafana-infinity-datasource/issues/1299)
 
 ## 3.9.0
 
-### Minor Changes
-
 🚀 Renames skill files to make it more easy to discover them via agents
-
-### Patch Changes
 
 ⚙️ Chore: remove unused dependencies
 
