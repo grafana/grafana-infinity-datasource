@@ -395,6 +395,34 @@
             ]
         },
         {
+            "id": "jsonData_awsAssumeRoleArn",
+            "key": "assumeRoleArn",
+            "section": "aws",
+            "label": "Assume Role ARN",
+            "description": "Optional. Specify an IAM Role ARN to assume for cross-account or role-based access.",
+            "valueType": "string",
+            "target": "jsonData",
+            "dependsOn": "jsonData_authMethod == 'aws'",
+            "ui": {
+                "component": "input",
+                "placeholder": "arn:aws:iam::123456789012:role/MyRole (optional)"
+            }
+        },
+        {
+            "id": "jsonData_awsExternalId",
+            "key": "externalId",
+            "section": "aws",
+            "label": "External ID",
+            "description": "Optional. Used for cross-account role assumption when the trust policy requires an external ID.",
+            "valueType": "string",
+            "target": "jsonData",
+            "dependsOn": "jsonData_authMethod == 'aws'",
+            "ui": {
+                "component": "input",
+                "placeholder": "external id (optional)"
+            }
+        },
+        {
             "id": "secureJsonData_awsAccessKey",
             "key": "awsAccessKey",
             "label": "Access Key",

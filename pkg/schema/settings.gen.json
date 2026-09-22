@@ -61,12 +61,22 @@
           "aws": {
             "type": "object",
             "properties": {
+              "assumeRoleArn": {
+                "description": "Optional. Specify an IAM Role ARN to assume for cross-account or role-based access.",
+                "type": "string",
+                "x-dsconfig-depends-on": "jsonData_authMethod == 'aws'"
+              },
               "authType": {
                 "type": "string",
                 "default": "keys",
                 "enum": [
                   "keys"
                 ],
+                "x-dsconfig-depends-on": "jsonData_authMethod == 'aws'"
+              },
+              "externalId": {
+                "description": "Optional. Used for cross-account role assumption when the trust policy requires an external ID.",
+                "type": "string",
                 "x-dsconfig-depends-on": "jsonData_authMethod == 'aws'"
               },
               "region": {
