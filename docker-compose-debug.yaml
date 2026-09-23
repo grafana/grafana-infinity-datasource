@@ -11,7 +11,7 @@ services:
       - 1080:1080
   prometheus:
     container_name: prometheus
-    image: prom/prometheus@sha256:3c42b892cf723fa54d2f262c37a0e1f80aa8c8ddb1da7b9b0df9455a35a7f893
+    image: prom/prometheus@sha256:5ce7540c3c00ef4ab0c9d2c995c6a5b9c421f44b4a115d97a2c7af3b1c21cbb0
     command:
       - --web.enable-remote-write-receiver
       - --enable-feature=native-histograms
