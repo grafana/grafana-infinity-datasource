@@ -32,16 +32,16 @@ export const VariableEditor = (props: Props) => {
 
 const FieldMapping = (props: Props) => {
   const { query, datasource } = props;
-  const [choices, setChoices] = useState<Array<ComboboxOption<string>>>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  // Remember which query the choices were loaded for, so loading state is derived during render
+  const [loaded, setLoaded] = useState<{ query?: VariableQuery; choices: Array<ComboboxOption<string>> }>({ choices: [] });
+  const hasInfinityQuery = query.queryType === 'infinity' && !!query.infinityQuery;
+  const choices = hasInfinityQuery ? loaded.choices : [];
+  const isLoading = hasInfinityQuery && loaded.query !== query;
   useEffect(() => {
     if (query.queryType !== 'infinity' || !query.infinityQuery) {
-      setChoices([]);
-      setIsLoading(false);
       return;
     }
     let isActive = true;
-    setIsLoading(true);
     const target: InfinityQuery = { ...query.infinityQuery, refId: query.refId || query.infinityQuery.refId || 'field-mapping-query' };
     const subscription = datasource.query({ targets: [target] } as DataQueryRequest<InfinityQuery>).subscribe({
       next: (response) => {
@@ -53,13 +53,11 @@ const FieldMapping = (props: Props) => {
         const fieldNames = ((response.data[0] || { fields: [] }) as DataFrame).fields
           .map((f) => f.name)
           .filter((name): name is string => typeof name === 'string' && name !== '');
-        setChoices(fieldNames.map((f) => ({ value: f, label: f })));
-        setIsLoading(false);
+        setLoaded({ query, choices: fieldNames.map((f) => ({ value: f, label: f })) });
       },
       error: () => {
         if (isActive) {
-          setChoices([]);
-          setIsLoading(false);
+          setLoaded({ query, choices: [] });
         }
       },
     });
