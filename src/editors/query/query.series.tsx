@@ -7,10 +7,10 @@ import { EditorField } from '@/components/extended/EditorField';
 import type { InfinitySeriesQuery, DataOverride } from '@/types';
 
 export const SeriesEditor = ({ query, onChange }: { query: InfinitySeriesQuery; onChange: (value: any) => void }) => {
-  query = defaultsDeep({}, query, { alias: 'Random Walk' });
+  const queryClone = defaultsDeep({}, query, { alias: 'Random Walk' });
   const onInputTextChange = <T extends InfinitySeriesQuery, K extends keyof T, V extends T[K]>(value: V, field: K | 'expression') => {
-    set(query, field, value);
-    onChange(query);
+    set(queryClone, field, value);
+    onChange(queryClone);
   };
   return (
     <>
@@ -20,14 +20,14 @@ export const SeriesEditor = ({ query, onChange }: { query: InfinitySeriesQuery; 
             <DataLinkInput
               onChange={(e) => onInputTextChange(e, `alias`)}
               suggestions={[{ label: 'Series Index', value: '__series.index', origin: VariableOrigin.Series }]}
-              value={query.alias || ''}
+              value={queryClone.alias || ''}
               placeholder="Alias / Random Walk"
             />
           </EditorField>
           <EditorField label="Series Count">
-            <Input type="number" width={12} value={query.seriesCount} placeholder="1" onChange={(e) => onInputTextChange(e.currentTarget.valueAsNumber || 1, `seriesCount`)} />
+            <Input type="number" width={12} value={queryClone.seriesCount} placeholder="1" onChange={(e) => onInputTextChange(e.currentTarget.valueAsNumber || 1, `seriesCount`)} />
           </EditorField>
-          {query.source === 'expression' && (
+          {queryClone.source === 'expression' && (
             <EditorField label="Expression">
               <DataLinkInput
                 onChange={(e) => onInputTextChange(e, `expression`)}
@@ -35,13 +35,13 @@ export const SeriesEditor = ({ query, onChange }: { query: InfinitySeriesQuery; 
                   { label: 'Series Index', value: '__series.index', origin: VariableOrigin.Series },
                   { label: 'Value Index', value: '__value.index', origin: VariableOrigin.Value },
                 ]}
-                value={query.expression || '                                             '}
+                value={queryClone.expression || '                                             '}
                 placeholder="Expression"
               />
             </EditorField>
           )}
           <EditorField label="Advanced Options">
-            <SeriesAdvancedOptions onChange={onChange} query={query} />
+            <SeriesAdvancedOptions onChange={onChange} query={queryClone} />
           </EditorField>
         </div>
       </EditorRow>
@@ -51,7 +51,7 @@ export const SeriesEditor = ({ query, onChange }: { query: InfinitySeriesQuery; 
 
 // exported for testing purposes only
 export const SeriesAdvancedOptions = ({ query, onChange }: { query: InfinitySeriesQuery; onChange: (value: any) => void }) => {
-  query = defaultsDeep({}, query, { dataOverrides: [] });
+  const queryClone = defaultsDeep({}, query, { dataOverrides: [] });
 
   const [popupState, setPopupState] = useState(false);
 
@@ -63,24 +63,24 @@ export const SeriesAdvancedOptions = ({ query, onChange }: { query: InfinitySeri
   });
 
   const addDataOverride = () => {
-    const queryDataOverrides = query.dataOverrides || [];
+    const queryDataOverrides = queryClone.dataOverrides || [];
     let newOverride: DataOverride = {
       values: ['${__value.index}', '10'],
       operator: '>=',
       override: 'null',
     };
     const dataOverrides = queryDataOverrides.concat(newOverride);
-    onChange({ ...query, dataOverrides });
+    onChange({ ...queryClone, dataOverrides });
   };
   const removeDataOverride = (index: number) => {
-    const queryDataOverrides = query.dataOverrides || [];
-    const dataOverrides = queryDataOverrides.filter((_, i) => i !== index);
-    onChange({ ...query, dataOverrides });
+    const queryDataOverrides = queryClone.dataOverrides || [];
+    const dataOverrides = queryDataOverrides.filter((_: any, i: number) => i !== index);
+    onChange({ ...queryClone, dataOverrides });
   };
 
   const onTextChange = (value: string, field: string) => {
-    set(query, field, value);
-    onChange(query);
+    set(queryClone, field, value);
+    onChange(queryClone);
   };
 
   return (
