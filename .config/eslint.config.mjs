@@ -4,6 +4,12 @@ import grafanaConfig from '@grafana/eslint-config';
 export default defineConfig([
   ...grafanaConfig,
   {
+    // eslint-plugin-react's "detect" calls context.getFilename(), which ESLint 10 removed
+    settings: {
+      react: {
+        version: '18.3',
+      },
+    },
     rules: {
       'react/prop-types': 'off',
     },
