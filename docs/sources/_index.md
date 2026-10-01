@@ -76,6 +76,16 @@ Once you have configured the Infinity data source, you can:
 - Configure and use [template variables](/docs/plugins/yesoreyeram-infinity-datasource/latest/variables/) for dynamic dashboards.
 - Add [transformations](https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/transform-data/) to process query results.
 
+{{< docs/shared source="grafana" lookup="datasources/query-with-gcx.md" version="latest" >}}
+
+For example, to query a pre-configured Infinity data source, use `gcx datasources infinity query`:
+
+```sh
+gcx datasources infinity query -d <DATASOURCE_UID> '$.items' -o json
+```
+
+Replace _`<DATASOURCE_UID>`_ with the UID of your Infinity data source. `gcx` reads the URL, type, method, and headers from the saved data source configuration. The optional selector expression (`$.items` for JSON, or an `XPath` for XML or HTML) narrows the returned data.
+
 ## Get started
 
 Watch this video to get started with the Grafana Infinity data source plugin:
