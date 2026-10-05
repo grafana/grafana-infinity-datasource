@@ -1,6 +1,6 @@
 {
   "name": "grafana-infinity-datasource",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "description": "JSON, CSV, XML, GraphQL, HTML and REST API datasource for Grafana. Do infinite things with Grafana. Transform data with UQL/GROQ. Visualize data from many apis, RSS/ATOM feeds directly",
   "keywords": [
     "grafana",
@@ -137,7 +137,8 @@
   },
   "overrides": {
     "fast-xml-parser": "5.7.0",
-    "jsonata": "1.8.9"
+    "jsonata": "1.8.9",
+    "undici": "8.11.2"
   },
   "engines": {
     "node": ">=24",
