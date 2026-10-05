@@ -1,5 +1,13 @@
 # Change Log
 
+## 4.1.1
+
+### Patch Changes
+
+🐛 Security: bump `undici` from 7.29.0 to 8.11.2 (CVE-2026-84961, CVE-2026-85014, CVE-2026-84933, CVE-2026-19534)
+🐛 Security: bump `brace-expansion` to 1.1.21 / 2.1.7 / 5.0.12 (CVE-2026-102278, CVE-2026-102276)
+🐛 Security: bump `qs` from 6.15.3 to 6.16.0 (CVE-2026-82562, CVE-2026-82417)
+
 ## 4.1.0
 
 ### Minor Changes
