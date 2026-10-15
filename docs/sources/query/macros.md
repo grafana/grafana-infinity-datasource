@@ -178,7 +178,7 @@ The same format options apply to `${__timeTo}`.
 
 Use `${__timeFrom}` and `${__timeTo}` instead of Grafana's built-in `${__from}` and `${__to}` variables when making API calls. The Infinity macros are interpolated on the backend, ensuring the time values are correctly passed to external APIs. Grafana's built-in time variables are interpolated on the frontend, which can cause issues with backend data source requests.
 
-For more information about Grafana's built-in time variables, refer to [Global variables](https://grafana.com/docs/grafana/latest/dashboards/variables/add-template-variables/#__from-and-__to).
+For more information about Grafana's built-in time variables, refer to [Built-in variables](https://grafana.com/docs/grafana/<GRAFANA_VERSION>/visualizations/dashboards/variables/built-in-variables/#__from-and-__to).
 
 ## Grafana metadata macros
 
