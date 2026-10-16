@@ -139,7 +139,7 @@
     "dompurify": "3.4.16",
     "fast-xml-parser": "5.7.0",
     "handlebars": "4.7.10",
-    "jsonata": "1.8.9",
+    "jsonata": "2.2.2",
     "moment": "2.31.0",
     "postcss-selector-parser": "7.1.6",
     "smol-toml": "1.9.0",
