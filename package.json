@@ -150,5 +150,5 @@
     "node": ">=24",
     "npm": ">=11.16.0"
   },
-  "packageManager": "npm@11.18.0"
+  "packageManager": "npm@12.2.0"
 }
