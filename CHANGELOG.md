@@ -1,5 +1,11 @@
 # Change Log
 
+## 4.1.2
+
+### Patch Changes
+
+🐛 🐛 Security: bump dependencies to fix vulnerabilities
+
 ## 4.1.1
 
 ### Patch Changes
