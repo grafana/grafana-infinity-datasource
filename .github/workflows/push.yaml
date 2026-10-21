@@ -15,4 +15,4 @@ jobs:
     uses: grafana/plugin-ci-workflows/.github/workflows/ci.yml@ci-cd-workflows/v10.1.0
     with:
       plugin-version-suffix: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || '' }}
-      golangci-lint-version: '2.14.0'
+      golangci-lint-version: '2.15.0'
