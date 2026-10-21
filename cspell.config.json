@@ -26,6 +26,8 @@
     "docker-compose.yaml"
   ],
   "words": [
+    "golangci",
+    "GOPATH",
     "ANSIC",
     "awsauth",
     "awsds",
