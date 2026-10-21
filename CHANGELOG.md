@@ -1,5 +1,11 @@
 # Change Log
 
+## 4.1.3
+
+### Patch Changes
+
+⚙️ Pin golangci-lint to 2.15.0 in development dependencies and CI/CD pipelines
+
 ## 4.1.2
 
 ### Patch Changes
