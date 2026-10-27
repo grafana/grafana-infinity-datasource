@@ -1,5 +1,11 @@
 # Change Log
 
+## 4.1.4
+
+### Patch Changes
+
+⚙️ Chore: bump dependencies
+
 ## 4.1.3
 
 ### Patch Changes
