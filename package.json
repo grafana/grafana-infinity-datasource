@@ -136,7 +136,7 @@
     "webpack-virtual-modules": "0.6.2"
   },
   "overrides": {
-    "dompurify": "3.4.16",
+    "dompurify": "3.4.17",
     "fast-xml-parser": "5.7.0",
     "handlebars": "4.7.10",
     "jsonata": "1.8.9",
@@ -144,7 +144,8 @@
     "postcss-selector-parser": "7.1.6",
     "smol-toml": "1.9.0",
     "source-map-js": "1.2.2",
-    "undici": "8.11.2"
+    "undici": "8.12.2",
+    "zod": "4.6.6"
   },
   "engines": {
     "node": ">=24",
