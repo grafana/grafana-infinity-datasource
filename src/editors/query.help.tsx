@@ -33,7 +33,14 @@ export const HelpLinks = () => {
         <LinkButton size="sm" variant="secondary" fill="outline" href="https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/query/uql" target="_blank" rel="noreferrer">
           UQL
         </LinkButton>
-        <LinkButton size="sm" variant="secondary" fill="outline" href="https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/setup/authentication" target="_blank" rel="noreferrer">
+        <LinkButton
+          size="sm"
+          variant="secondary"
+          fill="outline"
+          href="https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/configure#authentication"
+          target="_blank"
+          rel="noreferrer"
+        >
           Authentication
         </LinkButton>
         <LinkButton size="sm" variant="secondary" fill="outline" href="https://github.com/grafana/grafana-infinity-datasource/discussions/categories/show-and-tell" target="_blank" rel="noreferrer">

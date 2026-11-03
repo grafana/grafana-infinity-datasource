@@ -4,6 +4,11 @@ menuTitle: Configure
 description: Learn how to configure the Infinity data source plugin for Grafana
 aliases:
   - infinity/configure
+  - /docs/plugins/yesoreyeram-infinity-datasource/latest/setup/
+  - /docs/plugins/yesoreyeram-infinity-datasource/latest/setup/authentication/
+  - /docs/plugins/yesoreyeram-infinity-datasource/latest/setup/configuration/
+  - /docs/plugins/yesoreyeram-infinity-datasource/latest/setup/configuration/network/
+  - /docs/plugins/yesoreyeram-infinity-datasource/latest/setup/provisioning/
 keywords:
   - data source
   - infinity
