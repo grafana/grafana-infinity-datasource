@@ -136,6 +136,7 @@
     "webpack-virtual-modules": "0.6.2"
   },
   "overrides": {
+    "csv-parse": "7.0.2",
     "dompurify": "3.4.17",
     "fast-xml-parser": "5.7.0",
     "handlebars": "4.7.10",

@@ -9,6 +9,8 @@ module.exports = {
   transformIgnorePatterns: originalConfig.transformIgnorePatterns.map((pattern) => (pattern.startsWith('node_modules') ? `../../${pattern}` : pattern)),
   moduleNameMapper: {
     ...originalConfig.moduleNameMapper,
+    // uql@0.0.24 imports csv-parse/lib/sync (v4); csv-parse@7 removed that path.
+    '^csv-parse/lib/sync$': '<rootDir>/src/shims/csv-parse-lib-sync.js',
     '^@/components/(.*)': '<rootDir>/src/components/$1',
     '^@/editors/(.*)': '<rootDir>/src/editors/$1',
     '^@/utils/(.*)': '<rootDir>/src/utils/$1',

@@ -45,6 +45,8 @@ const config = async (env: any): Promise<Configuration> => {
     },
     resolve: {
       alias: {
+        // uql@0.0.24 imports csv-parse/lib/sync (v4); csv-parse@7 removed that path.
+        'csv-parse/lib/sync': path.resolve(process.cwd(), 'src/shims/csv-parse-lib-sync.js'),
         '@/components': path.resolve(process.cwd(), 'src/components/'),
         '@/editors': path.resolve(process.cwd(), 'src/editors/'),
         '@/utils': path.resolve(process.cwd(), 'src/utils/'),
