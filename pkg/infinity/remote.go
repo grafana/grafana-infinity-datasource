@@ -13,6 +13,7 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/grafana/infinity-libs/lib/go/jsonframer"
 	"github.com/grafana/infinity-libs/lib/go/transformations"
+	jsonata "github.com/xiatechs/jsonata-go"
 )
 
 func isBackendQuery(query models.Query) bool {
@@ -117,15 +118,15 @@ func ApplyPaginationItemToQuery(query models.Query, fieldType models.PaginationP
 	case models.PaginationParamTypeBodyData:
 		query.URLOptions.BodyForm = append(query.URLOptions.BodyForm, field)
 	case models.PaginationParamTypeBodyJson:
-		body := map[string]any{}
+		body := map[string]json.RawMessage{}
 		if trimmed := strings.TrimSpace(query.URLOptions.Body); trimmed != "" {
-			if err := json.Unmarshal([]byte(trimmed), &body); err != nil {
+			if err := json.Unmarshal([]byte(trimmed), &body); err != nil || body == nil {
 				// Body isn't a valid JSON object; leave it untouched rather than
 				// overwriting the user's payload with just the cursor field.
 				return query
 			}
 		}
-		body[fieldName] = fieldValue
+		body[fieldName], _ = json.Marshal(fieldValue)
 		if b, err := json.Marshal(body); err == nil {
 			query.URLOptions.Body = string(b)
 		}
@@ -242,11 +243,11 @@ func GetFrameForURLSourcesWithPostProcessing(ctx context.Context, pCtx *backend.
 		}
 		cursor, err = jsonframer.GetRootData(string(body), query.PageParamCursorFieldExtractionPath, framerType)
 		if err != nil {
-			// Many cursor-based APIs omit the cursor field entirely on the last
-			// page (instead of returning an empty value). In that case the
-			// extraction yields no result, which we treat as "no more pages"
-			// rather than a fatal error so pagination stops gracefully.
-			return frame, "", nil
+			// A missing cursor marks the final page. Keep other extraction errors.
+			if errors.Is(err, jsonata.ErrUndefined) {
+				return frame, "", nil
+			}
+			return frame, cursor, backend.PluginError(errors.New("error while extracting the cursor value"))
 		}
 	}
 	return frame, cursor, nil
