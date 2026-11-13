@@ -14,6 +14,11 @@ import (
 	"moul.io/http2curl/v2"
 )
 
+var defaultPorts = map[string]string{
+	"http":  "80",
+	"https": "443",
+}
+
 func GetRequest(ctx context.Context, pCtx *backend.PluginContext, settings models.InfinitySettings, body io.Reader, query models.Query, requestHeaders map[string]string, includeSect bool) (req *http.Request, err error) {
 	ctx, span := tracing.DefaultTracer().Start(ctx, "GetRequest")
 	defer span.End()
@@ -53,15 +58,34 @@ func GetRequest(ctx context.Context, pCtx *backend.PluginContext, settings model
 func GetQueryURL(ctx context.Context, pCtx *backend.PluginContext, settings models.InfinitySettings, query models.Query, includeSect bool) (string, error) {
 	_, span := tracing.DefaultTracer().Start(ctx, "GetQueryURL")
 	defer span.End()
-	urlString := query.URL
-	if !strings.HasPrefix(query.URL, settings.URL) {
-		urlString = settings.URL + urlString
+	urlString := replaceSect(query.URL, settings, includeSect)
+	baseURLString := replaceSect(settings.URL, settings, includeSect)
+	queryURL, err := url.Parse(urlString)
+	if err != nil {
+		return urlString, err
 	}
-	urlString = replaceSect(urlString, settings, includeSect)
+	// Absolute URLs are validated below, not concatenated with the base path.
+	if !queryURL.IsAbs() && !strings.HasPrefix(urlString, baseURLString) {
+		urlString = baseURLString + urlString
+	}
+	// Normalize before checking the origin: GitHub blob URLs can change hosts.
+	urlString = NormalizeURL(urlString)
 	u, err := url.Parse(urlString)
 	if err != nil {
 		return urlString, err
 	}
+	// If a base URL is configured make sure it has the same origin as the query URL
+	if settings.URL != "" {
+		parsedSettings, err := url.Parse(models.FixMissingURLSchema(baseURLString))
+		if err != nil {
+			return urlString, err
+		}
+
+		if !SameOrigin(u, parsedSettings) {
+			return urlString, models.ErrQueryURLNotAllowedByBaseURL
+		}
+	}
+
 	q := u.Query()
 	for _, param := range query.URLOptions.Params {
 		value := replaceSect(param.Value, settings, includeSect)
@@ -88,7 +112,7 @@ func GetQueryURL(ctx context.Context, pCtx *backend.PluginContext, settings mode
 	} else {
 		u.RawQuery = q.Encode()
 	}
-	return NormalizeURL(u.String()), nil
+	return u.String(), nil
 }
 
 func NormalizeURL(u string) string {
@@ -156,4 +180,21 @@ func interpolateGrafanaMetaDataMacros(value string, pCtx *backend.PluginContext)
 		}
 	}
 	return value
+}
+
+// SameOrigin returns true if the scheme, host, and port of the 2 URLs match
+func SameOrigin(url1 *url.URL, url2 *url.URL) bool {
+	port1 := url1.Port()
+	if port1 == "" {
+		port1 = defaultPorts[url1.Scheme]
+	}
+
+	port2 := url2.Port()
+	if port2 == "" {
+		port2 = defaultPorts[url2.Scheme]
+	}
+
+	return strings.EqualFold(url1.Scheme, url2.Scheme) &&
+		strings.EqualFold(url1.Hostname(), url2.Hostname()) &&
+		port1 == port2
 }

@@ -138,6 +138,7 @@ func TestGetQueryURL(t *testing.T) {
 		pCtx          *backend.PluginContext
 		excludeSecret bool
 		want          string
+		wantErr       error
 	}{
 		{
 			settings: models.InfinitySettings{},
@@ -179,14 +180,14 @@ func TestGetQueryURL(t *testing.T) {
 			want: "https://foo.com/hello?foo=bar&key=val10&key=val11&key2=value2",
 		},
 		{
-			name: "should always respect the URL in the settings",
+			name: "should reject a query URL on a different host than the base URL",
 			settings: models.InfinitySettings{
 				URL: "https://one.com",
 			},
 			query: models.Query{
 				URL: "https://two.com/hello?key=val",
 			},
-			want: "https://one.comhttps://two.com/hello?key=val",
+			wantErr: models.ErrQueryURLNotAllowedByBaseURL,
 		},
 		{
 			settings: models.InfinitySettings{
@@ -314,12 +315,421 @@ func TestGetQueryURL(t *testing.T) {
 			},
 			want: "http://foo.com?X-Grafana-User=testuser",
 		},
+		{
+			name: "should reject a query URL whose parsed host is not the base URL host",
+			settings: models.InfinitySettings{
+				URL: "http://base.example",
+			},
+			query: models.Query{
+				URL: "http://base.example@other.example:8081/path",
+			},
+			wantErr: models.ErrQueryURLNotAllowedByBaseURL,
+		},
+		{
+			name: "should reject a query URL whose host differs from the base URL host",
+			settings: models.InfinitySettings{
+				URL: "http://base.example",
+			},
+			query: models.Query{
+				URL: "http://base.example.other.example/path",
+			},
+			wantErr: models.ErrQueryURLNotAllowedByBaseURL,
+		},
+		{
+			name: "should reject a relative query URL that resolves to a different host",
+			settings: models.InfinitySettings{
+				URL: "http://base.example",
+			},
+			query: models.Query{
+				URL: "@other.example/path",
+			},
+			wantErr: models.ErrQueryURLNotAllowedByBaseURL,
+		},
+		{
+			name: "should reject a relative query URL that extends the base URL host",
+			settings: models.InfinitySettings{
+				URL: "http://base.example",
+			},
+			query: models.Query{
+				URL: ".other.example/path",
+			},
+			wantErr: models.ErrQueryURLNotAllowedByBaseURL,
+		},
+		{
+			name: "should reject a query URL on the same host but a different port",
+			settings: models.InfinitySettings{
+				URL: "https://foo.com",
+			},
+			query: models.Query{
+				URL: "https://foo.com:8081/path",
+			},
+			wantErr: models.ErrQueryURLNotAllowedByBaseURL,
+		},
+		{
+			name: "should reject a query URL whose host and port differ from the base URL",
+			settings: models.InfinitySettings{
+				URL: "http://localhost:3000",
+			},
+			query: models.Query{
+				URL: "http://localhost:3000@localhost:8081/path",
+			},
+			wantErr: models.ErrQueryURLNotAllowedByBaseURL,
+		},
+		{
+			name: "should reject a query URL on the same host but a different scheme",
+			settings: models.InfinitySettings{
+				URL: "https://foo.com",
+			},
+			query: models.Query{
+				URL: "http://foo.com/path",
+			},
+			wantErr: models.ErrQueryURLNotAllowedByBaseURL,
+		},
+		{
+			name: "should reject a relative query URL that resolves to a different host when the base URL has no scheme",
+			settings: models.InfinitySettings{
+				URL: "foo.com",
+			},
+			query: models.Query{
+				URL: "@other.example/path",
+			},
+			wantErr: models.ErrQueryURLNotAllowedByBaseURL,
+		},
+		{
+			name: "should reject a relative query URL that resolves to a different host when the base URL has no scheme and a port",
+			settings: models.InfinitySettings{
+				URL: "localhost:3000",
+			},
+			query: models.Query{
+				URL: "@other.example/path",
+			},
+			wantErr: models.ErrQueryURLNotAllowedByBaseURL,
+		},
+		{
+			name:     "should skip the base URL check when the base URL is empty",
+			settings: models.InfinitySettings{},
+			query: models.Query{
+				URL: "https://foo.com/hello?key=val",
+			},
+			want: "https://foo.com/hello?key=val",
+		},
+		{
+			name: "should allow a relative query URL on a base URL with a port",
+			settings: models.InfinitySettings{
+				URL: "https://foo.com:8443",
+			},
+			query: models.Query{
+				URL: "/hello",
+			},
+			want: "https://foo.com:8443/hello",
+		},
+		{
+			name: "should allow a matching absolute query URL on a base URL with a port",
+			settings: models.InfinitySettings{
+				URL: "https://foo.com:8443",
+			},
+			query: models.Query{
+				URL: "https://foo.com:8443/hello",
+			},
+			want: "https://foo.com:8443/hello",
+		},
+		{
+			name: "should allow a relative query URL on a base URL with a path",
+			settings: models.InfinitySettings{
+				URL: "https://foo.com/api",
+			},
+			query: models.Query{
+				URL: "/users",
+			},
+			want: "https://foo.com/api/users",
+		},
+		{
+			name: "should allow an explicit default https port that matches the implicit base port",
+			settings: models.InfinitySettings{
+				URL: "https://foo.com",
+			},
+			query: models.Query{
+				URL: "https://foo.com:443/path",
+			},
+			want: "https://foo.com:443/path",
+		},
+		{
+			name: "should allow an explicit default http port that matches the implicit base port",
+			settings: models.InfinitySettings{
+				URL: "http://foo.com",
+			},
+			query: models.Query{
+				URL: "http://foo.com:80/path",
+			},
+			want: "http://foo.com:80/path",
+		},
+		{
+			name: "should allow a relative query URL on a base URL with an explicit default port",
+			settings: models.InfinitySettings{
+				URL: "https://foo.com:443",
+			},
+			query: models.Query{
+				URL: "/path",
+			},
+			want: "https://foo.com:443/path",
+		},
+		{
+			name: "should allow an uppercase scheme that matches the base URL",
+			settings: models.InfinitySettings{
+				URL: "HTTPS://foo.com",
+			},
+			query: models.Query{
+				URL: "HTTPS://foo.com/path",
+			},
+			want: "https://foo.com/path",
+		},
+		{
+			name: "should allow another host that appears only in the query string",
+			settings: models.InfinitySettings{
+				URL: "https://foo.com",
+			},
+			query: models.Query{
+				URL: "https://foo.com/path?next=other.example",
+			},
+			want: "https://foo.com/path?next=other.example",
+		},
+		{
+			name: "should allow an at sign that appears only in the fragment",
+			settings: models.InfinitySettings{
+				URL: "https://foo.com",
+			},
+			query: models.Query{
+				URL: "https://foo.com/path#frag@other.example",
+			},
+			want: "https://foo.com/path#frag@other.example",
+		},
+		{
+			name: "should allow a relative query URL on a base URL with a trailing slash",
+			settings: models.InfinitySettings{
+				URL: "https://foo.com/",
+			},
+			query: models.Query{
+				URL: "path",
+			},
+			want: "https://foo.com/path",
+		},
+		{
+			name: "should allow a matching absolute query URL on a base URL with a trailing slash",
+			settings: models.InfinitySettings{
+				URL: "https://foo.com/",
+			},
+			query: models.Query{
+				URL: "https://foo.com/path",
+			},
+			want: "https://foo.com/path",
+		},
+		{
+			name: "should reject a query URL with an explicit non-default port when the base port is implicit",
+			settings: models.InfinitySettings{
+				URL: "https://foo.com",
+			},
+			query: models.Query{
+				URL: "https://foo.com:80/path",
+			},
+			wantErr: models.ErrQueryURLNotAllowedByBaseURL,
+		},
+		{
+			name: "should reject a query URL on the same host but a different explicit port",
+			settings: models.InfinitySettings{
+				URL: "https://foo.com",
+			},
+			query: models.Query{
+				URL: "https://foo.com:8443/path",
+			},
+			wantErr: models.ErrQueryURLNotAllowedByBaseURL,
+		},
+		{
+			name: "should reject a different host after macro expansion",
+			settings: models.InfinitySettings{
+				URL: "https://foo.com",
+				SecureQueryFields: map[string]string{
+					"h": "@other.example",
+				},
+			},
+			query: models.Query{
+				URL: "https://foo.com${__qs.h}/path",
+			},
+			wantErr: models.ErrQueryURLNotAllowedByBaseURL,
+		},
+		{
+			name: "should reject an extended host after macro expansion",
+			settings: models.InfinitySettings{
+				URL: "https://foo.com",
+				SecureQueryFields: map[string]string{
+					"h": ".other.example",
+				},
+			},
+			query: models.Query{
+				URL: "https://foo.com${__qs.h}/path",
+			},
+			wantErr: models.ErrQueryURLNotAllowedByBaseURL,
+		},
+		{
+			name:     "absolute URL is not prefixed with the base path",
+			settings: models.InfinitySettings{URL: "https://foo.com/api"},
+			query:    models.Query{URL: "https://foo.com/users"},
+			want:     "https://foo.com/users",
+		},
+		{
+			name:     "implicit query port matches explicit base default port",
+			settings: models.InfinitySettings{URL: "https://foo.com:443"},
+			query:    models.Query{URL: "https://foo.com/users"},
+			want:     "https://foo.com/users",
+		},
+		{
+			name:     "hostname case does not cause base concatenation",
+			settings: models.InfinitySettings{URL: "https://FOO.com/api"},
+			query:    models.Query{URL: "https://foo.com/users"},
+			want:     "https://foo.com/users",
+		},
+		{
+			name:     "normalized GitHub destination cannot escape the base origin",
+			settings: models.InfinitySettings{URL: "https://github.com"},
+			query:    models.Query{URL: "https://github.com/example/repo/blob/main/data.json"},
+			wantErr:  models.ErrQueryURLNotAllowedByBaseURL,
+		},
+		{
+			name:  "GitHub normalization without a base remains supported",
+			query: models.Query{URL: "https://github.com/example/repo/blob/main/data.json"},
+			want:  "https://raw.githubusercontent.com/example/repo/main/data.json",
+		},
+		{
+			name:     "IPv6 base accepts a relative path",
+			settings: models.InfinitySettings{URL: "http://[::1]:8080/api"},
+			query:    models.Query{URL: "/users"},
+			want:     "http://[::1]:8080/api/users",
+		},
+		{
+			name:     "IPv6 base rejects a different port",
+			settings: models.InfinitySettings{URL: "http://[::1]:8080"},
+			query:    models.Query{URL: "http://[::1]:8081/users"},
+			wantErr:  models.ErrQueryURLNotAllowedByBaseURL,
+		},
+		{
+			name: "should allow a macro expansion that stays on the base host",
+			settings: models.InfinitySettings{
+				URL: "https://foo.com",
+				SecureQueryFields: map[string]string{
+					"p": "x",
+				},
+			},
+			query: models.Query{
+				URL: "https://foo.com/${__qs.p}",
+			},
+			want: "https://foo.com/x?p=x",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			u, err := infinity.GetQueryURL(context.TODO(), tt.pCtx, tt.settings, tt.query, !tt.excludeSecret)
-			assert.Equal(t, err, nil)
+			if tt.wantErr != nil {
+				assert.ErrorIs(t, err, tt.wantErr)
+				return
+			}
+			assert.NoError(t, err)
 			assert.Equal(t, tt.want, u)
+		})
+	}
+}
+
+func TestSameOrigin(t *testing.T) {
+	tests := []struct {
+		name string
+		url1 string
+		url2 string
+		want bool
+	}{
+		{
+			name: "identical URLs are same origin",
+			url1: "https://foo.com/path",
+			url2: "https://foo.com/path",
+			want: true,
+		},
+		{
+			name: "implicit and explicit default https port are same origin",
+			url1: "https://foo.com",
+			url2: "https://foo.com:443",
+			want: true,
+		},
+		{
+			name: "implicit and explicit default http port are same origin",
+			url1: "http://foo.com",
+			url2: "http://foo.com:80",
+			want: true,
+		},
+		{
+			name: "hostname comparison is case insensitive",
+			url1: "https://FOO.com",
+			url2: "https://foo.com",
+			want: true,
+		},
+		{
+			name: "scheme comparison is case insensitive",
+			url1: "HTTPS://foo.com",
+			url2: "https://foo.com",
+			want: true,
+		},
+		{
+			name: "same effective port but different scheme is not same origin",
+			url1: "http://foo.com:443",
+			url2: "https://foo.com",
+			want: false,
+		},
+		{
+			name: "matching ports across schemes with explicit port is not same origin",
+			url1: "https://foo.com:80",
+			url2: "http://foo.com",
+			want: false,
+		},
+		{
+			name: "different explicit port is not same origin",
+			url1: "https://foo.com",
+			url2: "https://foo.com:8443",
+			want: false,
+		},
+		{
+			name: "host that is a suffix extension is not same origin",
+			url1: "https://foo.com",
+			url2: "https://foo.com.other.example",
+			want: false,
+		},
+		{
+			name: "trailing dot host is not same origin",
+			url1: "https://foo.com",
+			url2: "https://foo.com.",
+			want: false,
+		},
+		{
+			name: "differing paths are still same origin",
+			url1: "https://foo.com/a",
+			url2: "https://foo.com/b",
+			want: true,
+		},
+		{
+			name: "credentials component is not part of the origin comparison",
+			url1: "https://user@foo.com",
+			url2: "https://foo.com",
+			want: true,
+		},
+		{
+			name: "a host in the credentials component is not part of the origin comparison",
+			url1: "https://other.example@foo.com",
+			url2: "https://foo.com",
+			want: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			u1, err := url.Parse(tt.url1)
+			require.NoError(t, err)
+			u2, err := url.Parse(tt.url2)
+			require.NoError(t, err)
+			assert.Equal(t, tt.want, infinity.SameOrigin(u1, u2))
 		})
 	}
 }

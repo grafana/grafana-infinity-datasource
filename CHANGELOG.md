@@ -4,6 +4,8 @@
 
 ### Patch Changes
 
+🐛 Security: enforce the configured base URL origin for query URLs and apply base URL and allowed hosts restrictions to every redirect, including AWS-authenticated requests.
+
 🐛 Security: bump dependencies to fix vulnerabilities
 
 ## 4.1.6

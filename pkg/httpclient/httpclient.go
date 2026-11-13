@@ -200,6 +200,9 @@ func applyAWSAuth(ctx context.Context, httpClient *http.Client, settings models.
 		if err != nil {
 			return tempHttpClient, err
 		}
+		// Don't follow redirects here: return the 3xx to the outer client so that its redirect
+		// policy is applied and the next hop is signed again for its own host.
+		tempHttpClient.CheckRedirect = func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse }
 		authType := settings.AWSSettings.AuthType
 		if authType == "" {
 			authType = models.AWSAuthTypeKeys
