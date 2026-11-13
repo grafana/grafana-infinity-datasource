@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card, InlineFormLabel, Input, TextArea } from '@grafana/ui';
+import { Button, Card, InlineFormLabel, Input, Stack, TextArea } from '@grafana/ui';
 import type { InfinityOptions, InfinityReferenceData } from '@/types';
 import type { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 
@@ -27,12 +27,15 @@ export const ReferenceDataEditor = (props: DataSourcePluginOptionsEditorProps<In
       {refData.map((rd, rdi) => {
         return (
           <Card key={rdi}>
-            <Card.Heading>
-              <InlineFormLabel width={5}>Name</InlineFormLabel>
-              <Input value={rd.name} placeholder="Give an unique name to your reference data" onChange={(e) => onNameUpdate(rdi, 'name', e.currentTarget.value)} />
-            </Card.Heading>
+            {/* Not in Card.Heading: Grafana 13.3+ sets pointer-events: none on inputs there, so the name couldn't be clicked */}
             <Card.Description>
-              <TextArea value={rd.data} placeholder="Enter data here. either json / csv / tsv / xml / html" onChange={(e) => onNameUpdate(rdi, 'data', e.currentTarget.value)} rows={5} />
+              <Stack direction="column" gap={1}>
+                <Stack gap={0} alignItems="center">
+                  <InlineFormLabel width={5}>Name</InlineFormLabel>
+                  <Input value={rd.name} placeholder="Give an unique name to your reference data" onChange={(e) => onNameUpdate(rdi, 'name', e.currentTarget.value)} />
+                </Stack>
+                <TextArea value={rd.data} placeholder="Enter data here. either json / csv / tsv / xml / html" onChange={(e) => onNameUpdate(rdi, 'data', e.currentTarget.value)} rows={5} />
+              </Stack>
             </Card.Description>
             <Card.Actions>
               <Button
