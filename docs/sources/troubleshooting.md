@@ -33,11 +33,11 @@ These errors occur when the data source cannot connect to the target URL.
 
 **Cause:** Infinity validates the final request URL against the **Allowed hosts** list before sending it. The data source assembles and checks the URL in this order:
 
-1. If a **Base URL** is set in the data source configuration, it's prefixed to the query URL.
-1. The combined URL is checked against the **Allowed hosts** list.
-1. The query runs only when the URL matches an allowed entry.
+1. If a **Base URL** is set in the data source configuration, it's prefixed to relative query URLs. The final normalized URL must have the same origin as the base URL.
+1. The final URL is checked against the **Allowed hosts** list.
+1. The query runs only when the URL matches an allowed entry. Every redirect destination is checked again against both restrictions.
 
-An entry matches only when it's a prefix of the final URL, including the scheme, and the host names match. Because the match includes the scheme and the full path prefix, small differences cause the URL to be rejected.
+An entry matches only when it's a prefix of the final URL, including the scheme, and the host names and effective ports match. Because the match includes the scheme and the full path prefix, small differences cause the URL to be rejected.
 
 **Possible causes and solutions:**
 
@@ -58,6 +58,14 @@ To add or correct an allowed host:
 {{< admonition type="note" >}}
 Allowed hosts are required when authentication, custom headers, TLS certificates, custom query parameters, or cookie forwarding are configured. If none of these features are in use and the allowed hosts field is empty, all hosts are allowed by default. Configuring a base URL also satisfies this requirement.
 {{< /admonition >}}
+
+### Query URL does not match the base URL
+
+**Error message:** "query URL does not match the data source's base URL"
+
+**Cause:** The final normalized query URL or a redirect destination has a different scheme, host, or effective port than the configured **Base URL**.
+
+**Solution:** Use a relative query URL such as `/users`, or an absolute URL with the same origin as the base URL. Allowed hosts cannot override the base URL restriction. To query another origin, use a separate data source instance. GitHub blob URLs are normalized to `raw.githubusercontent.com`; configure that destination directly rather than a `github.com` base URL.
 
 ### Connection timeout
 

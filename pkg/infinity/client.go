@@ -52,6 +52,7 @@ func NewClient(ctx context.Context, settings models.InfinitySettings) (client *C
 		Settings:   settings,
 		HttpClient: httpClient,
 	}
+	httpClient.CheckRedirect = getCheckRedirect(settings)
 	if settings.AuthenticationMethod == models.AuthenticationMethodAzureBlob {
 		cred, err := azblob.NewSharedKeyCredential(settings.AzureBlobAccountName, settings.AzureBlobAccountKey)
 		if err != nil {
@@ -128,6 +129,13 @@ func (client *Client) req(ctx context.Context, pCtx *backend.PluginContext, url 
 		}()
 	}
 	if err != nil {
+		for _, policyErr := range []error{models.ErrInvalidConfigHostNotAllowed, models.ErrQueryURLNotAllowedByBaseURL} {
+			if errors.Is(err, policyErr) {
+				// net/http wraps redirect failures with the destination URL, which may contain secrets.
+				logger.Debug("redirect blocked", "error", policyErr.Error())
+				return nil, http.StatusUnauthorized, duration, backend.DownstreamError(policyErr)
+			}
+		}
 		if res != nil {
 			logger.Debug("error getting response from server", "url", url, "method", req.Method, "error", err.Error(), "status code", res.StatusCode)
 			// Infinity can query anything and users are responsible for ensuring that endpoint/auth is correct
@@ -250,6 +258,30 @@ func CanParseAsJSON(queryType models.QueryType, responseHeaders http.Header) boo
 	return false
 }
 
+// maxRedirects matches the net/http default policy
+const maxRedirects = 10
+
+// getCheckRedirect returns a redirect policy that applies the Allowed hosts and Base URL
+// restrictions to every hop, so a redirect cannot reach a host the initial request couldn't.
+// The check runs before the next request is sent, so no credentials are attached to a blocked hop.
+func getCheckRedirect(settings models.InfinitySettings) func(*http.Request, []*http.Request) error {
+	return func(req *http.Request, via []*http.Request) error {
+		if len(via) >= maxRedirects {
+			return fmt.Errorf("stopped after %d redirects", maxRedirects)
+		}
+		if !CanAllowURL(req.URL.String(), settings.AllowedHosts) {
+			return models.ErrInvalidConfigHostNotAllowed
+		}
+		if settings.URL != "" {
+			baseURL, err := url.Parse(models.FixMissingURLSchema(replaceSect(settings.URL, settings, true)))
+			if err != nil || !SameOrigin(req.URL, baseURL) {
+				return models.ErrQueryURLNotAllowedByBaseURL
+			}
+		}
+		return nil
+	}
+}
+
 func CanAllowURL(urlString string, allowedUrls []string) bool {
 	allow := false
 	if len(allowedUrls) == 0 {
@@ -271,9 +303,13 @@ func CanAllowURL(urlString string, allowedUrls []string) bool {
 			backend.Logger.Debug("error parsing the URL", "err", err.Error())
 			return false
 		}
+		parsedAllowedURL, err := url.Parse(models.FixMissingURLSchema(allowedUrl))
+		if err != nil {
+			return false
+		}
 		parsedURLHostName := parsedURL.Hostname()
 		matchesHostName := allowedHosts[parsedURLHostName]
-		if matchesURL && matchesHostName {
+		if matchesURL && matchesHostName && SameOrigin(parsedURL, parsedAllowedURL) {
 			return true
 		}
 	}
