@@ -274,6 +274,10 @@
                         "value": "ap-south-1"
                     },
                     {
+                        "label": "ap-south-2",
+                        "value": "ap-south-2"
+                    },
+                    {
                         "label": "ap-southeast-1",
                         "value": "ap-southeast-1"
                     },
@@ -286,8 +290,20 @@
                         "value": "ap-southeast-3"
                     },
                     {
+                        "label": "ap-southeast-4",
+                        "value": "ap-southeast-4"
+                    },
+                    {
+                        "label": "ap-southeast-5",
+                        "value": "ap-southeast-5"
+                    },
+                    {
                         "label": "ca-central-1",
                         "value": "ca-central-1"
+                    },
+                    {
+                        "label": "ca-west-1",
+                        "value": "ca-west-1"
                     },
                     {
                         "label": "cn-north-1",
@@ -302,12 +318,20 @@
                         "value": "eu-central-1"
                     },
                     {
+                        "label": "eu-central-2",
+                        "value": "eu-central-2"
+                    },
+                    {
                         "label": "eu-north-1",
                         "value": "eu-north-1"
                     },
                     {
                         "label": "eu-south-1",
                         "value": "eu-south-1"
+                    },
+                    {
+                        "label": "eu-south-2",
+                        "value": "eu-south-2"
                     },
                     {
                         "label": "eu-west-1",
@@ -322,8 +346,20 @@
                         "value": "eu-west-3"
                     },
                     {
+                        "label": "il-central-1",
+                        "value": "il-central-1"
+                    },
+                    {
+                        "label": "me-central-1",
+                        "value": "me-central-1"
+                    },
+                    {
                         "label": "me-south-1",
                         "value": "me-south-1"
+                    },
+                    {
+                        "label": "mx-central-1",
+                        "value": "mx-central-1"
                     },
                     {
                         "label": "sa-east-1",
