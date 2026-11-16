@@ -65,7 +65,14 @@ Allowed hosts are required when authentication, custom headers, TLS certificates
 
 **Cause:** The final normalized query URL or a redirect destination has a different scheme, host, or effective port than the configured **Base URL**.
 
-**Solution:** Use a relative query URL such as `/users`, or an absolute URL with the same origin as the base URL. Allowed hosts cannot override the base URL restriction. To query another origin, use a separate data source instance. GitHub blob URLs are normalized to `raw.githubusercontent.com`; configure that destination directly rather than a `github.com` base URL.
+**Solution:** Use a relative query URL such as `/users`, or an absolute URL with the same origin as the base URL. Allowed hosts cannot override the base URL restriction. To query another origin, use a separate data source instance.
+
+GitHub blob URLs are normalized before origin validation: `https://github.com/o/r/blob/main/a.json` becomes `https://raw.githubusercontent.com/o/r/main/a.json`. Either:
+
+- Set Base URL to `https://raw.githubusercontent.com/o/r/main` and query URL to `/a.json`, updating Allowed hosts to the raw-content destination if configured; or
+- Remove Base URL, use the full raw-content URL (or the original blob URL), and configure Allowed hosts for `https://raw.githubusercontent.com`.
+
+Adding `raw.githubusercontent.com` to Allowed hosts alone cannot override a `github.com` Base URL restriction.
 
 ### Connection timeout
 
@@ -246,13 +253,13 @@ For custom token configurations, refer to [OAuth2 token customization](https://g
 
 **Symptoms:** OAuth2 client credentials authentication fails against Microsoft Entra ID (formerly Azure AD), often with a token error or a "URL not allowed" error.
 
-**Cause:** The token URL, scopes, or allowed hosts are incorrect. With client credentials, Infinity makes two separate calls: one to the token endpoint and one to the data endpoint. Both hosts must be in the **Allowed hosts** list.
+**Cause:** The token URL, scopes, or allowed hosts are incorrect. With client credentials, Infinity makes two separate calls: one to the token endpoint and one to the data endpoint. The data endpoint must satisfy **Allowed hosts** and any configured **Base URL** restriction. Token acquisition uses a separate client without those checks; independently verify that the administrator-configured token endpoint and its redirects are trusted.
 
 **Solution:**
 
 1. Set the **Token URL** to your tenant endpoint, for example `https://login.microsoftonline.com/<tenant-id>/oauth2/v2.0/token`.
 1. Set **Scopes** to the resource scope. For client credentials, this is typically `https://<resource>/.default`.
-1. Add both hosts to **Allowed hosts**: the token endpoint host, for example `https://login.microsoftonline.com`, and the data endpoint host, for example `https://management.azure.com`.
+1. Add the data endpoint host to **Allowed hosts**, for example `https://management.azure.com`. Verify the token endpoint separately; adding it to Allowed hosts does not restrict token requests or their redirects.
 1. If your token endpoint requires custom headers, add them as token request headers. Multiple token request headers are supported in version 3.8.0 and later. Refer to [OAuth2 token customization](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/advanced-features/oauth2-custom-tokens/).
 
 For a complete Azure example, refer to [Azure API](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/examples/azure/).

@@ -514,6 +514,37 @@ func TestGetQueryURL(t *testing.T) {
 			want: "https://foo.com/path",
 		},
 		{
+			name: "should allow a colon in a relative query path",
+			settings: models.InfinitySettings{
+				URL: "https://foo.com/",
+			},
+			query: models.Query{
+				URL: "items:batchGet",
+			},
+			want: "https://foo.com/items:batchGet",
+		},
+		{
+			name: "should allow secure values in a colon-bearing relative query path",
+			settings: models.InfinitySettings{
+				URL:               "https://foo.com/",
+				SecureQueryFields: map[string]string{"operation": "batchGet"},
+			},
+			query: models.Query{
+				URL: "items:${__qs.operation}",
+			},
+			want: "https://foo.com/items:batchGet?operation=batchGet",
+		},
+		{
+			name: "should allow an absolute query path outside the base path on the same origin",
+			settings: models.InfinitySettings{
+				URL: "https://foo.com/v1",
+			},
+			query: models.Query{
+				URL: "https://foo.com/v2/items",
+			},
+			want: "https://foo.com/v2/items",
+		},
+		{
 			name: "should allow a matching absolute query URL on a base URL with a trailing slash",
 			settings: models.InfinitySettings{
 				URL: "https://foo.com/",

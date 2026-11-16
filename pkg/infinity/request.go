@@ -60,12 +60,10 @@ func GetQueryURL(ctx context.Context, pCtx *backend.PluginContext, settings mode
 	defer span.End()
 	urlString := replaceSect(query.URL, settings, includeSect)
 	baseURLString := replaceSect(settings.URL, settings, includeSect)
-	queryURL, err := url.Parse(urlString)
-	if err != nil {
-		return urlString, err
-	}
-	// Absolute URLs are validated below, not concatenated with the base path.
-	if !queryURL.IsAbs() && !strings.HasPrefix(urlString, baseURLString) {
+	// Only explicit HTTP(S) URLs bypass base-path concatenation. A colon in a
+	// relative path (for example items:batchGet) is not a URL scheme here.
+	lowerURL := strings.ToLower(urlString)
+	if !strings.HasPrefix(lowerURL, "http://") && !strings.HasPrefix(lowerURL, "https://") && !strings.HasPrefix(urlString, baseURLString) {
 		urlString = baseURLString + urlString
 	}
 	// Normalize before checking the origin: GitHub blob URLs can change hosts.
@@ -74,7 +72,8 @@ func GetQueryURL(ctx context.Context, pCtx *backend.PluginContext, settings mode
 	if err != nil {
 		return urlString, err
 	}
-	// If a base URL is configured make sure it has the same origin as the query URL
+	// A configured base URL restricts the origin, not the path: absolute query
+	// URLs may use any path on the same scheme, host, and effective port.
 	if settings.URL != "" {
 		parsedSettings, err := url.Parse(models.FixMissingURLSchema(baseURLString))
 		if err != nil {

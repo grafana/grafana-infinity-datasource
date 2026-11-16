@@ -265,6 +265,11 @@ const maxRedirects = 10
 // restrictions to every hop, so a redirect cannot reach a host the initial request couldn't.
 // The check runs before the next request is sent, so no credentials are attached to a blocked hop.
 func getCheckRedirect(settings models.InfinitySettings) func(*http.Request, []*http.Request) error {
+	var baseURL *url.URL
+	var baseURLErr error
+	if settings.URL != "" {
+		baseURL, baseURLErr = url.Parse(models.FixMissingURLSchema(replaceSect(settings.URL, settings, true)))
+	}
 	return func(req *http.Request, via []*http.Request) error {
 		if len(via) >= maxRedirects {
 			return fmt.Errorf("stopped after %d redirects", maxRedirects)
@@ -272,11 +277,8 @@ func getCheckRedirect(settings models.InfinitySettings) func(*http.Request, []*h
 		if !CanAllowURL(req.URL.String(), settings.AllowedHosts) {
 			return models.ErrInvalidConfigHostNotAllowed
 		}
-		if settings.URL != "" {
-			baseURL, err := url.Parse(models.FixMissingURLSchema(replaceSect(settings.URL, settings, true)))
-			if err != nil || !SameOrigin(req.URL, baseURL) {
-				return models.ErrQueryURLNotAllowedByBaseURL
-			}
+		if baseURLErr != nil || (baseURL != nil && !SameOrigin(req.URL, baseURL)) {
+			return models.ErrQueryURLNotAllowedByBaseURL
 		}
 		return nil
 	}

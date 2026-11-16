@@ -22,6 +22,7 @@ func TestRedirectBaseOrigin(t *testing.T) {
 		{"host suffix", "https://example.test", "https://example.test.other/", true},
 		{"different scheme", "https://example.test", "http://example.test/", true},
 		{"different port", "https://example.test", "https://example.test:8443/", true},
+		{"invalid base URL", "https://example.test:invalid", "https://example.test/", true},
 		{"IPv6 same origin", "http://[::1]:8080/api", "http://[::1]:8080/other", false},
 		{"IPv6 different port", "http://[::1]:8080", "http://[::1]:8081/", true},
 	} {

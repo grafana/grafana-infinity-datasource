@@ -82,11 +82,19 @@ The following sections describe the available configuration options for the Infi
 | **Base URL**      | Optional. The base URL for all queries. If configured, this URL is prefixed to relative query URLs. For example, if you set `https://example.com/api` as the base URL and `/users` as the query URL, the final URL will be `https://example.com/api/users`. Query URLs and redirect destinations must have the same scheme, host, and effective port as the base URL. Allowed hosts cannot override this restriction.      |
 | **Allowed hosts** | A list of hosts that the data source is allowed to connect to. Required when authentication, custom headers, or TLS certificates are configured. If no allowed hosts are specified and none of these features are in use, all hosts are allowed by default. |
 
+The Base URL path is not a security boundary. For example, with Base URL `https://api.example.com/v1`, an absolute query URL or redirect to `https://api.example.com/v2/items` is permitted, subject to Allowed hosts. Relative query URLs still use base-path concatenation.
+
 Allowed hosts restrictions apply to every redirect destination as well as the initial request. Include a non-default port explicitly in each allowed hosts entry when needed.
+
+{{< admonition type="warning" >}}
+Treat all Allowed hosts entries in a data source as one credential trust domain. Redirects to another allowed destination can forward custom headers, including API keys stored in headers. Authentication transports can also attach credentials to allowed destinations. Only include destinations trusted to receive this data source's credentials; use separate data sources for different credential trust boundaries. A configured Base URL still blocks redirects to other origins.
+{{< /admonition >}}
 
 For more information about URL configuration, refer to [URL reference](/docs/plugins/yesoreyeram-infinity-datasource/latest/references/url/).
 
 ### Authentication
+
+Base URL and Allowed hosts checks apply to data requests and their redirects. OAuth2 client-credentials and JWT token acquisition use separate HTTP clients; these checks do not apply to token endpoints or token-endpoint redirects. Token URLs are administrator-configured and must identify trusted endpoints.
 
 The Infinity data source supports the following authentication methods:
 
