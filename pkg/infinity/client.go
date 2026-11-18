@@ -289,16 +289,11 @@ func CanAllowURL(urlString string, allowedUrls []string) bool {
 	if len(allowedUrls) == 0 {
 		return true
 	}
-	allowedHosts, err := GetAllowedHosts(allowedUrls)
-	if err != nil {
-		backend.Logger.Debug("error parsing allowed list URLs", "err", err.Error())
-		return false
-	}
 	for _, allowedUrl := range allowedUrls {
 		// Legacy Check : Make sure the URL matches the pattern / allowed list prefix
 		// This is to ensure only certain paths are allowed. Example: Should allow foo.com/a and block foo.com/b
 		matchesURL := strings.HasPrefix(urlString, allowedUrl)
-		// Updated Check : Make sure the host name matches
+		// Match the origin per entry as well as the path prefix.
 		fullUrlString := models.FixMissingURLSchema(urlString)
 		parsedURL, err := url.Parse(fullUrlString)
 		if err != nil {
@@ -309,9 +304,7 @@ func CanAllowURL(urlString string, allowedUrls []string) bool {
 		if err != nil {
 			return false
 		}
-		parsedURLHostName := parsedURL.Hostname()
-		matchesHostName := allowedHosts[parsedURLHostName]
-		if matchesURL && matchesHostName && SameOrigin(parsedURL, parsedAllowedURL) {
+		if matchesURL && SameOrigin(parsedURL, parsedAllowedURL) {
 			return true
 		}
 	}

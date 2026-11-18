@@ -2,6 +2,10 @@ package infinity_test
 
 import (
 	"context"
+	"crypto/rand"
+	"crypto/rsa"
+	"crypto/x509"
+	"encoding/pem"
 	"fmt"
 	"io"
 	"net/http"
@@ -17,13 +21,40 @@ import (
 )
 
 func TestRedirectCredentialsAndMethods(t *testing.T) {
-	for _, auth := range []string{models.AuthenticationMethodApiKey, models.AuthenticationMethodAWS} {
+	key, err := rsa.GenerateKey(rand.Reader, 2048)
+	require.NoError(t, err)
+	privateKey := string(pem.EncodeToMemory(&pem.Block{Type: "RSA PRIVATE KEY", Bytes: x509.MarshalPKCS1PrivateKey(key)}))
+	tokenServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = io.WriteString(w, `{"access_token":"oauth-secret","token_type":"Bearer","expires_in":3600}`)
+	}))
+	defer tokenServer.Close()
+	for _, auth := range []string{
+		models.AuthenticationMethodApiKey, models.AuthenticationMethodAWS,
+		models.AuthenticationMethodBasic, models.AuthenticationMethodBearerToken,
+		models.AuthenticationMethodDigestAuth,
+		models.AuthOAuthTypeClientCredentials, models.AuthOAuthJWT, "oauth2-custom-token",
+	} {
 		for _, status := range []int{301, 302, 303, 307, 308} {
 			for _, allowed := range []bool{false, true} {
 				t.Run(fmt.Sprintf("%s/%d/allowed=%t", auth, status, allowed), func(t *testing.T) {
 					type receivedRequest struct{ method, body, key, signature string }
 					received := make(chan receivedRequest, 1)
+					// Digest challenges happen within the transport, after redirect validation.
+					challenge := func(w http.ResponseWriter, r *http.Request) bool {
+						if auth == models.AuthenticationMethodDigestAuth && !strings.HasPrefix(r.Header.Get("Authorization"), "Digest ") {
+							w.Header().Set("WWW-Authenticate", `Digest realm="redirect-test", nonce="test-nonce", qop="auth", algorithm=MD5`)
+							w.WriteHeader(http.StatusUnauthorized)
+							return true
+						}
+						return false
+					}
+					var targetHits atomic.Int32
 					target := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+						targetHits.Add(1)
+						if challenge(w, r) {
+							return
+						}
 						body, _ := io.ReadAll(r.Body)
 						received <- receivedRequest{r.Method, string(body), r.Header.Get("X-Api-Key"), r.Header.Get("Authorization")}
 						_, _ = io.WriteString(w, `{"ok":true}`)
@@ -31,16 +62,32 @@ func TestRedirectCredentialsAndMethods(t *testing.T) {
 					defer target.Close()
 					firstSignature := make(chan string, 1)
 					initial := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+						if challenge(w, r) {
+							return
+						}
 						firstSignature <- r.Header.Get("Authorization")
 						http.Redirect(w, r, target.URL+"/final?secret=redirect-canary", status)
 					}))
 					defer initial.Close()
 					settings := models.InfinitySettings{
 						AuthenticationMethod: auth, AllowedHosts: []string{initial.URL},
+						UserName: "test-user", Password: "test-password", BearerToken: "bearer-secret",
+						OAuth2Settings: models.OAuth2Settings{
+							OAuth2Type: auth, ClientID: "test-client", ClientSecret: "client-secret",
+							TokenURL: tokenServer.URL, Email: "test@example.com", PrivateKey: privateKey,
+						},
 						ApiKeyType: models.ApiKeyTypeHeader, ApiKeyKey: "X-Api-Key", ApiKeyValue: "stored-secret",
 						AWSAccessKey: "test-access-key", AWSSecretKey: "test-secret-key",
 						AWSSettings: models.AWSSettings{AuthType: models.AWSAuthTypeKeys, Region: "us-east-2", Service: "monitoring"},
 						ProxyType:   models.ProxyTypeNone, TimeoutInSeconds: 5,
+					}
+					settings.BasicAuthEnabled = auth == models.AuthenticationMethodBasic
+					if auth == models.AuthOAuthTypeClientCredentials || auth == models.AuthOAuthJWT || auth == "oauth2-custom-token" {
+						settings.AuthenticationMethod = models.AuthenticationMethodOAuth
+					}
+					if auth == "oauth2-custom-token" {
+						settings.OAuth2Settings.OAuth2Type = models.AuthOAuthTypeClientCredentials
+						settings.OAuth2Settings.TokenTemplate = "Custom ${__oauth2.access_token}"
 					}
 					if allowed {
 						settings.AllowedHosts = append(settings.AllowedHosts, target.URL)
@@ -56,6 +103,7 @@ func TestRedirectCredentialsAndMethods(t *testing.T) {
 						require.ErrorIs(t, err, models.ErrInvalidConfigHostNotAllowed)
 						require.NotContains(t, err.Error(), "redirect-canary")
 						require.Equal(t, http.StatusUnauthorized, code)
+						require.Zero(t, targetHits.Load(), "blocked destination must receive no request, even a digest challenge")
 						require.Empty(t, received, "blocked destination must receive no request or credentials")
 						return
 					}
@@ -70,13 +118,31 @@ func TestRedirectCredentialsAndMethods(t *testing.T) {
 						require.Equal(t, http.MethodGet, r.method)
 						require.Empty(t, r.body)
 					}
-					if auth == models.AuthenticationMethodAWS {
-						signature := <-firstSignature
+					initialAuth := <-firstSignature
+					switch auth {
+					case models.AuthenticationMethodAWS:
+						signature := initialAuth
 						require.True(t, strings.HasPrefix(r.signature, "AWS4-HMAC-SHA256 "))
 						require.True(t, strings.HasPrefix(signature, "AWS4-HMAC-SHA256 "))
 						require.NotEqual(t, signature, r.signature, "each destination must be signed again")
-					} else {
+					case models.AuthenticationMethodApiKey:
 						require.Equal(t, "stored-secret", r.key)
+					case models.AuthenticationMethodBasic:
+						require.Equal(t, "Basic dGVzdC11c2VyOnRlc3QtcGFzc3dvcmQ=", initialAuth)
+						require.Equal(t, initialAuth, r.signature)
+					case models.AuthenticationMethodBearerToken:
+						require.Equal(t, "Bearer bearer-secret", initialAuth)
+						require.Equal(t, initialAuth, r.signature)
+					case models.AuthenticationMethodDigestAuth:
+						require.Contains(t, initialAuth, `username="test-user"`)
+						require.Contains(t, r.signature, `username="test-user"`)
+						require.Contains(t, r.signature, `uri="/final?secret=redirect-canary"`)
+					case "oauth2-custom-token":
+						require.Equal(t, "Custom oauth-secret", initialAuth)
+						require.Equal(t, initialAuth, r.signature)
+					default:
+						require.Equal(t, "Bearer oauth-secret", initialAuth)
+						require.Equal(t, initialAuth, r.signature)
 					}
 				})
 			}
