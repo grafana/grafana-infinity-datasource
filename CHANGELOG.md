@@ -1,14 +1,18 @@
 # Change Log
 
-## 4.1.7
+## 4.2.0
 
-### Patch Changes
+### Minor Changes
 
 🐛 Security: enforce the configured base URL origin for query URLs and apply base URL and allowed hosts restrictions to every redirect, including AWS-authenticated requests.
 
 **Breaking compatibility changes:** A configured Base URL now restricts query URLs and redirect destinations to its scheme, hostname, and effective port. Cross-origin absolute query URLs are rejected even when their destination appears in Allowed hosts; use a separate data source for another origin. Allowed hosts entries must explicitly include non-default ports, for example `https://api.example.com:8443`. Redirect destinations must satisfy both restrictions.
 
 GitHub blob URLs normalize to `raw.githubusercontent.com`. Data sources using a `github.com` Base URL must migrate to the raw-content origin or remove the Base URL and explicitly allow the raw-content destination.
+
+## 4.1.7
+
+### Patch Changes
 
 🐛 Security: bump dependencies to fix vulnerabilities
 
