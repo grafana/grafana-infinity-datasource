@@ -17,7 +17,7 @@ const paginationParamTypes: Array<ComboboxOption<PaginationParamType>> = [
   { value: 'query', label: 'Query param' },
   { value: 'header', label: 'Header' },
   { value: 'body_data', label: 'Body form' },
-  // { value: 'body_json', label: 'Body JSON' },
+  { value: 'body_json', label: 'Body JSON' },
   { value: 'replace', label: 'Replace URL' },
 ];
 
