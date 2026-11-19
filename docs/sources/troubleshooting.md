@@ -59,6 +59,14 @@ To add or correct an allowed host:
 Allowed hosts are required when authentication, custom headers, TLS certificates, custom query parameters, or cookie forwarding are configured. If none of these features are in use and the allowed hosts field is empty, all hosts are allowed by default. Configuring a base URL also satisfies this requirement.
 {{< /admonition >}}
 
+### Query URL does not match the base URL
+
+**Error message:** "query URL does not match the data source's base URL"
+
+**Cause:** The data source has a **Base URL**, and the final request URL resolves to a different scheme, host, or port than the Base URL.
+
+**Solution:** Use a relative query URL such as `/users`, or an absolute URL with the same scheme, host, and port as the base URL. To query a different host, use a separate data source instance. Allowed hosts doesn't override the base URL.
+
 ### Connection timeout
 
 **Error message:** "context deadline exceeded" or "timeout awaiting response headers"

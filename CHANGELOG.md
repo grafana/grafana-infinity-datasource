@@ -1,5 +1,13 @@
 # Change Log
 
+## 4.1.8
+
+### Patch Changes
+
+🐛 Security: validate query URLs against the configured Base URL origin.
+
+**Compatibility:** Query URLs must match the Base URL's scheme, hostname, and effective port. Allowed hosts does not override this restriction. Use a separate data source for another origin.
+
 ## 4.1.7
 
 ### Patch Changes
