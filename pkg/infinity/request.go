@@ -58,18 +58,26 @@ func GetRequest(ctx context.Context, pCtx *backend.PluginContext, settings model
 func GetQueryURL(ctx context.Context, pCtx *backend.PluginContext, settings models.InfinitySettings, query models.Query, includeSect bool) (string, error) {
 	_, span := tracing.DefaultTracer().Start(ctx, "GetQueryURL")
 	defer span.End()
-	urlString := query.URL
-	if !strings.HasPrefix(query.URL, settings.URL) {
-		urlString = settings.URL + urlString
+	urlString := replaceSect(query.URL, settings, includeSect)
+	baseURLString := replaceSect(settings.URL, settings, includeSect)
+	if settings.URL != "" {
+		// Choose the base scheme before concatenation: bare localhost defaults
+		// to HTTP, whereas localhost/path would otherwise default to HTTPS.
+		normalizedBaseURL := models.FixMissingURLSchema(baseURLString)
+		if strings.HasPrefix(urlString, baseURLString) {
+			urlString = normalizedBaseURL + strings.TrimPrefix(urlString, baseURLString)
+		} else if !strings.HasPrefix(urlString, normalizedBaseURL) {
+			urlString = normalizedBaseURL + urlString
+		}
+		baseURLString = normalizedBaseURL
 	}
-	urlString = replaceSect(urlString, settings, includeSect)
 	u, err := url.Parse(models.FixMissingURLSchema(urlString))
 	if err != nil {
 		return urlString, err
 	}
 	// If a base URL is configured make sure it has the same origin as the query URL
 	if settings.URL != "" {
-		parsedSettings, err := url.Parse(models.FixMissingURLSchema(settings.URL))
+		parsedSettings, err := url.Parse(baseURLString)
 		if err != nil {
 			return urlString, err
 		}
