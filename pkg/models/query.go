@@ -131,7 +131,7 @@ type Query struct {
 	PageParamOffsetFieldVal            int                    `json:"pagination_param_offset_value,omitempty"`
 	PageParamPageFieldName             string                 `json:"pagination_param_page_field_name,omitempty"`
 	PageParamPageFieldType             PaginationParamType    `json:"pagination_param_page_field_type,omitempty"`
-	PageParamPageFieldVal              int                    `json:"pagination_param_page_value,omitempty"`
+	PageParamPageFieldVal              *int                   `json:"pagination_param_page_value,omitempty"`
 	PageParamCursorFieldName           string                 `json:"pagination_param_cursor_field_name,omitempty"`
 	PageParamCursorFieldType           PaginationParamType    `json:"pagination_param_cursor_field_type,omitempty"`
 	PageParamCursorFieldExtractionPath string                 `json:"pagination_param_cursor_extraction_path,omitempty"`
@@ -292,8 +292,10 @@ func ApplyDefaultsToQuery(ctx context.Context, pCtx *backend.PluginContext, quer
 			if query.PageParamPageFieldType == "" {
 				query.PageParamPageFieldType = PaginationParamTypeQuery
 			}
-			if query.PageParamPageFieldVal == 0 {
-				query.PageParamPageFieldVal = 1
+			// nil means "not set" (defaults to 1). An explicit 0 must be preserved for zero indexed APIs.
+			if query.PageParamPageFieldVal == nil {
+				defaultPage := 1
+				query.PageParamPageFieldVal = &defaultPage
 			}
 		}
 		if query.PageMode == PaginationModeCursor {
