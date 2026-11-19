@@ -135,7 +135,7 @@ export const PaginationEditor = (props: PaginationEditorProps) => {
                       type="number"
                       value={query.pagination_param_page_value}
                       min={0}
-                      onChange={(e) => onChange({ ...query, pagination_param_page_value: e.currentTarget.valueAsNumber || 1 })}
+                      onChange={(e) => onChange({ ...query, pagination_param_page_value: Number.isNaN(e.currentTarget.valueAsNumber) ? 1 : e.currentTarget.valueAsNumber })}
                     ></Input>
                   </Stack>
                 </EditorField>
