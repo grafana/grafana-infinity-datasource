@@ -2,7 +2,7 @@ import { Datasource } from '@/datasource';
 import { InfinityQueryEditor } from '@/editors/query/infinityQuery';
 import type { GlobalInfinityQuery, InfinityOptions, InfinityQuery } from '@/types';
 import { DataSourcePluginOptionsEditorProps, DataSourceSettings } from '@grafana/data';
-import { getDataSourceSrv } from '@grafana/runtime';
+import { getDataSourceInstance } from '@grafana/plugin-compat/datasources';
 import { Button, Drawer, InlineFormLabel, Input, Stack } from '@grafana/ui';
 import React, { useState } from 'react';
 import { useAsync } from 'react-use';
@@ -108,7 +108,7 @@ const GlobalQuery = (props: { query: GlobalInfinityQuery; onUpdate: (query: Glob
   const [id, setId] = useState(query.id || '');
   const [name, setName] = useState(query.name || '');
   const [popupState, setPopupState] = useState(false);
-  const datasource = useAsync(async () => await getDataSourceSrv().get(options.name));
+  const datasource = useAsync(async () => await getDataSourceInstance(options.name));
   return (
     <>
       <Button
