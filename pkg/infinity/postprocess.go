@@ -4,7 +4,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"sort"
 	"strings"
+	"time"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/dataplane"
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
@@ -55,7 +57,8 @@ func PostProcessFrame(ctx context.Context, frame *data.Frame, query models.Query
 		}
 	}
 	if query.Format == "timeseries" && frame.TimeSeriesSchema().Type == data.TimeSeriesTypeLong {
-		if wFrame, err := data.LongToWide(frame, &data.FillMissing{Mode: data.FillModeNull}); err == nil {
+		// LongToWide rejects rows that are not in ascending time order.
+		if wFrame, err := data.LongToWide(sortLongFrameByTime(frame), &data.FillMissing{Mode: data.FillModeNull}); err == nil {
 			return wFrame, err
 		}
 	}
@@ -76,6 +79,62 @@ func PostProcessFrame(ctx context.Context, frame *data.Frame, query models.Query
 		return frame, nil
 	}
 	return frame, nil
+}
+
+// sortLongFrameByTime returns a copy of a long time series frame with its rows in
+// ascending time order. Rows with a null time keep their order at the end.
+func sortLongFrameByTime(frame *data.Frame) *data.Frame {
+	timeIndex := frame.TimeSeriesSchema().TimeIndex
+	rowLen, err := frame.RowLen()
+	if err != nil || timeIndex < 0 || rowLen < 2 {
+		return frame
+	}
+	timeField := frame.Fields[timeIndex]
+	timeAt := func(row int) (time.Time, bool) {
+		v, ok := timeField.ConcreteAt(row)
+		if !ok {
+			return time.Time{}, false
+		}
+		ts, ok := v.(time.Time)
+		return ts, ok
+	}
+	order := make([]int, rowLen)
+	sorted := true
+	for i := range order {
+		order[i] = i
+		if i > 0 {
+			prev, prevOK := timeAt(i - 1)
+			cur, curOK := timeAt(i)
+			if !prevOK || !curOK || cur.Before(prev) {
+				sorted = false
+			}
+		}
+	}
+	if sorted {
+		return frame
+	}
+	sort.SliceStable(order, func(a, b int) bool {
+		ta, okA := timeAt(order[a])
+		tb, okB := timeAt(order[b])
+		if okA != okB {
+			return okA
+		}
+		return okA && ta.Before(tb)
+	})
+	sortedFrame := data.NewFrame(frame.Name)
+	sortedFrame.RefID = frame.RefID
+	sortedFrame.Meta = frame.Meta
+	for _, field := range frame.Fields {
+		sortedField := data.NewFieldFromFieldType(field.Type(), rowLen)
+		sortedField.Name = field.Name
+		sortedField.Labels = field.Labels
+		sortedField.Config = field.Config
+		for to, from := range order {
+			sortedField.Set(to, field.At(from))
+		}
+		sortedFrame.Fields = append(sortedFrame.Fields, sortedField)
+	}
+	return sortedFrame
 }
 
 func addErrorSourceToTransformError(err error) error {
