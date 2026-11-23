@@ -102,6 +102,49 @@ plugins:
   - https://github.com/grafana/grafana-infinity-datasource/releases/download/v2.4.0/yesoreyeram-infinity-datasource-2.4.0.zip;yesoreyeram-infinity-datasource
 ```
 
+### Build from source
+
+If no release archive exists for your platform, for example FreeBSD, you can build the plugin yourself. Grafana Labs doesn't support custom builds.
+
+You need [Node.js](https://nodejs.org/) 24 or later, [Go](https://go.dev/) 1.27 or later, and [Mage](https://magefile.org/).
+
+1. Clone the repository and check out the release you want to build:
+
+   ```shell
+   git clone https://github.com/grafana/grafana-infinity-datasource.git
+   cd grafana-infinity-datasource
+   git checkout v<VERSION>
+   ```
+
+1. Build the frontend. The output goes to the `dist/` folder:
+
+   ```shell
+   npm install
+   npm run build
+   ```
+
+1. Build the backend for your operating system and architecture. For example, for FreeBSD on amd64:
+
+   ```shell
+   mage -v build:custom freebsd amd64
+   ```
+
+   This writes `dist/gpx_infinity_freebsd_amd64`. Grafana looks for a backend binary named `gpx_infinity_<os>_<arch>`, so if you build without Mage, use the same name:
+
+   ```shell
+   CGO_ENABLED=0 GOOS=freebsd GOARCH=amd64 go build -o dist/gpx_infinity_freebsd_amd64 ./pkg
+   ```
+
+1. Copy the `dist/` folder to your Grafana plugins directory as `yesoreyeram-infinity-datasource`.
+1. A plugin you build yourself isn't signed. Allow Grafana to load it in the `[plugins]` section of your Grafana configuration:
+
+   ```ini
+   [plugins]
+   allow_loading_unsigned_plugins = yesoreyeram-infinity-datasource
+   ```
+
+1. Restart Grafana.
+
 ### Verify installation
 
 After installation:
