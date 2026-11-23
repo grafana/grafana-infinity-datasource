@@ -54,6 +54,9 @@ func PostProcessFrame(ctx context.Context, frame *data.Frame, query models.Query
 			return frame, err
 		}
 	}
+	if strings.HasPrefix(query.Format, "node-graph") {
+		frame = applyNodeGraphArcColors(frame)
+	}
 	if query.Format == "timeseries" && frame.TimeSeriesSchema().Type == data.TimeSeriesTypeLong {
 		if wFrame, err := data.LongToWide(frame, &data.FillMissing{Mode: data.FillModeNull}); err == nil {
 			return wFrame, err
@@ -76,6 +79,51 @@ func PostProcessFrame(ctx context.Context, frame *data.Frame, query models.Query
 		return frame, nil
 	}
 	return frame, nil
+}
+
+// applyNodeGraphArcColors gives each arc__<name> field the fixed color found in its
+// arc__<name>_color field and drops the color fields, as the frontend parser does.
+// The Node Graph panel reads arc colors from field config, not from extra fields.
+func applyNodeGraphArcColors(frame *data.Frame) *data.Frame {
+	if frame == nil {
+		return frame
+	}
+	colorFields := map[string]*data.Field{}
+	for _, field := range frame.Fields {
+		if strings.HasPrefix(field.Name, "arc__") && strings.HasSuffix(field.Name, "_color") {
+			colorFields[strings.TrimSuffix(field.Name, "_color")] = field
+		}
+	}
+	if len(colorFields) == 0 {
+		return frame
+	}
+	fields := make([]*data.Field, 0, len(frame.Fields))
+	for _, field := range frame.Fields {
+		if colorFields[strings.TrimSuffix(field.Name, "_color")] == field {
+			continue
+		}
+		if colorField, ok := colorFields[field.Name]; ok {
+			if field.Config == nil {
+				field.Config = &data.FieldConfig{}
+			}
+			field.Config.DisplayName = strings.TrimPrefix(field.Name, "arc__")
+			field.Config.Color = map[string]interface{}{"mode": "fixed", "fixedColor": firstStringValue(colorField)}
+		}
+		fields = append(fields, field)
+	}
+	frame.Fields = fields
+	return frame
+}
+
+func firstStringValue(field *data.Field) string {
+	for i := 0; i < field.Len(); i++ {
+		if v, ok := field.ConcreteAt(i); ok && v != nil {
+			if s := fmt.Sprint(v); s != "" {
+				return s
+			}
+		}
+	}
+	return ""
 }
 
 func addErrorSourceToTransformError(err error) error {
