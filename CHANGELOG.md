@@ -1,5 +1,11 @@
 # Change Log
 
+## 4.1.9
+
+### Patch Changes
+
+🐛 Update framesql to fix a panic in `min()`/`max()` when a field has no numeric values (now returns null)
+
 ## 4.1.8
 
 ### Patch Changes
