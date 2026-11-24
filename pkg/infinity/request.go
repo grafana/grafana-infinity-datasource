@@ -14,6 +14,11 @@ import (
 	"moul.io/http2curl/v2"
 )
 
+var defaultPorts = map[string]string{
+	"http":  "80",
+	"https": "443",
+}
+
 func GetRequest(ctx context.Context, pCtx *backend.PluginContext, settings models.InfinitySettings, body io.Reader, query models.Query, requestHeaders map[string]string, includeSect bool) (req *http.Request, err error) {
 	ctx, span := tracing.DefaultTracer().Start(ctx, "GetRequest")
 	defer span.End()
@@ -58,10 +63,22 @@ func GetQueryURL(ctx context.Context, pCtx *backend.PluginContext, settings mode
 		urlString = settings.URL + urlString
 	}
 	urlString = replaceSect(urlString, settings, includeSect)
-	u, err := url.Parse(urlString)
+	u, err := url.Parse(models.FixMissingURLSchema(urlString))
 	if err != nil {
 		return urlString, err
 	}
+	// If a base URL is configured make sure it has the same origin as the query URL
+	if settings.URL != "" {
+		parsedSettings, err := url.Parse(models.FixMissingURLSchema(settings.URL))
+		if err != nil {
+			return urlString, err
+		}
+
+		if !SameOrigin(u, parsedSettings) {
+			return urlString, models.ErrQueryURLNotAllowedByBaseURL
+		}
+	}
+
 	q := u.Query()
 	for _, param := range query.URLOptions.Params {
 		value := replaceSect(param.Value, settings, includeSect)
@@ -156,4 +173,21 @@ func interpolateGrafanaMetaDataMacros(value string, pCtx *backend.PluginContext)
 		}
 	}
 	return value
+}
+
+// SameOrigin returns true if the scheme, host, and port of the 2 URLs match
+func SameOrigin(url1 *url.URL, url2 *url.URL) bool {
+	port1 := url1.Port()
+	if port1 == "" {
+		port1 = defaultPorts[url1.Scheme]
+	}
+
+	port2 := url2.Port()
+	if port2 == "" {
+		port2 = defaultPorts[url2.Scheme]
+	}
+
+	return strings.EqualFold(url1.Scheme, url2.Scheme) &&
+		strings.EqualFold(url1.Hostname(), url2.Hostname()) &&
+		port1 == port2
 }

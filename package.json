@@ -1,6 +1,6 @@
 {
   "name": "grafana-infinity-datasource",
-  "version": "4.1.6",
+  "version": "4.1.8",
   "description": "JSON, CSV, XML, GraphQL, HTML and REST API datasource for Grafana. Do infinite things with Grafana. Transform data with UQL/GROQ. Visualize data from many apis, RSS/ATOM feeds directly",
   "keywords": [
     "grafana",
@@ -110,7 +110,7 @@
     "eslint-plugin-react-hooks": "7.0.1",
     "eslint-webpack-plugin": "5.0.3",
     "fork-ts-checker-webpack-plugin": "9.1.0",
-    "glob": "13.0.6",
+    "glob": "14.0.2",
     "identity-obj-proxy": "3.0.0",
     "imports-loader": "5.0.0",
     "jest": "30.3.0",

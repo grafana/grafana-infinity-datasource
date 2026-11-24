@@ -79,7 +79,7 @@ The following sections describe the available configuration options for the Infi
 
 | Setting           | Description                                                                                                                                                                                                                                                 |
 |-------------------|-------------                                                                                                                                                                                                                                                |
-| **Base URL**      | Optional. The base URL for all queries. If configured, this URL is prefixed to all query URLs. For example, if you set `https://example.com/api` as the base URL and `/users` as the query URL, the final URL will be `https://example.com/api/users`.      |
+| **Base URL**      | Optional. The base URL for all queries. If configured, this URL is prefixed to all query URLs. For example, if you set `https://example.com/api` as the base URL and `/users` as the query URL, the final URL will be `https://example.com/api/users`. Query URLs must use the same scheme, host, and port as the base URL. Queries that resolve to a different host are rejected.      |
 | **Allowed hosts** | A list of hosts that the data source is allowed to connect to. Required when authentication, custom headers, or TLS certificates are configured. If no allowed hosts are specified and none of these features are in use, all hosts are allowed by default. |
 
 For more information about URL configuration, refer to [URL reference](/docs/plugins/yesoreyeram-infinity-datasource/latest/references/url/).
