@@ -1,5 +1,25 @@
 # Change Log
 
+## 4.1.9
+
+### Patch Changes
+
+🐛 Update framesql to fix a panic in `min()`/`max()` when a field has no numeric values (now returns null)
+
+## 4.1.8
+
+### Patch Changes
+
+🐛 Security: validate query URLs against the configured Base URL origin.
+
+**Compatibility:** Query URLs must match the Base URL's scheme, hostname, and effective port. Allowed hosts does not override this restriction. Use a separate data source for another origin.
+
+## 4.1.7
+
+### Patch Changes
+
+🐛 Security: bump dependencies to fix vulnerabilities
+
 ## 4.1.6
 
 ### Patch Changes
