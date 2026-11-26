@@ -74,7 +74,7 @@
   "devDependencies": {
     "@axe-core/playwright": "4.14.0",
     "@changesets/cli": "2.31.1",
-    "@changesets/types": "6.1.0",
+    "@changesets/types": "7.0.0",
     "@grafana/e2e-selectors": "13.1.10",
     "@grafana/eslint-config": "9.0.0",
     "@grafana/plugin-e2e": "3.15.4",
