@@ -3,20 +3,20 @@ module github.com/grafana/grafana-infinity-datasource
 go 1.27.3
 
 require (
-	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.8.1
+	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.8.3
 	github.com/abbot/go-http-auth v0.4.0
-	github.com/aws/aws-sdk-go-v2 v1.47.0
-	github.com/grafana/dsconfig/schema v0.0.12
-	github.com/grafana/dskit v0.0.0-20260402131538-8d0d211734c0
-	github.com/grafana/grafana-aws-sdk v1.5.4
+	github.com/aws/aws-sdk-go-v2 v1.47.5
+	github.com/grafana/dsconfig/schema v0.0.13
+	github.com/grafana/dskit v0.0.0-20261104230502-5490ebb9aba4
+	github.com/grafana/grafana-aws-sdk v1.5.7
 	github.com/grafana/grafana-plugin-sdk-go v0.299.0
-	github.com/grafana/infinity-libs/lib/go/csvframer v1.0.4
+	github.com/grafana/infinity-libs/lib/go/csvframer v1.0.5
 	github.com/grafana/infinity-libs/lib/go/framesql v1.1.2
 	github.com/grafana/infinity-libs/lib/go/gframer v1.1.13
 	github.com/grafana/infinity-libs/lib/go/jsonframer v1.3.0
 	github.com/grafana/infinity-libs/lib/go/macros v1.1.1
 	github.com/grafana/infinity-libs/lib/go/transformations v1.1.1
-	github.com/grafana/infinity-libs/lib/go/xmlframer v1.0.4
+	github.com/grafana/infinity-libs/lib/go/xmlframer v1.0.5
 	github.com/icholy/digest v1.2.0
 	github.com/stretchr/testify v1.12.1
 	go.opentelemetry.io/otel v1.47.0
@@ -27,8 +27,9 @@ require (
 )
 
 require (
-	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.23.1 // indirect
-	github.com/Azure/azure-sdk-for-go/sdk/internal v1.12.0 // indirect
+	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.23.3 // indirect
+	github.com/Azure/azure-sdk-for-go/sdk/internal v1.13.0 // indirect
+	github.com/Azure/azure-sdk-for-go/sdk/storage/internal v0.1.0 // indirect
 	github.com/BurntSushi/toml v1.6.0 // indirect
 	github.com/andybalholm/brotli v1.2.7 // indirect
 	github.com/apache/arrow-go/v18 v18.8.0 // indirect
@@ -45,7 +46,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/sso v1.38.0 // indirect
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.43.0 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sts v1.50.0 // indirect
-	github.com/aws/smithy-go v1.28.1 // indirect
+	github.com/aws/smithy-go v1.28.7 // indirect
 	github.com/basgys/goxml2json v1.1.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/casbin/govaluate v1.10.0 // indirect
