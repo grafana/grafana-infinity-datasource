@@ -24,6 +24,7 @@ var (
 	ErrInvalidConfigAWSAccessKey   error = errors.New("invalid/empty AWS access key")
 	ErrInvalidConfigAWSSecretKey   error = errors.New("invalid/empty AWS secret key")
 	ErrInvalidConfigHostNotAllowed error = errors.New("requested URL not allowed. To allow this URL, update the data source config in the Security tab, Allowed hosts section")
+	ErrQueryURLNotAllowedByBaseURL error = errors.New("query URL does not match the data source's base URL")
 )
 
 var (
