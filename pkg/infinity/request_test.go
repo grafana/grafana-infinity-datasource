@@ -155,6 +155,22 @@ func TestGetQueryURL(t *testing.T) {
 			want: "https://foo.com?key=val",
 		},
 		{
+			name:     "should keep query parameters whose value contains a semicolon",
+			settings: models.InfinitySettings{},
+			query: models.Query{
+				URL: "https://foo.com/v1.1/Things?$expand=Datastreams($top=1;$expand=Observations($top=1))&$top=1",
+			},
+			want: "https://foo.com/v1.1/Things?%24expand=Datastreams%28%24top%3D1%3B%24expand%3DObservations%28%24top%3D1%29%29&%24top=1",
+		},
+		{
+			name:     "should keep an already encoded semicolon",
+			settings: models.InfinitySettings{},
+			query: models.Query{
+				URL: "https://foo.com?filter=a%3Bb&key=val",
+			},
+			want: "https://foo.com?filter=a%3Bb&key=val",
+		},
+		{
 			settings: models.InfinitySettings{
 				URL: "https://foo.com",
 			},

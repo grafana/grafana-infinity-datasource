@@ -79,6 +79,10 @@ func GetQueryURL(ctx context.Context, pCtx *backend.PluginContext, settings mode
 		}
 	}
 
+	// url.ParseQuery drops any key=value pair that contains a raw ';' (Go 1.17+),
+	// so a value such as $expand=Datastreams($top=1;$expand=...) would vanish.
+	// Treat ';' as part of the value, which is what users mean when they type it.
+	u.RawQuery = strings.ReplaceAll(u.RawQuery, ";", "%3B")
 	q := u.Query()
 	for _, param := range query.URLOptions.Params {
 		value := replaceSect(param.Value, settings, includeSect)
