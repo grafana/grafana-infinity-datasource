@@ -86,7 +86,7 @@ func GetPaginatedResults(ctx context.Context, pCtx *backend.PluginContext, query
 			if i > 0 && oCursor != "" {
 				currentQuery = ApplyPaginationItemToQuery(currentQuery, query.PageParamCursorFieldType, query.PageParamCursorFieldName, oCursor)
 			}
-			if i > query.PageMaxPages || (i > 0 && oCursor == "") {
+			if i >= query.PageMaxPages || (i > 0 && oCursor == "") {
 				break
 			}
 			i++

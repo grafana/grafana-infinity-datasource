@@ -1,9 +1,15 @@
 package infinity
 
 import (
+	"context"
+	"fmt"
+	"net/http"
+	"net/http/httptest"
+	"sync/atomic"
 	"testing"
 
 	"github.com/grafana/grafana-infinity-datasource/pkg/models"
+	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/stretchr/testify/require"
 )
 
@@ -266,4 +272,40 @@ func TestApplyPaginationItemToQuery(t *testing.T) {
 			}
 		})
 	})
+}
+
+func TestGetPaginatedResultsCursorMaxPages(t *testing.T) {
+	for _, maxPages := range []int{1, 2, 3} {
+		t.Run(fmt.Sprintf("should not request more than %d pages", maxPages), func(t *testing.T) {
+			var requests int32
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				n := atomic.AddInt32(&requests, 1)
+				// every page returns a cursor to a further page
+				_, _ = fmt.Fprintf(w, `{"cursor":"c%d","items":[{"id":%d}]}`, n, n)
+			}))
+			defer server.Close()
+			client, err := NewClient(context.Background(), models.InfinitySettings{
+				URL:          server.URL,
+				AllowedHosts: []string{server.URL},
+			})
+			require.NoError(t, err)
+			query := models.Query{
+				Type:                               models.QueryTypeJSON,
+				Source:                             "url",
+				URL:                                server.URL,
+				Parser:                             models.InfinityParserBackend,
+				RootSelector:                       "items",
+				PageMode:                           models.PaginationModeCursor,
+				PageMaxPages:                       maxPages,
+				PageParamCursorFieldName:           "cursor",
+				PageParamCursorFieldType:           models.PaginationParamTypeQuery,
+				PageParamCursorFieldExtractionPath: "cursor",
+			}
+			frame, err := GetPaginatedResults(context.Background(), &backend.PluginContext{}, query, *client, map[string]string{})
+			require.NoError(t, err)
+			require.NotNil(t, frame)
+			require.Equal(t, int32(maxPages), atomic.LoadInt32(&requests))
+			require.Equal(t, maxPages, frame.Rows())
+		})
+	}
 }
